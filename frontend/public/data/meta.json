@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-11T17:13:26+09:00",
-  "business_count": 105,
-  "news_count": 396,
+  "generated_at": "2026-06-12T05:17:18+09:00",
+  "business_count": 107,
+  "news_count": 425,
   "sources": [
     "나라장터",
     "네이버뉴스"
   ],
-  "last_collected_at": "2026-06-09T14:47:30",
+  "last_collected_at": "2026-06-11T18:36:16",
   "warning_count": 19
 }
