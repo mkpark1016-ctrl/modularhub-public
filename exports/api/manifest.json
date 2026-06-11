@@ -1,0 +1,39 @@
+{
+  "endpoints": [
+    "GET /api/health",
+    "GET /api/bids",
+    "GET /api/news",
+    "GET /api/rnd-announces",
+    "GET /api/rnd-outcomes",
+    "GET /api/patents",
+    "GET /api/trends",
+    "GET /api/favorites",
+    "POST /api/favorites",
+    "DELETE /api/favorites/{id}"
+  ],
+  "common_item_fields": [
+    "id",
+    "source_type",
+    "source_name",
+    "title",
+    "organization",
+    "posted_at",
+    "due_at",
+    "amount",
+    "region",
+    "keywords",
+    "relevance_score",
+    "source_record_id",
+    "source_record_no",
+    "business_type",
+    "business_subtype",
+    "notice_status",
+    "operating_scope",
+    "is_operating_scope",
+    "is_known_important",
+    "original_url",
+    "source_detail_api_url",
+    "summary",
+    "manual_check_site"
+  ]
+}

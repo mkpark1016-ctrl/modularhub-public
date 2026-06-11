@@ -1,0 +1,12 @@
+[
+  {
+    "bid_no": "R26BK01510994",
+    "title_contains": ["성의여자고등학교", "임시교사", "모듈러교실"],
+    "expected_source": "나라장터",
+    "expected_source_type": "bid",
+    "expected_business_type": "용역 또는 확인 필요",
+    "bid_orders": ["000", "001"],
+    "must_collect": true,
+    "note": "운영 물품 필터에서는 제외될 수 있으므로 회귀 테스트로 별도 추적"
+  }
+]

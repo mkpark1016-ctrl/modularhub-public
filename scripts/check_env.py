@@ -1,0 +1,106 @@
+from __future__ import annotations
+
+import os
+import sys
+from pathlib import Path
+
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from src.collectors.lh import DEFAULT_LH_OPENBID_ENDPOINT
+from src.config import (
+    BASE_DIR,
+    D2B_LOOKAHEAD_MONTHS,
+    D2B_BID_BASE_ENDPOINT,
+    D2B_BID_DOMESTIC_ENDPOINT,
+    D2B_BID_FOREIGN_ENDPOINT,
+    D2B_BID_LOOKBACK_DAYS,
+    D2B_BID_PAGE_SIZE,
+    D2B_BID_PUBLIC_PRIVATE_ENDPOINT,
+    D2B_PAGE_SIZE,
+    D2B_PLAN_BASE_ENDPOINT,
+    D2B_PLAN_DOMESTIC_ENDPOINT,
+    D2B_PLAN_FACILITY_ENDPOINT,
+    DATA_GO_KR_SERVICE_KEY,
+    G2B_BUSINESS_TYPES,
+    G2B_BUSINESS_TYPE,
+    G2B_INCLUDE_CANCELLED,
+    G2B_INCLUDE_CORRECTION,
+    G2B_ITEM_LOOKBACK_DAYS,
+    G2B_ITEM_PAGE_SIZE,
+    G2B_MODULAR_ITEM_ONLY,
+    G2B_MODULAR_LOOKBACK_DAYS,
+    G2B_MODULAR_PAGE_SIZE,
+    G2B_MODULAR_SCOPE_ENABLED,
+    G2B_MODULAR_TITLE_KEYWORD,
+    G2B_SERVICE_SUBTYPE,
+    LH_LOOKBACK_DAYS,
+    LH_OPENBID_ENDPOINT,
+    LH_PAGE_SIZE,
+    NAVER_CLIENT_ID,
+    NAVER_CLIENT_SECRET,
+    NAVER_NEWS_DISPLAY,
+    NAVER_NEWS_ENDPOINT,
+    NAVER_NEWS_LOOKBACK_DAYS,
+    NAVER_NEWS_SORT,
+)
+
+
+def mask_key(value: str) -> str:
+    if not value:
+        return "missing"
+    return f"{value[:4]}*** (length={len(value)})"
+
+
+def main() -> int:
+    env_path = BASE_DIR / ".env"
+    print(f"current working directory: {os.getcwd()}")
+    print(f".env path: {env_path}")
+    print(f".env exists: {env_path.exists()}")
+    print(f"DATA_GO_KR_SERVICE_KEY exists: {bool(DATA_GO_KR_SERVICE_KEY)}")
+    print(f"DATA_GO_KR_SERVICE_KEY: {mask_key(DATA_GO_KR_SERVICE_KEY)}")
+    print("shared auth: DATA_GO_KR_SERVICE_KEY is used for G2B, LH, D2B plan, and D2B bid")
+    print(f"G2B_MODULAR_ITEM_ONLY: {G2B_MODULAR_ITEM_ONLY}")
+    print(f"G2B_MODULAR_TITLE_KEYWORD: {G2B_MODULAR_TITLE_KEYWORD}")
+    print(f"G2B_BUSINESS_TYPE: {G2B_BUSINESS_TYPE}")
+    print(f"G2B_MODULAR_SCOPE_ENABLED: {G2B_MODULAR_SCOPE_ENABLED}")
+    print(f"G2B_BUSINESS_TYPES: {G2B_BUSINESS_TYPES}")
+    print(f"G2B_SERVICE_SUBTYPE: {G2B_SERVICE_SUBTYPE}")
+    print(f"G2B_MODULAR_LOOKBACK_DAYS: {G2B_MODULAR_LOOKBACK_DAYS}")
+    print(f"G2B_MODULAR_PAGE_SIZE: {G2B_MODULAR_PAGE_SIZE}")
+    print(f"G2B_ITEM_LOOKBACK_DAYS: {G2B_ITEM_LOOKBACK_DAYS}")
+    print(f"G2B_ITEM_PAGE_SIZE: {G2B_ITEM_PAGE_SIZE}")
+    print(f"G2B_INCLUDE_CANCELLED: {G2B_INCLUDE_CANCELLED}")
+    print(f"G2B_INCLUDE_CORRECTION: {G2B_INCLUDE_CORRECTION}")
+    print("G2B operation default: modular scope uses 나라장터 물품·용역 + title keyword")
+    print(f"LH_OPENBID_ENDPOINT: {LH_OPENBID_ENDPOINT or DEFAULT_LH_OPENBID_ENDPOINT}")
+    print(f"LH_LOOKBACK_DAYS: {LH_LOOKBACK_DAYS}")
+    print(f"LH_PAGE_SIZE: {LH_PAGE_SIZE}")
+    print(f"D2B_LOOKAHEAD_MONTHS: {D2B_LOOKAHEAD_MONTHS}")
+    print(f"D2B_PAGE_SIZE: {D2B_PAGE_SIZE}")
+    print(f"D2B_PLAN_BASE_ENDPOINT: {D2B_PLAN_BASE_ENDPOINT}")
+    print(f"D2B_PLAN_DOMESTIC_ENDPOINT: {D2B_PLAN_DOMESTIC_ENDPOINT}")
+    print(f"D2B_PLAN_FACILITY_ENDPOINT: {D2B_PLAN_FACILITY_ENDPOINT}")
+    print(f"D2B_BID_LOOKBACK_DAYS: {D2B_BID_LOOKBACK_DAYS}")
+    print(f"D2B_BID_PAGE_SIZE: {D2B_BID_PAGE_SIZE}")
+    print(f"D2B_BID_BASE_ENDPOINT: {D2B_BID_BASE_ENDPOINT}")
+    print(f"D2B_BID_DOMESTIC_ENDPOINT: {D2B_BID_DOMESTIC_ENDPOINT}")
+    print(f"D2B_BID_FOREIGN_ENDPOINT: {D2B_BID_FOREIGN_ENDPOINT}")
+    print(f"D2B_BID_PUBLIC_PRIVATE_ENDPOINT: {D2B_BID_PUBLIC_PRIVATE_ENDPOINT}")
+    print(f"NAVER_CLIENT_ID exists: {bool(NAVER_CLIENT_ID)}")
+    print(f"NAVER_CLIENT_ID: {mask_key(NAVER_CLIENT_ID)}")
+    print(f"NAVER_CLIENT_SECRET exists: {bool(NAVER_CLIENT_SECRET)}")
+    print(f"NAVER_CLIENT_SECRET: {mask_key(NAVER_CLIENT_SECRET)}")
+    print(f"NAVER_NEWS_LOOKBACK_DAYS: {NAVER_NEWS_LOOKBACK_DAYS}")
+    print(f"NAVER_NEWS_DISPLAY: {NAVER_NEWS_DISPLAY}")
+    print(f"NAVER_NEWS_SORT: {NAVER_NEWS_SORT}")
+    print(f"NAVER_NEWS_ENDPOINT: {NAVER_NEWS_ENDPOINT}")
+
+    if not DATA_GO_KR_SERVICE_KEY:
+        print("ERROR: .env에 DATA_GO_KR_SERVICE_KEY를 설정하세요.")
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

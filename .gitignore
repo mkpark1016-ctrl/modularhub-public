@@ -1,0 +1,36 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local databases
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Debug / temporary exports
+exports/debug/
+exports/tmp/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/*.log
+frontend/qa-artifacts/
+
+# OS
+.DS_Store
+Thumbs.db
