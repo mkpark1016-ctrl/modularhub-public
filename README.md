@@ -1266,3 +1266,60 @@ Vercel 배포 전 주의사항:
 .\.venv\Scripts\python.exe scripts\diagnose_g2b_modular_scope.py
 .\.venv\Scripts\python.exe scripts\test_api_contract.py
 ```
+
+## 10.5 발주계획과 매일 자동 갱신
+
+공개 사업정보는 `source_type`으로 입찰공고와 발주계획을 구분합니다.
+
+- `bid`: 나라장터·D2B 입찰공고
+- `procurement_plan`: 나라장터 발주계획·D2B 조달계획
+- 프론트의 `입찰공고`/`발주계획` 필터는 `type` 문자열이 아니라 `source_type`을 사용합니다.
+
+발주계획 로컬 수집 및 진단:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\collect_g2b_procurement_plans.py
+.\.venv\Scripts\python.exe scripts\collect_d2b_procurement_plans.py
+.\.venv\Scripts\python.exe scripts\export_public_json.py
+.\.venv\Scripts\python.exe scripts\diagnose_procurement_plan_gap.py
+.\.venv\Scripts\python.exe scripts\test_public_json_export.py
+.\.venv\Scripts\python.exe scripts\test_procurement_plan_pipeline.py
+```
+
+`diagnose_procurement_plan_gap.py`는 다음 상태를 구분합니다.
+
+- 수집기 미실행
+- DB에는 있으나 공개 JSON에서 누락
+- JSON에는 있으나 프론트 필터 불일치
+- 정상 수집 후 조회기간 내 모듈러 발주계획 0건
+
+나라장터 발주계획 API가 `403`을 반환하면 공공데이터포털에서 해당 발주계획현황서비스 활용신청과 `.env`의 `G2B_PLAN_*_ENDPOINT` 값을 확인합니다. 실제 수집이 성공했지만 모듈러 매칭이 0건이면 공개 화면은 오류 대신 조회기간 내 데이터가 없다는 안내를 표시합니다.
+
+### GitHub Actions 자동 갱신
+
+워크플로 파일은 `.github/workflows/update-public-data.yml`입니다. 저장소 `mkpark1016-ctrl/modularhub-public`에서 매일 한국시간 오전 7시(`0 22 * * *`, UTC)에 실행되며, GitHub의 `Actions` 탭에서 `Update public data`를 선택해 수동 실행할 수도 있습니다.
+
+GitHub 저장소의 `Settings > Secrets and variables > Actions`에 다음 Repository secrets를 등록합니다.
+
+- `DATA_GO_KR_SERVICE_KEY`
+- `NAVER_CLIENT_ID`
+- `NAVER_CLIENT_SECRET`
+
+자동 실행 순서:
+
+1. 입찰공고와 뉴스 수집
+2. 나라장터·D2B 발주계획 수집
+3. known important bid 수집
+4. `business.json`, `news.json`, `meta.json` 생성
+5. 공개 JSON 보안·계약·발주계획 테스트
+6. 사업정보와 뉴스정보가 모두 비어 있지 않을 때만 `frontend/public/data/*.json` commit/push
+7. Netlify가 GitHub push를 감지해 자동 재배포
+
+일부 수집기가 실패해도 다른 수집은 계속되며 실패 기록은 `meta.json`의 warning과 발주계획 수집 상태에 반영됩니다. JSON이 비어 있거나 API Key 노출 테스트가 실패하면 Actions는 commit하지 않습니다.
+
+Netlify 공개 화면에서 발주계획이 0건이면 먼저 GitHub Actions 실행 로그를 확인하고, 로컬에서는 아래 명령으로 DB·export·프론트 연결 지점을 한 번에 진단합니다.
+
+```bat
+.\.venv\Scripts\python.exe scripts\diagnose_procurement_plan_gap.py
+```

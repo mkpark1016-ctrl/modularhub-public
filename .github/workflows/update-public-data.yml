@@ -1,0 +1,118 @@
+name: Update public data
+
+on:
+  schedule:
+    # 22:00 UTC is 07:00 KST on the following day.
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-public-data
+  cancel-in-progress: false
+
+jobs:
+  collect-export-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TZ: Asia/Seoul
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Create collector environment
+        env:
+          DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+        run: |
+          printf '%s\n' \
+            "DATA_GO_KR_SERVICE_KEY=${DATA_GO_KR_SERVICE_KEY}" \
+            "NAVER_CLIENT_ID=${NAVER_CLIENT_ID}" \
+            "NAVER_CLIENT_SECRET=${NAVER_CLIENT_SECRET}" \
+            "G2B_MODULAR_LOOKBACK_DAYS=180" \
+            "G2B_MODULAR_PAGE_SIZE=100" \
+            "G2B_PLAN_LOOKAHEAD_MONTHS=12" \
+            "G2B_PLAN_PAGE_SIZE=100" \
+            "D2B_LOOKAHEAD_MONTHS=12" \
+            "D2B_PAGE_SIZE=50" \
+            "NAVER_NEWS_LOOKBACK_DAYS=14" \
+            "NAVER_NEWS_DISPLAY=50" > .env
+
+      - name: Collect bids and news
+        continue-on-error: true
+        run: python scripts/collect_all.py --skip-procurement-plans --skip-lh
+
+      - name: Collect G2B procurement plans
+        continue-on-error: true
+        run: |
+          if [ -f scripts/collect_g2b_procurement_plans.py ]; then
+            python scripts/collect_g2b_procurement_plans.py
+          else
+            echo "G2B procurement plan collector is not present; continuing."
+          fi
+
+      - name: Collect D2B procurement plans
+        continue-on-error: true
+        run: |
+          if [ -f scripts/collect_d2b_procurement_plans.py ]; then
+            python scripts/collect_d2b_procurement_plans.py
+          else
+            echo "D2B procurement plan collector is not present; continuing."
+          fi
+
+      - name: Collect known important G2B bids
+        continue-on-error: true
+        run: python scripts/collect_known_g2b_bids.py
+
+      - name: Export public JSON
+        run: python scripts/export_public_json.py
+
+      - name: Diagnose procurement plan pipeline
+        run: python scripts/diagnose_procurement_plan_gap.py
+
+      - name: Run public data security and contract tests
+        run: |
+          python scripts/test_public_json_export.py
+          python scripts/test_procurement_plan_pipeline.py
+
+      - name: Refuse empty public datasets
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("frontend/public/data")
+          business = json.loads((root / "business.json").read_text(encoding="utf-8"))["items"]
+          news = json.loads((root / "news.json").read_text(encoding="utf-8"))["items"]
+          if not business or not news:
+              raise SystemExit(f"Refusing publish: business={len(business)}, news={len(news)}")
+          print(f"Publish guard passed: business={len(business)}, news={len(news)}")
+          PY
+
+      - name: Commit updated public JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/data/business.json frontend/public/data/news.json frontend/public/data/meta.json
+          if git diff --cached --quiet; then
+            echo "No public data changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: update public ModularHub data"
+          git push
