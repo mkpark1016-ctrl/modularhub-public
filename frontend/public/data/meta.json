@@ -1,19 +1,18 @@
 {
-  "generated_at": "2026-06-13T09:12:52+09:00",
-  "business_count": 107,
+  "generated_at": "2026-06-13T12:24:10+09:00",
+  "business_count": 87,
   "procurement_plan_count": 0,
-  "procurement_plan_collection_status": "partial_warning",
+  "procurement_plan_collection_status": "failed",
   "procurement_plan_source_status": {
-    "나라장터": "failed",
-    "D2B": "success"
+    "나라장터": "failed"
   },
-  "procurement_plan_last_collected_at": "2026-06-13T09:06:41",
-  "news_count": 425,
+  "procurement_plan_last_collected_at": "2026-06-13T12:23:15",
+  "news_count": 114,
   "sources": [
     "나라장터",
     "네이버뉴스"
   ],
-  "last_collected_at": "2026-06-12T12:44:46",
+  "last_collected_at": "2026-06-13T12:23:10",
   "warning_count": 2,
   "g2b_order_plan_status": "failed",
   "g2b_order_plan_message": "나라장터 발주계획 API 호출에 실패했습니다. 활용신청/인증키/endpoint를 확인하세요.",
