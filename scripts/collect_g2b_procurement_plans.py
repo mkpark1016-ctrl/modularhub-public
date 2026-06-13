@@ -15,6 +15,7 @@ from src.config import DATA_GO_KR_SERVICE_KEY
 def main() -> int:
     if not DATA_GO_KR_SERVICE_KEY:
         print(".env에 DATA_GO_KR_SERVICE_KEY를 설정하세요.")
+        return 1
     result = run_collector(G2BProcurementPlanCollector())
     print(
         f"{result.collector_name} procurement plan: status={result.status}, "
@@ -24,6 +25,8 @@ def main() -> int:
         print(f"error: {result.error_message}")
         traceback.print_exception(RuntimeError(result.error_message))
         return 1
+    if result.inserted_count + result.updated_count + result.skipped_count == 0:
+        print("status: 정상 호출, 조회기간 내 모듈러 발주계획 0건")
     return 0
 
 

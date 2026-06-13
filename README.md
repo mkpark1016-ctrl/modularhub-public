@@ -1325,7 +1325,7 @@ Netlify 공개 화면에서 발주계획이 0건이면 먼저 GitHub Actions 실
 ```
 ## GitHub Actions 실패 복구 및 중지 API 정책
 
-- 나라장터 발주계획은 승인된 base endpoint `https://apis.data.go.kr/1230000/ao/OrderPlanStusService`를 사용합니다.
+- 나라장터 발주계획은 공공데이터포털 공식 Swagger의 base endpoint `https://apis.data.go.kr/1230000/ao/OrderPlanSttusService`를 사용합니다. `StusService`가 아니라 `SttusService`인 점에 주의합니다.
 - 상세 operation과 인증키 전달 방식은 아래 probe로 먼저 확인합니다.
 
 ```bat
@@ -1359,3 +1359,23 @@ GitHub Actions 실패 확인 방법:
 collector 단계는 optional 처리되어 exit code를 warning으로 남기고 다음 단계로 진행합니다. 최종 성공 기준은 `business.json`과 `news.json`이 비어 있지 않고 공개 JSON 보안 및 계약 테스트를 통과하는 것입니다.
 
 새 export가 비어 있으면 workflow는 checkout 시점의 기존 공개 JSON을 복원하고 commit을 건너뜁니다. 따라서 일부 API 실패로 Netlify의 정상 데이터가 빈 파일로 교체되지 않습니다.
+
+## 나라장터 발주계획 operation 검증
+
+공식 문서: [조달청_나라장터 발주계획현황서비스](https://www.data.go.kr/data/15129462/openapi.do)
+
+공식 Swagger에 등록된 operation은 다음과 같습니다.
+
+- 일반조회: `getOrderPlanSttusListThng`, `getOrderPlanSttusListServc`, `getOrderPlanSttusListCnstwk`, `getOrderPlanSttusListFrgcpt`
+- 검색조회: `getOrderPlanSttusListThngPPSSrch`, `getOrderPlanSttusListServcPPSSrch`, `getOrderPlanSttusListCnstwkPPSSrch`, `getOrderPlanSttusListFrgcptPPSSrch`
+
+일반조회 필수 파라미터는 `serviceKey`, `pageNo`, `numOfRows`, `inqryDiv`입니다. 검색조회 필수 파라미터는 `serviceKey`, `pageNo`, `numOfRows`, `orderBgnYm`, `orderEndYm`, `inqryBgnDt`, `inqryEndDt`이며 `bizNm=모듈러`를 선택 조건으로 사용합니다.
+
+```bat
+.\.venv\Scripts\python.exe scripts\probe_g2b_order_plan.py
+.\.venv\Scripts\python.exe scripts\collect_g2b_procurement_plans.py
+.\.venv\Scripts\python.exe scripts\export_public_json.py
+.\.venv\Scripts\python.exe scripts\test_public_json_export.py
+```
+
+probe는 operation별 결과를 `SUCCESS`, `EMPTY_RESULT`, `AUTH_ERROR`, `NOT_FOUND_OPERATION`, `PARAM_ERROR`, `PARSE_ERROR`로 분류합니다. `EMPTY_RESULT`는 API 오류가 아니라 정상 호출 후 조회 결과가 0건인 상태입니다. 수집기는 `PPSSrch` 검색조회로 먼저 모듈러 사업명을 조회하고 결과가 없으면 공식 일반조회 operation에서 클라이언트 키워드 필터를 수행합니다.

@@ -53,7 +53,7 @@ G2B_PLAN_PAGE_SIZE = int(os.getenv("G2B_PLAN_PAGE_SIZE", "100"))
 G2B_PLAN_TITLE_KEYWORD = os.getenv("G2B_PLAN_TITLE_KEYWORD", "모듈러")
 G2B_PLAN_BASE_ENDPOINT = os.getenv(
     "G2B_PLAN_BASE_ENDPOINT",
-    "https://apis.data.go.kr/1230000/ao/OrderPlanStusService",
+    "https://apis.data.go.kr/1230000/ao/OrderPlanSttusService",
 )
 G2B_PLAN_GOODS_ENDPOINT = os.getenv("G2B_PLAN_GOODS_ENDPOINT", "")
 G2B_PLAN_SERVICE_ENDPOINT = os.getenv("G2B_PLAN_SERVICE_ENDPOINT", "")

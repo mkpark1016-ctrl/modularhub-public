@@ -269,10 +269,20 @@ def collector_public_status(
         return "not_collected", f"{collector_name} {source_type} 수집 실행 기록이 없습니다."
     if clean_text(log.get("status")) != "success":
         error = sanitize_string(clean_text(log.get("error_message")))
-        if any(token in error.lower() for token in ("servicekey", "service key", "data_go_kr_service_key")):
+        error_lower = error.lower()
+        if "auth_error" in error_lower or any(
+            token in error_lower for token in ("servicekey", "service key", "data_go_kr_service_key")
+        ):
             error = "나라장터 발주계획 인증 또는 활용신청 상태를 확인하세요."
-        elif "operation 경로" in error or "http 404" in error.lower():
-            error = "나라장터 발주계획 API 호출에 실패했습니다. 활용신청/인증키/endpoint를 확인하세요."
+        elif "not_found_operation" in error_lower or "http 404" in error_lower:
+            error = (
+                "나라장터 발주계획 operation을 찾지 못했습니다. "
+                "공식 endpoint OrderPlanSttusService와 업무별 operation path를 확인하세요."
+            )
+        elif "param_error" in error_lower:
+            error = "나라장터 발주계획 필수 파라미터와 날짜 형식을 확인하세요."
+        elif "parse_error" in error_lower:
+            error = "나라장터 발주계획 응답 형식을 파싱하지 못했습니다. JSON/XML 응답을 확인하세요."
         return "failed", error or f"{collector_name} {source_type} API 호출에 실패했습니다."
     if exported_count == 0:
         return "success_no_match", "정상 호출되었으나 현재 조회기간 내 모듈러 매칭 데이터가 없습니다."
