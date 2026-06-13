@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sqlite3
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -15,6 +16,7 @@ sys.path.insert(0, str(ROOT))
 
 from src.config import DB_PATH, D2B_LEGACY_API_ENABLED  # noqa: E402
 from src.database import init_db, load_collect_logs_dataframe, load_items_dataframe  # noqa: E402
+from src.public_data_policy import guard_result, merge_public_items, payload_items  # noqa: E402
 
 
 OUTPUT_DIR = ROOT / "frontend" / "public" / "data"
@@ -222,6 +224,20 @@ def write_json(name: str, payload: object) -> None:
     print(f"wrote {path.relative_to(ROOT)}")
 
 
+def load_existing_payload(name: str) -> dict[str, Any]:
+    path = OUTPUT_DIR / name
+    if not path.exists():
+        return {"items": []}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"WARNING: 기존 {name}을 읽지 못해 빈 기준으로 병합합니다: {exc}")
+        return {"items": []}
+    if isinstance(payload, list):
+        return {"items": payload}
+    return payload if isinstance(payload, dict) else {"items": []}
+
+
 def procurement_plan_collection_status(logs: Any) -> tuple[str, dict[str, str], str | None]:
     if logs.empty or "source_type" not in logs.columns:
         return "not_collected", {}, None
@@ -290,6 +306,11 @@ def collector_public_status(
 
 
 def main() -> int:
+    previous_business_payload = load_existing_payload("business.json")
+    previous_news_payload = load_existing_payload("news.json")
+    previous_business = payload_items(previous_business_payload)
+    previous_news = payload_items(previous_news_payload)
+
     df = load_items_dataframe()
     if df.empty:
         rows: list[dict[str, Any]] = []
@@ -311,10 +332,11 @@ def main() -> int:
         and clean_text(row.get("original_url"))
     ]
 
-    business = [business_item(row, details) for row in business_rows]
-    news = [news_item(row) for row in news_rows]
-    business.sort(key=lambda item: (clean_text(item.get("posted_at")), item["id"]), reverse=True)
-    news.sort(key=lambda item: (clean_text(item.get("published_at")), item["id"]), reverse=True)
+    current_business = [business_item(row, details) for row in business_rows]
+    current_news = [news_item(row) for row in news_rows]
+    merge_time = datetime.now(timezone.utc)
+    business = merge_public_items(previous_business, current_business, kind="business", now=merge_time)
+    news = merge_public_items(previous_news, current_news, kind="news", now=merge_time)
 
     logs = load_collect_logs_dataframe(limit=500)
     plan_status, plan_source_status, plan_collected_at = procurement_plan_collection_status(logs)
@@ -350,19 +372,40 @@ def main() -> int:
         d2b_status = "disabled_stopped"
         d2b_message = "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
 
+    guard_status, guard_message = guard_result(
+        previous_business=len(previous_business),
+        merged_business=len(business),
+        previous_news=len(previous_news),
+        merged_news=len(news),
+        allow_shrink=os.getenv("ALLOW_PUBLIC_DATA_SHRINK", "false").lower() in {"1", "true", "yes", "y"},
+    )
+
     warnings: list[str] = []
     if g2b_status in {"failed", "not_collected"}:
         warnings.append(f"나라장터 발주계획: {g2b_message}")
     if d2b_status != "success":
         warnings.append(f"D2B: {d2b_message}")
+    if guard_status in {"blocked", "warning", "override"}:
+        warnings.append(f"공개 데이터 보호: {guard_message}")
     workflow_status = "warning" if warnings else "success"
     common_status = {
         "g2b_order_plan_status": g2b_status,
         "g2b_order_plan_message": g2b_message,
         "d2b_status": d2b_status,
         "d2b_message": d2b_message,
+        "d2b_legacy_status": d2b_status,
+        "d2b_gw_migration_required": True,
         "workflow_last_run_status": workflow_status,
         "warnings": warnings,
+        "previous_business_count": len(previous_business),
+        "current_business_count": len(current_business),
+        "merged_business_count": len(business),
+        "previous_news_count": len(previous_news),
+        "current_news_count": len(current_news),
+        "merged_news_count": len(news),
+        "public_data_guard_status": guard_status,
+        "public_data_guard_message": guard_message,
+        "data_policy": "cumulative_verified",
     }
     write_json(
         "business.json",
@@ -376,11 +419,22 @@ def main() -> int:
             "items": business,
         },
     )
-    write_json("news.json", {"generated_at": generated_at, "items": news})
+    write_json(
+        "news.json",
+        {
+            "generated_at": generated_at,
+            "data_policy": "cumulative_verified",
+            "previous_news_count": len(previous_news),
+            "current_news_count": len(current_news),
+            "merged_news_count": len(news),
+            "items": news,
+        },
+    )
     write_json(
         "meta.json",
         {
             "generated_at": generated_at,
+            "last_updated": generated_at,
             "business_count": len(business),
             "procurement_plan_count": plan_count,
             "procurement_plan_collection_status": plan_status,

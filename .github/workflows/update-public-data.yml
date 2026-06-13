@@ -129,29 +129,24 @@ jobs:
           fi
           exit 0
 
-      - name: Check generated dataset and restore on empty output
+      - name: Diagnose public JSON counts
+        run: python scripts/diagnose_public_json_counts.py
+
+      - name: Protect cumulative public JSON
         id: publish_guard
         run: |
-          python - <<'PY'
-          import json
-          import os
-          import shutil
-          from pathlib import Path
-
-          root = Path("frontend/public/data")
-          business = json.loads((root / "business.json").read_text(encoding="utf-8"))["items"]
-          news = json.loads((root / "news.json").read_text(encoding="utf-8"))["items"]
-          ready = bool(business and news)
-          if not business or not news:
-              backup = Path(os.environ["RUNNER_TEMP"]) / "public-data-backup"
-              for name in ("business.json", "news.json", "meta.json"):
-                  shutil.copy2(backup / name, root / name)
-              print(f"::warning::공개 데이터가 비어 기존 JSON을 복원했습니다: business={len(business)}, news={len(news)}")
-          else:
-              print(f"Publish guard passed: business={len(business)}, news={len(news)}")
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
-              output.write(f"publish_ready={'true' if ready else 'false'}\n")
-          PY
+          set +e
+          python scripts/refuse_suspicious_public_data_shrink.py
+          code=$?
+          if [ "$code" -ne 0 ]; then
+            cp "$RUNNER_TEMP/public-data-backup/business.json" frontend/public/data/business.json
+            cp "$RUNNER_TEMP/public-data-backup/news.json" frontend/public/data/news.json
+            cp "$RUNNER_TEMP/public-data-backup/meta.json" frontend/public/data/meta.json
+            echo "publish_ready=false" >> "$GITHUB_OUTPUT"
+            echo "::error::비정상적인 공개 데이터 감소를 감지해 기존 JSON을 복원하고 commit을 차단했습니다. exit_code=$code"
+            exit "$code"
+          fi
+          echo "publish_ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Run public data security and contract tests
         if: steps.publish_guard.outputs.publish_ready == 'true'

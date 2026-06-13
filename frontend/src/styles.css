@@ -27,6 +27,9 @@ footer { margin-top: 72px; padding: 28px 20px; text-align: center; color: #777; 
 .category-panel span { color: #6a6a6a; }
 .category-panel b { font-size: 18px; }
 .updated { color: #777; font-size: 13px; margin: 18px 0 0; }
+.public-data-note { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 14px; margin: 18px 0 0; color: #777; font-size: 13px; }
+.public-data-note strong { color: #333; }
+.public-data-note p { flex-basis: 100%; margin: 0; }
 .page-heading { padding: 54px 0 30px; border-bottom: 1px solid #d7d7d2; }
 .page-heading h1 { font-size: 38px; }
 .page-heading > p:last-child { color: #666; margin: 14px 0 0; }

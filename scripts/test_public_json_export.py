@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import json
-import subprocess
-import sys
 from pathlib import Path
 
 
@@ -26,7 +24,6 @@ def require(condition: bool, message: str) -> None:
 
 
 def main() -> int:
-    subprocess.run([sys.executable, str(ROOT / "scripts" / "export_public_json.py")], cwd=ROOT, check=True)
     for name, path in FILES.items():
         require(path.exists(), f"missing {name}.json")
 
@@ -50,9 +47,24 @@ def main() -> int:
         "d2b_message",
         "workflow_last_run_status",
         "warnings",
+        "previous_business_count",
+        "current_business_count",
+        "merged_business_count",
+        "previous_news_count",
+        "current_news_count",
+        "merged_news_count",
+        "public_data_guard_status",
+        "public_data_guard_message",
+        "d2b_legacy_status",
+        "d2b_gw_migration_required",
+        "data_policy",
     ):
         require(field in meta, f"meta status field is missing: {field}")
     require(isinstance(meta.get("warnings"), list), "meta warnings must be a list")
+    require(meta.get("data_policy") == "cumulative_verified", "unexpected public data policy")
+    require(meta.get("merged_business_count") == len(business["items"]), "merged business count mismatch")
+    require(meta.get("merged_news_count") == len(news["items"]), "merged news count mismatch")
+    require(meta.get("public_data_guard_status") in {"passed", "warning", "override"}, "public data guard did not pass")
 
     for item in business["items"]:
         require(item.get("title"), "business item title is missing")

@@ -92,7 +92,11 @@ function HomePage() {
           <b>{data?.news_count ?? "-"}건</b>
         </Link>
       </section>
-      <p className="updated">데이터 갱신: {data?.generated_at ? formatDate(data.generated_at) : "확인 중"}</p>
+      <div className="public-data-note">
+        <strong>누적 검증 데이터 기준</strong>
+        <span>데이터 갱신: {data?.generated_at ? formatDate(data.generated_at) : "확인 중"}</span>
+        {data?.workflow_last_run_status === "warning" && <p>일부 수집원은 일시적으로 제외되었고 기존 검증 데이터를 유지했습니다.</p>}
+      </div>
     </Layout>
   );
 }
@@ -139,8 +143,6 @@ function ListingPage({ type }) {
   const procurementPlanStatus = data?.procurement_plan_collection_status || meta?.procurement_plan_collection_status;
   const g2bOrderPlanStatus = data?.g2b_order_plan_status || meta?.g2b_order_plan_status;
   const g2bOrderPlanMessage = data?.g2b_order_plan_message || meta?.g2b_order_plan_message;
-  const d2bStatus = data?.d2b_status || meta?.d2b_status;
-  const d2bMessage = data?.d2b_message || meta?.d2b_message;
   const sources = ["전체", ...new Set(items.map((item) => item.source).filter(Boolean))];
   const filtered = items.filter((item) => {
     const text = `${item.title || ""} ${item.organization || item.media || ""} ${item.summary || ""} ${item.plan_no || ""} ${item.bid_no || ""}`.toLowerCase();
@@ -180,8 +182,7 @@ function ListingPage({ type }) {
         <section className="results" aria-live="polite">
           {isBusiness && kind === "발주계획" && !loading && !error && <div className="source-status">
             <p><strong>나라장터</strong> {g2bOrderPlanMessage || "발주계획 수집 상태를 확인 중입니다."}</p>
-            {d2bStatus === "disabled_stopped" && <p><strong>D2B</strong> 방위사업청 기존 API는 중지 상태로 자동 수집에서 제외되었습니다.</p>}
-            {d2bStatus !== "disabled_stopped" && d2bMessage && <p><strong>D2B</strong> {d2bMessage}</p>}
+            {meta?.workflow_last_run_status === "warning" && <p>일부 수집원은 일시적으로 제외되었으며 기존 검증 데이터는 유지됩니다.</p>}
           </div>}
           {loading && <div className="state">데이터를 불러오는 중입니다.</div>}
           {error && <div className="state error">{error}</div>}
