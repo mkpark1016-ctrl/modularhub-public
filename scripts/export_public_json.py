@@ -13,7 +13,7 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.config import DB_PATH  # noqa: E402
+from src.config import DB_PATH, D2B_LEGACY_API_ENABLED  # noqa: E402
 from src.database import init_db, load_collect_logs_dataframe, load_items_dataframe  # noqa: E402
 
 
@@ -167,17 +167,22 @@ def exact_original_url(row: dict[str, Any]) -> str | None:
 def business_item(row: dict[str, Any], details: dict[int, dict[str, Any]]) -> dict[str, Any]:
     item_id = int(row["id"])
     detail_row = details.get(item_id)
+    source_type = clean_text(row.get("source_type"))
+    record_no = clean_text(row.get("bid_no") or row.get("source_record_id"))
     return {
         "id": item_id,
         "source": clean_text(row.get("source_name")),
-        "source_type": clean_text(row.get("source_type")),
+        "source_name": clean_text(row.get("source_name")),
+        "source_type": source_type,
+        "type": "발주계획" if source_type == "procurement_plan" else "입찰공고",
         "title": clean_text(row.get("title")),
         "organization": clean_text(row.get("organization")),
         "demand_org": clean_text(row.get("demand_org")),
         "business_type": clean_text(row.get("business_type")),
         "business_subtype": clean_text(row.get("business_subtype")),
         "notice_status": clean_text(row.get("notice_status")),
-        "bid_no": clean_text(row.get("bid_no") or row.get("source_record_id")),
+        "plan_no": record_no if source_type == "procurement_plan" else "",
+        "bid_no": record_no,
         "bid_order": clean_text(row.get("bid_order") or row.get("source_record_no")),
         "posted_at": scalar(row.get("posted_at")),
         "due_at": scalar(row.get("due_at")),
@@ -217,6 +222,63 @@ def write_json(name: str, payload: object) -> None:
     print(f"wrote {path.relative_to(ROOT)}")
 
 
+def procurement_plan_collection_status(logs: Any) -> tuple[str, dict[str, str], str | None]:
+    if logs.empty or "source_type" not in logs.columns:
+        return "not_collected", {}, None
+    plan_logs = logs[logs["source_type"].eq("procurement_plan")].copy()
+    if plan_logs.empty:
+        return "not_collected", {}, None
+
+    source_status: dict[str, str] = {}
+    latest_at: str | None = None
+    for collector_name, group in plan_logs.groupby("collector_name", sort=False):
+        latest = group.iloc[0]
+        source_status[clean_text(collector_name)] = clean_text(latest.get("status")) or "unknown"
+        checked_at = clean_text(latest.get("finished_at") or latest.get("started_at"))
+        if checked_at and (latest_at is None or checked_at > latest_at):
+            latest_at = checked_at
+
+    statuses = set(source_status.values())
+    if statuses == {"success"}:
+        return "success", source_status, latest_at
+    if "success" in statuses:
+        return "partial_warning", source_status, latest_at
+    return "failed", source_status, latest_at
+
+
+def latest_log(logs: Any, collector_name: str, source_type: str | None = None) -> dict[str, Any] | None:
+    if logs.empty:
+        return None
+    matches = logs[logs["collector_name"].eq(collector_name)]
+    if source_type:
+        matches = matches[matches["source_type"].eq(source_type)]
+    if matches.empty:
+        return None
+    return matches.iloc[0].to_dict()
+
+
+def collector_public_status(
+    logs: Any,
+    *,
+    collector_name: str,
+    source_type: str,
+    exported_count: int,
+) -> tuple[str, str]:
+    log = latest_log(logs, collector_name, source_type)
+    if not log:
+        return "not_collected", f"{collector_name} {source_type} 수집 실행 기록이 없습니다."
+    if clean_text(log.get("status")) != "success":
+        error = sanitize_string(clean_text(log.get("error_message")))
+        if any(token in error.lower() for token in ("servicekey", "service key", "data_go_kr_service_key")):
+            error = "나라장터 발주계획 인증 또는 활용신청 상태를 확인하세요."
+        elif "operation 경로" in error or "http 404" in error.lower():
+            error = "나라장터 발주계획 API 호출에 실패했습니다. 활용신청/인증키/endpoint를 확인하세요."
+        return "failed", error or f"{collector_name} {source_type} API 호출에 실패했습니다."
+    if exported_count == 0:
+        return "success_no_match", "정상 호출되었으나 현재 조회기간 내 모듈러 매칭 데이터가 없습니다."
+    return "success", f"정상 호출되어 {exported_count}건을 공개 데이터에 반영했습니다."
+
+
 def main() -> int:
     df = load_items_dataframe()
     if df.empty:
@@ -245,6 +307,7 @@ def main() -> int:
     news.sort(key=lambda item: (clean_text(item.get("published_at")), item["id"]), reverse=True)
 
     logs = load_collect_logs_dataframe(limit=500)
+    plan_status, plan_source_status, plan_collected_at = procurement_plan_collection_status(logs)
     last_collected_at = None
     warning_count = 0
     if not logs.empty:
@@ -255,17 +318,69 @@ def main() -> int:
         warning_count = int((logs["status"] != "success").sum())
 
     generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
-    write_json("business.json", {"generated_at": generated_at, "items": business})
+    plan_count = sum(item.get("source_type") == "procurement_plan" for item in business)
+    g2b_plan_count = sum(
+        item.get("source_type") == "procurement_plan" and item.get("source") in {"나라장터", "G2B", "조달청"}
+        for item in business
+    )
+    g2b_status, g2b_message = collector_public_status(
+        logs,
+        collector_name="나라장터",
+        source_type="procurement_plan",
+        exported_count=g2b_plan_count,
+    )
+    if D2B_LEGACY_API_ENABLED:
+        d2b_log = latest_log(logs, "D2B")
+        if d2b_log and clean_text(d2b_log.get("status")) == "success":
+            d2b_status, d2b_message = "success", "D2B 기존 API 수집이 정상 완료되었습니다."
+        else:
+            d2b_status = "warning"
+            d2b_message = sanitize_string(clean_text((d2b_log or {}).get("error_message"))) or "D2B 기존 API 수집 상태를 확인하세요."
+    else:
+        d2b_status = "disabled_stopped"
+        d2b_message = "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
+
+    warnings: list[str] = []
+    if g2b_status in {"failed", "not_collected"}:
+        warnings.append(f"나라장터 발주계획: {g2b_message}")
+    if d2b_status != "success":
+        warnings.append(f"D2B: {d2b_message}")
+    workflow_status = "warning" if warnings else "success"
+    common_status = {
+        "g2b_order_plan_status": g2b_status,
+        "g2b_order_plan_message": g2b_message,
+        "d2b_status": d2b_status,
+        "d2b_message": d2b_message,
+        "workflow_last_run_status": workflow_status,
+        "warnings": warnings,
+    }
+    write_json(
+        "business.json",
+        {
+            "generated_at": generated_at,
+            "procurement_plan_count": plan_count,
+            "procurement_plan_collection_status": plan_status,
+            "procurement_plan_source_status": plan_source_status,
+            "procurement_plan_last_collected_at": plan_collected_at,
+            **common_status,
+            "items": business,
+        },
+    )
     write_json("news.json", {"generated_at": generated_at, "items": news})
     write_json(
         "meta.json",
         {
             "generated_at": generated_at,
             "business_count": len(business),
+            "procurement_plan_count": plan_count,
+            "procurement_plan_collection_status": plan_status,
+            "procurement_plan_source_status": plan_source_status,
+            "procurement_plan_last_collected_at": plan_collected_at,
             "news_count": len(news),
             "sources": sorted({item["source"] for item in business + news}),
             "last_collected_at": last_collected_at,
-            "warning_count": warning_count,
+            "warning_count": len(warnings) if warnings else warning_count,
+            **common_status,
         },
     )
     return 0

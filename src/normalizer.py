@@ -104,6 +104,8 @@ def _keyword_text(raw_item: dict, matched_keywords: list[str]) -> str | None:
 
 
 def normalize_item(raw_item: dict) -> dict:
+    if raw_item.get("source_name") == "나라장터" and raw_item.get("source_type") == "procurement_plan":
+        return _normalize_g2b_plan_item(raw_item)
     if raw_item.get("source_name") == "나라장터":
         return _normalize_g2b_item(raw_item)
     if raw_item.get("source_name") == "LH":
@@ -246,6 +248,47 @@ def _normalize_g2b_item(raw_item: dict) -> dict:
     return _finalize_item(raw_item, item)
 
 
+def _normalize_g2b_plan_item(raw_item: dict) -> dict:
+    matched_keywords = _matched_keywords(raw_item)
+    plan_no = _text(raw_item.get("plan_no") or raw_item.get("source_record_id") or raw_item.get("bid_no"))
+    plan_order = _text(raw_item.get("source_record_no"))
+    business_type = _text(raw_item.get("business_type") or raw_item.get("category"))
+    amount = raw_item.get("amount") or _raw_value(raw_item, "sumOrderAmt", "orderAmt", "bdgtAmt", "budgetAmt")
+    summary = _optional_text(raw_item.get("summary")) or (
+        f"발주계획번호: {plan_no or '-'}; 발주예정: {_text(raw_item.get('due_at')) or '-'}; "
+        f"업무구분: {business_type or '-'}; 계약방법: {_text(raw_item.get('contract_method')) or '-'}; "
+        f"입찰방법: {_text(raw_item.get('bid_method')) or '-'}; "
+        f"발주기관: {_text(raw_item.get('organization')) or '-'}; "
+        f"수요기관: {_text(raw_item.get('demand_org')) or '-'}; 예산액: {_text(amount) or '-'}"
+    )
+    item = {
+        "source_type": "procurement_plan",
+        "source_name": "나라장터",
+        "title": _text(raw_item.get("title")),
+        "organization": _optional_text(raw_item.get("organization")),
+        "posted_at": _date_text(raw_item.get("posted_at")),
+        "due_at": _date_text(raw_item.get("due_at")),
+        "amount": _amount(amount),
+        "region": _optional_text(raw_item.get("region")),
+        "keywords": _keyword_text(raw_item, matched_keywords),
+        "summary": summary,
+        "url": _optional_text(raw_item.get("url")),
+        "relevance_score": _generic_relevance_score(raw_item, matched_keywords),
+        "bid_no": plan_no,
+        "bid_order": plan_order,
+        "notice_status": _text(raw_item.get("notice_status")),
+        "business_type": business_type,
+        "business_subtype": _text(raw_item.get("business_subtype")) or "발주계획",
+        "operating_scope": _text(raw_item.get("operating_scope")) or "modular_procurement_plan",
+        "is_operating_scope": int(raw_item.get("is_operating_scope") or 1),
+        "contract_method": _text(raw_item.get("contract_method")),
+        "bid_method": _text(raw_item.get("bid_method")),
+        "demand_org": _text(raw_item.get("demand_org")),
+        "notice_org": _text(raw_item.get("organization")),
+    }
+    return _finalize_item(raw_item, item)
+
+
 def _normalize_lh_item(raw_item: dict) -> dict:
     matched_keywords = _matched_keywords(raw_item)
     estimate = _raw_value(raw_item, "presmtPrc")
@@ -290,14 +333,25 @@ def _normalize_d2b_plan_item(raw_item: dict) -> dict:
         "source_name": "D2B",
         "title": _text(raw_item.get("title") or _raw_value(raw_item, "reprsntPrdlstNm")),
         "organization": _optional_text(raw_item.get("organization")) or _optional_text(raw_item.get("region")),
-        "posted_at": _date_text(order_month),
-        "due_at": None,
+        "posted_at": _date_text(raw_item.get("posted_at")) or _date_text(order_month),
+        "due_at": _date_text(raw_item.get("due_at") or order_month),
         "amount": _amount(amount),
         "region": _optional_text(raw_item.get("region")),
         "keywords": _keyword_text(raw_item, matched_keywords),
         "summary": summary,
         "url": _optional_text(raw_item.get("url")),
         "relevance_score": calculate_d2b_relevance(raw_item),
+        "bid_no": _text(raw_item.get("plan_no") or raw_item.get("dcs_no") or raw_item.get("source_record_id")),
+        "bid_order": _text(raw_item.get("source_record_no")),
+        "notice_status": _text(raw_item.get("notice_status") or raw_item.get("progress_status")),
+        "business_type": _text(raw_item.get("business_type") or raw_item.get("category")),
+        "business_subtype": _text(raw_item.get("business_subtype")) or "조달계획",
+        "operating_scope": _text(raw_item.get("operating_scope")) or "modular_procurement_plan",
+        "is_operating_scope": int(raw_item.get("is_operating_scope") or 1),
+        "contract_method": _text(raw_item.get("contract_method")),
+        "bid_method": _text(raw_item.get("bid_method")),
+        "demand_org": _text(raw_item.get("demand_org")),
+        "notice_org": _text(raw_item.get("organization")),
     }
     return _finalize_item(raw_item, item)
 

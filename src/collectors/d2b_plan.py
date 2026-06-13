@@ -146,7 +146,16 @@ class D2BPlanCollector(BaseCollector):
         return total_count, [item for item in items if isinstance(item, dict)]
 
     def _to_raw_item(self, category: str, item: dict[str, Any]) -> dict:
-        title = self._pick(item, "reprsntPrdlstNm", "representPrdlstNm", "prdctNm", "itemNm", "prdlstNm")
+        title = self._pick(
+            item,
+            "reprsntPrdlstNm",
+            "representPrdlstNm",
+            "prcurePlanNm",
+            "planNm",
+            "prdctNm",
+            "itemNm",
+            "prdlstNm",
+        )
         dcs_no = self._pick(item, "dcsNo", "judgmntNo", "dcsnNo")
         order_month = self._pick(item, "orderPrearngeMt", "orderPrerngeMt", "orderMonth", "orderPrearngeYm")
         organization = self._pick(item, "ornt", "orntNm", "orntCode", "orderInsttNm", "orderAgency")
@@ -156,6 +165,8 @@ class D2BPlanCollector(BaseCollector):
         progress_status = self._pick(item, "progrsSttus", "progressStatus", "prgrsStts", "sttusNm")
         demand_year = self._pick(item, "dmndYear", "demandYear", "rqestYear", "reqYr")
         execution_type = self._pick(item, "excutTy", "excutTyNm", "execType", "bsnsSe")
+        posted_at = self._pick(item, "regDt", "rgstDt", "frstRegDt", "planRegDt")
+        business_type = self._pick(item, "bsnsSeNm", "bsnsSe", "prcureSeNm", "prcureSe") or execution_type
         summary = (
             f"판단번호: {dcs_no or '-'}; 발주예정월: {order_month or '-'}; 집행유형: {execution_type or '-'}; "
             f"계약방법: {contract_method or '-'}; 입찰방법: {bid_method or '-'}; "
@@ -179,21 +190,28 @@ class D2BPlanCollector(BaseCollector):
             "category": category,
             "title": title,
             "organization": organization,
-            "posted_at": order_month,
-            "due_at": None,
+            "posted_at": posted_at or order_month,
+            "due_at": order_month,
             "amount": amount,
             "region": organization,
             "url": self._build_notice_url(dcs_no),
             "summary": summary,
             "raw": item,
             "dcs_no": dcs_no,
+            "plan_no": dcs_no,
+            "bid_no": dcs_no,
             "source_record_id": dcs_no,
             "source_record_no": self._pick(item, "itemNo", "seq", "sn", "ord"),
             "order_month": order_month,
             "contract_method": contract_method,
             "bid_method": bid_method,
             "progress_status": progress_status,
+            "notice_status": progress_status,
             "demand_year": demand_year,
+            "business_type": business_type or category,
+            "business_subtype": category,
+            "operating_scope": "modular_procurement_plan",
+            "is_operating_scope": 1,
             "description": description,
             "relevance_score": relevance,
         }

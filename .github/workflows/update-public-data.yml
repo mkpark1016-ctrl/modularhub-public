@@ -51,61 +51,121 @@ jobs:
             "G2B_PLAN_PAGE_SIZE=100" \
             "D2B_LOOKAHEAD_MONTHS=12" \
             "D2B_PAGE_SIZE=50" \
+            "D2B_LEGACY_API_ENABLED=false" \
             "NAVER_NEWS_LOOKBACK_DAYS=14" \
             "NAVER_NEWS_DISPLAY=50" > .env
 
+      - name: Back up currently published JSON
+        run: |
+          mkdir -p "$RUNNER_TEMP/public-data-backup"
+          cp frontend/public/data/business.json "$RUNNER_TEMP/public-data-backup/business.json"
+          cp frontend/public/data/news.json "$RUNNER_TEMP/public-data-backup/news.json"
+          cp frontend/public/data/meta.json "$RUNNER_TEMP/public-data-backup/meta.json"
+
       - name: Collect bids and news
-        continue-on-error: true
-        run: python scripts/collect_all.py --skip-procurement-plans --skip-lh
+        run: |
+          set +e
+          command="python scripts/collect_all.py --skip-procurement-plans --skip-lh --skip-d2b"
+          echo "Running: $command"
+          $command
+          code=$?
+          echo "command=$command exit_code=$code"
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::입찰/뉴스 일부 수집기가 실패했습니다. exit_code=$code"
+          fi
+          exit 0
 
       - name: Collect G2B procurement plans
-        continue-on-error: true
         run: |
           if [ -f scripts/collect_g2b_procurement_plans.py ]; then
+            set +e
+            command="python scripts/collect_g2b_procurement_plans.py"
+            echo "Running: $command"
             python scripts/collect_g2b_procurement_plans.py
+            code=$?
+            echo "command=$command exit_code=$code"
+            if [ "$code" -ne 0 ]; then
+              echo "::warning::나라장터 발주계획 수집 실패. exit_code=$code"
+            fi
           else
             echo "G2B procurement plan collector is not present; continuing."
           fi
+          exit 0
 
-      - name: Collect D2B procurement plans
-        continue-on-error: true
+      - name: Record D2B legacy API status
         run: |
-          if [ -f scripts/collect_d2b_procurement_plans.py ]; then
-            python scripts/collect_d2b_procurement_plans.py
-          else
-            echo "D2B procurement plan collector is not present; continuing."
-          fi
+          echo "::warning::방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 자동 수집에서 제외하며 추후 GW API 전환이 필요합니다."
 
       - name: Collect known important G2B bids
-        continue-on-error: true
-        run: python scripts/collect_known_g2b_bids.py
+        run: |
+          set +e
+          command="python scripts/collect_known_g2b_bids.py"
+          echo "Running: $command"
+          $command
+          code=$?
+          echo "command=$command exit_code=$code"
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::known important bid 수집 실패. exit_code=$code"
+          fi
+          exit 0
 
       - name: Export public JSON
         run: python scripts/export_public_json.py
 
       - name: Diagnose procurement plan pipeline
-        run: python scripts/diagnose_procurement_plan_gap.py
-
-      - name: Run public data security and contract tests
         run: |
-          python scripts/test_public_json_export.py
-          python scripts/test_procurement_plan_pipeline.py
+          if [ -f scripts/diagnose_procurement_plan_gap.py ]; then
+            set +e
+            command="python scripts/diagnose_procurement_plan_gap.py"
+            echo "Running: $command"
+            $command
+            code=$?
+            echo "command=$command exit_code=$code"
+            if [ "$code" -ne 0 ]; then
+              echo "::warning::발주계획 진단 스크립트 실패. exit_code=$code"
+            fi
+          else
+            echo "::warning::scripts/diagnose_procurement_plan_gap.py가 없어 진단을 건너뜁니다."
+          fi
+          exit 0
 
-      - name: Refuse empty public datasets
+      - name: Check generated dataset and restore on empty output
+        id: publish_guard
         run: |
           python - <<'PY'
           import json
+          import os
+          import shutil
           from pathlib import Path
 
           root = Path("frontend/public/data")
           business = json.loads((root / "business.json").read_text(encoding="utf-8"))["items"]
           news = json.loads((root / "news.json").read_text(encoding="utf-8"))["items"]
+          ready = bool(business and news)
           if not business or not news:
-              raise SystemExit(f"Refusing publish: business={len(business)}, news={len(news)}")
-          print(f"Publish guard passed: business={len(business)}, news={len(news)}")
+              backup = Path(os.environ["RUNNER_TEMP"]) / "public-data-backup"
+              for name in ("business.json", "news.json", "meta.json"):
+                  shutil.copy2(backup / name, root / name)
+              print(f"::warning::공개 데이터가 비어 기존 JSON을 복원했습니다: business={len(business)}, news={len(news)}")
+          else:
+              print(f"Publish guard passed: business={len(business)}, news={len(news)}")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"publish_ready={'true' if ready else 'false'}\n")
           PY
 
+      - name: Run public data security and contract tests
+        if: steps.publish_guard.outputs.publish_ready == 'true'
+        run: |
+          set -e
+          echo "Running: python scripts/test_public_json_export.py"
+          python scripts/test_public_json_export.py
+          echo "command=test_public_json_export.py exit_code=0"
+          echo "Running: python scripts/test_procurement_plan_pipeline.py"
+          python scripts/test_procurement_plan_pipeline.py
+          echo "command=test_procurement_plan_pipeline.py exit_code=0"
+
       - name: Commit updated public JSON
+        if: steps.publish_guard.outputs.publish_ready == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

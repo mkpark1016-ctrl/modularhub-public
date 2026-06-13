@@ -1323,3 +1323,39 @@ Netlify 공개 화면에서 발주계획이 0건이면 먼저 GitHub Actions 실
 ```bat
 .\.venv\Scripts\python.exe scripts\diagnose_procurement_plan_gap.py
 ```
+## GitHub Actions 실패 복구 및 중지 API 정책
+
+- 나라장터 발주계획은 승인된 base endpoint `https://apis.data.go.kr/1230000/ao/OrderPlanStusService`를 사용합니다.
+- 상세 operation과 인증키 전달 방식은 아래 probe로 먼저 확인합니다.
+
+```bat
+.\.venv\Scripts\python.exe scripts\probe_g2b_order_plan.py
+```
+
+probe 결과는 다음처럼 구분합니다.
+
+- HTTP 2xx 및 정상 resultCode, 0건: 정상 호출이지만 조회기간 내 모듈러 매칭 0건
+- HTTP 403 또는 resultCode 30: 활용신청, 인증키 권한, Encoding/Decoding 키 확인 필요
+- HTTP 404: base endpoint가 아니라 업무별 상세 operation 경로 확인 필요
+
+방위사업청 기존 군수품조달정보 입찰공고·조달계획 API는 공공데이터포털에서 중지 상태이므로 기본 자동 수집에서 제외합니다. `D2B_LEGACY_API_ENABLED=false`가 기본이며, 공개 `meta.json`에는 `d2b_status=disabled_stopped` 경고가 기록됩니다. D2B GW API 전환은 별도 후속 단계로 진행합니다.
+
+`meta.json` 공개 상태 필드:
+
+- `g2b_order_plan_status`, `g2b_order_plan_message`
+- `d2b_status`, `d2b_message`
+- `workflow_last_run_status`
+- `warnings`
+
+GitHub Actions 실패 확인 방법:
+
+1. GitHub 저장소 `Actions` 탭에서 `Update public data` workflow를 엽니다.
+2. 실패한 `collect-export-publish` run을 선택합니다.
+3. 붉게 표시된 step을 열고 `command=... exit_code=...` 줄을 확인합니다.
+4. exit code `1` 또는 `2` 앞에 출력된 정확한 Python 명령과 API 오류 메시지를 확인합니다.
+
+2026년 6월 13일 확인한 workflow run `27448578723`의 실제 실패 step은 `Diagnose procurement plan pipeline`이었습니다. 해당 run의 커밋 `70ee8330b057cab8624e53ab296125951271a66e`에는 `scripts/diagnose_procurement_plan_gap.py`가 없어 Python이 스크립트 파일을 열지 못한 것이 원인이며, 이 경우 일반적으로 exit code `2`가 발생합니다. 현재 workflow는 파일 존재 여부를 확인하고 진단 실패를 warning으로 기록한 뒤 계속 진행합니다.
+
+collector 단계는 optional 처리되어 exit code를 warning으로 남기고 다음 단계로 진행합니다. 최종 성공 기준은 `business.json`과 `news.json`이 비어 있지 않고 공개 JSON 보안 및 계약 테스트를 통과하는 것입니다.
+
+새 export가 비어 있으면 workflow는 checkout 시점의 기존 공개 JSON을 복원하고 commit을 건너뜁니다. 따라서 일부 API 실패로 Netlify의 정상 데이터가 빈 파일로 교체되지 않습니다.

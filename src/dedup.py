@@ -11,6 +11,17 @@ def _clean(value: Any) -> str:
 
 
 def make_unique_hash(item: dict) -> str:
+    if _clean(item.get("source_type")) == "procurement_plan":
+        parts = [
+            item.get("source_name"),
+            item.get("source_type"),
+            item.get("source_record_id") or item.get("plan_no") or item.get("bid_no"),
+            item.get("title"),
+            item.get("organization"),
+            item.get("due_at"),
+        ]
+        return sha256("|".join(_clean(part) for part in parts).encode("utf-8")).hexdigest()
+
     if _clean(item.get("source_name")) in {"나라장터", "g2b", "조달청"} and _clean(
         item.get("source_record_id") or item.get("bid_no")
     ):

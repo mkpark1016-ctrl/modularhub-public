@@ -58,6 +58,9 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .card-actions { display: flex; gap: 14px; }
 .state { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 220px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; color: #666; }
 .state.error { color: #a33; }
+.source-status { padding: 14px 16px; background: #f7f7f4; border: 1px solid #d7d7d2; border-radius: 8px; color: #555; }
+.source-status p { margin: 0; line-height: 1.55; }
+.source-status p + p { margin-top: 6px; }
 .detail-page { max-width: 900px; margin: 0 auto; padding: 50px 0; }
 .back { display: inline-flex; align-items: center; gap: 6px; color: #666; margin-bottom: 30px; }
 .detail-page h1 { font-size: 36px; margin: 18px 0 30px; }

@@ -39,6 +39,12 @@ function businessKind(item) {
   return item.source_type === "procurement_plan" ? "발주계획" : "입찰공고";
 }
 
+function sourceTypeForKind(kind) {
+  if (kind === "입찰공고") return "bid";
+  if (kind === "발주계획") return "procurement_plan";
+  return "";
+}
+
 function isOpenBusiness(item) {
   if (!item.due_at) return false;
   const due = new Date(item.due_at);
@@ -102,7 +108,7 @@ function BusinessCard({ item }) {
       <div className="badge-row"><span>{displaySource(item.source)}</span><span>{kind}</span>{item.business_type && <span>{item.business_type}</span>}{item.notice_status && <span>{item.notice_status}</span>}{item.is_known_important && <span className="important">중요공고</span>}</div>
       <h2><Link to={`/business/${item.id}`}>{item.title}</Link></h2>
       <dl className="metadata"><div><dt>기관</dt><dd>{item.organization || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(item.posted_at)}</dd></div><div><dt>마감일</dt><dd>{formatDate(item.due_at)}</dd></div><div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div></dl>
-      <div className="card-footer"><span>{item.bid_no || "출처번호 미확인"}</span><Link to={`/business/${item.id}`}>상세보기</Link></div>
+      <div className="card-footer"><span>{item.plan_no || item.bid_no || "출처번호 미확인"}</span><Link to={`/business/${item.id}`}>상세보기</Link></div>
     </article>
   );
 }
@@ -121,17 +127,25 @@ function NewsCard({ item }) {
 function ListingPage({ type }) {
   const isBusiness = type === "business";
   const { loading, error, data } = useDataset(type);
+  const { data: meta } = useDataset("meta");
   const [query, setQuery] = useState("");
   const [source, setSource] = useState("전체");
   const [kind, setKind] = useState("전체");
   const [openOnly, setOpenOnly] = useState(false);
   const [newsDays, setNewsDays] = useState("전체");
   const items = data?.items || [];
+  const selectedSourceType = sourceTypeForKind(kind);
+  const procurementPlanCount = items.filter((item) => item.source_type === "procurement_plan").length;
+  const procurementPlanStatus = data?.procurement_plan_collection_status || meta?.procurement_plan_collection_status;
+  const g2bOrderPlanStatus = data?.g2b_order_plan_status || meta?.g2b_order_plan_status;
+  const g2bOrderPlanMessage = data?.g2b_order_plan_message || meta?.g2b_order_plan_message;
+  const d2bStatus = data?.d2b_status || meta?.d2b_status;
+  const d2bMessage = data?.d2b_message || meta?.d2b_message;
   const sources = ["전체", ...new Set(items.map((item) => item.source).filter(Boolean))];
   const filtered = items.filter((item) => {
-    const text = `${item.title || ""} ${item.organization || item.media || ""} ${item.summary || ""} ${item.bid_no || ""}`.toLowerCase();
+    const text = `${item.title || ""} ${item.organization || item.media || ""} ${item.summary || ""} ${item.plan_no || ""} ${item.bid_no || ""}`.toLowerCase();
     const sourceMatches = source === "전체" || item.source === source;
-    const kindMatches = !isBusiness || kind === "전체" || businessKind(item) === kind;
+    const kindMatches = !isBusiness || !selectedSourceType || item.source_type === selectedSourceType;
     const openMatches = !isBusiness || !openOnly || isOpenBusiness(item);
     let dateMatches = true;
     if (!isBusiness && newsDays !== "전체") {
@@ -142,15 +156,36 @@ function ListingPage({ type }) {
     }
     return (!query || text.includes(query.toLowerCase())) && sourceMatches && kindMatches && openMatches && dateMatches;
   });
+  let emptyMessage = "조건에 맞는 정보가 없습니다.";
+  if (isBusiness && kind === "발주계획") {
+    if (procurementPlanCount === 0 && g2bOrderPlanStatus === "failed") {
+      emptyMessage = "나라장터 발주계획 API 호출에 실패했습니다. 활용신청/인증키/endpoint를 확인하세요.";
+    } else if (procurementPlanCount === 0 && g2bOrderPlanStatus === "success_no_match") {
+      emptyMessage = "현재 조회기간 내 모듈러 발주계획 데이터가 없습니다.";
+    } else if (procurementPlanCount === 0 && ["not_collected", undefined].includes(procurementPlanStatus)) {
+      emptyMessage = "발주계획 수집 데이터가 아직 생성되지 않았습니다.";
+    } else if (procurementPlanCount === 0 && ["failed", "partial_warning"].includes(procurementPlanStatus)) {
+      emptyMessage = "발주계획 수집 중 일부 출처에 오류가 발생했습니다. 최신 수집 상태를 확인한 뒤 다시 시도해 주세요.";
+    } else if (procurementPlanCount === 0) {
+      emptyMessage = "현재 조회기간 내 모듈러 발주계획 데이터가 없습니다. 입찰공고는 발주계획 없이도 등록될 수 있으므로 입찰공고도 함께 확인하세요.";
+    } else {
+      emptyMessage = "선택한 조건에 맞는 발주계획이 없습니다. 출처 또는 검색어를 넓혀보세요.";
+    }
+  }
   return (
     <Layout>
       <section className="page-heading"><p className="eyebrow">{isBusiness ? "BUSINESS" : "NEWS"}</p><h1>{isBusiness ? "모듈러 사업정보" : "모듈러 뉴스정보"}</h1><p>{isBusiness ? "나라장터와 D2B에서 공고명 또는 사업명에 모듈러가 포함된 정보를 제공합니다." : "원문 링크가 확인된 모듈러 관련 뉴스를 제공합니다."}</p></section>
       <div className="content-layout">
         <aside className="filters"><h2>검색 조건</h2><SearchBar value={query} onChange={setQuery} placeholder={isBusiness ? "공고명, 기관, 공고번호" : "뉴스 제목, 요약"} /><label>출처<select value={source} onChange={(event) => setSource(event.target.value)}>{sources.map((name) => <option key={name} value={name}>{displaySource(name)}</option>)}</select></label>{isBusiness ? <><label>유형<select value={kind} onChange={(event) => setKind(event.target.value)}><option>전체</option><option>입찰공고</option><option>발주계획</option></select></label><label className="check-row"><input type="checkbox" checked={openOnly} onChange={(event) => setOpenOnly(event.target.checked)} />마감 전 공고만</label></> : <label>기간<select value={newsDays} onChange={(event) => setNewsDays(event.target.value)}><option>전체</option><option value="7">최근 7일</option><option value="30">최근 30일</option><option value="90">최근 90일</option></select></label>}<p className="filter-note">총 {filtered.length}건</p></aside>
         <section className="results" aria-live="polite">
+          {isBusiness && kind === "발주계획" && !loading && !error && <div className="source-status">
+            <p><strong>나라장터</strong> {g2bOrderPlanMessage || "발주계획 수집 상태를 확인 중입니다."}</p>
+            {d2bStatus === "disabled_stopped" && <p><strong>D2B</strong> 방위사업청 기존 API는 중지 상태로 자동 수집에서 제외되었습니다.</p>}
+            {d2bStatus !== "disabled_stopped" && d2bMessage && <p><strong>D2B</strong> {d2bMessage}</p>}
+          </div>}
           {loading && <div className="state">데이터를 불러오는 중입니다.</div>}
           {error && <div className="state error">{error}</div>}
-          {!loading && !error && filtered.length === 0 && <div className="state">조건에 맞는 정보가 없습니다.</div>}
+          {!loading && !error && filtered.length === 0 && <div className="state">{emptyMessage}</div>}
           {filtered.map((item) => isBusiness ? <BusinessCard key={item.id} item={item} /> : <NewsCard key={item.id} item={item} />)}
         </section>
       </div>
@@ -173,14 +208,14 @@ function DetailPage({ type }) {
         <Link className="back" to={`/${type}`}><ArrowLeft size={17} />목록으로</Link>
         <div className="badge-row"><span>{displaySource(item.source)}</span><span>{isBusiness ? businessKind(item) : "뉴스"}</span>{isBusiness && item.notice_status && <span>{item.notice_status}</span>}</div>
         <h1>{item.title}</h1>
-        <dl className="detail-grid"><div><dt>기관</dt><dd>{(isBusiness ? item.organization : item.media) || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(isBusiness ? item.posted_at : item.published_at)}</dd></div><div><dt>{isBusiness ? "마감일" : "출처"}</dt><dd>{isBusiness ? formatDate(item.due_at) : (item.source || "네이버뉴스")}</dd></div>{isBusiness && <div><dt>수요기관</dt><dd>{item.demand_org || "-"}</dd></div>}{isBusiness && <div><dt>업무구분</dt><dd>{[item.business_type, item.business_subtype].filter(Boolean).join(" / ") || "-"}</dd></div>}{isBusiness && <div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div>}{isBusiness && <div><dt>공고/판단번호</dt><dd>{item.bid_no || "-"}</dd></div>}{isBusiness && <div><dt>공고차수</dt><dd>{item.bid_order || "-"}</dd></div>}{isBusiness && <div><dt>공고상태</dt><dd>{item.notice_status || "-"}</dd></div>}</dl>
+        <dl className="detail-grid"><div><dt>기관</dt><dd>{(isBusiness ? item.organization : item.media) || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(isBusiness ? item.posted_at : item.published_at)}</dd></div><div><dt>{isBusiness ? "마감일" : "출처"}</dt><dd>{isBusiness ? formatDate(item.due_at) : (item.source || "네이버뉴스")}</dd></div>{isBusiness && <div><dt>수요기관</dt><dd>{item.demand_org || "-"}</dd></div>}{isBusiness && <div><dt>업무구분</dt><dd>{[item.business_type, item.business_subtype].filter(Boolean).join(" / ") || "-"}</dd></div>}{isBusiness && <div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div>}{isBusiness && <div><dt>공고/판단/계획번호</dt><dd>{item.plan_no || item.bid_no || "-"}</dd></div>}{isBusiness && <div><dt>공고차수</dt><dd>{item.bid_order || "-"}</dd></div>}{isBusiness && <div><dt>공고상태</dt><dd>{item.notice_status || "-"}</dd></div>}</dl>
         <section className="summary"><h2>내용</h2><p>{item.summary || "상세 요약이 없습니다."}</p></section>
         <div className="detail-actions">
           {originalUrl && <a className="button primary" href={originalUrl} target="_blank" rel="noreferrer">원문 열기 <ExternalLink size={16} /></a>}
           {isBusiness && manualUrl && <a className="button secondary" href={manualUrl} target="_blank" rel="noreferrer">공식 확인 사이트 <ExternalLink size={16} /></a>}
         </div>
         {isBusiness && item.detail && <details className="api-detail"><summary>공식 API 상세 정보</summary><pre>{JSON.stringify(item.detail, null, 2)}</pre></details>}
-        {isBusiness && <div className="manual-note"><strong>{originalUrl ? "공식 사이트 수동 확인" : "정확한 상세 원문 링크 미확인"}</strong><p>{item.manual_check?.guide_text}</p><label>공고번호<input readOnly value={item.bid_no || ""} onFocus={(event) => event.target.select()} /></label><label>공고명<input readOnly value={item.title || ""} onFocus={(event) => event.target.select()} /></label><label>검색 조합<input readOnly value={item.manual_check?.search_text || ""} onFocus={(event) => event.target.select()} /></label></div>}
+        {isBusiness && <div className="manual-note"><strong>{originalUrl ? "공식 사이트 수동 확인" : "정확한 상세 원문 링크 미확인"}</strong><p>{item.manual_check?.guide_text}</p><label>공고/계획번호<input readOnly value={item.plan_no || item.bid_no || ""} onFocus={(event) => event.target.select()} /></label><label>공고명<input readOnly value={item.title || ""} onFocus={(event) => event.target.select()} /></label><label>검색 조합<input readOnly value={item.manual_check?.search_text || ""} onFocus={(event) => event.target.select()} /></label></div>}
       </article>
     </Layout>
   );

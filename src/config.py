@@ -48,6 +48,17 @@ G2B_DETAIL_BASE_ENDPOINT = os.getenv(
     "https://apis.data.go.kr/1230000/ad/BidPublicInfoService",
 )
 G2B_DETAIL_USE_API_LINK = os.getenv("G2B_DETAIL_USE_API_LINK", "true").lower() in {"1", "true", "yes", "y"}
+G2B_PLAN_LOOKAHEAD_MONTHS = int(os.getenv("G2B_PLAN_LOOKAHEAD_MONTHS", "12"))
+G2B_PLAN_PAGE_SIZE = int(os.getenv("G2B_PLAN_PAGE_SIZE", "100"))
+G2B_PLAN_TITLE_KEYWORD = os.getenv("G2B_PLAN_TITLE_KEYWORD", "모듈러")
+G2B_PLAN_BASE_ENDPOINT = os.getenv(
+    "G2B_PLAN_BASE_ENDPOINT",
+    "https://apis.data.go.kr/1230000/ao/OrderPlanStusService",
+)
+G2B_PLAN_GOODS_ENDPOINT = os.getenv("G2B_PLAN_GOODS_ENDPOINT", "")
+G2B_PLAN_SERVICE_ENDPOINT = os.getenv("G2B_PLAN_SERVICE_ENDPOINT", "")
+G2B_PLAN_CONSTRUCTION_ENDPOINT = os.getenv("G2B_PLAN_CONSTRUCTION_ENDPOINT", "")
+G2B_PLAN_FOREIGN_ENDPOINT = os.getenv("G2B_PLAN_FOREIGN_ENDPOINT", "")
 LH_LOOKBACK_DAYS = int(os.getenv("LH_LOOKBACK_DAYS", "180"))
 LH_PAGE_SIZE = int(os.getenv("LH_PAGE_SIZE", "100"))
 LH_OPENBID_ENDPOINT = os.getenv(
@@ -76,6 +87,12 @@ D2B_PLAN_DOMESTIC_ENDPOINT = os.getenv(
     "http://openapi.d2b.go.kr/openapi/service/PrcurePlanInfoService/getDmstcPrcurePlanList",
 )
 D2B_PLAN_FACILITY_ENDPOINT = os.getenv("D2B_PLAN_FACILITY_ENDPOINT", "")
+D2B_LEGACY_API_ENABLED = os.getenv("D2B_LEGACY_API_ENABLED", "false").lower() in {
+    "1",
+    "true",
+    "yes",
+    "y",
+}
 D2B_BID_LOOKBACK_DAYS = int(os.getenv("D2B_BID_LOOKBACK_DAYS", "90"))
 D2B_BID_PAGE_SIZE = int(os.getenv("D2B_BID_PAGE_SIZE", "50"))
 D2B_BID_BASE_ENDPOINT = os.getenv(

@@ -39,14 +39,31 @@ def main() -> int:
     meta = json.loads(FILES["meta"].read_text(encoding="utf-8"))
     require(isinstance(business.get("items"), list), "business items must be a list")
     require(isinstance(news.get("items"), list), "news items must be a list")
+    require(bool(business["items"]), "business items must not be empty")
+    require(bool(news["items"]), "news items must not be empty")
     require(meta.get("business_count") == len(business["items"]), "business count mismatch")
     require(meta.get("news_count") == len(news["items"]), "news count mismatch")
+    for field in (
+        "g2b_order_plan_status",
+        "g2b_order_plan_message",
+        "d2b_status",
+        "d2b_message",
+        "workflow_last_run_status",
+        "warnings",
+    ):
+        require(field in meta, f"meta status field is missing: {field}")
+    require(isinstance(meta.get("warnings"), list), "meta warnings must be a list")
 
     for item in business["items"]:
         require(item.get("title"), "business item title is missing")
         require(item.get("source"), "business item source is missing")
+        require(item.get("source_name") == item.get("source"), "business source/source_name mismatch")
         require(isinstance(item.get("manual_check"), dict), "business manual_check is missing")
         require(item["source_type"] in {"bid", "procurement_plan"}, "unexpected business source_type")
+        require(item.get("type") in {"입찰공고", "발주계획"}, "business type label is missing")
+        if item["source_type"] == "procurement_plan":
+            require(item.get("type") == "발주계획", "procurement plan label mismatch")
+            require("plan_no" in item, "procurement plan number field is missing")
     for item in news["items"]:
         require(item.get("original_url"), "news original_url is missing")
         require(item.get("source_type") is None, "news contract must not expose unrelated source_type")
