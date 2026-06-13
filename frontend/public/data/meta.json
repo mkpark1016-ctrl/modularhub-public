@@ -1,26 +1,25 @@
 {
-  "generated_at": "2026-06-13T12:24:10+09:00",
-  "business_count": 87,
-  "procurement_plan_count": 0,
-  "procurement_plan_collection_status": "failed",
+  "generated_at": "2026-06-13T14:31:18+09:00",
+  "business_count": 98,
+  "procurement_plan_count": 11,
+  "procurement_plan_collection_status": "success",
   "procurement_plan_source_status": {
-    "나라장터": "failed"
+    "나라장터": "success"
   },
-  "procurement_plan_last_collected_at": "2026-06-13T12:23:15",
+  "procurement_plan_last_collected_at": "2026-06-13T14:30:14",
   "news_count": 114,
   "sources": [
     "나라장터",
     "네이버뉴스"
   ],
-  "last_collected_at": "2026-06-13T12:23:10",
-  "warning_count": 2,
-  "g2b_order_plan_status": "failed",
-  "g2b_order_plan_message": "나라장터 발주계획 API 호출에 실패했습니다. 활용신청/인증키/endpoint를 확인하세요.",
+  "last_collected_at": "2026-06-13T14:30:14",
+  "warning_count": 1,
+  "g2b_order_plan_status": "success",
+  "g2b_order_plan_message": "정상 호출되어 11건을 공개 데이터에 반영했습니다.",
   "d2b_status": "disabled_stopped",
   "d2b_message": "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다.",
   "workflow_last_run_status": "warning",
   "warnings": [
-    "나라장터 발주계획: 나라장터 발주계획 API 호출에 실패했습니다. 활용신청/인증키/endpoint를 확인하세요.",
     "D2B: 방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
   ]
 }
