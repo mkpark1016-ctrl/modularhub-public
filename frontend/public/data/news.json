@@ -1,10 +1,58 @@
 {
-  "generated_at": "2026-06-14T07:54:35+09:00",
+  "generated_at": "2026-06-15T08:00:10+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 416,
-  "current_news_count": 113,
-  "merged_news_count": 431,
+  "previous_news_count": 431,
+  "current_news_count": 111,
+  "merged_news_count": 436,
   "items": [
+    {
+      "id": 86,
+      "source": "네이버뉴스",
+      "media": "kmecnews.co.kr",
+      "title": "AI 데이터센터, 열을 잡는 기계설비가 승부처다",
+      "summary": "특히 데이터센터를 단순한 건축물이 아닌 고도의 설비 집약 산업으로 바라보는 시각이 인상적이었다. 건설 속도를 높이기 위한 OSC와 모듈러 공법, 플러그앤플레이 방식의 설비 구성, 기계설비 구성요소 표준화 방안이...",
+      "published_at": "2026-06-15",
+      "original_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50195",
+      "naver_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50195",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5747,
+      "source": "네이버뉴스",
+      "media": "kwnews.co.kr",
+      "title": "횡성 농어촌 유학, 지방소멸 위기 극복 대안 부상",
+      "summary": "이에 횡성군은 모듈러 주택 조성 등 거주 공간 마련과 유학 가족을 위한 맞춤형 일자리 창출과 현지 주민과의 교류 행사 운영 등 ‘횡성의 정(情)’을 느낄 수 있는 정주 여건 조성 방안을 심혈을 기울이고 있다. 남복현 군...",
+      "published_at": "2026-06-15",
+      "original_url": "https://www.kwnews.co.kr/page/view/2026061350012100000",
+      "naver_url": "https://n.news.naver.com/mnews/article/087/0001199075?sid=102",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 131,
+      "source": "네이버뉴스",
+      "media": "koscaj.com",
+      "title": "[논단] 공사비 상승의 '구조적 위기' 고리를 끊어야 한다",
+      "summary": "싱가포르는 모듈러 공법 도입을 의무화해 노동 집약 구조를 극복하고 생산 단계를 지능화했다. 이는 규제와... 미분양 주택 매입 확약을 실질적으로 전면 확대해야 한다. 중장기적으로는 거시 충격에 강한 저소비·고효율...",
+      "published_at": "2026-06-15",
+      "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324575",
+      "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324575",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5748,
+      "source": "네이버뉴스",
+      "media": "joongboo.com",
+      "title": "오산 세교2지구 초등학교 배정 놓고 \"임대아파트가 알아서 빠져줘야\" 일...",
+      "summary": "이에 대해 일부 주민들은 과밀학급 문제의 원인을 특정 아파트 단지나 임대주택 입주민에게 돌리는 것은... 경우 모듈러 교실 설치를 검토하고 설치가 결정되면 내년 중 운영하는 방안도 검토하고 있다\"고 설명했다....",
+      "published_at": "2026-06-14",
+      "original_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
+      "naver_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
     {
       "id": 133,
       "source": "네이버뉴스",
@@ -723,7 +771,7 @@
       "original_url": "https://dealsite.co.kr/articles/163107",
       "naver_url": "https://dealsite.co.kr/articles/163107",
       "keywords": "프리패브 건축",
-      "relevance_score": 3
+      "relevance_score": 1
     },
     {
       "id": 5599,
@@ -735,7 +783,7 @@
       "original_url": "https://news.bizwatch.co.kr/article/market/2026/06/05/0018",
       "naver_url": "https://n.news.naver.com/mnews/article/648/0000047764?sid=101",
       "keywords": "모듈러 주택",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5598,
@@ -747,7 +795,7 @@
       "original_url": "https://www.mk.co.kr/article/12067929",
       "naver_url": "https://n.news.naver.com/mnews/article/009/0005690439?sid=101",
       "keywords": "모듈러 주택",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5601,
@@ -1144,6 +1192,18 @@
       "naver_url": "https://www.newsquest.co.kr/news/articleView.html?idxno=267229",
       "keywords": "모듈러 건축",
       "relevance_score": 14
+    },
+    {
+      "id": 172,
+      "source": "네이버뉴스",
+      "media": "jndn.com",
+      "title": "원광전력, 노후 공장 그린리모델링 BIPV 기술개발 동참",
+      "summary": "이번 과제는 노후 공장 지붕에 태양광 설비를 보다 경제적이고 효율적으로 적용할 수 있는 프리패브 기반 BIPV 지붕 유닛 시스템 개발을 목표로 한다. 기존 태양광 설비는 노후 건축물의 구조 보강 비용과 시공...",
+      "published_at": "2026-06-02",
+      "original_url": "http://www.jndn.com/article.php?aid=1780389664433593004",
+      "naver_url": "http://www.jndn.com/article.php?aid=1780389664433593004",
+      "keywords": "프리패브 건축",
+      "relevance_score": 1
     },
     {
       "id": 755,
