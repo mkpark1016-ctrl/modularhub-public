@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-06-15T08:00:10+09:00",
-  "last_updated": "2026-06-15T08:00:10+09:00",
-  "business_count": 118,
-  "procurement_plan_count": 11,
+  "generated_at": "2026-06-16T08:30:52+09:00",
+  "last_updated": "2026-06-16T08:30:52+09:00",
+  "business_count": 120,
+  "procurement_plan_count": 13,
   "procurement_plan_collection_status": "success",
   "procurement_plan_source_status": {
     "나라장터": "success"
   },
-  "procurement_plan_last_collected_at": "2026-06-15T07:59:27",
-  "news_count": 436,
+  "procurement_plan_last_collected_at": "2026-06-16T08:29:52",
+  "news_count": 447,
   "sources": [
     "나라장터",
     "네이버뉴스"
   ],
-  "last_collected_at": "2026-06-15T07:59:27",
+  "last_collected_at": "2026-06-16T08:29:52",
   "warning_count": 1,
   "g2b_order_plan_status": "success",
-  "g2b_order_plan_message": "정상 호출되어 11건을 공개 데이터에 반영했습니다.",
+  "g2b_order_plan_message": "정상 호출되어 13건을 공개 데이터에 반영했습니다.",
   "d2b_status": "disabled_stopped",
   "d2b_message": "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다.",
   "d2b_legacy_status": "disabled_stopped",
@@ -26,12 +26,12 @@
     "D2B: 방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
   ],
   "previous_business_count": 118,
-  "current_business_count": 96,
-  "merged_business_count": 118,
-  "previous_news_count": 431,
-  "current_news_count": 111,
-  "merged_news_count": 436,
+  "current_business_count": 99,
+  "merged_business_count": 120,
+  "previous_news_count": 436,
+  "current_news_count": 104,
+  "merged_news_count": 447,
   "public_data_guard_status": "passed",
-  "public_data_guard_message": "Cumulative merge protected public data: business 118 -> 118, news 431 -> 436.",
+  "public_data_guard_message": "Cumulative merge protected public data: business 118 -> 120, news 436 -> 447.",
   "data_policy": "cumulative_verified"
 }
