@@ -1414,3 +1414,59 @@ GitHub Actions는 export 후 건수 진단과 감소 가드를 실행합니다. 
 - `d2b_legacy_status`, `d2b_gw_migration_required`
 
 D2B 기존 API 중지 상태는 내부 meta warning으로 유지합니다. `probe_d2b_gw.py`, `d2b_gw_bid.py`, `d2b_gw_procurement_plan.py`는 후속 GW API 전환을 위한 자리만 마련했으며 현재 수집 및 공개 JSON에는 연결하지 않습니다.
+
+## Dual Deployment: Netlify + Vercel
+
+ModularHub 공개 프론트는 Netlify 운영 배포를 유지하면서 Vercel에도 같은 GitHub `main` 브랜치를 연결해 병행 배포할 수 있습니다. Netlify 설정 파일은 삭제하지 않으며, 기존 Netlify URL은 Notion 임베드나 백업 접속용 운영 URL로 계속 유지합니다. Vercel은 추가 검증용 배포 채널로 붙입니다.
+
+두 플랫폼 모두 `frontend/public/data/business.json`, `frontend/public/data/news.json`, `frontend/public/data/meta.json`을 사용합니다. 데이터 수집과 JSON 갱신은 GitHub Actions가 담당하고, Netlify와 Vercel은 GitHub `main` 변경을 감지해 정적 프론트만 배포합니다.
+
+주의 사항:
+
+- Vercel에는 API Key를 등록하지 않습니다.
+- `DATA_GO_KR_SERVICE_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`은 GitHub Repository Secrets에만 둡니다.
+- Vercel Cron은 사용하지 않습니다.
+- GitHub Actions 데이터 갱신 구조는 그대로 유지합니다.
+- Netlify 자동 배포를 끊거나 프로젝트를 삭제하지 않습니다.
+- Netlify 크레딧 소모가 우려되면 코드가 아니라 Netlify 관리자 화면에서 auto publishing, deploy 상태, repository 연결 상태를 별도로 조정합니다.
+
+Vercel 프로젝트 생성 설정:
+
+- Import Git Repository: `mkpark1016-ctrl/modularhub-public`
+- Framework Preset: `Vite`
+- Root Directory: `frontend`
+- Install Command: `npm install`
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Production Branch: `main`
+- Environment Variables: 없음
+
+SPA 라우팅:
+
+- Vercel은 `frontend/vercel.json`의 rewrite 설정으로 `/business`, `/news`, `/business/:id`, `/news/:id` 직접 접속과 새로고침을 `index.html`로 연결합니다.
+- Netlify는 기존 `frontend/netlify.toml` 설정을 유지합니다.
+
+운영 전환 기준:
+
+- Netlify는 Vercel 안정화 전까지 인터넷 접속 가능한 기존 배포 URL로 유지합니다.
+- Vercel이 2~3일 이상 정상 갱신되면 Notion 임베드 URL을 Vercel로 교체할 수 있습니다.
+- Netlify 프로젝트 삭제는 Vercel 안정화 이후 별도 판단합니다.
+
+로컬 검증:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2\frontend"
+npm install
+npm run build
+
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\diagnose_public_json_counts.py
+.\.venv\Scripts\python.exe scripts\refuse_suspicious_public_data_shrink.py
+.\.venv\Scripts\python.exe scripts\test_public_json_export.py
+```
+
+배포 흐름:
+
+1. GitHub Actions가 매일 데이터를 수집합니다.
+2. 공개 JSON을 누적 병합하고 축소 방지 검사를 통과한 경우에만 commit/push합니다.
+3. Netlify와 Vercel이 같은 `main` 브랜치 변경을 각각 감지해 재배포합니다.
