@@ -1,10 +1,46 @@
 {
-  "generated_at": "2026-06-16T08:30:52+09:00",
+  "generated_at": "2026-06-16T11:13:23+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 436,
-  "current_news_count": 104,
-  "merged_news_count": 447,
+  "previous_news_count": 447,
+  "current_news_count": 106,
+  "merged_news_count": 451,
   "items": [
+    {
+      "id": 5755,
+      "source": "네이버뉴스",
+      "media": "seoul.co.kr",
+      "title": "김태희 경기도의원, ‘전국 최초 모듈러주택 지원 조례’로 우수조례 의...",
+      "summary": "“경기도가 모듈러주택 공급을 선도해 관련 산업 생태계 조성과 전국 확산을 이끄는 거점이 될 것으로 기대된다”고 강조했다. 이번 수상에 대해 김 의원은 “도민의 주거 안정과 지속 가능한 건축문화 확산을 위해 마련한...",
+      "published_at": "2026-06-16",
+      "original_url": "https://www.seoul.co.kr/news/publicnews/local_govern/kyungki_do/2026/06/16/20260616500065?wlog_tag3=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/081/0003652897?sid=102",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 5754,
+      "source": "네이버뉴스",
+      "media": "viva100.com",
+      "title": "대우건설, 신한라이프케어와 초고령사회 대응 시니어주택 사업 업무협약...",
+      "summary": "대우건설은 지속가능 경영 강화를 위해 친환경 및 탄소저감형 건축재 활용, 에너지 고효율 설계, 스마트·모듈러 건축 기술 도입을 확대하고 있다. 아울러 지역사회와의 상생, 안전한 시공 환경 조성, 건설현장 근로자의...",
+      "published_at": "2026-06-16",
+      "original_url": "https://www.viva100.com/article/20260616500400",
+      "naver_url": "https://www.viva100.com/article/20260616500400",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5753,
+      "source": "네이버뉴스",
+      "media": "iminju.net",
+      "title": "현대엘리베이터, 모듈러 상용화·스페이스X 호재…기업가치 재평가?",
+      "summary": "현대엘리베이터 관계자는 \"이노블록은 중대재해를 최소할 수 있는 솔루션\"이라며 \"대형 건설사들의 높은 관심과 정부의 모듈러 건축 활성화 정책에 힘입어 향후 수요가 더욱 늘어날 것으로 보인다\"고 말했다. 이어...",
+      "published_at": "2026-06-16",
+      "original_url": "http://www.iminju.net/news/articleView.html?idxno=165310",
+      "naver_url": "http://www.iminju.net/news/articleView.html?idxno=165310",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
     {
       "id": 5749,
       "source": "네이버뉴스",
@@ -15,6 +51,18 @@
       "original_url": "http://www.newsdream.kr/news/articleView.html?idxno=113058",
       "naver_url": "http://www.newsdream.kr/news/articleView.html?idxno=113058",
       "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 160,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "센엔지니어링 ‘PSRC’ 싱가포르 건축설계기준에 등재",
+      "summary": "PSRC기둥 공법은 최근 각광을 받는 OSC(탈현장건설) 공법에 해당한다. 그만큼 시공성이 뛰어나고, 현장의 안전관리 및 공사기간 단축에 유리하다. AI(인공지능) 시대를 맞아 수요가 커진 반도체 공장, 데이터센터...",
+      "published_at": "2026-06-16",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606160857465040468",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606160857465040468",
+      "keywords": "OSC 건설",
       "relevance_score": 6
     },
     {
@@ -82,7 +130,7 @@
       "source": "네이버뉴스",
       "media": "polinews.co.kr",
       "title": "이상휘 의원, '철강산업 전기료 감면' 위한 법안 대표 발의… 철강기업...",
-      "summary": "또한, 포항시가 발주하는 모든 공공건축, 교통 인프라, 모듈러 주택사업 등에 포스코에서 제작하는 철강재 및 지역 중소기업 제품을 우선 적용할 수 있도록 조례의 정비를 희망하는 것으로 알려졌다.",
+      "summary": "또한, 포항시가 발주하는 모든 공공건축, 교통인프라, 모듈러 주택사업 등에 지역에서 생산하는 철강재를 우선 적용할 수 있도록 조례의 정비 등을 희망하는 것으로 알려졌다.",
       "published_at": "2026-06-15",
       "original_url": "https://www.polinews.co.kr/news/articleView.html?idxno=734123",
       "naver_url": "https://www.polinews.co.kr/news/articleView.html?idxno=734123",
