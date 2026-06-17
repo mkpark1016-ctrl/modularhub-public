@@ -1,10 +1,190 @@
 {
-  "generated_at": "2026-06-17T08:20:39+09:00",
+  "generated_at": "2026-06-18T08:17:36+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 451,
-  "current_news_count": 113,
-  "merged_news_count": 464,
+  "previous_news_count": 464,
+  "current_news_count": 124,
+  "merged_news_count": 479,
   "items": [
+    {
+      "id": 5762,
+      "source": "네이버뉴스",
+      "media": "koreatimes.com",
+      "title": "이발사·부동산중개인 ‘면허 갱신’ 쉬워진다",
+      "summary": "아울러 서민 주거 대책의 일환으로, 폭 14~16피트 사이의 조립식 주택(모듈러 홈)을 운송할 때 부과되던 2만 5,000달러의 막대한 보증금 요건을 전격 폐지해 주거지 이동의 장벽을 낮췄다. 이 외에도 야외 스포츠를 즐기는...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.koreatimes.com/article/1617763",
+      "naver_url": "http://www.koreatimes.com/article/1617763",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5769,
+      "source": "네이버뉴스",
+      "media": "etoday.co.kr",
+      "title": "자연과환경, ‘중소기업인대회’ 대통령표창 수상…OSCㆍ기후환경 기술...",
+      "summary": "이투데이=설경진 기자 | 이병용 대표, 모범중소기업인 부문 수상…PCㆍ모듈러 건축 스마트 공법 주도 탄소포집 자재ㆍ재난 구호 등 ESG 경영 및 친환경 혁신 성과 인정받아 자연과환경이 전통적인 건설 산업에 공장형...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.etoday.co.kr/news/view/2594637",
+      "naver_url": "https://www.etoday.co.kr/news/view/2594637",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 5768,
+      "source": "네이버뉴스",
+      "media": "joongang.co.kr",
+      "title": "UBG, 빌드웰러와 손잡고 일본 박람회 친환경 부스 사업 확대",
+      "summary": "연세대학교 건축학과를 졸업한 김유석·정우열 공동대표가 2018년 설립한 빌드웰러(builddweller)는 사용자의 삶과 환경 변화에 맞춰 조립·해체·변형이 가능한 국내 모듈러 시스템 가구 및 공간 솔루션 브랜드다....",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.joongang.co.kr/article/25437592",
+      "naver_url": "https://n.news.naver.com/mnews/article/025/0003531190?sid=103",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5767,
+      "source": "네이버뉴스",
+      "media": "ikld.kr",
+      "title": "유닛랩, 넥스트라이즈·국토교통기술대전 참가",
+      "summary": "2026년 LH·SH·GH의 매입임대 목표는 총 3만8224호이며, 이 가운데 약 91%가 신축매입약정형으로 구성된다. 수도권 비중도 81.1%에 이른다. 유닛랩은 모듈러가 제한적인 공공 시범사업을 넘어 민간 사업자가 참여 가능한 공급...",
+      "published_at": "2026-06-17",
+      "original_url": "http://www.ikld.kr/news/articleView.html?idxno=336130",
+      "naver_url": "http://www.ikld.kr/news/articleView.html?idxno=336130",
+      "keywords": "LH 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 5766,
+      "source": "네이버뉴스",
+      "media": "asiatime.co.kr",
+      "title": "전국 최초 조례 잇따라 수상⋯ 경기도의회 의원발의 입법 성과 주목",
+      "summary": "이 조례는 전국 최초로 모듈러주택 공급 지원계획 수립과 지원센터 설치, 클러스터 조성, 시범사업 추진 등을 담은 종합 지원체계를 구축해 친환경 건축 확산과 주거복지 향상 기반을 마련했다. 박명숙 의원은 '경기도...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.asiatime.co.kr/article/20260617500189",
+      "naver_url": "https://www.asiatime.co.kr/article/20260617500189",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5765,
+      "source": "네이버뉴스",
+      "media": "hellot.net",
+      "title": "[헬로스톡] 6/17 주목할 종목 : SGC에너지·HL D&I·SK스퀘어·현대모비스",
+      "summary": "7~8월 모듈러 발주 및 임차 확약서 체결을 시작으로 연말 착공에 돌입한다. 2차 사업은 240MW 규모로... HL D&I — 2분기도 실적 순항, 중동 종전으로 주택주 회복 기대 역대 최대 수주잔고를 등에 업은 HL D&I(014790)...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.hellot.net/news/article.html?no=113262",
+      "naver_url": "https://www.hellot.net/news/article.html?no=113262",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5764,
+      "source": "네이버뉴스",
+      "media": "bizwnews.com",
+      "title": "유닛랩, 6월 두 박람회서 경량 도심형 모듈러 테스트베드 검증 내용 공...",
+      "summary": "하성민 유닛랩 대표는 \"공공 모듈러 시장에서는 단순히 지을 수 있다는 설명만으로는 부족하고, 실제 부지에 적용했을 때 비용과 기간, 운송·양중 조건, 공동주택 기준 대응까지 얼마나 촘촘하게 검토했는지가...",
+      "published_at": "2026-06-17",
+      "original_url": "http://www.bizwnews.com/news/articleView.html?idxno=138881",
+      "naver_url": "http://www.bizwnews.com/news/articleView.html?idxno=138881",
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5763,
+      "source": "네이버뉴스",
+      "media": "ajunews.com",
+      "title": "국토교통기술대전 24일 개막…자율주행·UAM·AI시티 한자리에",
+      "summary": "AI시티 분야에서는 한국토지주택공사(LH), 한국국토정보공사(LX) 등이 도시 공간정보, 스마트시티, 모듈러 주택 기술을 선보인다. AI시티는 도시 인프라에서 수집되는 데이터를 인공지능이 실시간으로 학습·분석해...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.ajunews.com/view/20260617145116268",
+      "naver_url": "https://www.ajunews.com/view/20260617145116268",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 194,
+      "source": "네이버뉴스",
+      "media": "pinpointnews.co.kr",
+      "title": "K-방역·의료 모빌리티의 핵심… 오텍, 고부가 특수 차량 수요 확대 기대",
+      "summary": "모듈러 공법을 활용한 이동식 음압병동 분야의 강자인 에스와이는 4.15% 오른 2,385원에 거래중이다. 병원 특수... 자동차 내장재 기술을 음압 벽체에 응용한 GH신소재 역시 특수 내장재 공급 계약 확대 기대감 속에 매수세가...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460845",
+      "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460845",
+      "keywords": "GH 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 191,
+      "source": "네이버뉴스",
+      "media": "gosiweek.com",
+      "title": "유닛랩, ‘약정율 6.4%’ LH 신축매입약정형 매입임대 시장 병목 모듈러...",
+      "summary": "유닛랩은 오는 6월 열리는 넥스트라이즈 2026 서울과 2026 국토교통기술대전에 참가해, LH 신축매입약정형... 그리고 모듈러 공급을 반복 가능한 구조로 만들기 위해 어떤 데이터 기반 검토 체계가 필요한지를 설명할...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.gosiweek.com/article/1065595294613685",
+      "naver_url": "https://www.gosiweek.com/article/1065595294613685",
+      "keywords": "LH 모듈러",
+      "relevance_score": 22
+    },
+    {
+      "id": 168,
+      "source": "네이버뉴스",
+      "media": "theguru.co.kr",
+      "title": "美 국방부, 희토류 스타트업에 5억 달러 자금 지원",
+      "summary": "美 희토류 공급망 탈중국화 속도 2028년 생산 목표로 공장 건설 추진 미국 국방부가 희토류 정제 스타트업... 16일(현지시간) 피닉스테일링스는 미 국방부 전략자본국(OSC)과 5억 달러(약 7600억원) 규모의 조건부 장기 대출...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.theguru.co.kr/news/article.html?no=103163",
+      "naver_url": "https://www.theguru.co.kr/news/article.html?no=103163",
+      "keywords": "OSC 건설",
+      "relevance_score": 12
+    },
+    {
+      "id": 147,
+      "source": "네이버뉴스",
+      "media": "bizwork.co.kr",
+      "title": "모빌리티부터 우주항공까지…'국토교통기술대전' 24일 코엑스서 개막",
+      "summary": "AI시티 분야에서는 도시 데이터와 인공지능(AI)을 결합한 자율형 도시 모델, 에너지 기본주택, 모듈러주택 기술이 공개된다. 우주항공 분야에서는 UAM, 드론, 국토위성, 차세대중형위성 등 항공·위성 기술을 선보인다....",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416576",
+      "naver_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416576",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 146,
+      "source": "네이버뉴스",
+      "media": "news1.kr",
+      "title": "자율주행·UAM·AI시티 한자리에…국토교통기술대전 24일 개막",
+      "summary": "도시 인프라에서 수집되는 데이터를 AI가 실시간으로 학습·분석해 스스로 판단·실행하는 AI시티 전시는 에너지 기본주택, 모듈러 주택, 스마트시티 플랫폼 등을 연계해 미래 도시의 일상을 보여준다. 국민 참여형...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.news1.kr/realestate/general/6199792",
+      "naver_url": "https://n.news.naver.com/mnews/article/421/0009008069?sid=101",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 145,
+      "source": "네이버뉴스",
+      "media": "sedaily.com",
+      "title": "자율주행·건설로봇·AI시티…미래 국토교통 기술 한자리에",
+      "summary": "총 409개 부스에서 자율주행, 건설로봇, 에너지 기본주택, 위성·드론 기술과 함께 28개 스타트업의 혁신... 스마트건설존에는 현대건설·삼성물산이 건설현장 자재운반 로봇과 스마트모듈러홈을, 우주항공존에서는...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.sedaily.com/article/20056636?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/011/0004632037?sid=101",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 144,
+      "source": "네이버뉴스",
+      "media": "nocutnews.co.kr",
+      "title": "\"미래 기술 다 모은 한국판 CES\"…국토교통기술대전 24일 개막",
+      "summary": "AI시티 존에서는 도시 데이터를 인공지능이 실시간으로 분석해 운영하는 자율형 도시 모델과 에너지 기본주택, 모듈러 주택 등을 선보인다. 우주항공 존에서는 도심항공교통(UAM), 드론, 위성 기술이 공개된다....",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.nocutnews.co.kr/news/6534395?utm_source=naver&utm_medium=article&utm_campaign=20260617013815",
+      "naver_url": "https://n.news.naver.com/mnews/article/079/0004158804?sid=101",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
     {
       "id": 97,
       "source": "네이버뉴스",
@@ -723,7 +903,7 @@
       "original_url": "https://www.mhj21.com/news/articleView.html?idxno=252579",
       "naver_url": "https://www.mhj21.com/news/articleView.html?idxno=252579",
       "keywords": "학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5741,
@@ -735,7 +915,7 @@
       "original_url": "https://news.ifm.kr/news/articleView.html?idxno=472729",
       "naver_url": "https://news.ifm.kr/news/articleView.html?idxno=472729",
       "keywords": "LH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5734,
@@ -747,7 +927,7 @@
       "original_url": "https://www.youthdaily.co.kr/news/article.html?no=220585",
       "naver_url": "https://www.youthdaily.co.kr/news/article.html?no=220585",
       "keywords": "모듈러 주택",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5733,
@@ -759,7 +939,7 @@
       "original_url": "https://www.g-enews.com/view.php?ud=2026061009573654908fbfc802b3_1",
       "naver_url": "https://www.g-enews.com/view.php?ud=2026061009573654908fbfc802b3_1",
       "keywords": "모듈러 주택",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5732,
@@ -771,7 +951,7 @@
       "original_url": "http://www.lawissue.co.kr/view.php?ud=202606101537503513d94aa4ada6_12",
       "naver_url": "http://www.lawissue.co.kr/view.php?ud=202606101537503513d94aa4ada6_12",
       "keywords": "모듈러 주택",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5727,
@@ -783,7 +963,7 @@
       "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=439062",
       "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=439062",
       "keywords": "모듈러 주택;모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5726,
@@ -795,7 +975,7 @@
       "original_url": "https://www.seoul.co.kr/news/publicnews/local_govern/kyungki_do/2026/06/10/20260610500049?wlog_tag3=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/081/0003651151?sid=102",
       "keywords": "모듈러 주택;모듈러 건축",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5725,
@@ -807,7 +987,7 @@
       "original_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41213",
       "naver_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41213",
       "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5724,
@@ -819,7 +999,7 @@
       "original_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264085",
       "naver_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264085",
       "keywords": "모듈러 주택;모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5723,
@@ -831,7 +1011,7 @@
       "original_url": "https://www.electimes.com/news/articleView.html?idxno=368960",
       "naver_url": "https://www.electimes.com/news/articleView.html?idxno=368960",
       "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5746,
@@ -862,11 +1042,11 @@
       "source": "네이버뉴스",
       "media": "m-i.kr",
       "title": "[기획] 스마트홈·SMR·AI 데이터센터…건설사, 신사업 진출에 '진심'",
-      "summary": "GS건설은 공장에서 미리 제작한 모듈을 현장에 조립하는 모듈러 주택과 프리패브(공장제) 공법을 활용해 단독·공동주택 시장 선점에 나서고 있다. 인건비와 공기를 줄이고 품질을 일정 수준 이상으로 끌어올릴 수 있는...",
+      "summary": "대형 건설사들이 사업 모델을 근본부터 바꾸고 있다. 원전·AI 데이터센터 같은 미래 인프라부터 스마트홈... GS건설은 공장에서 미리 제작한 모듈을 현장에 조립하는 모듈러 주택과 프리패브(공장제) 공법을 활용해 단독...",
       "published_at": "2026-06-09",
       "original_url": "https://www.m-i.kr/news/articleView.html?idxno=1379921",
       "naver_url": "https://www.m-i.kr/news/articleView.html?idxno=1379921",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;스마트건설 모듈러",
       "relevance_score": 4
     },
     {
@@ -874,11 +1054,11 @@
       "source": "네이버뉴스",
       "media": "the-biz.co.kr",
       "title": "대형사 몰리는 LH 민참사업… 공공주택도 '브랜드' 시대",
-      "summary": "GS건설은 최근 현대엘리베이터와 모듈러 엘리베이터 기술 개발에 나서며, 해당 기술을 시흥거모 A-1BL 통합형 민간참여 공공주택 사업에 시범 적용한다고 밝혔다. 업계에서는 민참사업이 브랜드 경쟁뿐 아니라 신기술...",
+      "summary": "민참사업은 한국토지주택공사(LH)가 토지 확보와 사업 관리를 맡고 민간 건설사가 설계와 시공에 참여하는... GS건설은 최근 현대엘리베이터와 모듈러 엘리베이터 기술 개발에 나서며, 해당 기술을 시흥거모 A-1BL 통합형...",
       "published_at": "2026-06-09",
       "original_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722216",
       "naver_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722216",
-      "keywords": "모듈러 주택",
+      "keywords": "LH 모듈러",
       "relevance_score": 10
     },
     {
@@ -886,11 +1066,11 @@
       "source": "네이버뉴스",
       "media": "namdonews.com",
       "title": "\"전남광주통합특별시, 정부 국토교통정책 선점해야\"",
-      "summary": "귀촌·귀어 인구를 위한 모듈러주택 공급을 활성화하고 전남 철강산업과 연계하는 방안도 들어 있다. 청년층에게는 청년월세 지원과 '만원주택'의 공급 유형·규모·임차료 세분화를, 고령자에게는 대학캠퍼스와 연계한...",
+      "summary": "귀촌·귀어 인구를 위한 모듈러주택 공급을 활성화하고 전남 철강산업과 연계하는 방안도 들어 있다.... ◇AI 기반 산업혁신·저탄소 전환 보고서는 광역 AI·디지털트윈 기본구상을 마련하고, 통합특별시 스마트도시 조례...",
       "published_at": "2026-06-09",
       "original_url": "https://www.namdonews.com/news/articleView.html?idxno=913092",
       "naver_url": "https://www.namdonews.com/news/articleView.html?idxno=913092",
-      "keywords": "모듈러 주택",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 4
     },
     {
@@ -1006,11 +1186,11 @@
       "source": "네이버뉴스",
       "media": "sidae.com",
       "title": "'젠슨 황 효과' AI데이터센터…건설업계, 8700조 인프라 수주 경쟁",
-      "summary": "고발열 서버 대응이 가능한 액침 냉각 기술을 개발하고 모듈러(조립식) 공법을 도입해 공기를 단축하는 전략이다. 한화건설은 2004년 KT 강남 IDC를 시작으로 금융·통신 데이터센터를 시공한 바 있다. 최근에는 경기...",
+      "summary": "업계 1위 삼성물산 건설부문은 차별화 된 기술 확보에 집중하고 있다. 고발열 서버 대응이 가능한 액침 냉각 기술을 개발하고 모듈러(조립식) 공법을 도입해 공기를 단축하는 전략이다. 한화건설은 2004년 KT 강남...",
       "published_at": "2026-06-09",
       "original_url": "https://www.sidae.com/article/2026060913131790337",
       "naver_url": "https://n.news.naver.com/mnews/article/417/0001146805?sid=101",
-      "keywords": "모듈러 주택",
+      "keywords": "삼성물산 모듈러",
       "relevance_score": 4
     },
     {
@@ -1234,11 +1414,11 @@
       "source": "네이버뉴스",
       "media": "kr.aving.net",
       "title": "[비바테크 2026-②] \"AI 검색 생태계 선점하라\"... 韓 AI 리테일·커머스...",
-      "summary": "특히 지난 3월 스페인 바르셀로나에서 열린 MWC 2026 참가를 계기로 스페인 기업 및 모듈러 건축 스타트업과도 협력 논의를 시작한 가운데, 이번 비바테크에선 맞춤형 제조 산업(MTO·ETO) 수요가 큰 유럽 제조업...",
+      "summary": "예컨대 삼성물산과 '맞춤형 수트 3D VTO' 프로젝트를 진행하는가 하면, 삼우건축사사무소와는 모듈형 건축... 특히 지난 3월 스페인 바르셀로나에서 열린 MWC 2026 참가를 계기로 스페인 기업 및 모듈러 건축...",
       "published_at": "2026-06-05",
       "original_url": "https://kr.aving.net/news/articleView.html?idxno=1811531",
       "naver_url": "https://kr.aving.net/news/articleView.html?idxno=1811531",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;삼성물산 모듈러",
       "relevance_score": 4
     },
     {
@@ -1366,11 +1546,11 @@
       "source": "네이버뉴스",
       "media": "etoday.co.kr",
       "title": "자연과환경, ‘IBK강소기업’ 선정ㆍ기술등급 ‘e-T3+’ 획득…스마트 ...",
-      "summary": "현재는 2029년까지 이어지는 국가 대형 연구개발(R&D) 과제에 참여해 모듈러 건축의 원천 기술 확보와 상용화에 전사적 역량을 집중하고 있다. 자연과환경은 이번 성과를 발판 삼아 탄소 저감형 친환경 콘크리트 부재...",
+      "summary": "스마트 건설의 새로운 표준을 제시할 계획이다. 자연과환경 관계자는 “이번 IBK강소기업 선정과 우수 기술등급 획득은 회사가 수년간 집중해온 기술 중심 경영의 결실”이라며 “이를 동력 삼아 친환경 및 모듈러...",
       "published_at": "2026-06-04",
       "original_url": "https://www.etoday.co.kr/news/view/2590593",
       "naver_url": "https://www.etoday.co.kr/news/view/2590593",
-      "keywords": "모듈러 건축",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 4
     },
     {
@@ -1378,11 +1558,11 @@
       "source": "네이버뉴스",
       "media": "goodmorningcc.com",
       "title": "금산군, 충남형 농촌리브투게더 모듈러 주택 20% 설치",
-      "summary": "충남 금산군이 추진 중인 충남형 농촌리브투게더 사업이 순조롭게 진행되며 모듈러 주택 설치 공정에 본격... 군 도시건축과 관계자는 \"청년층과 귀농·귀촌 가구의 안정적인 정착을 돕고 지역에 새로운 활력을 불어넣는...",
+      "summary": "충남 금산군이 추진 중인 충남형 농촌리브투게더 사업이 순조롭게 진행되며 모듈러 주택 설치 공정에 본격... 금남초등학교 부지에 개별 창고를 포함한 단독주택 21호를 조성한다. 총사업비는 78억 원이 투입된다. 사업...",
       "published_at": "2026-06-04",
       "original_url": "https://www.goodmorningcc.com/news/articleView.html?idxno=447106",
       "naver_url": "https://www.goodmorningcc.com/news/articleView.html?idxno=447106",
-      "keywords": "모듈러 주택;모듈러 건축",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 14
     },
     {
@@ -1390,11 +1570,11 @@
       "source": "네이버뉴스",
       "media": "bzeronews.com",
       "title": "[탐사 분석] \"'30% 낙찰 교실' 괜찮은가\"… 모듈러 교실, 숫자에 밀린 교...",
-      "summary": "교육청은 모듈러 교실이 공장에서 제작한 구조물을 현장에서 조립하는 방식으로 일반 건축물보다 공사 기간을 크게 단축할 수 있다고 설명했다. 일부에서 제기되는 저가 낙찰에 따른 품질 저하 우려에 대해서는...",
+      "summary": "국내 모듈러 산업은 스마트건설과 탄소중립 시대 핵심 산업으로 꼽힌다. 그러나 시장이 지나친 가격 경쟁에 매몰될 경우 연구개발 투자 축소와 기술 경쟁력 약화로 이어질 가능성도 있다. 결국 중요한 질문은 단순하다....",
       "published_at": "2026-06-04",
       "original_url": "https://www.bzeronews.com/news/articleView.html?idxno=817703",
       "naver_url": "https://www.bzeronews.com/news/articleView.html?idxno=817703",
-      "keywords": "모듈러 건축",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 14
     },
     {
