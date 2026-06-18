@@ -1,10 +1,286 @@
 {
-  "generated_at": "2026-06-18T08:17:36+09:00",
+  "generated_at": "2026-06-19T08:30:37+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 464,
-  "current_news_count": 124,
-  "merged_news_count": 479,
+  "previous_news_count": 479,
+  "current_news_count": 167,
+  "merged_news_count": 556,
   "items": [
+    {
+      "id": 5770,
+      "source": "네이버뉴스",
+      "media": "segye.com",
+      "title": "베일 벗은 삼성 ‘AI 모듈러 홈’… 미래 주거 주목",
+      "summary": "삼성전자가 인공지능(AI) 기반의 단독주택형 모듈러 주택시장에 본격 진출했다. 삼성전자는 AI를 통한 건축 편의성과 가전제품 솔루션이란 ‘두 마리 토끼’를 잡은 ‘삼성 AI 모듈러 홈’을 통해 모듈러 주택시장을...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.segye.com/newsView/20260618515884?OutUrl=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/022/0004136634?sid=101",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 254,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "[다시 도는 원전시계](2) 영덕 원전 주설비공사ㆍ기장 SMR 시선집중",
+      "summary": "5조 규모… 2035년 준공 모듈러ㆍ공장제작 방식 도입 [대한경제=박흥순 기자]국내 원전시장의 시선이 경북... 신한울 3ㆍ4호기 주설비공사는 종합심사낙찰제가 처음으로 적용됐고, 현대건설ㆍ삼성물산ㆍ대우건설이...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606181115226310863",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606181115226310863",
+      "keywords": "삼성물산 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 99,
+      "source": "네이버뉴스",
+      "media": "ftoday.co.kr",
+      "title": "삼성전자, '삼성 AI 모듈러 홈' 출시...공간제작소와 협업",
+      "summary": "삼성전자가 목조 모듈러 주택 전문 기업인 공간제작소와 손잡고 단독주택형 모듈러 건축 시장에 진출한다. 기획 및 제조 단계부터 삼성전자의 고도화된 AI 가전과 홈 솔루션을 앞세워 스마트 주거 경험 제공에 나선다는...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.ftoday.co.kr/news/articleView.html?idxno=360698",
+      "naver_url": "http://www.ftoday.co.kr/news/articleView.html?idxno=360698",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 98,
+      "source": "네이버뉴스",
+      "media": "sisaon.co.kr",
+      "title": "삼성·공간제작소, 'AI 모듈러 홈' 첫 선…SK하이닉스, HBM4E 공개 [IT오늘...",
+      "summary": "삼성·공간제작소, 'AI 모듈러 홈' 첫 선 삼성전자는 목조 모듈러 주택 전문 기업 공간제작소와 손잡고 '삼성 AI 모듈러 홈'을 출시하며 단독주택형 모듈러 건축 시장에 본격 진출했다고 18일 밝혔다. 경기도 화성에...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.sisaon.co.kr/news/articleView.html?idxno=201944",
+      "naver_url": "https://www.sisaon.co.kr/news/articleView.html?idxno=201944",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5789,
+      "source": "네이버뉴스",
+      "media": "efnews.co.kr",
+      "title": "삼성전자, 공간제작소와 손잡고 'AI 모듈러 홈' 출시…주택 기획부터 AI...",
+      "summary": "주택 제작 단계부터 AI 가전과 홈 솔루션을 탑재한 '삼성 AI 모듈러 홈'을 선보이며 단독주택형 모듈러 건축 시장 공략을 본격화한다. 삼성전자는 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하고, 경기도 화성시에...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.efnews.co.kr/news/articleView.html?idxno=130421",
+      "naver_url": "http://www.efnews.co.kr/news/articleView.html?idxno=130421",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 5788,
+      "source": "네이버뉴스",
+      "media": "wikileaks-kr.org",
+      "title": "'천수답' 사업 구조 코오롱이앤씨, 홀로서기 언제쯤?",
+      "summary": "엑시아머티리얼스는 코오롱이앤씨와 OSC(탈현장건축)·모듈러 사업에서 손잡아 온 소재 계열사다. 코오롱이앤씨는 자본잠식과 계속기업으로서 불확실성을 해소하기 위한 해결책으로 유상증자를 제시했다. 하지만...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.wikileaks-kr.org/news/articleView.html?idxno=188782",
+      "naver_url": "http://www.wikileaks-kr.org/news/articleView.html?idxno=188782",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5787,
+      "source": "네이버뉴스",
+      "media": "busan.com",
+      "title": "삼성전자, LG 이어 모듈러 주택 뒤늦게 출시",
+      "summary": "삼성전자는 이번 출시로 단독주택 형 모듈러 건축 시장에 본격 진출하고 향후 4층 이상의 중층 건물까지 AI 모듈러 홈의 적용 모델을 확장할 예정이다. 앞서 LG전자는 AI 가전과 냉난방공조 기술을 집약한 모듈러 주택...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.busan.com/view/busan/view.php?code=2026061817052646608",
+      "naver_url": "https://n.news.naver.com/mnews/article/082/0001386048?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5786,
+      "source": "네이버뉴스",
+      "media": "financialreview.co.kr",
+      "title": "[오늘 뭐했니?] 삼성",
+      "summary": "삼성전자가 AI 기능을 기반으로 신제품과 모듈러 건축 솔루션을 본격 출시한다. 아울러 삼성은 미취업 청년 1000명을 대상으로 직무교육 프로그램 교육생을 모집한다. 삼성전자 모델들이 새롭게 출시한 '갤럭시 A37 5G...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.financialreview.co.kr/news/articleView.html?idxno=42976",
+      "naver_url": "http://www.financialreview.co.kr/news/articleView.html?idxno=42976",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5785,
+      "source": "네이버뉴스",
+      "media": "nspna.com",
+      "title": "삼성전자, 공간제작소와 ‘AI 모듈러 홈’ 선봬",
+      "summary": "삼성전자는 향후 단독주택형에 이어 4층 이상 중층 건물로 AI 모듈러 홈 적용 모델을 확대할 계획이다. 회사는 오피스, 숙박시설 등 다양한 건축물 형태로 AI 홈 솔루션 적용 범위를 넓힐 예정이다. NSP통신",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.nspna.com/news/?mode=view&newsid=817198",
+      "naver_url": "https://www.nspna.com/news/?mode=view&newsid=817198",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 5784,
+      "source": "네이버뉴스",
+      "media": "thevaluenews.co.kr",
+      "title": "[전자 레이더] 삼성, 1000명 규모 청년 실무 교육…삼성전자, AI·모바일...",
+      "summary": "모듈러 공법은 건축물의 80%가량을 공장에서 사전 제작한 뒤 현장에서 조립하는 방식으로, 공사 기간 단축과 폐기물 저감 효과가 있다. 양사는 이달 경기 화성에 330㎡ 및 66㎡ 규모의 시범 주택을 조성해 실제 기기 연동...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.thevaluenews.co.kr/news/view.php?idx=199468",
+      "naver_url": "http://www.thevaluenews.co.kr/news/view.php?idx=199468",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5783,
+      "source": "네이버뉴스",
+      "media": "zdnet.co.kr",
+      "title": "삼성전자, 'AI 모듈러 홈' 출시…스마트홈 생태계 강화",
+      "summary": "지난해 국내 최대 모듈러 건축물 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발 업무협약을 맺었고, 삼성물산과 'IFA 2025'에서 글로벌 B2B 대상 모듈러 홈 솔루션을 선보였다. 삼성전자는 향후 단독주택을 넘어 4층...",
+      "published_at": "2026-06-18",
+      "original_url": "https://zdnet.co.kr/view/?no=20260618082222",
+      "naver_url": "https://n.news.naver.com/mnews/article/092/0002427119?sid=105",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5782,
+      "source": "네이버뉴스",
+      "media": "lcnews.co.kr",
+      "title": "모듈러 건축 시장 진출한 삼성전자, '삼성 AI 모듈러 홈' 출시·쇼룸 오...",
+      "summary": "라이센스뉴스 = 백성요 기자 | 삼성전자가 '스마트싱스' 중심의 AI 홈 솔루션이 공간제작소의 모듈러 주택에 적용된 '삼성 AI 모듈러 홈'을 출시하며 단독주택형 모듈러 건축 시장에 본격적으로 진출한다. 삼성전자와...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.lcnews.co.kr/news/articleView.html?idxno=203607",
+      "naver_url": "https://www.lcnews.co.kr/news/articleView.html?idxno=203607",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5781,
+      "source": "네이버뉴스",
+      "media": "goodkyung.com",
+      "title": "삼성전자, 공간제작소와 '삼성 AI 모듈러 홈' 선봬…시장 본격 진출",
+      "summary": "삼성전자는 공간제작소와 손잡고 '삼성 인공지능(AI) 모듈러 홈'을 선보이고 단독주택 형 모듈러 건축 시장에 진출한다고 18일 밝혔다. 모듈러 건축에 AI를 더해 스마트 주거 경험을 제공한다는 계획이다. 공간제작소는...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.goodkyung.com/news/articleView.html?idxno=288267",
+      "naver_url": "https://www.goodkyung.com/news/articleView.html?idxno=288267",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 5780,
+      "source": "네이버뉴스",
+      "media": "gpkorea.com",
+      "title": "삼성전자, 공간제작소와 'AI 모듈러 홈' 출시",
+      "summary": "삼성전자가 목조 모듈러 주택 전문기업 공간제작소와 손잡고 인공지능(AI) 기반 주거 솔루션을 적용한 '삼성 AI 모듈러 홈'을 출시했다. 삼성전자는 이달 경기도 화성시에 공간제작소와 공동으로 기획·제작한 '삼성 AI...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.gpkorea.com/news/articleView.html?idxno=143864",
+      "naver_url": "https://www.gpkorea.com/news/articleView.html?idxno=143864",
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5779,
+      "source": "네이버뉴스",
+      "media": "inthenews.co.kr",
+      "title": "입주 즉시 AI 홈 완성…삼성전자, AI 홈 기반 ‘삼성 AI 모듈러 홈’ 출...",
+      "summary": "공간제작소와 협력…경기도 화성에 쇼룸 오픈 공장 제작 단계부터 AI 가전 및 스마트싱스 사전 탑재 인더뉴스 이종현 기자ㅣ삼성전자가 목조 모듈러 주택 전문 기업인 공간제작소와 협력해 단독주택 형 모듈러 건축...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.inthenews.co.kr/news/article.html?no=88205",
+      "naver_url": "https://www.inthenews.co.kr/news/article.html?no=88205",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5778,
+      "source": "네이버뉴스",
+      "media": "popcornnews.net",
+      "title": "삼성, AI 접점 넓힌다…청년 직무교육부터 모듈러 홈·보급형 갤럭시까...",
+      "summary": "삼성전자는 목조 모듈러 주택 전문 기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하고 단독주택형 모듈러 건축 시장에 본격 진출한다. 공간제작소는 AI 기반 설계와 자동화 생산 시스템을 활용해 주택의 80...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.popcornnews.net/news/articleView.html?idxno=124156",
+      "naver_url": "http://www.popcornnews.net/news/articleView.html?idxno=124156",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5777,
+      "source": "네이버뉴스",
+      "media": "newsis.com",
+      "title": "삼성전자, 공간제작소와 'AI 모듈러 홈' 출시…단독주택 시장 본격 진출",
+      "summary": "삼성전자는 목조 모듈러 주택 전문 기업인 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시, 단독주택 형 모듈러 건축 시장에 본격 진출한다고 18일 밝혔다. 모듈러 주택은 공사기간이 비교적 짧고 균일한 건축 품질을...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.newsis.com/view/NISX20260618_0003673884",
+      "naver_url": "https://n.news.naver.com/mnews/article/003/0014013136?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5776,
+      "source": "네이버뉴스",
+      "media": "yonhapnewstv.co.kr",
+      "title": "입주 즉시 인공지능 가전 사용…삼성, 'AI 모듈러 홈' 출시",
+      "summary": "삼성전자는 이번 출시로 단독주택 형 모듈러 건축 시장에 본격 진출하고 향후 4층 이상의 중층 건물까지 AI 모듈러 홈의 적용 모델을 확장할 예정입니다. #삼성전자 #인공지능 #모듈러홈",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.yonhapnewstv.co.kr/news/AKR20260618095434Xga",
+      "naver_url": "https://n.news.naver.com/mnews/article/422/0000875917?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 5775,
+      "source": "네이버뉴스",
+      "media": "newsinside.kr",
+      "title": "삼성전자, 모듈러 주택 시장 진출...'AI 모듈러 홈' 출시",
+      "summary": "삼성전자는 지난해 2월 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B(기업 간 거래) 대상 모듈러 홈...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.newsinside.kr/news/articleView.html?idxno=4770769",
+      "naver_url": "https://www.newsinside.kr/news/articleView.html?idxno=4770769",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5774,
+      "source": "네이버뉴스",
+      "media": "polinews.co.kr",
+      "title": "삼성전자, 신사업 진출과 대규모 청년 고용 지원 동시 추진",
+      "summary": "삼성전자는 목조 모듈러 주택 기업 공간제작소와 협력해 설계 단계부터 자사 가전과 스마트싱스 플랫폼을 탑재한 '삼성 AI 모듈러 홈'을 선보였다고 18일 밝혔다. 모듈러 주택은 건물의 80% 이상을 공장에서 미리 제작해...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.polinews.co.kr/news/articleView.html?idxno=734442",
+      "naver_url": "https://www.polinews.co.kr/news/articleView.html?idxno=734442",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5773,
+      "source": "네이버뉴스",
+      "media": "biztribune.co.kr",
+      "title": "삼성, AI 기능 담은 59만원대 갤럭시 출격…A시리즈 경쟁력 강화",
+      "summary": "삼성전자는 최근 목조 모듈러 주택 전문기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시한 바 있다. 공장에서 제작되는 모듈러 주택 단계부터 AI 가전과 스마트싱스 기반 AI 홈 솔루션을 탑재해 입주 즉시 AI...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.biztribune.co.kr/news/articleView.html?idxno=354879",
+      "naver_url": "http://www.biztribune.co.kr/news/articleView.html?idxno=354879",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5772,
+      "source": "네이버뉴스",
+      "media": "paxetv.com",
+      "title": "삼성전자, 모듈러 주택 시장 진출…'AI 홈' 적용 주거공간 선보여",
+      "summary": "[사진=삼성전자] 삼성전자는 모듈러 주택 전문기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시했다고 밝혔습니다. 양사는 경기도 화성시에 공동 쇼룸을 열고 삼성전자의 AI 가전과 스마트홈 플랫폼을 적용한 모듈러...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.paxetv.com/news/articleView.html?idxno=274981",
+      "naver_url": "http://www.paxetv.com/news/articleView.html?idxno=274981",
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5771,
+      "source": "네이버뉴스",
+      "media": "cnbizm.com",
+      "title": "삼성전자, 공간제작소와 '삼성 AI 모듈러 홈' 출시… 스마트 주택 시장...",
+      "summary": "최근 건설업계에서는 공사비 상승과 인력 부족 문제에 대응하기 위해 모듈러 건축이 새로운 대안으로 부상하고 있다. 특히 AI와 사물인터넷(IoT) 기술을 결합한 스마트홈 시장이 성장하면서 건설과 전자산업 간 협업도...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.cnbizm.com/news/articleView.html?idxno=305888",
+      "naver_url": "https://www.cnbizm.com/news/articleView.html?idxno=305888",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
+      "relevance_score": 16
+    },
     {
       "id": 5762,
       "source": "네이버뉴스",
@@ -18,15 +294,663 @@
       "relevance_score": 6
     },
     {
+      "id": 5371,
+      "source": "네이버뉴스",
+      "media": "ekn.kr",
+      "title": "삼성전자, 경기 화성시에 ‘삼성 AI 모듈러 홈’ 쇼룸 열어",
+      "summary": "모듈러 주택은 공사기간이 비교적 짧고 균일한 건축 품질을 보장한다는 장점이 있다. 건축 시 발생하는 폐기물도 줄일 수 있다. 쇼룸은 공간제작소의 모듈러 목조주택에 삼성전자의 AI 가전과 스마트싱스 기반의 AI...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.ekn.kr/web/view.php",
+      "naver_url": "https://www.ekn.kr/web/view.php",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 249,
+      "source": "네이버뉴스",
+      "media": "edaily.co.kr",
+      "title": "삼성전자, 모듈러 홈에 AI 가전 심는다…단독주택 시장 진출",
+      "summary": "지난해 2월에는 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며, ‘IFA 2025’에서는 삼성물산과 협업해 글로벌 기업 간 거래(B2B) 대상 모듈러 홈...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.edaily.co.kr/news/newspath.asp?newsid=03158646645483032",
+      "naver_url": "https://n.news.naver.com/mnews/article/018/0006308648?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 248,
+      "source": "네이버뉴스",
+      "media": "pinpointnews.co.kr",
+      "title": "삼성전자, 공간제작소와 맞손...단독주택형 'AI 모듈러 홈' 출시",
+      "summary": "지난해 2월 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 글로벌 기업 고객을 대상으로 한 모듈러 홈 솔루션을 공개했다. 양혜순 삼성전자 DA사업부 부사장은...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=461035",
+      "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=461035",
+      "keywords": "모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 247,
+      "source": "네이버뉴스",
+      "media": "news1.kr",
+      "title": "삼성전자, 공간제작소와 협업 '삼성 AI 모듈러 홈' 출시",
+      "summary": "한편 삼성전자는 지난해 2월 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었다. 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 설루션을...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.news1.kr/industry/general-industry/6200816",
+      "naver_url": "https://n.news.naver.com/mnews/article/421/0009009815?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 246,
+      "source": "네이버뉴스",
+      "media": "biz.sbs.co.kr",
+      "title": "삼성전자, AI 품은 모듈러 주택 출시",
+      "summary": "삼성전자는 지난해 모듈러 건축 전문기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 체결한 데 이어, 지난해 IFA 2025에서는 삼성물산과 함께 글로벌 B2B 고객 대상 모듈러 홈 솔루션을 공개한 바...",
+      "published_at": "2026-06-18",
+      "original_url": "https://biz.sbs.co.kr/article_hub/20000317304?division=NAVER",
+      "naver_url": "https://n.news.naver.com/mnews/article/374/0000516760?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 245,
+      "source": "네이버뉴스",
+      "media": "view.asiae.co.kr",
+      "title": "삼성도 모듈러 주택 시장 본격 진출…'AI 모듈러 홈' 출시",
+      "summary": "작년 2월에는 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B(기업 간 거래) 대상 모듈러 홈 솔루션을...",
+      "published_at": "2026-06-18",
+      "original_url": "https://view.asiae.co.kr/article/2026061808495159581",
+      "naver_url": "https://n.news.naver.com/mnews/article/277/0005777942?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 244,
+      "source": "네이버뉴스",
+      "media": "dailian.co.kr",
+      "title": "'입주 즉시 AI' 구현한 삼성…모듈러 홈 시장 진출",
+      "summary": "삼성전자는 앞서 국내 모듈러 건축 전문 기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺었고, IFA 2025에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션을 선보인 바 있다. 양혜순...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.dailian.co.kr/news/view/1657148/?sc=Naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/119/0003102171?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 243,
+      "source": "네이버뉴스",
+      "media": "etoday.co.kr",
+      "title": "삼성전자, 공간제작소와 'AI 모듈러 홈' 출시…입주 즉시 AI 홈 구현",
+      "summary": "삼성전자는 지난해 2월 모듈러 건축 전문기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 체결했다. 또한 'IFA 2025'에서는 삼성물산과 협력해 글로벌 기업 간 거래(B2B) 고객을 대상으로 한 모듈러 홈...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.etoday.co.kr/news/view/2594779",
+      "naver_url": "https://www.etoday.co.kr/news/view/2594779",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 242,
+      "source": "네이버뉴스",
+      "media": "yna.co.kr",
+      "title": "삼성전자, AI가전·스마트싱스 기반 '삼성 AI 모듈러 홈' 출시",
+      "summary": "삼성전자는 작년 2월 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B(기업간거래) 대상 모듈러 홈...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.yna.co.kr/view/AKR20260618029900003?input=1195m",
+      "naver_url": "https://n.news.naver.com/mnews/article/001/0016145012?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 241,
+      "source": "네이버뉴스",
+      "media": "biz.newdaily.co.kr",
+      "title": "삼성전자 '삼성 AI 모듈러 홈' 출시 … AI 홈 생태계 확장",
+      "summary": "앞서 삼성전자는 지난해 2월 모듈러 건축 전문 기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 체결했으며 'IFA 2025'에서는 삼성물산과 협력해 글로벌 B2B 시장을 겨냥한 모듈러 홈 솔루션을 선보인...",
+      "published_at": "2026-06-18",
+      "original_url": "https://biz.newdaily.co.kr/site/data/html/2026/06/18/2026061800030.html",
+      "naver_url": "https://biz.newdaily.co.kr/site/data/html/2026/06/18/2026061800030.html",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 240,
+      "source": "네이버뉴스",
+      "media": "asiaa.co.kr",
+      "title": "삼성전자, 'AI 모듈러 홈' 출시...단독주택형 모듈러 건축 시장 본격 진...",
+      "summary": "실제로 삼성전자는 지난해 2월 유창이앤씨와 공동주택형 모듈러 주택 개발 업무협약을 맺은 데 이어, 'IFA 2025'에서는 삼성물산과 협력해 글로벌 B2B 시장용 모듈러 홈 솔루션을 선보이는 등 관련 시장 공략을 꾸준히...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.asiaa.co.kr/news/articleView.html?idxno=252618",
+      "naver_url": "https://www.asiaa.co.kr/news/articleView.html?idxno=252618",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 239,
+      "source": "네이버뉴스",
+      "media": "businessplus.kr",
+      "title": "삼성전자, 공간제작소와 AI 홈 기반 'AI 모듈러 홈' 출시",
+      "summary": "앞서 지난해 2월에는 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션을 선보인...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.businessplus.kr/news/articleView.html?idxno=113011",
+      "naver_url": "https://www.businessplus.kr/news/articleView.html?idxno=113011",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 238,
+      "source": "네이버뉴스",
+      "media": "daily.hankooki.com",
+      "title": "삼성전자, 공간제작소와 'AI 모듈러 홈' 선봬",
+      "summary": "작년 2월에는 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B(기업간거래) 대상 모듈러 홈 솔루션을...",
+      "published_at": "2026-06-18",
+      "original_url": "https://daily.hankooki.com/news/articleView.html?idxno=1377639",
+      "naver_url": "https://daily.hankooki.com/news/articleView.html?idxno=1377639",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 237,
+      "source": "네이버뉴스",
+      "media": "mt.co.kr",
+      "title": "삼성전자, 'AI 모듈러 홈' 출시…단독주택형 시장 진출",
+      "summary": "앞서 삼성전자는 지난해 2월 국내 최대 모듈러 건축물 제작 전문 회사 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약(MOU)을 맺었다. 같은해 독일 베를린에서 열린 'IFA 2025'에서는 삼성물산과 협업해...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.mt.co.kr/industry/2026/06/19/2026061808450560170",
+      "naver_url": "https://n.news.naver.com/mnews/article/008/0005373661?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 236,
+      "source": "네이버뉴스",
+      "media": "viva100.com",
+      "title": "삼성전자, 공간제작소와 손잡고 AI 홈 기반 ‘삼성 AI 모듈러 홈’ 출시",
+      "summary": "작년 2월에는 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며, ‘IFA 2025’에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션을 선보인 바...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.viva100.com/article/20260618500202",
+      "naver_url": "https://www.viva100.com/article/20260618500202",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 235,
+      "source": "네이버뉴스",
+      "media": "dt.co.kr",
+      "title": "삼성전자, ‘AI 홈’ 입힌 단독주택 선봬…모듈러 주택 시장 공략 속도",
+      "summary": "삼성전자는 지난해 국내 모듈러 건축 전문기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약(MOU)을 체결했으며, ‘IFA 2025’에서는 삼성물산과 협력해 글로벌 기업간거래(B2B)용 모듈러 홈 솔루션을...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.dt.co.kr/article/12068234?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/029/0003032412?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 234,
+      "source": "네이버뉴스",
+      "media": "ezyeconomy.com",
+      "title": "삼성전자, 공간제작소와 'AI 모듈러 홈' 출시…단독주택 시장 확장",
+      "summary": "삼성전자는 앞서 지난해 국내 모듈러 건축 전문기업 유창이앤씨와 공동주택형 모듈러 주택 개발 협약을 체결했으며, 'IFA 2025'에서는 삼성물산과 함께 글로벌 기업 간 거래(B2B) 시장을 겨냥한 모듈러 홈 솔루션을 공개한...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.ezyeconomy.com/news/articleView.html?idxno=236495",
+      "naver_url": "https://www.ezyeconomy.com/news/articleView.html?idxno=236495",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 233,
+      "source": "네이버뉴스",
+      "media": "ebn.co.kr",
+      "title": "[Tech & Now] 삼성전자, 가전·모바일 AI 영토 확장…'AI 모듈러 홈'·'갤...",
+      "summary": "지난해 2월에는 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무 협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션을 선보인...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.ebn.co.kr/news/articleView.html?idxno=1712993",
+      "naver_url": "https://www.ebn.co.kr/news/articleView.html?idxno=1712993",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 232,
+      "source": "네이버뉴스",
+      "media": "news.einfomax.co.kr",
+      "title": "삼성전자, 단독주택형 모듈러 건축시장 진출…\"AI 홈 솔루션 적용\"",
+      "summary": "작년 2월에는 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션을 선보인 바...",
+      "published_at": "2026-06-18",
+      "original_url": "https://news.einfomax.co.kr/news/articleView.html?idxno=4420627",
+      "naver_url": "https://news.einfomax.co.kr/news/articleView.html?idxno=4420627",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 231,
+      "source": "네이버뉴스",
+      "media": "ddaily.co.kr",
+      "title": "삼성전자, 공간제작소와 '삼성 AI 모듈러 홈' 출시…단톡주택형 모듈러...",
+      "summary": "작년 2월에는 유창이앤씨와 공동주택형 모듈러 주택 개발을 위해 업무 협약을 맺었으며, 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션을 선보였다.",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.ddaily.co.kr/page/view/2026061809235717695",
+      "naver_url": "https://n.news.naver.com/mnews/article/138/0002231283?sid=105",
+      "keywords": "모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 205,
+      "source": "네이버뉴스",
+      "media": "ikld.kr",
+      "title": "학교 모듈러, 낙찰률 41.3% 극저가 등 최저가낙찰률 문제… 품질·안전 ...",
+      "summary": "최근 3개월 전체 모듈러 공고 44건, 이중 학교 모듈러 31건 전체 평균 86.49% 중 80% 이하 4건 중 2건이 50% 미만 국내 모듈러 산업계의 대외 협력 창구 역할을 맡고 있는 OSC모듈러산업협회(회장 김인한)가 조달청 모듈러 건축...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.ikld.kr/news/articleView.html?idxno=336162",
+      "naver_url": "http://www.ikld.kr/news/articleView.html?idxno=336162",
+      "keywords": "모듈러 건축;학교 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 161,
+      "source": "네이버뉴스",
+      "media": "nongaek.com",
+      "title": "삼성전자, 공간제작소와 AI 모듈러 홈 공개",
+      "summary": "최근 건설·가전 업계에서는 스마트홈 기술과 모듈러 건축을 결합한 주거 모델 개발이 확대되는 추세다. 에너지 관리와 주거 편의성 향상 수요가 늘면서 관련 솔루션 적용 범위도 점차 넓어지고 있다. 삼성전자는 향후...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.nongaek.com/news/articleView.html?idxno=95763",
+      "naver_url": "http://www.nongaek.com/news/articleView.html?idxno=95763",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 153,
+      "source": "네이버뉴스",
+      "media": "sentv.co.kr",
+      "title": "삼성전자, 'AI 모듈러 홈' 출시…단독주택 시장 공략",
+      "summary": "목조 모듈러 주택에 삼성전자의 AI 가전과 스마트싱스 기반 AI 홈 솔루션을 적용해 실제 주거 환경을... 균일화, 건설 폐기물 감소 등의 장점이 있다. 최근 인력난과 친환경 건축 수요 확대에 따라 국내외 건설업계의...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.sentv.co.kr/article/view/sentv202606180023",
+      "naver_url": "https://www.sentv.co.kr/article/view/sentv202606180023",
+      "keywords": "모듈러 주택;스마트건설 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 152,
+      "source": "네이버뉴스",
+      "media": "imwood.co.kr",
+      "title": "기둥 없는 100m 장스팬 '나무 우산'…\"광장동 복합체육시설은 '목재라서...",
+      "summary": "나아가 목조건축은 현장 작업을 최소화하고 공장에서 정밀하게 가공된 부재를 가져와 조립하는 프리패브(Pre-fab) 공법이 핵심입니다. 이는 현장의 공기를 극적으로 단축할 뿐만 아니라 최근 건설업계의 가장 큰 화두인...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41236",
+      "naver_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41236",
+      "keywords": "프리패브 건축",
+      "relevance_score": 3
+    },
+    {
+      "id": 130,
+      "source": "네이버뉴스",
+      "media": "biz.heraldcorp.com",
+      "title": "“입주하면 AI 가전 즉시 사용” 삼성전자, 단독주택 ‘AI 모듈러 홈’ ...",
+      "summary": "[삼성전자 제공] [헤럴듣겅제=김현일 기자] 삼성전자가 자사 인공지능(AI) 가전과 스마트홈 기기들이 설치된 단독주택 ‘삼성 AI 모듈러 홈’을 출시하며 모듈러 건축 시장 진출을 알렸다. 18일 삼성전자에 따르면 목조...",
+      "published_at": "2026-06-18",
+      "original_url": "https://biz.heraldcorp.com/article/10774500?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/016/0002658218?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 129,
+      "source": "네이버뉴스",
+      "media": "ajunews.com",
+      "title": "삼성전자, 스마트싱스 기반 'AI 모듈러 홈' 출시··· 모듈러 주택 시장...",
+      "summary": "국내 모듈러 건축 시장은 오는 2030년 최대 4조4000억 원 규모까지 성장할 것으로 전망된다. 전통적인 건설 방식의 한계를 넘어 비용 효율성과 친환경성을 갖춘 모듈러 주택에 대한 수요가 급증하면서 대형 건설사뿐만...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.ajunews.com/view/20260618095054838",
+      "naver_url": "https://www.ajunews.com/view/20260618095054838",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 128,
+      "source": "네이버뉴스",
+      "media": "webeconomy.co.kr",
+      "title": "삼성전자, 공간제작소와 손잡고 '삼성 AI 모듈러 홈' 출시",
+      "summary": "삼성전자가 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 선보였다고 18일 밝혔다. 이 주택은 공장에서 미리 제작된 모듈을 현장에 운반해 조립하는 방식으로, 공사기간 단축과 균일한 품질을 제공한다. 경기도 화성시에...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2204415",
+      "naver_url": "https://www.webeconomy.co.kr/news/articleView.html?idxno=2204415",
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 127,
+      "source": "네이버뉴스",
+      "media": "it.chosun.com",
+      "title": "삼성·LG, 집 자체를 플랫폼으로…미래 주거시장 선점 경쟁",
+      "summary": "18일 관련업계에 따르면 2030년 우리나라 모듈러 건축 시장은 약 4조4000억원 규모로 성장할 전망이다. 이런 가운데 삼성전자와 LG전자가 AI 가전과 스마트홈 기술을 기반으로 미래 주거 시장 선점에 속도를 내고 있다....",
+      "published_at": "2026-06-18",
+      "original_url": "https://it.chosun.com/news/articleView.html?idxno=2023092164103",
+      "naver_url": "https://it.chosun.com/news/articleView.html?idxno=2023092164103",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 126,
+      "source": "네이버뉴스",
+      "media": "mk.co.kr",
+      "title": "“LG 긴장하겠네”…삼성전자도 모듈러 주택 시장 출사표",
+      "summary": "단독주택형 모듈러 건축 시장에 본격 진출하는 것이다. 삼성전자와 공간제작소는 경기도 화성시에 양사가 공동으로 기획·제작한 삼성 AI 모듈러 홈 쇼룸을 이달 오픈했다. 쇼룸은 공간제작소의 모듈러 목조주택에...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.mk.co.kr/article/12077142",
+      "naver_url": "https://n.news.naver.com/mnews/article/009/0005695445?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 125,
+      "source": "네이버뉴스",
+      "media": "nextdaily.co.kr",
+      "title": "삼성전자, 공간제작소와 손잡고 'AI 모듈러 홈' 출시…경기 화성에 쇼룸...",
+      "summary": "삼성전자가 목조 모듈러 주택 전문 기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하며 단독주택형 모듈러 건축 시장에 본격 진출한다고 18일 밝혔다. 양사는 이달 경기도 화성시에 330㎡와 66㎡ 규모의 공동 쇼룸...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.nextdaily.co.kr/news/articleView.html?idxno=250473",
+      "naver_url": "https://www.nextdaily.co.kr/news/articleView.html?idxno=250473",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 124,
+      "source": "네이버뉴스",
+      "media": "bizwork.co.kr",
+      "title": "삼성전자, AI 가전 품은 모듈러 홈 출시…단독주택 시장 공략",
+      "summary": "삼성전자는 모듈러 건축 분야에서 협업을 확대해 왔다. 지난해 2월에는 국내 모듈러 건축물 제작 전문 기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺었다. 또 'IFA 2025'에서는 삼성물산과 협업해...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416613",
+      "naver_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416613",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 123,
+      "source": "네이버뉴스",
+      "media": "itdaily.kr",
+      "title": "삼성전자, AI 모듈러 홈 선보여…\"가전·IoT 사전 설치\"",
+      "summary": "삼성전자는 지난해 국내 모듈러 건축 기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약(MOU)을 체결했으며, 유럽 최대 가전·IT 전시회인 'IFA 2025'에서는 삼성물산과 협력해 글로벌 B2B 시장을 겨냥한...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.itdaily.kr/news/articleView.html?idxno=239920",
+      "naver_url": "http://www.itdaily.kr/news/articleView.html?idxno=239920",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 122,
+      "source": "네이버뉴스",
+      "media": "thebigdata.co.kr",
+      "title": "삼성전자, 'AI 모듈러 홈' 시장 공략...공간제작소와 협업",
+      "summary": "삼성전자는 목조 모듈러 주택 전문 기업인 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하며 단독주택형 모듈러 건축 시장에 본격 진출한다고 18일 밝혔다. 이번 협력으로 공간제작소는 모듈러 주택 전문 기업으로...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.thebigdata.co.kr/view.php?ud=2026061810082131150ecbf9426b_23",
+      "naver_url": "http://www.thebigdata.co.kr/view.php?ud=2026061810082131150ecbf9426b_23",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 121,
+      "source": "네이버뉴스",
+      "media": "newspim.com",
+      "title": "삼성전자, AI 가전 품은 모듈러 주택 출시…스마트홈 시장 확장",
+      "summary": "삼성전자가 모듈러 주택 전문기업 공간제작소와 손잡고 '삼성 인공지능(AI) 모듈러 홈'을 선보이며 단독주택형 모듈러 건축 시장 공략에 나선다. 삼성전자는 이달 경기도 화성시에 공간제작소와 공동 기획·제작한...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.newspim.com/news/view/20260618000162",
+      "naver_url": "https://www.newspim.com/news/view/20260618000162",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 120,
+      "source": "네이버뉴스",
+      "media": "banronbodo.com",
+      "title": "삼성전자가 만든 '단독주택'...공간제작소와 함께 '삼성 AI 모듈러 홈' 출...",
+      "summary": "삼성전자가 '삼성 AI 모듈러 홈'을 출시하며 단독주택 형 모듈러 건축 시장에 본격 진출한다. 삼성전자는 경기도 화성시에 목조 모듈러 주택 전문 기업인 공간제작소와 공동으로 기획·제작한 '삼성 AI 모듈러 홈...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.banronbodo.com/news/articleView.html?idxno=32494",
+      "naver_url": "https://www.banronbodo.com/news/articleView.html?idxno=32494",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 118,
+      "source": "네이버뉴스",
+      "media": "dealsite.co.kr",
+      "title": "[재계는 지금] 삼성전자-공간제작소, 'AI 모듈러 홈' 출시 外",
+      "summary": "삼성전자가 목조 모듈러 주택 전문 기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하고 단독주택형 모듈러 건축 시장에 진출한다. 주택의 80% 이상을 공장에서 사전 제작하는 모듈러 공법을 적용해 공사...",
+      "published_at": "2026-06-18",
+      "original_url": "https://dealsite.co.kr/articles/163833",
+      "naver_url": "https://dealsite.co.kr/articles/163833",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 117,
+      "source": "네이버뉴스",
+      "media": "worktoday.co.kr",
+      "title": "삼성전자, AI 가전 내장 모듈러 주택 시장 진출 … 스마트홈 넘어 건축...",
+      "summary": "삼성전자는 목조 모듈러 주택 전문기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하고, 단독주택형 모듈러 건축 시장에 본격 진출한다고 18일 밝혔다. 양사는 경기도 화성시에 공동 기획·제작한 '삼성 AI 모듈러 홈...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.worktoday.co.kr/news/articleView.html?idxno=85780",
+      "naver_url": "http://www.worktoday.co.kr/news/articleView.html?idxno=85780",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 116,
+      "source": "네이버뉴스",
+      "media": "biz.heraldcorp.com",
+      "title": "삼성전자, 단독주택 ‘AI 모듈러 홈’ 출시",
+      "summary": "가전 구매·설치비용·시간 대폭 절감 삼성전자가 자사 인공지능(AI) 가전과 스마트홈 기기들이 설치된 단독주택 ‘삼성 AI 모듈러 홈’을 출시하며 모듈러 건축 시장 진출을 알렸다. 18일 삼성전자에 따르면 목조...",
+      "published_at": "2026-06-18",
+      "original_url": "https://biz.heraldcorp.com/article/10774899?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/016/0002658367?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 115,
+      "source": "네이버뉴스",
+      "media": "biz.chosun.com",
+      "title": "삼성전자, 공간제작소와 ‘AI 모듈러 홈’ 출시… 단독주택형 시장 공략",
+      "summary": "삼성전자는 모듈러 주택에 인공지능(AI) 가전과 스마트싱스 기반 AI 홈 솔루션을 적용해 단독주택형 모듈러 건축 시장에 진출한다. 삼성전자는 공간제작소와 공동으로 기획·제작한 ‘삼성 AI 모듈러 홈’ 쇼룸을 경기...",
+      "published_at": "2026-06-18",
+      "original_url": "https://biz.chosun.com/it-science/ict/2026/06/18/DKPUC5UXMBENXKQ2TNVXYCS4TI/?utm_source=naver&utm_medium=original&utm_campaign=biz",
+      "naver_url": "https://n.news.naver.com/mnews/article/366/0001172615?sid=105",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 114,
+      "source": "네이버뉴스",
+      "media": "4th.kr",
+      "title": "삼성전자, 단독주택 형 모듈러 건축 시장 진출 본격",
+      "summary": "/2026.6.18 삼성전자 삼성전자가 인공지능(AI) 가전과 스마트홈 플랫폼을 결합한 모듈러 주택을 선보이며 모듈러 건축 시장 공략에 본격 나선다. 신축 아파트 중심으로 확산해온 AI홈 사업을 단독주택으로 확대하는...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.4th.kr/news/articleView.html?idxno=2113360",
+      "naver_url": "http://www.4th.kr/news/articleView.html?idxno=2113360",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 113,
+      "source": "네이버뉴스",
+      "media": "autodaily.co.kr",
+      "title": "삼성전자, 공간제작소와 'AI 모듈러 홈' 출시…단독주택 시장 진출",
+      "summary": "삼성전자가 단독주택형 모듈러 건축 시장에 본격 진출한다. 회사는 목조 모듈러 주택 전문 기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하고, 경기도 화성시에 공동 기획·제작한 쇼룸을 이달 열었다....",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.autodaily.co.kr/news/articleView.html?idxno=544994",
+      "naver_url": "https://www.autodaily.co.kr/news/articleView.html?idxno=544994",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 112,
+      "source": "네이버뉴스",
+      "media": "slist.kr",
+      "title": "삼성전자, 공간제작소와 '삼성 AI 모듈러 홈' 출시",
+      "summary": "삼성전자는 지난해 2월 국내 모듈러 건축물 제작 전문 회사 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺었다. 'IFA 2025'에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션도 선보인 바...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.slist.kr/news/articleView.html?idxno=746026",
+      "naver_url": "https://www.slist.kr/news/articleView.html?idxno=746026",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
+      "relevance_score": 16
+    },
+    {
+      "id": 111,
+      "source": "네이버뉴스",
+      "media": "m-i.kr",
+      "title": "삼성전자, '삼성 AI 모듈러 홈' 출시…단독주택 건축시장 확장 발판",
+      "summary": "앞서 삼성전자는 지난해 2월 모듈러 건축 전문 기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 체결한 바 있다. 국제 가전 박람회 'IFA 2025'에서는 삼성물산과 손잡고 글로벌 B2B 시장을 겨냥한 모듈러...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.m-i.kr/news/articleView.html?idxno=1382921",
+      "naver_url": "https://www.m-i.kr/news/articleView.html?idxno=1382921",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 110,
+      "source": "네이버뉴스",
+      "media": "news.dealsitetv.com",
+      "title": "[재계 투데이] 삼성, 청년희망배움터 교육생 모집 外",
+      "summary": "◆삼성전자, 삼성 AI 모듈러 홈 출시 삼성전자가 목조 모듈러 주택 전문 기업인 공간제작소와 협력해 삼성 AI 모듈러 홈을 출시하며 단독주택 형 모듈러 건축 시장에 본격 진출한다. 공간제작소는 모듈러 주택...",
+      "published_at": "2026-06-18",
+      "original_url": "https://news.dealsitetv.com/articles/172019",
+      "naver_url": "https://news.dealsitetv.com/articles/172019",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 109,
+      "source": "네이버뉴스",
+      "media": "dailypop.kr",
+      "title": "[줌인] 집 안팎 경계 허문 삼성 AI…'커넥티드 케어'와 '모듈러 홈'으로...",
+      "summary": "건축 기간과 비용을 줄이는 모듈러 주택의 특성에 플러그 앤 플레이 방식의 스마트홈을 결합했다. 소비자는 문을 열고 들어가자마자 고도화된 AI 라이프를 누릴 수 있다. 삼성전자와 공간제작소는 경기도 화성시에...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.dailypop.kr/news/articleView.html?idxno=99793",
+      "naver_url": "http://www.dailypop.kr/news/articleView.html?idxno=99793",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 108,
+      "source": "네이버뉴스",
+      "media": "wowtv.co.kr",
+      "title": "삼성, 공간제작소와 손잡고 '삼성 AI 모듈러 홈' 출시",
+      "summary": "'삼성 AI 모듈러 홈'은 모듈러 주택의 장점인 건축 편의성과 균일한 품질을 제공할 뿐만 아니라 공장 제작 단계부터 삼성전자의 가전제품과 솔루션이 설치·등록된 채 배송된다는 특징이 있다. 공간의 형태나 목적에...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202606180359&t=NN",
+      "naver_url": "https://n.news.naver.com/mnews/article/215/0001255838?sid=101",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 107,
+      "source": "네이버뉴스",
+      "media": "g-enews.com",
+      "title": "삼성전자, 공간제작소와 AI 홈 기반 '삼성 AI 모듈러 홈' 출시",
+      "summary": "삼성전자가 모듈러 주택 전문 기업 공간제작소와 손잡고 인공지능(AI) 홈 솔루션 적용 범위를 단독주택형 모듈러 건축으로 넓힌다. 삼성전자는 공간제작소와 공동으로 기획·제작한 ‘삼성 AI 모듈러 홈’ 쇼룸을 경기...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.g-enews.com/view.php?ud=2026061810440074736ed0c62d49_1",
+      "naver_url": "https://www.g-enews.com/view.php?ud=2026061810440074736ed0c62d49_1",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 106,
+      "source": "네이버뉴스",
+      "media": "metroseoul.co.kr",
+      "title": "삼성전자, 모듈러 주택시장 진출...'AI 홈'으로 미래 주거 선점",
+      "summary": "삼성전자는 목조 모듈러 주택 전문 기업인 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하며 단독주택 형 모듈러 건축 시장에 본격 진출한다 18일 밝혔다. 공간제작소는 모듈러 주택 전문 기업으로 기존의 현장 중심...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.metroseoul.co.kr/article/20260618500204",
+      "naver_url": "http://www.metroseoul.co.kr/article/20260618500204",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 105,
+      "source": "네이버뉴스",
+      "media": "public25.com",
+      "title": "삼성전자, 공간제작소와 '삼성 AI 모듈러 홈' 출시…공장 제작 단계부터...",
+      "summary": "삼성전자는 앞서 지난해 국내 모듈러 건축 전문기업 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 체결했으며, IFA 2025에서는 삼성물산과 협력해 글로벌 B2B 시장을 겨냥한 모듈러 홈 솔루션을 선보인...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.public25.com/news/articleView.html?idxno=48707",
+      "naver_url": "https://www.public25.com/news/articleView.html?idxno=48707",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 104,
+      "source": "네이버뉴스",
+      "media": "todayeconomic.com",
+      "title": "삼성전자, AI가전·스마트싱스 결합한 ‘삼성 AI 모듈러 홈’ 출시",
+      "summary": "삼성전자는 이번 출시를 통해 단독주택형 모듈러 건축 시장에 본격 진출한다. 향후에는 4층 이상 중층 건물까지 AI 모듈러 홈 적용 모델을 확대해 다양한 주거 형태에 AI 홈 설루션을 적용한다는 계획이다. 삼성전자는...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.todayeconomic.com/news/article.html?no=31026",
+      "naver_url": "https://www.todayeconomic.com/news/article.html?no=31026",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 103,
+      "source": "네이버뉴스",
+      "media": "kdfnews.com",
+      "title": "삼성·LG·쿠쿠, AI·프리미엄 앞세운 가전 경쟁…스마트폰부터 주거공...",
+      "summary": "목조 모듈러 주택 전문기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 선보였다. 해당 주택은 건축 단계부터 삼성전자 AI 가전과 스마트싱스 기반 AI 홈 솔루션이 적용된다. 소비자는 입주 즉시 AI 가전과 홈 IoT...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.kdfnews.com/news/articleView.html?idxno=184377",
+      "naver_url": "http://www.kdfnews.com/news/articleView.html?idxno=184377",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 102,
+      "source": "네이버뉴스",
+      "media": "sedaily.com",
+      "title": "삼성전자 ‘모듈러 홈’ 진출…단독주택에 AI가전 통째로",
+      "summary": "국내외 모듈러 건축 시장은 가파르게 성장 중이다. 대한건설정책연구원에 따르면 지난해 약 6000억 원 규모였던 국내시장은 연평균 35% 성장해 2030년 2조 8000억 원에 달할 것으로 전망된다. 마케츠앤드마케츠는 전...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.sedaily.com/article/20057387?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/011/0004632549?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 101,
+      "source": "네이버뉴스",
+      "media": "mk.co.kr",
+      "title": "“AX 제대로 하면 제조업에 ‘바이브 코딩’같은 시대 열릴 것”",
+      "summary": "비유하자면 PLM이 집을 짓는 과정을 기록하는 시스템이라면, 팔마는 그 전에 건축 설계도와 자재 기준을 만드는 작업입니다.” -수많은 글로벌 솔루션 중 팔마를 선택한 이유는. “저희가 오랫동안 모듈러 디자인...",
+      "published_at": "2026-06-18",
+      "original_url": "https://www.mk.co.kr/article/12077428",
+      "naver_url": "https://n.news.naver.com/mnews/article/009/0005695651?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 100,
+      "source": "네이버뉴스",
+      "media": "fnnews.com",
+      "title": "삼성전자 '삼성 AI 모듈러 홈' 출시...모듈러 건축 시장 진출",
+      "summary": "삼성전자는 18일 목조 모듈러 주택 전문 기업인 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하며 단독주택 형 모듈러 건축 시장에 본격 진출한다. 공간제작소는 모듈러 주택 전문 기업으로 기존의 현장 중심 건축...",
+      "published_at": "2026-06-18",
+      "original_url": "http://www.fnnews.com/news/202606180942200896",
+      "naver_url": "https://n.news.naver.com/mnews/article/014/0005536774?sid=101",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
       "id": 5769,
       "source": "네이버뉴스",
       "media": "etoday.co.kr",
       "title": "자연과환경, ‘중소기업인대회’ 대통령표창 수상…OSCㆍ기후환경 기술...",
-      "summary": "이투데이=설경진 기자 | 이병용 대표, 모범중소기업인 부문 수상…PCㆍ모듈러 건축 스마트 공법 주도 탄소포집 자재ㆍ재난 구호 등 ESG 경영 및 친환경 혁신 성과 인정받아 자연과환경이 전통적인 건설 산업에 공장형...",
+      "summary": "전통적인 건설 산업에 공장형 사전 제작(OSC) 공법을 도입하고 탄소중립 신기술을 개발한 공로를 인정받아 대통령표창을 수상했다. 기후변화 대응을 위한 모듈러 건축 기술과 탄소 포집·활용(CCUS) 자재 상용화 등...",
       "published_at": "2026-06-17",
       "original_url": "https://www.etoday.co.kr/news/view/2594637",
       "naver_url": "https://www.etoday.co.kr/news/view/2594637",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;OSC 건설",
       "relevance_score": 16
     },
     {
@@ -82,11 +1006,11 @@
       "source": "네이버뉴스",
       "media": "bizwnews.com",
       "title": "유닛랩, 6월 두 박람회서 경량 도심형 모듈러 테스트베드 검증 내용 공...",
-      "summary": "하성민 유닛랩 대표는 \"공공 모듈러 시장에서는 단순히 지을 수 있다는 설명만으로는 부족하고, 실제 부지에 적용했을 때 비용과 기간, 운송·양중 조건, 공동주택 기준 대응까지 얼마나 촘촘하게 검토했는지가...",
+      "summary": "실제로 2026년 LH·SH·GH의 매입임대 목표는 총 3만8224호이며, 이 가운데 약 91%가 신축매입약정형으로 구성됐다고 한다. 수도권 비중은 81.1%다. 유닛랩은 이를 두고 공공 모듈러가 제한적인 시범사업 단계를 넘어 실제 공급...",
       "published_at": "2026-06-17",
       "original_url": "http://www.bizwnews.com/news/articleView.html?idxno=138881",
       "naver_url": "http://www.bizwnews.com/news/articleView.html?idxno=138881",
-      "keywords": "모듈러 주택",
+      "keywords": "LH 모듈러",
       "relevance_score": 16
     },
     {
@@ -94,11 +1018,11 @@
       "source": "네이버뉴스",
       "media": "ajunews.com",
       "title": "국토교통기술대전 24일 개막…자율주행·UAM·AI시티 한자리에",
-      "summary": "AI시티 분야에서는 한국토지주택공사(LH), 한국국토정보공사(LX) 등이 도시 공간정보, 스마트시티, 모듈러 주택 기술을 선보인다. AI시티는 도시 인프라에서 수집되는 데이터를 인공지능이 실시간으로 학습·분석해...",
+      "summary": "건설현장 자재운반 로봇과 스마트모듈러홈 등이 대표 전시물로 마련된다. AI시티 분야에서는 한국토지주택공사(LH), 한국국토정보공사(LX) 등이 도시 공간정보, 스마트시티, 모듈러 주택 기술을 선보인다. AI시티는...",
       "published_at": "2026-06-17",
       "original_url": "https://www.ajunews.com/view/20260617145116268",
       "naver_url": "https://www.ajunews.com/view/20260617145116268",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -126,6 +1050,18 @@
       "relevance_score": 22
     },
     {
+      "id": 188,
+      "source": "네이버뉴스",
+      "media": "fntoday.co.kr",
+      "title": "유닛랩, 넥스트라이즈·국토교통기술대전 참가",
+      "summary": "2026년 LH·SH·GH의 매입임대 목표는 총 3만8224호이며, 이 가운데 약 91%인 3만4727호가 신축매입약정형으로 구성된다. 수도권 물량은 3만1014호로 전체의 81.1%를 차지한다. 유닛랩은 이를 두고 모듈러가 더 이상 제한적인 공공...",
+      "published_at": "2026-06-17",
+      "original_url": "https://www.fntoday.co.kr/news/articleView.html?idxno=386424",
+      "naver_url": "https://www.fntoday.co.kr/news/articleView.html?idxno=386424",
+      "keywords": "LH 모듈러",
+      "relevance_score": 6
+    },
+    {
       "id": 168,
       "source": "네이버뉴스",
       "media": "theguru.co.kr",
@@ -142,11 +1078,11 @@
       "source": "네이버뉴스",
       "media": "bizwork.co.kr",
       "title": "모빌리티부터 우주항공까지…'국토교통기술대전' 24일 코엑스서 개막",
-      "summary": "AI시티 분야에서는 도시 데이터와 인공지능(AI)을 결합한 자율형 도시 모델, 에너지 기본주택, 모듈러주택 기술이 공개된다. 우주항공 분야에서는 UAM, 드론, 국토위성, 차세대중형위성 등 항공·위성 기술을 선보인다....",
+      "summary": "스마트건설 분야에서는 건설현장 자재운반 로봇, 무인 자동화 시공·관리 기술, 스마트모듈러홈 등이 전시된다. AI시티 분야에서는 도시 데이터와 인공지능(AI)을 결합한 자율형 도시 모델, 에너지 기본주택, 모듈러주택...",
       "published_at": "2026-06-17",
       "original_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416576",
       "naver_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416576",
-      "keywords": "모듈러 주택",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -154,11 +1090,11 @@
       "source": "네이버뉴스",
       "media": "news1.kr",
       "title": "자율주행·UAM·AI시티 한자리에…국토교통기술대전 24일 개막",
-      "summary": "도시 인프라에서 수집되는 데이터를 AI가 실시간으로 학습·분석해 스스로 판단·실행하는 AI시티 전시는 에너지 기본주택, 모듈러 주택, 스마트시티 플랫폼 등을 연계해 미래 도시의 일상을 보여준다. 국민 참여형...",
+      "summary": "국토부와 국토교통과학기술진흥원이 공동 주최하며, 81개 기관이 참여해 모빌리티, 스마트건설, AI시티... 기본주택, 모듈러 주택, 스마트시티 플랫폼 등을 연계해 미래 도시의 일상을 보여준다. 국민 참여형...",
       "published_at": "2026-06-17",
       "original_url": "https://www.news1.kr/realestate/general/6199792",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0009008069?sid=101",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -166,11 +1102,11 @@
       "source": "네이버뉴스",
       "media": "sedaily.com",
       "title": "자율주행·건설로봇·AI시티…미래 국토교통 기술 한자리에",
-      "summary": "총 409개 부스에서 자율주행, 건설로봇, 에너지 기본주택, 위성·드론 기술과 함께 28개 스타트업의 혁신... 스마트건설존에는 현대건설·삼성물산이 건설현장 자재운반 로봇과 스마트모듈러홈을, 우주항공존에서는...",
+      "summary": "스마트건설존에는 현대건설·삼성물산이 건설현장 자재운반 로봇과 스마트모듈러홈을, 우주항공존에서는 대한항공·한국항공우주산업(KAI)이 차세대중형위성 2호 모형과 물류·항공기 점검 드론을 전시한다....",
       "published_at": "2026-06-17",
       "original_url": "https://www.sedaily.com/article/20056636?ref=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/011/0004632037?sid=101",
-      "keywords": "모듈러 주택",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -178,11 +1114,11 @@
       "source": "네이버뉴스",
       "media": "nocutnews.co.kr",
       "title": "\"미래 기술 다 모은 한국판 CES\"…국토교통기술대전 24일 개막",
-      "summary": "AI시티 존에서는 도시 데이터를 인공지능이 실시간으로 분석해 운영하는 자율형 도시 모델과 에너지 기본주택, 모듈러 주택 등을 선보인다. 우주항공 존에서는 도심항공교통(UAM), 드론, 위성 기술이 공개된다....",
+      "summary": "스마트건설 분야에서는 건설현장 자재운반 로봇과 무인 자동화 시공 기술이 전시된다. AI시티 존에서는 도시 데이터를 인공지능이 실시간으로 분석해 운영하는 자율형 도시 모델과 에너지 기본주택, 모듈러 주택...",
       "published_at": "2026-06-17",
       "original_url": "https://www.nocutnews.co.kr/news/6534395?utm_source=naver&utm_medium=article&utm_campaign=20260617013815",
       "naver_url": "https://n.news.naver.com/mnews/article/079/0004158804?sid=101",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -190,11 +1126,11 @@
       "source": "네이버뉴스",
       "media": "bizwork.co.kr",
       "title": "건설기술인協, 스마트건설 교육으로 청년 취업 지원",
-      "summary": "주요 내용은 BIM, 건설안전, 건설로봇, 드론, 모듈러 건축, 생성형 AI 기반 설계 및 데이터 분석 등 현장 적용성이 높은 기술 중심이다. 현직 전문가들이 강사로 참여해 실제 건설현장에서 활용되는 기술과 직무 경험도...",
+      "summary": "교육과정은 스마트건설 실무교육과 취업지원 프로그램으로 구성된다. 주요 내용은 BIM, 건설안전, 건설로봇, 드론, 모듈러 건축, 생성형 AI 기반 설계 및 데이터 분석 등 현장 적용성이 높은 기술 중심이다. 현직...",
       "published_at": "2026-06-16",
       "original_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416541",
       "naver_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416541",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -206,7 +1142,7 @@
       "published_at": "2026-06-16",
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324669",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324669",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -218,7 +1154,7 @@
       "published_at": "2026-06-16",
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606161508146780580",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606161508146780580",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -242,7 +1178,7 @@
       "published_at": "2026-06-16",
       "original_url": "http://www.ikld.kr/news/articleView.html?idxno=336068",
       "naver_url": "http://www.ikld.kr/news/articleView.html?idxno=336068",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -254,7 +1190,7 @@
       "published_at": "2026-06-16",
       "original_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2439446",
       "naver_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2439446",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -262,11 +1198,11 @@
       "source": "네이버뉴스",
       "media": "newspim.com",
       "title": "\"청년 건설인재 키운다\"…건설기술인협회, 스마트건설 교육 확대",
-      "summary": "주요 교육 과정에는 BIM, 건설안전, 건설로봇, 드론, 모듈러 건축, 생성형 AI 기반 설계와 데이터 분석 등이 포함됐다. 최근 건설현장에서 활용도가 커지고 있는 디지털·자동화 기술을 중심으로 교육 내용을 구성했다....",
+      "summary": "BIM, 건설안전, 건설로봇, 드론, 모듈러 건축, 생성형 AI 기반 설계와 데이터 분석 등을 다룬다. 스마트건설 현장에서 활용되는 기술 중심으로 교육이 구성됐다. Q. 수료하면 어떤 혜택이 있나? A. 교육 수료자는 건설기술인...",
       "published_at": "2026-06-16",
       "original_url": "https://www.newspim.com/news/view/20260616000960",
       "naver_url": "https://www.newspim.com/news/view/20260616000960",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -314,7 +1250,7 @@
       "published_at": "2026-06-16",
       "original_url": "https://www.viva100.com/article/20260616500400",
       "naver_url": "https://www.viva100.com/article/20260616500400",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -334,11 +1270,11 @@
       "source": "네이버뉴스",
       "media": "newsdream.kr",
       "title": "[드림&CEO] 흙먼지 마다않는 '현장형' 허윤홍 대표, GS건설에 '혁신 DNA' ...",
-      "summary": "모듈러 공법을 통한 친환경 건축, 수처리 사업을 통한 수자원 보호, AI와 스마트시티 기술을 결합한 미래 주거 환경 조성 등은 모두 그의 '지속 가능성'에 대한 철학에서 비롯됐습니다. 단기적 이익보다 환경·사회적...",
+      "summary": "'발로 뛰는 리더.' 허윤홍 GS건설 대표를 상징하는 수식어인데요 이 수식어는 단순한 수사가 아닙니다. 2023년... 모듈러 공법을 통한 친환경 건축, 수처리 사업을 통한 수자원 보호, AI와 스마트시티 기술을 결합한 미래...",
       "published_at": "2026-06-16",
       "original_url": "http://www.newsdream.kr/news/articleView.html?idxno=113058",
       "naver_url": "http://www.newsdream.kr/news/articleView.html?idxno=113058",
-      "keywords": "모듈러 건축",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -370,11 +1306,11 @@
       "source": "네이버뉴스",
       "media": "dnews.co.kr",
       "title": "“건설업 위기 돌파구는 AX(인공지능 전환)”",
-      "summary": "건설주택포럼 상반기 세미나 개최 김태균 회장“원자재·인력난 등 복합 위기, AI 혁신으로 돌파해야”... 자동화, 모듈러 생산, 통합운영의 공간생산시스템 산업으로 진화할 것”으로 예측했다. 김 교수는 미래의...",
+      "summary": "“앞으로 건설산업은 현장에서 모든 것을 해결하는 시대에서 벗어나 공장에서 제조하고 현장에서 조립하며 AI가 관리하는 시대로 전환할 것”이라며 “데이터 기반설계, 공정 자동화, 모듈러 생산, 통합운영의...",
       "published_at": "2026-06-16",
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606161512335710581",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606161512335710581",
-      "keywords": "모듈러 주택",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -382,11 +1318,11 @@
       "source": "네이버뉴스",
       "media": "g-enews.com",
       "title": "정부 산업재해 강력 경고 통했나…건설업, 사망 사고 큰 폭 감소",
-      "summary": "사물인터넷(IoT), 드론, 디지털 건축정보모델(BIM), 증강·가상현실(VR·AR) 등 스마트 기술과 모듈러 공법 도입도 적극 추진 중이다. 업계에서는 그동안 추진돼 온 기술 혁신이 정부의 압박 속에서 더욱 빨라졌다고 보고 있다....",
+      "summary": "예를 들어 현대건설, 대우건설, GS건설, 롯데건설 등은 현장에 인공지능(AI) 기반 통역·번역 시스템을 확대 적용하고 있다. 사물인터넷(IoT), 드론, 디지털 건축정보모델(BIM), 증강·가상현실(VR·AR) 등 스마트 기술과 모듈러...",
       "published_at": "2026-06-15",
       "original_url": "https://www.g-enews.com/view.php?ud=202606150846207596ea13369bfa_1",
       "naver_url": "https://www.g-enews.com/view.php?ud=202606150846207596ea13369bfa_1",
-      "keywords": "모듈러 건축",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -394,11 +1330,11 @@
       "source": "네이버뉴스",
       "media": "pinpointnews.co.kr",
       "title": "건설도 이제는 친환경 시대… 삼성물산, 스마트 모듈러 건축으로 신성장...",
-      "summary": "삼성물산은 국내 건설업계 최고 수준의 기술력과 대형 프로젝트 수행 능력을 바탕으로 모듈러 건축 시장에서도 경쟁력을 확보할 것으로 평가받는다. 스마트 건설 기술과 친환경 건축 수요 확대가 긍정적인 투자 포인트로...",
+      "summary": "증시 전문가들은 \"모듈러주택 시장은 건설 자동화와 스마트 건설 기술 발전의 수혜를 받을 가능성이 높다\"며 \"시공 역량을 갖춘 대형 건설사와 핵심 자재 공급 기업 중심으로 성장성이 부각될 수 있다\"고 설명했다. 이어...",
       "published_at": "2026-06-15",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460073",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460073",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 21
     },
     {
@@ -406,11 +1342,11 @@
       "source": "네이버뉴스",
       "media": "pinpointnews.co.kr",
       "title": "중동 재건 시동 걸렸다...삼성E&A, 글로벌 플랜트 기술력 앞세워 수주전...",
-      "summary": "모듈러 건축 관련 기업인 에스와이와 에스와이스틸텍 역시 관심을 받고 있다. 전쟁 피해 지역에서는 신속한 주택 공급이 중요한 만큼 모듈러 건축 방식이 적극 활용될 가능성이 높기 때문이다. 통신 인프라 복구...",
+      "summary": "모듈러 건축 관련 기업인 에스와이와 에스와이스틸텍 역시 관심을 받고 있다. 전쟁 피해 지역에서는 신속한... 설계 및 엔지니어링 분야에서는 희림과 유신, 도화엔지니어링이 관심을 받고 있다. 재건 사업은 실제 공사...",
       "published_at": "2026-06-15",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460104",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460104",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;희림 모듈러",
       "relevance_score": 6
     },
     {
@@ -422,7 +1358,7 @@
       "published_at": "2026-06-15",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460169",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460169",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;금강공업 모듈러",
       "relevance_score": 6
     },
     {
@@ -430,11 +1366,11 @@
       "source": "네이버뉴스",
       "media": "kmecnews.co.kr",
       "title": "AI 데이터센터, 열을 잡는 기계설비가 승부처다",
-      "summary": "특히 데이터센터를 단순한 건축물이 아닌 고도의 설비 집약 산업으로 바라보는 시각이 인상적이었다. 건설 속도를 높이기 위한 OSC와 모듈러 공법, 플러그앤플레이 방식의 설비 구성, 기계설비 구성요소 표준화 방안이...",
+      "summary": "건설 속도를 높이기 위한 OSC와 모듈러 공법, 플러그앤플레이 방식의 설비 구성, 기계설비 구성요소 표준화 방안이 함께 논의됐으며, 공급 확대 과정에서 설비의 시공성과 유지관리 효율을 동시에 확보해야 한다는 의견도...",
       "published_at": "2026-06-15",
       "original_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50195",
       "naver_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50195",
-      "keywords": "모듈러 건축",
+      "keywords": "OSC 건설",
       "relevance_score": 6
     },
     {
@@ -454,11 +1390,11 @@
       "source": "네이버뉴스",
       "media": "opinionnews.co.kr",
       "title": "특별법 시행 앞둔 AI 데이터센터…건설사, 전력망·냉각 설루션 경쟁",
-      "summary": "이에 따라 데이터센터는 단순 건축물이 아니라 전력, 통신, 기계설비가 결합된 고부가가치 산업 인프라로... 삼성물산은 서버를 비전도성 액체에 직접 담가 열을 식히는 액침 냉각 기술과 모듈러 공법을 앞세워...",
+      "summary": "사진제공=현대건설 건설업계가 AI 데이터센터 시장을 미래 먹거리로 키우고 있다. 15일 건설업계에 따르면... 삼성물산은 서버를 비전도성 액체에 직접 담가 열을 식히는 액침 냉각 기술과 모듈러 공법을 앞세워...",
       "published_at": "2026-06-15",
       "original_url": "http://www.opinionnews.co.kr/news/articleView.html?idxno=140028",
       "naver_url": "http://www.opinionnews.co.kr/news/articleView.html?idxno=140028",
-      "keywords": "모듈러 건축",
+      "keywords": "현대건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -466,11 +1402,11 @@
       "source": "네이버뉴스",
       "media": "the-biz.co.kr",
       "title": "\"전력 찾아 국경 넘는다\"… 건설사들, 데이터센터 경쟁",
-      "summary": "삼성물산 건설부문은 현재까지 14개 데이터센터 프로젝트를 수행했으며 액침냉각 기술과 모듈러 공법을... 데이터센터가 단순 건축물이 아닌 장기 운영형 인프라 자산으로 인식되면서 건설사들의 사업 방식도...",
+      "summary": "현대건설은 금융결제원 분당센터와 KT 목동 IDC, NH·KB 통합 IT센터, 네이버 데이터센터 '각 세종' 등 굵직한... 삼성물산 건설부문은 현재까지 14개 데이터센터 프로젝트를 수행했으며 액침냉각 기술과 모듈러 공법을...",
       "published_at": "2026-06-15",
       "original_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722578",
       "naver_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722578",
-      "keywords": "모듈러 건축",
+      "keywords": "현대건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -478,11 +1414,11 @@
       "source": "네이버뉴스",
       "media": "kwnews.co.kr",
       "title": "횡성 농어촌 유학, 지방소멸 위기 극복 대안 부상",
-      "summary": "이에 횡성군은 모듈러 주택 조성 등 거주 공간 마련과 유학 가족을 위한 맞춤형 일자리 창출과 현지 주민과의 교류 행사 운영 등 ‘횡성의 정(情)’을 느낄 수 있는 정주 여건 조성 방안을 심혈을 기울이고 있다. 남복현 군...",
+      "summary": "작은학교가 경쟁력을 갖추는 정착형 교육 모델이 되고 있다. ■학생 수 3년 만에 6배 급증 지역에 활력... 이에 횡성군은 모듈러 주택 조성 등 거주 공간 마련과 유학 가족을 위한 맞춤형 일자리 창출과 현지 주민과의 교류...",
       "published_at": "2026-06-15",
       "original_url": "https://www.kwnews.co.kr/page/view/2026061350012100000",
       "naver_url": "https://n.news.naver.com/mnews/article/087/0001199075?sid=102",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -550,11 +1486,11 @@
       "source": "네이버뉴스",
       "media": "koscaj.com",
       "title": "[논단] 공사비 상승의 '구조적 위기' 고리를 끊어야 한다",
-      "summary": "싱가포르는 모듈러 공법 도입을 의무화해 노동 집약 구조를 극복하고 생산 단계를 지능화했다. 이는 규제와... 미분양 주택 매입 확약을 실질적으로 전면 확대해야 한다. 중장기적으로는 거시 충격에 강한 저소비·고효율...",
+      "summary": "적용해 공공과 민간의 파트너십을 통한 리스크 해지 모델을 정착시켰다. 싱가포르는 모듈러 공법 도입을... 함께 공공임대용 미분양 주택 매입 확약을 실질적으로 전면 확대해야 한다. 중장기적으로는 거시 충격에 강한...",
       "published_at": "2026-06-15",
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324575",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324575",
-      "keywords": "모듈러 주택",
+      "keywords": "공공임대 모듈러",
       "relevance_score": 6
     },
     {
@@ -562,11 +1498,11 @@
       "source": "네이버뉴스",
       "media": "joongboo.com",
       "title": "오산 세교2지구 초등학교 배정 놓고 \"임대아파트가 알아서 빠져줘야\" 일...",
-      "summary": "이에 대해 일부 주민들은 과밀학급 문제의 원인을 특정 아파트 단지나 임대주택 입주민에게 돌리는 것은... 경우 모듈러 교실 설치를 검토하고 설치가 결정되면 내년 중 운영하는 방안도 검토하고 있다\"고 설명했다....",
+      "summary": "학급이었던 학교가 현재 50개 학급으로 운영되고 있다\"고 밝혔다. 이어 \"현재는 여유 교실이 남아 있어 추가 학생 수용이 가능한 상황\"이라며 \"다만 올해 하반기 학생 수 증가 추이를 지켜본 뒤 필요할 경우 모듈러 교실...",
       "published_at": "2026-06-14",
       "original_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
       "naver_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
-      "keywords": "모듈러 주택",
+      "keywords": "학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -574,11 +1510,11 @@
       "source": "네이버뉴스",
       "media": "shinailbo.co.kr",
       "title": "횡성군 농어촌 유학 3년 차…전입 급증하며 인구정책 모델로 부상",
-      "summary": "이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 임시 및 안정적 거주 기반 마련을 추진하고 있다. 전문가들은 단순 체류를 넘어 실질적인 정착으로 이어지기 위해서는 일자리 제공과 지역 주민과의 교류 확대 등...",
+      "summary": "단순한 체험형 교육을 넘어 학생과 가족의 실제 전입으로 이어지면서 작은 학교를 살리고 지역 정주 인구를... 이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 임시 및 안정적 거주 기반 마련을 추진하고 있다....",
       "published_at": "2026-06-14",
       "original_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5030018",
       "naver_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5030018",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -586,11 +1522,11 @@
       "source": "네이버뉴스",
       "media": "segye.com",
       "title": "작은 학교 살린 농어촌유학…횡성에 사람이 돌아온다",
-      "summary": "횡성군은 청일면 일원에 모듈러 주택 조성을 추진하는 등 체류 기반 확충에 나서고 있다. 전문가들은 농어촌 유학의 최종 목표가 단순 체류가 아니라 정착이 돼야 한다고 지적한다. 학생들이 졸업한 뒤에도 가족이 지역에...",
+      "summary": "학교를 선택하고도 집을 구하지 못해 유학을 포기하는 사례도 발생한다. 횡성군은 청일면 일원에 모듈러 주택 조성을 추진하는 등 체류 기반 확충에 나서고 있다. 전문가들은 농어촌 유학의 최종 목표가 단순 체류가...",
       "published_at": "2026-06-14",
       "original_url": "https://www.segye.com/newsView/20260612511905?OutUrl=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/022/0004135244?sid=102",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -598,11 +1534,11 @@
       "source": "네이버뉴스",
       "media": "newstown.co.kr",
       "title": "\"지방소멸 위기를 희망으로\"…횡성 농어촌 유학, 인구 유입 '마중물'되...",
-      "summary": "이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족이 머물 수 있는 주거 여건 마련을 추진하고 있다. 전문가들은 농어촌 유학이 일시 체류에 그치지 않으려면 주거와 일자리, 지역사회 관계망이 함께...",
+      "summary": "일부 면 지역은 주택이 노후화됐거나 공급 자체가 부족해 원하는 학교로 전학을 희망해도 거주지를 찾기 어려운 상황이 발생하고 있다. 이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족이 머물 수 있는...",
       "published_at": "2026-06-13",
       "original_url": "http://www.newstown.co.kr/news/articleView.html?idxno=706045",
       "naver_url": "http://www.newstown.co.kr/news/articleView.html?idxno=706045",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -610,11 +1546,11 @@
       "source": "네이버뉴스",
       "media": "koscaj.com",
       "title": "K-FINCO 기술교육원, OSC 모듈러 건설 실무자 양성과정 개강",
-      "summary": "최근 정부 차원에서도 모듈러 건축 활성화를 위한 제도적 기반 마련과 공공 부문 적용 확대가 추진되고 있어, 관련 실무 인력 양성의 필요성은 더욱 커지고 있다. 이번 교육과정은 지난 9일부터 11월27일까지 약 6개월간...",
+      "summary": "K-FINCO 전문건설공제조합 기술교육원(이하 기술교육원)이 지난 9일 충북 음성 기술교육원에서 'OSC 모듈러 건설 실무자 양성과정'을 개강하고 본격적인 교육 운영에 들어갔다. 이번 과정은 공장에서 주요 건축 부재와...",
       "published_at": "2026-06-12",
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324595",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324595",
-      "keywords": "모듈러 건축",
+      "keywords": "OSC 건설",
       "relevance_score": 16
     },
     {
@@ -626,7 +1562,7 @@
       "published_at": "2026-06-12",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=459603",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=459603",
-      "keywords": "모듈러 건축",
+      "keywords": "금강공업 모듈러",
       "relevance_score": 21
     },
     {
@@ -662,7 +1598,7 @@
       "published_at": "2026-06-12",
       "original_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
       "naver_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
-      "keywords": "모듈러 주택",
+      "keywords": "LH 모듈러",
       "relevance_score": 6
     },
     {
@@ -674,7 +1610,7 @@
       "published_at": "2026-06-12",
       "original_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2438316",
       "naver_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2438316",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -682,11 +1618,11 @@
       "source": "네이버뉴스",
       "media": "gukjenews.com",
       "title": "농어촌 유학 3년차…횡성군 학생·가족 유입 증가",
-      "summary": "이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족의 거주 여건 개선에 나섰다. 또한 맞춤형 일자리 창출과 향토민과의 교류 행사 등 정주 여건 조성 방안도 추진 중이다. 남복현 군 교육체육과장은 \"횡성...",
+      "summary": "일부 면 단위 지역에서는 주택 노후와 부족으로 인해 학생들이 원하는 학교에 다니기 어려운 상황이 발생하고 있다. 이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족의 거주 여건 개선에 나섰다. 또한...",
       "published_at": "2026-06-12",
       "original_url": "https://www.gukjenews.com/news/articleView.html?idxno=3606619",
       "naver_url": "https://www.gukjenews.com/news/articleView.html?idxno=3606619",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -694,11 +1630,11 @@
       "source": "네이버뉴스",
       "media": "yna.co.kr",
       "title": "횡성 농어촌 유학생 43명으로 급증…인구유입 새 모델 부상",
-      "summary": "횡성군은 청일면에 모듈러주택 조성을 추진하는 한편 유학 가족 맞춤형 일자리와 주민 교류 프로그램 확대를 통해 장기 정착 기반을 마련할 계획이다. 남복현 군 교육체육과장은 \"유학생 가족이 지역사회 구성원으로...",
+      "summary": "군은 학부모 요구를 반영해 중학교 과정까지 사업 확대도 검토 중이다. 다만 주거 공간 부족은 해결 과제로 남아 있다. 횡성군은 청일면에 모듈러주택 조성을 추진하는 한편 유학 가족 맞춤형 일자리와 주민 교류...",
       "published_at": "2026-06-12",
       "original_url": "https://www.yna.co.kr/view/AKR20260612054600062?input=1195m",
       "naver_url": "https://n.news.naver.com/mnews/article/001/0016134831?sid=102",
-      "keywords": "모듈러 주택",
+      "keywords": "학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -706,11 +1642,11 @@
       "source": "네이버뉴스",
       "media": "newsis.com",
       "title": "\"폐교 위기 탈출\"…횡성 농어촌 유학 가구 47% 급증",
-      "summary": "횡성군은 청일면 일대에 모듈러 주택 조성을 추진하며 대응에 나서고 있다. 일자리 연계와 주민 교류 확대 등을 통해 정착 중심 정책으로 발전시킨다는 방침이다. 남복현 군 교육체육과장은 \"농어촌 유학 성과는 행정과...",
+      "summary": "행정은 예산과 기반을 지원하고 교육지원청은 학교 운영 내실화를 담당했으며 민간은 마을교육공동체 운영... 횡성군은 청일면 일대에 모듈러 주택 조성을 추진하며 대응에 나서고 있다. 일자리 연계와 주민 교류 확대...",
       "published_at": "2026-06-12",
       "original_url": "https://www.newsis.com/view/NISX20260612_0003666580",
       "naver_url": "https://n.news.naver.com/mnews/article/003/0014002651?sid=102",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -718,11 +1654,11 @@
       "source": "네이버뉴스",
       "media": "kukinews.com",
       "title": "지방소멸 위기 횡성, 농어촌 유학생 급증...인구 유입 마중물 되나",
-      "summary": "이에따라 횡성군은 청일면에 모듈러 주택 등을 조성해 농촌유학생 가족이 거주할 수 있는 여건 마련에 박차를 가하고 있다. 전문가들은 단순한 체류를 넘어 ‘영구 정착’으로 유도하기 위한 정책적 배려가 필요하다는...",
+      "summary": "일부 면 단위 지역은 주택노후 및 주택부족으로 원하는 학교에 다닐 수 없어 단기간이라도 체류할 수 있는 주택이 필요한 상황이다. 이에따라 횡성군은 청일면에 모듈러 주택 등을 조성해 농촌유학생 가족이 거주할 수...",
       "published_at": "2026-06-12",
       "original_url": "https://www.kukinews.com/article/view/kuk202606120073",
       "naver_url": "https://www.kukinews.com/article/view/kuk202606120073",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -730,11 +1666,11 @@
       "source": "네이버뉴스",
       "media": "jeonmae.co.kr",
       "title": "횡성군 농어촌 유학, 3년 만에 학령인구 위기 극복 모델로",
-      "summary": "횡성군은 청일면에 모듈러 주택 등을 마련해 농촌 유학생 가족이 안정적으로 거주할 수 있도록 하고 있다. 전문가들은 단순 체류를 넘어 영구 정착을 유도할 수 있는 정책적 배려가 필요하다고 강조한다. 이에 군은...",
+      "summary": "일부 면 단위 지역은 노후 주택과 주택 부족으로 원하는 학교에 다닐 수 없는 상황이다. 횡성군은 청일면에 모듈러 주택 등을 마련해 농촌 유학생 가족이 안정적으로 거주할 수 있도록 하고 있다. 전문가들은 단순 체류를...",
       "published_at": "2026-06-12",
       "original_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264693",
       "naver_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264693",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -742,11 +1678,11 @@
       "source": "네이버뉴스",
       "media": "pressian.com",
       "title": "횡성 농어촌 유학, 인구 유입 마중물 ‘톡톡’…3년 새 6배 급증",
-      "summary": "횡성군은 급증하는 유학 가족의 안정적인 정주를 위해 청일면에 모듈러 주택을 조성하는 등 거주 공간 확보에 박차를 가하고 있다. 남복현 횡성군 교육체육과장은 “유학생 가족들이 단기 체류를 넘어 횡성의 진정한...",
+      "summary": "가족 단위의 인구 유입은 폐교 위기에 놓였던 지역 작은 학교들을 즉각적으로 살려내고 있다. 유현초와... 횡성군은 급증하는 유학 가족의 안정적인 정주를 위해 청일면에 모듈러 주택을 조성하는 등 거주 공간 확보에...",
       "published_at": "2026-06-12",
       "original_url": "https://www.pressian.com/pages/articles/2026061210535363983?utm_source=naver&utm_medium=search",
       "naver_url": "https://n.news.naver.com/mnews/article/002/0002444860?sid=102",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -754,11 +1690,11 @@
       "source": "네이버뉴스",
       "media": "weeklytoday.com",
       "title": "[위클리오늘] '지방소멸 위기를 희망으로'…횡성 농어촌 유학, 인구 유입...",
-      "summary": "이에 따라 횡성군은 청일면에 모듈러 주택 등을 조성하여 농촌유학생 가족이 거주할 수 있는 여건 마련에 박차를 가하고 있다. 전문가들은 단순한 체류를 넘어 '영구 정착'으로 유도하기 위한 정책적 배려가 필요하다고...",
+      "summary": "일부 면 단위 지역은 주택노후 및 주택부족으로 원하는 학교에 다닐 수 없어 단기간이라도 체류할 수 있는 주택이 필요한 상황이다. 이에 따라 횡성군은 청일면에 모듈러 주택 등을 조성하여 농촌유학생 가족이 거주할 수...",
       "published_at": "2026-06-12",
       "original_url": "http://www.weeklytoday.com/news/articleView.html?idxno=779712",
       "naver_url": "http://www.weeklytoday.com/news/articleView.html?idxno=779712",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;학교 모듈러",
       "relevance_score": 6
     },
     {
@@ -771,7 +1707,7 @@
       "original_url": "https://www.iusm.co.kr/news/articleView.html?idxno=1063958",
       "naver_url": "https://www.iusm.co.kr/news/articleView.html?idxno=1063958",
       "keywords": "학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5739,
@@ -783,7 +1719,7 @@
       "original_url": "https://www.m-i.kr/news/articleView.html?idxno=1380800",
       "naver_url": "https://www.m-i.kr/news/articleView.html?idxno=1380800",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5738,
@@ -795,7 +1731,7 @@
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324569",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324569",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5731,
@@ -814,12 +1750,12 @@
       "source": "네이버뉴스",
       "media": "news.mtn.co.kr",
       "title": "건설사들, 미래 먹거리 AI 데이터센터 투자 본격화",
-      "summary": "공기를 단축할 수 있는 모듈러 공법을 도입하는 등 차별화된 기술을 통해 경쟁력을 강화한다는 계획이다.... 일반 건축물보다 복잡하고, 고용 창출 효과가 미미해 지역 주민이 반기지 않는 점도 현실적인 과제\"라고...",
+      "summary": "공기를 단축할 수 있는 모듈러 공법을 도입하는 등 차별화된 기술을 통해 경쟁력을 강화한다는 계획이다.DL이앤씨는 지난해 계열사 ㈜대림이 호주 'DCI Data Centers'와 합작법인을 세워 추진한 가산 데이터센터를...",
       "published_at": "2026-06-11",
       "original_url": "https://news.mtn.co.kr/news-detail/2026061015552896541",
       "naver_url": "https://news.mtn.co.kr/news-detail/2026061015552896541",
-      "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "keywords": "DL이앤씨 모듈러",
+      "relevance_score": 4
     },
     {
       "id": 5721,
@@ -838,12 +1774,12 @@
       "source": "네이버뉴스",
       "media": "polinews.co.kr",
       "title": "모듈러 건축, 공사비·인력난 대안…\"공공 발주가 관건\"",
-      "summary": "업계에서는 이 같은 구조적 문제를 해결할 수 있는 방안으로 모듈러 건축 확대 필요성을 제기하고 있다. 모듈러 공법은 공장 생산 비중을 높여 현장 작업을 최소화한다. 주요 구조체와 내부 설비를 공장에서 제작한 뒤...",
+      "summary": "국토교통부와 한국토지주택공사(LH)는 공공주택뿐 아니라 학교, 군 시설, 교정시설 등 다양한 공공 건축물에 모듈러 적용을 확대하는 방안을 검토하고 있다. 다만 사업 추진 방식에 대해서는 업계 내 의견이 엇갈린다....",
       "published_at": "2026-06-11",
       "original_url": "https://www.polinews.co.kr/news/articleView.html?idxno=733798",
       "naver_url": "https://www.polinews.co.kr/news/articleView.html?idxno=733798",
-      "keywords": "모듈러 건축",
-      "relevance_score": 16
+      "keywords": "모듈러 건축;LH 모듈러",
+      "relevance_score": 14
     },
     {
       "id": 5719,
@@ -878,8 +1814,8 @@
       "published_at": "2026-06-11",
       "original_url": "https://www.news1.kr/local/daejeon-chungnam/6194916",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0008999144?sid=102",
-      "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "keywords": "모듈러 건축;학교 모듈러",
+      "relevance_score": 4
     },
     {
       "id": 5716,
@@ -922,11 +1858,11 @@
       "source": "네이버뉴스",
       "media": "youthdaily.co.kr",
       "title": "지방 소멸 막는 '지역활력타운'...LH, 융복합 맞춤형 컨설팅 개시",
-      "summary": "단지 내부에는 단독주택 필지와 분양·임대형 타운하우스, 모듈러 주택 등 다양한 주거 형태가 도입된다. 주거 공간 주변에는 산책로와 공원녹지 등 자연환경이 조성되며 국민체육센터, 주민자치공간, 창업 공간 및...",
+      "summary": "맞춤형 자문 조직 가동 한국토지주택공사(LH)가 지방 자치단체의 정주 여건 개선과 은퇴자·청년층의... 단지 내부에는 단독주택 필지와 분양·임대형 타운하우스, 모듈러 주택 등 다양한 주거 형태가 도입된다. 주거 공간...",
       "published_at": "2026-06-10",
       "original_url": "https://www.youthdaily.co.kr/news/article.html?no=220585",
       "naver_url": "https://www.youthdaily.co.kr/news/article.html?no=220585",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;LH 모듈러",
       "relevance_score": 10
     },
     {
@@ -934,11 +1870,11 @@
       "source": "네이버뉴스",
       "media": "g-enews.com",
       "title": "경기 광명시흥 공공주택사업, 공급 속도 높이고 친환경 전환도 과제로",
-      "summary": "임 의원은 공사 기간을 줄이면서도 탄소 배출을 저감할 수 있는 대안으로 모듈러 주택 도입 확대를 제안했다. 모듈러 주택은 공장에서 주요 구조물을 사전 제작한 뒤 현장에서 조립하는 방식으로, 기존 공법보다 공사...",
+      "summary": "GH 역시 모듈러 주택 확대 방침을 밝히며 광명시흥 사업 적용 가능성을 검토하겠다고 답변했다. 전문가들은 대규모 공공주택 사업이 단순한 물량 공급을 넘어 신속한 공급과 탄소중립이라는 두 가지 과제를 동시에...",
       "published_at": "2026-06-10",
       "original_url": "https://www.g-enews.com/view.php?ud=2026061009573654908fbfc802b3_1",
       "naver_url": "https://www.g-enews.com/view.php?ud=2026061009573654908fbfc802b3_1",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;GH 모듈러",
       "relevance_score": 4
     },
     {
@@ -946,11 +1882,11 @@
       "source": "네이버뉴스",
       "media": "lawissue.co.kr",
       "title": "경기도, 광명시흥 공공주택사업 속도전 주문… 임창휘 의원 \"공급 시기...",
-      "summary": "사업 추진 과정의 공정관리를 강화하고 모듈러주택 도입 등 공기 단축 방안도 함께 검토해야 한다는 주문이다. 임창휘 경기도의원(더불어민주당·광주2)은 지난 9일 열린 경기도의회 도시환경위원회 회의에서...",
+      "summary": "김 사장은 GH가 연간 1천 가구 이상 규모의 모듈러주택 공급을 추진하고 있다며 광명시흥 공공주택사업에도 적용 가능성을 검토하겠다고 답했다. 광명시흥 공공주택지구 사업은 2026년부터 2033년까지 추진되는 대규모...",
       "published_at": "2026-06-10",
       "original_url": "http://www.lawissue.co.kr/view.php?ud=202606101537503513d94aa4ada6_12",
       "naver_url": "http://www.lawissue.co.kr/view.php?ud=202606101537503513d94aa4ada6_12",
-      "keywords": "모듈러 주택",
+      "keywords": "GH 모듈러",
       "relevance_score": 4
     },
     {
@@ -958,11 +1894,11 @@
       "source": "네이버뉴스",
       "media": "businesspost.co.kr",
       "title": "[Who Is ?] 이승찬 계룡건설산업 회장",
-      "summary": "한 지역에 모듈러 주택 450세대 건축은 국내 역대 최대 규모다. 모듈러 주택은 탈현장공법(OSC·Off-Site Construction) 방식 가운데 하나로 부재 등을 공장 등에서 네모곽 형태로 제작한 뒤 현장에서 조립하는 방식으로...",
+      "summary": "모듈러 주택은 탈현장공법(OSC·Off-Site Construction) 방식 가운데 하나로 부재 등을 공장 등에서 네모곽 형태로 제작한 뒤 현장에서 조립하는 방식으로 시공된다. 계룡건설산업은 2020년 모듈러 주택사업을 사업목적에...",
       "published_at": "2026-06-10",
       "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=439062",
       "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=439062",
-      "keywords": "모듈러 주택;모듈러 건축",
+      "keywords": "모듈러 주택;OSC 건설",
       "relevance_score": 4
     },
     {
@@ -970,11 +1906,11 @@
       "source": "네이버뉴스",
       "media": "seoul.co.kr",
       "title": "임창휘 경기도의원, 광명시흥 공공주택지구 “조기 준공·모듈러 주택 ...",
-      "summary": "혁신적인 모듈러 공법을 선제적으로 도입해야 한다는 주문이 제기됐다. 경기도의회 도시환경위원회 소속... 해당 사업에는 용지비 1조 4371억원과 건축비 2조 9788억원을 포함해 총 4조 4159억원의 대규모 사업비가 투입될...",
+      "summary": "사업에도 모듈러 주택의 도입을 적극 검토하겠다”고 화답했다. 한편 광명시흥 공공주택지구 내 공공주택사업은 2033년까지 추진되는 대규모 뉴타운급 개발 사업이다. GH는 전체 지구 조성 사업 지분율 20%에 맞춰...",
       "published_at": "2026-06-10",
       "original_url": "https://www.seoul.co.kr/news/publicnews/local_govern/kyungki_do/2026/06/10/20260610500049?wlog_tag3=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/081/0003651151?sid=102",
-      "keywords": "모듈러 주택;모듈러 건축",
+      "keywords": "모듈러 주택;GH 모듈러",
       "relevance_score": 14
     },
     {
@@ -994,11 +1930,11 @@
       "source": "네이버뉴스",
       "media": "jeonmae.co.kr",
       "title": "임창휘 경기도의원, 광명시흥 공공주택지구 사업 속도·친환경 공법 촉...",
-      "summary": "또한 임 의원은 사업 속도 제고와 환경 보호를 동시에 달성할 수 있는 방안으로 '모듈러 주택' 선제 도입을... 총 사업비는 용지비 1조 4,371억 원과 건축비 등 2조 9,788억 원을 합쳐 4조 4,159억 원이다. [전국매일신문]...",
+      "summary": "경기도의회 도시환경위원회 임창휘 의원(더불어민주당·광주2)이 경기주택도시공사(GH)를 상대로 광명시흥... 또한 임 의원은 사업 속도 제고와 환경 보호를 동시에 달성할 수 있는 방안으로 '모듈러 주택' 선제...",
       "published_at": "2026-06-10",
       "original_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264085",
       "naver_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264085",
-      "keywords": "모듈러 주택;모듈러 건축",
+      "keywords": "모듈러 주택;GH 모듈러",
       "relevance_score": 4
     },
     {
@@ -1078,11 +2014,11 @@
       "source": "네이버뉴스",
       "media": "dnews.co.kr",
       "title": "대형 건설사, R&D조직 ‘새판짜기’",
-      "summary": "아울러건축ㆍ토목기술연구팀에 더해플랜트신성장연구팀을 새로 조직했다. 롯데건설은 이 같은 전사적 기술 전략을 바탕으로 원전 사업 진출, PC(프리캐스트 콘크리트) 모듈러 전환 등 미래 성장 동력 발굴에 집중할...",
+      "summary": "인프라도시연구실 △스마트건설연구실 등 6실 체제로 변경했다. 특히 HMG건설기술연구원은 SMR... 롯데건설은 이 같은 전사적 기술 전략을 바탕으로 원전 사업 진출, PC(프리캐스트 콘크리트) 모듈러 전환 등 미래 성장...",
       "published_at": "2026-06-09",
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606081051183780418",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606081051183780418",
-      "keywords": "모듈러 건축",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 4
     },
     {
@@ -1186,11 +2122,11 @@
       "source": "네이버뉴스",
       "media": "sidae.com",
       "title": "'젠슨 황 효과' AI데이터센터…건설업계, 8700조 인프라 수주 경쟁",
-      "summary": "업계 1위 삼성물산 건설부문은 차별화 된 기술 확보에 집중하고 있다. 고발열 서버 대응이 가능한 액침 냉각 기술을 개발하고 모듈러(조립식) 공법을 도입해 공기를 단축하는 전략이다. 한화건설은 2004년 KT 강남...",
+      "summary": "9일 건설업계에 따르면 삼성물산·현대건설·대우건설·한화건설부문·SK에코플랜트 등은 데이터센터... 고발열 서버 대응이 가능한 액침 냉각 기술을 개발하고 모듈러(조립식) 공법을 도입해 공기를 단축하는...",
       "published_at": "2026-06-09",
       "original_url": "https://www.sidae.com/article/2026060913131790337",
       "naver_url": "https://n.news.naver.com/mnews/article/417/0001146805?sid=101",
-      "keywords": "삼성물산 모듈러",
+      "keywords": "현대건설 모듈러",
       "relevance_score": 4
     },
     {
@@ -1246,11 +2182,11 @@
       "source": "네이버뉴스",
       "media": "s-journal.co.kr",
       "title": "[창간기획: 미래를 설계하는 기업들] GS건설, AI로 현장 바꾸고 프리패...",
-      "summary": "현장 작업을 줄여 공사 과정에서 발생할 수 있는 소음, 공해, 혼잡을 줄일 수 있어 친환경 미래 건축 기술로 주목받고 있다. GS건설은 2020년 폴란드 목조 모듈러주택 전문회사 단우드(Danwood)를 인수하며 해외 프리패브...",
+      "summary": "목조 단독주택 부문에서는 국내 최초로 국토교통부 공업화주택 인정을 획득했고, 철골 모듈러 부문에서도 18층 이하 철골 모듈러 공동주택에 대한 공업화주택 인정을 받았다. 최근에는 농촌체류형 쉼터 모델 디자인...",
       "published_at": "2026-06-08",
       "original_url": "https://www.s-journal.co.kr/news/articleView.html?idxno=41604",
       "naver_url": "https://www.s-journal.co.kr/news/articleView.html?idxno=41604",
-      "keywords": "모듈러 건축",
+      "keywords": "공업화주택",
       "relevance_score": 4
     },
     {
@@ -1258,11 +2194,11 @@
       "source": "네이버뉴스",
       "media": "g-enews.com",
       "title": "건설업계, 모듈러 공법 통한 준공 활발…'주거·숙박' 도입 가속",
-      "summary": "스테이 1538은 지상 4층, 총 3개 동, 300실 규모의 건축물을 지하 1층 주차장을 포함한 지상 4층, 3개 동으로 그대로 옮겨 조성했다. 금강공업은 경북 고령군에 철골 모듈러 공법을 적용한 청년 귀농·귀촌 주거단지를...",
+      "summary": "8일 건설업계에 따르면 GS건설 자회사 자이가이스트(XiGEIST)를 비롯해 유창이앤씨, 금강공업 등이 모듈러 주택을 주력 사업으로 키우며 시장 선점 경쟁에 나서고 있다. 모듈러 공법은 건물의 주요 구조·마감·설비를...",
       "published_at": "2026-06-08",
       "original_url": "https://www.g-enews.com/view.php?ud=202606081529219909514e0091f6_1",
       "naver_url": "https://www.g-enews.com/view.php?ud=202606081529219909514e0091f6_1",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 주택;유창이앤씨 모듈러",
       "relevance_score": 14
     },
     {
@@ -1270,11 +2206,11 @@
       "source": "네이버뉴스",
       "media": "imwood.co.kr",
       "title": "[박정로의 주간 브리핑] 국토부 매입임대 6만6000호 공급…모듈러 건축...",
-      "summary": "국토부 매입임대 6만6000호 공급…모듈러 건축 '청신호' 국토교통부가 향후 2년간 수도권에 매입임대주택 6만6000호를 집중 공급하며, 공기 단축을 위해 모듈러 공법 시범사업을 추진한다. 이번 정책은 공정률 기반 대금...",
+      "summary": "국토부 매입임대 6만6000호 공급…모듈러 건축 '청신호' 국토교통부가 향후 2년간 수도권에 매입임대주택... LH 토지주택연구원, '목조 OSC 주거단지' 어젠다 제안 LH 토지주택연구원이 최신 보고서(포커스 78호)를 통해...",
       "published_at": "2026-06-08",
       "original_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41170",
       "naver_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41170",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;LH 모듈러",
       "relevance_score": 14
     },
     {
@@ -1282,11 +2218,11 @@
       "source": "네이버뉴스",
       "media": "kr.aving.net",
       "title": "[테크 리더 - '공간지능' 편] 지구를 넘어 달·화성까지… 오바마 앞에 ...",
-      "summary": "스패이드(SPAID) 이종걸 대표는 그 변곡점을, 누구보다 먼저 건축에서부터 30년간 온몸으로 통과해 온... (NEOM) 모듈러 BIM 납품도 그의 손을 거쳤다. 여기에 통신·금융·부동산·상권·공공 데이터를 GIS 좌표 위에...",
+      "summary": "\"컬럼비아에서 프랭크 게리까지, 그리고 오바마 앞에 선 건축가\" 초등학교 졸업 후 미국으로 이민해... (NEOM) 모듈러 BIM 납품도 그의 손을 거쳤다. 여기에 통신·금융·부동산·상권·공공 데이터를 GIS 좌표 위에...",
       "published_at": "2026-06-08",
       "original_url": "https://kr.aving.net/news/articleView.html?idxno=1811558",
       "naver_url": "https://kr.aving.net/news/articleView.html?idxno=1811558",
-      "keywords": "모듈러 건축",
+      "keywords": "학교 모듈러",
       "relevance_score": 4
     },
     {
@@ -3831,18 +4767,6 @@
       "original_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1258136",
       "naver_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1258136",
       "keywords": "학교 모듈러",
-      "relevance_score": 6
-    },
-    {
-      "id": 5371,
-      "source": "네이버뉴스",
-      "media": "ekn.kr",
-      "title": "[패트롤] 구리시-남양주시-부천시-양평군-하남시",
-      "summary": "5대 개혁 과제는 토평한강 스마트도시 & 글로벌 AI 허브 유치를 비롯해 △첨단 교통망 확장으로 사통팔달... 감일-위례의 학급 과밀 문제를 해결하기 위해 도시형 캠퍼스와 모듈러 교실 도입도 추진한다. ▷ 원도심...",
-      "published_at": "2026-05-20",
-      "original_url": "https://www.ekn.kr/web/view.php",
-      "naver_url": "https://www.ekn.kr/web/view.php",
-      "keywords": "스마트건설 모듈러",
       "relevance_score": 6
     },
     {
