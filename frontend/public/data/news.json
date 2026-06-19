@@ -1,10 +1,178 @@
 {
-  "generated_at": "2026-06-19T08:30:37+09:00",
+  "generated_at": "2026-06-20T07:45:59+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 479,
-  "current_news_count": 167,
-  "merged_news_count": 556,
+  "previous_news_count": 556,
+  "current_news_count": 184,
+  "merged_news_count": 578,
   "items": [
+    {
+      "id": 5790,
+      "source": "네이버뉴스",
+      "media": "ikld.kr",
+      "title": "대한건설협회, 건설 학과 대학생 대상 스마트건설 현장견학 실시",
+      "summary": "이날 참가 학생들은 한국건설기술연구원을 방문해 스마트건설지원센터의 설립 취지와 OSC(탈현장건설) 공법 적용 건축물을 살펴봤다. 이어 한재구 스마트건설지원센터장의 '건설산업의 미래, 스마트건설 기술과 새로운...",
+      "published_at": "2026-06-20",
+      "original_url": "http://www.ikld.kr/news/articleView.html?idxno=336291",
+      "naver_url": "http://www.ikld.kr/news/articleView.html?idxno=336291",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 5803,
+      "source": "네이버뉴스",
+      "media": "hankyung.com",
+      "title": "\"기술자가 사회 중심\"…머스크 국가관 실현시킨 도시",
+      "summary": "트레일러부터 모듈러 주택, 타운하우스까지 형태도 다양하다. 도시 경계 밖에는 주택 건설을 위한 부지가 조성돼 있어 도시 확장이 이어질 예정이다. ◇교육부터 건축까지 자치권 스타베이스 행정 업무는 스페이스X...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.hankyung.com/article/2026061974361",
+      "naver_url": "https://n.news.naver.com/mnews/article/015/0005300828?sid=104",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5802,
+      "source": "네이버뉴스",
+      "media": "ajunews.com",
+      "title": "경기도기숙사, 수원과학대와 청년 생활안전 협약...입사생 호신술 교육...",
+      "summary": "앞서, 경기도기숙사는 지난해 8월 모듈러 분야 건축전문기업 플랜엠, 운영법인 희망둥지협동조합과 시설관리 자문 협력을 위한 업무협약을 체결하고 건물과 설비 관리 분야 협력을 추진했다. 시설관리 협약이 기숙 환경...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.ajunews.com/view/20260619164138348",
+      "naver_url": "https://www.ajunews.com/view/20260619164138348",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5801,
+      "source": "네이버뉴스",
+      "media": "news.dealsitetv.com",
+      "title": "전북 상장사 37개…전국의 1.3% 불과",
+      "summary": "군산에 본사를 둔 모듈러 건축 전문기업 ㈜엔알비가 코스닥 시장에 신규 상장하면서 상장기업 수가 소폭 늘었다. 그러나 전국적인 흐름과 비교하면 전북의 존재감은 여전히 미미했다. 전국 상장기업 가운데 서울...",
+      "published_at": "2026-06-19",
+      "original_url": "https://news.dealsitetv.com/articles/172084",
+      "naver_url": "https://news.dealsitetv.com/articles/172084",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5800,
+      "source": "네이버뉴스",
+      "media": "irobotnews.com",
+      "title": "유엔디, '유엔디로보틱스'로 사명 변경…글로벌 로봇 기업 나래 펼친다",
+      "summary": "및 모듈러 로보틱스 플랫폼'을 제공하는 글로벌 혁신 로봇 기업으로 브랜드 정체성을 선언했다.... 오토메이트 2026 무대에서 라이브 시연을 통해 공개되는 '맥봇플랫폼'은 제조, 물류, 국방, 의료, 건축, 농업 등...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.irobotnews.com/news/articleView.html?idxno=46973",
+      "naver_url": "https://www.irobotnews.com/news/articleView.html?idxno=46973",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5799,
+      "source": "네이버뉴스",
+      "media": "enewstoday.co.kr",
+      "title": "이 대통령 \"지금 시급한 과제는 첫째도, 둘째도 물가\"",
+      "summary": "또 모듈러 주택을 활용한 이재민 주거 지원책을 보고받고 '이전 설치가 가능한지'와 '100호 제작 시 필요한 예산 규모는 어느 정도인지'를 하준경 경제성장수석에게 물었고, 지난해 극심한 가뭄으로 큰 어려움을 겪었던...",
+      "published_at": "2026-06-19",
+      "original_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2440758",
+      "naver_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2440758",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5798,
+      "source": "네이버뉴스",
+      "media": "businesspost.co.kr",
+      "title": "이재명 \"물가 안정 최우선 과제, 가용한 정책수단 총동원해야\"",
+      "summary": "이후 비공개회의에서는 풍수해 발생에 따른 이주민 주거지원 대책인 '모듈러 주택 지원'을 보고 받았다. 이어 지난 2025년 가뭄에 시달렸던 강원 강릉시의 상황이 올해 되풀이 되지 않도록 대체저수지 확보 등의 대비책을...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440455",
+      "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440455",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5797,
+      "source": "네이버뉴스",
+      "media": "naeil.com",
+      "title": "이 대통령 “시급한 과제 첫째도 물가, 둘째도 물가…가용수단 총동원”",
+      "summary": "이 대통령은 그 외에 이재민 발생 시 주거지원대책 중 하나로 검토 중인 모듈러 주택 활용 방안에 대해선 이전 설치 가능 여부와 필요 예산 규모를 물었고, 가뭄 대책 등도 꼼꼼히 체크했다.",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.naeil.com/news/read/592565?ref=naver",
+      "naver_url": "https://www.naeil.com/news/read/592565?ref=naver",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5796,
+      "source": "네이버뉴스",
+      "media": "news1.kr",
+      "title": "李대통령 \"예측 가능한 사고 발생시 엄히 문책\"…자연재해 대비태세 점...",
+      "summary": "풍수해 등으로 이재민 발생 시 주거지원 대책 중 하나로 검토 중인 모듈러 주택을 보고받은 이 대통령은 이전 설치 가능 여부 및 관련 필요 예산 규모를 꼼꼼히 체크한 것으로 전해졌다. 아울러 지난해 극심한 가뭄으로 큰...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.news1.kr/politics/president/6203007",
+      "naver_url": "https://n.news.naver.com/mnews/article/421/0009013761?sid=100",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5795,
+      "source": "네이버뉴스",
+      "media": "newsis.com",
+      "title": "李대통령 \"여름철 예측가능 사고엔 엄히 책임…'강릉 가뭄'같은 불편 없...",
+      "summary": "아울러 \"이 대통령은 풍수해 등으로 이재민 발생 시 주거지원대책 중 하나로 검토 중인 모듈러 주택을 활용한 주거지원책을 보고받고, 이전 설치가 가능한 지와 100호 제작 시 필요한 예산 규모를 경제성장수석에게 묻기도...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.newsis.com/view/NISX20260619_0003676485",
+      "naver_url": "https://n.news.naver.com/mnews/article/003/0014017336?sid=100",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5794,
+      "source": "네이버뉴스",
+      "media": "dt.co.kr",
+      "title": "李대통령 “선관위 해체 수준 개혁 필요, 헌법개정도 검토”",
+      "summary": "또 이 대통령은 풍수해 이재민 주거 지원책으로 검토 중인 모듈러 주택의 이전 설치 가능 여부와 100호 제작 시 예산 규모 등을 살폈다. 아울러 지난해 극심한 가뭄을 겪은 강릉을 예로 들며 대체 저수지 확보 등 실질적이고...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.dt.co.kr/article/12068478?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/029/0003032657?sid=100",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5793,
+      "source": "네이버뉴스",
+      "media": "newspim.com",
+      "title": "李대통령, '여름철 자연재해 대응책' 점검…쪽방촌·학교·농촌 폭염 매...",
+      "summary": "이 대통령은 하준경 경제성장수석으로부터 풍수해 등으로 이재민 발생 시 주거 지원 대책 중 하나로 검토 중인 모듈러 주택을 활용한 이재민 주거 지원책을 보고받고 이전 설치 여부와 100호 제작 시 필요한 예산 규모를...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.newspim.com/news/view/20260619000904",
+      "naver_url": "https://www.newspim.com/news/view/20260619000904",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5792,
+      "source": "네이버뉴스",
+      "media": "view.asiae.co.kr",
+      "title": "李대통령 \"선관위, 해체 수준 개혁…필요시 개헌도 검토\"…\"첫째도, 둘째...",
+      "summary": "이어 이 대통령은 풍수해 등으로 이재민 발생 시 주거지원대책 중 하나로 검토 중인 모듈러 주택을 활용한 이재민 주거지원책을 보고받고 이전 설치가 가능한지와 100호 제작 시 필요한 예산 규모를 경제성장수석에게...",
+      "published_at": "2026-06-19",
+      "original_url": "https://view.asiae.co.kr/article/2026061918024477282",
+      "naver_url": "https://n.news.naver.com/mnews/article/277/0005778953?sid=100",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 5791,
+      "source": "네이버뉴스",
+      "media": "mhns.co.kr",
+      "title": "대한건설협회, 대학생 스마트건설 현장견학",
+      "summary": "참가 학생들은 이날 오전 한국건설기술연구원을 찾아 스마트건설지원센터의 설립 취지와 OSC(Off-Site Construction·탈현장건설) 공법이 적용된 건축물을 둘러봤다. 또 한재구 스마트건설지원센터장이 '건설산업의 미래...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.mhns.co.kr/news/articleView.html?idxno=750864",
+      "naver_url": "https://www.mhns.co.kr/news/articleView.html?idxno=750864",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
     {
       "id": 5770,
       "source": "네이버뉴스",
@@ -27,6 +195,102 @@
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606181115226310863",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606181115226310863",
       "keywords": "삼성물산 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 219,
+      "source": "네이버뉴스",
+      "media": "s-journal.co.kr",
+      "title": "[창간기획: 미래를 설계하는 기업들] 현대로템, K2 전차 넘어 미래 지상...",
+      "summary": "군 장학재단 기부, 군부대 위문, 모듈러형 간부 숙소 지원, 대한민국상이군경회 협력 사업 등을 통해 장병 복지 향상과 상이군인 지원에 참여하고 있다. 이집트 빈민아동 교육 지원 사업과 폴란드 방산 인재 육성...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.s-journal.co.kr/news/articleView.html?idxno=41866",
+      "naver_url": "https://www.s-journal.co.kr/news/articleView.html?idxno=41866",
+      "keywords": "군간부숙소 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 159,
+      "source": "네이버뉴스",
+      "media": "ikld.kr",
+      "title": "[전문기자리뷰] 낙찰률 41.4%…",
+      "summary": "국회예산정책처 분석에서도 공공공사 입낙찰제도의 현행 최저가낙찰제도가 지난친 저가낙찰로 인한 건설업... 한편 모듈러산업계는 OSC모듈러산업협회를 중심으로 11개 기업의 연명서를 서울시교육청·부산시교육청...",
+      "published_at": "2026-06-19",
+      "original_url": "http://www.ikld.kr/news/articleView.html?idxno=336265",
+      "naver_url": "http://www.ikld.kr/news/articleView.html?idxno=336265",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 158,
+      "source": "네이버뉴스",
+      "media": "theguru.co.kr",
+      "title": "美 희토류 기업 에너지 퓨얼스, 국방부로부터 7억2500만 달러 대출 확보",
+      "summary": "희토류 분리·금속화 시설 건설 지원 中 의존도 낮추는 공급망 강화 미국 국방부가 희토류 기업 에너지... 18일(현지시간) 미 국방부 전략자본국(OSC)은 “에너지 퓨얼스와 최대 7억2500만 달러 규모의 조건부 대출 약정을...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.theguru.co.kr/news/article.html?no=103317",
+      "naver_url": "https://www.theguru.co.kr/news/article.html?no=103317",
+      "keywords": "OSC 건설",
+      "relevance_score": 12
+    },
+    {
+      "id": 157,
+      "source": "네이버뉴스",
+      "media": "bizwork.co.kr",
+      "title": "스마트건설 현장서 진로 모색…건설協, 대학생 현장견학 진행",
+      "summary": "참가 학생들은 오전에 한국건설기술연구원을 방문해 스마트건설지원센터의 역할과 OSC 공법 적용 건축물을 살펴봤다. 이어 한재구 스마트건설지원센터장의 '건설산업의 미래, 스마트건설 기술과 새로운 기회' 특강을...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416650",
+      "naver_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416650",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 156,
+      "source": "네이버뉴스",
+      "media": "asiatime.co.kr",
+      "title": "[건설 뉴스브리핑] IPARK현산, 프리미엄 민간임대 '파크로쉬 서울원' 분...",
+      "summary": "참가 학생들은 오전에 한국건설기술연구원(원장 박선규)을 방문하여 스마트건설지원센터의 설립 취지와 OSC(Off-Site Construction, 탈현장건설) 공법 적용 건축물을 둘러보고, 한재구 스마트건설지원센터장의 ‘건설산업의...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.asiatime.co.kr/article/20260619500341",
+      "naver_url": "https://www.asiatime.co.kr/article/20260619500341",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 155,
+      "source": "네이버뉴스",
+      "media": "seoulfn.com",
+      "title": "건설협회, '미래 건설인 스마트건설 현장견학' 진행",
+      "summary": "참가 학생들은 오전에 한국건설기술연구원을 방문해 스마트건설지원센터의 설립 취지와 OSC(Off-Site Construction, 탈현장건설) 공법 적용 건축물을 둘러봤다. 이어 지반열진공챔버실험실과 제로카본 건물 등 주요...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.seoulfn.com/news/articleView.html?idxno=631555",
+      "naver_url": "https://www.seoulfn.com/news/articleView.html?idxno=631555",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 154,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "대한건설협회, 미래 건설인과 스마트 건설현장 체험",
+      "summary": "참가 학생들은 오전에 한국건설기술연구원(원장 박선규)을 방문해 스마트건설지원센터의 설립 취지와 OSC(Off-Site Construction, 탈현장건설) 공법 적용 건축물을 둘러봤다. 이후 한재구 스마트건설지원센터장의...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606191923396280061",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606191923396280061",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 148,
+      "source": "네이버뉴스",
+      "media": "edaily.co.kr",
+      "title": "李대통령 “재난 예방 철저히 대비한 부처엔 상응하는 보상 필요”",
+      "summary": "이어 이 대통령은 풍수해 등으로 이재민이 발생할 경우 주거지원 대책 중 하나로 검토 중인 모듈러 주택을 활용한 이재민 주거지원책을 보고받고, 이전 설치가 가능한지와 100호 제작 시 필요한 예산 규모를...",
+      "published_at": "2026-06-19",
+      "original_url": "https://www.edaily.co.kr/news/newspath.asp?newsid=05494006645483360",
+      "naver_url": "https://n.news.naver.com/mnews/article/018/0006310222?sid=100",
+      "keywords": "모듈러 주택",
       "relevance_score": 6
     },
     {
@@ -190,11 +454,11 @@
       "source": "네이버뉴스",
       "media": "popcornnews.net",
       "title": "삼성, AI 접점 넓힌다…청년 직무교육부터 모듈러 홈·보급형 갤럭시까...",
-      "summary": "삼성전자는 목조 모듈러 주택 전문 기업 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하고 단독주택형 모듈러 건축 시장에 본격 진출한다. 공간제작소는 AI 기반 설계와 자동화 생산 시스템을 활용해 주택의 80...",
+      "summary": "삼성전자는 이미 지난해 2월 국내 모듈러 건축물 제작 전문 회사 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺었다. IFA 2025에서는 삼성물산과 협업해 글로벌 B2B 대상 모듈러 홈 솔루션도 선보인 바...",
       "published_at": "2026-06-18",
       "original_url": "http://www.popcornnews.net/news/articleView.html?idxno=124156",
       "naver_url": "http://www.popcornnews.net/news/articleView.html?idxno=124156",
-      "keywords": "모듈러 건축;모듈러 주택",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
       "relevance_score": 16
     },
     {
@@ -230,7 +494,7 @@
       "published_at": "2026-06-18",
       "original_url": "https://www.newsinside.kr/news/articleView.html?idxno=4770769",
       "naver_url": "https://www.newsinside.kr/news/articleView.html?idxno=4770769",
-      "keywords": "모듈러 건축;모듈러 주택",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
       "relevance_score": 16
     },
     {
@@ -1551,7 +1815,7 @@
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324595",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324595",
       "keywords": "OSC 건설",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 89,
@@ -1563,7 +1827,7 @@
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=459603",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=459603",
       "keywords": "금강공업 모듈러",
-      "relevance_score": 21
+      "relevance_score": 19
     },
     {
       "id": 88,
@@ -1599,7 +1863,7 @@
       "original_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
       "naver_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
       "keywords": "LH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 143,
@@ -1611,7 +1875,7 @@
       "original_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2438316",
       "naver_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2438316",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 142,
@@ -1623,7 +1887,7 @@
       "original_url": "https://www.gukjenews.com/news/articleView.html?idxno=3606619",
       "naver_url": "https://www.gukjenews.com/news/articleView.html?idxno=3606619",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 141,
@@ -1635,7 +1899,7 @@
       "original_url": "https://www.yna.co.kr/view/AKR20260612054600062?input=1195m",
       "naver_url": "https://n.news.naver.com/mnews/article/001/0016134831?sid=102",
       "keywords": "학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 140,
@@ -1647,7 +1911,7 @@
       "original_url": "https://www.newsis.com/view/NISX20260612_0003666580",
       "naver_url": "https://n.news.naver.com/mnews/article/003/0014002651?sid=102",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 138,
@@ -1659,7 +1923,7 @@
       "original_url": "https://www.kukinews.com/article/view/kuk202606120073",
       "naver_url": "https://www.kukinews.com/article/view/kuk202606120073",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 137,
@@ -1671,7 +1935,7 @@
       "original_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264693",
       "naver_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264693",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 136,
@@ -1683,7 +1947,7 @@
       "original_url": "https://www.pressian.com/pages/articles/2026061210535363983?utm_source=naver&utm_medium=search",
       "naver_url": "https://n.news.naver.com/mnews/article/002/0002444860?sid=102",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 135,
@@ -1695,7 +1959,7 @@
       "original_url": "http://www.weeklytoday.com/news/articleView.html?idxno=779712",
       "naver_url": "http://www.weeklytoday.com/news/articleView.html?idxno=779712",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5744,

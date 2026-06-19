@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-19T08:30:37+09:00",
-  "last_updated": "2026-06-19T08:30:37+09:00",
+  "generated_at": "2026-06-20T07:45:59+09:00",
+  "last_updated": "2026-06-20T07:45:59+09:00",
   "business_count": 125,
   "procurement_plan_count": 16,
   "procurement_plan_collection_status": "success",
   "procurement_plan_source_status": {
     "나라장터": "success"
   },
-  "procurement_plan_last_collected_at": "2026-06-19T08:29:24",
-  "news_count": 556,
+  "procurement_plan_last_collected_at": "2026-06-20T07:44:50",
+  "news_count": 578,
   "sources": [
     "나라장터",
     "네이버뉴스"
   ],
-  "last_collected_at": "2026-06-19T08:29:24",
+  "last_collected_at": "2026-06-20T07:44:50",
   "warning_count": 1,
   "g2b_order_plan_status": "success",
   "g2b_order_plan_message": "정상 호출되어 16건을 공개 데이터에 반영했습니다.",
@@ -28,10 +28,10 @@
   "previous_business_count": 125,
   "current_business_count": 105,
   "merged_business_count": 125,
-  "previous_news_count": 479,
-  "current_news_count": 167,
-  "merged_news_count": 556,
+  "previous_news_count": 556,
+  "current_news_count": 184,
+  "merged_news_count": 578,
   "public_data_guard_status": "passed",
-  "public_data_guard_message": "Cumulative merge protected public data: business 125 -> 125, news 479 -> 556.",
+  "public_data_guard_message": "Cumulative merge protected public data: business 125 -> 125, news 556 -> 578.",
   "data_policy": "cumulative_verified"
 }
