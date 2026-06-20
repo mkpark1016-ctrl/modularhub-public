@@ -1,10 +1,22 @@
 {
-  "generated_at": "2026-06-20T16:53:05+09:00",
+  "generated_at": "2026-06-21T07:59:37+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 578,
+  "previous_news_count": 582,
   "current_news_count": 187,
-  "merged_news_count": 582,
+  "merged_news_count": 583,
   "items": [
+    {
+      "id": 5807,
+      "source": "네이버뉴스",
+      "media": "news.einfomax.co.kr",
+      "title": "공급 속도전에 '모듈러 주택' 판 커지나…GS건설 이어 삼성전자 가세",
+      "summary": "국회 역시 지난해 말 발의된 '모듈러 건축 활성화 지원에 관한 특별법'을 소관 상임위 법안심사소위에 상정한 상태다. 해당 법안은 현장 공사와 구분되는 모듈러 맞춤형 표준 기준을 수립하고, 이를 공공부문부터 우선...",
+      "published_at": "2026-06-21",
+      "original_url": "https://news.einfomax.co.kr/news/articleView.html?idxno=4421034",
+      "naver_url": "https://news.einfomax.co.kr/news/articleView.html?idxno=4421034",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
     {
       "id": 5806,
       "source": "네이버뉴스",
@@ -1851,7 +1863,7 @@
       "original_url": "http://www.newstown.co.kr/news/articleView.html?idxno=706045",
       "naver_url": "http://www.newstown.co.kr/news/articleView.html?idxno=706045",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 90,
