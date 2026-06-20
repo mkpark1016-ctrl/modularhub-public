@@ -1470,3 +1470,115 @@ cd /d "D:\backup01\Documents\New project 2"
 1. GitHub Actions가 매일 데이터를 수집합니다.
 2. 공개 JSON을 누적 병합하고 축소 방지 검사를 통과한 경우에만 commit/push합니다.
 3. Netlify와 Vercel이 같은 `main` 브랜치 변경을 각각 감지해 재배포합니다.
+
+## 10.8-A Public Agency Housing Contest Source Probe
+
+이번 단계는 LH, GH, iH, SH 공식 홈페이지에 게시되는 민간참여 공공주택건설사업 민간사업자 공모를 향후 안정적으로 수집하기 위한 진단 단계입니다. DB 저장, 공개 JSON export, 프론트 표시 변경은 하지 않습니다.
+
+대상 소스:
+
+- LH 공모안내: `https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034`
+- GH 공모 관련사항: `https://www.gh.or.kr/gh/bid-announcement.do`
+- iH 공지사항: `https://www.ih.co.kr/main/customer/notification/notice.jsp`
+- SH 사업발주 공고 게시판: `https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList`
+
+진단 원칙:
+
+- 각 기관 요청 사이에는 최소 1초 간격을 둡니다.
+- `User-Agent`를 명시합니다.
+- CAPTCHA, 로그인, 접근 제한은 우회하지 않습니다.
+- requests로 확인이 어려우면 `playwright_required` 또는 `manual_only` 후보로 분류합니다.
+- PDF, HWP, HWPX, ZIP 첨부파일은 파일명과 URL만 추출하고 대량 다운로드하지 않습니다.
+- 기관 하나의 실패가 다른 기관 진단을 중단하지 않습니다.
+
+원문 링크 검증 정책:
+
+- 상세 URL은 기관별 `allowed_domains` 안에 있어야 합니다.
+- 목록 URL은 정확 원문 링크로 통과하지 않습니다.
+- 상세 URL에는 LH `list_no`, GH `articleNo`, iH `msg_seq` 같은 고유 ID가 포함되어야 합니다.
+- 상세 페이지 제목 또는 본문이 목록 제목/known title과 유사해야 합니다.
+- 검증 실패 시 `original_url` 후보로 확정하지 않고 `detail_unverified` 또는 실패 사유를 남깁니다.
+
+공모 단계 구분:
+
+- 사업기회 단계: `pre_notice`, `main_notice`, `re_notice`, `correction`
+- 정보 업데이트: `update`
+- 결과 공고: `result`
+
+결과 공고는 신규 사업기회 목록에 혼입하지 않습니다. 단, 이번 단계에서는 공개 JSON 필터를 실제로 적용하지 않습니다.
+
+모듈러 관련성 구분:
+
+- `confirmed`: 제목, 본문, 첨부파일명에 `모듈러`, `OSC`, `Off-Site`, `공업화주택`, `프리패브`, `PC 모듈러`, `스틸 모듈러`, `공장제작`, `DfMA` 등 명시 근거가 있는 경우
+- `review_candidate`: 민간참여 공공주택 공모이지만 모듈러 적용 근거가 명시되지 않은 경우
+- `unconfirmed`: 관련 근거가 없는 일반 공지
+
+근거 없는 민간참여 공모를 `confirmed`로 표시하지 않습니다. 화면 적용 단계에서는 `review_candidate`를 “모듈러 적용 검토 대상, 공고상 모듈러 적용 확정 아님”으로 안내합니다.
+
+실행:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\probe_public_housing_contest_sources.py
+.\.venv\Scripts\python.exe scripts\test_public_housing_contest_probe.py
+.\.venv\Scripts\python.exe -m compileall src scripts
+```
+
+출력:
+
+- `logs/public_housing_contest_probe.json`
+- `logs/public_housing_contest_probe.md`
+
+`logs` 폴더는 진단 산출물 보관용이며 commit 대상이 아닙니다.
+
+## 10.8-B LH 민간참여 공공주택 공모 수집
+
+LH 공식 공모안내 게시판의 민간참여 공공주택건설사업 민간사업자 공모를 사업정보에 통합합니다.
+
+대상 게시판:
+
+- LH 공모안내: `https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034`
+
+수집 기준:
+
+- 제목 또는 본문이 `민간참여 공공주택건설사업`, `민간참여 공공주택사업`, `민간사업자 공모/재공모` 조건과 공공주택 문맥을 함께 만족해야 합니다.
+- 사업기회 기본 노출 단계는 `pre_notice`, `main_notice`, `re_notice`, `correction`입니다.
+- `result`와 `update` 단계는 DB에는 보존할 수 있지만 기본 공개 사업기회 목록에는 노출하지 않습니다.
+- 공고에 모듈러, OSC, Off-Site, 공업화주택, 프리패브, DfMA 등의 직접 근거가 없으면 `review_candidate`로 표시합니다.
+- `review_candidate`는 “모듈러 적용 검토 대상”이며, 공고상 모듈러 적용 확정이 아닙니다.
+
+원문 링크와 첨부파일:
+
+- LH 상세 URL은 `lh.or.kr` 도메인, `act=view`, `list_no` 포함, HTTP 200, 제목 유사도 조건을 만족할 때만 공식 원문으로 저장합니다.
+- 목록 페이지나 파일 다운로드 URL을 원문 링크로 표시하지 않습니다.
+- PDF, HWP, HWPX, ZIP 첨부파일은 파일명, 파일 형식, 공식 다운로드 URL만 수집합니다.
+- 첨부파일 본문은 이번 단계에서 파싱하지 않습니다.
+
+로컬 실행:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\collect_lh_public_housing_contests.py --dry-run
+.\.venv\Scripts\python.exe scripts\test_lh_public_housing_contest_collector.py
+.\.venv\Scripts\python.exe scripts\collect_lh_public_housing_contests.py --apply
+.\.venv\Scripts\python.exe scripts\export_public_json.py
+.\.venv\Scripts\python.exe scripts\test_public_json_export.py
+.\.venv\Scripts\python.exe scripts\refuse_suspicious_public_data_shrink.py
+.\.venv\Scripts\python.exe scripts\diagnose_public_json_counts.py
+```
+
+프론트 검증:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2\frontend"
+npm run lint
+npm run build
+```
+
+GitHub Actions:
+
+- `update-public-data.yml`에서 기존 나라장터/D2B/뉴스 수집 후 LH 민간참여 공공주택 공모 수집을 실행합니다.
+- LH 수집에는 별도 Secret이 필요하지 않습니다.
+- LH 수집 실패는 workflow 전체 실패로 처리하지 않고 `meta.json` warning 상태로 반영합니다.
+- 공개 JSON export, 보안 테스트, 축소 방지 테스트가 통과할 때만 JSON 변경분을 commit/push합니다.
+- Netlify와 Vercel은 동일한 `frontend/public/data/*.json`을 배포합니다.

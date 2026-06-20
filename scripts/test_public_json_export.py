@@ -57,6 +57,10 @@ def main() -> int:
         "public_data_guard_message",
         "d2b_legacy_status",
         "d2b_gw_migration_required",
+        "lh_contest_status",
+        "lh_contest_message",
+        "lh_contest_public_count",
+        "lh_contest_exact_link_count",
         "data_policy",
     ):
         require(field in meta, f"meta status field is missing: {field}")
@@ -71,11 +75,18 @@ def main() -> int:
         require(item.get("source"), "business item source is missing")
         require(item.get("source_name") == item.get("source"), "business source/source_name mismatch")
         require(isinstance(item.get("manual_check"), dict), "business manual_check is missing")
-        require(item["source_type"] in {"bid", "procurement_plan"}, "unexpected business source_type")
-        require(item.get("type") in {"입찰공고", "발주계획"}, "business type label is missing")
+        require(
+            item["source_type"] in {"bid", "procurement_plan", "public_agency_contest"},
+            "unexpected business source_type",
+        )
+        require(item.get("type") in {"입찰공고", "발주계획", "민간사업자 공모"}, "business type label is missing")
         if item["source_type"] == "procurement_plan":
             require(item.get("type") == "발주계획", "procurement plan label mismatch")
             require("plan_no" in item, "procurement plan number field is missing")
+        if item["source_type"] == "public_agency_contest":
+            require(item.get("type") == "민간사업자 공모", "public contest label mismatch")
+            require(item.get("source") == "LH", "10.8-B only exports LH public agency contests")
+            require(item.get("source_record_id") or item.get("bid_no"), "LH contest source record id is missing")
     for item in news["items"]:
         require(item.get("original_url"), "news original_url is missing")
         require(item.get("source_type") is None, "news contract must not expose unrelated source_type")

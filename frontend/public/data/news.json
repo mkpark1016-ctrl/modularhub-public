@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T07:45:59+09:00",
+  "generated_at": "2026-06-20T16:32:02+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 556,
-  "current_news_count": 184,
+  "previous_news_count": 578,
+  "current_news_count": 425,
   "merged_news_count": 578,
   "items": [
     {
@@ -556,18 +556,6 @@
       "naver_url": "http://www.koreatimes.com/article/1617763",
       "keywords": "모듈러 주택",
       "relevance_score": 6
-    },
-    {
-      "id": 5371,
-      "source": "네이버뉴스",
-      "media": "ekn.kr",
-      "title": "삼성전자, 경기 화성시에 ‘삼성 AI 모듈러 홈’ 쇼룸 열어",
-      "summary": "모듈러 주택은 공사기간이 비교적 짧고 균일한 건축 품질을 보장한다는 장점이 있다. 건축 시 발생하는 폐기물도 줄일 수 있다. 쇼룸은 공간제작소의 모듈러 목조주택에 삼성전자의 AI 가전과 스마트싱스 기반의 AI...",
-      "published_at": "2026-06-18",
-      "original_url": "https://www.ekn.kr/web/view.php",
-      "naver_url": "https://www.ekn.kr/web/view.php",
-      "keywords": "모듈러 주택;모듈러 건축",
-      "relevance_score": 16
     },
     {
       "id": 249,
@@ -1534,11 +1522,11 @@
       "source": "네이버뉴스",
       "media": "newsdream.kr",
       "title": "[드림&CEO] 흙먼지 마다않는 '현장형' 허윤홍 대표, GS건설에 '혁신 DNA' ...",
-      "summary": "'발로 뛰는 리더.' 허윤홍 GS건설 대표를 상징하는 수식어인데요 이 수식어는 단순한 수사가 아닙니다. 2023년... 모듈러 공법을 통한 친환경 건축, 수처리 사업을 통한 수자원 보호, AI와 스마트시티 기술을 결합한 미래...",
+      "summary": "모듈러 공법을 통한 친환경 건축, 수처리 사업을 통한 수자원 보호, AI와 스마트시티 기술을 결합한 미래 주거 환경 조성 등은 모두 그의 '지속 가능성'에 대한 철학에서 비롯됐습니다. 단기적 이익보다 환경·사회적...",
       "published_at": "2026-06-16",
       "original_url": "http://www.newsdream.kr/news/articleView.html?idxno=113058",
       "naver_url": "http://www.newsdream.kr/news/articleView.html?idxno=113058",
-      "keywords": "스마트건설 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 6
     },
     {
@@ -1582,11 +1570,11 @@
       "source": "네이버뉴스",
       "media": "g-enews.com",
       "title": "정부 산업재해 강력 경고 통했나…건설업, 사망 사고 큰 폭 감소",
-      "summary": "예를 들어 현대건설, 대우건설, GS건설, 롯데건설 등은 현장에 인공지능(AI) 기반 통역·번역 시스템을 확대 적용하고 있다. 사물인터넷(IoT), 드론, 디지털 건축정보모델(BIM), 증강·가상현실(VR·AR) 등 스마트 기술과 모듈러...",
+      "summary": "사물인터넷(IoT), 드론, 디지털 건축정보모델(BIM), 증강·가상현실(VR·AR) 등 스마트 기술과 모듈러 공법 도입도 적극 추진 중이다. 업계에서는 그동안 추진돼 온 기술 혁신이 정부의 압박 속에서 더욱 빨라졌다고 보고 있다....",
       "published_at": "2026-06-15",
       "original_url": "https://www.g-enews.com/view.php?ud=202606150846207596ea13369bfa_1",
       "naver_url": "https://www.g-enews.com/view.php?ud=202606150846207596ea13369bfa_1",
-      "keywords": "스마트건설 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 6
     },
     {
@@ -1594,11 +1582,11 @@
       "source": "네이버뉴스",
       "media": "pinpointnews.co.kr",
       "title": "건설도 이제는 친환경 시대… 삼성물산, 스마트 모듈러 건축으로 신성장...",
-      "summary": "증시 전문가들은 \"모듈러주택 시장은 건설 자동화와 스마트 건설 기술 발전의 수혜를 받을 가능성이 높다\"며 \"시공 역량을 갖춘 대형 건설사와 핵심 자재 공급 기업 중심으로 성장성이 부각될 수 있다\"고 설명했다. 이어...",
+      "summary": "삼성물산은 국내 건설업계 최고 수준의 기술력과 대형 프로젝트 수행 능력을 바탕으로 모듈러 건축 시장에서도 경쟁력을 확보할 것으로 평가받는다. 스마트 건설 기술과 친환경 건축 수요 확대가 긍정적인 투자 포인트로...",
       "published_at": "2026-06-15",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460073",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460073",
-      "keywords": "모듈러 건축;스마트건설 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 21
     },
     {
@@ -1606,11 +1594,11 @@
       "source": "네이버뉴스",
       "media": "pinpointnews.co.kr",
       "title": "중동 재건 시동 걸렸다...삼성E&A, 글로벌 플랜트 기술력 앞세워 수주전...",
-      "summary": "모듈러 건축 관련 기업인 에스와이와 에스와이스틸텍 역시 관심을 받고 있다. 전쟁 피해 지역에서는 신속한... 설계 및 엔지니어링 분야에서는 희림과 유신, 도화엔지니어링이 관심을 받고 있다. 재건 사업은 실제 공사...",
+      "summary": "모듈러 건축 관련 기업인 에스와이와 에스와이스틸텍 역시 관심을 받고 있다. 전쟁 피해 지역에서는 신속한 주택 공급이 중요한 만큼 모듈러 건축 방식이 적극 활용될 가능성이 높기 때문이다. 통신 인프라 복구...",
       "published_at": "2026-06-15",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460104",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460104",
-      "keywords": "모듈러 건축;희림 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 6
     },
     {
@@ -1622,7 +1610,7 @@
       "published_at": "2026-06-15",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460169",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=460169",
-      "keywords": "모듈러 건축;금강공업 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 6
     },
     {
@@ -1630,11 +1618,11 @@
       "source": "네이버뉴스",
       "media": "kmecnews.co.kr",
       "title": "AI 데이터센터, 열을 잡는 기계설비가 승부처다",
-      "summary": "건설 속도를 높이기 위한 OSC와 모듈러 공법, 플러그앤플레이 방식의 설비 구성, 기계설비 구성요소 표준화 방안이 함께 논의됐으며, 공급 확대 과정에서 설비의 시공성과 유지관리 효율을 동시에 확보해야 한다는 의견도...",
+      "summary": "특히 데이터센터를 단순한 건축물이 아닌 고도의 설비 집약 산업으로 바라보는 시각이 인상적이었다. 건설 속도를 높이기 위한 OSC와 모듈러 공법, 플러그앤플레이 방식의 설비 구성, 기계설비 구성요소 표준화 방안이...",
       "published_at": "2026-06-15",
       "original_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50195",
       "naver_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50195",
-      "keywords": "OSC 건설",
+      "keywords": "모듈러 건축",
       "relevance_score": 6
     },
     {
@@ -1642,7 +1630,7 @@
       "source": "네이버뉴스",
       "media": "polinews.co.kr",
       "title": "이상휘 의원, '철강산업 전기료 감면' 위한 법안 대표 발의… 철강기업...",
-      "summary": "또한, 포항시가 발주하는 모든 공공건축, 교통인프라, 모듈러 주택사업 등에 지역에서 생산하는 철강재를 우선 적용할 수 있도록 조례의 정비 등을 희망하는 것으로 알려졌다.",
+      "summary": "또한, 포항시가 발주하는 모든 공공건축, 교통 인프라, 모듈러 주택사업 등에 포스코에서 제작하는 철강재 및 지역 중소기업 제품을 우선 적용할 수 있도록 조례의 정비를 희망하는 것으로 알려졌다.",
       "published_at": "2026-06-15",
       "original_url": "https://www.polinews.co.kr/news/articleView.html?idxno=734123",
       "naver_url": "https://www.polinews.co.kr/news/articleView.html?idxno=734123",
@@ -1654,11 +1642,11 @@
       "source": "네이버뉴스",
       "media": "opinionnews.co.kr",
       "title": "특별법 시행 앞둔 AI 데이터센터…건설사, 전력망·냉각 설루션 경쟁",
-      "summary": "사진제공=현대건설 건설업계가 AI 데이터센터 시장을 미래 먹거리로 키우고 있다. 15일 건설업계에 따르면... 삼성물산은 서버를 비전도성 액체에 직접 담가 열을 식히는 액침 냉각 기술과 모듈러 공법을 앞세워...",
+      "summary": "이에 따라 데이터센터는 단순 건축물이 아니라 전력, 통신, 기계설비가 결합된 고부가가치 산업 인프라로... 삼성물산은 서버를 비전도성 액체에 직접 담가 열을 식히는 액침 냉각 기술과 모듈러 공법을 앞세워...",
       "published_at": "2026-06-15",
       "original_url": "http://www.opinionnews.co.kr/news/articleView.html?idxno=140028",
       "naver_url": "http://www.opinionnews.co.kr/news/articleView.html?idxno=140028",
-      "keywords": "현대건설 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 6
     },
     {
@@ -1666,11 +1654,11 @@
       "source": "네이버뉴스",
       "media": "the-biz.co.kr",
       "title": "\"전력 찾아 국경 넘는다\"… 건설사들, 데이터센터 경쟁",
-      "summary": "현대건설은 금융결제원 분당센터와 KT 목동 IDC, NH·KB 통합 IT센터, 네이버 데이터센터 '각 세종' 등 굵직한... 삼성물산 건설부문은 현재까지 14개 데이터센터 프로젝트를 수행했으며 액침냉각 기술과 모듈러 공법을...",
+      "summary": "삼성물산 건설부문은 현재까지 14개 데이터센터 프로젝트를 수행했으며 액침냉각 기술과 모듈러 공법을... 데이터센터가 단순 건축물이 아닌 장기 운영형 인프라 자산으로 인식되면서 건설사들의 사업 방식도...",
       "published_at": "2026-06-15",
       "original_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722578",
       "naver_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722578",
-      "keywords": "현대건설 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 6
     },
     {
@@ -1678,11 +1666,11 @@
       "source": "네이버뉴스",
       "media": "kwnews.co.kr",
       "title": "횡성 농어촌 유학, 지방소멸 위기 극복 대안 부상",
-      "summary": "작은학교가 경쟁력을 갖추는 정착형 교육 모델이 되고 있다. ■학생 수 3년 만에 6배 급증 지역에 활력... 이에 횡성군은 모듈러 주택 조성 등 거주 공간 마련과 유학 가족을 위한 맞춤형 일자리 창출과 현지 주민과의 교류...",
+      "summary": "이에 횡성군은 모듈러 주택 조성 등 거주 공간 마련과 유학 가족을 위한 맞춤형 일자리 창출과 현지 주민과의 교류 행사 운영 등 ‘횡성의 정(情)’을 느낄 수 있는 정주 여건 조성 방안을 심혈을 기울이고 있다. 남복현 군...",
       "published_at": "2026-06-15",
       "original_url": "https://www.kwnews.co.kr/page/view/2026061350012100000",
       "naver_url": "https://n.news.naver.com/mnews/article/087/0001199075?sid=102",
-      "keywords": "모듈러 주택;학교 모듈러",
+      "keywords": "모듈러 주택",
       "relevance_score": 6
     },
     {
@@ -1750,11 +1738,11 @@
       "source": "네이버뉴스",
       "media": "koscaj.com",
       "title": "[논단] 공사비 상승의 '구조적 위기' 고리를 끊어야 한다",
-      "summary": "적용해 공공과 민간의 파트너십을 통한 리스크 해지 모델을 정착시켰다. 싱가포르는 모듈러 공법 도입을... 함께 공공임대용 미분양 주택 매입 확약을 실질적으로 전면 확대해야 한다. 중장기적으로는 거시 충격에 강한...",
+      "summary": "싱가포르는 모듈러 공법 도입을 의무화해 노동 집약 구조를 극복하고 생산 단계를 지능화했다. 이는 규제와... 미분양 주택 매입 확약을 실질적으로 전면 확대해야 한다. 중장기적으로는 거시 충격에 강한 저소비·고효율...",
       "published_at": "2026-06-15",
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324575",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324575",
-      "keywords": "공공임대 모듈러",
+      "keywords": "모듈러 주택",
       "relevance_score": 6
     },
     {
@@ -1762,11 +1750,11 @@
       "source": "네이버뉴스",
       "media": "joongboo.com",
       "title": "오산 세교2지구 초등학교 배정 놓고 \"임대아파트가 알아서 빠져줘야\" 일...",
-      "summary": "학급이었던 학교가 현재 50개 학급으로 운영되고 있다\"고 밝혔다. 이어 \"현재는 여유 교실이 남아 있어 추가 학생 수용이 가능한 상황\"이라며 \"다만 올해 하반기 학생 수 증가 추이를 지켜본 뒤 필요할 경우 모듈러 교실...",
+      "summary": "이에 대해 일부 주민들은 과밀학급 문제의 원인을 특정 아파트 단지나 임대주택 입주민에게 돌리는 것은... 경우 모듈러 교실 설치를 검토하고 설치가 결정되면 내년 중 운영하는 방안도 검토하고 있다\"고 설명했다....",
       "published_at": "2026-06-14",
       "original_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
       "naver_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
-      "keywords": "학교 모듈러",
+      "keywords": "모듈러 주택",
       "relevance_score": 6
     },
     {
@@ -1774,11 +1762,11 @@
       "source": "네이버뉴스",
       "media": "shinailbo.co.kr",
       "title": "횡성군 농어촌 유학 3년 차…전입 급증하며 인구정책 모델로 부상",
-      "summary": "단순한 체험형 교육을 넘어 학생과 가족의 실제 전입으로 이어지면서 작은 학교를 살리고 지역 정주 인구를... 이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 임시 및 안정적 거주 기반 마련을 추진하고 있다....",
+      "summary": "이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 임시 및 안정적 거주 기반 마련을 추진하고 있다. 전문가들은 단순 체류를 넘어 실질적인 정착으로 이어지기 위해서는 일자리 제공과 지역 주민과의 교류 확대 등...",
       "published_at": "2026-06-14",
       "original_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5030018",
       "naver_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5030018",
-      "keywords": "모듈러 주택;학교 모듈러",
+      "keywords": "모듈러 주택",
       "relevance_score": 6
     },
     {
@@ -1786,11 +1774,11 @@
       "source": "네이버뉴스",
       "media": "segye.com",
       "title": "작은 학교 살린 농어촌유학…횡성에 사람이 돌아온다",
-      "summary": "학교를 선택하고도 집을 구하지 못해 유학을 포기하는 사례도 발생한다. 횡성군은 청일면 일원에 모듈러 주택 조성을 추진하는 등 체류 기반 확충에 나서고 있다. 전문가들은 농어촌 유학의 최종 목표가 단순 체류가...",
+      "summary": "횡성군은 청일면 일원에 모듈러 주택 조성을 추진하는 등 체류 기반 확충에 나서고 있다. 전문가들은 농어촌 유학의 최종 목표가 단순 체류가 아니라 정착이 돼야 한다고 지적한다. 학생들이 졸업한 뒤에도 가족이 지역에...",
       "published_at": "2026-06-14",
       "original_url": "https://www.segye.com/newsView/20260612511905?OutUrl=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/022/0004135244?sid=102",
-      "keywords": "모듈러 주택;학교 모듈러",
+      "keywords": "모듈러 주택",
       "relevance_score": 6
     },
     {
@@ -1798,11 +1786,11 @@
       "source": "네이버뉴스",
       "media": "newstown.co.kr",
       "title": "\"지방소멸 위기를 희망으로\"…횡성 농어촌 유학, 인구 유입 '마중물'되...",
-      "summary": "일부 면 지역은 주택이 노후화됐거나 공급 자체가 부족해 원하는 학교로 전학을 희망해도 거주지를 찾기 어려운 상황이 발생하고 있다. 이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족이 머물 수 있는...",
+      "summary": "이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족이 머물 수 있는 주거 여건 마련을 추진하고 있다. 전문가들은 농어촌 유학이 일시 체류에 그치지 않으려면 주거와 일자리, 지역사회 관계망이 함께...",
       "published_at": "2026-06-13",
       "original_url": "http://www.newstown.co.kr/news/articleView.html?idxno=706045",
       "naver_url": "http://www.newstown.co.kr/news/articleView.html?idxno=706045",
-      "keywords": "모듈러 주택;학교 모듈러",
+      "keywords": "모듈러 주택",
       "relevance_score": 6
     },
     {
@@ -1810,12 +1798,12 @@
       "source": "네이버뉴스",
       "media": "koscaj.com",
       "title": "K-FINCO 기술교육원, OSC 모듈러 건설 실무자 양성과정 개강",
-      "summary": "K-FINCO 전문건설공제조합 기술교육원(이하 기술교육원)이 지난 9일 충북 음성 기술교육원에서 'OSC 모듈러 건설 실무자 양성과정'을 개강하고 본격적인 교육 운영에 들어갔다. 이번 과정은 공장에서 주요 건축 부재와...",
+      "summary": "최근 정부 차원에서도 모듈러 건축 활성화를 위한 제도적 기반 마련과 공공 부문 적용 확대가 추진되고 있어, 관련 실무 인력 양성의 필요성은 더욱 커지고 있다. 이번 교육과정은 지난 9일부터 11월27일까지 약 6개월간...",
       "published_at": "2026-06-12",
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324595",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324595",
-      "keywords": "OSC 건설",
-      "relevance_score": 14
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 89,
@@ -1826,8 +1814,8 @@
       "published_at": "2026-06-12",
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=459603",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=459603",
-      "keywords": "금강공업 모듈러",
-      "relevance_score": 19
+      "keywords": "모듈러 건축",
+      "relevance_score": 21
     },
     {
       "id": 88,
@@ -1854,18 +1842,6 @@
       "relevance_score": 6
     },
     {
-      "id": 5302,
-      "source": "네이버뉴스",
-      "media": "thebell.co.kr",
-      "title": "[더벨][i-point] 엔알비, 고층 공동주택 트랙 레코드 '확장'",
-      "summary": "엔알비는 현재 한국토지주택공사(LH)의 의왕초평 A-4BL 사업을 통해 현재 국내 최고층(22층) PC모듈러 공동주택 사업을 수행하고 있다. 하남교산 A1BL이 본격화되면 의왕초평에 이어 고층 PC모듈러 공동주택 분야의...",
-      "published_at": "2026-06-12",
-      "original_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
-      "naver_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
-      "keywords": "LH 모듈러",
-      "relevance_score": 4
-    },
-    {
       "id": 143,
       "source": "네이버뉴스",
       "media": "enewstoday.co.kr",
@@ -1874,92 +1850,92 @@
       "published_at": "2026-06-12",
       "original_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2438316",
       "naver_url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2438316",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 142,
       "source": "네이버뉴스",
       "media": "gukjenews.com",
       "title": "농어촌 유학 3년차…횡성군 학생·가족 유입 증가",
-      "summary": "일부 면 단위 지역에서는 주택 노후와 부족으로 인해 학생들이 원하는 학교에 다니기 어려운 상황이 발생하고 있다. 이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족의 거주 여건 개선에 나섰다. 또한...",
+      "summary": "이에 횡성군은 청일면에 모듈러 주택을 조성하는 등 유학생 가족의 거주 여건 개선에 나섰다. 또한 맞춤형 일자리 창출과 향토민과의 교류 행사 등 정주 여건 조성 방안도 추진 중이다. 남복현 군 교육체육과장은 \"횡성...",
       "published_at": "2026-06-12",
       "original_url": "https://www.gukjenews.com/news/articleView.html?idxno=3606619",
       "naver_url": "https://www.gukjenews.com/news/articleView.html?idxno=3606619",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 141,
       "source": "네이버뉴스",
       "media": "yna.co.kr",
       "title": "횡성 농어촌 유학생 43명으로 급증…인구유입 새 모델 부상",
-      "summary": "군은 학부모 요구를 반영해 중학교 과정까지 사업 확대도 검토 중이다. 다만 주거 공간 부족은 해결 과제로 남아 있다. 횡성군은 청일면에 모듈러주택 조성을 추진하는 한편 유학 가족 맞춤형 일자리와 주민 교류...",
+      "summary": "횡성군은 청일면에 모듈러주택 조성을 추진하는 한편 유학 가족 맞춤형 일자리와 주민 교류 프로그램 확대를 통해 장기 정착 기반을 마련할 계획이다. 남복현 군 교육체육과장은 \"유학생 가족이 지역사회 구성원으로...",
       "published_at": "2026-06-12",
       "original_url": "https://www.yna.co.kr/view/AKR20260612054600062?input=1195m",
       "naver_url": "https://n.news.naver.com/mnews/article/001/0016134831?sid=102",
-      "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 140,
       "source": "네이버뉴스",
       "media": "newsis.com",
       "title": "\"폐교 위기 탈출\"…횡성 농어촌 유학 가구 47% 급증",
-      "summary": "행정은 예산과 기반을 지원하고 교육지원청은 학교 운영 내실화를 담당했으며 민간은 마을교육공동체 운영... 횡성군은 청일면 일대에 모듈러 주택 조성을 추진하며 대응에 나서고 있다. 일자리 연계와 주민 교류 확대...",
+      "summary": "횡성군은 청일면 일대에 모듈러 주택 조성을 추진하며 대응에 나서고 있다. 일자리 연계와 주민 교류 확대 등을 통해 정착 중심 정책으로 발전시킨다는 방침이다. 남복현 군 교육체육과장은 \"농어촌 유학 성과는 행정과...",
       "published_at": "2026-06-12",
       "original_url": "https://www.newsis.com/view/NISX20260612_0003666580",
       "naver_url": "https://n.news.naver.com/mnews/article/003/0014002651?sid=102",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 138,
       "source": "네이버뉴스",
       "media": "kukinews.com",
       "title": "지방소멸 위기 횡성, 농어촌 유학생 급증...인구 유입 마중물 되나",
-      "summary": "일부 면 단위 지역은 주택노후 및 주택부족으로 원하는 학교에 다닐 수 없어 단기간이라도 체류할 수 있는 주택이 필요한 상황이다. 이에따라 횡성군은 청일면에 모듈러 주택 등을 조성해 농촌유학생 가족이 거주할 수...",
+      "summary": "이에따라 횡성군은 청일면에 모듈러 주택 등을 조성해 농촌유학생 가족이 거주할 수 있는 여건 마련에 박차를 가하고 있다. 전문가들은 단순한 체류를 넘어 ‘영구 정착’으로 유도하기 위한 정책적 배려가 필요하다는...",
       "published_at": "2026-06-12",
       "original_url": "https://www.kukinews.com/article/view/kuk202606120073",
       "naver_url": "https://www.kukinews.com/article/view/kuk202606120073",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 137,
       "source": "네이버뉴스",
       "media": "jeonmae.co.kr",
       "title": "횡성군 농어촌 유학, 3년 만에 학령인구 위기 극복 모델로",
-      "summary": "일부 면 단위 지역은 노후 주택과 주택 부족으로 원하는 학교에 다닐 수 없는 상황이다. 횡성군은 청일면에 모듈러 주택 등을 마련해 농촌 유학생 가족이 안정적으로 거주할 수 있도록 하고 있다. 전문가들은 단순 체류를...",
+      "summary": "횡성군은 청일면에 모듈러 주택 등을 마련해 농촌 유학생 가족이 안정적으로 거주할 수 있도록 하고 있다. 전문가들은 단순 체류를 넘어 영구 정착을 유도할 수 있는 정책적 배려가 필요하다고 강조한다. 이에 군은...",
       "published_at": "2026-06-12",
       "original_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264693",
       "naver_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264693",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 136,
       "source": "네이버뉴스",
       "media": "pressian.com",
       "title": "횡성 농어촌 유학, 인구 유입 마중물 ‘톡톡’…3년 새 6배 급증",
-      "summary": "가족 단위의 인구 유입은 폐교 위기에 놓였던 지역 작은 학교들을 즉각적으로 살려내고 있다. 유현초와... 횡성군은 급증하는 유학 가족의 안정적인 정주를 위해 청일면에 모듈러 주택을 조성하는 등 거주 공간 확보에...",
+      "summary": "횡성군은 급증하는 유학 가족의 안정적인 정주를 위해 청일면에 모듈러 주택을 조성하는 등 거주 공간 확보에 박차를 가하고 있다. 남복현 횡성군 교육체육과장은 “유학생 가족들이 단기 체류를 넘어 횡성의 진정한...",
       "published_at": "2026-06-12",
       "original_url": "https://www.pressian.com/pages/articles/2026061210535363983?utm_source=naver&utm_medium=search",
       "naver_url": "https://n.news.naver.com/mnews/article/002/0002444860?sid=102",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 135,
       "source": "네이버뉴스",
       "media": "weeklytoday.com",
       "title": "[위클리오늘] '지방소멸 위기를 희망으로'…횡성 농어촌 유학, 인구 유입...",
-      "summary": "일부 면 단위 지역은 주택노후 및 주택부족으로 원하는 학교에 다닐 수 없어 단기간이라도 체류할 수 있는 주택이 필요한 상황이다. 이에 따라 횡성군은 청일면에 모듈러 주택 등을 조성하여 농촌유학생 가족이 거주할 수...",
+      "summary": "이에 따라 횡성군은 청일면에 모듈러 주택 등을 조성하여 농촌유학생 가족이 거주할 수 있는 여건 마련에 박차를 가하고 있다. 전문가들은 단순한 체류를 넘어 '영구 정착'으로 유도하기 위한 정책적 배려가 필요하다고...",
       "published_at": "2026-06-12",
       "original_url": "http://www.weeklytoday.com/news/articleView.html?idxno=779712",
       "naver_url": "http://www.weeklytoday.com/news/articleView.html?idxno=779712",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5744,
@@ -1971,7 +1947,7 @@
       "original_url": "https://www.iusm.co.kr/news/articleView.html?idxno=1063958",
       "naver_url": "https://www.iusm.co.kr/news/articleView.html?idxno=1063958",
       "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5739,
@@ -1983,7 +1959,7 @@
       "original_url": "https://www.m-i.kr/news/articleView.html?idxno=1380800",
       "naver_url": "https://www.m-i.kr/news/articleView.html?idxno=1380800",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5738,
@@ -1995,7 +1971,7 @@
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324569",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324569",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5731,
@@ -2014,12 +1990,12 @@
       "source": "네이버뉴스",
       "media": "news.mtn.co.kr",
       "title": "건설사들, 미래 먹거리 AI 데이터센터 투자 본격화",
-      "summary": "공기를 단축할 수 있는 모듈러 공법을 도입하는 등 차별화된 기술을 통해 경쟁력을 강화한다는 계획이다.DL이앤씨는 지난해 계열사 ㈜대림이 호주 'DCI Data Centers'와 합작법인을 세워 추진한 가산 데이터센터를...",
+      "summary": "공기를 단축할 수 있는 모듈러 공법을 도입하는 등 차별화된 기술을 통해 경쟁력을 강화한다는 계획이다.... 일반 건축물보다 복잡하고, 고용 창출 효과가 미미해 지역 주민이 반기지 않는 점도 현실적인 과제\"라고...",
       "published_at": "2026-06-11",
       "original_url": "https://news.mtn.co.kr/news-detail/2026061015552896541",
       "naver_url": "https://news.mtn.co.kr/news-detail/2026061015552896541",
-      "keywords": "DL이앤씨 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5721,
@@ -2038,12 +2014,12 @@
       "source": "네이버뉴스",
       "media": "polinews.co.kr",
       "title": "모듈러 건축, 공사비·인력난 대안…\"공공 발주가 관건\"",
-      "summary": "국토교통부와 한국토지주택공사(LH)는 공공주택뿐 아니라 학교, 군 시설, 교정시설 등 다양한 공공 건축물에 모듈러 적용을 확대하는 방안을 검토하고 있다. 다만 사업 추진 방식에 대해서는 업계 내 의견이 엇갈린다....",
+      "summary": "업계에서는 이 같은 구조적 문제를 해결할 수 있는 방안으로 모듈러 건축 확대 필요성을 제기하고 있다. 모듈러 공법은 공장 생산 비중을 높여 현장 작업을 최소화한다. 주요 구조체와 내부 설비를 공장에서 제작한 뒤...",
       "published_at": "2026-06-11",
       "original_url": "https://www.polinews.co.kr/news/articleView.html?idxno=733798",
       "naver_url": "https://www.polinews.co.kr/news/articleView.html?idxno=733798",
-      "keywords": "모듈러 건축;LH 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 5719,
@@ -2078,8 +2054,8 @@
       "published_at": "2026-06-11",
       "original_url": "https://www.news1.kr/local/daejeon-chungnam/6194916",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0008999144?sid=102",
-      "keywords": "모듈러 건축;학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5716,
@@ -2103,7 +2079,7 @@
       "original_url": "https://www.mhj21.com/news/articleView.html?idxno=252579",
       "naver_url": "https://www.mhj21.com/news/articleView.html?idxno=252579",
       "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5741,
@@ -2115,67 +2091,67 @@
       "original_url": "https://news.ifm.kr/news/articleView.html?idxno=472729",
       "naver_url": "https://news.ifm.kr/news/articleView.html?idxno=472729",
       "keywords": "LH 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5734,
       "source": "네이버뉴스",
       "media": "youthdaily.co.kr",
       "title": "지방 소멸 막는 '지역활력타운'...LH, 융복합 맞춤형 컨설팅 개시",
-      "summary": "맞춤형 자문 조직 가동 한국토지주택공사(LH)가 지방 자치단체의 정주 여건 개선과 은퇴자·청년층의... 단지 내부에는 단독주택 필지와 분양·임대형 타운하우스, 모듈러 주택 등 다양한 주거 형태가 도입된다. 주거 공간...",
+      "summary": "단지 내부에는 단독주택 필지와 분양·임대형 타운하우스, 모듈러 주택 등 다양한 주거 형태가 도입된다. 주거 공간 주변에는 산책로와 공원녹지 등 자연환경이 조성되며 국민체육센터, 주민자치공간, 창업 공간 및...",
       "published_at": "2026-06-10",
       "original_url": "https://www.youthdaily.co.kr/news/article.html?no=220585",
       "naver_url": "https://www.youthdaily.co.kr/news/article.html?no=220585",
-      "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 10
+      "keywords": "모듈러 주택",
+      "relevance_score": 12
     },
     {
       "id": 5733,
       "source": "네이버뉴스",
       "media": "g-enews.com",
       "title": "경기 광명시흥 공공주택사업, 공급 속도 높이고 친환경 전환도 과제로",
-      "summary": "GH 역시 모듈러 주택 확대 방침을 밝히며 광명시흥 사업 적용 가능성을 검토하겠다고 답변했다. 전문가들은 대규모 공공주택 사업이 단순한 물량 공급을 넘어 신속한 공급과 탄소중립이라는 두 가지 과제를 동시에...",
+      "summary": "임 의원은 공사 기간을 줄이면서도 탄소 배출을 저감할 수 있는 대안으로 모듈러 주택 도입 확대를 제안했다. 모듈러 주택은 공장에서 주요 구조물을 사전 제작한 뒤 현장에서 조립하는 방식으로, 기존 공법보다 공사...",
       "published_at": "2026-06-10",
       "original_url": "https://www.g-enews.com/view.php?ud=2026061009573654908fbfc802b3_1",
       "naver_url": "https://www.g-enews.com/view.php?ud=2026061009573654908fbfc802b3_1",
-      "keywords": "모듈러 주택;GH 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5732,
       "source": "네이버뉴스",
       "media": "lawissue.co.kr",
       "title": "경기도, 광명시흥 공공주택사업 속도전 주문… 임창휘 의원 \"공급 시기...",
-      "summary": "김 사장은 GH가 연간 1천 가구 이상 규모의 모듈러주택 공급을 추진하고 있다며 광명시흥 공공주택사업에도 적용 가능성을 검토하겠다고 답했다. 광명시흥 공공주택지구 사업은 2026년부터 2033년까지 추진되는 대규모...",
+      "summary": "사업 추진 과정의 공정관리를 강화하고 모듈러주택 도입 등 공기 단축 방안도 함께 검토해야 한다는 주문이다. 임창휘 경기도의원(더불어민주당·광주2)은 지난 9일 열린 경기도의회 도시환경위원회 회의에서...",
       "published_at": "2026-06-10",
       "original_url": "http://www.lawissue.co.kr/view.php?ud=202606101537503513d94aa4ada6_12",
       "naver_url": "http://www.lawissue.co.kr/view.php?ud=202606101537503513d94aa4ada6_12",
-      "keywords": "GH 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5727,
       "source": "네이버뉴스",
       "media": "businesspost.co.kr",
       "title": "[Who Is ?] 이승찬 계룡건설산업 회장",
-      "summary": "모듈러 주택은 탈현장공법(OSC·Off-Site Construction) 방식 가운데 하나로 부재 등을 공장 등에서 네모곽 형태로 제작한 뒤 현장에서 조립하는 방식으로 시공된다. 계룡건설산업은 2020년 모듈러 주택사업을 사업목적에...",
+      "summary": "한 지역에 모듈러 주택 450세대 건축은 국내 역대 최대 규모다. 모듈러 주택은 탈현장공법(OSC·Off-Site Construction) 방식 가운데 하나로 부재 등을 공장 등에서 네모곽 형태로 제작한 뒤 현장에서 조립하는 방식으로...",
       "published_at": "2026-06-10",
       "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=439062",
       "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=439062",
-      "keywords": "모듈러 주택;OSC 건설",
-      "relevance_score": 4
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5726,
       "source": "네이버뉴스",
       "media": "seoul.co.kr",
       "title": "임창휘 경기도의원, 광명시흥 공공주택지구 “조기 준공·모듈러 주택 ...",
-      "summary": "사업에도 모듈러 주택의 도입을 적극 검토하겠다”고 화답했다. 한편 광명시흥 공공주택지구 내 공공주택사업은 2033년까지 추진되는 대규모 뉴타운급 개발 사업이다. GH는 전체 지구 조성 사업 지분율 20%에 맞춰...",
+      "summary": "혁신적인 모듈러 공법을 선제적으로 도입해야 한다는 주문이 제기됐다. 경기도의회 도시환경위원회 소속... 해당 사업에는 용지비 1조 4371억원과 건축비 2조 9788억원을 포함해 총 4조 4159억원의 대규모 사업비가 투입될...",
       "published_at": "2026-06-10",
       "original_url": "https://www.seoul.co.kr/news/publicnews/local_govern/kyungki_do/2026/06/10/20260610500049?wlog_tag3=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/081/0003651151?sid=102",
-      "keywords": "모듈러 주택;GH 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 5725,
@@ -2187,19 +2163,19 @@
       "original_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41213",
       "naver_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41213",
       "keywords": "모듈러 건축",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5724,
       "source": "네이버뉴스",
       "media": "jeonmae.co.kr",
       "title": "임창휘 경기도의원, 광명시흥 공공주택지구 사업 속도·친환경 공법 촉...",
-      "summary": "경기도의회 도시환경위원회 임창휘 의원(더불어민주당·광주2)이 경기주택도시공사(GH)를 상대로 광명시흥... 또한 임 의원은 사업 속도 제고와 환경 보호를 동시에 달성할 수 있는 방안으로 '모듈러 주택' 선제...",
+      "summary": "또한 임 의원은 사업 속도 제고와 환경 보호를 동시에 달성할 수 있는 방안으로 '모듈러 주택' 선제 도입을... 총 사업비는 용지비 1조 4,371억 원과 건축비 등 2조 9,788억 원을 합쳐 4조 4,159억 원이다. [전국매일신문]...",
       "published_at": "2026-06-10",
       "original_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264085",
       "naver_url": "https://www.jeonmae.co.kr/news/articleView.html?idxno=1264085",
-      "keywords": "모듈러 주택;GH 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5723,
@@ -2211,7 +2187,7 @@
       "original_url": "https://www.electimes.com/news/articleView.html?idxno=368960",
       "naver_url": "https://www.electimes.com/news/articleView.html?idxno=368960",
       "keywords": "모듈러 건축",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5746,
@@ -2223,7 +2199,7 @@
       "original_url": "https://www.tournews21.com/news/articleView.html?idxno=136303",
       "naver_url": "https://www.tournews21.com/news/articleView.html?idxno=136303",
       "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5740,
@@ -2235,55 +2211,55 @@
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324511",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324511",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5737,
       "source": "네이버뉴스",
       "media": "m-i.kr",
       "title": "[기획] 스마트홈·SMR·AI 데이터센터…건설사, 신사업 진출에 '진심'",
-      "summary": "대형 건설사들이 사업 모델을 근본부터 바꾸고 있다. 원전·AI 데이터센터 같은 미래 인프라부터 스마트홈... GS건설은 공장에서 미리 제작한 모듈을 현장에 조립하는 모듈러 주택과 프리패브(공장제) 공법을 활용해 단독...",
+      "summary": "GS건설은 공장에서 미리 제작한 모듈을 현장에 조립하는 모듈러 주택과 프리패브(공장제) 공법을 활용해 단독·공동주택 시장 선점에 나서고 있다. 인건비와 공기를 줄이고 품질을 일정 수준 이상으로 끌어올릴 수 있는...",
       "published_at": "2026-06-09",
       "original_url": "https://www.m-i.kr/news/articleView.html?idxno=1379921",
       "naver_url": "https://www.m-i.kr/news/articleView.html?idxno=1379921",
-      "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5736,
       "source": "네이버뉴스",
       "media": "the-biz.co.kr",
       "title": "대형사 몰리는 LH 민참사업… 공공주택도 '브랜드' 시대",
-      "summary": "민참사업은 한국토지주택공사(LH)가 토지 확보와 사업 관리를 맡고 민간 건설사가 설계와 시공에 참여하는... GS건설은 최근 현대엘리베이터와 모듈러 엘리베이터 기술 개발에 나서며, 해당 기술을 시흥거모 A-1BL 통합형...",
+      "summary": "GS건설은 최근 현대엘리베이터와 모듈러 엘리베이터 기술 개발에 나서며, 해당 기술을 시흥거모 A-1BL 통합형 민간참여 공공주택 사업에 시범 적용한다고 밝혔다. 업계에서는 민참사업이 브랜드 경쟁뿐 아니라 신기술...",
       "published_at": "2026-06-09",
       "original_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722216",
       "naver_url": "http://www.the-biz.co.kr/news/articleView.html?idxno=722216",
-      "keywords": "LH 모듈러",
-      "relevance_score": 10
+      "keywords": "모듈러 주택",
+      "relevance_score": 12
     },
     {
       "id": 5735,
       "source": "네이버뉴스",
       "media": "namdonews.com",
       "title": "\"전남광주통합특별시, 정부 국토교통정책 선점해야\"",
-      "summary": "귀촌·귀어 인구를 위한 모듈러주택 공급을 활성화하고 전남 철강산업과 연계하는 방안도 들어 있다.... ◇AI 기반 산업혁신·저탄소 전환 보고서는 광역 AI·디지털트윈 기본구상을 마련하고, 통합특별시 스마트도시 조례...",
+      "summary": "귀촌·귀어 인구를 위한 모듈러주택 공급을 활성화하고 전남 철강산업과 연계하는 방안도 들어 있다. 청년층에게는 청년월세 지원과 '만원주택'의 공급 유형·규모·임차료 세분화를, 고령자에게는 대학캠퍼스와 연계한...",
       "published_at": "2026-06-09",
       "original_url": "https://www.namdonews.com/news/articleView.html?idxno=913092",
       "naver_url": "https://www.namdonews.com/news/articleView.html?idxno=913092",
-      "keywords": "스마트건설 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5730,
       "source": "네이버뉴스",
       "media": "dnews.co.kr",
       "title": "대형 건설사, R&D조직 ‘새판짜기’",
-      "summary": "인프라도시연구실 △스마트건설연구실 등 6실 체제로 변경했다. 특히 HMG건설기술연구원은 SMR... 롯데건설은 이 같은 전사적 기술 전략을 바탕으로 원전 사업 진출, PC(프리캐스트 콘크리트) 모듈러 전환 등 미래 성장...",
+      "summary": "아울러건축ㆍ토목기술연구팀에 더해플랜트신성장연구팀을 새로 조직했다. 롯데건설은 이 같은 전사적 기술 전략을 바탕으로 원전 사업 진출, PC(프리캐스트 콘크리트) 모듈러 전환 등 미래 성장 동력 발굴에 집중할...",
       "published_at": "2026-06-09",
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606081051183780418",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606081051183780418",
-      "keywords": "스마트건설 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5729,
@@ -2295,7 +2271,7 @@
       "original_url": "https://www.sentv.co.kr/article/view/sentv202606090099",
       "naver_url": "https://www.sentv.co.kr/article/view/sentv202606090099",
       "keywords": "모듈러 건축",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5728,
@@ -2307,7 +2283,7 @@
       "original_url": "https://www.aflnews.co.kr/news/articleView.html?idxno=322027",
       "naver_url": "https://www.aflnews.co.kr/news/articleView.html?idxno=322027",
       "keywords": "모듈러 건축",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5692,
@@ -2319,7 +2295,7 @@
       "original_url": "https://www.news1.kr/industry/general-industry/6191777",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0008993348?sid=101",
       "keywords": "현대건설 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5652,
@@ -2331,7 +2307,7 @@
       "original_url": "https://www.bloter.net/news/articleView.html?idxno=664871",
       "naver_url": "https://n.news.naver.com/mnews/article/293/0000085988?sid=101",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5651,
@@ -2343,7 +2319,7 @@
       "original_url": "https://www.electimes.com/news/articleView.html?idxno=368864",
       "naver_url": "https://www.electimes.com/news/articleView.html?idxno=368864",
       "keywords": "프리팹 건축",
-      "relevance_score": 1
+      "relevance_score": 3
     },
     {
       "id": 5650,
@@ -2355,7 +2331,7 @@
       "original_url": "https://www.itbiznews.com/news/articleView.html?idxno=215589",
       "naver_url": "https://www.itbiznews.com/news/articleView.html?idxno=215589",
       "keywords": "프리팹 건축",
-      "relevance_score": 1
+      "relevance_score": 3
     },
     {
       "id": 5649,
@@ -2367,7 +2343,7 @@
       "original_url": "https://www.epnc.co.kr/news/articleView.html?idxno=402784",
       "naver_url": "https://www.epnc.co.kr/news/articleView.html?idxno=402784",
       "keywords": "프리팹 건축",
-      "relevance_score": 1
+      "relevance_score": 3
     },
     {
       "id": 5648,
@@ -2379,19 +2355,19 @@
       "original_url": "https://www.industrynews.co.kr/news/articleView.html?idxno=81931",
       "naver_url": "https://www.industrynews.co.kr/news/articleView.html?idxno=81931",
       "keywords": "프리팹 건축",
-      "relevance_score": 1
+      "relevance_score": 3
     },
     {
       "id": 5594,
       "source": "네이버뉴스",
       "media": "sidae.com",
       "title": "'젠슨 황 효과' AI데이터센터…건설업계, 8700조 인프라 수주 경쟁",
-      "summary": "9일 건설업계에 따르면 삼성물산·현대건설·대우건설·한화건설부문·SK에코플랜트 등은 데이터센터... 고발열 서버 대응이 가능한 액침 냉각 기술을 개발하고 모듈러(조립식) 공법을 도입해 공기를 단축하는...",
+      "summary": "고발열 서버 대응이 가능한 액침 냉각 기술을 개발하고 모듈러(조립식) 공법을 도입해 공기를 단축하는 전략이다. 한화건설은 2004년 KT 강남 IDC를 시작으로 금융·통신 데이터센터를 시공한 바 있다. 최근에는 경기...",
       "published_at": "2026-06-09",
       "original_url": "https://www.sidae.com/article/2026060913131790337",
       "naver_url": "https://n.news.naver.com/mnews/article/417/0001146805?sid=101",
-      "keywords": "현대건설 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5547,
@@ -2403,19 +2379,19 @@
       "original_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41209",
       "naver_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41209",
       "keywords": "모듈러 건축",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5597,
       "source": "네이버뉴스",
       "media": "theguru.co.kr",
       "title": "삼성전자, 필리핀 최초 '스마트 모듈러 주택' 구축…동남아 주거 혁신 ...",
-      "summary": "앞세워 건설 품질과 공기 문제를 동시에 해결하고 스마트홈 표준을 선점하겠다는 구상이다. 특히 이번 협력은 국내에서 검증된 '인공지능(AI) 홈 기반 모듈러 전략'을 해외 시장으로 확장하는 첫 사례로, 향후 직원 숙소와...",
+      "summary": "하이브 모듈러와 손잡고 'AI 홈 솔루션' 필리핀 이식 설계부터 IoT 내재화해 스마트 주택 대중화 주도 삼성전자가 필리핀 주택 시장에 '스마트 모듈러 주택' 전략을 본격 투입하며 현지 주거 패러다임 변화에 나선다. 단순...",
       "published_at": "2026-06-08",
       "original_url": "https://www.theguru.co.kr/news/article.html?no=102744",
       "naver_url": "https://www.theguru.co.kr/news/article.html?no=102744",
-      "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
     },
     {
       "id": 5596,
@@ -2427,7 +2403,7 @@
       "original_url": "https://www.khan.co.kr/article/202606081020001",
       "naver_url": "https://n.news.naver.com/mnews/article/032/0003450524?sid=100",
       "keywords": "모듈러 주택",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5595,
@@ -2439,55 +2415,55 @@
       "original_url": "https://www.sidae.com/article/2026060813523029216",
       "naver_url": "https://n.news.naver.com/mnews/article/417/0001146622?sid=102",
       "keywords": "모듈러 주택",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5551,
       "source": "네이버뉴스",
       "media": "s-journal.co.kr",
       "title": "[창간기획: 미래를 설계하는 기업들] GS건설, AI로 현장 바꾸고 프리패...",
-      "summary": "목조 단독주택 부문에서는 국내 최초로 국토교통부 공업화주택 인정을 획득했고, 철골 모듈러 부문에서도 18층 이하 철골 모듈러 공동주택에 대한 공업화주택 인정을 받았다. 최근에는 농촌체류형 쉼터 모델 디자인...",
+      "summary": "현장 작업을 줄여 공사 과정에서 발생할 수 있는 소음, 공해, 혼잡을 줄일 수 있어 친환경 미래 건축 기술로 주목받고 있다. GS건설은 2020년 폴란드 목조 모듈러주택 전문회사 단우드(Danwood)를 인수하며 해외 프리패브...",
       "published_at": "2026-06-08",
       "original_url": "https://www.s-journal.co.kr/news/articleView.html?idxno=41604",
       "naver_url": "https://www.s-journal.co.kr/news/articleView.html?idxno=41604",
-      "keywords": "공업화주택",
-      "relevance_score": 4
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5550,
       "source": "네이버뉴스",
       "media": "g-enews.com",
       "title": "건설업계, 모듈러 공법 통한 준공 활발…'주거·숙박' 도입 가속",
-      "summary": "8일 건설업계에 따르면 GS건설 자회사 자이가이스트(XiGEIST)를 비롯해 유창이앤씨, 금강공업 등이 모듈러 주택을 주력 사업으로 키우며 시장 선점 경쟁에 나서고 있다. 모듈러 공법은 건물의 주요 구조·마감·설비를...",
+      "summary": "스테이 1538은 지상 4층, 총 3개 동, 300실 규모의 건축물을 지하 1층 주차장을 포함한 지상 4층, 3개 동으로 그대로 옮겨 조성했다. 금강공업은 경북 고령군에 철골 모듈러 공법을 적용한 청년 귀농·귀촌 주거단지를...",
       "published_at": "2026-06-08",
       "original_url": "https://www.g-enews.com/view.php?ud=202606081529219909514e0091f6_1",
       "naver_url": "https://www.g-enews.com/view.php?ud=202606081529219909514e0091f6_1",
-      "keywords": "모듈러 주택;유창이앤씨 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 5549,
       "source": "네이버뉴스",
       "media": "imwood.co.kr",
       "title": "[박정로의 주간 브리핑] 국토부 매입임대 6만6000호 공급…모듈러 건축...",
-      "summary": "국토부 매입임대 6만6000호 공급…모듈러 건축 '청신호' 국토교통부가 향후 2년간 수도권에 매입임대주택... LH 토지주택연구원, '목조 OSC 주거단지' 어젠다 제안 LH 토지주택연구원이 최신 보고서(포커스 78호)를 통해...",
+      "summary": "국토부 매입임대 6만6000호 공급…모듈러 건축 '청신호' 국토교통부가 향후 2년간 수도권에 매입임대주택 6만6000호를 집중 공급하며, 공기 단축을 위해 모듈러 공법 시범사업을 추진한다. 이번 정책은 공정률 기반 대금...",
       "published_at": "2026-06-08",
       "original_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41170",
       "naver_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41170",
-      "keywords": "모듈러 건축;LH 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 5548,
       "source": "네이버뉴스",
       "media": "kr.aving.net",
       "title": "[테크 리더 - '공간지능' 편] 지구를 넘어 달·화성까지… 오바마 앞에 ...",
-      "summary": "\"컬럼비아에서 프랭크 게리까지, 그리고 오바마 앞에 선 건축가\" 초등학교 졸업 후 미국으로 이민해... (NEOM) 모듈러 BIM 납품도 그의 손을 거쳤다. 여기에 통신·금융·부동산·상권·공공 데이터를 GIS 좌표 위에...",
+      "summary": "스패이드(SPAID) 이종걸 대표는 그 변곡점을, 누구보다 먼저 건축에서부터 30년간 온몸으로 통과해 온... (NEOM) 모듈러 BIM 납품도 그의 손을 거쳤다. 여기에 통신·금융·부동산·상권·공공 데이터를 GIS 좌표 위에...",
       "published_at": "2026-06-08",
       "original_url": "https://kr.aving.net/news/articleView.html?idxno=1811558",
       "naver_url": "https://kr.aving.net/news/articleView.html?idxno=1811558",
-      "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5642,
@@ -2499,7 +2475,7 @@
       "original_url": "https://dealsite.co.kr/articles/163107",
       "naver_url": "https://dealsite.co.kr/articles/163107",
       "keywords": "프리패브 건축",
-      "relevance_score": 1
+      "relevance_score": 3
     },
     {
       "id": 5599,
@@ -2511,31 +2487,31 @@
       "original_url": "https://news.bizwatch.co.kr/article/market/2026/06/05/0018",
       "naver_url": "https://n.news.naver.com/mnews/article/648/0000047764?sid=101",
       "keywords": "모듈러 주택",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5598,
       "source": "네이버뉴스",
       "media": "mk.co.kr",
       "title": "전부 반도체에 올인할 때…버핏 후계자는 ‘여기’ 베팅했다 [오찬종의...",
-      "summary": "및 모듈러 주택 건설업체인 클레이턴 홈즈(Clayton Homes)를 17억 달러에 인수한 사건입니다. 당시에 워런... 콘텐츠 플랫폼 매경플러스에서 확인할 수 있습니다. 아래 QR코드를 스마트폰 카메라로 찍으면 연결됩니다.",
+      "summary": "및 모듈러 주택 건설업체인 클레이턴 홈즈(Clayton Homes)를 17억 달러에 인수한 사건입니다. 당시에 워런 버핏이 클레이턴 홈즈를 인수하게 된 계기는 아주 재미있습니다. 기사 전문은 매일경제신문의 프리미엄 재테크...",
       "published_at": "2026-06-07",
       "original_url": "https://www.mk.co.kr/article/12067929",
       "naver_url": "https://n.news.naver.com/mnews/article/009/0005690439?sid=101",
-      "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5601,
       "source": "네이버뉴스",
       "media": "kyeonggi.com",
       "title": "[단독] 학교 신설 ‘하세월’, 학생들 갈 곳 없다…평택 고덕신도시, 과...",
-      "summary": "일부 학교에서는 임시 방편인 모듈러 교실 설치를 검토하고 있지만 학부모들은 운동장 축소와 교육환경 저하 등을 이유로 반대한 바 있다. 학부모들은 단순히 학교를 신설하는 수준을 넘어 학생 증가 추이를 반영한...",
+      "summary": "학부모들은 과밀 현상이 일시적인 문제가 아니라 공동주택 입주가 이어지면서 더욱 심화할 것으로 보고... 일부 학교에서는 임시 방편인 모듈러 교실 설치를 검토하고 있지만 학부모들은 운동장 축소와 교육환경 저하...",
       "published_at": "2026-06-06",
       "original_url": "https://www.kyeonggi.com/article/20260602580361",
       "naver_url": "https://n.news.naver.com/mnews/article/666/0000110151?sid=102",
-      "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5600,
@@ -2547,7 +2523,7 @@
       "original_url": "https://www.fortunekorea.co.kr/news/articleView.html?idxno=52731",
       "naver_url": "https://www.fortunekorea.co.kr/news/articleView.html?idxno=52731",
       "keywords": "모듈러 주택",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5552,
@@ -2559,7 +2535,7 @@
       "original_url": "http://www.koreatimes.com/article/1616168",
       "naver_url": "http://www.koreatimes.com/article/1616168",
       "keywords": "모듈러 건축",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5643,
@@ -2571,7 +2547,7 @@
       "original_url": "https://news.dealsitetv.com/articles/171394",
       "naver_url": "https://news.dealsitetv.com/articles/171394",
       "keywords": "프리패브 건축",
-      "relevance_score": 1
+      "relevance_score": 3
     },
     {
       "id": 5626,
@@ -2583,7 +2559,7 @@
       "original_url": "https://www.newsquest.co.kr/news/articleView.html?idxno=267371",
       "naver_url": "https://www.newsquest.co.kr/news/articleView.html?idxno=267371",
       "keywords": "OSC 건설",
-      "relevance_score": 14
+      "relevance_score": 16
     },
     {
       "id": 5603,
@@ -2595,31 +2571,31 @@
       "original_url": "https://www.vogue.co.kr/2026/06/05/%ec%9b%90%ec%83%89%ec%9d%b4-%ec%9d%bc%ea%b9%a8%ec%9a%b4-%ec%98%81%ea%b0%90-%ed%8e%98%eb%93%9c%eb%a1%9c-%ec%95%8c%eb%aa%a8%eb%8f%84%eb%b0%94%eb%a5%b4%ec%9d%98-%ec%98%81%ed%99%94%ec%a0%81-%ec%98%a4/?utm_source=naver&utm_medium=partnership",
       "naver_url": "https://www.vogue.co.kr/2026/06/05/%ec%9b%90%ec%83%89%ec%9d%b4-%ec%9d%bc%ea%b9%a8%ec%9a%b4-%ec%98%81%ea%b0%90-%ed%8e%98%eb%93%9c%eb%a1%9c-%ec%95%8c%eb%aa%a8%eb%8f%84%eb%b0%94%eb%a5%b4%ec%9d%98-%ec%98%81%ed%99%94%ec%a0%81-%ec%98%a4/?utm_source=naver&utm_medium=partnership",
       "keywords": "모듈러 주택",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5602,
       "source": "네이버뉴스",
       "media": "lkp.news",
       "title": "8조 수주 향하는 GS건설, 사업 다각화 속도 낸다",
-      "summary": "스마트건설 부문도 성장축으로 자리 잡고 있다. GS건설은 폴란드 목조 모듈러 주택 전문기업 단우드를 기반으로 유럽 시장 공략을 이어가고 있으며 PC 공장과 모듈러 전문 자회사 자이가이스트도 사업 영역을 확대하며...",
+      "summary": "GS건설은 폴란드 목조 모듈러 주택 전문기업 단우드를 기반으로 유럽 시장 공략을 이어가고 있으며 PC 공장과 모듈러 전문 자회사 자이가이스트도 사업 영역을 확대하며 사업 포트폴리오 다변화에 힘을 보태고 있다....",
       "published_at": "2026-06-05",
       "original_url": "http://www.lkp.news/news/articleView.html?idxno=80680",
       "naver_url": "http://www.lkp.news/news/articleView.html?idxno=80680",
-      "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
     },
     {
       "id": 5553,
       "source": "네이버뉴스",
       "media": "kr.aving.net",
       "title": "[비바테크 2026-②] \"AI 검색 생태계 선점하라\"... 韓 AI 리테일·커머스...",
-      "summary": "예컨대 삼성물산과 '맞춤형 수트 3D VTO' 프로젝트를 진행하는가 하면, 삼우건축사사무소와는 모듈형 건축... 특히 지난 3월 스페인 바르셀로나에서 열린 MWC 2026 참가를 계기로 스페인 기업 및 모듈러 건축...",
+      "summary": "특히 지난 3월 스페인 바르셀로나에서 열린 MWC 2026 참가를 계기로 스페인 기업 및 모듈러 건축 스타트업과도 협력 논의를 시작한 가운데, 이번 비바테크에선 맞춤형 제조 산업(MTO·ETO) 수요가 큰 유럽 제조업...",
       "published_at": "2026-06-05",
       "original_url": "https://kr.aving.net/news/articleView.html?idxno=1811531",
       "naver_url": "https://kr.aving.net/news/articleView.html?idxno=1811531",
-      "keywords": "모듈러 건축;삼성물산 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5666,
@@ -2631,7 +2607,7 @@
       "original_url": "https://news.ifm.kr/news/articleView.html?idxno=472347",
       "naver_url": "https://news.ifm.kr/news/articleView.html?idxno=472347",
       "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5665,
@@ -2643,7 +2619,7 @@
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606022248590720923",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606022248590720923",
       "keywords": "학교 모듈러",
-      "relevance_score": 14
+      "relevance_score": 16
     },
     {
       "id": 5664,
@@ -2655,7 +2631,7 @@
       "original_url": "https://www.incheontoday.com/news/articleView.html?idxno=319695",
       "naver_url": "https://www.incheontoday.com/news/articleView.html?idxno=319695",
       "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5663,
@@ -2667,7 +2643,7 @@
       "original_url": "https://biz.heraldcorp.com/article/10763813?ref=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/016/0002652165?sid=103",
       "keywords": "학교 모듈러",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5628,
@@ -2679,7 +2655,7 @@
       "original_url": "http://www.lak.co.kr/news/boardview.php?id=23226",
       "naver_url": "http://www.lak.co.kr/news/boardview.php?id=23226",
       "keywords": "OSC 건설",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5627,
@@ -2691,7 +2667,7 @@
       "original_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50071",
       "naver_url": "https://www.kmecnews.co.kr/news/articleView.html?idxno=50071",
       "keywords": "OSC 건설",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5605,
@@ -2703,7 +2679,7 @@
       "original_url": "https://www.ggilbo.com/news/articleView.html?idxno=1161871",
       "naver_url": "https://www.ggilbo.com/news/articleView.html?idxno=1161871",
       "keywords": "모듈러 주택",
-      "relevance_score": 14
+      "relevance_score": 16
     },
     {
       "id": 5604,
@@ -2715,67 +2691,67 @@
       "original_url": "https://www.ccdn.co.kr/news/articleView.html?idxno=1081422",
       "naver_url": "https://www.ccdn.co.kr/news/articleView.html?idxno=1081422",
       "keywords": "모듈러 주택",
-      "relevance_score": 4
+      "relevance_score": 6
     },
     {
       "id": 5558,
       "source": "네이버뉴스",
       "media": "dnews.co.kr",
       "title": "모듈러 사용 후 해체·재설치 ‘stay 1538 평창’ 개관",
-      "summary": "앞서 학교 임시교실 등을 통해 모듈러의 재사용이 검증됐지만, 이처럼 300실에 달하는 대규모의 숙박시설을 8년 이상 장기 사용한 후 이전ㆍ재설치한 사례는 세계적으로도 전무후무하다. 모듈러 건축은 공장에서...",
+      "summary": "모듈러 건축은 공장에서 제작해 현장에서 조립하는 방식으로, 해체 후 재설치가 가능한 것이 특징이다. 또한 구조체 자재 재활용이 가능하기 때문에 친환경 건축공법으로도 주목받고 있다. 이번 프로젝트는 모듈러의...",
       "published_at": "2026-06-04",
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606020952004840837",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606020952004840837",
-      "keywords": "모듈러 건축;학교 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 5557,
       "source": "네이버뉴스",
       "media": "dnews.co.kr",
       "title": "[최저가 모듈러 교실] (2) 모듈러 제작비 중심 예정가격 산정 한계…‘...",
-      "summary": "학교 모듈러 제작ㆍ설치 시장의 최저가 낙찰이 결국 모듈러 산업은 물론 학생 안전마저 위협하는 부메랑으로 되돌아올 것으로 우려되면서 입찰제도의 전면적인 개선이 시급하다는 목소리가 커지고 있다. 모듈러 교실은...",
+      "summary": "현행 입찰제도가 모듈러 건축의 ‘생애주기비용(LCC)’을 고려하지 않고, 초기 제작비 중심으로만 예정가격을 산정하는 것도 고질적인 문제로 꼽힌다. 학교 모듈러는 단순히 짓고 끝나는 것이 아니라 임대기간 중 유지관리...",
       "published_at": "2026-06-04",
       "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606022344587850924",
       "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606022344587850924",
-      "keywords": "학교 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 건축;학교 모듈러",
+      "relevance_score": 16
     },
     {
       "id": 5556,
       "source": "네이버뉴스",
       "media": "etoday.co.kr",
       "title": "자연과환경, ‘IBK강소기업’ 선정ㆍ기술등급 ‘e-T3+’ 획득…스마트 ...",
-      "summary": "스마트 건설의 새로운 표준을 제시할 계획이다. 자연과환경 관계자는 “이번 IBK강소기업 선정과 우수 기술등급 획득은 회사가 수년간 집중해온 기술 중심 경영의 결실”이라며 “이를 동력 삼아 친환경 및 모듈러...",
+      "summary": "현재는 2029년까지 이어지는 국가 대형 연구개발(R&D) 과제에 참여해 모듈러 건축의 원천 기술 확보와 상용화에 전사적 역량을 집중하고 있다. 자연과환경은 이번 성과를 발판 삼아 탄소 저감형 친환경 콘크리트 부재...",
       "published_at": "2026-06-04",
       "original_url": "https://www.etoday.co.kr/news/view/2590593",
       "naver_url": "https://www.etoday.co.kr/news/view/2590593",
-      "keywords": "스마트건설 모듈러",
-      "relevance_score": 4
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5555,
       "source": "네이버뉴스",
       "media": "goodmorningcc.com",
       "title": "금산군, 충남형 농촌리브투게더 모듈러 주택 20% 설치",
-      "summary": "충남 금산군이 추진 중인 충남형 농촌리브투게더 사업이 순조롭게 진행되며 모듈러 주택 설치 공정에 본격... 금남초등학교 부지에 개별 창고를 포함한 단독주택 21호를 조성한다. 총사업비는 78억 원이 투입된다. 사업...",
+      "summary": "충남 금산군이 추진 중인 충남형 농촌리브투게더 사업이 순조롭게 진행되며 모듈러 주택 설치 공정에 본격... 군 도시건축과 관계자는 \"청년층과 귀농·귀촌 가구의 안정적인 정착을 돕고 지역에 새로운 활력을 불어넣는...",
       "published_at": "2026-06-04",
       "original_url": "https://www.goodmorningcc.com/news/articleView.html?idxno=447106",
       "naver_url": "https://www.goodmorningcc.com/news/articleView.html?idxno=447106",
-      "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 5554,
       "source": "네이버뉴스",
       "media": "bzeronews.com",
       "title": "[탐사 분석] \"'30% 낙찰 교실' 괜찮은가\"… 모듈러 교실, 숫자에 밀린 교...",
-      "summary": "국내 모듈러 산업은 스마트건설과 탄소중립 시대 핵심 산업으로 꼽힌다. 그러나 시장이 지나친 가격 경쟁에 매몰될 경우 연구개발 투자 축소와 기술 경쟁력 약화로 이어질 가능성도 있다. 결국 중요한 질문은 단순하다....",
+      "summary": "교육청은 모듈러 교실이 공장에서 제작한 구조물을 현장에서 조립하는 방식으로 일반 건축물보다 공사 기간을 크게 단축할 수 있다고 설명했다. 일부에서 제기되는 저가 낙찰에 따른 품질 저하 우려에 대해서는...",
       "published_at": "2026-06-04",
       "original_url": "https://www.bzeronews.com/news/articleView.html?idxno=817703",
       "naver_url": "https://www.bzeronews.com/news/articleView.html?idxno=817703",
-      "keywords": "스마트건설 모듈러",
-      "relevance_score": 14
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
     },
     {
       "id": 5644,
@@ -2818,11 +2794,11 @@
       "source": "네이버뉴스",
       "media": "polinews.co.kr",
       "title": "\"공장서 만들고 현장서 조립\"…모듈러 공법, 건설 패러다임 바꾼다",
-      "summary": "최근 국회에서 열린 모듈러 건설산업 관련 토론회에서는 공공부문이 초기 시장 형성에 적극 나서야 한다는 의견이 제시됐다. 공공주택뿐 아니라 학교·군 시설·재난 대응 시설 등 다양한 분야에서 발주를 확대해야 한다는...",
+      "summary": "공장 제작 기반 '탈현장건설' 확산 업계에 따르면 모듈러 공법은 건축 부재와 설비 등을 공장에서 사전 제작한 뒤 현장에서 조립하는 방식이다. 현장 작업량을 줄일 수 있어 공사 기간 단축과 품질 균일화, 안전성 확보...",
       "published_at": "2026-06-03",
       "original_url": "https://www.polinews.co.kr/news/articleView.html?idxno=732971",
       "naver_url": "https://www.polinews.co.kr/news/articleView.html?idxno=732971",
-      "keywords": "학교 모듈러",
+      "keywords": "모듈러 건축",
       "relevance_score": 14
     },
     {
@@ -2934,18 +2910,6 @@
       "relevance_score": 1
     },
     {
-      "id": 755,
-      "source": "네이버뉴스",
-      "media": "asiatoday.co.kr",
-      "title": "베트남·데이터센터로 '포스트 이니마' 키운다…GS건설 신성장사업 육성...",
-      "summary": "GS건설은 폴란드 목조 모듈러 주택 전문업체 단우드(Danwood) 인수를 기반으로 독일 시장에 목조주택을... 올해 초 기존 '신사업실'을 '신성장사업개발본부'로 확대 개편했으며, 올해 1분기부터는 해당 부문 실적을 건축...",
-      "published_at": "2026-06-01",
-      "original_url": "https://www.asiatoday.co.kr/kn/view.php",
-      "naver_url": "https://www.asiatoday.co.kr/kn/view.php",
-      "keywords": "모듈러 주택;모듈러 건축",
-      "relevance_score": 4
-    },
-    {
       "id": 5668,
       "source": "네이버뉴스",
       "media": "stnsports.co.kr",
@@ -3022,11 +2986,11 @@
       "source": "네이버뉴스",
       "media": "biz.chosun.com",
       "title": "8년 표류한 가리봉시장 개발 재시동… 청년주택 181가구 짓는다",
-      "summary": "1일 서울주택도시개발공사(SH)와 구로구 등에 따르면 양 기관은 최근 가리봉 구시장부지 복합화사업 변경안을 확정하고, 새 설계 절차에 착수했다. 변경안에는 기존 모듈러 공법 대신 철근콘크리트(RC) 공법을 적용하고...",
+      "summary": "변경안에는 기존 모듈러 공법 대신 철근콘크리트(RC) 공법을 적용하고, 통합공공임대주택과 공영주차장 규모를 확대하는 내용이 담겼다. 모듈러 공법은 공장에서 제작한 구조물을 현장에서 조립하는 방식이다. 공사...",
       "published_at": "2026-06-01",
       "original_url": "https://biz.chosun.com/real_estate/real_estate_general/2026/06/01/AL5YBALLIRHIXOO2IHFOYEJXJQ/?utm_source=naver&utm_medium=original&utm_campaign=biz",
       "naver_url": "https://n.news.naver.com/mnews/article/366/0001168570?sid=101",
-      "keywords": "SH 모듈러",
+      "keywords": "모듈러 주택",
       "relevance_score": 4
     },
     {
@@ -5034,6 +4998,18 @@
       "relevance_score": 6
     },
     {
+      "id": 5371,
+      "source": "네이버뉴스",
+      "media": "ekn.kr",
+      "title": "[패트롤] 구리시-남양주시-부천시-양평군-하남시",
+      "summary": "5대 개혁 과제는 토평한강 스마트도시 & 글로벌 AI 허브 유치를 비롯해 △첨단 교통망 확장으로 사통팔달... 감일-위례의 학급 과밀 문제를 해결하기 위해 도시형 캠퍼스와 모듈러 교실 도입도 추진한다. ▷ 원도심...",
+      "published_at": "2026-05-20",
+      "original_url": "https://www.ekn.kr/web/view.php",
+      "naver_url": "https://www.ekn.kr/web/view.php",
+      "keywords": "스마트건설 모듈러",
+      "relevance_score": 6
+    },
+    {
       "id": 5363,
       "source": "네이버뉴스",
       "media": "newspenguin.com",
@@ -5404,6 +5380,18 @@
       "naver_url": "https://n.news.naver.com/mnews/article/009/0005682317?sid=101",
       "keywords": "모듈러 주택;모듈러 건축",
       "relevance_score": 12
+    },
+    {
+      "id": 5302,
+      "source": "네이버뉴스",
+      "media": "thebell.co.kr",
+      "title": "[더벨][IR Briefing] KC산업, 최대주주 손바뀜 후 첫 주주 소통 나섰다",
+      "summary": "이 부사장은 \"토목PC, PC 모듈러, 특수구조물, 건축PC 등 다양한 PC 제조를 다 아우를 수 있는 기업은 KC산업뿐\"이라며 \"현재 건설업계에서는 사회적 요구에 따라 현장에서 시공하지 않고 공장에서 제작 및 운반하는 OSC...",
+      "published_at": "2026-05-19",
+      "original_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
+      "naver_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
     },
     {
       "id": 5301,
@@ -6939,6 +6927,18 @@
       "original_url": "https://www.incheontoday.com/news/articleView.html?idxno=318419",
       "naver_url": "https://www.incheontoday.com/news/articleView.html?idxno=318419",
       "keywords": "모듈러 건축;LH 모듈러",
+      "relevance_score": 4
+    },
+    {
+      "id": 755,
+      "source": "네이버뉴스",
+      "media": "asiatoday.co.kr",
+      "title": "대우건설 효자 3인방으로 떠오른 대우에스티 \"외부물량 본격 확대…자립...",
+      "summary": "글로벌 시장조사기관 자이온 마켓 리서치에 따르면 2023년 1552억 달러(211조3824억원)였던 OSC 건설시장 규모는 2032년까지 연평균 6%씩 성장해 약 2623억 달러(357조3050억원)에 이를 것으로 관측되고 있다.소규모 주택사업을...",
+      "published_at": "2026-05-03",
+      "original_url": "https://www.asiatoday.co.kr/kn/view.php",
+      "naver_url": "https://www.asiatoday.co.kr/kn/view.php",
+      "keywords": "OSC 건설",
       "relevance_score": 4
     }
   ]

@@ -52,6 +52,11 @@ jobs:
             "D2B_LOOKAHEAD_MONTHS=12" \
             "D2B_PAGE_SIZE=50" \
             "D2B_LEGACY_API_ENABLED=false" \
+            "LH_CONTEST_ENABLED=true" \
+            "LH_CONTEST_MAX_PAGES=10" \
+            "LH_CONTEST_LOOKBACK_DAYS=730" \
+            "LH_CONTEST_REQUEST_INTERVAL_SECONDS=1.5" \
+            "LH_CONTEST_TIMEOUT_SECONDS=20" \
             "NAVER_NEWS_LOOKBACK_DAYS=14" \
             "NAVER_NEWS_DISPLAY=50" > .env
 
@@ -95,6 +100,23 @@ jobs:
       - name: Record D2B legacy API status
         run: |
           echo "::warning::방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 자동 수집에서 제외하며 추후 GW API 전환이 필요합니다."
+
+      - name: Collect LH public housing contests
+        run: |
+          if [ -f scripts/collect_lh_public_housing_contests.py ]; then
+            set +e
+            command="python scripts/collect_lh_public_housing_contests.py --apply"
+            echo "Running: $command"
+            $command
+            code=$?
+            echo "command=$command exit_code=$code"
+            if [ "$code" -ne 0 ]; then
+              echo "::warning::LH 민간참여 공공주택 공모 수집 실패. 기존 공개 JSON은 유지됩니다. exit_code=$code"
+            fi
+          else
+            echo "LH public housing contest collector is not present; continuing."
+          fi
+          exit 0
 
       - name: Collect known important G2B bids
         run: |

@@ -1,0 +1,82 @@
+{
+  "sources": [
+    {
+      "source_code": "LH_CONTEST",
+      "source_name": "LH 공모안내",
+      "organization_name": "한국토지주택공사",
+      "list_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
+      "allowed_domains": ["www.lh.or.kr", "lh.or.kr"],
+      "parser_mode": "html",
+      "pagination_mode": "query_nPage",
+      "detail_url_pattern": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no={source_record_id}",
+      "detail_url_candidates": [
+        "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no={source_record_id}",
+        "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no={source_record_id}&nPage=1"
+      ],
+      "known_record": {
+        "source_record_ids": ["730648", "732612", "732642", "732709"],
+        "title_contains": ["민간참여 공공주택건설사업"]
+      },
+      "request_interval_seconds": 1.0,
+      "enabled": true
+    },
+    {
+      "source_code": "GH_CONTEST",
+      "source_name": "GH 공모 관련사항",
+      "organization_name": "경기주택도시공사",
+      "list_url": "https://www.gh.or.kr/gh/bid-announcement.do",
+      "allowed_domains": ["www.gh.or.kr", "gh.or.kr"],
+      "parser_mode": "html",
+      "pagination_mode": "article_offset",
+      "detail_url_pattern": "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo={source_record_id}",
+      "detail_url_candidates": [
+        "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo={source_record_id}",
+        "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo={source_record_id}&article.offset=0&articleLimit=10"
+      ],
+      "known_record": {
+        "source_record_ids": ["63590"],
+        "title_contains": ["하남교산 A3블록", "민간참여 공공주택사업", "민간사업자 재공모"]
+      },
+      "request_interval_seconds": 1.0,
+      "enabled": true
+    },
+    {
+      "source_code": "IH_NOTICE",
+      "source_name": "iH 공지사항",
+      "organization_name": "인천도시공사",
+      "list_url": "https://www.ih.co.kr/main/customer/notification/notice.jsp",
+      "allowed_domains": ["www.ih.co.kr", "ih.co.kr"],
+      "parser_mode": "html",
+      "pagination_mode": "jsp_query",
+      "detail_url_pattern": "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq={source_record_id}&bcd=notice",
+      "detail_url_candidates": [
+        "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq={source_record_id}&bcd=notice",
+        "https://www.ih.co.kr/main/customer/notification/notice.jsp?mode=view&msg_seq={source_record_id}",
+        "https://www.ih.co.kr/main/customer/notification/notice.jsp?boardId=notice&mode=view&msg_seq={source_record_id}"
+      ],
+      "known_record": {
+        "source_record_ids": ["4191", "4152"],
+        "title_contains": ["민간참여 공공주택건설사업", "민간사업자 공모"]
+      },
+      "request_interval_seconds": 1.0,
+      "enabled": true
+    },
+    {
+      "source_code": "SH_CONTEST",
+      "source_name": "SH 사업발주 공고",
+      "organization_name": "서울주택도시공사",
+      "list_url": "https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList",
+      "allowed_domains": ["www.i-sh.co.kr", "i-sh.co.kr"],
+      "parser_mode": "html",
+      "pagination_mode": "unknown",
+      "detail_url_pattern": "",
+      "detail_url_candidates": [],
+      "known_record": {
+        "source_record_ids": [],
+        "title_contains": []
+      },
+      "request_interval_seconds": 1.0,
+      "enabled": true
+    }
+  ]
+}

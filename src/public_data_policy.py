@@ -54,6 +54,9 @@ def business_identity(item: dict[str, Any]) -> tuple[str, ...]:
     bid_no = clean_text(item.get("bid_no"))
     plan_no = clean_text(item.get("plan_no"))
     bid_order = clean_text(item.get("bid_order"))
+    source_record_id = clean_text(item.get("source_record_id") or item.get("bid_no") or item.get("plan_no"))
+    if source_type == "public_agency_contest" and source_record_id:
+        return ("contest", source, source_record_id.lower())
     if source_type == "procurement_plan" and plan_no:
         return ("plan", source, plan_no.lower())
     if bid_no:
@@ -109,6 +112,10 @@ def merge_record(existing: dict[str, Any], fresh: dict[str, Any]) -> dict[str, A
 def should_retain_existing(item: dict[str, Any], kind: str, *, now: datetime, retention_days: int) -> bool:
     if kind == "business" and bool(item.get("is_known_important")):
         return True
+    if kind == "business" and clean_text(item.get("source_type")).lower() == "public_agency_contest":
+        stage = clean_text(item.get("notice_status") or item.get("notice_stage"))
+        if stage not in {"pre_notice", "main_notice", "re_notice", "correction"}:
+            return False
     field_names = ("due_at", "posted_at") if kind == "business" else ("published_at",)
     parsed_dates = [parse_public_datetime(item.get(field)) for field in field_names]
     known_dates = [value for value in parsed_dates if value is not None]

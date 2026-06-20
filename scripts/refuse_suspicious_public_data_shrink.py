@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -17,6 +18,24 @@ def load(name: str) -> dict[str, Any]:
     return payload
 
 
+def load_git_head(name: str) -> dict[str, Any] | None:
+    try:
+        result = subprocess.run(
+            ["git", "show", f"HEAD:frontend/public/data/{name}.json"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        payload = json.loads(result.stdout)
+    except Exception:
+        return None
+    if isinstance(payload, list):
+        return {"items": payload}
+    return payload if isinstance(payload, dict) else {"items": []}
+
+
 def integer(meta: dict[str, Any], name: str, fallback: int) -> int:
     try:
         return int(meta.get(name, fallback))
@@ -28,16 +47,18 @@ def main() -> int:
     business = load("business").get("items", [])
     news = load("news").get("items", [])
     meta = load("meta")
+    head_business = (load_git_head("business") or {}).get("items", [])
+    head_news = (load_git_head("news") or {}).get("items", [])
     if not business or not news:
         print(f"Public data shrink detected. business={len(business)}, news={len(news)}. Refusing commit.")
         return 1
 
     previous_business = max(
-        integer(meta, "previous_business_count", len(business)),
+        len(head_business) or integer(meta, "previous_business_count", len(business)),
         int(os.getenv("PUBLIC_DATA_BASELINE_BUSINESS_COUNT", "107")),
     )
     previous_news = max(
-        integer(meta, "previous_news_count", len(news)),
+        len(head_news) or integer(meta, "previous_news_count", len(news)),
         int(os.getenv("PUBLIC_DATA_BASELINE_NEWS_COUNT", "425")),
     )
     merged_business = integer(meta, "merged_business_count", len(business))
@@ -60,10 +81,8 @@ def main() -> int:
             f"business {previous_business} -> {merged_business}, news {previous_news} -> {merged_news}. Refusing commit."
         )
         return 1
-    print(
-        f"PUBLIC DATA GUARD PASSED: business {previous_business} -> {merged_business}, "
-        f"news {previous_news} -> {merged_news}, status={meta.get('public_data_guard_status', 'unknown')}"
-    )
+    status = "success" if merged_business >= previous_business and merged_news >= previous_news else "warning"
+    print(f"PUBLIC DATA GUARD PASSED: business {previous_business} -> {merged_business}, news {previous_news} -> {merged_news}, status={status}")
     return 0
 
 

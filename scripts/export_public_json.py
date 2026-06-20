@@ -4,6 +4,7 @@ import json
 import os
 import re
 import sqlite3
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -21,7 +22,7 @@ from src.public_data_policy import guard_result, merge_public_items, payload_ite
 
 OUTPUT_DIR = ROOT / "frontend" / "public" / "data"
 BUSINESS_SOURCES = {"나라장터", "G2B", "조달청", "D2B", "국방조달", "방위사업청"}
-BUSINESS_TYPES = {"bid", "procurement_plan"}
+BUSINESS_TYPES = {"bid", "procurement_plan", "public_agency_contest"}
 MODULAR_TERMS = ("모듈러", "osc", "공업화주택", "프리패브", "프리팹")
 SENSITIVE_KEY_PARTS = (
     "servicekey",
@@ -143,11 +144,15 @@ def load_latest_details() -> dict[int, dict[str, Any]]:
 
 def manual_check(row: dict[str, Any]) -> dict[str, str]:
     source = clean_text(row.get("source_name"))
+    source_type = clean_text(row.get("source_type"))
     bid_no = clean_text(row.get("source_record_id") or row.get("bid_no"))
     bid_order = clean_text(row.get("source_record_no") or row.get("bid_order"))
     title = clean_text(row.get("title"))
     organization = clean_text(row.get("organization"))
-    if source in {"나라장터", "G2B", "조달청"}:
+    if source == "LH" and source_type == "public_agency_contest":
+        site_name, site_url = "LH 공모안내", "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034"
+        guide = "LH 공모안내 게시판에서 공모명 또는 원문 식별번호(list_no)로 상세 공고와 첨부파일을 확인하세요."
+    elif source in {"나라장터", "G2B", "조달청"}:
         site_name, site_url = "나라장터", "https://www.g2b.go.kr"
         guide = "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
     else:
@@ -159,7 +164,7 @@ def manual_check(row: dict[str, Any]) -> dict[str, str]:
 
 def exact_original_url(row: dict[str, Any]) -> str | None:
     url = clean_text(row.get("original_url"))
-    if not url or clean_text(row.get("link_type")) != "exact":
+    if not url or clean_text(row.get("link_type")) not in {"exact", "exact_original"}:
         return None
     if int(row.get("exact_url_verified") or 0) != 1 or clean_text(row.get("link_status")) != "ok":
         return None
@@ -171,18 +176,26 @@ def business_item(row: dict[str, Any], details: dict[int, dict[str, Any]]) -> di
     detail_row = details.get(item_id)
     source_type = clean_text(row.get("source_type"))
     record_no = clean_text(row.get("bid_no") or row.get("source_record_id"))
+    detail_payload = parse_payload(detail_row.get("detail_payload_json")) if detail_row else None
+    detail = detail_payload if isinstance(detail_payload, dict) else {}
+    item_type = "민간사업자 공모" if source_type == "public_agency_contest" else (
+        "발주계획" if source_type == "procurement_plan" else "입찰공고"
+    )
     return {
         "id": item_id,
         "source": clean_text(row.get("source_name")),
         "source_name": clean_text(row.get("source_name")),
         "source_type": source_type,
-        "type": "발주계획" if source_type == "procurement_plan" else "입찰공고",
+        "type": item_type,
         "title": clean_text(row.get("title")),
         "organization": clean_text(row.get("organization")),
         "demand_org": clean_text(row.get("demand_org")),
         "business_type": clean_text(row.get("business_type")),
         "business_subtype": clean_text(row.get("business_subtype")),
         "notice_status": clean_text(row.get("notice_status")),
+        "notice_stage": clean_text(row.get("notice_status") or detail.get("notice_stage")),
+        "source_record_id": clean_text(row.get("source_record_id")),
+        "source_record_no": clean_text(row.get("source_record_no")),
         "plan_no": record_no if source_type == "procurement_plan" else "",
         "bid_no": record_no,
         "bid_order": clean_text(row.get("bid_order") or row.get("source_record_no")),
@@ -194,9 +207,22 @@ def business_item(row: dict[str, Any], details: dict[int, dict[str, Any]]) -> di
         "keywords": clean_text(row.get("keywords")),
         "relevance_score": scalar(row.get("relevance_score")) or 0,
         "is_known_important": bool(row.get("is_known_important")),
+        "is_operating_scope": bool(row.get("is_operating_scope")),
+        "display_type": clean_text(detail.get("display_type")) or item_type,
+        "modular_relevance": clean_text(detail.get("modular_relevance")),
+        "modular_evidence": detail.get("modular_evidence") or [],
+        "project_name": clean_text(detail.get("project_name")),
+        "project_sites": detail.get("project_sites") or [],
+        "project_blocks": detail.get("project_blocks") or [],
+        "application_schedule_text": clean_text(detail.get("application_schedule_text")),
+        "household_count": scalar(detail.get("household_count")),
+        "housing_type": clean_text(detail.get("housing_type")),
+        "attachments": detail.get("attachments") or [],
+        "related_group_key": clean_text(detail.get("related_group_key")),
+        "exact_link_verified": bool(row.get("exact_url_verified")),
         "external_original_url": exact_original_url(row),
         "manual_check": manual_check(row),
-        "detail": parse_payload(detail_row.get("detail_payload_json")) if detail_row else None,
+        "detail": detail_payload,
     }
 
 
@@ -233,6 +259,24 @@ def load_existing_payload(name: str) -> dict[str, Any]:
     except (json.JSONDecodeError, OSError) as exc:
         print(f"WARNING: 기존 {name}을 읽지 못해 빈 기준으로 병합합니다: {exc}")
         return {"items": []}
+    if isinstance(payload, list):
+        return {"items": payload}
+    return payload if isinstance(payload, dict) else {"items": []}
+
+
+def load_git_head_payload(name: str) -> dict[str, Any] | None:
+    try:
+        result = subprocess.run(
+            ["git", "show", f"HEAD:frontend/public/data/{name}"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        payload = json.loads(result.stdout)
+    except Exception:
+        return None
     if isinstance(payload, list):
         return {"items": payload}
     return payload if isinstance(payload, dict) else {"items": []}
@@ -305,11 +349,33 @@ def collector_public_status(
     return "success", f"정상 호출되어 {exported_count}건을 공개 데이터에 반영했습니다."
 
 
+def include_business_row(row: dict[str, Any]) -> bool:
+    source_name = clean_text(row.get("source_name"))
+    source_type = clean_text(row.get("source_type"))
+    if source_type == "public_agency_contest":
+        return (
+            source_name == "LH"
+            and clean_text(row.get("business_type")) == "private_participation_public_housing"
+            and int(row.get("is_operating_scope") or 0) == 1
+        )
+    if source_name not in BUSINESS_SOURCES or source_type not in BUSINESS_TYPES:
+        return False
+    if bool(row.get("is_known_important")):
+        return True
+    if contains_modular(row.get("title"), row.get("summary"), row.get("keywords")):
+        return True
+    return False
+
+
 def main() -> int:
     previous_business_payload = load_existing_payload("business.json")
     previous_news_payload = load_existing_payload("news.json")
     previous_business = payload_items(previous_business_payload)
     previous_news = payload_items(previous_news_payload)
+    baseline_business_payload = load_git_head_payload("business.json") or previous_business_payload
+    baseline_news_payload = load_git_head_payload("news.json") or previous_news_payload
+    baseline_business = payload_items(baseline_business_payload)
+    baseline_news = payload_items(baseline_news_payload)
 
     df = load_items_dataframe()
     if df.empty:
@@ -321,9 +387,7 @@ def main() -> int:
 
     business_rows = [
         row for row in rows
-        if clean_text(row.get("source_name")) in BUSINESS_SOURCES
-        and clean_text(row.get("source_type")) in BUSINESS_TYPES
-        and (contains_modular(row.get("title"), row.get("summary"), row.get("keywords")) or bool(row.get("is_known_important")))
+        if include_business_row(row)
     ]
     news_rows = [
         row for row in rows
@@ -361,6 +425,31 @@ def main() -> int:
         source_type="procurement_plan",
         exported_count=g2b_plan_count,
     )
+    lh_contest_items = [
+        item
+        for item in business
+        if item.get("source") == "LH" and item.get("source_type") == "public_agency_contest"
+    ]
+    lh_contest_count = len(lh_contest_items)
+    lh_exact_link_count = sum(1 for item in lh_contest_items if item.get("external_original_url"))
+    lh_log = latest_log(logs, "LHPublicHousingContestCollector", "public_agency_contest")
+    lh_stats: dict[str, Any] = {}
+    if lh_log and clean_text(lh_log.get("error_message")):
+        try:
+            parsed_lh_stats = json.loads(clean_text(lh_log.get("error_message")))
+            if isinstance(parsed_lh_stats, dict):
+                lh_stats = sanitize_payload(parsed_lh_stats)
+        except json.JSONDecodeError:
+            lh_stats = {"message": sanitize_string(clean_text(lh_log.get("error_message")))}
+    if not lh_log:
+        lh_status = "not_collected" if lh_contest_count == 0 else "previous_data_retained"
+        lh_message = "LH 민간참여 공공주택 공모 수집 기록이 아직 없습니다."
+    elif clean_text(lh_log.get("status")) in {"success", "partial_warning"}:
+        lh_status = "success" if lh_contest_count > 0 else "success_no_public_match"
+        lh_message = f"LH 민간참여 공공주택 공모 {lh_contest_count}건을 공개 사업정보에 반영했습니다."
+    else:
+        lh_status = "failed"
+        lh_message = sanitize_string(clean_text(lh_log.get("error_message"))) or "LH 공모 수집에 실패했습니다."
     if D2B_LEGACY_API_ENABLED:
         d2b_log = latest_log(logs, "D2B")
         if d2b_log and clean_text(d2b_log.get("status")) == "success":
@@ -373,9 +462,9 @@ def main() -> int:
         d2b_message = "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
 
     guard_status, guard_message = guard_result(
-        previous_business=len(previous_business),
+        previous_business=len(baseline_business),
         merged_business=len(business),
-        previous_news=len(previous_news),
+        previous_news=len(baseline_news),
         merged_news=len(news),
         allow_shrink=os.getenv("ALLOW_PUBLIC_DATA_SHRINK", "false").lower() in {"1", "true", "yes", "y"},
     )
@@ -385,6 +474,8 @@ def main() -> int:
         warnings.append(f"나라장터 발주계획: {g2b_message}")
     if d2b_status != "success":
         warnings.append(f"D2B: {d2b_message}")
+    if lh_status == "failed":
+        warnings.append(f"LH 민간사업자 공모: {lh_message}")
     if guard_status in {"blocked", "warning", "override"}:
         warnings.append(f"공개 데이터 보호: {guard_message}")
     workflow_status = "warning" if warnings else "success"
@@ -395,12 +486,25 @@ def main() -> int:
         "d2b_message": d2b_message,
         "d2b_legacy_status": d2b_status,
         "d2b_gw_migration_required": True,
+        "lh_contest_status": lh_status,
+        "lh_contest_message": lh_message,
+        "lh_contest_last_attempt": clean_text((lh_log or {}).get("started_at")),
+        "lh_contest_last_success": clean_text((lh_log or {}).get("finished_at"))
+        if lh_log and clean_text(lh_log.get("status")) in {"success", "partial_warning"}
+        else "",
+        "lh_contest_scanned_count": scalar(lh_stats.get("scanned")),
+        "lh_contest_matched_count": scalar(lh_stats.get("matched")),
+        "lh_contest_inserted_count": scalar(lh_stats.get("inserted")),
+        "lh_contest_updated_count": scalar(lh_stats.get("updated")),
+        "lh_contest_public_count": lh_contest_count,
+        "lh_contest_exact_link_count": lh_exact_link_count,
+        "lh_contest_failure_reason": "; ".join(lh_stats.get("errors") or []),
         "workflow_last_run_status": workflow_status,
         "warnings": warnings,
-        "previous_business_count": len(previous_business),
+        "previous_business_count": len(baseline_business),
         "current_business_count": len(current_business),
         "merged_business_count": len(business),
-        "previous_news_count": len(previous_news),
+        "previous_news_count": len(baseline_news),
         "current_news_count": len(current_news),
         "merged_news_count": len(news),
         "public_data_guard_status": guard_status,
@@ -424,7 +528,7 @@ def main() -> int:
         {
             "generated_at": generated_at,
             "data_policy": "cumulative_verified",
-            "previous_news_count": len(previous_news),
+            "previous_news_count": len(baseline_news),
             "current_news_count": len(current_news),
             "merged_news_count": len(news),
             "items": news,

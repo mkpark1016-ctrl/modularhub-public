@@ -36,12 +36,14 @@ function displaySource(value) {
 }
 
 function businessKind(item) {
+  if (item.source_type === "public_agency_contest") return "민간사업자 공모";
   return item.source_type === "procurement_plan" ? "발주계획" : "입찰공고";
 }
 
 function sourceTypeForKind(kind) {
   if (kind === "입찰공고") return "bid";
   if (kind === "발주계획") return "procurement_plan";
+  if (kind === "민간사업자 공모") return "public_agency_contest";
   return "";
 }
 
@@ -107,12 +109,15 @@ function SearchBar({ value, onChange, placeholder }) {
 
 function BusinessCard({ item }) {
   const kind = businessKind(item);
+  const modularLabel = item.modular_relevance === "confirmed" ? "모듈러 명시" : (
+    item.modular_relevance === "review_candidate" ? "모듈러 검토대상" : ""
+  );
   return (
     <article className="result-card">
-      <div className="badge-row"><span>{displaySource(item.source)}</span><span>{kind}</span>{item.business_type && <span>{item.business_type}</span>}{item.notice_status && <span>{item.notice_status}</span>}{item.is_known_important && <span className="important">중요공고</span>}</div>
+      <div className="badge-row"><span>{displaySource(item.source)}</span><span>{kind}</span>{item.business_type && <span>{item.business_type}</span>}{item.notice_status && <span>{item.notice_status}</span>}{modularLabel && <span>{modularLabel}</span>}{item.is_known_important && <span className="important">중요공고</span>}</div>
       <h2><Link to={`/business/${item.id}`}>{item.title}</Link></h2>
       <dl className="metadata"><div><dt>기관</dt><dd>{item.organization || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(item.posted_at)}</dd></div><div><dt>마감일</dt><dd>{formatDate(item.due_at)}</dd></div><div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div></dl>
-      <div className="card-footer"><span>{item.plan_no || item.bid_no || "출처번호 미확인"}</span><Link to={`/business/${item.id}`}>상세보기</Link></div>
+      <div className="card-footer"><span>{item.source_record_id || item.plan_no || item.bid_no || "출처번호 미확인"}</span><Link to={`/business/${item.id}`}>상세보기</Link></div>
     </article>
   );
 }
@@ -145,7 +150,7 @@ function ListingPage({ type }) {
   const g2bOrderPlanMessage = data?.g2b_order_plan_message || meta?.g2b_order_plan_message;
   const sources = ["전체", ...new Set(items.map((item) => item.source).filter(Boolean))];
   const filtered = items.filter((item) => {
-    const text = `${item.title || ""} ${item.organization || item.media || ""} ${item.summary || ""} ${item.plan_no || ""} ${item.bid_no || ""}`.toLowerCase();
+    const text = `${item.title || ""} ${item.organization || item.media || ""} ${item.summary || ""} ${item.plan_no || ""} ${item.bid_no || ""} ${item.source_record_id || ""}`.toLowerCase();
     const sourceMatches = source === "전체" || item.source === source;
     const kindMatches = !isBusiness || !selectedSourceType || item.source_type === selectedSourceType;
     const openMatches = !isBusiness || !openOnly || isOpenBusiness(item);
@@ -178,7 +183,7 @@ function ListingPage({ type }) {
     <Layout>
       <section className="page-heading"><p className="eyebrow">{isBusiness ? "BUSINESS" : "NEWS"}</p><h1>{isBusiness ? "모듈러 사업정보" : "모듈러 뉴스정보"}</h1><p>{isBusiness ? "나라장터와 D2B에서 공고명 또는 사업명에 모듈러가 포함된 정보를 제공합니다." : "원문 링크가 확인된 모듈러 관련 뉴스를 제공합니다."}</p></section>
       <div className="content-layout">
-        <aside className="filters"><h2>검색 조건</h2><SearchBar value={query} onChange={setQuery} placeholder={isBusiness ? "공고명, 기관, 공고번호" : "뉴스 제목, 요약"} /><label>출처<select value={source} onChange={(event) => setSource(event.target.value)}>{sources.map((name) => <option key={name} value={name}>{displaySource(name)}</option>)}</select></label>{isBusiness ? <><label>유형<select value={kind} onChange={(event) => setKind(event.target.value)}><option>전체</option><option>입찰공고</option><option>발주계획</option></select></label><label className="check-row"><input type="checkbox" checked={openOnly} onChange={(event) => setOpenOnly(event.target.checked)} />마감 전 공고만</label></> : <label>기간<select value={newsDays} onChange={(event) => setNewsDays(event.target.value)}><option>전체</option><option value="7">최근 7일</option><option value="30">최근 30일</option><option value="90">최근 90일</option></select></label>}<p className="filter-note">총 {filtered.length}건</p></aside>
+        <aside className="filters"><h2>검색 조건</h2><SearchBar value={query} onChange={setQuery} placeholder={isBusiness ? "공고명, 기관, 공고번호" : "뉴스 제목, 요약"} /><label>출처<select value={source} onChange={(event) => setSource(event.target.value)}>{sources.map((name) => <option key={name} value={name}>{displaySource(name)}</option>)}</select></label>{isBusiness ? <><label>유형<select value={kind} onChange={(event) => setKind(event.target.value)}><option>전체</option><option>입찰공고</option><option>발주계획</option><option>민간사업자 공모</option></select></label><label className="check-row"><input type="checkbox" checked={openOnly} onChange={(event) => setOpenOnly(event.target.checked)} />마감 전 공고만</label></> : <label>기간<select value={newsDays} onChange={(event) => setNewsDays(event.target.value)}><option>전체</option><option value="7">최근 7일</option><option value="30">최근 30일</option><option value="90">최근 90일</option></select></label>}<p className="filter-note">총 {filtered.length}건</p></aside>
         <section className="results" aria-live="polite">
           {isBusiness && kind === "발주계획" && !loading && !error && <div className="source-status">
             <p><strong>나라장터</strong> {g2bOrderPlanMessage || "발주계획 수집 상태를 확인 중입니다."}</p>
@@ -203,16 +208,23 @@ function DetailPage({ type }) {
   if (error || !item) return <Layout><div className="state error">해당 정보를 찾을 수 없습니다.</div></Layout>;
   const originalUrl = isBusiness ? item.external_original_url : item.original_url;
   const manualUrl = item.manual_check?.site_url;
+  const isContest = isBusiness && item.source_type === "public_agency_contest";
+  const attachments = Array.isArray(item.attachments) ? item.attachments : [];
+  const modularLabel = item.modular_relevance === "confirmed" ? "모듈러 명시" : (
+    item.modular_relevance === "review_candidate" ? "모듈러 적용 검토 대상" : ""
+  );
   return (
     <Layout>
       <article className="detail-page">
         <Link className="back" to={`/${type}`}><ArrowLeft size={17} />목록으로</Link>
         <div className="badge-row"><span>{displaySource(item.source)}</span><span>{isBusiness ? businessKind(item) : "뉴스"}</span>{isBusiness && item.notice_status && <span>{item.notice_status}</span>}</div>
         <h1>{item.title}</h1>
-        <dl className="detail-grid"><div><dt>기관</dt><dd>{(isBusiness ? item.organization : item.media) || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(isBusiness ? item.posted_at : item.published_at)}</dd></div><div><dt>{isBusiness ? "마감일" : "출처"}</dt><dd>{isBusiness ? formatDate(item.due_at) : (item.source || "네이버뉴스")}</dd></div>{isBusiness && <div><dt>수요기관</dt><dd>{item.demand_org || "-"}</dd></div>}{isBusiness && <div><dt>업무구분</dt><dd>{[item.business_type, item.business_subtype].filter(Boolean).join(" / ") || "-"}</dd></div>}{isBusiness && <div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div>}{isBusiness && <div><dt>공고/판단/계획번호</dt><dd>{item.plan_no || item.bid_no || "-"}</dd></div>}{isBusiness && <div><dt>공고차수</dt><dd>{item.bid_order || "-"}</dd></div>}{isBusiness && <div><dt>공고상태</dt><dd>{item.notice_status || "-"}</dd></div>}</dl>
+        <dl className="detail-grid"><div><dt>기관</dt><dd>{(isBusiness ? item.organization : item.media) || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(isBusiness ? item.posted_at : item.published_at)}</dd></div><div><dt>{isBusiness ? "마감일" : "출처"}</dt><dd>{isBusiness ? formatDate(item.due_at) : (item.source || "네이버뉴스")}</dd></div>{isBusiness && <div><dt>수요기관</dt><dd>{item.demand_org || "-"}</dd></div>}{isBusiness && <div><dt>업무구분</dt><dd>{[item.business_type, item.business_subtype].filter(Boolean).join(" / ") || "-"}</dd></div>}{isBusiness && <div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div>}{isBusiness && <div><dt>공고/판단/계획번호</dt><dd>{item.source_record_id || item.plan_no || item.bid_no || "-"}</dd></div>}{isBusiness && <div><dt>공고차수</dt><dd>{item.bid_order || "-"}</dd></div>}{isBusiness && <div><dt>공고상태</dt><dd>{item.notice_status || "-"}</dd></div>}{isContest && <div><dt>대상지구/블록</dt><dd>{[...(item.project_sites || []), ...(item.project_blocks || [])].join(" / ") || "공고문 확인 필요"}</dd></div>}{isContest && <div><dt>모듈러 관련성</dt><dd>{modularLabel || "확인 필요"}</dd></div>}</dl>
         <section className="summary"><h2>내용</h2><p>{item.summary || "상세 요약이 없습니다."}</p></section>
+        {isContest && <section className="summary"><h2>공모 일정</h2><p>{item.application_schedule_text || "공모 일정은 첨부 공고문 확인"}</p></section>}
+        {isContest && attachments.length > 0 && <section className="summary"><h2>첨부파일</h2><ul className="attachment-list">{attachments.map((file) => <li key={`${file.url}-${file.name}`}><a href={file.url} target="_blank" rel="noreferrer">{file.name || "첨부파일"}{file.file_type ? ` (${file.file_type})` : ""}</a></li>)}</ul></section>}
         <div className="detail-actions">
-          {originalUrl && <a className="button primary" href={originalUrl} target="_blank" rel="noreferrer">원문 열기 <ExternalLink size={16} /></a>}
+          {originalUrl && <a className="button primary" href={originalUrl} target="_blank" rel="noreferrer">{isContest ? "공식 원문" : "원문 열기"} <ExternalLink size={16} /></a>}
           {isBusiness && manualUrl && <a className="button secondary" href={manualUrl} target="_blank" rel="noreferrer">공식 확인 사이트 <ExternalLink size={16} /></a>}
         </div>
         {isBusiness && item.detail && <details className="api-detail"><summary>공식 API 상세 정보</summary><pre>{JSON.stringify(item.detail, null, 2)}</pre></details>}
