@@ -1,10 +1,118 @@
 {
-  "generated_at": "2026-06-21T07:59:37+09:00",
+  "generated_at": "2026-06-22T08:01:29+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 582,
-  "current_news_count": 187,
-  "merged_news_count": 583,
+  "previous_news_count": 583,
+  "current_news_count": 194,
+  "merged_news_count": 594,
   "items": [
+    {
+      "id": 5809,
+      "source": "네이버뉴스",
+      "media": "mt.co.kr",
+      "title": "\"엘리베이터 건설현장 중대재해 위험 95%까지 줄인다\"[R&D인사이드]",
+      "summary": "모듈러 승강기 사례는 이미 일부 있었지만 20층이 넘는 고층 건물 적용은 사례가 없었기 때문이다. 배 상무는 \"가장 어려웠던 건 고층 구조를 실제로 테스트할 현장이 없었다는 점\"이라며 \"㎝ 단위 오차를 허용하는 건축과...",
+      "published_at": "2026-06-22",
+      "original_url": "https://www.mt.co.kr/industry/2026/06/22/2026061914021196239",
+      "naver_url": "https://n.news.naver.com/mnews/article/008/0005374981?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5808,
+      "source": "네이버뉴스",
+      "media": "imnews.imbc.com",
+      "title": "[비즈&트렌드] 가전·냉난방까지 묶어서 판다‥모듈러 주택 승부수",
+      "summary": "◀ 앵커 ▶ LG전자와 삼성전자 등 가전업체들이, 조립식 주택, 이른바 '모듈러 주택' 시장에 본격 진출하고 있습니다. 가전뿐 아니라 인공지능과 냉난방공조 등 주력 사업을 동시에 키울 수 있기 때문인데요. 이지수...",
+      "published_at": "2026-06-22",
+      "original_url": "https://imnews.imbc.com/replay/2026/nwtoday/article/6831827_37012.html",
+      "naver_url": "https://n.news.naver.com/mnews/article/214/0001506849?sid=101",
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5816,
+      "source": "네이버뉴스",
+      "media": "jnilbo.com",
+      "title": "삼성, AI 모듈러홈 출시… 건축시장 공략",
+      "summary": "삼성전자가 목조 모듈러 주택 전문기업인 공간제작소와 협력해 '삼성 AI 모듈러 홈'을 출시하고 단독주택형 모듈러 건축 시장 공략에 본격 나섰다고 21일 밝혔다. 공간제작소는 AI 기반 설계와 자동화 생산 시스템을...",
+      "published_at": "2026-06-21",
+      "original_url": "https://www.jnilbo.com/news/articleView.html?idxno=90000044055",
+      "naver_url": "https://www.jnilbo.com/news/articleView.html?idxno=90000044055",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5815,
+      "source": "네이버뉴스",
+      "media": "bizwnews.com",
+      "title": "SH, '2026 스마트 건설기술 경진대회' 개최",
+      "summary": "사진=SH 서울주택도시개발공사(SH, 이하 공사)가 인공지능(AI), 로봇 자동화, 건축 정보 모형(BIM) 등 첨단... 이 계획은 생산성 향상과 현장 안전 제로화를 위해 가상시공, 로봇, 모듈러 등 첨단 공법을 체계적으로 도입하는...",
+      "published_at": "2026-06-21",
+      "original_url": "http://www.bizwnews.com/news/articleView.html?idxno=138969",
+      "naver_url": "http://www.bizwnews.com/news/articleView.html?idxno=138969",
+      "keywords": "모듈러 건축",
+      "relevance_score": 12
+    },
+    {
+      "id": 5814,
+      "source": "네이버뉴스",
+      "media": "segyebiz.com",
+      "title": "삼성·LG, 가전과 공간 결합한 모듈형 주택 시장서 한판승부",
+      "summary": "단독주택형 모듈러 건축 시장 진출을 알렸다. 최근 삼성전자와 공간제작소는 경기도 화성시에 양사가 공동으로 기획·제작한 ‘삼성 AI 모듈러 홈’ 쇼룸을 오픈했다. 쇼룸은 330㎡ 66㎡ 등 총 2개소로 구성됐는데...",
+      "published_at": "2026-06-21",
+      "original_url": "http://www.segyebiz.com/newsView/20260621505268?OutUrl=naver",
+      "naver_url": "http://www.segyebiz.com/newsView/20260621505268?OutUrl=naver",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5813,
+      "source": "네이버뉴스",
+      "media": "techm.kr",
+      "title": "삼성전자 '산토끼'·LG전자 '집토끼', 매출·수익 확대 '총력'",
+      "summary": "됐다\"며 \"앞으로도 모듈러 건축의 혁신성과 삼성전자만의 AI 홈 설루션을 결합해 주거 공간의 제약을 넘어선 차별화된 라이프스타일을 지속적으로 제안해 나갈 것\"이라고 말했다. LG전자는 5월과 6월 'LG 올레드...",
+      "published_at": "2026-06-21",
+      "original_url": "https://www.techm.kr/news/articleView.html?idxno=152781",
+      "naver_url": "https://www.techm.kr/news/articleView.html?idxno=152781",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 5812,
+      "source": "네이버뉴스",
+      "media": "sedaily.com",
+      "title": "LG전자 모듈러주택 확대…AI·가전·공조 동시에 키운다",
+      "summary": "LG전자는 글로벌 파트너십을 잇달아 체결하며 해외에서 200조 원 규모로 빠르게 성장하는 모듈러 주택에 들어갈 가전과 주거용 솔루션을 통합 공급하고 이를 통해 실적 개선을 꾀할 방침이다. 삼성전자(005930) 역시...",
+      "published_at": "2026-06-21",
+      "original_url": "https://www.sedaily.com/article/20058313?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/011/0004633398?sid=101",
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 5811,
+      "source": "네이버뉴스",
+      "media": "pinpointnews.co.kr",
+      "title": "대한건설협회, 대학생 대상 스마트건설 현장 체험 운영",
+      "summary": "참가 학생들은 먼저 한국건설기술연구원을 찾아 스마트건설지원센터 운영 현황과 OSC(Off-Site Construction·탈현장건설) 공법이 적용된 건축물을 둘러봤다. 이어 '건설산업의 미래, 스마트건설 기술과 새로운 기회'를 주제로...",
+      "published_at": "2026-06-21",
+      "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=461759",
+      "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=461759",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 5810,
+      "source": "네이버뉴스",
+      "media": "viva100.com",
+      "title": "대한건설협회, 대학생 대상 스마트건설 현장견학 프로그램 진행",
+      "summary": "참가 학생들은 이날 오전 한국건설기술연구원 스마트건설지원센터를 방문해 스마트건설 기술과 OSC(탈현장건설)공법이 적용된 시설을 둘러봤다. 이와 함께, 한재구 스마트건설지원센터장의 ‘건설산업의 미래...",
+      "published_at": "2026-06-21",
+      "original_url": "https://www.viva100.com/article/20260621500168",
+      "naver_url": "https://www.viva100.com/article/20260621500168",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
     {
       "id": 5807,
       "source": "네이버뉴스",
@@ -16,6 +124,30 @@
       "naver_url": "https://news.einfomax.co.kr/news/articleView.html?idxno=4421034",
       "keywords": "모듈러 건축;모듈러 주택",
       "relevance_score": 16
+    },
+    {
+      "id": 225,
+      "source": "네이버뉴스",
+      "media": "metroseoul.co.kr",
+      "title": "양주시 정덕영 시장 당선인, 안민석 교육감 당선인에 '지역교육 현안' ...",
+      "summary": "이어 옥정신도시 초등학교 과밀 학급 문제 해결 필요성도 요청했다.현재 8개 초등학교 가운데 5곳이 과대 학교로 운영되고 있어 학생 학습권 보장과 교육환경 개선을 위해 경기도형 캠퍼스 운영기준 개선과 모듈러 교실...",
+      "published_at": "2026-06-21",
+      "original_url": "http://www.metroseoul.co.kr/article/20260620500003",
+      "naver_url": "http://www.metroseoul.co.kr/article/20260620500003",
+      "keywords": "학교 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 224,
+      "source": "네이버뉴스",
+      "media": "viva100.com",
+      "title": "양주시, 교육환경 혁신 위해 경기도교육청과 손잡는다",
+      "summary": "현재 옥정신도시 내 8개 초등학교 중 5개 학교가 과대학교로 운영되고 있어 학생들의 학습권 보장과 교육환경 개선을 위해 경기도형 캠퍼스 운영기준 개선과 모듈러 교실 설치 등 한시적 지원 확대가 필요하다는 입장을...",
+      "published_at": "2026-06-21",
+      "original_url": "https://www.viva100.com/article/20260621500529",
+      "naver_url": "https://www.viva100.com/article/20260621500529",
+      "keywords": "학교 모듈러",
+      "relevance_score": 12
     },
     {
       "id": 5806,
@@ -458,7 +590,7 @@
       "published_at": "2026-06-18",
       "original_url": "https://zdnet.co.kr/view/?no=20260618082222",
       "naver_url": "https://n.news.naver.com/mnews/article/092/0002427119?sid=105",
-      "keywords": "모듈러 건축;모듈러 주택",
+      "keywords": "모듈러 건축;모듈러 주택;유창이앤씨 모듈러",
       "relevance_score": 16
     },
     {
@@ -922,11 +1054,11 @@
       "source": "네이버뉴스",
       "media": "ajunews.com",
       "title": "삼성전자, 스마트싱스 기반 'AI 모듈러 홈' 출시··· 모듈러 주택 시장...",
-      "summary": "국내 모듈러 건축 시장은 오는 2030년 최대 4조4000억 원 규모까지 성장할 것으로 전망된다. 전통적인 건설 방식의 한계를 넘어 비용 효율성과 친환경성을 갖춘 모듈러 주택에 대한 수요가 급증하면서 대형 건설사뿐만...",
+      "summary": "삼성 AI 모듈러 홈은 공장 제작 단계부터 삼성전자의 가전제품과 스마트싱스 기반의 AI 홈 솔루션이 설치... 갖춘 모듈러 주택에 대한 수요가 급증하면서 대형 건설사뿐만 아니라 정보기기(IT) 테크 기업들까지 시장...",
       "published_at": "2026-06-18",
       "original_url": "https://www.ajunews.com/view/20260618095054838",
       "naver_url": "https://www.ajunews.com/view/20260618095054838",
-      "keywords": "모듈러 건축;모듈러 주택",
+      "keywords": "모듈러 주택;스마트건설 모듈러",
       "relevance_score": 16
     },
     {
@@ -1827,7 +1959,7 @@
       "original_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
       "naver_url": "https://www.joongboo.com/news/articleView.html?idxno=363728676",
       "keywords": "학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 133,
@@ -1839,7 +1971,7 @@
       "original_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5030018",
       "naver_url": "https://www.shinailbo.co.kr/news/articleView.html?idxno=5030018",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 132,
@@ -1851,7 +1983,7 @@
       "original_url": "https://www.segye.com/newsView/20260612511905?OutUrl=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/022/0004135244?sid=102",
       "keywords": "모듈러 주택;학교 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 134,
