@@ -17,6 +17,11 @@ BUSINESS_PATH = ROOT / "frontend" / "public" / "data" / "business.json"
 NEWS_PATH = ROOT / "frontend" / "public" / "data" / "news.json"
 META_PATH = ROOT / "frontend" / "public" / "data" / "meta.json"
 ALLOWED_CONTEST_STAGES = {"pre_notice", "main_notice", "re_notice", "correction"}
+CONTEST_SOURCE_RULES = {
+    "LH": {"host": "lh.or.kr", "path_token": "board.es", "query_token": "list_no="},
+    "GH": {"host": "gh.or.kr", "path_token": "bid-announcement.do", "query_token": "articleNo="},
+    "iH": {"host": "ih.co.kr", "path_token": "bbsMsgDetail.do", "query_token": "msg_seq="},
+}
 
 
 def clean_text(value: Any) -> str:
@@ -99,17 +104,20 @@ def summarize_item(item: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def is_lh_exact_url(url: str, source_record_id: str) -> bool:
+def is_contest_exact_url(source: str, url: str, source_record_id: str) -> bool:
     if not url or not source_record_id:
+        return False
+    rule = CONTEST_SOURCE_RULES.get(source)
+    if not rule:
         return False
     parsed = urlparse(url)
     host = parsed.netloc.lower()
+    expected_host = rule["host"]
     return (
         parsed.scheme in {"http", "https"}
-        and (host == "www.lh.or.kr" or host.endswith(".lh.or.kr") or host == "lh.or.kr")
-        and "board.es" in parsed.path
-        and "act=view" in parsed.query
-        and f"list_no={source_record_id}" in parsed.query
+        and (host == expected_host or host.endswith("." + expected_host))
+        and rule["path_token"] in parsed.path
+        and f"{rule['query_token']}{source_record_id}" in parsed.query
     )
 
 
@@ -132,20 +140,28 @@ def find_unexpected(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return unexpected
 
 
-def validate_lh_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def validate_public_contest_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     violations: list[dict[str, Any]] = []
     for item in items:
-        if item.get("source") != "LH" or item.get("source_type") != "public_agency_contest":
+        source = clean_text(item.get("source"))
+        if source not in CONTEST_SOURCE_RULES or item.get("source_type") != "public_agency_contest":
             continue
         reasons = []
         source_record_id = clean_text(item.get("source_record_id") or item.get("bid_no"))
         original_url = clean_text(item.get("external_original_url"))
         if item.get("business_type") != "private_participation_public_housing":
             reasons.append("business_type_mismatch")
+        expected_source_code = {"LH": "LH_CONTEST", "GH": "GH_CONTEST", "iH": "IH_NOTICE"}.get(source)
+        if expected_source_code and clean_text(item.get("source_code")) != expected_source_code:
+            reasons.append("source_code_mismatch")
         if not source_record_id:
             reasons.append("missing_source_record_id")
-        if not is_lh_exact_url(original_url, source_record_id):
-            reasons.append("invalid_lh_original_url")
+        if source == "GH" and clean_text(item.get("id")) != f"gh_contest:{source_record_id}":
+            reasons.append("invalid_gh_public_id")
+        if source == "iH" and clean_text(item.get("id")) != f"ih_contest:{source_record_id}":
+            reasons.append("invalid_ih_public_id")
+        if not is_contest_exact_url(source, original_url, source_record_id):
+            reasons.append("invalid_public_contest_original_url")
         if not item.get("title"):
             reasons.append("missing_title")
         if not item.get("posted_at"):
@@ -216,7 +232,7 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         for item_id in changed_ids
     ]
     unexpected = find_unexpected(current_items)
-    lh_violations = validate_lh_items(current_items)
+    public_contest_violations = validate_public_contest_items(current_items)
     policy_excluded = load_db_exclusions()
     return {
         "base_count": len(base_items),
@@ -232,10 +248,19 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         "removed": removed,
         "changed": changed[:100],
         "unexpected_records": unexpected,
+        "public_contest_count_by_source": source_counter(
+            [item for item in current_items if item.get("source_type") == "public_agency_contest"]
+        ),
+        "public_contest_violations": public_contest_violations,
         "lh_public_count": sum(
             1 for item in current_items if item.get("source") == "LH" and item.get("source_type") == "public_agency_contest"
         ),
-        "lh_public_violations": lh_violations,
+        "gh_public_count": sum(
+            1 for item in current_items if item.get("source") == "GH" and item.get("source_type") == "public_agency_contest"
+        ),
+        "ih_public_count": sum(
+            1 for item in current_items if item.get("source") == "iH" and item.get("source_type") == "public_agency_contest"
+        ),
         "policy_excluded_db_items": policy_excluded,
     }
 
@@ -258,8 +283,11 @@ def write_reports(report: dict[str, Any]) -> tuple[Path, Path]:
         f"- current_by_source: {report['current_by_source']}",
         f"- current_by_type: {report['current_by_type']}",
         f"- lh_public_count: {report['lh_public_count']}",
+        f"- gh_public_count: {report['gh_public_count']}",
+        f"- ih_public_count: {report['ih_public_count']}",
+        f"- public_contest_count_by_source: {report['public_contest_count_by_source']}",
         f"- unexpected_records: {len(report['unexpected_records'])}",
-        f"- lh_public_violations: {len(report['lh_public_violations'])}",
+        f"- public_contest_violations: {len(report['public_contest_violations'])}",
         "",
         "## Added",
     ]
@@ -299,14 +327,16 @@ def main() -> int:
     print(f"removed_by_source={report['removed_by_source']}")
     print(f"unexpected_records={len(report['unexpected_records'])}")
     print(f"lh_public_count={report['lh_public_count']}")
-    print(f"lh_public_violations={len(report['lh_public_violations'])}")
+    print(f"gh_public_count={report['gh_public_count']}")
+    print(f"ih_public_count={report['ih_public_count']}")
+    print(f"public_contest_violations={len(report['public_contest_violations'])}")
     print(f"report_path={json_path.relative_to(ROOT)}")
     print(f"report_md_path={md_path.relative_to(ROOT)}")
     if report["unexpected_records"]:
         print("Unexpected public records detected.")
         return 1
-    if report["lh_public_violations"]:
-        print("LH public contest validation failed.")
+    if report["public_contest_violations"]:
+        print("Public contest validation failed.")
         return 1
     return 0
 

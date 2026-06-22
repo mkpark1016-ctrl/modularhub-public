@@ -23,6 +23,17 @@ from src.public_data_policy import guard_result, merge_public_items, payload_ite
 OUTPUT_DIR = ROOT / "frontend" / "public" / "data"
 BUSINESS_SOURCES = {"나라장터", "G2B", "조달청", "D2B", "국방조달", "방위사업청"}
 BUSINESS_TYPES = {"bid", "procurement_plan", "public_agency_contest"}
+PUBLIC_AGENCY_CONTEST_SOURCES = {"LH", "GH", "iH"}
+PUBLIC_AGENCY_CONTEST_COLLECTORS = {
+    "LH": ("LHPublicHousingContestCollector", "LH 공모안내"),
+    "GH": ("GHPublicHousingContestCollector", "GH 공모 관련사항"),
+    "iH": ("IHPublicHousingContestCollector", "iH 공지사항"),
+}
+PUBLIC_AGENCY_BOARD_URLS = {
+    "LH": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
+    "GH": "https://www.gh.or.kr/gh/bid-announcement.do",
+    "iH": "https://www.ih.co.kr/main/customer/notification/notice.jsp",
+}
 MODULAR_TERMS = ("모듈러", "osc", "공업화주택", "프리패브", "프리팹")
 SENSITIVE_KEY_PARTS = (
     "servicekey",
@@ -149,9 +160,10 @@ def manual_check(row: dict[str, Any]) -> dict[str, str]:
     bid_order = clean_text(row.get("source_record_no") or row.get("bid_order"))
     title = clean_text(row.get("title"))
     organization = clean_text(row.get("organization"))
-    if source == "LH" and source_type == "public_agency_contest":
-        site_name, site_url = "LH 공모안내", "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034"
-        guide = "LH 공모안내 게시판에서 공모명 또는 원문 식별번호(list_no)로 상세 공고와 첨부파일을 확인하세요."
+    if source_type == "public_agency_contest" and source in PUBLIC_AGENCY_CONTEST_SOURCES:
+        site_name = PUBLIC_AGENCY_CONTEST_COLLECTORS.get(source, ("", f"{source} 공식 게시판"))[1]
+        site_url = PUBLIC_AGENCY_BOARD_URLS.get(source, "")
+        guide = f"{site_name}에서 공모명 또는 원문 식별번호로 상세 공고와 첨부파일을 확인하세요."
     elif source in {"나라장터", "G2B", "조달청"}:
         site_name, site_url = "나라장터", "https://www.g2b.go.kr"
         guide = "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
@@ -175,16 +187,25 @@ def business_item(row: dict[str, Any], details: dict[int, dict[str, Any]]) -> di
     item_id = int(row["id"])
     detail_row = details.get(item_id)
     source_type = clean_text(row.get("source_type"))
+    source_name = clean_text(row.get("source_name"))
     record_no = clean_text(row.get("bid_no") or row.get("source_record_id"))
     detail_payload = parse_payload(detail_row.get("detail_payload_json")) if detail_row else None
     detail = detail_payload if isinstance(detail_payload, dict) else {}
+    source_record_id = clean_text(row.get("source_record_id"))
+    source_code = clean_text(detail.get("source_code"))
+    if not source_code and source_type == "public_agency_contest":
+        source_code = {"LH": "LH_CONTEST", "GH": "GH_CONTEST", "iH": "IH_NOTICE"}.get(source_name, "")
+    public_id: int | str = item_id
+    if source_type == "public_agency_contest" and source_name in {"GH", "iH"} and source_record_id:
+        public_id = f"{source_name.lower()}_contest:{source_record_id}"
     item_type = "민간사업자 공모" if source_type == "public_agency_contest" else (
         "발주계획" if source_type == "procurement_plan" else "입찰공고"
     )
-    return {
-        "id": item_id,
-        "source": clean_text(row.get("source_name")),
-        "source_name": clean_text(row.get("source_name")),
+    original_url = exact_original_url(row)
+    item = {
+        "id": public_id,
+        "source": source_name,
+        "source_name": source_name,
         "source_type": source_type,
         "type": item_type,
         "title": clean_text(row.get("title")),
@@ -194,7 +215,7 @@ def business_item(row: dict[str, Any], details: dict[int, dict[str, Any]]) -> di
         "business_subtype": clean_text(row.get("business_subtype")),
         "notice_status": clean_text(row.get("notice_status")),
         "notice_stage": clean_text(row.get("notice_status") or detail.get("notice_stage")),
-        "source_record_id": clean_text(row.get("source_record_id")),
+        "source_record_id": source_record_id,
         "source_record_no": clean_text(row.get("source_record_no")),
         "plan_no": record_no if source_type == "procurement_plan" else "",
         "bid_no": record_no,
@@ -220,10 +241,15 @@ def business_item(row: dict[str, Any], details: dict[int, dict[str, Any]]) -> di
         "attachments": detail.get("attachments") or [],
         "related_group_key": clean_text(detail.get("related_group_key")),
         "exact_link_verified": bool(row.get("exact_url_verified")),
-        "external_original_url": exact_original_url(row),
+        "external_original_url": original_url,
         "manual_check": manual_check(row),
         "detail": detail_payload,
     }
+    if source_type == "public_agency_contest":
+        item["source_code"] = source_code
+        item["link_verified"] = bool(row.get("exact_url_verified"))
+        item["original_url"] = original_url
+    return item
 
 
 def news_item(row: dict[str, Any]) -> dict[str, Any]:
@@ -280,6 +306,18 @@ def load_git_head_payload(name: str) -> dict[str, Any] | None:
     if isinstance(payload, list):
         return {"items": payload}
     return payload if isinstance(payload, dict) else {"items": []}
+
+
+def normalize_existing_public_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    normalized: list[dict[str, Any]] = []
+    contest_only_fields = {"source_code", "link_verified", "original_url"}
+    for item in items:
+        copied = dict(item)
+        if clean_text(copied.get("source_type")) != "public_agency_contest":
+            for field in contest_only_fields:
+                copied.pop(field, None)
+        normalized.append(copied)
+    return normalized
 
 
 def procurement_plan_collection_status(logs: Any) -> tuple[str, dict[str, str], str | None]:
@@ -349,12 +387,66 @@ def collector_public_status(
     return "success", f"정상 호출되어 {exported_count}건을 공개 데이터에 반영했습니다."
 
 
+def public_agency_contest_public_meta(
+    logs: Any,
+    business: list[dict[str, Any]],
+    *,
+    source: str,
+) -> dict[str, Any]:
+    collector_name, label = PUBLIC_AGENCY_CONTEST_COLLECTORS[source]
+    items = [
+        item
+        for item in business
+        if item.get("source") == source and item.get("source_type") == "public_agency_contest"
+    ]
+    count = len(items)
+    exact_link_count = sum(1 for item in items if item.get("external_original_url"))
+    log = latest_log(logs, collector_name, "public_agency_contest")
+    stats: dict[str, Any] = {}
+    if log and clean_text(log.get("error_message")):
+        try:
+            parsed_stats = json.loads(clean_text(log.get("error_message")))
+            if isinstance(parsed_stats, dict):
+                stats = sanitize_payload(parsed_stats)
+        except json.JSONDecodeError:
+            stats = {"message": sanitize_string(clean_text(log.get("error_message")))}
+
+    if not log:
+        status = "not_collected" if count == 0 else "previous_data_retained"
+        message = f"{label} 수집 기록이 아직 없습니다."
+    elif clean_text(log.get("status")) in {"success", "partial_warning"}:
+        status = "success" if count > 0 else "success_no_public_match"
+        message = f"{label} {count}건을 공개 사업정보에 반영했습니다."
+    else:
+        status = "failed"
+        message = sanitize_string(clean_text(log.get("error_message"))) or f"{label} 수집에 실패했습니다."
+
+    prefix = source.lower().replace("ih", "ih")
+    return {
+        f"{prefix}_contest_status": status,
+        f"{prefix}_contest_message": message,
+        f"{prefix}_contest_last_attempt": clean_text((log or {}).get("started_at")),
+        f"{prefix}_contest_last_success": clean_text((log or {}).get("finished_at"))
+        if log and clean_text(log.get("status")) in {"success", "partial_warning"}
+        else "",
+        f"{prefix}_contest_scanned_count": scalar(stats.get("scanned")),
+        f"{prefix}_contest_matched_count": scalar(stats.get("matched")),
+        f"{prefix}_contest_opportunity_count": scalar(stats.get("opportunity")),
+        f"{prefix}_contest_inserted_count": scalar(stats.get("inserted")),
+        f"{prefix}_contest_updated_count": scalar(stats.get("updated")),
+        f"{prefix}_contest_public_count": count,
+        f"{prefix}_contest_exact_link_count": exact_link_count,
+        f"{prefix}_contest_attachment_count": scalar(stats.get("attachment_count")),
+        f"{prefix}_contest_failure_reason": "; ".join(stats.get("errors") or []),
+    }
+
+
 def include_business_row(row: dict[str, Any]) -> bool:
     source_name = clean_text(row.get("source_name"))
     source_type = clean_text(row.get("source_type"))
     if source_type == "public_agency_contest":
         return (
-            source_name == "LH"
+            source_name in PUBLIC_AGENCY_CONTEST_SOURCES
             and clean_text(row.get("business_type")) == "private_participation_public_housing"
             and int(row.get("is_operating_scope") or 0) == 1
         )
@@ -376,6 +468,8 @@ def main() -> int:
     baseline_news_payload = load_git_head_payload("news.json") or previous_news_payload
     baseline_business = payload_items(baseline_business_payload)
     baseline_news = payload_items(baseline_news_payload)
+    previous_business = normalize_existing_public_items(previous_business)
+    baseline_business = normalize_existing_public_items(baseline_business)
 
     df = load_items_dataframe()
     if df.empty:
@@ -450,6 +544,8 @@ def main() -> int:
     else:
         lh_status = "failed"
         lh_message = sanitize_string(clean_text(lh_log.get("error_message"))) or "LH 공모 수집에 실패했습니다."
+    gh_contest_meta = public_agency_contest_public_meta(logs, business, source="GH")
+    ih_contest_meta = public_agency_contest_public_meta(logs, business, source="iH")
     if D2B_LEGACY_API_ENABLED:
         d2b_log = latest_log(logs, "D2B")
         if d2b_log and clean_text(d2b_log.get("status")) == "success":
@@ -476,6 +572,10 @@ def main() -> int:
         warnings.append(f"D2B: {d2b_message}")
     if lh_status == "failed":
         warnings.append(f"LH 민간사업자 공모: {lh_message}")
+    if gh_contest_meta.get("gh_contest_status") == "failed":
+        warnings.append(f"GH 민간사업자 공모: {gh_contest_meta.get('gh_contest_message')}")
+    if ih_contest_meta.get("ih_contest_status") == "failed":
+        warnings.append(f"iH 민간사업자 공모: {ih_contest_meta.get('ih_contest_message')}")
     if guard_status in {"blocked", "warning", "override"}:
         warnings.append(f"공개 데이터 보호: {guard_message}")
     workflow_status = "warning" if warnings else "success"
@@ -499,6 +599,8 @@ def main() -> int:
         "lh_contest_public_count": lh_contest_count,
         "lh_contest_exact_link_count": lh_exact_link_count,
         "lh_contest_failure_reason": "; ".join(lh_stats.get("errors") or []),
+        **gh_contest_meta,
+        **ih_contest_meta,
         "workflow_last_run_status": workflow_status,
         "warnings": warnings,
         "previous_business_count": len(baseline_business),

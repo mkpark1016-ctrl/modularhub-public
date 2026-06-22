@@ -76,7 +76,7 @@ function HomePage() {
       <section className="intro">
         <p className="eyebrow">모듈러 건축 정보 플랫폼</p>
         <h1>사업기회와 시장 뉴스를<br />한 흐름으로 확인하세요.</h1>
-        <p>나라장터와 D2B의 모듈러 사업정보, 네이버 뉴스 원문을 한곳에 정리합니다.</p>
+        <p>나라장터·D2B 사업정보와 LH·GH·iH 민간사업자 공모, 네이버 뉴스 원문을 한곳에 정리합니다.</p>
         <div className="intro-actions">
           <Link className="button primary" to="/business">사업정보 보기</Link>
           <Link className="button secondary" to="/news">뉴스정보 보기</Link>
@@ -85,7 +85,7 @@ function HomePage() {
       <section className="category-grid" aria-label="서비스 카테고리">
         <Link className="category-panel" to="/business">
           <Building2 size={26} />
-          <div><strong>사업정보</strong><span>나라장터 입찰, D2B 입찰·조달계획</span></div>
+          <div><strong>사업정보</strong><span>나라장터·D2B 입찰과 공공기관 민간사업자 공모</span></div>
           <b>{data?.business_count ?? "-"}건</b>
         </Link>
         <Link className="category-panel" to="/news">
@@ -181,7 +181,7 @@ function ListingPage({ type }) {
   }
   return (
     <Layout>
-      <section className="page-heading"><p className="eyebrow">{isBusiness ? "BUSINESS" : "NEWS"}</p><h1>{isBusiness ? "모듈러 사업정보" : "모듈러 뉴스정보"}</h1><p>{isBusiness ? "나라장터와 D2B에서 공고명 또는 사업명에 모듈러가 포함된 정보를 제공합니다." : "원문 링크가 확인된 모듈러 관련 뉴스를 제공합니다."}</p></section>
+      <section className="page-heading"><p className="eyebrow">{isBusiness ? "BUSINESS" : "NEWS"}</p><h1>{isBusiness ? "모듈러 사업정보" : "모듈러 뉴스정보"}</h1><p>{isBusiness ? "나라장터·D2B 사업정보와 LH·GH·iH 민간사업자 공모를 함께 제공합니다." : "원문 링크가 확인된 모듈러 관련 뉴스를 제공합니다."}</p></section>
       <div className="content-layout">
         <aside className="filters"><h2>검색 조건</h2><SearchBar value={query} onChange={setQuery} placeholder={isBusiness ? "공고명, 기관, 공고번호" : "뉴스 제목, 요약"} /><label>출처<select value={source} onChange={(event) => setSource(event.target.value)}>{sources.map((name) => <option key={name} value={name}>{displaySource(name)}</option>)}</select></label>{isBusiness ? <><label>유형<select value={kind} onChange={(event) => setKind(event.target.value)}><option>전체</option><option>입찰공고</option><option>발주계획</option><option>민간사업자 공모</option></select></label><label className="check-row"><input type="checkbox" checked={openOnly} onChange={(event) => setOpenOnly(event.target.checked)} />마감 전 공고만</label></> : <label>기간<select value={newsDays} onChange={(event) => setNewsDays(event.target.value)}><option>전체</option><option value="7">최근 7일</option><option value="30">최근 30일</option><option value="90">최근 90일</option></select></label>}<p className="filter-note">총 {filtered.length}건</p></aside>
         <section className="results" aria-live="polite">

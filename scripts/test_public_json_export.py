@@ -61,6 +61,14 @@ def main() -> int:
         "lh_contest_message",
         "lh_contest_public_count",
         "lh_contest_exact_link_count",
+        "gh_contest_status",
+        "gh_contest_message",
+        "gh_contest_public_count",
+        "gh_contest_exact_link_count",
+        "ih_contest_status",
+        "ih_contest_message",
+        "ih_contest_public_count",
+        "ih_contest_exact_link_count",
         "data_policy",
     ):
         require(field in meta, f"meta status field is missing: {field}")
@@ -85,8 +93,15 @@ def main() -> int:
             require("plan_no" in item, "procurement plan number field is missing")
         if item["source_type"] == "public_agency_contest":
             require(item.get("type") == "민간사업자 공모", "public contest label mismatch")
-            require(item.get("source") == "LH", "10.8-B only exports LH public agency contests")
-            require(item.get("source_record_id") or item.get("bid_no"), "LH contest source record id is missing")
+            require(item.get("source") in {"LH", "GH", "iH"}, "unexpected public agency contest source")
+            require(item.get("source_record_id") or item.get("bid_no"), "public contest source record id is missing")
+            require(item.get("business_type") == "private_participation_public_housing", "public contest business_type mismatch")
+            expected_source_code = {"LH": "LH_CONTEST", "GH": "GH_CONTEST", "iH": "IH_NOTICE"}[item["source"]]
+            require(item.get("source_code") == expected_source_code, "public contest source_code mismatch")
+            if item["source"] == "GH":
+                require(item.get("id") == f"gh_contest:{item.get('source_record_id')}", "GH public contest id mismatch")
+            if item["source"] == "iH":
+                require(item.get("id") == f"ih_contest:{item.get('source_record_id')}", "iH public contest id mismatch")
     for item in news["items"]:
         require(item.get("original_url"), "news original_url is missing")
         require(item.get("source_type") is None, "news contract must not expose unrelated source_type")

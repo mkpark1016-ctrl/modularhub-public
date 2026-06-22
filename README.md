@@ -1582,3 +1582,51 @@ GitHub Actions:
 - LH 수집 실패는 workflow 전체 실패로 처리하지 않고 `meta.json` warning 상태로 반영합니다.
 - 공개 JSON export, 보안 테스트, 축소 방지 테스트가 통과할 때만 JSON 변경분을 commit/push합니다.
 - Netlify와 Vercel은 동일한 `frontend/public/data/*.json`을 배포합니다.
+
+## 10.8-C GH·iH 민간참여 공공주택 공모 수집
+
+GH와 iH 공식 게시판의 민간참여 공공주택건설사업 민간사업자 공모를 LH와 같은 `public_agency_contest` 사업정보로 통합합니다.
+
+대상 게시판:
+
+- GH 공모 관련사항: `https://www.gh.or.kr/gh/bid-announcement.do`
+- iH 공지사항: `https://www.ih.co.kr/main/customer/notification/notice.jsp`
+
+수집 기준:
+
+- 제목 또는 본문이 `민간참여 공공주택건설사업`, `민간참여 공공주택사업`, `민간사업자 공모/재공모` 조건과 공공주택 문맥을 함께 만족해야 합니다.
+- `pre_notice`, `main_notice`, `re_notice`, `correction` 단계만 기본 공개 사업기회로 내보냅니다.
+- `update`, `result`, `unknown` 단계는 DB에는 보존될 수 있지만 기본 공개 사업기회 목록에서는 제외됩니다.
+- 공고문에 모듈러, OSC, Off-Site, 공업화주택, 프리패브, DfMA 등 직접 근거가 없으면 `review_candidate`로 표시합니다.
+- `review_candidate`는 “모듈러 적용 검토 대상”이며, 공고상 모듈러 적용 확정이 아닙니다.
+
+정확 원문 및 첨부파일:
+
+- GH 원문은 `gh.or.kr` 도메인과 `articleNo`가 포함된 상세 URL만 exact로 저장합니다.
+- iH 원문은 `ih.co.kr` 도메인과 `msg_seq`가 포함된 상세 URL만 exact로 저장합니다.
+- 목록 URL, 다운로드 URL, 상위 페이지는 공식 원문으로 표시하지 않습니다.
+- PDF, HWP, HWPX, ZIP, XLSX 첨부파일은 파일명, 형식, 공식 다운로드 URL만 저장합니다.
+
+로컬 실행:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\collect_gh_public_housing_contests.py --dry-run
+.\.venv\Scripts\python.exe scripts\collect_ih_public_housing_contests.py --dry-run
+.\.venv\Scripts\python.exe scripts\test_gh_public_housing_contest_collector.py
+.\.venv\Scripts\python.exe scripts\test_ih_public_housing_contest_collector.py
+.\.venv\Scripts\python.exe scripts\collect_gh_public_housing_contests.py --apply
+.\.venv\Scripts\python.exe scripts\collect_ih_public_housing_contests.py --apply
+.\.venv\Scripts\python.exe scripts\export_public_json.py
+.\.venv\Scripts\python.exe scripts\test_public_json_export.py
+.\.venv\Scripts\python.exe scripts\refuse_suspicious_public_data_shrink.py
+.\.venv\Scripts\python.exe scripts\diagnose_public_json_counts.py
+```
+
+GitHub Actions:
+
+- `update-public-data.yml`에서 LH 수집 후 GH, iH 공모 수집을 순차 실행합니다.
+- GH/iH 수집에는 별도 Secret이 필요하지 않습니다.
+- 기관별 수집 실패는 warning으로 기록하고 기존 공개 JSON을 보존합니다.
+- 공개 JSON export, 축소 방지, 보안/계약 테스트, frontend build가 통과해야만 변경된 JSON을 commit/push합니다.
+- Netlify와 Vercel은 같은 `frontend/public/data/*.json`을 배포합니다.

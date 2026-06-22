@@ -57,6 +57,16 @@ jobs:
             "LH_CONTEST_LOOKBACK_DAYS=730" \
             "LH_CONTEST_REQUEST_INTERVAL_SECONDS=1.5" \
             "LH_CONTEST_TIMEOUT_SECONDS=20" \
+            "GH_CONTEST_ENABLED=true" \
+            "GH_CONTEST_MAX_PAGES=10" \
+            "GH_CONTEST_LOOKBACK_DAYS=730" \
+            "GH_CONTEST_REQUEST_INTERVAL_SECONDS=1.5" \
+            "GH_CONTEST_TIMEOUT_SECONDS=20" \
+            "IH_CONTEST_ENABLED=true" \
+            "IH_CONTEST_MAX_PAGES=10" \
+            "IH_CONTEST_LOOKBACK_DAYS=730" \
+            "IH_CONTEST_REQUEST_INTERVAL_SECONDS=1.5" \
+            "IH_CONTEST_TIMEOUT_SECONDS=20" \
             "NAVER_NEWS_LOOKBACK_DAYS=14" \
             "NAVER_NEWS_DISPLAY=50" > .env
 
@@ -118,6 +128,40 @@ jobs:
           fi
           exit 0
 
+      - name: Collect GH public housing contests
+        run: |
+          if [ -f scripts/collect_gh_public_housing_contests.py ]; then
+            set +e
+            command="python scripts/collect_gh_public_housing_contests.py --apply"
+            echo "Running: $command"
+            $command
+            code=$?
+            echo "command=$command exit_code=$code"
+            if [ "$code" -ne 0 ]; then
+              echo "::warning::GH 민간참여 공공주택 공모 수집 실패. 기존 공개 JSON은 유지됩니다. exit_code=$code"
+            fi
+          else
+            echo "GH public housing contest collector is not present; continuing."
+          fi
+          exit 0
+
+      - name: Collect iH public housing contests
+        run: |
+          if [ -f scripts/collect_ih_public_housing_contests.py ]; then
+            set +e
+            command="python scripts/collect_ih_public_housing_contests.py --apply"
+            echo "Running: $command"
+            $command
+            code=$?
+            echo "command=$command exit_code=$code"
+            if [ "$code" -ne 0 ]; then
+              echo "::warning::iH 민간참여 공공주택 공모 수집 실패. 기존 공개 JSON은 유지됩니다. exit_code=$code"
+            fi
+          else
+            echo "iH public housing contest collector is not present; continuing."
+          fi
+          exit 0
+
       - name: Collect known important G2B bids
         run: |
           set +e
@@ -154,6 +198,9 @@ jobs:
       - name: Diagnose public JSON counts
         run: python scripts/diagnose_public_json_counts.py
 
+      - name: Audit public JSON delta
+        run: python scripts/audit_public_json_delta.py --base git-head --current frontend/public/data/business.json
+
       - name: Protect cumulative public JSON
         id: publish_guard
         run: |
@@ -180,6 +227,21 @@ jobs:
           echo "Running: python scripts/test_procurement_plan_pipeline.py"
           python scripts/test_procurement_plan_pipeline.py
           echo "command=test_procurement_plan_pipeline.py exit_code=0"
+
+      - name: Set up Node
+        if: steps.publish_guard.outputs.publish_ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build frontend
+        if: steps.publish_guard.outputs.publish_ready == 'true'
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
 
       - name: Commit updated public JSON
         if: steps.publish_guard.outputs.publish_ready == 'true'

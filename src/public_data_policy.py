@@ -104,7 +104,13 @@ def merge_record(existing: dict[str, Any], fresh: dict[str, Any]) -> dict[str, A
                 merged[key] = {**merged[key], **value}
             else:
                 merged[key] = value
-    if _nonempty(original_id):
+    if (
+        clean_text(fresh.get("source_type")) == "public_agency_contest"
+        and clean_text(fresh.get("source")) in {"GH", "iH"}
+        and _nonempty(fresh.get("id"))
+    ):
+        merged["id"] = fresh["id"]
+    elif _nonempty(original_id):
         merged["id"] = original_id
     return merged
 
