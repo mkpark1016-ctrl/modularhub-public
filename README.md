@@ -1712,3 +1712,25 @@ cd /d "D:\backup01\Documents\New project 2"
 - 금지 작업: DB apply, public JSON export, commit, push
 
 검증 결과는 `sh-live-verification-<run_number>` artifact에 `report.json`, `report.md`, `stdout.log`로 저장됩니다. 정상적인 0건 상태는 “SH 수집 성공, 현재 공개 가능한 민간참여 공공주택 공모 없음”으로 표시됩니다.
+
+## Vercel public JSON verification
+
+공개 JSON 검증은 Vercel Preview deployment URL이 아니라 Production alias를 기준으로 수행합니다.
+
+- Production alias: `https://modularhub-public.vercel.app`
+- 검증 대상:
+  - `https://modularhub-public.vercel.app/data/business.json`
+  - `https://modularhub-public.vercel.app/data/news.json`
+  - `https://modularhub-public.vercel.app/data/meta.json`
+
+Vercel deployment target URL이 `vercel.com/login` 또는 SSO 페이지로 리다이렉트되면 Deployment Protection이 적용된 Preview/Deployment URL을 호출한 것입니다. 이 경우 정적 JSON 라우팅 오류로 판단하지 않고 Production alias에서 다시 확인합니다.
+
+검증 명령:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\verify_deployed_public_json.py --base-url https://modularhub-public.vercel.app
+.\.venv\Scripts\python.exe scripts\build_sh_production_readiness_report.py
+```
+
+SH 운영 전환은 `Verify SH public housing contests` workflow의 live dry-run 결과가 성공으로 확인된 뒤에만 진행합니다. workflow artifact 또는 실행 결과를 확인할 수 없으면 `production_ready=false`로 보고하고 운영 `Update public data` workflow에는 SH apply를 연결하지 않습니다.

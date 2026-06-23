@@ -19,6 +19,7 @@ data/*.sqlite3
 
 # Logs
 logs/
+artifacts/
 *.log
 
 # Debug / temporary exports
