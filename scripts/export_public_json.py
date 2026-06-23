@@ -34,7 +34,7 @@ PUBLIC_AGENCY_BOARD_URLS = {
     "LH": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
     "GH": "https://www.gh.or.kr/gh/bid-announcement.do",
     "iH": "https://www.ih.co.kr/main/customer/notification/notice.jsp",
-    "SH": "https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList",
+    "SH": "https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do",
 }
 MODULAR_TERMS = ("모듈러", "osc", "공업화주택", "프리패브", "프리팹")
 SENSITIVE_KEY_PARTS = (

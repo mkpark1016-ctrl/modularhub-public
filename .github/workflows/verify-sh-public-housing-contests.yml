@@ -31,6 +31,9 @@ jobs:
       - name: Run SH probe fixture tests
         run: python scripts/test_sh_public_housing_contest_probe.py
 
+      - name: Run SH live verifier contract tests
+        run: python scripts/test_sh_live_verifier_contract.py
+
       - name: Compile Python sources
         run: python -m compileall src scripts
 
@@ -43,8 +46,8 @@ jobs:
         with:
           name: sh-live-verification-${{ github.run_number }}
           path: |
-            artifacts/sh-live-verification/report.json
-            artifacts/sh-live-verification/report.md
-            artifacts/sh-live-verification/stdout.log
+            artifacts/sh_live_verification/report.json
+            artifacts/sh_live_verification/report.md
+            artifacts/sh_live_verification/stdout.log
           if-no-files-found: warn
           retention-days: 7

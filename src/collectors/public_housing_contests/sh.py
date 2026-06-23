@@ -51,7 +51,7 @@ ORGANIZATION = "서울주택도시개발공사"
 DISPLAY_TYPE = "민간사업자 공모"
 OPERATING_SCOPE = "sh_public_housing_contest"
 PORTAL_NAME = "SH 사업발주·공지"
-BOARD_URL = LANDING_URL
+BOARD_URL = BID_LIST_URL
 COLLECTOR_NAME = "SHPublicHousingContestCollector"
 DEFAULT_TIMEOUT_SECONDS = 20
 DEFAULT_REQUEST_INTERVAL_SECONDS = 1.0
@@ -155,9 +155,28 @@ class SHCollectStats:
     response_format: str = "html"
     status: str = "success_no_matches"
     source_url: str = BOARD_URL
+    list_url: str = BOARD_URL
     final_url: str = ""
     http_status: int | None = None
+    page_title: str = ""
+    detected_page_type: str = "unknown_page"
+    table_found: bool = False
+    empty_list_message_found: bool = False
+    row_count: int = 0
+    rows_with_title: int = 0
+    rows_with_identifier: int = 0
+    rows_with_posted_date: int = 0
+    rows_with_href: int = 0
+    rows_with_onclick: int = 0
+    rows_with_seq: int = 0
+    rows_with_bid_number: int = 0
+    parse_success_ratio: float = 0.0
+    detail_candidate_count: int = 0
+    detail_fetch_attempted_count: int = 0
+    detail_fetch_success_count: int = 0
+    detail_fetch_failed_count: int = 0
     parser_mismatch: bool = False
+    parser_mismatch_reasons: list[str] = field(default_factory=list)
     failure_reason: str = ""
     scanned: int = 0
     sh_notice_count: int = 0
@@ -192,14 +211,35 @@ class SHCollectStats:
             "response_format": self.response_format,
             "status": self.status,
             "source_url": self.source_url,
+            "list_url": self.list_url,
             "final_url": self.final_url,
             "http_status": self.http_status,
+            "page_title": self.page_title,
+            "detected_page_type": self.detected_page_type,
+            "table_found": self.table_found,
+            "empty_list_message_found": self.empty_list_message_found,
+            "row_count": self.row_count,
+            "rows_with_title": self.rows_with_title,
+            "rows_with_identifier": self.rows_with_identifier,
+            "rows_with_posted_date": self.rows_with_posted_date,
+            "rows_with_href": self.rows_with_href,
+            "rows_with_onclick": self.rows_with_onclick,
+            "rows_with_seq": self.rows_with_seq,
+            "rows_with_bid_number": self.rows_with_bid_number,
+            "parse_success_ratio": self.parse_success_ratio,
+            "detail_candidate_count": self.detail_candidate_count,
+            "detail_fetch_attempted_count": self.detail_fetch_attempted_count,
+            "detail_fetch_success_count": self.detail_fetch_success_count,
+            "detail_fetch_failed_count": self.detail_fetch_failed_count,
             "parser_mismatch": self.parser_mismatch,
+            "parser_mismatch_reasons": self.parser_mismatch_reasons,
             "failure_reason": self.failure_reason,
             "scanned": self.scanned,
+            "scanned_count": self.scanned,
             "sh_notice_count": self.sh_notice_count,
             "g2b_linked_count": self.g2b_linked_count,
             "candidate_count": self.candidate_count,
+            "keyword_candidate_count": self.candidate_count,
             "confirmed_count": self.confirmed_count,
             "review_required_count": self.review_required_count,
             "result_count": self.result_count,
@@ -389,12 +429,85 @@ def official_attachments(raw: list[dict[str, Any]]) -> list[dict[str, str]]:
     return result
 
 
+def extract_page_title(page_html: str) -> str:
+    match = re.search(r"<title[^>]*>(.*?)</title>", page_html or "", flags=re.IGNORECASE | re.DOTALL)
+    return clean_text(re.sub(r"<[^>]+>", " ", match.group(1))) if match else ""
+
+
+def is_blocked_page(page_html: str) -> bool:
+    lowered = (page_html or "").lower()
+    return any(token in lowered for token in ("captcha", "access denied", "forbidden", "unauthorized"))
+
+
+def empty_list_message_found(page_html: str) -> bool:
+    text = clean_text(re.sub(r"<[^>]+>", " ", page_html or "")).lower()
+    tokens = (
+        "no data",
+        "no results",
+        "\uc870\ud68c\ub41c \ub370\uc774\ud130\uac00 \uc5c6",
+        "\ub4f1\ub85d\ub41c \uac8c\uc2dc\ubb3c\uc774 \uc5c6",
+        "\uac80\uc0c9\uacb0\uacfc\uac00 \uc5c6",
+    )
+    return any(token in text for token in tokens)
+
+
+def detect_page_type(page_html: str, final_url: str, status_code: int | None = 200) -> str:
+    if status_code and status_code >= 400:
+        return "error_page"
+    lowered_url = (final_url or "").lower()
+    lowered = (page_html or "").lower()
+    if is_blocked_page(page_html) or "login" in lowered_url and "i-sh.co.kr" in lowered_url:
+        return "blocked_page"
+    if "bidblanclist.do" in lowered_url or "openbidblancdetail" in lowered or "bidntcenm" in lowered:
+        return "sh_bid_list"
+    if "instopenresultcdlist" in lowered_url:
+        return "sh_result_list"
+    if "submain4.do" in lowered_url:
+        return "menu_wrapper"
+    if empty_list_message_found(page_html):
+        return "empty_list"
+    if parse_landing_notice_links(page_html, final_url):
+        return "sh_notice_list"
+    return "unknown_page"
+
+
+def bid_list_health(page_html: str, final_url: str, parsed_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    row_candidates = re.findall(r"<tr[^>]*>\s*<td[^>]*>\s*\d+", page_html or "", flags=re.IGNORECASE)
+    onclick_candidates = re.findall(
+        r"openBidblancDetail\('([^']+)'\s*,\s*'([^']+)'\)",
+        page_html or "",
+        flags=re.IGNORECASE,
+    )
+    seq_candidates = re.findall(r"seq=(\d+)", page_html or "", flags=re.IGNORECASE)
+    rows_with_title = sum(1 for row in parsed_rows if clean_text(row.get("title")))
+    rows_with_posted_date = sum(1 for row in parsed_rows if parse_date(clean_text(row.get("posted_at"))))
+    row_count = max(len(row_candidates), len(parsed_rows))
+    detail_candidates = len(onclick_candidates) + len(seq_candidates)
+    ratio = round(rows_with_title / row_count, 3) if row_count else 0.0
+    return {
+        "page_title": extract_page_title(page_html),
+        "detected_page_type": detect_page_type(page_html, final_url),
+        "table_found": bool(re.search(r"<table\b", page_html or "", flags=re.IGNORECASE)),
+        "empty_list_message_found": empty_list_message_found(page_html),
+        "row_count": row_count,
+        "rows_with_title": rows_with_title,
+        "rows_with_identifier": sum(1 for row in parsed_rows if clean_text(row.get("source_record_id"))),
+        "rows_with_posted_date": rows_with_posted_date,
+        "rows_with_href": len(re.findall(r"<a\b[^>]*href=", page_html or "", flags=re.IGNORECASE)),
+        "rows_with_onclick": len(onclick_candidates),
+        "rows_with_seq": len(seq_candidates),
+        "rows_with_bid_number": len(onclick_candidates),
+        "parse_success_ratio": ratio,
+        "detail_candidate_count": detail_candidates,
+    }
+
+
 def load_sh_source() -> dict[str, Any]:
     for source in load_sources():
         if source.get("source_code") == SOURCE_CODE:
             return source
     return {
-        "list_url": LANDING_URL,
+        "list_url": BID_LIST_URL,
         "request_interval_seconds": DEFAULT_REQUEST_INTERVAL_SECONDS,
         "allowed_domains": sorted(OFFICIAL_HOSTS),
     }
@@ -410,10 +523,17 @@ class SHPublicHousingContestCollector:
         end_date: str | None = None,
         request_interval_seconds: float | None = None,
         timeout_seconds: int | None = None,
+        list_url: str | None = None,
         verbose: bool = False,
         db_path: Path = DB_PATH,
     ) -> None:
         self.source = load_sh_source()
+        self.list_url = (
+            list_url
+            or os.getenv("SH_CONTEST_LIST_URL")
+            or str(self.source.get("list_url") or "")
+            or BID_LIST_URL
+        )
         self.max_pages = max_pages or int(os.getenv("SH_CONTEST_MAX_PAGES", "3"))
         self.lookback_days = lookback_days or int(os.getenv("SH_CONTEST_LOOKBACK_DAYS", "1825"))
         self.start_date = start_date
@@ -463,26 +583,34 @@ class SHPublicHousingContestCollector:
 
     def collect(self) -> SHCollectStats:
         stats = SHCollectStats()
-        landing = self.fetch(str(self.source.get("list_url") or LANDING_URL))
+        landing = self.fetch(self.list_url)
         stats.source_url = landing.url
         stats.final_url = landing.final_url
         stats.http_status = landing.status_code
+        stats.page_title = extract_page_title(landing.text)
+        stats.detected_page_type = detect_page_type(landing.text, landing.final_url, landing.status_code)
         if landing.status_code != 200 or not landing.text:
-            stats.status = "failed"
-            stats.failure_reason = "http_error" if landing.status_code else "network_error"
+            stats.status = "http_error" if landing.status_code else "network_error"
+            stats.failure_reason = stats.status
             stats.failed += 1
             stats.errors.append(f"landing: status={landing.status_code} error={landing.error}")
             return stats
         if not host_allowed(landing.final_url, self.allowed_domains):
-            stats.status = "failed"
+            stats.status = "blocked"
             stats.failure_reason = "unexpected_domain"
             stats.failed += 1
             stats.errors.append(f"landing domain not allowed: {landing.final_url}")
             return stats
+        if stats.detected_page_type == "blocked_page":
+            stats.status = "blocked"
+            stats.failure_reason = "blocked"
+            stats.failed += 1
+            return stats
 
-        notices = parse_landing_notice_links(landing.text, landing.final_url)
+        notices = [] if stats.detected_page_type == "sh_bid_list" else parse_landing_notice_links(landing.text, landing.final_url)
         stats.sh_notice_count = len(notices)
-        bid_list_url = find_bid_list_url(landing.text, landing.final_url) or BID_LIST_URL
+        bid_list_url = landing.final_url if stats.detected_page_type == "sh_bid_list" else find_bid_list_url(landing.text, landing.final_url) or BID_LIST_URL
+        stats.list_url = bid_list_url
         bid_rows = self._collect_bid_rows(bid_list_url, stats)
         stats.g2b_linked_count = len(bid_rows)
         stats.scanned = stats.sh_notice_count + stats.g2b_linked_count
@@ -494,9 +622,12 @@ class SHPublicHousingContestCollector:
                 stats.skipped += 1
                 continue
             try:
+                stats.detail_fetch_attempted_count += 1
                 record = self._collect_notice_detail(notice)
+                stats.detail_fetch_success_count += 1
             except Exception as exc:  # pragma: no cover - defensive live failure path
                 stats.failed += 1
+                stats.detail_fetch_failed_count += 1
                 stats.errors.append(f"{notice.get('source_record_id')}: {exc}")
                 continue
             if record is None:
@@ -531,7 +662,9 @@ class SHPublicHousingContestCollector:
                 stats.g2b_unmatched_count += 1
             stats.g2b_discoveries.append(discovery)
 
-        if stats.parser_mismatch:
+        if stats.status in {"wrong_page_type", "blocked", "network_error", "http_error"}:
+            stats.failure_reason = stats.failure_reason or stats.status
+        elif stats.parser_mismatch:
             stats.status = "parser_mismatch"
             stats.failure_reason = stats.failure_reason or "parser_mismatch"
         elif stats.errors and not stats.records and not stats.g2b_discoveries:
@@ -565,16 +698,43 @@ class SHPublicHousingContestCollector:
             if fetch.status_code != 200 or not fetch.text:
                 stats.errors.append(f"bid page {page_no}: status={fetch.status_code} error={fetch.error}")
                 if page_no == 1:
-                    stats.status = "parser_mismatch"
-                    stats.parser_mismatch = True
-                    stats.failure_reason = "http_error" if fetch.status_code else "network_error"
+                    stats.status = "http_error" if fetch.status_code else "network_error"
+                    stats.failure_reason = stats.status
                 break
             page_rows = parse_bid_list_rows(fetch.text)
+            if page_no == 1:
+                health = bid_list_health(fetch.text, fetch.final_url, page_rows)
+                for key, value in health.items():
+                    setattr(stats, key, value)
+                stats.final_url = fetch.final_url
+                stats.http_status = fetch.status_code
+                if health["detected_page_type"] not in {"sh_bid_list", "empty_list"}:
+                    stats.status = "wrong_page_type"
+                    stats.failure_reason = "wrong_page_type"
+                    stats.parser_mismatch = True
+                    stats.parser_mismatch_reasons.append(f"detected_page_type={health['detected_page_type']}")
+                    break
             if not page_rows:
                 if page_no == 1:
+                    if stats.empty_list_message_found:
+                        break
                     stats.errors.append("bid list parser returned zero rows")
                     stats.parser_mismatch = True
                     stats.failure_reason = "parser_mismatch"
+                    stats.parser_mismatch_reasons.append("no_rows_without_empty_list_message")
+                break
+            if page_no == 1:
+                if stats.row_count and stats.rows_with_title / max(stats.row_count, 1) < 0.5:
+                    stats.parser_mismatch = True
+                    stats.failure_reason = "parser_mismatch"
+                    stats.parser_mismatch_reasons.append("low_title_parse_ratio")
+                    break
+                if stats.row_count and not stats.detail_candidate_count:
+                    stats.parser_mismatch = True
+                    stats.failure_reason = "parser_mismatch"
+                    stats.parser_mismatch_reasons.append("no_detail_candidates")
+                    break
+            if stats.parser_mismatch:
                 break
             for row in page_rows:
                 key = (clean_text(row.get("bid_no")), clean_text(row.get("bid_order")))
@@ -846,6 +1006,7 @@ def collect_sh_public_housing_contests(
     lookback_days: int | None = None,
     start_date: str | None = None,
     end_date: str | None = None,
+    list_url: str | None = None,
     verbose: bool = False,
     db_path: Path = DB_PATH,
 ) -> SHCollectStats:
@@ -854,6 +1015,7 @@ def collect_sh_public_housing_contests(
         lookback_days=lookback_days,
         start_date=start_date,
         end_date=end_date,
+        list_url=list_url,
         verbose=verbose,
         db_path=db_path,
     )

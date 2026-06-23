@@ -1480,7 +1480,7 @@ cd /d "D:\backup01\Documents\New project 2"
 - LH 공모안내: `https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034`
 - GH 공모 관련사항: `https://www.gh.or.kr/gh/bid-announcement.do`
 - iH 공지사항: `https://www.ih.co.kr/main/customer/notification/notice.jsp`
-- SH 사업발주 공고 게시판: `https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList`
+- SH 사업발주 공고 게시판: `https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do`
 
 진단 원칙:
 
@@ -1637,8 +1637,8 @@ GitHub Actions:
 
 대상 공식 페이지:
 
-- SH 사업발주 공고 진입 페이지: `https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList`
-- 브라우저 렌더링 후 확인된 사업발주 목록 후보: `https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do`
+- SH 사업발주 공고 운영 목록 URL: `https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do`
+- 구형 메뉴/결과 진입 페이지는 probe 참고용으로만 사용: `https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList`
 
 진단 방식:
 
@@ -1711,7 +1711,7 @@ cd /d "D:\backup01\Documents\New project 2"
 - 수행 내용: SH fixture 테스트, SH probe fixture 테스트, Python compileall, 실제 SH 공개 HTML dry-run 검증
 - 금지 작업: DB apply, public JSON export, commit, push
 
-검증 결과는 `sh-live-verification-<run_number>` artifact에 `report.json`, `report.md`, `stdout.log`로 저장됩니다. 정상적인 0건 상태는 “SH 수집 성공, 현재 공개 가능한 민간참여 공공주택 공모 없음”으로 표시됩니다.
+검증 결과는 `sh-live-verification-<run_number>` artifact에 `artifacts/sh_live_verification/report.json`, `report.md`, `stdout.log`로 저장됩니다. 정상적인 0건 상태는 “SH 수집 성공, 현재 공개 가능한 민간참여 공공주택 공모 없음”으로 표시됩니다.
 
 ## Vercel public JSON verification
 

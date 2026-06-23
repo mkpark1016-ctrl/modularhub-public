@@ -16,9 +16,12 @@ from src.collectors.public_housing_contests.sh import (  # noqa: E402
     SHContestRecord,
     SHG2BDiscovery,
     apply_sh_stats,
+    bid_list_health,
     classify_sh_candidate,
+    detect_page_type,
     extract_title,
     html_to_text,
+    load_sh_source,
     official_attachments,
     parse_bid_list_rows,
     parse_down_list,
@@ -126,6 +129,33 @@ def test_parsers() -> None:
     assert empty_rows == []
 
 
+def test_live_verification_page_contract() -> None:
+    source = load_sh_source()
+    assert source["list_url"] == BID_LIST_URL
+    assert BOARD_URL == BID_LIST_URL
+
+    bid_html = read_fixture("sh_bid_list_no_matches_minimal.html")
+    rows = parse_bid_list_rows(bid_html)
+    health = bid_list_health(bid_html, BID_LIST_URL, rows)
+    assert health["detected_page_type"] == "sh_bid_list"
+    assert health["row_count"] == 2
+    assert health["rows_with_title"] == 2
+    assert health["rows_with_identifier"] == 2
+    assert health["rows_with_bid_number"] == 2
+    assert health["detail_candidate_count"] == 2
+    assert health["parse_success_ratio"] == 1.0
+
+    empty_html = read_fixture("sh_empty_bid_list_minimal.html")
+    empty_health = bid_list_health(empty_html, BID_LIST_URL, [])
+    assert empty_health["detected_page_type"] == "sh_bid_list"
+    assert empty_health["empty_list_message_found"]
+
+    wrapper_html = read_fixture("sh_menu_wrapper_minimal.html")
+    old_url = "https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList"
+    assert detect_page_type(wrapper_html, old_url) == "sh_result_list"
+    assert detect_page_type("<html>Access denied</html>", BID_LIST_URL) == "blocked_page"
+
+
 def test_classification_and_exact_url() -> None:
     detail_url = "https://www.i-sh.co.kr/main/lay2/program/S1T294C299/www/brd/m_255/view.do?multi_itm_seq=8&seq=306155"
     public_html = read_fixture("sh_contest_public_notice_detail_minimal.html")
@@ -210,6 +240,7 @@ def test_duplicate_upsert_and_g2b_merge() -> None:
 
 def main() -> int:
     test_parsers()
+    test_live_verification_page_contract()
     test_classification_and_exact_url()
     test_duplicate_upsert_and_g2b_merge()
     print("SH public housing contest collector tests passed")

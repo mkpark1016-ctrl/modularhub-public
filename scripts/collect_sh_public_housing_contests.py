@@ -21,6 +21,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--lookback-days", type=int, default=None)
     parser.add_argument("--start-date", default=None)
     parser.add_argument("--end-date", default=None)
+    parser.add_argument("--list-url", default=None)
     parser.add_argument("--verbose", action="store_true")
     return parser.parse_args()
 
@@ -33,6 +34,7 @@ def main() -> int:
         lookback_days=args.lookback_days,
         start_date=args.start_date,
         end_date=args.end_date,
+        list_url=args.list_url,
         verbose=args.verbose,
     )
     print(json.dumps(stats.summary(), ensure_ascii=False, indent=2))
