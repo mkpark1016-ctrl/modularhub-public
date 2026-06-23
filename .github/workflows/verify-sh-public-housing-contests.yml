@@ -1,0 +1,50 @@
+name: Verify SH public housing contests
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-sh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run SH collector fixture tests
+        run: python scripts/test_sh_public_housing_contest_collector.py
+
+      - name: Run SH probe fixture tests
+        run: python scripts/test_sh_public_housing_contest_probe.py
+
+      - name: Compile Python sources
+        run: python -m compileall src scripts
+
+      - name: Run live SH dry-run verification
+        run: python scripts/verify_sh_public_housing_contests_live.py --max-pages 3
+
+      - name: Upload SH live verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sh-live-verification-${{ github.run_number }}
+          path: |
+            artifacts/sh-live-verification/report.json
+            artifacts/sh-live-verification/report.md
+            artifacts/sh-live-verification/stdout.log
+          if-no-files-found: warn
+          retention-days: 7

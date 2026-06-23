@@ -1630,3 +1630,85 @@ GitHub Actions:
 - 기관별 수집 실패는 warning으로 기록하고 기존 공개 JSON을 보존합니다.
 - 공개 JSON export, 축소 방지, 보안/계약 테스트, frontend build가 통과해야만 변경된 JSON을 commit/push합니다.
 - Netlify와 Vercel은 같은 `frontend/public/data/*.json`을 배포합니다.
+
+## 10.8-D1 SH 공모 게시판 Playwright 구조 진단
+
+이번 단계는 서울주택도시개발공사(SH) 공식 게시판의 민간참여 공공주택 및 민간사업자 공모 수집 가능성을 확인하는 읽기 전용 probe입니다. DB, `frontend/public/data/business.json`, `frontend/public/data/news.json`, `frontend/public/data/meta.json`은 수정하지 않습니다.
+
+대상 공식 페이지:
+
+- SH 사업발주 공고 진입 페이지: `https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList`
+- 브라우저 렌더링 후 확인된 사업발주 목록 후보: `https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do`
+
+진단 방식:
+
+- `scripts/probe_sh_public_housing_contests.py`는 Playwright Chromium을 사용해 공식 페이지를 headless로 열고, 공개 HTML 문서·공식 요청·목록 구조·상세 URL·첨부파일 구조를 분석합니다.
+- 쿠키, 인증 헤더, API Key, 개인정보는 로그에 저장하지 않습니다.
+- 첨부파일은 다운로드하지 않고 파일명과 공식 URL 패턴만 확인합니다.
+- 결과는 `logs/sh_public_housing_contest_probe.json`과 `logs/sh_public_housing_contest_probe.md`에 저장되며, 로그 산출물은 Git 추적 대상이 아닙니다.
+
+로컬 진단 준비:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe -m pip install -r requirements-playwright.txt
+.\.venv\Scripts\python.exe -m playwright install chromium
+```
+
+이미 로컬 Chrome이 설치되어 있으면 probe는 기본적으로 Chrome 채널을 사용합니다.
+
+실행:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\probe_sh_public_housing_contests.py --max-pages 3
+.\.venv\Scripts\python.exe scripts\test_sh_public_housing_contest_probe.py
+.\.venv\Scripts\python.exe -m compileall src scripts
+```
+
+판정 기준:
+
+- 공개 HTML/공식 요청만으로 목록을 재현할 수 있으면 다음 단계는 HTTP collector 구현을 우선 검토합니다.
+- 브라우저 DOM에서만 안정적으로 확인되면 Playwright collector 구현을 별도 단계로 분리합니다.
+- CAPTCHA, 로그인, 접근 차단 또는 반복 오류가 확인되면 자동 수집 대상에서 제외하고 수동 모니터링 또는 경고 상태로 관리합니다.
+
+## 10.8-D2A SH 공개 HTML 수집기
+
+SH 운영 수집기는 Playwright를 사용하지 않고 `requests` 기반 `http_html` 방식으로 동작합니다. Playwright는 10.8-D1 구조 진단 전용이며, GitHub Actions 운영 수집 단계에는 연결하지 않습니다.
+
+수집 대상은 두 종류로 분리합니다.
+
+- SH 자체 공지: `seq`가 있는 SH 상세 페이지를 `sh_contest:{seq}` 기준으로 저장합니다.
+- SH 사업발주·나라장터 연계 공고: `openBidblancDetail(bidNtceNo, bidNtceOrd)`로 확인되는 G2B 공고는 별도 공개 카드를 만들지 않고 기존 G2B item이 있을 때만 SH 발견 이력을 `source_details`에 병합합니다.
+
+공개 정책:
+
+- `classification_status=confirmed`, `stage=notice`, exact 링크 검증 성공 항목만 공개 사업정보에 포함합니다.
+- 주택 문맥이 없는 일반 민간사업자 공모는 `review_required` 또는 `excluded`로 분류하고 기본 공개 목록에서 제외합니다.
+- 평가결과, 심사결과, 선정결과, 우선협상대상자, 평가위원, 계약체결 등 결과 공고는 `stage=result`로 보존하되 기본 사업기회 목록에는 포함하지 않습니다.
+- 수집 성공이나 확정 공모 0건인 경우는 `success_no_matches`로 기록하며, 기존 SH·LH·GH·iH·나라장터·뉴스 데이터를 삭제하지 않습니다.
+
+로컬 실행:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\collect_sh_public_housing_contests.py --dry-run --max-pages 3 --verbose
+.\.venv\Scripts\python.exe scripts\collect_sh_public_housing_contests.py --apply --max-pages 3
+.\.venv\Scripts\python.exe scripts\test_sh_public_housing_contest_collector.py
+```
+
+운영 설정 예시는 `.env.example`의 `SH_CONTEST_*` 값을 참고합니다. 실제 `.env` 파일은 Git에 포함하지 않습니다.
+
+### SH 원격 라이브 검증 workflow
+
+`Verify SH public housing contests` GitHub Actions workflow는 SH collector를 원격 환경에서 dry-run으로만 검증합니다.
+
+- 실행 방식: GitHub Actions 화면에서 `Verify SH public housing contests` 선택 후 `Run workflow`
+- 트리거: `workflow_dispatch` 수동 실행 전용
+- 권한: `contents: read`
+- 설치 의존성: `requirements.txt`
+- Playwright/Chromium: 설치하지 않음
+- 수행 내용: SH fixture 테스트, SH probe fixture 테스트, Python compileall, 실제 SH 공개 HTML dry-run 검증
+- 금지 작업: DB apply, public JSON export, commit, push
+
+검증 결과는 `sh-live-verification-<run_number>` artifact에 `report.json`, `report.md`, `stdout.log`로 저장됩니다. 정상적인 0건 상태는 “SH 수집 성공, 현재 공개 가능한 민간참여 공공주택 공모 없음”으로 표시됩니다.

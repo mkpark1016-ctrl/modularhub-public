@@ -3,8 +3,7 @@ from __future__ import annotations
 import html
 import json
 import re
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
@@ -13,7 +12,6 @@ from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
 
 SOURCE_CODE = "SH_CONTEST"
 SOURCE_NAME = "SH"
-ORGANIZATION_NAME = "서울주택도시개발공사"
 LANDING_URL = "https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList"
 BID_LIST_URL = "https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do"
 G2B_BID_URL = "https://www.g2b.go.kr/link/PNPE027_01/single/"
@@ -52,17 +50,6 @@ def clean_text(value: Any) -> str:
     if value is None:
         return ""
     return re.sub(r"\s+", " ", html.unescape(str(value))).strip()
-
-
-def now_iso() -> str:
-    return datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
-
-
-def is_official_url(url: str) -> bool:
-    try:
-        return urlparse(url).netloc.lower() in OFFICIAL_HOSTS
-    except ValueError:
-        return False
 
 
 def build_g2b_bid_url(bid_no: str, bid_order: str) -> str:
@@ -153,14 +140,13 @@ def parse_landing_notice_links(page_html: str, base_url: str = LANDING_URL) -> l
         if source_record_id in seen:
             continue
         seen.add(source_record_id)
-        flags = keyword_flags(link.text)
         notices.append(
             {
                 "source_record_id": source_record_id,
                 "title": link.text,
                 "detail_url": detail_url,
                 "record_id_source": "seq",
-                **flags,
+                **keyword_flags(link.text),
             }
         )
     return notices
@@ -211,19 +197,6 @@ def parse_page_count(text: str) -> dict[str, int | None]:
     }
 
 
-def _extract_title_from_text(text: str) -> str:
-    lines = [clean_text(line) for line in text.splitlines()]
-    lines = [line for line in lines if line]
-    for idx, line in enumerate(lines):
-        if "등록일 :" in line and idx > 0:
-            return lines[idx - 1]
-    for line in lines:
-        flags = keyword_flags(line)
-        if flags["general_private_contest_candidate"] or "공고" in line:
-            return line
-    return lines[0] if lines else ""
-
-
 def parse_down_list(page_html: str, detail_url: str) -> list[dict[str, Any]]:
     match = re.search(r"initParam\.downList\s*=\s*(\[[\s\S]*?\]);", page_html or "")
     if not match:
@@ -265,7 +238,10 @@ def parse_down_list(page_html: str, detail_url: str) -> list[dict[str, Any]]:
 def parse_notice_detail(page_html: str, detail_url: str, body_text: str = "") -> dict[str, Any]:
     text = body_text or clean_text(re.sub(r"<[^>]+>", "\n", page_html or ""))
     posted_match = re.search(r"등록일\s*:\s*(20\d{2}-\d{2}-\d{2})", text)
-    title = _extract_title_from_text(text)
+    title = ""
+    heading = re.search(r"<h[1-3][^>]*>(.*?)</h[1-3]>", page_html or "", flags=re.IGNORECASE | re.DOTALL)
+    if heading:
+        title = clean_text(re.sub(r"<[^>]+>", " ", heading.group(1)))
     source_record_id = extract_seq(detail_url)
     attachments = parse_down_list(page_html, detail_url)
     parsed_url = urlparse(detail_url)
@@ -293,43 +269,3 @@ def parse_notice_detail(page_html: str, detail_url: str, body_text: str = "") ->
         "attachment_count": len(attachments),
         **keyword_flags(f"{title} {text} {' '.join(item['name'] for item in attachments)}"),
     }
-
-
-def sanitize_request_url(url: str) -> str:
-    parsed = urlparse(url)
-    query = parse_qs(parsed.query)
-    blocked = {"cookie", "authorization", "token", "key", "servicekey"}
-    clean_query = {key: values for key, values in query.items() if key.lower() not in blocked}
-    return parsed._replace(query=urlencode(clean_query, doseq=True)).geturl()
-
-
-def summarize_markdown(report: dict[str, Any]) -> str:
-    lines = [
-        "# SH Public Housing Contest Playwright Probe",
-        "",
-        f"- checked_at: {report.get('checked_at')}",
-        f"- source_url: {report.get('source_url')}",
-        f"- final_url: {report.get('final_url')}",
-        f"- parser_mode: {report.get('parser_mode')}",
-        f"- data_loading_mode: {report.get('data_loading_mode')}",
-        f"- recommended_collector_mode: {report.get('recommended_collector_mode')}",
-        f"- scanned_count: {report.get('scanned_count')}",
-        f"- keyword_match_count: {report.get('keyword_match_count')}",
-        f"- general_private_contest_count: {report.get('general_private_contest_count')}",
-        f"- result_keyword_count: {report.get('result_keyword_count')}",
-        f"- record_id_candidate: {json.dumps(report.get('record_id_candidate'), ensure_ascii=False)}",
-        f"- detail_url_pattern: {json.dumps(report.get('detail_url_pattern'), ensure_ascii=False)}",
-        f"- attachment_pattern: {report.get('attachment_pattern')}",
-        f"- failure_reason: {report.get('failure_reason') or ''}",
-        "",
-        "## Selectors",
-    ]
-    for selector in report.get("list_selector_candidates", []):
-        lines.append(f"- `{selector}`")
-    lines.extend(["", "## Candidate XHR / Document Requests"])
-    for request in report.get("candidate_xhr", [])[:20]:
-        lines.append(f"- {request.get('method')} {request.get('resource_type')} {request.get('status')} {request.get('url')}")
-    lines.extend(["", "## Detail Samples"])
-    for detail in report.get("detail_samples", []):
-        lines.append(f"- {detail.get('source_record_id')}: {detail.get('title')} / attachments={detail.get('attachment_count')}")
-    return "\n".join(lines) + "\n"

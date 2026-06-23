@@ -23,16 +23,18 @@ from src.public_data_policy import guard_result, merge_public_items, payload_ite
 OUTPUT_DIR = ROOT / "frontend" / "public" / "data"
 BUSINESS_SOURCES = {"나라장터", "G2B", "조달청", "D2B", "국방조달", "방위사업청"}
 BUSINESS_TYPES = {"bid", "procurement_plan", "public_agency_contest"}
-PUBLIC_AGENCY_CONTEST_SOURCES = {"LH", "GH", "iH"}
+PUBLIC_AGENCY_CONTEST_SOURCES = {"LH", "GH", "iH", "SH"}
 PUBLIC_AGENCY_CONTEST_COLLECTORS = {
     "LH": ("LHPublicHousingContestCollector", "LH 공모안내"),
     "GH": ("GHPublicHousingContestCollector", "GH 공모 관련사항"),
     "iH": ("IHPublicHousingContestCollector", "iH 공지사항"),
+    "SH": ("SHPublicHousingContestCollector", "SH 사업발주·공지"),
 }
 PUBLIC_AGENCY_BOARD_URLS = {
     "LH": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
     "GH": "https://www.gh.or.kr/gh/bid-announcement.do",
     "iH": "https://www.ih.co.kr/main/customer/notification/notice.jsp",
+    "SH": "https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList",
 }
 MODULAR_TERMS = ("모듈러", "osc", "공업화주택", "프리패브", "프리팹")
 SENSITIVE_KEY_PARTS = (
@@ -194,9 +196,9 @@ def business_item(row: dict[str, Any], details: dict[int, dict[str, Any]]) -> di
     source_record_id = clean_text(row.get("source_record_id"))
     source_code = clean_text(detail.get("source_code"))
     if not source_code and source_type == "public_agency_contest":
-        source_code = {"LH": "LH_CONTEST", "GH": "GH_CONTEST", "iH": "IH_NOTICE"}.get(source_name, "")
+        source_code = {"LH": "LH_CONTEST", "GH": "GH_CONTEST", "iH": "IH_NOTICE", "SH": "SH_CONTEST"}.get(source_name, "")
     public_id: int | str = item_id
-    if source_type == "public_agency_contest" and source_name in {"GH", "iH"} and source_record_id:
+    if source_type == "public_agency_contest" and source_name in {"GH", "iH", "SH"} and source_record_id:
         public_id = f"{source_name.lower()}_contest:{source_record_id}"
     item_type = "민간사업자 공모" if source_type == "public_agency_contest" else (
         "발주계획" if source_type == "procurement_plan" else "입찰공고"
@@ -546,6 +548,7 @@ def main() -> int:
         lh_message = sanitize_string(clean_text(lh_log.get("error_message"))) or "LH 공모 수집에 실패했습니다."
     gh_contest_meta = public_agency_contest_public_meta(logs, business, source="GH")
     ih_contest_meta = public_agency_contest_public_meta(logs, business, source="iH")
+    sh_contest_meta = public_agency_contest_public_meta(logs, business, source="SH")
     if D2B_LEGACY_API_ENABLED:
         d2b_log = latest_log(logs, "D2B")
         if d2b_log and clean_text(d2b_log.get("status")) == "success":
@@ -576,6 +579,8 @@ def main() -> int:
         warnings.append(f"GH 민간사업자 공모: {gh_contest_meta.get('gh_contest_message')}")
     if ih_contest_meta.get("ih_contest_status") == "failed":
         warnings.append(f"iH 민간사업자 공모: {ih_contest_meta.get('ih_contest_message')}")
+    if sh_contest_meta.get("sh_contest_status") == "failed":
+        warnings.append(f"SH 민간사업자 공모: {sh_contest_meta.get('sh_contest_message')}")
     if guard_status in {"blocked", "warning", "override"}:
         warnings.append(f"공개 데이터 보호: {guard_message}")
     workflow_status = "warning" if warnings else "success"
@@ -601,6 +606,7 @@ def main() -> int:
         "lh_contest_failure_reason": "; ".join(lh_stats.get("errors") or []),
         **gh_contest_meta,
         **ih_contest_meta,
+        **sh_contest_meta,
         "workflow_last_run_status": workflow_status,
         "warnings": warnings,
         "previous_business_count": len(baseline_business),
