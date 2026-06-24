@@ -1734,3 +1734,22 @@ cd /d "D:\backup01\Documents\New project 2"
 ```
 
 SH 운영 전환은 `Verify SH public housing contests` workflow의 live dry-run 결과가 성공으로 확인된 뒤에만 진행합니다. workflow artifact 또는 실행 결과를 확인할 수 없으면 `production_ready=false`로 보고하고 운영 `Update public data` workflow에는 SH apply를 연결하지 않습니다.
+
+### SH Shadow Mode daily monitoring
+
+`Monitor SH public housing contests` workflow는 SH 사업발주 목록을 하루 1회 읽기 전용으로 점검합니다.
+
+- 트리거: `workflow_dispatch`, `schedule`
+- 예약 시간: `37 17 * * *` UTC (`02:37` KST)
+- 목적: SH 목록 구조, 파서 상태, 후보 존재 여부를 점검
+- 금지 작업: DB apply, public JSON export, 운영 `Update public data` 연결
+- 정상 0건: `success_no_matches`로 성공 처리
+- 실패 처리: `parser_mismatch`, `wrong_page_type`, `blocked`, `network_error`, `http_error`
+
+Shadow 결과는 `sh-shadow-<run_id>` artifact에 저장됩니다.
+
+- `artifacts/sh_shadow/report.json`
+- `artifacts/sh_shadow/report.md`
+- `artifacts/sh_shadow/candidates.json`
+
+`candidates.json`은 후보가 없더라도 빈 배열로 생성됩니다. `publish_eligible_count`가 1 이상이면 공개 반영 전에 후보의 원문 링크, 공고 단계, exact link 검증 결과를 수동으로 검토합니다. GitHub cron은 UTC 기준이므로 한국시간 운영 일정과 비교할 때 9시간 차이를 적용합니다.

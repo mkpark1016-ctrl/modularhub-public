@@ -22,6 +22,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--start-date", default=None)
     parser.add_argument("--end-date", default=None)
     parser.add_argument("--list-url", default=None)
+    parser.add_argument("--request-delay", type=float, default=None)
+    parser.add_argument("--timeout", type=int, default=None)
     parser.add_argument("--verbose", action="store_true")
     return parser.parse_args()
 
@@ -35,6 +37,8 @@ def main() -> int:
         start_date=args.start_date,
         end_date=args.end_date,
         list_url=args.list_url,
+        request_interval_seconds=args.request_delay,
+        timeout_seconds=args.timeout,
         verbose=args.verbose,
     )
     print(json.dumps(stats.summary(), ensure_ascii=False, indent=2))

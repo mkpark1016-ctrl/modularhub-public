@@ -171,7 +171,10 @@ class SHCollectStats:
     rows_with_seq: int = 0
     rows_with_bid_number: int = 0
     parse_success_ratio: float = 0.0
+    detail_link_candidate_count: int = 0
+    unique_detail_candidate_count: int = 0
     detail_candidate_count: int = 0
+    detail_fetch_target_count: int = 0
     detail_fetch_attempted_count: int = 0
     detail_fetch_success_count: int = 0
     detail_fetch_failed_count: int = 0
@@ -227,7 +230,10 @@ class SHCollectStats:
             "rows_with_seq": self.rows_with_seq,
             "rows_with_bid_number": self.rows_with_bid_number,
             "parse_success_ratio": self.parse_success_ratio,
+            "detail_link_candidate_count": self.detail_link_candidate_count,
+            "unique_detail_candidate_count": self.unique_detail_candidate_count,
             "detail_candidate_count": self.detail_candidate_count,
+            "detail_fetch_target_count": self.detail_fetch_target_count,
             "detail_fetch_attempted_count": self.detail_fetch_attempted_count,
             "detail_fetch_success_count": self.detail_fetch_success_count,
             "detail_fetch_failed_count": self.detail_fetch_failed_count,
@@ -472,17 +478,29 @@ def detect_page_type(page_html: str, final_url: str, status_code: int | None = 2
 
 
 def bid_list_health(page_html: str, final_url: str, parsed_rows: list[dict[str, Any]]) -> dict[str, Any]:
-    row_candidates = re.findall(r"<tr[^>]*>\s*<td[^>]*>\s*\d+", page_html or "", flags=re.IGNORECASE)
-    onclick_candidates = re.findall(
-        r"openBidblancDetail\('([^']+)'\s*,\s*'([^']+)'\)",
-        page_html or "",
-        flags=re.IGNORECASE,
-    )
-    seq_candidates = re.findall(r"seq=(\d+)", page_html or "", flags=re.IGNORECASE)
+    row_blocks = re.findall(r"<tr[^>]*>\s*<td[^>]*>\s*\d+.*?</tr>", page_html or "", flags=re.IGNORECASE | re.DOTALL)
+    row_candidates = row_blocks or re.findall(r"<tr[^>]*>\s*<td[^>]*>\s*\d+", page_html or "", flags=re.IGNORECASE)
+    onclick_candidates: list[tuple[str, str]] = []
+    seq_candidates: list[str] = []
+    for row_html in row_candidates:
+        onclick_candidates.extend(
+            re.findall(
+                r"openBidblancDetail\('([^']+)'\s*,\s*'([^']+)'\)",
+                row_html,
+                flags=re.IGNORECASE,
+            )
+        )
+        seq_candidates.extend(re.findall(r"seq=(\d+)", row_html, flags=re.IGNORECASE))
     rows_with_title = sum(1 for row in parsed_rows if clean_text(row.get("title")))
     rows_with_posted_date = sum(1 for row in parsed_rows if parse_date(clean_text(row.get("posted_at"))))
     row_count = max(len(row_candidates), len(parsed_rows))
     detail_candidates = len(onclick_candidates) + len(seq_candidates)
+    unique_detail_candidates = {
+        f"g2b:{bid_no}:{bid_order}"
+        for bid_no, bid_order in onclick_candidates
+        if clean_text(bid_no) and clean_text(bid_order)
+    }
+    unique_detail_candidates.update(f"seq:{seq}" for seq in seq_candidates if clean_text(seq))
     ratio = round(rows_with_title / row_count, 3) if row_count else 0.0
     return {
         "page_title": extract_page_title(page_html),
@@ -498,7 +516,10 @@ def bid_list_health(page_html: str, final_url: str, parsed_rows: list[dict[str, 
         "rows_with_seq": len(seq_candidates),
         "rows_with_bid_number": len(onclick_candidates),
         "parse_success_ratio": ratio,
+        "detail_link_candidate_count": detail_candidates,
+        "unique_detail_candidate_count": len(unique_detail_candidates),
         "detail_candidate_count": detail_candidates,
+        "detail_fetch_target_count": 0,
     }
 
 
@@ -609,6 +630,7 @@ class SHPublicHousingContestCollector:
 
         notices = [] if stats.detected_page_type == "sh_bid_list" else parse_landing_notice_links(landing.text, landing.final_url)
         stats.sh_notice_count = len(notices)
+        stats.detail_fetch_target_count = len(notices)
         bid_list_url = landing.final_url if stats.detected_page_type == "sh_bid_list" else find_bid_list_url(landing.text, landing.final_url) or BID_LIST_URL
         stats.list_url = bid_list_url
         bid_rows = self._collect_bid_rows(bid_list_url, stats)
@@ -1007,6 +1029,8 @@ def collect_sh_public_housing_contests(
     start_date: str | None = None,
     end_date: str | None = None,
     list_url: str | None = None,
+    request_interval_seconds: float | None = None,
+    timeout_seconds: int | None = None,
     verbose: bool = False,
     db_path: Path = DB_PATH,
 ) -> SHCollectStats:
@@ -1016,6 +1040,8 @@ def collect_sh_public_housing_contests(
         start_date=start_date,
         end_date=end_date,
         list_url=list_url,
+        request_interval_seconds=request_interval_seconds,
+        timeout_seconds=timeout_seconds,
         verbose=verbose,
         db_path=db_path,
     )

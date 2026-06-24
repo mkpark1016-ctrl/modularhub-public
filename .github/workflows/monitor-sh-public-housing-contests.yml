@@ -1,0 +1,141 @@
+name: Monitor SH public housing contests
+
+on:
+  schedule:
+    # 17:37 UTC is 02:37 KST on the following day; this avoids the public data update window.
+    - cron: "37 17 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monitor-sh-public-housing-contests
+  cancel-in-progress: false
+
+jobs:
+  shadow-monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run SH collector fixture tests
+        run: python scripts/test_sh_public_housing_contest_collector.py
+
+      - name: Run SH verifier contract tests
+        run: python scripts/test_sh_live_verifier_contract.py
+
+      - name: Compile Python sources
+        run: python -m compileall src scripts
+
+      - name: Run SH live read-only verification
+        run: >
+          python scripts/verify_sh_public_housing_contests_live.py
+          --max-pages 3
+          --output-dir artifacts/sh_shadow
+
+      - name: Validate Shadow report
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/sh_shadow/report.json").read_text(encoding="utf-8"))
+          allowed = {"success", "success_no_matches"}
+          if report.get("status") not in allowed:
+              raise SystemExit(f"SH shadow status failed: {report.get('status')} {report.get('failure_reason')}")
+          if report.get("parser_mismatch"):
+              raise SystemExit("SH shadow parser_mismatch=true")
+          if not report.get("public_json_unchanged"):
+              raise SystemExit("public JSON changed during SH shadow run")
+          if not report.get("db_unchanged"):
+              raise SystemExit("DB changed during SH shadow run")
+          if not report.get("env_unchanged"):
+              raise SystemExit(".env changed during SH shadow run")
+          candidates_path = Path("artifacts/sh_shadow/candidates.json")
+          candidates = json.loads(candidates_path.read_text(encoding="utf-8"))
+          if not isinstance(candidates, list):
+              raise SystemExit("candidates.json must be a JSON array")
+          PY
+
+      - name: Verify public JSON DB env unchanged
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/sh_shadow/report.json").read_text(encoding="utf-8"))
+          before = report.get("counts_before") or {}
+          after = report.get("counts_after") or {}
+          for key in sorted(set(before) | set(after)):
+              if before.get(key) != after.get(key):
+                  raise SystemExit(f"{key} changed during SH shadow run: before={before.get(key)} after={after.get(key)}")
+          if after.get("sh_public_count") != 0:
+              raise SystemExit(f"SH public count must remain 0 in shadow mode, got {after.get('sh_public_count')}")
+          PY
+
+      - name: Write GitHub Job Summary
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+          if not summary_path:
+              raise SystemExit(0)
+          report_path = Path("artifacts/sh_shadow/report.json")
+          if not report_path.exists():
+              Path(summary_path).write_text("## SH Shadow Monitor\n\nreport.json was not generated.\n", encoding="utf-8")
+              raise SystemExit(0)
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          lines = [
+              "## SH Shadow Monitor",
+              "",
+              f"- status: {report.get('status')}",
+              f"- checked_at: {report.get('checked_at')}",
+              f"- detected_page_type: {report.get('detected_page_type')}",
+              f"- HTTP status: {report.get('http_status')}",
+              f"- row_count: {report.get('row_count')}",
+              f"- parse_success_ratio: {report.get('parse_success_ratio')}",
+              f"- g2b_linked_count: {report.get('g2b_linked_count')}",
+              f"- confirmed_count: {report.get('confirmed_count')}",
+              f"- exact_link_count: {report.get('exact_link_count')}",
+              f"- publish_eligible_count: {report.get('publish_eligible_count')}",
+              f"- parser_mismatch: {report.get('parser_mismatch')}",
+              f"- public_json_unchanged: {report.get('public_json_unchanged')}",
+              f"- db_unchanged: {report.get('db_unchanged')}",
+              f"- env_unchanged: {report.get('env_unchanged')}",
+          ]
+          if report.get("status") == "success_no_matches":
+              lines.extend(["", "SH 목록 구조는 정상이며 현재 공개 대상 민간참여 공공주택 공모가 없습니다."])
+          if report.get("publish_eligible_count"):
+              lines.extend(["", "SH 공개 검토 후보가 발견되었습니다. candidates.json을 검토하십시오."])
+          Path(summary_path).write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+
+      - name: Upload Shadow Mode Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sh-shadow-${{ github.run_id }}
+          path: |
+            artifacts/sh_shadow/report.json
+            artifacts/sh_shadow/report.md
+            artifacts/sh_shadow/candidates.json
+          if-no-files-found: warn
+          retention-days: 14

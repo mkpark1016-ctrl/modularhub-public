@@ -81,10 +81,76 @@ def official_domain(url: str) -> bool:
     return host in OFFICIAL_HOSTS
 
 
-def write_outputs(report: dict[str, Any], stdout_lines: list[str]) -> None:
-    ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-    (ARTIFACT_DIR / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    (ARTIFACT_DIR / "stdout.log").write_text("\n".join(stdout_lines) + "\n", encoding="utf-8")
+def record_candidate(record: Any) -> dict[str, Any]:
+    publish_eligible = bool(getattr(record, "is_public_opportunity", False))
+    return {
+        "internal_id": f"sh_contest:{getattr(record, 'source_record_id', '')}",
+        "source_name": getattr(record, "source_name", "SH"),
+        "source_type": getattr(record, "source_type", "public_agency_contest"),
+        "title": getattr(record, "title", ""),
+        "posted_date": getattr(record, "posted_at", None),
+        "stage": getattr(record, "stage", "unknown"),
+        "classification": getattr(record, "classification_status", "unknown"),
+        "keyword_matches": list(getattr(record, "modular_evidence", []) or []),
+        "seq": getattr(record, "source_record_id", ""),
+        "bid_ntce_no": "",
+        "bid_ntce_ord": "",
+        "list_url": getattr(record, "board_url", ""),
+        "detail_url": getattr(record, "source_page_url", ""),
+        "official_url": getattr(record, "original_url", None),
+        "link_type": "exact_original" if getattr(record, "exact_link_verified", False) else "unverified",
+        "exact_link_verified": bool(getattr(record, "exact_link_verified", False)),
+        "attachment_count": len(getattr(record, "attachments", []) or []),
+        "publish_eligible": publish_eligible,
+        "review_reason": "" if publish_eligible else getattr(record, "link_validation_reason", "") or "not_publish_eligible",
+    }
+
+
+def g2b_candidate(discovery: Any) -> dict[str, Any]:
+    bid_no = getattr(discovery, "bid_no", "")
+    bid_order = getattr(discovery, "bid_order", "")
+    return {
+        "internal_id": f"g2b:{bid_no}:{bid_order}",
+        "source_name": "SH",
+        "source_type": "bid",
+        "title": getattr(discovery, "title", ""),
+        "posted_date": getattr(discovery, "posted_at", None),
+        "stage": "linked_bid",
+        "classification": "g2b_linked",
+        "keyword_matches": [],
+        "seq": "",
+        "bid_ntce_no": bid_no,
+        "bid_ntce_ord": bid_order,
+        "list_url": getattr(discovery, "source_page_url", ""),
+        "detail_url": getattr(discovery, "detail_url", ""),
+        "official_url": getattr(discovery, "detail_url", ""),
+        "link_type": "g2b_link",
+        "exact_link_verified": False,
+        "attachment_count": 0,
+        "publish_eligible": False,
+        "review_reason": "g2b_linked_shadow_only",
+    }
+
+
+def build_candidates(stats: Any) -> list[dict[str, Any]]:
+    candidates = [record_candidate(record) for record in getattr(stats, "records", [])]
+    candidates.extend(g2b_candidate(discovery) for discovery in getattr(stats, "g2b_discoveries", []))
+    seen: set[str] = set()
+    unique: list[dict[str, Any]] = []
+    for candidate in candidates:
+        key = candidate["internal_id"]
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(candidate)
+    return unique
+
+
+def write_outputs(report: dict[str, Any], stdout_lines: list[str], output_dir: Path, candidates: list[dict[str, Any]]) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    (output_dir / "stdout.log").write_text("\n".join(stdout_lines) + "\n", encoding="utf-8")
+    (output_dir / "candidates.json").write_text(json.dumps(candidates, ensure_ascii=False, indent=2), encoding="utf-8")
     markdown = [
         "# SH live verification",
         "",
@@ -101,7 +167,9 @@ def write_outputs(report: dict[str, Any], stdout_lines: list[str]) -> None:
         f"- rows_with_title: {report.get('rows_with_title')}",
         f"- rows_with_identifier: {report.get('rows_with_identifier')}",
         f"- parse_success_ratio: {report.get('parse_success_ratio')}",
-        f"- detail_candidate_count: {report.get('detail_candidate_count')}",
+        f"- detail_link_candidate_count: {report.get('detail_link_candidate_count')}",
+        f"- unique_detail_candidate_count: {report.get('unique_detail_candidate_count')}",
+        f"- detail_fetch_target_count: {report.get('detail_fetch_target_count')}",
         f"- scanned_count: {report.get('scanned_count')}",
         f"- sh_notice_count: {report.get('sh_notice_count')}",
         f"- g2b_linked_count: {report.get('g2b_linked_count')}",
@@ -110,6 +178,7 @@ def write_outputs(report: dict[str, Any], stdout_lines: list[str]) -> None:
         f"- result_count: {report.get('result_count')}",
         f"- exact_link_count: {report.get('exact_link_count')}",
         f"- attachment_count: {report.get('attachment_count')}",
+        f"- publish_eligible_count: {report.get('publish_eligible_count')}",
         f"- parser_mismatch: {report.get('parser_mismatch')}",
         f"- parser_mismatch_reasons: {', '.join(report.get('parser_mismatch_reasons') or [])}",
         f"- public_json_unchanged: {report.get('public_json_unchanged')}",
@@ -118,7 +187,9 @@ def write_outputs(report: dict[str, Any], stdout_lines: list[str]) -> None:
     ]
     if report.get("status") == "success_no_matches":
         markdown.extend(["", "SH 수집 성공, 현재 공개 가능한 민간참여 공공주택 공모 없음"])
-    (ARTIFACT_DIR / "report.md").write_text("\n".join(markdown) + "\n", encoding="utf-8")
+    if report.get("publish_eligible_count"):
+        markdown.extend(["", "SH 공개 검토 후보가 발견되었습니다. candidates.json을 검토하십시오."])
+    (output_dir / "report.md").write_text("\n".join(markdown) + "\n", encoding="utf-8")
 
     summary_path = Path(str(Path.cwd() / "_github_step_summary_placeholder"))
     import os
@@ -133,6 +204,10 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Read-only live verification for SH public housing contest collector.")
     parser.add_argument("--max-pages", type=int, default=3)
     parser.add_argument("--list-url", default="")
+    parser.add_argument("--source-url", default="")
+    parser.add_argument("--output-dir", default=str(ARTIFACT_DIR))
+    parser.add_argument("--request-delay", type=float, default=None)
+    parser.add_argument("--timeout", type=int, default=None)
     return parser.parse_args()
 
 
@@ -154,8 +229,12 @@ def exit_code_for_status(status: str, failure_reason: str = "") -> int:
 
 def main() -> int:
     args = parse_args()
+    output_dir = Path(args.output_dir)
+    if not output_dir.is_absolute():
+        output_dir = ROOT / output_dir
     started = time.perf_counter()
     stdout_lines: list[str] = []
+    candidates: list[dict[str, Any]] = []
     before = file_snapshot(MUTATION_FILES)
     counts_before = load_public_counts()
     checked_at = now_iso()
@@ -183,7 +262,10 @@ def main() -> int:
         "rows_with_seq": 0,
         "rows_with_bid_number": 0,
         "parse_success_ratio": 0.0,
+        "detail_link_candidate_count": 0,
+        "unique_detail_candidate_count": 0,
         "detail_candidate_count": 0,
+        "detail_fetch_target_count": 0,
         "detail_fetch_attempted_count": 0,
         "detail_fetch_success_count": 0,
         "detail_fetch_failed_count": 0,
@@ -196,6 +278,7 @@ def main() -> int:
         "irrelevant_count": 0,
         "exact_link_count": 0,
         "attachment_count": 0,
+        "publish_eligible_count": 0,
         "duration_seconds": 0,
         "public_json_unchanged": False,
         "db_unchanged": False,
@@ -208,9 +291,12 @@ def main() -> int:
         stats = collect_sh_public_housing_contests(
             dry_run=True,
             max_pages=args.max_pages,
-            list_url=args.list_url or None,
+            list_url=args.source_url or args.list_url or None,
+            request_interval_seconds=args.request_delay,
+            timeout_seconds=args.timeout,
             verbose=False,
         )
+        candidates = build_candidates(stats)
         summary = stats.summary()
         stdout_lines.append(json.dumps(summary, ensure_ascii=False))
         report.update(
@@ -237,6 +323,9 @@ def main() -> int:
                 "rows_with_bid_number": summary.get("rows_with_bid_number") or 0,
                 "parse_success_ratio": summary.get("parse_success_ratio") or 0.0,
                 "detail_candidate_count": summary.get("detail_candidate_count") or 0,
+                "detail_link_candidate_count": summary.get("detail_link_candidate_count") or 0,
+                "unique_detail_candidate_count": summary.get("unique_detail_candidate_count") or 0,
+                "detail_fetch_target_count": summary.get("detail_fetch_target_count") or 0,
                 "detail_fetch_attempted_count": summary.get("detail_fetch_attempted_count") or 0,
                 "detail_fetch_success_count": summary.get("detail_fetch_success_count") or 0,
                 "detail_fetch_failed_count": summary.get("detail_fetch_failed_count") or 0,
@@ -249,6 +338,7 @@ def main() -> int:
                 "irrelevant_count": summary.get("irrelevant_count") or 0,
                 "exact_link_count": summary.get("exact_link_count") or 0,
                 "attachment_count": summary.get("attachment_count") or 0,
+                "publish_eligible_count": sum(1 for candidate in candidates if candidate.get("publish_eligible")),
             }
         )
     except Exception as exc:  # pragma: no cover - live defensive path
@@ -290,7 +380,7 @@ def main() -> int:
         report["status"] = status
         report["failure_reason"] = failure
 
-    write_outputs(report, stdout_lines)
+    write_outputs(report, stdout_lines, output_dir, candidates)
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return exit_code_for_status(str(report.get("status") or "failed"), str(report.get("failure_reason") or ""))
 
