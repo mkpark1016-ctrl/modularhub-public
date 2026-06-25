@@ -1,10 +1,22 @@
 {
-  "generated_at": "2026-06-26T00:39:41+09:00",
+  "generated_at": "2026-06-26T08:11:59+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 778,
-  "current_news_count": 274,
-  "merged_news_count": 805,
+  "previous_news_count": 805,
+  "current_news_count": 273,
+  "merged_news_count": 806,
   "items": [
+    {
+      "id": 5992,
+      "source": "네이버뉴스",
+      "media": "businesspost.co.kr",
+      "title": "[Who Is ?] 허윤홍 GS건설 대표이사 사장",
+      "summary": "2026년 1분기에는 건설·부동산 경기 악화에 따른 주택공급 감소 영향으로 건축·주택사업본부 매출이... GS건설 신사업부문은 2022년 수처리와 모듈러주택을 중심으로 매출이 1조 원을 넘으면서 성공적으로 자리를...",
+      "published_at": "2026-06-26",
+      "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440688",
+      "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440688",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
     {
       "id": 5991,
       "source": "네이버뉴스",
@@ -1066,11 +1078,11 @@
       "source": "네이버뉴스",
       "media": "iminju.net",
       "title": "[공기업 센터] 한국조폐공사·국민체육진흥공단·한국토지주택공사",
-      "summary": "특별관은 ▲청정에너지 ▲제로에너지 주택(가상체험·실물체험) ▲모듈러 주택 ▲탄소중립 체험 등 5개 존(Zone)으로 구성됐으며, 디지털 체험과 실물 전시관, 조경·휴게공간·미디어월이 어우러진 종합 체험형...",
+      "summary": "한국토지주택공사는 24일부터 3일간 서울 코엑스에서 열리는'2026 국토교통기술대전'에서 'LH가 그리는... 특별관은 ▲청정에너지 ▲제로에너지 주택(가상체험·실물체험) ▲모듈러 주택 ▲탄소중립 체험 등 5개 존(Zone)...",
       "published_at": "2026-06-24",
       "original_url": "http://www.iminju.net/news/articleView.html?idxno=165763",
       "naver_url": "http://www.iminju.net/news/articleView.html?idxno=165763",
-      "keywords": "모듈러 주택",
+      "keywords": "모듈러 주택;LH 모듈러",
       "relevance_score": 6
     },
     {
@@ -1718,7 +1730,7 @@
       "published_at": "2026-06-23",
       "original_url": "https://www.news1.kr/economy/trend/6205588",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0009018496?sid=101",
-      "keywords": "스마트건설 모듈러",
+      "keywords": "플랜엠 모듈러",
       "relevance_score": 6
     },
     {
