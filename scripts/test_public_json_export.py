@@ -70,6 +70,18 @@ def main() -> int:
         "ih_contest_public_count",
         "ih_contest_exact_link_count",
         "data_policy",
+        "business_total",
+        "business_active",
+        "business_closed",
+        "business_unknown",
+        "bid_total",
+        "procurement_plan_total",
+        "public_agency_contest_total",
+        "lh_public_count",
+        "gh_public_count",
+        "ih_public_count",
+        "sh_public_count",
+        "last_updated_at",
     ):
         require(field in meta, f"meta status field is missing: {field}")
     require(isinstance(meta.get("warnings"), list), "meta warnings must be a list")
@@ -87,6 +99,12 @@ def main() -> int:
             item["source_type"] in {"bid", "procurement_plan", "public_agency_contest"},
             "unexpected business source_type",
         )
+        require(item.get("opportunity_status") in {"active", "closed", "unknown"}, "business lifecycle status is missing")
+        require(isinstance(item.get("is_closed"), bool), "business is_closed must be boolean")
+        require("days_until_deadline" in item, "business days_until_deadline is missing")
+        require("closed_at" in item, "business closed_at is missing")
+        require("last_seen_at" in item, "business last_seen_at is missing")
+        require(item.get("lifecycle_reason"), "business lifecycle_reason is missing")
         require(item.get("type") in {"입찰공고", "발주계획", "민간사업자 공모"}, "business type label is missing")
         if item["source_type"] == "procurement_plan":
             require(item.get("type") == "발주계획", "procurement plan label mismatch")

@@ -47,7 +47,32 @@ function sourceTypeForKind(kind) {
   return "";
 }
 
+function businessStatus(item) {
+  if (item.opportunity_status) return item.opportunity_status;
+  if (!item.due_at) return "unknown";
+  const due = new Date(item.due_at);
+  if (Number.isNaN(due.getTime())) return "unknown";
+  return due >= new Date(new Date().toDateString()) ? "active" : "closed";
+}
+
+function businessStatusLabel(item) {
+  const status = businessStatus(item);
+  if (status === "active") return "진행 중";
+  if (status === "closed") return "마감";
+  return "상태 미확인";
+}
+
+function businessStatusRank(item) {
+  const status = businessStatus(item);
+  if (status === "active") return 0;
+  if (status === "unknown") return 1;
+  return 2;
+}
+
 function isOpenBusiness(item) {
+  const status = businessStatus(item);
+  if (status === "active") return true;
+  if (status === "closed") return false;
   if (!item.due_at) return false;
   const due = new Date(item.due_at);
   return !Number.isNaN(due.getTime()) && due >= new Date(new Date().toDateString());
@@ -109,6 +134,8 @@ function SearchBar({ value, onChange, placeholder }) {
 
 function BusinessCard({ item }) {
   const kind = businessKind(item);
+  const status = businessStatus(item);
+  const statusLabel = businessStatusLabel(item);
   const modularLabel = item.modular_relevance === "confirmed" ? "모듈러 명시" : (
     item.modular_relevance === "review_candidate" ? "모듈러 검토대상" : ""
   );
@@ -116,6 +143,7 @@ function BusinessCard({ item }) {
     <article className="result-card">
       <div className="badge-row"><span>{displaySource(item.source)}</span><span>{kind}</span>{item.business_type && <span>{item.business_type}</span>}{item.notice_status && <span>{item.notice_status}</span>}{modularLabel && <span>{modularLabel}</span>}{item.is_known_important && <span className="important">중요공고</span>}</div>
       <h2><Link to={`/business/${item.id}`}>{item.title}</Link></h2>
+      {status === "closed" && <p className="closed-inline">{statusLabel}</p>}
       <dl className="metadata"><div><dt>기관</dt><dd>{item.organization || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(item.posted_at)}</dd></div><div><dt>마감일</dt><dd>{formatDate(item.due_at)}</dd></div><div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div></dl>
       <div className="card-footer"><span>{item.source_record_id || item.plan_no || item.bid_no || "출처번호 미확인"}</span><Link to={`/business/${item.id}`}>상세보기</Link></div>
     </article>
@@ -145,6 +173,9 @@ function ListingPage({ type }) {
   const items = data?.items || [];
   const selectedSourceType = sourceTypeForKind(kind);
   const procurementPlanCount = items.filter((item) => item.source_type === "procurement_plan").length;
+  const activeCount = isBusiness ? items.filter((item) => businessStatus(item) === "active").length : 0;
+  const closedCount = isBusiness ? items.filter((item) => businessStatus(item) === "closed").length : 0;
+  const unknownCount = isBusiness ? items.filter((item) => businessStatus(item) === "unknown").length : 0;
   const procurementPlanStatus = data?.procurement_plan_collection_status || meta?.procurement_plan_collection_status;
   const g2bOrderPlanStatus = data?.g2b_order_plan_status || meta?.g2b_order_plan_status;
   const g2bOrderPlanMessage = data?.g2b_order_plan_message || meta?.g2b_order_plan_message;
@@ -162,6 +193,13 @@ function ListingPage({ type }) {
       dateMatches = !Number.isNaN(published.getTime()) && published >= threshold;
     }
     return (!query || text.includes(query.toLowerCase())) && sourceMatches && kindMatches && openMatches && dateMatches;
+  }).sort((a, b) => {
+    if (!isBusiness) return 0;
+    const statusDelta = businessStatusRank(a) - businessStatusRank(b);
+    if (statusDelta !== 0) return statusDelta;
+    const aDate = new Date(a.posted_at || a.due_at || 0).getTime() || 0;
+    const bDate = new Date(b.posted_at || b.due_at || 0).getTime() || 0;
+    return bDate - aDate;
   });
   let emptyMessage = "조건에 맞는 정보가 없습니다.";
   if (isBusiness && kind === "발주계획") {
@@ -185,6 +223,7 @@ function ListingPage({ type }) {
       <div className="content-layout">
         <aside className="filters"><h2>검색 조건</h2><SearchBar value={query} onChange={setQuery} placeholder={isBusiness ? "공고명, 기관, 공고번호" : "뉴스 제목, 요약"} /><label>출처<select value={source} onChange={(event) => setSource(event.target.value)}>{sources.map((name) => <option key={name} value={name}>{displaySource(name)}</option>)}</select></label>{isBusiness ? <><label>유형<select value={kind} onChange={(event) => setKind(event.target.value)}><option>전체</option><option>입찰공고</option><option>발주계획</option><option>민간사업자 공모</option></select></label><label className="check-row"><input type="checkbox" checked={openOnly} onChange={(event) => setOpenOnly(event.target.checked)} />마감 전 공고만</label></> : <label>기간<select value={newsDays} onChange={(event) => setNewsDays(event.target.value)}><option>전체</option><option value="7">최근 7일</option><option value="30">최근 30일</option><option value="90">최근 90일</option></select></label>}<p className="filter-note">총 {filtered.length}건</p></aside>
         <section className="results" aria-live="polite">
+          {isBusiness && <div className="source-status lifecycle-summary"><p>전체 {items.length}건 · 진행 {activeCount}건 · 마감 {closedCount}건 · 상태 미확인 {unknownCount}건</p></div>}
           {isBusiness && kind === "발주계획" && !loading && !error && <div className="source-status">
             <p><strong>나라장터</strong> {g2bOrderPlanMessage || "발주계획 수집 상태를 확인 중입니다."}</p>
             {meta?.workflow_last_run_status === "warning" && <p>일부 수집원은 일시적으로 제외되었으며 기존 검증 데이터는 유지됩니다.</p>}
@@ -209,6 +248,7 @@ function DetailPage({ type }) {
   const originalUrl = isBusiness ? item.external_original_url : item.original_url;
   const manualUrl = item.manual_check?.site_url;
   const isContest = isBusiness && item.source_type === "public_agency_contest";
+  const status = isBusiness ? businessStatus(item) : "";
   const attachments = Array.isArray(item.attachments) ? item.attachments : [];
   const modularLabel = item.modular_relevance === "confirmed" ? "모듈러 명시" : (
     item.modular_relevance === "review_candidate" ? "모듈러 적용 검토 대상" : ""
@@ -219,6 +259,7 @@ function DetailPage({ type }) {
         <Link className="back" to={`/${type}`}><ArrowLeft size={17} />목록으로</Link>
         <div className="badge-row"><span>{displaySource(item.source)}</span><span>{isBusiness ? businessKind(item) : "뉴스"}</span>{isBusiness && item.notice_status && <span>{item.notice_status}</span>}</div>
         <h1>{item.title}</h1>
+        {status === "closed" && <p className="closed-inline">마감</p>}
         <dl className="detail-grid"><div><dt>기관</dt><dd>{(isBusiness ? item.organization : item.media) || "-"}</dd></div><div><dt>게시일</dt><dd>{formatDate(isBusiness ? item.posted_at : item.published_at)}</dd></div><div><dt>{isBusiness ? "마감일" : "출처"}</dt><dd>{isBusiness ? formatDate(item.due_at) : (item.source || "네이버뉴스")}</dd></div>{isBusiness && <div><dt>수요기관</dt><dd>{item.demand_org || "-"}</dd></div>}{isBusiness && <div><dt>업무구분</dt><dd>{[item.business_type, item.business_subtype].filter(Boolean).join(" / ") || "-"}</dd></div>}{isBusiness && <div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div>}{isBusiness && <div><dt>공고/판단/계획번호</dt><dd>{item.source_record_id || item.plan_no || item.bid_no || "-"}</dd></div>}{isBusiness && <div><dt>공고차수</dt><dd>{item.bid_order || "-"}</dd></div>}{isBusiness && <div><dt>공고상태</dt><dd>{item.notice_status || "-"}</dd></div>}{isContest && <div><dt>대상지구/블록</dt><dd>{[...(item.project_sites || []), ...(item.project_blocks || [])].join(" / ") || "공고문 확인 필요"}</dd></div>}{isContest && <div><dt>모듈러 관련성</dt><dd>{modularLabel || "확인 필요"}</dd></div>}</dl>
         <section className="summary"><h2>내용</h2><p>{item.summary || "상세 요약이 없습니다."}</p></section>
         {isContest && <section className="summary"><h2>공모 일정</h2><p>{item.application_schedule_text || "공모 일정은 첨부 공고문 확인"}</p></section>}

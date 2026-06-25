@@ -49,6 +49,8 @@ footer { margin-top: 72px; padding: 28px 20px; text-align: center; color: #777; 
 .badge-row { display: flex; gap: 7px; flex-wrap: wrap; }
 .badge-row span { font-size: 12px; font-weight: 700; border: 1px solid #cfcfca; border-radius: 999px; padding: 4px 8px; background: #fafafa; }
 .badge-row .important { color: #9a3412; border-color: #fdba74; background: #fff7ed; }
+.closed-inline { display: inline-flex; width: fit-content; margin: -8px 0 14px; padding: 4px 8px; border: 1px solid #cfcfca; border-radius: 999px; background: #f4f4f1; color: #666; font-size: 12px; font-weight: 800; }
+.lifecycle-summary p { font-size: 13px; }
 .result-card h2 { font-size: 20px; line-height: 1.45; margin: 14px 0 18px; }
 .result-card h2 a:hover { text-decoration: underline; }
 .result-card > p { color: #555; line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }

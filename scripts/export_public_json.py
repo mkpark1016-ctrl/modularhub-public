@@ -17,7 +17,13 @@ sys.path.insert(0, str(ROOT))
 
 from src.config import DB_PATH, D2B_LEGACY_API_ENABLED  # noqa: E402
 from src.database import init_db, load_collect_logs_dataframe, load_items_dataframe  # noqa: E402
-from src.public_data_policy import guard_result, merge_public_items, payload_items  # noqa: E402
+from src.public_data_policy import (  # noqa: E402
+    apply_business_lifecycle,
+    guard_result,
+    load_removal_allowlist,
+    merge_public_items,
+    payload_items,
+)
 
 
 OUTPUT_DIR = ROOT / "frontend" / "public" / "data"
@@ -310,6 +316,48 @@ def load_git_head_payload(name: str) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else {"items": []}
 
 
+def load_git_history_payloads(name: str, *, limit: int = 25) -> list[dict[str, Any]]:
+    rel_path = f"frontend/public/data/{name}"
+    try:
+        history = subprocess.run(
+            ["git", "log", f"--format=%H", f"-n{limit}", "--", rel_path],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+    except Exception:
+        return []
+    payloads: list[dict[str, Any]] = []
+    for sha in [line.strip() for line in history.stdout.splitlines() if line.strip()]:
+        try:
+            result = subprocess.run(
+                ["git", "show", f"{sha}:{rel_path}"],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+            )
+            payload = json.loads(result.stdout)
+        except Exception:
+            continue
+        if isinstance(payload, list):
+            payloads.append({"items": payload})
+        elif isinstance(payload, dict):
+            payloads.append(payload)
+    return payloads
+
+
+def largest_payload_by_item_count(
+    payloads: list[dict[str, Any]],
+    fallback: dict[str, Any],
+) -> dict[str, Any]:
+    candidates = [payload for payload in payloads if isinstance(payload, dict)] + [fallback]
+    return max(candidates, key=lambda payload: len(payload_items(payload)))
+
+
 def normalize_existing_public_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     normalized: list[dict[str, Any]] = []
     contest_only_fields = {"source_code", "link_verified", "original_url"}
@@ -466,12 +514,28 @@ def main() -> int:
     previous_news_payload = load_existing_payload("news.json")
     previous_business = payload_items(previous_business_payload)
     previous_news = payload_items(previous_news_payload)
-    baseline_business_payload = load_git_head_payload("business.json") or previous_business_payload
-    baseline_news_payload = load_git_head_payload("news.json") or previous_news_payload
+    history_business_payloads = load_git_history_payloads("business.json")
+    history_news_payloads = load_git_history_payloads("news.json")
+    git_head_business_payload = load_git_head_payload("business.json") or {"items": []}
+    git_head_news_payload = load_git_head_payload("news.json") or {"items": []}
+    baseline_business_payload = largest_payload_by_item_count(
+        history_business_payloads,
+        git_head_business_payload or previous_business_payload,
+    )
+    baseline_news_payload = largest_payload_by_item_count(
+        history_news_payloads,
+        git_head_news_payload or previous_news_payload,
+    )
     baseline_business = payload_items(baseline_business_payload)
     baseline_news = payload_items(baseline_news_payload)
-    previous_business = normalize_existing_public_items(previous_business)
+    historical_business = payload_items(baseline_business_payload)
+    historical_news = payload_items(baseline_news_payload)
+    git_head_business = payload_items(git_head_business_payload)
+    git_head_news = payload_items(git_head_news_payload)
+    previous_business = normalize_existing_public_items(historical_business + previous_business + git_head_business)
+    previous_news = historical_news + previous_news + git_head_news
     baseline_business = normalize_existing_public_items(baseline_business)
+    removal_allowlist = load_removal_allowlist()
 
     df = load_items_dataframe()
     if df.empty:
@@ -495,8 +559,16 @@ def main() -> int:
     current_business = [business_item(row, details) for row in business_rows]
     current_news = [news_item(row) for row in news_rows]
     merge_time = datetime.now(timezone.utc)
-    business = merge_public_items(previous_business, current_business, kind="business", now=merge_time)
+    generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
+    business = merge_public_items(
+        previous_business,
+        current_business,
+        kind="business",
+        now=merge_time,
+        removal_allowlist=removal_allowlist,
+    )
     news = merge_public_items(previous_news, current_news, kind="news", now=merge_time)
+    business = apply_business_lifecycle(business, now=merge_time, default_last_seen_at=generated_at)
 
     logs = load_collect_logs_dataframe(limit=500)
     plan_status, plan_source_status, plan_collected_at = procurement_plan_collection_status(logs)
@@ -509,7 +581,6 @@ def main() -> int:
             last_collected_at = clean_text(dates.iloc[0]) or None
         warning_count = int((logs["status"] != "success").sum())
 
-    generated_at = datetime.now().astimezone().isoformat(timespec="seconds")
     plan_count = sum(item.get("source_type") == "procurement_plan" for item in business)
     g2b_plan_count = sum(
         item.get("source_type") == "procurement_plan" and item.get("source") in {"나라장터", "G2B", "조달청"}
@@ -549,6 +620,23 @@ def main() -> int:
     gh_contest_meta = public_agency_contest_public_meta(logs, business, source="GH")
     ih_contest_meta = public_agency_contest_public_meta(logs, business, source="iH")
     sh_contest_meta = public_agency_contest_public_meta(logs, business, source="SH")
+    business_active_count = sum(item.get("opportunity_status") == "active" for item in business)
+    business_closed_count = sum(item.get("opportunity_status") == "closed" for item in business)
+    business_unknown_count = sum(item.get("opportunity_status") == "unknown" for item in business)
+    bid_total = sum(item.get("source_type") == "bid" for item in business)
+    public_agency_contest_total = sum(item.get("source_type") == "public_agency_contest" for item in business)
+    gh_public_count = sum(
+        item.get("source") == "GH" and item.get("source_type") == "public_agency_contest"
+        for item in business
+    )
+    ih_public_count = sum(
+        item.get("source") == "iH" and item.get("source_type") == "public_agency_contest"
+        for item in business
+    )
+    sh_public_count = sum(
+        item.get("source") == "SH" and item.get("source_type") == "public_agency_contest"
+        for item in business
+    )
     if D2B_LEGACY_API_ENABLED:
         d2b_log = latest_log(logs, "D2B")
         if d2b_log and clean_text(d2b_log.get("status")) == "success":
@@ -618,6 +706,18 @@ def main() -> int:
         "public_data_guard_status": guard_status,
         "public_data_guard_message": guard_message,
         "data_policy": "cumulative_verified",
+        "business_total": len(business),
+        "business_active": business_active_count,
+        "business_closed": business_closed_count,
+        "business_unknown": business_unknown_count,
+        "bid_total": bid_total,
+        "procurement_plan_total": plan_count,
+        "public_agency_contest_total": public_agency_contest_total,
+        "lh_public_count": lh_contest_count,
+        "gh_public_count": gh_public_count,
+        "ih_public_count": ih_public_count,
+        "sh_public_count": sh_public_count,
+        "last_updated_at": generated_at,
     }
     write_json(
         "business.json",

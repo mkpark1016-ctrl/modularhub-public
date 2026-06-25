@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-import os
+import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
 
 
-DEFAULT_RETENTION_DAYS = 180
+ROOT = Path(__file__).resolve().parents[1]
+REMOVAL_ALLOWLIST_PATH = ROOT / "config" / "public_data_removal_allowlist.json"
 BUSINESS_SHRINK_THRESHOLD = 0.20
 NEWS_SHRINK_THRESHOLD = 0.30
+KST = timezone(timedelta(hours=9), "KST")
 
 
 def clean_text(value: Any) -> str:
@@ -67,6 +69,9 @@ def business_identity(item: dict[str, Any]) -> tuple[str, ...]:
     if posted_at:
         return ("fallback-posted", source, title, organization, posted_at)
     due_at = clean_text(item.get("due_at"))[:10]
+    item_id = clean_text(item.get("id"))
+    if item_id:
+        return ("id", item_id.lower())
     return ("fallback-due", source, title, due_at)
 
 
@@ -115,20 +120,42 @@ def merge_record(existing: dict[str, Any], fresh: dict[str, Any]) -> dict[str, A
     return merged
 
 
+def load_removal_allowlist(path: Path | None = None) -> dict[str, dict[str, Any]]:
+    allowlist_path = path or REMOVAL_ALLOWLIST_PATH
+    if not allowlist_path.exists():
+        return {}
+    try:
+        payload = json.loads(allowlist_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    raw_items = payload.get("items", []) if isinstance(payload, dict) else payload
+    if not isinstance(raw_items, list):
+        return {}
+    allowed: dict[str, dict[str, Any]] = {}
+    for item in raw_items:
+        if not isinstance(item, dict):
+            continue
+        item_id = clean_text(item.get("item_id") or item.get("id"))
+        reason = clean_text(item.get("reason"))
+        if item_id and reason:
+            allowed[item_id] = item
+    return allowed
+
+
+def is_removal_allowed(item: dict[str, Any], allowlist: dict[str, dict[str, Any]] | None = None) -> bool:
+    item_id = clean_text(item.get("id") or item.get("item_id"))
+    if not item_id:
+        return False
+    allowed = allowlist if allowlist is not None else load_removal_allowlist()
+    return item_id in allowed
+
+
 def should_retain_existing(item: dict[str, Any], kind: str, *, now: datetime, retention_days: int) -> bool:
-    if kind == "business" and bool(item.get("is_known_important")):
-        return True
     if kind == "business" and clean_text(item.get("source_type")).lower() == "public_agency_contest":
         stage = clean_text(item.get("notice_status") or item.get("notice_stage"))
         if stage not in {"pre_notice", "main_notice", "re_notice", "correction"}:
             return False
-    field_names = ("due_at", "posted_at") if kind == "business" else ("published_at",)
-    parsed_dates = [parse_public_datetime(item.get(field)) for field in field_names]
-    known_dates = [value for value in parsed_dates if value is not None]
-    if not known_dates:
-        return True
-    cutoff = now.astimezone(timezone.utc) - timedelta(days=retention_days)
-    return max(known_dates) >= cutoff
+    return True
 
 
 def ensure_unique_ids(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -162,18 +189,23 @@ def merge_public_items(
     kind: str,
     now: datetime | None = None,
     retention_days: int | None = None,
+    removal_allowlist: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     if kind not in {"business", "news"}:
         raise ValueError(f"unsupported public data kind: {kind}")
     current_time = now or datetime.now(timezone.utc)
-    keep_days = retention_days or int(os.getenv("PUBLIC_DATA_RETENTION_DAYS", str(DEFAULT_RETENTION_DAYS)))
     identity: Callable[[dict[str, Any]], tuple[str, ...]] = business_identity if kind == "business" else news_identity
     merged_by_key: dict[tuple[str, ...], dict[str, Any]] = {}
+    allowed_removals = removal_allowlist if removal_allowlist is not None else load_removal_allowlist()
 
     for item in existing:
-        if should_retain_existing(item, kind, now=current_time, retention_days=keep_days):
+        if is_removal_allowed(item, allowed_removals):
+            continue
+        if should_retain_existing(item, kind, now=current_time, retention_days=retention_days or 0):
             merged_by_key[identity(item)] = dict(item)
     for item in fresh:
+        if is_removal_allowed(item, allowed_removals):
+            continue
         key = identity(item)
         if key in merged_by_key:
             merged_by_key[key] = merge_record(merged_by_key[key], item)
@@ -184,6 +216,66 @@ def merge_public_items(
     date_field = "posted_at" if kind == "business" else "published_at"
     merged.sort(key=lambda item: (clean_text(item.get(date_field)), clean_text(item.get("id"))), reverse=True)
     return merged
+
+
+def business_lifecycle_fields(
+    item: dict[str, Any],
+    *,
+    now: datetime | None = None,
+    default_last_seen_at: str | None = None,
+) -> dict[str, Any]:
+    current_time = (now or datetime.now(KST)).astimezone(KST)
+    today = current_time.date()
+    due_at = parse_public_datetime(item.get("due_at"))
+    last_seen_at = (
+        clean_text(item.get("last_seen_at"))
+        or clean_text(item.get("collected_at"))
+        or clean_text(item.get("posted_at"))
+        or clean_text(default_last_seen_at)
+    )
+    if due_at is None:
+        return {
+            "opportunity_status": "unknown",
+            "is_closed": False,
+            "days_until_deadline": None,
+            "closed_at": None,
+            "last_seen_at": last_seen_at,
+            "lifecycle_reason": "no_deadline",
+        }
+    due_date = due_at.astimezone(KST).date()
+    days_until_deadline = (due_date - today).days
+    if days_until_deadline < 0:
+        return {
+            "opportunity_status": "closed",
+            "is_closed": True,
+            "days_until_deadline": days_until_deadline,
+            "closed_at": due_date.isoformat(),
+            "last_seen_at": last_seen_at,
+            "lifecycle_reason": "deadline_passed",
+        }
+    return {
+        "opportunity_status": "active",
+        "is_closed": False,
+        "days_until_deadline": days_until_deadline,
+        "closed_at": None,
+        "last_seen_at": last_seen_at,
+        "lifecycle_reason": "deadline_today_or_future",
+    }
+
+
+def apply_business_lifecycle(
+    items: list[dict[str, Any]],
+    *,
+    now: datetime | None = None,
+    default_last_seen_at: str | None = None,
+) -> list[dict[str, Any]]:
+    return [
+        {
+            **item,
+            **business_lifecycle_fields(item, now=now, default_last_seen_at=default_last_seen_at),
+        }
+        for item in items
+    ]
 
 
 def guard_result(
