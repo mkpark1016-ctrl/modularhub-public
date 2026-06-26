@@ -1,0 +1,21 @@
+{
+  "articles": [
+    {
+      "url": "https://example-news.invalid/building/modular-housing?utm_source=feed",
+      "title": "Council approves modular housing project",
+      "seendate": "20260626084500",
+      "domain": "example-news.invalid",
+      "language": "English",
+      "sourcecountry": "United States",
+      "socialimage": "https://example-news.invalid/image.jpg"
+    },
+    {
+      "url": "https://example-news.invalid/technology/modular-synthesizer?utm_campaign=test",
+      "title": "New modular synthesizer software released",
+      "seendate": "20260626080000",
+      "domain": "example-news.invalid",
+      "language": "English",
+      "sourcecountry": "United States"
+    }
+  ]
+}

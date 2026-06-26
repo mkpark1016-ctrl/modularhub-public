@@ -1,0 +1,84 @@
+{
+  "provider": "GDELT DOC 2.0",
+  "endpoint": "https://api.gdeltproject.org/api/v2/doc/doc",
+  "request_interval_seconds": 12.0,
+  "maxrecords": 50,
+  "timespans": ["7d", "30d"],
+  "retry_backoff_seconds": [30, 60, 120, 240],
+  "max_retries": 4,
+  "circuit_breaker_consecutive_429": 2,
+  "countries": [
+    {
+      "code": "GB",
+      "name": "United Kingdom",
+      "name_ko": "영국",
+      "name_en": "United Kingdom",
+      "gdelt_sourcecountry": "unitedkingdom",
+      "gdelt_sourcecountry_candidates": ["unitedkingdom", "GB", "UK"],
+      "enabled": true
+    },
+    {
+      "code": "DE",
+      "name": "Germany",
+      "name_ko": "독일",
+      "name_en": "Germany",
+      "gdelt_sourcecountry": "germany",
+      "gdelt_sourcecountry_candidates": ["germany", "DE"],
+      "enabled": true
+    },
+    {
+      "code": "PL",
+      "name": "Poland",
+      "name_ko": "폴란드",
+      "name_en": "Poland",
+      "gdelt_sourcecountry": "poland",
+      "gdelt_sourcecountry_candidates": ["poland", "PL"],
+      "enabled": true
+    },
+    {
+      "code": "AU",
+      "name": "Australia",
+      "name_ko": "호주",
+      "name_en": "Australia",
+      "gdelt_sourcecountry": "australia",
+      "gdelt_sourcecountry_candidates": ["australia", "AU"],
+      "enabled": true
+    },
+    {
+      "code": "US",
+      "name": "United States",
+      "name_ko": "미국",
+      "name_en": "United States",
+      "gdelt_sourcecountry": "unitedstates",
+      "gdelt_sourcecountry_candidates": ["unitedstates", "US"],
+      "enabled": true
+    },
+    {
+      "code": "CN",
+      "name": "China",
+      "name_ko": "중국",
+      "name_en": "China",
+      "gdelt_sourcecountry": "china",
+      "gdelt_sourcecountry_candidates": ["china", "CN"],
+      "enabled": true
+    },
+    {
+      "code": "SG",
+      "name": "Singapore",
+      "name_ko": "싱가포르",
+      "name_en": "Singapore",
+      "gdelt_sourcecountry": "singapore",
+      "gdelt_sourcecountry_candidates": ["singapore", "SG"],
+      "enabled": true
+    },
+    {
+      "code": "JP",
+      "name": "Japan",
+      "name_ko": "일본",
+      "name_en": "Japan",
+      "gdelt_sourcecountry": "japan",
+      "gdelt_sourcecountry_candidates": ["japan", "JP"],
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "query_packs": [
+    {
+      "id": "core_modular",
+      "label": "Core modular",
+      "queries": [
+        "modular construction",
+        "modular building",
+        "modular housing",
+        "modular home",
+        "volumetric modular",
+        "permanent modular construction"
+      ]
+    },
+    {
+      "id": "prefab_offsite",
+      "label": "Prefab and offsite",
+      "queries": [
+        "prefabricated construction",
+        "prefabricated building",
+        "prefab housing",
+        "prefab building",
+        "offsite construction",
+        "off-site construction"
+      ]
+    },
+    {
+      "id": "applications",
+      "label": "Applications",
+      "queries": [
+        "modular hotel",
+        "modular school",
+        "modular hospital",
+        "modular apartment",
+        "modular dormitory",
+        "modular housing",
+        "prefabricated hotel",
+        "prefabricated school",
+        "prefabricated housing"
+      ],
+      "disabled_queries": [
+        {
+          "query": "modern methods of construction",
+          "reason": "Broad construction-policy term; keep for experimental recall testing only."
+        },
+        {
+          "query": "industrialized construction",
+          "reason": "Broad construction-policy term; keep for experimental recall testing only."
+        }
+      ],
+      "experimental_queries": []
+    }
+  ],
+  "noise_terms": [
+    "software",
+    "synthesizer",
+    "furniture",
+    "smartphone",
+    "modular arithmetic",
+    "blockchain",
+    "reactor"
+  ],
+  "recommended_output_fields": [
+    "news_scope",
+    "news_provider",
+    "source_country_code",
+    "source_country_name",
+    "source_language",
+    "original_title",
+    "query_group",
+    "keyword_query",
+    "publisher_domain",
+    "canonical_url",
+    "image_url"
+  ]
+}
