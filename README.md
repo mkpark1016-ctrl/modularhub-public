@@ -2,7 +2,7 @@
 
 ## 10.0 공개 웹서비스 방향
 
-ModularHub는 기존 로컬 Streamlit 대시보드에서 **사업정보와 뉴스정보에 집중한 공개 웹서비스**로 전환합니다. 공개 화면은 Netlify에 배포 가능한 Vite React 정적 앱이며, Python 수집기와 SQLite는 서버/수집 단계에 그대로 남습니다.
+ModularHub는 기존 로컬 Streamlit 대시보드에서 **사업정보와 뉴스정보에 집중한 공개 웹서비스**로 전환합니다. 공개 화면은 Vercel에 배포되는 Vite React 정적 앱이며, Python 수집기와 SQLite는 서버/수집 단계에 그대로 남습니다.
 
 공개 범위는 다음 두 가지입니다.
 
@@ -16,7 +16,7 @@ R&D, 특허, 트렌드, 블로그, 커뮤니티, 즐겨찾기, 로그인, AI 요
 - `src/`, `scripts/`, `data/`: API Key를 사용하는 Python 수집 및 SQLite 저장
 - `scripts/export_public_site_data.py`: 공개 가능한 필드만 정적 JSON으로 내보내기
 - `frontend/`: API Key 없이 정적 JSON만 읽는 Vite React 공개 앱
-- `netlify.toml`: Netlify 빌드와 SPA 라우팅 설정
+- `frontend/vercel.json`: Vercel SPA 라우팅과 JSON 캐시 설정
 
 프론트엔드에는 `DATA_GO_KR_SERVICE_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`을 넣지 않습니다. `source_detail_api_url`처럼 인증키가 포함될 가능성이 있는 값도 공개 JSON에서 제외됩니다.
 
@@ -72,24 +72,35 @@ cd /d "D:\backup01\Documents\New project 2\frontend"
 npm.cmd run build
 ```
 
-### Netlify 배포
+### Vercel 운영 배포
 
-1. 이 프로젝트를 GitHub 저장소에 push합니다.
-2. Netlify에서 해당 저장소를 연결합니다.
-3. 루트의 `netlify.toml` 설정을 사용해 배포합니다.
-4. 새 데이터를 공개할 때 Python 수집기를 실행한 뒤 `scripts/export_public_site_data.py`를 실행하고, 변경된 `frontend/public/data/*.json`을 GitHub에 반영합니다.
+공식 운영 배포는 Vercel만 사용합니다. Netlify는 크레딧 소모를 막기 위해 관리자 화면에서 Stopped builds 상태로 두며, 저장소에는 Netlify 전용 build 설정을 유지하지 않습니다.
 
-Netlify 설정은 `frontend`를 base directory로, `npm run build`를 build command로, `frontend/dist`를 publish 결과로 사용합니다. SPA redirect가 설정되어 있어 상세 URL을 직접 열어도 React 라우터가 처리합니다.
+Vercel 프로젝트 설정:
 
-> 현재 MVP는 **로컬 수집 → 정적 JSON export → GitHub push → Netlify 배포** 방식입니다. API Key는 Netlify나 브라우저에 배포되지 않습니다.
+- Import Git Repository: `mkpark1016-ctrl/modularhub-public`
+- Framework Preset: `Vite`
+- Root Directory: `frontend`
+- Install Command: `npm install`
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Production Branch: `main`
+- Environment Variables: 없음
 
-### Netlify 배포 전 브라우저 QA
+운영 흐름:
 
-Chrome이 설치된 환경에서 개발 서버를 실행한 후 실제 브라우저 자동 검사를 수행합니다.
+1. GitHub Actions `Update public data` workflow가 schedule 또는 `workflow_dispatch`로 데이터를 수집합니다.
+2. 공개 JSON을 누적 병합하고 보안/축소 방지 테스트가 통과할 때만 `frontend/public/data/*.json`을 commit/push합니다.
+3. Vercel이 `main` 브랜치 commit을 감지해 Production을 재배포합니다.
+4. Vercel에는 API Key를 등록하지 않습니다. `DATA_GO_KR_SERVICE_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`은 GitHub Repository Secrets에만 둡니다.
+5. Vercel Cron은 사용하지 않습니다.
+
+### Vercel 배포 전 브라우저 QA
+
+Chrome이 설치된 환경에서 개발 서버를 실행하고 실제 브라우저 자동 검사를 수행합니다.
 
 ```bat
 cd /d "D:\backup01\Documents\New project 2"
-.\.venv\Scripts\python.exe scripts\export_public_json.py
 .\.venv\Scripts\python.exe scripts\test_public_json_export.py
 
 cd frontend
@@ -106,26 +117,7 @@ cd /d "D:\backup01\Documents\New project 2\frontend"
 npm.cmd run qa:browser
 ```
 
-브라우저 QA는 다음을 자동 확인합니다.
-
-- `/data/business.json`, `/data/news.json`, `/data/meta.json` 로딩과 건수 일치
-- 홈의 사업정보·뉴스정보 CTA와 현재 공개 건수
-- `/business` 검색, 유형 필터, 카드 렌더링
-- `/business/:id` 직접 접속과 새로고침, 기관·공고번호·금액·확인 사이트·복사용 검색어
-- `/news` 검색, 뉴스 카드와 원문 링크
-- `/news/:id` 직접 접속과 새로고침, 매체·게시일·요약·원문 링크
-- 공개 JSON의 API Key 관련 문자열 미포함
-
-검사 스크린샷은 로컬 `frontend/qa-artifacts/`에 생성되며 Git에는 포함되지 않습니다.
-
-Netlify SPA fallback은 `frontend/public/_redirects`와 `frontend/netlify.toml`에 모두 설정되어 있습니다.
-
-```text
-/* /index.html 200
-```
-
-Netlify 배포 후에도 `/business/{id}`와 `/news/{id}`를 주소창에 직접 입력하고 새로고침해 404가 발생하지 않는지 최종 확인합니다.
-
+브라우저 QA는 `/data/business.json`, `/data/news.json`, `/data/meta.json`, `/business`, `/news`, 상세 URL 직접 접근과 새로고침을 확인합니다. SPA fallback은 `frontend/vercel.json`이 담당합니다.
 ### 기존 로컬 대시보드
 
 아래 내용은 수집 상태 확인과 내부 운영용 Streamlit 대시보드 안내입니다.
@@ -1314,11 +1306,11 @@ GitHub 저장소의 `Settings > Secrets and variables > Actions`에 다음 Repos
 4. `business.json`, `news.json`, `meta.json` 생성
 5. 공개 JSON 보안·계약·발주계획 테스트
 6. 사업정보와 뉴스정보가 모두 비어 있지 않을 때만 `frontend/public/data/*.json` commit/push
-7. Netlify가 GitHub push를 감지해 자동 재배포
+7. Vercel이 GitHub main 브랜치 변경을 감지해 Production을 자동 재배포
 
 일부 수집기가 실패해도 다른 수집은 계속되며 실패 기록은 `meta.json`의 warning과 발주계획 수집 상태에 반영됩니다. JSON이 비어 있거나 API Key 노출 테스트가 실패하면 Actions는 commit하지 않습니다.
 
-Netlify 공개 화면에서 발주계획이 0건이면 먼저 GitHub Actions 실행 로그를 확인하고, 로컬에서는 아래 명령으로 DB·export·프론트 연결 지점을 한 번에 진단합니다.
+Vercel 공개 화면에서 발주계획이 0건이면 먼저 GitHub Actions 실행 로그를 확인하고, 로컬에서는 아래 명령으로 DB·export·프론트 연결 지점을 한 번에 진단합니다.
 
 ```bat
 .\.venv\Scripts\python.exe scripts\diagnose_procurement_plan_gap.py
@@ -1358,7 +1350,7 @@ GitHub Actions 실패 확인 방법:
 
 collector 단계는 optional 처리되어 exit code를 warning으로 남기고 다음 단계로 진행합니다. 최종 성공 기준은 `business.json`과 `news.json`이 비어 있지 않고 공개 JSON 보안 및 계약 테스트를 통과하는 것입니다.
 
-새 export가 비어 있으면 workflow는 checkout 시점의 기존 공개 JSON을 복원하고 commit을 건너뜁니다. 따라서 일부 API 실패로 Netlify의 정상 데이터가 빈 파일로 교체되지 않습니다.
+새 export가 비어 있으면 workflow는 checkout 시점의 기존 공개 JSON을 복원하고 commit을 건너뜁니다. 따라서 일부 API 실패로 Vercel의 정상 데이터가 빈 파일로 교체되지 않습니다.
 
 ## 나라장터 발주계획 operation 검증
 
@@ -1403,7 +1395,7 @@ probe는 operation별 결과를 `SUCCESS`, `EMPTY_RESULT`, `AUTH_ERROR`, `NOT_FO
 
 감소 가드는 사업정보가 이전 기준보다 20% 이상, 뉴스정보가 30% 이상 줄어들면 commit을 차단합니다. 누적 병합 최종 결과가 이전 공개 건수 이상이면 신규 수집 건수가 일시적으로 적어도 통과합니다. 의도적인 정리 작업에 한해서만 `ALLOW_PUBLIC_DATA_SHRINK=true`를 설정할 수 있으며 기본값은 `false`입니다.
 
-GitHub Actions는 export 후 건수 진단과 감소 가드를 실행합니다. 가드가 실패하면 checkout 시점의 공개 JSON 백업을 복원하고 workflow를 실패 처리하므로 GitHub와 Netlify의 정상 데이터는 유지됩니다. 보안·계약 테스트는 JSON을 다시 생성하지 않고 생성된 결과를 읽기 전용으로 검사합니다.
+GitHub Actions는 export 후 건수 진단과 감소 가드를 실행합니다. 가드가 실패하면 checkout 시점의 공개 JSON 백업을 복원하고 workflow를 실패 처리하므로 GitHub와 Vercel의 정상 데이터는 유지됩니다. 보안·계약 테스트는 JSON을 다시 생성하지 않고 생성된 결과를 읽기 전용으로 검사합니다.
 
 `meta.json`에는 다음 보호 상태가 기록됩니다.
 
@@ -1415,22 +1407,15 @@ GitHub Actions는 export 후 건수 진단과 감소 가드를 실행합니다. 
 
 D2B 기존 API 중지 상태는 내부 meta warning으로 유지합니다. `probe_d2b_gw.py`, `d2b_gw_bid.py`, `d2b_gw_procurement_plan.py`는 후속 GW API 전환을 위한 자리만 마련했으며 현재 수집 및 공개 JSON에는 연결하지 않습니다.
 
-## Dual Deployment: Netlify + Vercel
+## Vercel-only Production Deployment
 
-ModularHub 공개 프론트는 Netlify 운영 배포를 유지하면서 Vercel에도 같은 GitHub `main` 브랜치를 연결해 병행 배포할 수 있습니다. Netlify 설정 파일은 삭제하지 않으며, 기존 Netlify URL은 Notion 임베드나 백업 접속용 운영 URL로 계속 유지합니다. Vercel은 추가 검증용 배포 채널로 붙입니다.
+ModularHub 공개 프론트의 공식 운영 배포 플랫폼은 Vercel입니다. Netlify는 운영 배포에서 제외되었고, 크레딧 소모를 막기 위해 Netlify 관리자 화면에서 Stopped builds 상태로 관리합니다. 저장소에서는 Netlify 전용 자동 배포 설정을 유지하지 않습니다.
 
-두 플랫폼 모두 `frontend/public/data/business.json`, `frontend/public/data/news.json`, `frontend/public/data/meta.json`을 사용합니다. 데이터 수집과 JSON 갱신은 GitHub Actions가 담당하고, Netlify와 Vercel은 GitHub `main` 변경을 감지해 정적 프론트만 배포합니다.
+공식 Production URL:
 
-주의 사항:
+- `https://modularhub-public.vercel.app`
 
-- Vercel에는 API Key를 등록하지 않습니다.
-- `DATA_GO_KR_SERVICE_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`은 GitHub Repository Secrets에만 둡니다.
-- Vercel Cron은 사용하지 않습니다.
-- GitHub Actions 데이터 갱신 구조는 그대로 유지합니다.
-- Netlify 자동 배포를 끊거나 프로젝트를 삭제하지 않습니다.
-- Netlify 크레딧 소모가 우려되면 코드가 아니라 Netlify 관리자 화면에서 auto publishing, deploy 상태, repository 연결 상태를 별도로 조정합니다.
-
-Vercel 프로젝트 생성 설정:
+Vercel 프로젝트 설정:
 
 - Import Git Repository: `mkpark1016-ctrl/modularhub-public`
 - Framework Preset: `Vite`
@@ -1441,16 +1426,21 @@ Vercel 프로젝트 생성 설정:
 - Production Branch: `main`
 - Environment Variables: 없음
 
-SPA 라우팅:
+운영 원칙:
 
-- Vercel은 `frontend/vercel.json`의 rewrite 설정으로 `/business`, `/news`, `/business/:id`, `/news/:id` 직접 접속과 새로고침을 `index.html`로 연결합니다.
-- Netlify는 기존 `frontend/netlify.toml` 설정을 유지합니다.
+- 데이터 수집과 공개 JSON 갱신은 GitHub Actions `Update public data` workflow가 담당합니다.
+- workflow는 `schedule`과 `workflow_dispatch`를 유지합니다.
+- Vercel은 `main` 브랜치 commit을 감지해 Production을 배포합니다.
+- Vercel에는 API Key나 Secret을 등록하지 않습니다.
+- Vercel Cron은 사용하지 않습니다.
+- `frontend/vercel.json`은 `/business`, `/news`, 상세 URL 직접 접근과 새로고침을 위한 SPA fallback 및 `/data/*.json` 캐시 정책을 담당합니다.
 
-운영 전환 기준:
+수동 데이터 갱신:
 
-- Netlify는 Vercel 안정화 전까지 인터넷 접속 가능한 기존 배포 URL로 유지합니다.
-- Vercel이 2~3일 이상 정상 갱신되면 Notion 임베드 URL을 Vercel로 교체할 수 있습니다.
-- Netlify 프로젝트 삭제는 Vercel 안정화 이후 별도 판단합니다.
+1. GitHub 저장소 `Actions` 탭으로 이동합니다.
+2. `Update public data` workflow를 선택합니다.
+3. `Run workflow`를 누르고 branch는 `main`을 선택합니다.
+4. workflow가 공개 JSON을 commit하면 Vercel이 Production을 자동 재배포합니다.
 
 로컬 검증:
 
@@ -1463,14 +1453,8 @@ cd /d "D:\backup01\Documents\New project 2"
 .\.venv\Scripts\python.exe scripts\diagnose_public_json_counts.py
 .\.venv\Scripts\python.exe scripts\refuse_suspicious_public_data_shrink.py
 .\.venv\Scripts\python.exe scripts\test_public_json_export.py
+.\.venv\Scripts\python.exe scripts\verify_deployed_public_json.py --base-url https://modularhub-public.vercel.app
 ```
-
-배포 흐름:
-
-1. GitHub Actions가 매일 데이터를 수집합니다.
-2. 공개 JSON을 누적 병합하고 축소 방지 검사를 통과한 경우에만 commit/push합니다.
-3. Netlify와 Vercel이 같은 `main` 브랜치 변경을 각각 감지해 재배포합니다.
-
 ## 10.8-A Public Agency Housing Contest Source Probe
 
 이번 단계는 LH, GH, iH, SH 공식 홈페이지에 게시되는 민간참여 공공주택건설사업 민간사업자 공모를 향후 안정적으로 수집하기 위한 진단 단계입니다. DB 저장, 공개 JSON export, 프론트 표시 변경은 하지 않습니다.
@@ -1581,7 +1565,7 @@ GitHub Actions:
 - LH 수집에는 별도 Secret이 필요하지 않습니다.
 - LH 수집 실패는 workflow 전체 실패로 처리하지 않고 `meta.json` warning 상태로 반영합니다.
 - 공개 JSON export, 보안 테스트, 축소 방지 테스트가 통과할 때만 JSON 변경분을 commit/push합니다.
-- Netlify와 Vercel은 동일한 `frontend/public/data/*.json`을 배포합니다.
+- Vercel은 `frontend/public/data/*.json`을 배포합니다.
 
 ## 10.8-C GH·iH 민간참여 공공주택 공모 수집
 
@@ -1629,7 +1613,7 @@ GitHub Actions:
 - GH/iH 수집에는 별도 Secret이 필요하지 않습니다.
 - 기관별 수집 실패는 warning으로 기록하고 기존 공개 JSON을 보존합니다.
 - 공개 JSON export, 축소 방지, 보안/계약 테스트, frontend build가 통과해야만 변경된 JSON을 commit/push합니다.
-- Netlify와 Vercel은 같은 `frontend/public/data/*.json`을 배포합니다.
+- Vercel은 같은 `frontend/public/data/*.json`을 배포합니다.
 
 ## 10.8-D1 SH 공모 게시판 Playwright 구조 진단
 
