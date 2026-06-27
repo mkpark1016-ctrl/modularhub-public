@@ -16,6 +16,7 @@ from scripts.check_gdelt_provider_health import (  # noqa: E402
     EXIT_CODES,
     build_health_url,
     health_plan,
+    provider_decision,
     run_live_health,
     show_cooldown,
     validate_health_query,
@@ -165,7 +166,16 @@ def main() -> int:
         cooldown = json.loads(result.stdout)
         require(cooldown["actual_request_count"] == 0, "--show-cooldown must not request")
         require(cooldown["cooldown_active"] is False, "empty cooldown should not be active")
+        require(cooldown["provider_state"] == "unknown", "empty provider state should be unknown")
         require(not any(Path(tmp).iterdir()), "--show-cooldown must not create files")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        decision = provider_decision("AU", report_dir=Path(tmp), cooldown_seconds=3600)
+        require(decision["actual_request_count"] == 0, "provider decision must not request")
+        require(decision["provider_state"] == "unknown", "missing state should be unknown")
+        require(decision["10.10-A.4_ready"] is False, "missing state should not be A.4 ready")
+        require(decision["10.10-B1_ready"] is False, "missing state should not be B1 ready")
+        require(not any(Path(tmp).iterdir()), "provider decision must not create files")
 
     with tempfile.TemporaryDirectory() as tmp:
         conflict = subprocess.run(
@@ -215,6 +225,11 @@ def main() -> int:
     summary, _, _ = run_case(FakeResponse(429, {"articles": []}, headers={"Content-Type": "application/json", "Retry-After": "60"}), "rate_limited")
     require(summary["retry_after"] == "60", "Retry-After not recorded")
     require(EXIT_CODES[summary["status"]] == 2, "rate_limited exit code mismatch")
+    require(summary["provider_state"] == "degraded", "first 429 should degrade provider")
+    state = json.loads((_ / "last_attempt.json").read_text(encoding="utf-8"))
+    require(state["consecutive_rate_limit_count"] == 1, "first 429 count mismatch")
+    require(state["provider_state"] == "degraded", "first 429 state mismatch")
+    require(state["webngrams_probe_allowed"] is True, "degraded provider should allow Web NGrams probe")
 
     tmpdir = Path(tempfile.mkdtemp())
     first_transport = FakeTransport(FakeResponse(429, {"articles": []}, headers={"Content-Type": "application/json"}))
@@ -225,6 +240,35 @@ def main() -> int:
     second_transport = FakeTransport(FakeResponse(200, {"articles": []}))
     second = run_live_health(country_code="AU", timeout=1, report_dir=tmpdir, get_func=second_transport.get)
     require(second["status"] == "cooldown_active" and len(second_transport.calls) == 0, "429 cooldown should block rerun")
+
+    tmpdir = Path(tempfile.mkdtemp())
+    (tmpdir / "last_attempt.json").write_text(
+        json.dumps(
+            {
+                "attempted_at": "2099-01-01T00:00:00Z",
+                "country": "AU",
+                "query_profile": "health",
+                "query_fingerprint": "legacy",
+                "http_status": 429,
+                "health_status": "rate_limited",
+                "request_count": 1,
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    decision = provider_decision("AU", report_dir=tmpdir, cooldown_seconds=3600)
+    require(decision["provider_state"] == "quarantined", "legacy repeated 429 should quarantine provider")
+    require(decision["consecutive_rate_limit_count"] >= 2, "legacy repeated 429 count mismatch")
+    require(decision["doc_api_collection_allowed"] is False, "quarantine should block DOC API")
+    require(decision["webngrams_probe_allowed"] is True, "quarantine should allow Web NGrams probe")
+    require(decision["recommended_next_source"] == "gdelt_web_news_ngrams", "next source mismatch")
+    require(decision["10.10-A.4_ready"] is False, "quarantine should block A.4")
+    require(decision["10.10-B1_ready"] is True, "quarantine should prepare B1")
+    blocked_transport = FakeTransport(FakeResponse(200, {"articles": []}))
+    blocked = run_live_health(country_code="AU", timeout=1, report_dir=tmpdir, get_func=blocked_transport.get)
+    require(blocked["status"] == "skipped_provider_quarantined", "quarantined provider should skip live")
+    require(blocked["actual_request_count"] == 0 and len(blocked_transport.calls) == 0, "quarantine skip must not call transport")
 
     tmpdir = Path(tempfile.mkdtemp())
     run_live_health(country_code="AU", timeout=1, report_dir=tmpdir, get_func=FakeTransport(FakeResponse(429, {"articles": []}, headers={"Retry-After": "7200"})).get)
@@ -245,6 +289,7 @@ def main() -> int:
     require(EXIT_CODES[summary["status"]] == 3, "invalid_query exit code mismatch")
     state = json.loads((_ / "last_attempt.json").read_text(encoding="utf-8"))
     require(state["local_cooldown_seconds"] == 0, "invalid_query should not create cooldown")
+    require(state["consecutive_rate_limit_count"] == 0, "invalid_query should not increment rate limit count")
 
     long_term = "m" * 121
     summary, transport, _ = run_case(FakeResponse(200, {"articles": [{"title": "Should not request"}]}), "invalid_query", health_term=long_term)
@@ -283,6 +328,11 @@ def main() -> int:
     require(EXIT_CODES[summary["status"]] == 4, "timeout exit code mismatch")
     state = json.loads((_ / "last_attempt.json").read_text(encoding="utf-8"))
     require(state["local_cooldown_seconds"] == 900, "timeout cooldown mismatch")
+
+    summary, _, tmpdir = run_case(FakeResponse(200, {"articles": [{"title": "Modular housing"}]}), "healthy")
+    state = json.loads((tmpdir / "last_attempt.json").read_text(encoding="utf-8"))
+    require(state["consecutive_rate_limit_count"] == 0, "healthy response should reset rate limit count")
+    require(state["provider_state"] == "healthy", "healthy provider state mismatch")
 
     print("GDELT PROVIDER HEALTH TEST PASSED")
     return 0

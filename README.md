@@ -1773,3 +1773,19 @@ Live health checks must be explicit:
 ```
 
 Cooldown state is stored at `artifacts/global_news_health/last_attempt.json`. Reports are written under `artifacts/global_news_health/`. The `artifacts/` directory is intentionally not tracked by Git.
+
+Provider quarantine policy:
+
+- The DOC 2.0 API is an optional provider for ModularHub global news, not the only planned source.
+- A first HTTP 429 moves the provider to `degraded`; two consecutive HTTP 429 results move it to `quarantined`.
+- Quarantine lasts 24 hours under ModularHub's internal safety policy. This is not an official GDELT limit.
+- While quarantined, DOC API live health checks, country sweeps, and article collection must stop before any HTTP request is sent.
+- Do not repeatedly call live health checks manually to bypass quarantine.
+- During quarantine, `doc_api_collection_allowed=false`, `webngrams_probe_allowed=true`, and the recommended next source is `gdelt_web_news_ngrams`.
+- The next fallback research path is GDELT Web News NGrams 3.0 plus Article List lookups.
+
+Provider decision can be inspected without network access:
+
+```bat
+.\.venv\Scripts\python.exe scripts\check_gdelt_provider_health.py --country AU --provider-decision
+```

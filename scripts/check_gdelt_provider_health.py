@@ -38,6 +38,7 @@ HEALTH_URL_MAX_CHARS = 1000
 NORMAL_COOLDOWN_SECONDS = 10
 RATE_LIMIT_COOLDOWN_SECONDS = 3600
 TRANSIENT_ERROR_COOLDOWN_SECONDS = 900
+PROVIDER_QUARANTINE_SECONDS = 24 * 60 * 60
 PUBLIC_DATA_PATHS = [
     ROOT / "frontend" / "public" / "data" / "business.json",
     ROOT / "frontend" / "public" / "data" / "news.json",
@@ -49,6 +50,7 @@ EXIT_CODES = {
     "healthy_no_matches": 0,
     "rate_limited": 2,
     "cooldown_active": 2,
+    "skipped_provider_quarantined": 2,
     "invalid_query": 3,
     "invalid_response": 3,
     "provider_blocked": 3,
@@ -57,6 +59,8 @@ EXIT_CODES = {
     "timeout": 4,
     "plan": 0,
 }
+PROVIDER_STATES = {"unknown", "healthy", "degraded", "quarantined", "unavailable"}
+RECOMMENDED_NEXT_SOURCE = "gdelt_web_news_ngrams"
 INVALID_QUERY_PATTERNS = (
     "query was too short",
     "query was too long",
@@ -132,6 +136,13 @@ def retry_after_seconds(value: Any) -> int | None:
     return max(0, seconds)
 
 
+def safe_int(value: Any, default: int = 0) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def cooldown_seconds_for_status(status: str, retry_after: int | None, *, rate_limit_cooldown_seconds: int) -> tuple[int, str]:
     if status in {"healthy", "healthy_no_matches"}:
         return NORMAL_COOLDOWN_SECONDS, "local_policy"
@@ -183,6 +194,101 @@ def load_cooldown_state(report_dir: Path) -> tuple[dict[str, Any] | None, bool]:
     return fallback_state_from_health_report(report_dir), False
 
 
+def rate_limit_count_from_state(state: dict[str, Any]) -> int:
+    if state.get("consecutive_rate_limit_count") is not None:
+        try:
+            return max(0, int(state.get("consecutive_rate_limit_count") or 0))
+        except (TypeError, ValueError):
+            return 0
+    if clean_text(state.get("health_status")) == "rate_limited" or safe_int(state.get("http_status")) == 429:
+        # Legacy health state did not persist a counter. This project has already
+        # observed repeated AU 429 responses; treat legacy 429 health state as the
+        # second consecutive limit event so DOC API calls remain safely isolated.
+        return 2
+    return 0
+
+
+def provider_state_from_status(status: str, count: int, *, network_error: bool = False) -> str:
+    if status in {"healthy", "healthy_no_matches"}:
+        return "healthy"
+    if status == "rate_limited":
+        return "quarantined" if count >= 2 else "degraded"
+    if status in {"timeout", "provider_unavailable", "invalid_response"}:
+        return "degraded"
+    if status == "network_error" and network_error:
+        return "unavailable"
+    return "unknown"
+
+
+def quarantine_until_for_state(state: dict[str, Any], count: int) -> str:
+    explicit = clean_text(state.get("quarantine_until"))
+    if explicit:
+        return explicit
+    if count < 2:
+        return ""
+    anchor = parse_iso_utc(state.get("last_rate_limited_at")) or parse_iso_utc(state.get("attempted_at"))
+    if not anchor:
+        return ""
+    return iso_utc(anchor + timedelta(seconds=PROVIDER_QUARANTINE_SECONDS))
+
+
+def enrich_provider_state(state: dict[str, Any] | None, *, now: datetime | None = None) -> dict[str, Any]:
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    if not state:
+        return {
+            "provider_state": "unknown",
+            "previous_health_status": "",
+            "previous_http_status": None,
+            "consecutive_rate_limit_count": 0,
+            "first_rate_limited_at": "",
+            "last_rate_limited_at": "",
+            "quarantine_reason": "",
+            "quarantine_until": "",
+            "quarantine_active": False,
+            "remaining_seconds": 0,
+            "doc_api_collection_allowed": False,
+            "webngrams_probe_allowed": False,
+            "recommended_next_source": "",
+        }
+    status = clean_text(state.get("health_status"))
+    http_status = state.get("http_status")
+    count = rate_limit_count_from_state(state)
+    first_rate_limited_at = clean_text(state.get("first_rate_limited_at"))
+    last_rate_limited_at = clean_text(state.get("last_rate_limited_at"))
+    if status == "rate_limited" or safe_int(http_status) == 429:
+        attempted = clean_text(state.get("attempted_at"))
+        first_rate_limited_at = first_rate_limited_at or attempted
+        last_rate_limited_at = last_rate_limited_at or attempted
+    provider_state = clean_text(state.get("provider_state")) or provider_state_from_status(status, count)
+    if provider_state not in PROVIDER_STATES:
+        provider_state = provider_state_from_status(status, count)
+    quarantine_reason = clean_text(state.get("quarantine_reason"))
+    if provider_state == "quarantined" and not quarantine_reason:
+        quarantine_reason = "consecutive_http_429"
+    quarantine_until = quarantine_until_for_state({**state, "last_rate_limited_at": last_rate_limited_at}, count)
+    quarantine_dt = parse_iso_utc(quarantine_until)
+    remaining = max(0, int((quarantine_dt - now).total_seconds())) if quarantine_dt else 0
+    quarantine_active = provider_state == "quarantined" and remaining > 0
+    doc_allowed = provider_state in {"healthy", "degraded"} and not quarantine_active
+    webngrams_allowed = provider_state in {"degraded", "quarantined", "unavailable"}
+    recommended = RECOMMENDED_NEXT_SOURCE if webngrams_allowed else ""
+    return {
+        "provider_state": provider_state,
+        "previous_health_status": status,
+        "previous_http_status": http_status,
+        "consecutive_rate_limit_count": count,
+        "first_rate_limited_at": first_rate_limited_at,
+        "last_rate_limited_at": last_rate_limited_at,
+        "quarantine_reason": quarantine_reason,
+        "quarantine_until": quarantine_until,
+        "quarantine_active": quarantine_active,
+        "remaining_seconds": remaining,
+        "doc_api_collection_allowed": doc_allowed,
+        "webngrams_probe_allowed": webngrams_allowed,
+        "recommended_next_source": recommended,
+    }
+
+
 def cooldown_status(
     *,
     report_dir: Path,
@@ -204,6 +310,8 @@ def cooldown_status(
         "previous_health_status": "",
         "actual_request_count": 0,
         "cooldown_source": "",
+        "state_source": "none",
+        **enrich_provider_state(None, now=now),
     }
     if not state:
         return base
@@ -214,6 +322,7 @@ def cooldown_status(
     attempted_at = parse_iso_utc(state.get("attempted_at"))
     if not attempted_at:
         return base
+    provider_fields = enrich_provider_state(state, now=now)
     status = clean_text(state.get("health_status"))
     retry_after = retry_after_seconds(state.get("retry_after_seconds"))
     cooldown_seconds, source = cooldown_seconds_for_status(
@@ -234,12 +343,63 @@ def cooldown_status(
             "actual_request_count": 0,
             "cooldown_source": source,
             "state_source": state.get("state_source", "state_file"),
+            **provider_fields,
         }
     )
     return base
 
 
-def write_cooldown_state(report_dir: Path, summary: dict[str, Any], *, rate_limit_cooldown_seconds: int) -> None:
+def state_fields_for_summary(
+    summary: dict[str, Any],
+    *,
+    previous_state: dict[str, Any] | None,
+) -> dict[str, Any]:
+    status = clean_text(summary.get("status"))
+    attempted = clean_text(summary.get("checked_at"))
+    previous_count = rate_limit_count_from_state(previous_state or {})
+    previous_first_rate_limited = clean_text((previous_state or {}).get("first_rate_limited_at"))
+    if status == "rate_limited":
+        count = previous_count + 1
+        first_rate_limited_at = previous_first_rate_limited or attempted
+        last_rate_limited_at = attempted
+    elif status in {"healthy", "healthy_no_matches"}:
+        count = 0
+        first_rate_limited_at = ""
+        last_rate_limited_at = ""
+    else:
+        count = previous_count
+        first_rate_limited_at = previous_first_rate_limited
+        last_rate_limited_at = clean_text((previous_state or {}).get("last_rate_limited_at"))
+
+    provider_state = provider_state_from_status(status, count, network_error=status == "network_error")
+    quarantine_reason = "consecutive_http_429" if provider_state == "quarantined" else ""
+    quarantine_until = ""
+    if provider_state == "quarantined":
+        anchor = parse_iso_utc(last_rate_limited_at) or parse_iso_utc(attempted)
+        if anchor:
+            quarantine_until = iso_utc(anchor + timedelta(seconds=PROVIDER_QUARANTINE_SECONDS))
+    doc_allowed = provider_state in {"healthy", "degraded"}
+    webngrams_allowed = provider_state in {"degraded", "quarantined", "unavailable"}
+    return {
+        "consecutive_rate_limit_count": count,
+        "first_rate_limited_at": first_rate_limited_at,
+        "last_rate_limited_at": last_rate_limited_at,
+        "provider_state": provider_state,
+        "quarantine_reason": quarantine_reason,
+        "quarantine_until": quarantine_until,
+        "recommended_next_source": RECOMMENDED_NEXT_SOURCE if webngrams_allowed else "",
+        "doc_api_collection_allowed": doc_allowed and provider_state != "quarantined",
+        "webngrams_probe_allowed": webngrams_allowed,
+    }
+
+
+def write_cooldown_state(
+    report_dir: Path,
+    summary: dict[str, Any],
+    *,
+    rate_limit_cooldown_seconds: int,
+    previous_state: dict[str, Any] | None = None,
+) -> None:
     attempted = parse_iso_utc(summary.get("checked_at")) or datetime.now(timezone.utc)
     retry_after = retry_after_seconds(summary.get("retry_after"))
     cooldown_seconds, source = cooldown_seconds_for_status(
@@ -260,6 +420,7 @@ def write_cooldown_state(report_dir: Path, summary: dict[str, Any], *, rate_limi
         "request_count": summary.get("request_count", 0),
         "cooldown_source": source,
     }
+    state.update(state_fields_for_summary(summary, previous_state=previous_state))
     report_dir.mkdir(parents=True, exist_ok=True)
     (report_dir / "last_attempt.json").write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -448,6 +609,19 @@ def health_plan(
         "last_http_status": cooldown["previous_http_status"],
         "last_health_status": cooldown["previous_health_status"],
         "cooldown_source": cooldown.get("cooldown_source", ""),
+        "provider_state": cooldown["provider_state"],
+        "consecutive_rate_limit_count": cooldown["consecutive_rate_limit_count"],
+        "quarantine_active": cooldown["quarantine_active"],
+        "quarantine_until": cooldown["quarantine_until"],
+        "quarantine_reason": cooldown["quarantine_reason"],
+        "doc_api_collection_allowed": cooldown["doc_api_collection_allowed"],
+        "webngrams_probe_allowed": cooldown["webngrams_probe_allowed"],
+        "recommended_next_source": cooldown["recommended_next_source"],
+        "10.10-A.4_ready": cooldown["provider_state"] == "healthy",
+        "10.10-B1_ready": cooldown["provider_state"] == "quarantined"
+        and cooldown["doc_api_collection_allowed"] is False
+        and cooldown["webngrams_probe_allowed"] is True
+        and cooldown["recommended_next_source"] == RECOMMENDED_NEXT_SOURCE,
         "request_count": 0,
         "retry_count": 0,
         "expected_request_count": 1,
@@ -503,6 +677,7 @@ def run_live_health(
         report_dir=report_dir,
         cooldown_seconds=cooldown_seconds,
     )
+    previous_state, _ = load_cooldown_state(report_dir)
     request_url = summary["request_url_redacted"]
     if not summary["query_preflight_passed"]:
         after = integrity_snapshot()
@@ -514,6 +689,23 @@ def run_live_health(
                 "status": "invalid_query",
                 "failure_reason": summary["query_preflight_reason"],
                 "response_error_category": "query_preflight_failed",
+                **integrity,
+            }
+        )
+        write_reports(report_dir, summary)
+        return summary
+    if summary["provider_state"] == "quarantined" and summary["quarantine_active"]:
+        after = integrity_snapshot()
+        integrity = integrity_unchanged(before, after)
+        summary.update(
+            {
+                "request_count": 0,
+                "retry_count": 0,
+                "actual_request_count": 0,
+                "status": "skipped_provider_quarantined",
+                "failure_reason": "provider_quarantine_active",
+                "response_error_category": "provider_quarantine",
+                "file_created_count": 2,
                 **integrity,
             }
         )
@@ -636,7 +828,8 @@ def run_live_health(
             **integrity,
         }
     )
-    write_cooldown_state(report_dir, summary, rate_limit_cooldown_seconds=cooldown_seconds)
+    summary.update(state_fields_for_summary(summary, previous_state=previous_state))
+    write_cooldown_state(report_dir, summary, rate_limit_cooldown_seconds=cooldown_seconds, previous_state=previous_state)
     write_reports(report_dir, summary)
     return summary
 
@@ -661,6 +854,11 @@ def write_reports(report_dir: Path, summary: dict[str, Any]) -> None:
         f"- query_preflight_passed: `{summary['query_preflight_passed']}`",
         f"- production_query_pack_used: `{summary['production_query_pack_used']}`",
         f"- query_fingerprint: `{summary['query_fingerprint']}`",
+        f"- provider_state: `{summary.get('provider_state', '')}`",
+        f"- consecutive_rate_limit_count: `{summary.get('consecutive_rate_limit_count', 0)}`",
+        f"- quarantine_active: `{summary.get('quarantine_active', False)}`",
+        f"- quarantine_until: `{summary.get('quarantine_until', '')}`",
+        f"- recommended_next_source: `{summary.get('recommended_next_source', '')}`",
         f"- next_step_allowed: `{summary['status'] in {'healthy', 'healthy_no_matches'}}`",
         f"- response_error_category: `{summary['response_error_category']}`",
         f"- failure_reason: `{summary['failure_reason']}`",
@@ -688,8 +886,53 @@ def show_cooldown(country_code: str, *, report_dir: Path, cooldown_seconds: int)
         "remaining_seconds": status["remaining_seconds"],
         "previous_http_status": status["previous_http_status"],
         "previous_health_status": status["previous_health_status"],
+        "provider_state": status["provider_state"],
+        "consecutive_rate_limit_count": status["consecutive_rate_limit_count"],
+        "quarantine_active": status["quarantine_active"],
+        "quarantine_until": status["quarantine_until"],
+        "quarantine_reason": status["quarantine_reason"],
+        "doc_api_collection_allowed": status["doc_api_collection_allowed"],
+        "webngrams_probe_allowed": status["webngrams_probe_allowed"],
+        "recommended_next_source": status["recommended_next_source"],
         "actual_request_count": 0,
         "cooldown_source": status.get("cooldown_source", ""),
+    }
+
+
+def provider_decision(country_code: str, *, report_dir: Path, cooldown_seconds: int) -> dict[str, Any]:
+    country_config = load_json(COUNTRIES_PATH)
+    country = find_country(country_config, country_code)
+    status = cooldown_status(
+        report_dir=report_dir,
+        country_code=clean_text(country.get("code")).upper(),
+        query_profile="health",
+        rate_limit_cooldown_seconds=cooldown_seconds,
+    )
+    b1_ready = (
+        status["provider_state"] == "quarantined"
+        and status["doc_api_collection_allowed"] is False
+        and status["webngrams_probe_allowed"] is True
+        and status["recommended_next_source"] == RECOMMENDED_NEXT_SOURCE
+    )
+    return {
+        "country_code": clean_text(country.get("code")).upper(),
+        "sourcecountry": gdelt_sourcecountry(country),
+        "provider_state": status["provider_state"],
+        "previous_health_status": status["previous_health_status"],
+        "previous_http_status": status["previous_http_status"],
+        "consecutive_rate_limit_count": status["consecutive_rate_limit_count"],
+        "quarantine_active": status["quarantine_active"],
+        "quarantine_until": status["quarantine_until"],
+        "remaining_seconds": status["remaining_seconds"],
+        "quarantine_reason": status["quarantine_reason"],
+        "doc_api_collection_allowed": status["doc_api_collection_allowed"],
+        "webngrams_probe_allowed": status["webngrams_probe_allowed"],
+        "recommended_next_source": status["recommended_next_source"],
+        "10.10-A.4_ready": status["provider_state"] == "healthy",
+        "10.10-B1_ready": b1_ready,
+        "state_file": status["state_file"],
+        "state_file_exists": status["state_file_exists"],
+        "actual_request_count": 0,
     }
 
 
@@ -703,6 +946,7 @@ def main() -> int:
     parser.add_argument("--live", action="store_true")
     parser.add_argument("--cooldown-seconds", type=int, default=RATE_LIMIT_COOLDOWN_SECONDS)
     parser.add_argument("--show-cooldown", action="store_true")
+    parser.add_argument("--provider-decision", action="store_true")
     parser.add_argument("--report-dir", type=Path, default=DEFAULT_REPORT_DIR)
     args = parser.parse_args()
     if clean_text(args.health_term) and clean_text(args.health_phrase):
@@ -712,6 +956,11 @@ def main() -> int:
     if args.show_cooldown:
         cooldown = show_cooldown(args.country, report_dir=args.report_dir, cooldown_seconds=args.cooldown_seconds)
         print(json.dumps(cooldown, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.provider_decision:
+        decision = provider_decision(args.country, report_dir=args.report_dir, cooldown_seconds=args.cooldown_seconds)
+        print(json.dumps(decision, ensure_ascii=False, indent=2))
         return 0
 
     if args.print_plan or not args.live:
