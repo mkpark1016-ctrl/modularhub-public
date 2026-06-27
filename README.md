@@ -1737,3 +1737,39 @@ Shadow 결과는 `sh-shadow-<run_id>` artifact에 저장됩니다.
 - `artifacts/sh_shadow/candidates.json`
 
 `candidates.json`은 후보가 없더라도 빈 배열로 생성됩니다. `publish_eligible_count`가 1 이상이면 공개 반영 전에 후보의 원문 링크, 공고 단계, exact link 검증 결과를 수동으로 검토합니다. GitHub cron은 UTC 기준이므로 한국시간 운영 일정과 비교할 때 9시간 차이를 적용합니다.
+## GDELT global news health gate
+
+The GDELT global news health gate is a provider availability check only. It does not collect articles into the database, does not update `frontend/public/data/news.json`, and does not run the production global-news query pack.
+
+Health query policy:
+
+- Health profile query: `modular sourcecountry:{gdelt_sourcecountry}`
+- Default country: `AU` (`sourcecountry:australia`)
+- Production Query Packs in `config/global_news_queries.json` are not used by the health check.
+- No automatic retry, no country fallback, no 30-day fallback, and no query-pack fallback are performed.
+- A healthy or healthy_no_matches result is required before a later clean quality run.
+
+Cooldown policy:
+
+- Cooldown values are ModularHub internal safety limits, not official GDELT rate limits.
+- Normal successful response: wait at least 10 seconds before another live health request.
+- HTTP 429: wait at least 3600 seconds, or longer if a numeric Retry-After value is greater.
+- Timeout, provider_unavailable, or invalid_response: wait 900 seconds.
+- invalid_query is treated as a code/query issue and is not a cooldown condition.
+- Avoid repeated manual live checks on the same day after rate limiting.
+
+Local commands:
+
+```bat
+cd /d "D:\backup01\Documents\New project 2"
+.\.venv\Scripts\python.exe scripts\check_gdelt_provider_health.py --country AU --print-plan
+.\.venv\Scripts\python.exe scripts\check_gdelt_provider_health.py --country AU --show-cooldown
+```
+
+Live health checks must be explicit:
+
+```bat
+.\.venv\Scripts\python.exe scripts\check_gdelt_provider_health.py --country AU --live
+```
+
+Cooldown state is stored at `artifacts/global_news_health/last_attempt.json`. Reports are written under `artifacts/global_news_health/`. The `artifacts/` directory is intentionally not tracked by Git.
