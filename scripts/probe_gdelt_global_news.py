@@ -23,6 +23,10 @@ COUNTRIES_PATH = ROOT / "config" / "global_news_countries.json"
 QUERIES_PATH = ROOT / "config" / "global_news_queries.json"
 DEFAULT_OUTPUT_DIR = ROOT / "artifacts" / "global_news_probe"
 USER_AGENT = "ModularHubGDELTProbe/0.2 (+https://github.com/mkpark1016-ctrl/modularhub-public)"
+PROBE_VERSION = "0.3"
+CHECKPOINT_SCHEMA_VERSION = 2
+PROBE_SCHEMA_VERSION = "gdelt-global-news-probe-checkpoint-v2"
+QUERY_GENERATOR_VERSION = "query-generator-r2"
 TERMINAL_SUCCESS = {"success", "success_no_matches"}
 ERROR_STATUSES = {
     "provider_rate_limited",
@@ -71,6 +75,14 @@ def load_json(path: Path) -> Any:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def stable_json(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def sha256_json(value: Any) -> str:
+    return hashlib.sha256(stable_json(value).encode("utf-8")).hexdigest()
 
 
 def clean_text(value: Any) -> str:
@@ -127,6 +139,124 @@ def build_gdelt_params(country: dict[str, Any], query_config: dict[str, Any], *,
 
 def build_gdelt_url(endpoint: str, country: dict[str, Any], query_config: dict[str, Any], *, timespan: str, maxrecords: int) -> str:
     return f"{endpoint}?{urlencode(build_gdelt_params(country, query_config, timespan=timespan, maxrecords=maxrecords))}"
+
+
+def normalize_country_config_for_fingerprint(country_config: dict[str, Any]) -> dict[str, Any]:
+    normalized = {key: value for key, value in country_config.items() if key != "countries"}
+    normalized["countries"] = sorted(
+        [dict(country) for country in country_config.get("countries", [])],
+        key=lambda country: clean_text(country.get("code")).upper(),
+    )
+    return normalized
+
+
+def normalize_query_config_for_fingerprint(query_config: dict[str, Any]) -> dict[str, Any]:
+    normalized = {key: value for key, value in query_config.items() if key != "query_packs"}
+    normalized["query_packs"] = sorted(
+        [dict(pack) for pack in query_config.get("query_packs", [])],
+        key=lambda pack: clean_text(pack.get("id")),
+    )
+    return normalized
+
+
+def config_fingerprint_payload(country_config: dict[str, Any], query_config: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "probe_schema_version": PROBE_SCHEMA_VERSION,
+        "query_generator_version": QUERY_GENERATOR_VERSION,
+        "countries": normalize_country_config_for_fingerprint(country_config),
+        "queries": normalize_query_config_for_fingerprint(query_config),
+    }
+
+
+def config_fingerprint(country_config: dict[str, Any], query_config: dict[str, Any]) -> str:
+    return sha256_json(config_fingerprint_payload(country_config, query_config))
+
+
+def short_fingerprint(value: str) -> str:
+    return value[:12]
+
+
+def active_query_pack_manifest(query_config: dict[str, Any]) -> list[dict[str, Any]]:
+    packs: list[dict[str, Any]] = []
+    for pack in query_config.get("query_packs", []):
+        queries = [clean_text(term) for term in pack.get("queries", []) if clean_text(term)]
+        if queries:
+            packs.append({"id": clean_text(pack.get("id")), "queries": queries})
+    return packs
+
+
+def query_fingerprint_payload(country: dict[str, Any], query_config: dict[str, Any], *, timespan: str, maxrecords: int) -> dict[str, Any]:
+    params = build_gdelt_params(country, query_config, timespan=timespan, maxrecords=maxrecords)
+    return {
+        "country_code": clean_text(country.get("code")).upper(),
+        "gdelt_sourcecountry": gdelt_sourcecountry(country),
+        "active_query_packs": active_query_pack_manifest(query_config),
+        "query": params["query"],
+        "timespan": params["timespan"],
+        "maxrecords": params["maxrecords"],
+        "mode": params["mode"],
+        "format": params["format"],
+        "sort": params["sort"],
+    }
+
+
+def country_query_fingerprint(country: dict[str, Any], query_config: dict[str, Any], *, timespan: str, maxrecords: int) -> str:
+    return sha256_json(query_fingerprint_payload(country, query_config, timespan=timespan, maxrecords=maxrecords))
+
+
+def generate_run_id(config_fingerprint_value: str, *, now: datetime | None = None) -> str:
+    timestamp = (now or datetime.now(timezone.utc)).strftime("%Y%m%dT%H%M%SZ")
+    return f"{timestamp}-{short_fingerprint(config_fingerprint_value)}"
+
+
+def build_query_manifest(
+    country_config: dict[str, Any],
+    query_config: dict[str, Any],
+    *,
+    generated_at: str | None = None,
+    run_id: str | None = None,
+    timespan: str | None = None,
+    maxrecords: int | None = None,
+) -> dict[str, Any]:
+    generated_at = generated_at or utc_now_iso()
+    fingerprint = config_fingerprint(country_config, query_config)
+    run_id = run_id or generate_run_id(fingerprint)
+    timespan = timespan or str((country_config.get("timespans") or ["7d"])[0])
+    maxrecords = int(maxrecords if maxrecords is not None else country_config.get("maxrecords") or 50)
+    endpoint = str(country_config["endpoint"])
+    countries: list[dict[str, Any]] = []
+    for country in sorted(country_config.get("countries", []), key=lambda item: clean_text(item.get("code")).upper()):
+        if not country.get("enabled", True):
+            continue
+        validate_country_config(country)
+        query_fp = country_query_fingerprint(country, query_config, timespan=timespan, maxrecords=maxrecords)
+        countries.append(
+            {
+                "code": clean_text(country.get("code")).upper(),
+                "name": clean_text(country.get("name")),
+                "gdelt_sourcecountry": gdelt_sourcecountry(country),
+                "query": build_country_query(country, query_config),
+                "url": build_gdelt_url(endpoint, country, query_config, timespan=timespan, maxrecords=maxrecords),
+                "timespan": timespan,
+                "maxrecords": str(maxrecords),
+                "mode": "artlist",
+                "format": "json",
+                "sort": "datedesc",
+                "query_fingerprint": query_fp,
+                "query_fingerprint_short": short_fingerprint(query_fp),
+            }
+        )
+    return {
+        "run_id": run_id,
+        "schema_version": CHECKPOINT_SCHEMA_VERSION,
+        "probe_version": PROBE_VERSION,
+        "query_generator_version": QUERY_GENERATOR_VERSION,
+        "config_fingerprint": fingerprint,
+        "config_fingerprint_short": short_fingerprint(fingerprint),
+        "generated_at": generated_at,
+        "countries": countries,
+        "query_packs": active_query_pack_manifest(query_config),
+    }
 
 
 def canonical_url(value: str) -> str:
@@ -559,6 +689,88 @@ def load_checkpoint(path: Path) -> dict[str, Any]:
     if not isinstance(checkpoint, dict) or not isinstance(checkpoint.get("countries"), dict):
         return {"version": 1, "countries": {}, "checkpoint_warning": "checkpoint_invalid_restarted"}
     return checkpoint
+
+
+def new_checkpoint(manifest: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "schema_version": CHECKPOINT_SCHEMA_VERSION,
+        "run_id": manifest["run_id"],
+        "created_at": manifest["generated_at"],
+        "updated_at": manifest["generated_at"],
+        "config_fingerprint": manifest["config_fingerprint"],
+        "probe_version": PROBE_VERSION,
+        "countries": {},
+    }
+
+
+def checkpoint_country_query_fingerprints(manifest: dict[str, Any]) -> dict[str, str]:
+    return {country["code"]: country["query_fingerprint"] for country in manifest.get("countries", [])}
+
+
+def checkpoint_compatibility_from_payload(checkpoint: Any, manifest: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(checkpoint, dict):
+        return {"status": "corrupt", "resume_possible": False, "reason": "checkpoint_root_not_object"}
+    if checkpoint.get("schema_version") != CHECKPOINT_SCHEMA_VERSION:
+        return {
+            "status": "unsupported_schema",
+            "resume_possible": False,
+            "reason": f"expected_schema_{CHECKPOINT_SCHEMA_VERSION}_got_{checkpoint.get('schema_version') or checkpoint.get('version') or 'missing'}",
+        }
+    if checkpoint.get("config_fingerprint") != manifest.get("config_fingerprint"):
+        return {"status": "stale_config", "resume_possible": False, "reason": "config_fingerprint_mismatch"}
+    countries = checkpoint.get("countries")
+    if not isinstance(countries, dict):
+        return {"status": "corrupt", "resume_possible": False, "reason": "checkpoint_countries_not_object"}
+    expected_queries = checkpoint_country_query_fingerprints(manifest)
+    stale_queries = [
+        code
+        for code, record in countries.items()
+        if code in expected_queries
+        and isinstance(record, dict)
+        and record.get("query_fingerprint")
+        and record.get("query_fingerprint") != expected_queries[code]
+    ]
+    if stale_queries:
+        return {
+            "status": "stale_query",
+            "resume_possible": False,
+            "reason": "query_fingerprint_mismatch",
+            "countries": sorted(stale_queries),
+        }
+    return {"status": "compatible", "resume_possible": True, "reason": ""}
+
+
+def checkpoint_compatibility(path: Path, manifest: dict[str, Any]) -> dict[str, Any]:
+    if not path.exists():
+        return {"status": "missing", "resume_possible": False, "reason": "checkpoint_not_found"}
+    try:
+        checkpoint = json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        return {"status": "corrupt", "resume_possible": False, "reason": type(exc).__name__}
+    return checkpoint_compatibility_from_payload(checkpoint, manifest)
+
+
+def checkpoint_record_for_country(
+    country: dict[str, Any],
+    query_config: dict[str, Any],
+    *,
+    timespan: str,
+    maxrecords: int,
+    status: str,
+    attempt_count: int = 0,
+    last_http_status: int | None = None,
+    last_error_type: str = "",
+    **extra: Any,
+) -> dict[str, Any]:
+    record = {
+        "query_fingerprint": country_query_fingerprint(country, query_config, timespan=timespan, maxrecords=maxrecords),
+        "status": status,
+        "attempt_count": attempt_count,
+        "last_http_status": last_http_status,
+        "last_error_type": last_error_type,
+        **extra,
+    }
+    return record
 
 
 def bootstrap_checkpoint_from_report(output_dir: Path) -> dict[str, Any]:
@@ -1038,13 +1250,15 @@ def run_probe(
     countries = [country for country in country_config["countries"] if country.get("enabled", True)]
     for country in countries:
         validate_country_config(country)
+    default_timespan = str((country_config.get("timespans") or ["7d"])[0])
+    manifest = build_query_manifest(country_config, query_config, timespan=default_timespan, maxrecords=maxrecords)
     force_countries = force_countries or []
     seed = seed if seed is not None else int(datetime.now(timezone.utc).strftime("%Y%m%d%H%M"))
     output_dir.mkdir(parents=True, exist_ok=True)
     checkpoint_path = output_dir / "checkpoint.json"
-    checkpoint = load_checkpoint(checkpoint_path)
-    if not checkpoint.get("countries"):
-        checkpoint = bootstrap_checkpoint_from_report(output_dir)
+    checkpoint_state = checkpoint_compatibility(checkpoint_path, manifest)
+    checkpoint = load_checkpoint(checkpoint_path) if checkpoint_state["status"] == "compatible" else new_checkpoint(manifest)
+    checkpoint["checkpoint_compatibility"] = checkpoint_state
     checkpoint.setdefault("countries", {})
 
     before_integrity = snapshot_integrity()
@@ -1070,16 +1284,23 @@ def run_probe(
             pending = initial_country_report(country, "pending_rate_limit")
             pending["failure_reason"] = "circuit_breaker_open_after_consecutive_429"
             country_reports_by_code[country["code"]] = pending
-            checkpoint["countries"][country["code"]] = {
-                "status": "pending_rate_limit",
-                "updated_at": utc_now_iso(),
-                "article_observations": 0,
-                "selected_sourcecountry": pending["selected_sourcecountry"],
-                "sourcecountry_validated": False,
-                "timespan_counts": {},
-                "query_group_counts": {},
-                "articles": [],
-            }
+            checkpoint["countries"][country["code"]] = checkpoint_record_for_country(
+                country,
+                query_config,
+                timespan=default_timespan,
+                maxrecords=maxrecords,
+                status="pending_rate_limit",
+                attempt_count=0,
+                last_http_status=None,
+                last_error_type="pending_rate_limit",
+                updated_at=utc_now_iso(),
+                article_observations=0,
+                selected_sourcecountry=pending["selected_sourcecountry"],
+                sourcecountry_validated=False,
+                timespan_counts={},
+                query_group_counts={},
+                articles=[],
+            )
             continue
         country_report, country_requests = collect_country(
             country=country,
@@ -1096,16 +1317,28 @@ def run_probe(
         )
         request_reports.extend(country_requests)
         country_reports_by_code[country["code"]] = country_report
-        checkpoint["countries"][country["code"]] = {
-            "status": country_report["status"],
-            "updated_at": utc_now_iso(),
-            "article_observations": country_report["article_observations"],
-            "selected_sourcecountry": country_report["selected_sourcecountry"],
-            "sourcecountry_validated": country_report["sourcecountry_validated"],
-            "timespan_counts": country_report["timespan_counts"],
-            "query_group_counts": country_report["query_group_counts"],
-            "articles": country_report["articles"],
-        }
+        last_http_status = None
+        for request_report in reversed(country_requests):
+            if request_report.get("http_status") is not None:
+                last_http_status = int(request_report["http_status"])
+                break
+        checkpoint["countries"][country["code"]] = checkpoint_record_for_country(
+            country,
+            query_config,
+            timespan=default_timespan,
+            maxrecords=maxrecords,
+            status=country_report["status"],
+            attempt_count=int(country_report.get("api_attempt_count") or 0),
+            last_http_status=last_http_status,
+            last_error_type="" if country_report["status"] in TERMINAL_SUCCESS else country_report["status"],
+            updated_at=utc_now_iso(),
+            article_observations=country_report["article_observations"],
+            selected_sourcecountry=country_report["selected_sourcecountry"],
+            sourcecountry_validated=country_report["sourcecountry_validated"],
+            timespan_counts=country_report["timespan_counts"],
+            query_group_counts=country_report["query_group_counts"],
+            articles=country_report["articles"],
+        )
         save_checkpoint(checkpoint_path, checkpoint)
         if country_report["status"] == "provider_rate_limited":
             consecutive_429 += 1
@@ -1277,9 +1510,54 @@ def print_queries() -> int:
     return 0
 
 
+def expected_max_http_requests(country_config: dict[str, Any], country_count: int) -> int:
+    timespan_count = len(country_config.get("timespans") or ["7d"])
+    max_retries = int(country_config.get("max_retries", 4))
+    return country_count * timespan_count * (max_retries + 1)
+
+
+def relative_display_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return path.name
+
+
+def build_run_plan(country_config: dict[str, Any], query_config: dict[str, Any], *, output_dir: Path) -> dict[str, Any]:
+    manifest = build_query_manifest(country_config, query_config)
+    checkpoint_path = output_dir / "checkpoint.json"
+    checkpoint_state = checkpoint_compatibility(checkpoint_path, manifest)
+    planned_countries = len(manifest["countries"])
+    timespan_count = len(country_config.get("timespans") or ["7d"])
+    max_retries = int(country_config.get("max_retries", 4))
+    max_http_requests_per_country = timespan_count * (max_retries + 1)
+    return {
+        **manifest,
+        "checkpoint": {
+            "path": relative_display_path(checkpoint_path),
+            **checkpoint_state,
+        },
+        "resume_possible": checkpoint_state["status"] == "compatible",
+        "planned_country_count": planned_countries,
+        "base_http_requests_per_country": 1,
+        "max_http_requests_per_country": max_http_requests_per_country,
+        "expected_base_http_requests": planned_countries,
+        "expected_max_http_requests": expected_max_http_requests(country_config, planned_countries),
+    }
+
+
+def print_run_plan(*, output_dir: Path = DEFAULT_OUTPUT_DIR) -> int:
+    country_config = load_json(COUNTRIES_PATH)
+    query_config = load_json(QUERIES_PATH)
+    plan = build_run_plan(country_config, query_config, output_dir=output_dir)
+    print(json.dumps(plan, ensure_ascii=False, indent=2))
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Probe GDELT DOC 2.0 global modular construction news coverage.")
     parser.add_argument("--print-queries", action="store_true", help="Print country query plans without network, checkpoint, or artifact writes.")
+    parser.add_argument("--print-run-plan", action="store_true", help="Print run IDs, fingerprints, URLs, and checkpoint compatibility without network or writes.")
     parser.add_argument("--max-countries", type=int, default=None, help="Limit countries for smoke testing.")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--timeout", type=float, default=20.0)
@@ -1293,6 +1571,8 @@ def main() -> int:
     args = parser.parse_args()
     if args.print_queries:
         return print_queries()
+    if args.print_run_plan:
+        return print_run_plan(output_dir=args.output_dir)
     report = run_probe(
         max_countries=args.max_countries,
         output_dir=args.output_dir,

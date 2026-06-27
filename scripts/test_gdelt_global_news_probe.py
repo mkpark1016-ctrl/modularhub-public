@@ -19,14 +19,21 @@ from scripts.probe_gdelt_global_news import (  # noqa: E402
     RateLimiter,
     active_query_terms,
     bias_report,
+    build_query_manifest,
+    build_run_plan,
     build_country_query,
     build_gdelt_params,
     build_gdelt_url,
     build_integrated_query,
     canonical_url,
+    checkpoint_compatibility,
+    checkpoint_compatibility_from_payload,
+    config_fingerprint,
+    country_query_fingerprint,
     choose_countries_to_run,
     country_filter_matches,
     dedupe_metrics,
+    generate_run_id,
     detect_noise_terms,
     load_checkpoint,
     load_json,
@@ -158,6 +165,128 @@ def main() -> int:
         require(printed_map["GB"]["gdelt_sourcecountry"] == "unitedkingdom", "printed GB sourcecountry mismatch")
         require("sourcecountry:GB" not in printed_map["GB"]["query"], "printed query leaked GB code")
         require("modern methods of construction" not in printed_map["AU"]["query"], "printed query includes disabled term")
+
+    base_config_fp = config_fingerprint(countries_config, query_config)
+    require(len(base_config_fp) == 64, "config fingerprint should be full sha256")
+    key_reordered_config = {
+        "countries": countries_config["countries"],
+        "circuit_breaker_consecutive_429": countries_config["circuit_breaker_consecutive_429"],
+        "max_retries": countries_config["max_retries"],
+        "retry_backoff_seconds": countries_config["retry_backoff_seconds"],
+        "timespans": countries_config["timespans"],
+        "maxrecords": countries_config["maxrecords"],
+        "request_interval_seconds": countries_config["request_interval_seconds"],
+        "endpoint": countries_config["endpoint"],
+        "provider": countries_config["provider"],
+    }
+    require(config_fingerprint(key_reordered_config, query_config) == base_config_fp, "JSON key order should not change config fingerprint")
+    compact_roundtrip_config = json.loads(json.dumps(countries_config, separators=(",", ":")))
+    require(config_fingerprint(compact_roundtrip_config, query_config) == base_config_fp, "JSON formatting should not change config fingerprint")
+    reordered_countries_config = json.loads(json.dumps(countries_config))
+    reordered_countries_config["countries"] = list(reversed(reordered_countries_config["countries"]))
+    require(config_fingerprint(reordered_countries_config, query_config) == base_config_fp, "country order should not change config fingerprint")
+    reordered_query_config = json.loads(json.dumps(query_config))
+    reordered_query_config["query_packs"] = list(reversed(reordered_query_config["query_packs"]))
+    require(config_fingerprint(countries_config, reordered_query_config) == base_config_fp, "query pack order should not change config fingerprint")
+    changed_query_config = json.loads(json.dumps(query_config))
+    changed_query_config["query_packs"][0]["queries"][0] = "modular construction changed"
+    require(config_fingerprint(countries_config, changed_query_config) != base_config_fp, "changed query should change config fingerprint")
+    changed_enabled_config = json.loads(json.dumps(countries_config))
+    changed_enabled_config["countries"][0]["enabled"] = False
+    require(config_fingerprint(changed_enabled_config, query_config) != base_config_fp, "enabled change should change config fingerprint")
+
+    us_query_fp = country_query_fingerprint(country, query_config, timespan="7d", maxrecords=50)
+    changed_us_config = json.loads(json.dumps(countries_config))
+    for item in changed_us_config["countries"]:
+        if item["code"] == "US":
+            item["gdelt_sourcecountry"] = "usa"
+    changed_us = next(item for item in changed_us_config["countries"] if item["code"] == "US")
+    changed_gb = next(item for item in changed_us_config["countries"] if item["code"] == "GB")
+    require(country_query_fingerprint(changed_us, query_config, timespan="7d", maxrecords=50) != us_query_fp, "sourcecountry change should change that country query fingerprint")
+    require(
+        country_query_fingerprint(changed_gb, query_config, timespan="7d", maxrecords=50)
+        == country_query_fingerprint(next(item for item in countries if item["code"] == "GB"), query_config, timespan="7d", maxrecords=50),
+        "other country query fingerprint should remain unchanged",
+    )
+
+    manifest = build_query_manifest(countries_config, query_config)
+    require(manifest["config_fingerprint"] == base_config_fp, "manifest config fingerprint mismatch")
+    require(manifest["run_id"].endswith(manifest["config_fingerprint_short"]), "run_id should include short fingerprint")
+    fixed_run_id = generate_run_id(base_config_fp, now=datetime(2026, 6, 26, 0, 0, tzinfo=timezone.utc))
+    require(fixed_run_id == f"20260626T000000Z-{base_config_fp[:12]}", "deterministic run_id format mismatch")
+    later_run_id = generate_run_id(base_config_fp, now=datetime(2026, 6, 26, 0, 0, 1, tzinfo=timezone.utc))
+    require(later_run_id != fixed_run_id, "different execution times should produce different run_ids")
+    require(fixed_run_id.endswith("Z-" + base_config_fp[:12]), "run_id must contain UTC Z marker and hyphen separator")
+    require(not any(ch in fixed_run_id for ch in '<>:"/\\|?*'), "run_id must be safe for Windows filenames")
+    require(len({manifest["run_id"], *[manifest["run_id"] for _ in manifest["countries"]]}) == 1, "one manifest should use one run_id")
+    compatible_checkpoint = {
+        "schema_version": manifest["schema_version"],
+        "run_id": manifest["run_id"],
+        "created_at": manifest["generated_at"],
+        "updated_at": manifest["generated_at"],
+        "config_fingerprint": manifest["config_fingerprint"],
+        "probe_version": manifest["probe_version"],
+        "countries": {
+            row["code"]: {
+                "query_fingerprint": row["query_fingerprint"],
+                "status": "success",
+                "attempt_count": 1,
+                "last_http_status": 200,
+                "last_error_type": "",
+            }
+            for row in manifest["countries"]
+        },
+    }
+    compatible_state = checkpoint_compatibility_from_payload(compatible_checkpoint, manifest)
+    require(compatible_state["status"] == "compatible" and compatible_state["resume_possible"], "compatible checkpoint rejected")
+    unsupported_checkpoint = dict(compatible_checkpoint)
+    unsupported_checkpoint["schema_version"] = 999
+    unsupported_state = checkpoint_compatibility_from_payload(unsupported_checkpoint, manifest)
+    require(unsupported_state["status"] == "unsupported_schema" and not unsupported_state["resume_possible"], "schema mismatch should be unsupported")
+    stale_config_checkpoint = dict(compatible_checkpoint)
+    stale_config_checkpoint["config_fingerprint"] = "0" * 64
+    stale_config_state = checkpoint_compatibility_from_payload(stale_config_checkpoint, manifest)
+    require(stale_config_state["status"] == "stale_config" and not stale_config_state["resume_possible"], "config mismatch should be stale")
+    stale_query_checkpoint = json.loads(json.dumps(compatible_checkpoint))
+    stale_query_checkpoint["countries"]["US"]["query_fingerprint"] = "1" * 64
+    stale_query_state = checkpoint_compatibility_from_payload(stale_query_checkpoint, manifest)
+    require(stale_query_state["status"] == "stale_query" and not stale_query_state["resume_possible"], "query mismatch should be stale")
+    corrupt_state = checkpoint_compatibility_from_payload(["not", "object"], manifest)
+    require(corrupt_state["status"] == "corrupt" and not corrupt_state["resume_possible"], "non-object checkpoint should be corrupt")
+    with tempfile.TemporaryDirectory() as tmp_plan:
+        tmpdir = Path(tmp_plan)
+        missing_state = checkpoint_compatibility(tmpdir / "checkpoint.json", manifest)
+        require(missing_state["status"] == "missing" and not missing_state["resume_possible"], "missing checkpoint status mismatch")
+        (tmpdir / "checkpoint.json").write_text("{", encoding="utf-8")
+        corrupt_file_state = checkpoint_compatibility(tmpdir / "checkpoint.json", manifest)
+        require(corrupt_file_state["status"] == "corrupt" and not corrupt_file_state["resume_possible"], "corrupt checkpoint status mismatch")
+
+    with tempfile.TemporaryDirectory() as tmp_plan:
+        plan_result = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts" / "probe_gdelt_global_news.py"),
+                "--print-run-plan",
+                "--output-dir",
+                tmp_plan,
+            ],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        plan = json.loads(plan_result.stdout)
+        require(plan["checkpoint"]["status"] == "missing", "--print-run-plan checkpoint status mismatch")
+        require(plan["planned_country_count"] == 8, "--print-run-plan country count mismatch")
+        require(plan["base_http_requests_per_country"] == 1, "--print-run-plan base per-country count missing")
+        require(plan["max_http_requests_per_country"] == 10, "--print-run-plan max per-country count mismatch")
+        require(plan["expected_base_http_requests"] == 8, "--print-run-plan expected base request count missing")
+        require(plan["expected_max_http_requests"] == 80, "--print-run-plan expected max request count mismatch")
+        require(":\\" not in plan["checkpoint"]["path"], "--print-run-plan must not expose local absolute paths")
+        require(not any(Path(tmp_plan).iterdir()), "--print-run-plan must not create artifacts")
+        direct_plan = build_run_plan(countries_config, query_config, output_dir=Path(tmp_plan))
+        require(direct_plan["config_fingerprint"] == plan["config_fingerprint"], "direct run plan mismatch")
 
     require(parse_retry_after("30") == 30.0, "numeric Retry-After parse failed")
     now = datetime(2026, 6, 26, 0, 0, tzinfo=timezone.utc)
