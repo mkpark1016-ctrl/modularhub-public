@@ -1,10 +1,118 @@
 {
-  "generated_at": "2026-06-30T15:20:06+09:00",
+  "generated_at": "2026-07-01T08:08:12+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 806,
-  "current_news_count": 295,
-  "merged_news_count": 887,
+  "previous_news_count": 887,
+  "current_news_count": 290,
+  "merged_news_count": 896,
   "items": [
+    {
+      "id": 6066,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "모듈러 특별법 추가 발의 '기대반 우려반'",
+      "summary": "기존 모듈러 특별법 발목 잡았던 통합발주 등 일부 특례 빠지고 지역업체 우대 조항 신설 눈길 업계“입법 추진력 기대 높지만 산업 진흥 효과 축소될까 우려” [대한경제=장진우 기자] 모듈러 건축 활성화를 위한 특별법이...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606300818526110236",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606300818526110236",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 6065,
+      "source": "네이버뉴스",
+      "media": "newsis.com",
+      "title": "반도체 공장 골조 혁신…삼성E&A 독자 기술로 정밀·고속 시공[짤막영상...",
+      "summary": "골조는 건축물의 하중을 지탱하는 뼈대로, 건물의 안전성과 시공 품질을 좌우하는 핵심 구조다. 삼성E... 삼성E&A는 공장에서 제작한 부재를 현장에서 조립하는 모듈러 방식의 시공을 확대해 공사 기간을...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.newsis.com/view/NISX20260629_0003688221",
+      "naver_url": "https://n.news.naver.com/mnews/article/003/0014038498?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 6064,
+      "source": "네이버뉴스",
+      "media": "slownews.kr",
+      "title": "“민주주의 지켜온 호남에 보상, 투자 유도했지만 억압이나 강요는 아니...",
+      "summary": "양승훈(경남대 교수)은 “1970년대 중화학공업화 이후 이 정도로 투자 규모가 큰 산업정책을 제시하면서... 주택 담보 비율이 무주택자는 70%에서 40%로 줄고 유주택자는 아예 막힌다. 다주택자는 양도세와 취득세 중과를...",
+      "published_at": "2026-07-01",
+      "original_url": "https://slownews.kr/162491",
+      "naver_url": "https://slownews.kr/162491",
+      "keywords": "공업화주택",
+      "relevance_score": 3
+    },
+    {
+      "id": 6072,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "[2026 도시와 공간 포럼] (3) “1000가구 설계에 단 30분 소요…...",
+      "summary": "텐일레븐은 AI 건축설계 플랫폼 ‘빌드잇(BUILDIT)’과 모듈러 건축 설루션 ‘빌드잇-엠(BUILDIT-M)’을 개발하며, 설계부터 시공까지 전 과정을 하나의 파이프라인으로 구축한 기술 기업이다. 핵심 설루션인 빌드잇은...",
+      "published_at": "2026-06-30",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606291005333910075",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202606291005333910075",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 6071,
+      "source": "네이버뉴스",
+      "media": "topdaily.kr",
+      "title": "GS건설, 친환경 신사업 도전 이번엔 다를까",
+      "summary": "지난해까지 3년 연속 역성장에 놓인 GS건설은 주력인 국내 건축·주택 부문에서 연간 9조원, 8조원, 7조원... 영국 모듈러 사업 엘리먼츠 유럽 청산 등을 진행했다. GS건설 관계자는 \"신재생에너지 신규 사업으로 현재는...",
+      "published_at": "2026-06-30",
+      "original_url": "https://www.topdaily.kr/articles/110758",
+      "naver_url": "https://www.topdaily.kr/articles/110758",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 6070,
+      "source": "네이버뉴스",
+      "media": "ajunews.com",
+      "title": "[하반기 달리지는 것] KTX·SRT 한 앱으로 예매… 고속도로 감면도 확대",
+      "summary": "모듈러주택 등 공업화주택 활성화를 지원하면서 품질 관리도 강화하려는 취지다. 시설물 안전관리도 강화된다. 중대한 결함이 있거나 D·E등급으로 지정된 위험 시설물의 보수·보강 조치 기한은 기존보다 단축된다....",
+      "published_at": "2026-06-30",
+      "original_url": "https://www.ajunews.com/view/20260630165420414",
+      "naver_url": "https://www.ajunews.com/view/20260630165420414",
+      "keywords": "공업화주택;모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 6069,
+      "source": "네이버뉴스",
+      "media": "koscaj.com",
+      "title": "올해 하반기 달라지는 건설정책···하도급·공공계약·주택공급 제도...",
+      "summary": "공업화주택 인정제도도 개선된다. 국토부는 11월7일부터 공업화주택 인정 이후 점검 절차를 신설하고, 유효기간 연장과 변경 필요사항 등에 대한 법령 기준을 마련한다. 공업화주택 인정기간이 장기임에도 사후관리...",
+      "published_at": "2026-06-30",
+      "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324984",
+      "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324984",
+      "keywords": "공업화주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 6068,
+      "source": "네이버뉴스",
+      "media": "womennews.co.kr",
+      "title": "고의숙 제주교육감 취임식 대신 학교로… “\"아이 중심·현장 중심 교육...",
+      "summary": "제주영지학교에서는 특수교육 현안을 듣고 모듈러 교실 등 시설을 점검한다. 신성여중에서는 사립학교 운영 현안과 신축 시설을 살핀다. 오후에는 한림항공우주고등학교를 방문한다. 학교 관계자들과 직업계 교육과...",
+      "published_at": "2026-06-30",
+      "original_url": "https://www.womennews.co.kr/news/articleView.html?idxno=279385",
+      "naver_url": "https://n.news.naver.com/mnews/article/310/0000137950?sid=102",
+      "keywords": "학교 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 6067,
+      "source": "네이버뉴스",
+      "media": "newsis.com",
+      "title": "'2030년 48→55학급' 과대학교 송린중…제2캠퍼스 검토",
+      "summary": "수노을교 인근 한국수자원공사(수공) 소유의 공원부지를 학교용지로 활용하는 방안이다. 모듈러 교사(校舍)를 활용하면 중앙투자심사 등 복잡한 행정절차를 거치지 않아도 돼 비교적 짧은 시간에 캠퍼스 조성이...",
+      "published_at": "2026-06-30",
+      "original_url": "https://www.newsis.com/view/NISX20260630_0003689859",
+      "naver_url": "https://n.news.naver.com/mnews/article/003/0014037513?sid=102",
+      "keywords": "학교 모듈러",
+      "relevance_score": 6
+    },
     {
       "id": 6004,
       "source": "네이버뉴스",
@@ -1174,11 +1282,11 @@
       "source": "네이버뉴스",
       "media": "viva100.com",
       "title": "LH, 제로에너지 주택부터 배송로봇까지…미래 주거기술 선보인다",
-      "summary": "특별관은 청정에너지, 제로에너지 주택 체험, 실물 전시, 모듈러 주택, 탄소중립 체험 등 5개 구역으로... 제로에너지 건축물을 설계해 볼 수 있다. ‘ZERO+ HOME 전시관’에서는 국가 연구개발 과제인 ‘ZEB3 제로에너지...",
+      "summary": "전시, 모듈러 주택, 탄소중립 체험 등 5개 구역으로 운영된다. 디지털 체험 콘텐츠와 실물 전시를 비롯해 조경·휴게공간, 미디어월을 함께 배치해 체험형 공간으로 꾸몄다. ‘청정에너지와 함께하는 LH’ 구역에서는...",
       "published_at": "2026-06-25",
       "original_url": "https://www.viva100.com/article/20260625500127",
       "naver_url": "https://www.viva100.com/article/20260625500127",
-      "keywords": "모듈러 주택;모듈러 건축",
+      "keywords": "모듈러 주택;LH 모듈러",
       "relevance_score": 12
     },
     {
@@ -1186,11 +1294,11 @@
       "source": "네이버뉴스",
       "media": "polinews.co.kr",
       "title": "\"가전 대신 집을 팝니다\"…삼성·LG, 4조 원 모듈러 주택 시장 진출",
-      "summary": "관련 업계에 따르면 국내 모듈러 건축 시장 규모는 오는 2030년 최대 4조 4,000억 원까지 성장할 전망이다. 삼성전자는 지난 18일 목조 모듈러 주택 전문기업 공간제작소와 손잡고 '삼성 AI 모듈러 홈'을 출시하며 B2C...",
+      "summary": "규모 프리패브(Pre-fabrication) 시장 진입에 속도를 내고 있다. LG 스마트코티지는 국내 모듈러 주택 최초로 한국에너지공단의 제로에너지건축물 최고 등급인 'ZEB 플러스(Plus)'를 획득했다. 히트펌프 냉난방공조(HVAC)...",
       "published_at": "2026-06-25",
       "original_url": "https://www.polinews.co.kr/news/articleView.html?idxno=735061",
       "naver_url": "https://www.polinews.co.kr/news/articleView.html?idxno=735061",
-      "keywords": "모듈러 건축;모듈러 주택",
+      "keywords": "모듈러 주택;프리패브 건축",
       "relevance_score": 16
     },
     {
@@ -1318,11 +1426,11 @@
       "source": "네이버뉴스",
       "media": "theguru.co.kr",
       "title": "[르포] \"집 지을 때 가전·보안까지 통째로\"…화성서 베일 벗은 '삼성 A...",
-      "summary": "공간제작소의 기본 목조 모듈러 주택 건축비는 평당 500만 원 안팎이다. 여기에 삼성전자의 고효율 AI 가전과 스마트싱스 기반 프리미엄 옵션을 추가하더라도 평당 600만 원 수준으로 묶을 수 있어, 기존 콘크리트 주택...",
+      "summary": "\" 24일 찾은 경기도 화성시 소재 '삼성 AI 모듈러 홈' 쇼룸. 은은한 나무 향이 감도는 목조 기반의 단독주택... 건축사·건설사에 스마트싱스 기반 'AI 홈 솔루션'을 공급하는 '오픈 플랫폼' 비즈니스 모델을 택했다. 직접...",
       "published_at": "2026-06-25",
       "original_url": "https://www.theguru.co.kr/news/article.html?no=103525",
       "naver_url": "https://www.theguru.co.kr/news/article.html?no=103525",
-      "keywords": "모듈러 주택;모듈러 건축",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -2667,7 +2775,7 @@
       "original_url": "https://www.ajunews.com/view/20260623111542907",
       "naver_url": "https://www.ajunews.com/view/20260623111542907",
       "keywords": "모듈러 건축;플랜엠 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5872,
@@ -2679,7 +2787,7 @@
       "original_url": "https://biz.heraldcorp.com/article/10784994?ref=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/016/0002660339?sid=101",
       "keywords": "모듈러 건축;플랜엠 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5871,
@@ -2691,7 +2799,7 @@
       "original_url": "https://www.newspim.com/news/view/20260623000452",
       "naver_url": "https://www.newspim.com/news/view/20260623000452",
       "keywords": "모듈러 건축;플랜엠 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5870,
@@ -2703,7 +2811,7 @@
       "original_url": "https://www.news1.kr/economy/trend/6205588",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0009018496?sid=101",
       "keywords": "플랜엠 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5869,
@@ -2715,7 +2823,7 @@
       "original_url": "https://www.newsis.com/view/NISX20260623_0003679748",
       "naver_url": "https://n.news.naver.com/mnews/article/003/0014022298?sid=101",
       "keywords": "모듈러 건축;플랜엠 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5868,
@@ -2727,7 +2835,7 @@
       "original_url": "https://www.asiaa.co.kr/news/articleView.html?idxno=253064",
       "naver_url": "https://www.asiaa.co.kr/news/articleView.html?idxno=253064",
       "keywords": "모듈러 주택;프리패브 건축",
-      "relevance_score": 13
+      "relevance_score": 11
     },
     {
       "id": 5867,
@@ -2823,7 +2931,7 @@
       "original_url": "https://www.mt.co.kr/world/2026/06/23/2026062215253149432",
       "naver_url": "https://n.news.naver.com/mnews/article/008/0005375609?sid=104",
       "keywords": "OSC 건설",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5859,
@@ -2835,7 +2943,7 @@
       "original_url": "https://www.newspim.com/news/view/20260623000680",
       "naver_url": "https://www.newspim.com/news/view/20260623000680",
       "keywords": "SH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5819,
@@ -2859,7 +2967,7 @@
       "original_url": "https://www.news1.kr/industry/general-industry/6204758",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0009017619?sid=101",
       "keywords": "프리패브 건축",
-      "relevance_score": 13
+      "relevance_score": 11
     },
     {
       "id": 5817,
