@@ -1,0 +1,286 @@
+[
+  {
+    "id": "publish_modular_construction",
+    "title": "Modular construction project opens in Australia",
+    "url": "https://builder.example.org/modular-construction-au",
+    "canonical_url": "https://builder.example.org/modular-construction-au",
+    "published_at": "20260627000000",
+    "language": "en",
+    "gal_joined": true,
+    "source_country_code": "AU"
+  },
+  {
+    "id": "publish_prefabricated_building",
+    "title": "Prefabricated building factory supports housing",
+    "url": "https://builder.example.org/prefabricated-building",
+    "canonical_url": "https://builder.example.org/prefabricated-building",
+    "published_at": "20260627000100",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "publish_offsite_school",
+    "title": "Offsite construction school classrooms completed",
+    "url": "https://education.example.org/offsite-school",
+    "canonical_url": "https://education.example.org/offsite-school",
+    "published_at": "20260627000200",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "publish_modular_hotel",
+    "title": "Modular hotel accommodation reaches site",
+    "url": "https://hotel.example.org/modular-hotel",
+    "canonical_url": "https://hotel.example.org/modular-hotel",
+    "published_at": "20260627000300",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "score_49_irrelevant",
+    "title": "Modular site update",
+    "url": "https://review.example.org/modular-site",
+    "canonical_url": "https://review.example.org/modular-site",
+    "published_at": "20260627000400",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "score_50_review",
+    "title": "Modular parts for construction",
+    "url": "https://review.example.org/modular-construction-parts",
+    "canonical_url": "https://review.example.org/modular-construction-parts",
+    "published_at": "20260627000500",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "score_79_review",
+    "title": "Modular site home factory office apartment dormitory council",
+    "url": "https://review.example.org/modular-many-contexts",
+    "canonical_url": "https://review.example.org/modular-many-contexts",
+    "published_at": "20260627000600",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "score_80_publish",
+    "title": "Modular construction",
+    "url": "https://review.example.org/modular-construction",
+    "canonical_url": "https://review.example.org/modular-construction",
+    "published_at": "20260627000700",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "irrelevant_synth",
+    "title": "New modular synthesizer reaches studios",
+    "url": "https://music.example.org/modular-synth",
+    "canonical_url": "https://music.example.org/modular-synth",
+    "published_at": "20260627000800",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "irrelevant_furniture",
+    "title": "Retailer launches modular furniture collection",
+    "url": "https://retail.example.org/modular-furniture",
+    "canonical_url": "https://retail.example.org/modular-furniture",
+    "published_at": "20260627000900",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "irrelevant_software",
+    "title": "Software module improves developer workflow",
+    "url": "https://tech.example.org/software-module",
+    "canonical_url": "https://tech.example.org/software-module",
+    "published_at": "20260627001000",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "irrelevant_battery",
+    "title": "Battery module capacity rises for phones",
+    "url": "https://tech.example.org/battery-module",
+    "canonical_url": "https://tech.example.org/battery-module",
+    "published_at": "20260627001100",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "irrelevant_smartphone",
+    "title": "Modular smartphone module returns",
+    "url": "https://phone.example.org/modular-smartphone",
+    "canonical_url": "https://phone.example.org/modular-smartphone",
+    "published_at": "20260627001200",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "malformed_missing_title",
+    "title": "",
+    "url": "https://bad.example.org/missing-title",
+    "canonical_url": "https://bad.example.org/missing-title",
+    "published_at": "20260627001300",
+    "language": "en",
+    "gal_joined": false
+  },
+  {
+    "id": "malformed_missing_url",
+    "title": "Modular construction without URL",
+    "url": "",
+    "published_at": "20260627001400",
+    "language": "en",
+    "gal_joined": false
+  },
+  {
+    "id": "malformed_invalid_url",
+    "title": "Modular construction invalid URL",
+    "url": "not-a-url",
+    "published_at": "20260627001500",
+    "language": "en",
+    "gal_joined": false
+  },
+  {
+    "id": "malformed_unsupported_scheme",
+    "title": "Modular construction ftp URL",
+    "url": "ftp://files.example.org/modular",
+    "published_at": "20260627001600",
+    "language": "en",
+    "gal_joined": false
+  },
+  {
+    "id": "dup_gal_a",
+    "article_identifier": "gal-duplicate-1",
+    "title": "Modular housing project starts",
+    "url": "https://duplicates.example.org/gal-a",
+    "canonical_url": "https://duplicates.example.org/gal-a",
+    "published_at": "20260627001700",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "dup_gal_b",
+    "article_identifier": "gal-duplicate-1",
+    "title": "Modular housing project starts with update",
+    "url": "https://duplicates.example.org/gal-b",
+    "canonical_url": "https://duplicates.example.org/gal-b",
+    "published_at": "20260627001800",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "dup_tracking_a",
+    "title": "Prefabricated building opens",
+    "url": "https://duplicates.example.org/tracking?id=10&utm_source=x",
+    "canonical_url": "https://duplicates.example.org/tracking?id=10&utm_source=x",
+    "published_at": "20260627001900",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "dup_tracking_b",
+    "title": "Prefabricated building opens",
+    "url": "https://duplicates.example.org/tracking?id=10&utm_campaign=y#section",
+    "canonical_url": "https://duplicates.example.org/tracking?id=10&utm_campaign=y#section",
+    "published_at": "20260627002000",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "dup_domain_title_a",
+    "title": "Modular school project awarded",
+    "url": "https://same-title.example.org/a",
+    "canonical_url": "https://same-title.example.org/a",
+    "published_at": "20260627002100",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "dup_domain_title_b",
+    "title": "Modular school project awarded",
+    "url": "https://same-title.example.org/b",
+    "canonical_url": "https://same-title.example.org/b",
+    "published_at": "20260627002200",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "dup_similar_a",
+    "title": "Modular office building project starts today",
+    "url": "https://similar.example.org/a",
+    "canonical_url": "https://similar.example.org/a",
+    "published_at": "20260627002300",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "dup_similar_b",
+    "title": "Modular office building project starts today",
+    "url": "https://similar.example.org/b",
+    "canonical_url": "https://similar.example.org/b",
+    "published_at": "20260628002300",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "country_confirmed",
+    "title": "Modular construction factory expands",
+    "url": "https://country.example.org/confirmed",
+    "canonical_url": "https://country.example.org/confirmed",
+    "published_at": "20260627002400",
+    "language": "en",
+    "source_country_code": "GB",
+    "gal_joined": true
+  },
+  {
+    "id": "country_inferred",
+    "title": "Australia modular construction project advances",
+    "url": "https://country.test.com.au/inferred",
+    "canonical_url": "https://country.test.com.au/inferred",
+    "published_at": "20260627002500",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "country_unresolved",
+    "title": "Modular construction project advances",
+    "url": "https://country.example.org/unresolved",
+    "canonical_url": "https://country.example.org/unresolved",
+    "published_at": "20260627002600",
+    "language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "country_conflicting",
+    "title": "Modular construction project advances",
+    "url": "https://country.example.org/conflicting",
+    "canonical_url": "https://country.example.org/conflicting",
+    "published_at": "20260627002700",
+    "language": "en",
+    "source_country_code": "AU",
+    "publication_country": "DE",
+    "gal_joined": true
+  },
+  {
+    "id": "language_match",
+    "title": "Modular construction language match",
+    "url": "https://language.example.org/match",
+    "canonical_url": "https://language.example.org/match",
+    "published_at": "20260627002800",
+    "language": "en",
+    "gal_language": "en",
+    "gal_joined": true
+  },
+  {
+    "id": "language_conflict",
+    "title": "Modular construction language conflict",
+    "url": "https://language.example.org/conflict",
+    "canonical_url": "https://language.example.org/conflict",
+    "published_at": "20260627002900",
+    "language": "en",
+    "gal_language": "de",
+    "gal_joined": true
+  }
+]
