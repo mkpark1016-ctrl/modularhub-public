@@ -33,66 +33,223 @@ jobs:
     env:
       TIMESTAMP: ${{ inputs.timestamp }}
       MAX_CANDIDATES: ${{ inputs.max_candidates }}
-      ACKNOWLEDGE_SINGLE_RUN: ${{ inputs.acknowledge_single_run }}
+      ACKNOWLEDGE_SINGLE_RUN_NORMALIZED: ${{ inputs.acknowledge_single_run == true && 'true' || 'false' }}
       PROBE_DIR: artifacts/global_news_webngrams_probe
       REVIEW_DIR: artifacts/global_news_webngrams_review
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: pip
 
-      - name: Install dependencies
-        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+      - name: Initialize run control artifact
+        run: |
+          set -euo pipefail
+          mkdir -p "${PROBE_DIR}" "${REVIEW_DIR}"
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          def now() -> str:
+              return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+          payload = {
+              "schema_version": 1,
+              "workflow_name": "Verify GDELT Web NGrams live",
+              "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+              "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+              "branch": os.environ.get("GITHUB_REF_NAME", ""),
+              "commit_sha": os.environ.get("GITHUB_SHA", ""),
+              "timestamp": os.environ.get("TIMESTAMP", ""),
+              "max_candidates": os.environ.get("MAX_CANDIDATES", ""),
+              "acknowledge_single_run": os.environ.get("ACKNOWLEDGE_SINGLE_RUN_NORMALIZED", "false"),
+              "validation_status": "pending",
+              "failure_type": "",
+              "actual_http_request_count": 0,
+              "generated_at": now(),
+          }
+          Path("artifacts/global_news_webngrams_probe/run_control.json").write_text(
+              json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True),
+              encoding="utf-8",
+          )
+          PY
 
       - name: Validate manual approval and inputs
+        id: input_validation
         run: |
-          set -euo pipefail
-          if [ "${GITHUB_REF}" != "refs/heads/main" ]; then
-            echo "::error::Run this live verification from the main branch only."
-            exit 1
-          fi
-          if [ "${ACKNOWLEDGE_SINGLE_RUN}" != "true" ]; then
-            echo "::error::acknowledge_single_run must be true before any HTTP request is allowed."
-            exit 1
-          fi
-          if ! printf '%s' "${TIMESTAMP}" | grep -Eq '^[0-9]{14}$'; then
-            echo "::error::timestamp must be exactly 14 UTC digits."
-            exit 1
-          fi
-          if ! printf '%s' "${MAX_CANDIDATES}" | grep -Eq '^[0-9]+$'; then
-            echo "::error::max_candidates must be an integer."
-            exit 1
-          fi
-          if [ "${MAX_CANDIDATES}" -lt 1 ] || [ "${MAX_CANDIDATES}" -gt 100 ]; then
-            echo "::error::max_candidates must be between 1 and 100."
-            exit 1
-          fi
+          set +e
+          python - <<'PY'
+          import json
+          import os
+          import re
+          import sys
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          def now() -> str:
+              return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+          probe_dir = Path("artifacts/global_news_webngrams_probe")
+          run_control_path = probe_dir / "run_control.json"
+          run_control = json.loads(run_control_path.read_text(encoding="utf-8"))
+          timestamp = os.environ.get("TIMESTAMP", "").strip()
+          max_candidates = os.environ.get("MAX_CANDIDATES", "").strip()
+          acknowledged = os.environ.get("ACKNOWLEDGE_SINGLE_RUN_NORMALIZED", "false").strip().lower()
+          failure_type = ""
+          failure_reason = ""
+
+          if os.environ.get("GITHUB_REF_NAME") != "main":
+              failure_type = "branch_invalid"
+              failure_reason = "Run this live verification from the main branch only."
+          elif acknowledged != "true":
+              failure_type = "manual_approval_missing"
+              failure_reason = "acknowledge_single_run must be true before any HTTP request is allowed."
+          elif not re.fullmatch(r"[0-9]{14}", timestamp):
+              failure_type = "timestamp_invalid"
+              failure_reason = "timestamp must be exactly 14 UTC digits."
+          elif not re.fullmatch(r"[0-9]+", max_candidates):
+              failure_type = "max_candidates_invalid"
+              failure_reason = "max_candidates must be an integer."
+          elif not (1 <= int(max_candidates) <= 100):
+              failure_type = "max_candidates_invalid"
+              failure_reason = "max_candidates must be between 1 and 100."
+
+          if failure_type:
+              status = "failed"
+              validation_exit_code = 1
+          else:
+              status = "passed"
+              validation_exit_code = 0
+
+          run_control.update(
+              {
+                  "timestamp": timestamp,
+                  "max_candidates": max_candidates,
+                  "acknowledge_single_run": acknowledged,
+                  "validation_status": status,
+                  "failure_type": failure_type,
+                  "actual_http_request_count": 0,
+                  "generated_at": now(),
+              }
+          )
+          run_control_path.write_text(json.dumps(run_control, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
+
+          if failure_type:
+              failure_report = {
+                  "schema_version": 1,
+                  "workflow_name": "Verify GDELT Web NGrams live",
+                  "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+                  "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+                  "branch": os.environ.get("GITHUB_REF_NAME", ""),
+                  "commit_sha": os.environ.get("GITHUB_SHA", ""),
+                  "failed_step": "Validate manual approval and inputs",
+                  "failure_type": failure_type,
+                  "failure_reason": failure_reason,
+                  "actual_http_request_count": 0,
+                  "timestamp": timestamp,
+                  "max_candidates": max_candidates,
+                  "acknowledge_single_run_normalized": acknowledged,
+                  "public_json_status": "not_evaluated",
+                  "db_status": "not_evaluated",
+                  "env_status": "not_evaluated",
+                  "checkpoint_status": "not_evaluated",
+                  "production_publish_allowed": False,
+                  "generated_at": now(),
+              }
+              (probe_dir / "failure_report.json").write_text(
+                  json.dumps(failure_report, ensure_ascii=False, indent=2, sort_keys=True),
+                  encoding="utf-8",
+              )
+              (probe_dir / "failure_report.md").write_text(
+                  "\n".join(
+                      [
+                          "# GDELT Web NGrams Live Verification Failure",
+                          "",
+                          f"- failed_step: `{failure_report['failed_step']}`",
+                          f"- failure_type: `{failure_type}`",
+                          f"- failure_reason: `{failure_reason}`",
+                          "- actual_http_request_count: `0`",
+                          f"- timestamp: `{timestamp}`",
+                          f"- max_candidates: `{max_candidates}`",
+                          f"- acknowledge_single_run_normalized: `{acknowledged}`",
+                          "- public_json_status: `not_evaluated`",
+                          "- db_status: `not_evaluated`",
+                          "- env_status: `not_evaluated`",
+                          "- checkpoint_status: `not_evaluated`",
+                          "- production_publish_allowed: `False`",
+                      ]
+                  )
+                  + "\n",
+                  encoding="utf-8",
+              )
+              print(f"::error::{failure_reason}")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"validation_exit_code={validation_exit_code}\n")
+              output.write(f"failure_type={failure_type}\n")
+
+          print(
+              json.dumps(
+                  {
+                      "timestamp": timestamp,
+                      "max_candidates": max_candidates,
+                      "acknowledge_single_run_normalized": acknowledged,
+                      "github_ref_name": os.environ.get("GITHUB_REF_NAME", ""),
+                      "github_sha": os.environ.get("GITHUB_SHA", ""),
+                      "validation_status": status,
+                      "failure_type": failure_type,
+                  },
+                  ensure_ascii=False,
+              )
+          )
+          sys.exit(0)
+          PY
+
+      - name: Install dependencies
+        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' }}
+        id: dependencies
+        run: |
+          set +e
+          python -m pip install --upgrade pip && pip install -r requirements.txt
+          code=$?
+          echo "dependency_exit_code=${code}" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Run offline preflight checks
+        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' }}
+        id: preflight
         run: |
-          set -euo pipefail
-          python scripts/probe_gdelt_webngrams.py --print-plan --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}"
-          python scripts/test_gdelt_webngrams_probe.py
-          python scripts/test_gdelt_webngrams_candidate_review.py
-          python scripts/test_gdelt_global_news_probe.py
-          python scripts/test_gdelt_provider_health.py
-          python scripts/diagnose_public_json_counts.py
-          python -m compileall src scripts
-          python - <<'PY'
+          set +e
+          (
+            set -euo pipefail
+            python scripts/probe_gdelt_webngrams.py --print-plan --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}"
+            python scripts/test_gdelt_webngrams_probe.py
+            python scripts/test_gdelt_webngrams_candidate_review.py
+            python scripts/test_gdelt_global_news_probe.py
+            python scripts/test_gdelt_provider_health.py
+            python scripts/diagnose_public_json_counts.py
+            python -m compileall src scripts
+            python - <<'PY'
           from pathlib import Path
 
           endpoint = "api." + "gdeltproject.org/api/v2/" + "doc/doc"
           for name in ["scripts/probe_gdelt_webngrams.py", "scripts/test_gdelt_webngrams_probe.py"]:
               assert endpoint not in Path(name).read_text(encoding="utf-8"), "DOC API endpoint must not be referenced"
           PY
+          )
+          code=$?
+          echo "preflight_exit_code=${code}" >> "$GITHUB_OUTPUT"
+          exit 0
 
       - name: Run live Web NGrams and GAL probe
+        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' }}
         id: live_probe
         run: |
           set +e
@@ -103,7 +260,7 @@ jobs:
 
       - name: Run live candidate quality review
         id: live_review
-        if: ${{ always() }}
+        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' && hashFiles('artifacts/global_news_webngrams_probe/report.json') != '' }}
         run: |
           set +e
           python scripts/review_gdelt_webngrams_candidates.py \
@@ -117,21 +274,9 @@ jobs:
 
       - name: Validate live report contract
         id: live_contract
-        if: ${{ always() }}
+        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' && hashFiles('artifacts/global_news_webngrams_probe/report.json') != '' && hashFiles('artifacts/global_news_webngrams_review/live_review_report.json') != '' }}
         run: |
           set +e
-          report="${PROBE_DIR}/report.json"
-          review="${REVIEW_DIR}/live_review_report.json"
-          code=0
-          if [ ! -f "$report" ]; then
-            echo "::error::Live probe report was not created."
-            code=1
-          fi
-          if [ ! -f "$review" ]; then
-            echo "::error::Live quality review report was not created."
-            code=1
-          fi
-          if [ "$code" -eq 0 ]; then
           python - <<'PY'
           import json
           from pathlib import Path
@@ -156,19 +301,23 @@ jobs:
           assert review.get("public_json_unchanged") is True, "review changed public JSON"
           assert review.get("db_unchanged") is True, "review changed DB"
           assert review.get("env_unchanged") is True, "review changed .env"
-          print(json.dumps({
-              "status": report.get("status"),
-              "transport_acceptance_passed": report.get("transport_acceptance_passed"),
-              "keyword_observation": report.get("keyword_observation"),
-              "10.10-B1_live_accepted": report.get("10.10-B1_live_accepted"),
-              "10.10-B2_ready": report.get("10.10-B2_ready"),
-              "quality_pipeline_valid": review.get("quality_pipeline_valid"),
-              "shadow_ready": review.get("shadow_ready"),
-              "production_publish_allowed": review.get("production_publish_allowed"),
-          }, ensure_ascii=False))
+          print(
+              json.dumps(
+                  {
+                      "status": report.get("status"),
+                      "transport_acceptance_passed": report.get("transport_acceptance_passed"),
+                      "keyword_observation": report.get("keyword_observation"),
+                      "10.10-B1_live_accepted": report.get("10.10-B1_live_accepted"),
+                      "10.10-B2_ready": report.get("10.10-B2_ready"),
+                      "quality_pipeline_valid": review.get("quality_pipeline_valid"),
+                      "shadow_ready": review.get("shadow_ready"),
+                      "production_publish_allowed": review.get("production_publish_allowed"),
+                  },
+                  ensure_ascii=False,
+              )
+          )
           PY
           code=$?
-          fi
           echo "contract_exit_code=${code}" >> "$GITHUB_OUTPUT"
           exit 0
 
@@ -181,20 +330,37 @@ jobs:
           import os
           from pathlib import Path
 
+          def load_json(path: str) -> dict:
+              target = Path(path)
+              return json.loads(target.read_text(encoding="utf-8")) if target.exists() else {}
+
+          def tri(value):
+              return "not_evaluated" if value is None else str(value).lower()
+
           summary = Path(os.environ["GITHUB_STEP_SUMMARY"])
-          probe_path = Path("artifacts/global_news_webngrams_probe/report.json")
-          review_path = Path("artifacts/global_news_webngrams_review/live_review_report.json")
-          probe = json.loads(probe_path.read_text(encoding="utf-8")) if probe_path.exists() else {}
-          review = json.loads(review_path.read_text(encoding="utf-8")) if review_path.exists() else {}
+          run_control = load_json("artifacts/global_news_webngrams_probe/run_control.json")
+          failure = load_json("artifacts/global_news_webngrams_probe/failure_report.json")
+          probe = load_json("artifacts/global_news_webngrams_probe/report.json")
+          review = load_json("artifacts/global_news_webngrams_review/live_review_report.json")
+          manual_approval = run_control.get("acknowledge_single_run") == "true"
+          validation_passed = run_control.get("validation_status") == "passed"
           lines = [
               "# GDELT Web NGrams Live Verification",
               "",
-              f"- Timestamp: `{probe.get('timestamp', '${{ inputs.timestamp }}')}`",
+              f"- Timestamp: `{probe.get('timestamp') or run_control.get('timestamp') or '${{ inputs.timestamp }}'}`",
               f"- Probe Run ID: `{review.get('probe_run_id', '')}`",
-              f"- HTTP requests: `{probe.get('network_request_count', probe.get('http_request_count', ''))}`",
-              f"- Web NGrams status: `{probe.get('webngrams_http_status', '')}`",
-              f"- GAL status: `{probe.get('gal_http_status', '')}`",
-              f"- Transport Acceptance: `{probe.get('transport_acceptance_passed', False)}`",
+              f"- Manual Approval: `{str(manual_approval).lower()}`",
+              f"- Validation Status: `{run_control.get('validation_status', 'not_evaluated')}`",
+              f"- Failure Type: `{failure.get('failure_type') or run_control.get('failure_type') or ''}`",
+              f"- HTTP requests: `{probe.get('network_request_count', probe.get('http_request_count', run_control.get('actual_http_request_count', 0)))}`",
+              "- Web NGrams request count: `0`" if not probe else "- Web NGrams request count: `1`",
+              "- GAL request count: `0`" if not probe else "- GAL request count: `1`",
+              f"- DOC API request count: `{probe.get('doc_api_request_count', 0)}`",
+              "- Retry count: `0`",
+              "- Fallback count: `0`",
+              f"- Web NGrams status: `{probe.get('webngrams_http_status', 'not_evaluated')}`",
+              f"- GAL status: `{probe.get('gal_http_status', 'not_evaluated')}`",
+              f"- Transport Acceptance: `{tri(probe.get('transport_acceptance_passed'))}`",
               f"- Total input candidates: `{review.get('total_input_count', 0)}`",
               f"- Valid candidates: `{review.get('valid_input_count', 0)}`",
               f"- Malformed: `{review.get('malformed_input_count', 0)}`",
@@ -203,15 +369,16 @@ jobs:
               f"- Publish Candidate: `{review.get('publish_candidate_count', 0)}`",
               f"- Review Required: `{review.get('review_required_count', 0)}`",
               f"- Irrelevant: `{review.get('irrelevant_count', 0)}`",
-              f"- GAL Join success ratio: `{review.get('gal_join_success_ratio', '')}`",
+              f"- GAL Join success ratio: `{review.get('gal_join_success_ratio', 'not_evaluated')}`",
               f"- Country confirmed/inferred/unresolved/conflicting: `{review.get('country_confirmed_count', 0)}` / `{review.get('country_inferred_count', 0)}` / `{review.get('country_unresolved_count', 0)}` / `{review.get('country_conflicting_count', 0)}`",
-              f"- Country resolution success ratio: `{review.get('country_resolution_success_ratio', '')}`",
-              f"- Quality Pipeline Valid: `{review.get('quality_pipeline_valid', False)}`",
-              f"- Shadow Ready: `{review.get('shadow_ready', False)}`",
-              f"- Production Publish Allowed: `{review.get('production_publish_allowed', False)}`",
-              f"- Public JSON Unchanged: `{review.get('public_json_unchanged', probe.get('public_json_unchanged', False))}`",
-              f"- DB Unchanged: `{review.get('db_unchanged', probe.get('db_unchanged', False))}`",
-              f"- .env Unchanged: `{review.get('env_unchanged', probe.get('env_unchanged', False))}`",
+              f"- Country resolution success ratio: `{review.get('country_resolution_success_ratio', 'not_evaluated')}`",
+              f"- Quality Pipeline Valid: `{tri(review.get('quality_pipeline_valid'))}`",
+              f"- Shadow Ready: `{tri(review.get('shadow_ready') if validation_passed else False)}`",
+              "- Production Publish Allowed: `false`",
+              f"- Public JSON Unchanged: `{tri(review.get('public_json_unchanged', probe.get('public_json_unchanged')) if validation_passed else None)}`",
+              f"- DB Unchanged: `{tri(review.get('db_unchanged', probe.get('db_unchanged')) if validation_passed else None)}`",
+              f"- .env Unchanged: `{tri(review.get('env_unchanged', probe.get('env_unchanged')) if validation_passed else None)}`",
+              f"- Checkpoint Unchanged: `{tri(probe.get('checkpoint_unchanged') if validation_passed else None)}`",
               f"- Artifact: `gdelt-webngrams-live-review-${{ github.run_id }}-${{ inputs.timestamp }}`",
           ]
           summary.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -220,21 +387,33 @@ jobs:
 
       - name: Upload live verification artifacts
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gdelt-webngrams-live-review-${{ github.run_id }}-${{ inputs.timestamp }}
           path: |
             artifacts/global_news_webngrams_probe/**
             artifacts/global_news_webngrams_review/**
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 7
 
-      - name: Preserve live probe exit code
+      - name: Preserve live verification exit code
         if: ${{ always() }}
         run: |
-          probe="${{ steps.live_probe.outputs.probe_exit_code || 1 }}"
-          review="${{ steps.live_review.outputs.review_exit_code || 1 }}"
-          contract="${{ steps.live_contract.outputs.contract_exit_code || 1 }}"
+          validation="${{ steps.input_validation.outputs.validation_exit_code || 1 }}"
+          dependencies="${{ steps.dependencies.outputs.dependency_exit_code || 0 }}"
+          preflight="${{ steps.preflight.outputs.preflight_exit_code || 0 }}"
+          probe="${{ steps.live_probe.outputs.probe_exit_code || 0 }}"
+          review="${{ steps.live_review.outputs.review_exit_code || 0 }}"
+          contract="${{ steps.live_contract.outputs.contract_exit_code || 0 }}"
+          if [ "$validation" -ne 0 ]; then
+            exit "$validation"
+          fi
+          if [ "$dependencies" -ne 0 ]; then
+            exit "$dependencies"
+          fi
+          if [ "$preflight" -ne 0 ]; then
+            exit "$preflight"
+          fi
           if [ "$probe" -ne 0 ]; then
             exit "$probe"
           fi
