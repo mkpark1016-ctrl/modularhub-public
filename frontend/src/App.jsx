@@ -10,6 +10,7 @@ import {
   Search,
 } from "lucide-react";
 import { Link, NavLink, Route, Routes, useParams } from "react-router-dom";
+import { matchesBusinessFilters } from "./businessFilters";
 
 const DATA_BASE = import.meta.env.VITE_DATA_BASE_URL || "/data";
 
@@ -456,12 +457,13 @@ function ListingPage({ type }) {
     const queryText = normalizeText(query);
     return items.filter((item) => {
       if (isBusiness) {
-        const selectedType = TYPE_OPTIONS.find((option) => option.value === typeFilter)?.sourceType;
-        const typeMatches = !selectedType || item.source_type === selectedType;
-        const agencyMatches = agencyFilter === "all" || agencyFilterValue(item) === agencyFilter;
-        const statusMatches = statusFilter === "all" || getBusinessStatus(item) === statusFilter;
+        const filterMatches = matchesBusinessFilters(
+          item,
+          { sourceType: typeFilter, agency: agencyFilter, status: statusFilter },
+          { getAgencyValue: agencyFilterValue, getStatus: getBusinessStatus },
+        );
         const searchMatches = !queryText || getSearchText(item).includes(queryText);
-        return typeMatches && agencyMatches && statusMatches && searchMatches;
+        return filterMatches && searchMatches;
       }
 
       const text = `${item.title || ""} ${item.media || ""} ${item.source || ""} ${item.summary || ""}`.toLowerCase();
