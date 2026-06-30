@@ -1,0 +1,143 @@
+name: Verify GDELT Web NGrams live
+
+on:
+  workflow_dispatch:
+    inputs:
+      timestamp:
+        description: Approved UTC timestamp in YYYYMMDDHHMMSS format
+        required: true
+        type: string
+        default: "20211215000100"
+      max_candidates:
+        description: Maximum modular candidates to retain
+        required: true
+        type: string
+        default: "20"
+      acknowledge_single_run:
+        description: I approve exactly one Web NGrams request and one GAL request
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-gdelt-webngrams-live
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TIMESTAMP: ${{ inputs.timestamp }}
+      MAX_CANDIDATES: ${{ inputs.max_candidates }}
+      ACKNOWLEDGE_SINGLE_RUN: ${{ inputs.acknowledge_single_run }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Validate manual approval and inputs
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_REF}" != "refs/heads/main" ]; then
+            echo "::error::Run this live verification from the main branch only."
+            exit 1
+          fi
+          if [ "${ACKNOWLEDGE_SINGLE_RUN}" != "true" ]; then
+            echo "::error::acknowledge_single_run must be true before any HTTP request is allowed."
+            exit 1
+          fi
+          if ! printf '%s' "${TIMESTAMP}" | grep -Eq '^[0-9]{14}$'; then
+            echo "::error::timestamp must be exactly 14 UTC digits."
+            exit 1
+          fi
+          if ! printf '%s' "${MAX_CANDIDATES}" | grep -Eq '^[0-9]+$'; then
+            echo "::error::max_candidates must be an integer."
+            exit 1
+          fi
+          if [ "${MAX_CANDIDATES}" -lt 1 ] || [ "${MAX_CANDIDATES}" -gt 100 ]; then
+            echo "::error::max_candidates must be between 1 and 100."
+            exit 1
+          fi
+
+      - name: Run offline preflight checks
+        run: |
+          set -euo pipefail
+          python scripts/probe_gdelt_webngrams.py --print-plan --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}"
+          python scripts/test_gdelt_webngrams_probe.py
+          python scripts/test_gdelt_global_news_probe.py
+          python scripts/test_gdelt_provider_health.py
+          python scripts/diagnose_public_json_counts.py
+          python -m compileall src scripts
+          python - <<'PY'
+          from pathlib import Path
+
+          endpoint = "api." + "gdeltproject.org/api/v2/" + "doc/doc"
+          for name in ["scripts/probe_gdelt_webngrams.py", "scripts/test_gdelt_webngrams_probe.py"]:
+              assert endpoint not in Path(name).read_text(encoding="utf-8"), "DOC API endpoint must not be referenced"
+          PY
+
+      - name: Run live Web NGrams and GAL probe
+        id: live_probe
+        run: |
+          set +e
+          python scripts/probe_gdelt_webngrams.py --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}"
+          code=$?
+          echo "probe_exit_code=${code}" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload live verification artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gdelt-webngrams-live-${{ github.run_id }}-${{ inputs.timestamp }}
+          path: artifacts/global_news_webngrams_probe/**
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Validate live report contract
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          report="artifacts/global_news_webngrams_probe/report.json"
+          if [ ! -f "$report" ]; then
+            echo "::error::Live probe report was not created."
+            exit 1
+          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/global_news_webngrams_probe/report.json").read_text(encoding="utf-8"))
+          assert report.get("timestamp") == "${{ inputs.timestamp }}", "timestamp mismatch"
+          assert int(report.get("http_request_count") or 0) <= 2, "too many HTTP requests"
+          assert int(report.get("network_request_count") or 0) <= 2, "too many network requests"
+          assert int(report.get("doc_api_request_count") or 0) == 0, "DOC API request count must be zero"
+          assert report.get("public_json_unchanged") is True, "public JSON changed"
+          assert report.get("db_unchanged") is True, "DB changed"
+          assert report.get("env_unchanged") is True, ".env changed"
+          assert report.get("checkpoint_unchanged") is True, "checkpoint changed"
+          print(json.dumps({
+              "status": report.get("status"),
+              "transport_acceptance_passed": report.get("transport_acceptance_passed"),
+              "keyword_observation": report.get("keyword_observation"),
+              "10.10-B1_live_accepted": report.get("10.10-B1_live_accepted"),
+              "10.10-B2_ready": report.get("10.10-B2_ready"),
+          }, ensure_ascii=False))
+          PY
+
+      - name: Preserve live probe exit code
+        if: ${{ always() }}
+        run: exit "${{ steps.live_probe.outputs.probe_exit_code || 1 }}"

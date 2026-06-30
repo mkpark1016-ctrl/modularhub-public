@@ -1789,3 +1789,19 @@ Provider decision can be inspected without network access:
 ```bat
 .\.venv\Scripts\python.exe scripts\check_gdelt_provider_health.py --country AU --provider-decision
 ```
+
+## GDELT Web NGrams live verification
+
+The GDELT DOC API remains quarantined after repeated HTTP 429 responses. The Web News NGrams probe is an experimental, read-only fallback check; it is not an operating news collector and it does not update public JSON, the database, or frontend data.
+
+Manual live verification is isolated in the `Verify GDELT Web NGrams live` GitHub Actions workflow:
+
+- Trigger: `workflow_dispatch` only.
+- Required branch: `main`.
+- Required acknowledgement: `acknowledge_single_run=true`.
+- Timestamp: one approved UTC value in `YYYYMMDDHHMMSS` format, for example `20211215000100`.
+- Requests: exactly one Web NGrams GET and one GAL GET, with no DOC API call, retry, timestamp search, or fallback.
+- Artifacts: `artifacts/global_news_webngrams_probe/**`, uploaded as `gdelt-webngrams-live-<run_id>-<timestamp>` for 7 days.
+- Public data: live results remain artifacts only until a later approved collector step.
+
+The probe separates transport acceptance from keyword quality. A live run can pass transport acceptance even when `keyword_observation=empty`; B2 should then focus on time-window expansion and keyword quality. If the approved timestamp is missing, the status is `timestamp_missing`, which is treated separately from provider failure and does not trigger automatic retry with another timestamp.
