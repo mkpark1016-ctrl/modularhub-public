@@ -1801,10 +1801,10 @@ Manual live verification is isolated in the `Verify GDELT Web NGrams live` GitHu
 - Required acknowledgement: `acknowledge_single_run=true`.
 - Timestamp: one approved UTC value in `YYYYMMDDHHMMSS` format, for example `20211215000100`.
 - Requests: exactly one Web NGrams GET and one GAL GET, with no DOC API call, retry, timestamp search, or fallback.
-- Artifacts: `artifacts/global_news_webngrams_probe/**`, uploaded as `gdelt-webngrams-live-<run_id>-<timestamp>` for 7 days.
+- Artifacts: `artifacts/global_news_webngrams_probe/**` and `artifacts/global_news_webngrams_review/**`, uploaded as `gdelt-webngrams-live-review-<run_id>-<timestamp>` for 7 days.
 - Public data: live results remain artifacts only until a later approved collector step.
 
-The probe separates transport acceptance from keyword quality. A live run can pass transport acceptance even when `keyword_observation=empty`; B2 should then focus on time-window expansion and keyword quality. If the approved timestamp is missing, the status is `timestamp_missing`, which is treated separately from provider failure and does not trigger automatic retry with another timestamp.
+The workflow separates transport acceptance from candidate quality review. A live run can pass transport acceptance even when `keyword_observation=empty`; the review then reports `quality_pipeline_valid`, `shadow_ready`, and `production_publish_allowed=false`. B2 should focus on time-window expansion, keyword quality, and manual review before any public data merge. If the approved timestamp is missing, the status is `timestamp_missing`, which is treated separately from provider failure and does not trigger automatic retry with another timestamp.
 
 ## GDELT Web NGrams candidate review
 
@@ -1819,9 +1819,9 @@ Fixture review:
 Live artifact review:
 
 ```bat
-.\.venv\Scripts\python.exe scripts\review_gdelt_webngrams_candidates.py --input artifacts\global_news_webngrams_probe\candidates.json
+.\.venv\Scripts\python.exe scripts\review_gdelt_webngrams_candidates.py --input-candidates artifacts\global_news_webngrams_probe\candidates.json --input-probe-report artifacts\global_news_webngrams_probe\report.json --source-mode live
 ```
 
-The review step keeps original titles and URLs, normalizes URLs for duplicate detection, scores modular construction relevance, classifies candidates as `publish_candidate`, `review_required`, `irrelevant`, or `malformed`, and writes manual review files under `artifacts/global_news_webngrams_review/`. Country resolution is evidence-based: missing evidence remains `unresolved`, conflicting evidence remains `conflicting`, and a ccTLD alone is not enough to confirm a country. Overseas news scheduling and public `news.json` publication require a later explicit approval step.
+The review step keeps original titles and URLs, normalizes URLs for duplicate detection, scores modular construction relevance, classifies candidates as `publish_candidate`, `review_required`, `irrelevant`, or `malformed`, and writes manual review files under `artifacts/global_news_webngrams_review/`. Country resolution is evidence-based: missing evidence remains `unresolved`, conflicting evidence remains `conflicting`, and a ccTLD alone is not enough to confirm a country. `shadow_ready=true` only means the read-only transport and quality pipelines completed; overseas news scheduling and public `news.json` publication require a later explicit approval step.
 
 Review metrics are split by denominator. `total_input_count` is every input candidate, while `valid_input_count` excludes malformed rows and `malformed_input_count` records title or URL failures. `unique_valid_candidate_count` is after duplicate suppression; `duplicate_member_count` counts all members in duplicate groups, while `duplicate_suppressed_count` counts only non-representative candidates. GAL join success uses unique valid candidates with an article identifier as the denominator. Country resolution success uses unique valid candidates and counts only `confirmed` plus `inferred`. Fixture results are not live approval results: if `live_acceptance_status` is not `accepted` or `10.10-B1_live_accepted=false`, overseas candidates must remain out of public `news.json`. The next approval step is to review a successful live artifact with the same command and inspect `manual_review.csv`.

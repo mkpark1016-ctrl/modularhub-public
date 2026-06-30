@@ -34,6 +34,8 @@ jobs:
       TIMESTAMP: ${{ inputs.timestamp }}
       MAX_CANDIDATES: ${{ inputs.max_candidates }}
       ACKNOWLEDGE_SINGLE_RUN: ${{ inputs.acknowledge_single_run }}
+      PROBE_DIR: artifacts/global_news_webngrams_probe
+      REVIEW_DIR: artifacts/global_news_webngrams_review
 
     steps:
       - name: Checkout repository
@@ -77,6 +79,7 @@ jobs:
           set -euo pipefail
           python scripts/probe_gdelt_webngrams.py --print-plan --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}"
           python scripts/test_gdelt_webngrams_probe.py
+          python scripts/test_gdelt_webngrams_candidate_review.py
           python scripts/test_gdelt_global_news_probe.py
           python scripts/test_gdelt_provider_health.py
           python scripts/diagnose_public_json_counts.py
@@ -93,34 +96,48 @@ jobs:
         id: live_probe
         run: |
           set +e
-          python scripts/probe_gdelt_webngrams.py --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}"
+          python scripts/probe_gdelt_webngrams.py --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}" --output-dir "${PROBE_DIR}"
           code=$?
           echo "probe_exit_code=${code}" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Upload live verification artifacts
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: gdelt-webngrams-live-${{ github.run_id }}-${{ inputs.timestamp }}
-          path: artifacts/global_news_webngrams_probe/**
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Validate live report contract
+      - name: Run live candidate quality review
+        id: live_review
         if: ${{ always() }}
         run: |
-          set -euo pipefail
-          report="artifacts/global_news_webngrams_probe/report.json"
+          set +e
+          python scripts/review_gdelt_webngrams_candidates.py \
+            --input-candidates "${PROBE_DIR}/candidates.json" \
+            --input-probe-report "${PROBE_DIR}/report.json" \
+            --source-mode live \
+            --output-dir "${REVIEW_DIR}"
+          code=$?
+          echo "review_exit_code=${code}" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Validate live report contract
+        id: live_contract
+        if: ${{ always() }}
+        run: |
+          set +e
+          report="${PROBE_DIR}/report.json"
+          review="${REVIEW_DIR}/live_review_report.json"
+          code=0
           if [ ! -f "$report" ]; then
             echo "::error::Live probe report was not created."
-            exit 1
+            code=1
           fi
+          if [ ! -f "$review" ]; then
+            echo "::error::Live quality review report was not created."
+            code=1
+          fi
+          if [ "$code" -eq 0 ]; then
           python - <<'PY'
           import json
           from pathlib import Path
 
           report = json.loads(Path("artifacts/global_news_webngrams_probe/report.json").read_text(encoding="utf-8"))
+          review = json.loads(Path("artifacts/global_news_webngrams_review/live_review_report.json").read_text(encoding="utf-8"))
           assert report.get("timestamp") == "${{ inputs.timestamp }}", "timestamp mismatch"
           assert int(report.get("http_request_count") or 0) <= 2, "too many HTTP requests"
           assert int(report.get("network_request_count") or 0) <= 2, "too many network requests"
@@ -129,15 +146,99 @@ jobs:
           assert report.get("db_unchanged") is True, "DB changed"
           assert report.get("env_unchanged") is True, ".env changed"
           assert report.get("checkpoint_unchanged") is True, "checkpoint changed"
+          assert review.get("source_mode") == "live", "review source mode must be live"
+          assert review.get("transport_acceptance_passed") == report.get("transport_acceptance_passed"), "transport flag mismatch"
+          assert review.get("candidate_schema_valid") is True, "candidate schema invalid"
+          assert review.get("metric_conservation_passed") is True, "metric conservation failed"
+          assert review.get("quality_pipeline_valid") is True, "quality pipeline failed"
+          assert review.get("production_publish_allowed") is False, "production publication must stay disabled"
+          assert review.get("external_http_request_count") == 0, "review must not perform HTTP requests"
+          assert review.get("public_json_unchanged") is True, "review changed public JSON"
+          assert review.get("db_unchanged") is True, "review changed DB"
+          assert review.get("env_unchanged") is True, "review changed .env"
           print(json.dumps({
               "status": report.get("status"),
               "transport_acceptance_passed": report.get("transport_acceptance_passed"),
               "keyword_observation": report.get("keyword_observation"),
               "10.10-B1_live_accepted": report.get("10.10-B1_live_accepted"),
               "10.10-B2_ready": report.get("10.10-B2_ready"),
+              "quality_pipeline_valid": review.get("quality_pipeline_valid"),
+              "shadow_ready": review.get("shadow_ready"),
+              "production_publish_allowed": review.get("production_publish_allowed"),
           }, ensure_ascii=False))
           PY
+          code=$?
+          fi
+          echo "contract_exit_code=${code}" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Write live verification summary
+        if: ${{ always() }}
+        run: |
+          set +e
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          summary = Path(os.environ["GITHUB_STEP_SUMMARY"])
+          probe_path = Path("artifacts/global_news_webngrams_probe/report.json")
+          review_path = Path("artifacts/global_news_webngrams_review/live_review_report.json")
+          probe = json.loads(probe_path.read_text(encoding="utf-8")) if probe_path.exists() else {}
+          review = json.loads(review_path.read_text(encoding="utf-8")) if review_path.exists() else {}
+          lines = [
+              "# GDELT Web NGrams Live Verification",
+              "",
+              f"- Timestamp: `{probe.get('timestamp', '${{ inputs.timestamp }}')}`",
+              f"- Probe Run ID: `{review.get('probe_run_id', '')}`",
+              f"- HTTP requests: `{probe.get('network_request_count', probe.get('http_request_count', ''))}`",
+              f"- Web NGrams status: `{probe.get('webngrams_http_status', '')}`",
+              f"- GAL status: `{probe.get('gal_http_status', '')}`",
+              f"- Transport Acceptance: `{probe.get('transport_acceptance_passed', False)}`",
+              f"- Total input candidates: `{review.get('total_input_count', 0)}`",
+              f"- Valid candidates: `{review.get('valid_input_count', 0)}`",
+              f"- Malformed: `{review.get('malformed_input_count', 0)}`",
+              f"- Duplicate suppressed: `{review.get('duplicate_suppressed_count', 0)}`",
+              f"- Unique candidates: `{review.get('unique_valid_candidate_count', 0)}`",
+              f"- Publish Candidate: `{review.get('publish_candidate_count', 0)}`",
+              f"- Review Required: `{review.get('review_required_count', 0)}`",
+              f"- Irrelevant: `{review.get('irrelevant_count', 0)}`",
+              f"- GAL Join success ratio: `{review.get('gal_join_success_ratio', '')}`",
+              f"- Country confirmed/inferred/unresolved/conflicting: `{review.get('country_confirmed_count', 0)}` / `{review.get('country_inferred_count', 0)}` / `{review.get('country_unresolved_count', 0)}` / `{review.get('country_conflicting_count', 0)}`",
+              f"- Country resolution success ratio: `{review.get('country_resolution_success_ratio', '')}`",
+              f"- Quality Pipeline Valid: `{review.get('quality_pipeline_valid', False)}`",
+              f"- Shadow Ready: `{review.get('shadow_ready', False)}`",
+              f"- Production Publish Allowed: `{review.get('production_publish_allowed', False)}`",
+              f"- Public JSON Unchanged: `{review.get('public_json_unchanged', probe.get('public_json_unchanged', False))}`",
+              f"- DB Unchanged: `{review.get('db_unchanged', probe.get('db_unchanged', False))}`",
+              f"- .env Unchanged: `{review.get('env_unchanged', probe.get('env_unchanged', False))}`",
+              f"- Artifact: `gdelt-webngrams-live-review-${{ github.run_id }}-${{ inputs.timestamp }}`",
+          ]
+          summary.write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+          exit 0
+
+      - name: Upload live verification artifacts
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gdelt-webngrams-live-review-${{ github.run_id }}-${{ inputs.timestamp }}
+          path: |
+            artifacts/global_news_webngrams_probe/**
+            artifacts/global_news_webngrams_review/**
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Preserve live probe exit code
         if: ${{ always() }}
-        run: exit "${{ steps.live_probe.outputs.probe_exit_code || 1 }}"
+        run: |
+          probe="${{ steps.live_probe.outputs.probe_exit_code || 1 }}"
+          review="${{ steps.live_review.outputs.review_exit_code || 1 }}"
+          contract="${{ steps.live_contract.outputs.contract_exit_code || 1 }}"
+          if [ "$probe" -ne 0 ]; then
+            exit "$probe"
+          fi
+          if [ "$review" -ne 0 ]; then
+            exit "$review"
+          fi
+          exit "$contract"

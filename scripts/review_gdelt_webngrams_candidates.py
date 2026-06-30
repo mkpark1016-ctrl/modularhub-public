@@ -177,6 +177,12 @@ EVIDENCE_PRIORITY = {
     "input_country_evidence": 6,
 }
 CLASSIFICATION_ORDER = {"publish_candidate": 0, "review_required": 1, "irrelevant": 2, "malformed": 3}
+VOLATILE_HASH_FIELDS = {
+    "checked_at",
+    "generated_at",
+    "normalized_result_hash",
+    "output_file_hashes",
+}
 
 
 def utc_now_iso() -> str:
@@ -201,6 +207,53 @@ def contains_phrase(normalized_context: str, phrase: str) -> bool:
 
 def file_hash(path: Path) -> str | None:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None
+
+
+def stable_hash(payload: Any) -> str:
+    return hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()
+
+
+def normalize_for_result_hash(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: normalize_for_result_hash(item)
+            for key, item in sorted(value.items())
+            if key not in VOLATILE_HASH_FIELDS
+        }
+    if isinstance(value, list):
+        return [normalize_for_result_hash(item) for item in value]
+    return value
+
+
+def safe_path_label(path: Path | None) -> str:
+    if path is None:
+        return ""
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return path.name
+
+
+def probe_run_id(report: dict[str, Any] | None, source: str, source_hash: str | None) -> str:
+    if report:
+        for key in ("run_id", "probe_run_id"):
+            value = clean_text(report.get(key))
+            if value:
+                return value
+        timestamp = clean_text(report.get("timestamp"))
+        if timestamp:
+            return f"probe-{timestamp}"
+    if source == "fixture":
+        return "probe-fixture"
+    return f"probe-artifact-{(source_hash or stable_hash(source))[:12]}"
+
+
+def review_run_id(probe_id: str, source_hash: str | None) -> str:
+    return f"review-{probe_id}-{(source_hash or stable_hash(probe_id))[:12]}"
+
+
+def fallback_fingerprint(label: str, payload: Any) -> str:
+    return stable_hash({"label": label, "payload": payload})
 
 
 def integrity_snapshot() -> dict[str, Any]:
@@ -234,6 +287,17 @@ def parse_json_file(path: Path) -> Any:
         raise ValueError(f"input file does not exist: {path}") from exc
     except json.JSONDecodeError as exc:
         raise ValueError(f"input file is not valid JSON: {path}: {exc}") from exc
+
+
+def contains_unsafe_local_reference(value: Any) -> bool:
+    if isinstance(value, dict):
+        return any(contains_unsafe_local_reference(item) for item in value.values())
+    if isinstance(value, list):
+        return any(contains_unsafe_local_reference(item) for item in value)
+    text = clean_text(value)
+    if not text:
+        return False
+    return bool(re.search(r"(?i)([a-z]:\\users\\|/home/[^/]+/|/users/[^/]+/)", text))
 
 
 def normalize_url(raw_url: Any) -> dict[str, Any]:
@@ -756,7 +820,17 @@ def load_fixture_candidates() -> tuple[list[dict[str, Any]], dict[str, Any] | No
 
 
 def load_input_candidates(input_path: Path) -> tuple[list[dict[str, Any]], dict[str, Any] | None, str]:
-    payload = parse_json_file(input_path)
+    candidates, report, _source_mode = load_candidate_artifact(input_path, input_path.with_name("report.json"), source_mode="artifact")
+    return candidates, report, str(input_path)
+
+
+def load_candidate_artifact(
+    candidates_path: Path,
+    report_path: Path | None,
+    *,
+    source_mode: str,
+) -> tuple[list[dict[str, Any]], dict[str, Any] | None, str]:
+    payload = parse_json_file(candidates_path)
     if isinstance(payload, dict) and isinstance(payload.get("items"), list):
         candidates = payload["items"]
     elif isinstance(payload, list):
@@ -765,9 +839,38 @@ def load_input_candidates(input_path: Path) -> tuple[list[dict[str, Any]], dict[
         raise ValueError("candidate input must be a JSON array or an object with an items array")
     if not all(isinstance(item, dict) for item in candidates):
         raise ValueError("candidate input contains non-object entries")
-    report_path = input_path.with_name("report.json")
-    report = parse_json_file(report_path) if report_path.exists() else None
-    return candidates, report, str(input_path)
+    report = parse_json_file(report_path) if report_path and report_path.exists() else None
+    if source_mode == "live":
+        validate_live_inputs(candidates, report, candidates_path, report_path)
+    return candidates, report, str(candidates_path)
+
+
+def validate_live_inputs(
+    candidates: list[dict[str, Any]],
+    report: dict[str, Any] | None,
+    candidates_path: Path,
+    report_path: Path | None,
+) -> None:
+    if report is None:
+        raise ValueError("--source-mode live requires --input-probe-report")
+    if not isinstance(report, dict):
+        raise ValueError("live probe report must be a JSON object")
+    required_report_fields = ["timestamp", "transport_acceptance_passed", "http_request_count", "doc_api_request_count"]
+    missing = [field for field in required_report_fields if field not in report]
+    if missing:
+        raise ValueError(f"live probe report is missing required fields: {', '.join(missing)}")
+    if not clean_text(report.get("timestamp")):
+        raise ValueError("live probe report timestamp is empty")
+    if int(report.get("doc_api_request_count") or 0) != 0:
+        raise ValueError("live probe report indicates DOC API requests")
+    if int(report.get("network_request_count") or report.get("http_request_count") or 0) > 2:
+        raise ValueError("live probe report exceeded the two-request limit")
+    if "fixture" in clean_text(report.get("mode")).lower() or clean_text(report.get("input_mode")).lower() == "fixture":
+        raise ValueError("live review input must not be a fixture report")
+    if contains_unsafe_local_reference(report) or contains_unsafe_local_reference(candidates):
+        raise ValueError("live review input contains a local absolute path")
+    if candidates_path == report_path:
+        raise ValueError("candidate and probe report inputs must be separate files")
 
 
 def summarize_live_acceptance(report: dict[str, Any] | None, source: str) -> dict[str, Any]:
@@ -795,7 +898,35 @@ def summarize_live_acceptance(report: dict[str, Any] | None, source: str) -> dic
     }
 
 
-def review_candidates(raw_candidates: list[dict[str, Any]], report: dict[str, Any] | None, *, source: str, output_dir: Path) -> dict[str, Any]:
+def metric_conservation(report: dict[str, Any]) -> dict[str, bool]:
+    return {
+        "input_count_conserved": report["total_input_count"] == report["valid_input_count"] + report["malformed_input_count"],
+        "pre_dedup_count_conserved": report["pre_dedup_valid_count"] == report["valid_input_count"],
+        "dedup_count_conserved": report["unique_valid_candidate_count"]
+        == report["pre_dedup_valid_count"] - report["duplicate_suppressed_count"],
+        "classified_count_conserved": report["classified_candidate_count"] == report["unique_valid_candidate_count"],
+        "classification_bucket_count_conserved": report["classified_candidate_count"]
+        == report["publish_candidate_count"] + report["review_required_count"] + report["irrelevant_count"],
+        "country_status_count_conserved": report["country_confirmed_count"]
+        + report["country_inferred_count"]
+        + report["country_unresolved_count"]
+        + report["country_conflicting_count"]
+        == report["country_resolution_eligible_count"],
+        "country_success_count_conserved": report["country_resolution_success_count"]
+        == report["country_confirmed_count"] + report["country_inferred_count"],
+    }
+
+
+def review_candidates(
+    raw_candidates: list[dict[str, Any]],
+    report: dict[str, Any] | None,
+    *,
+    source: str,
+    output_dir: Path,
+    source_mode: str | None = None,
+    candidates_path: Path | None = None,
+    probe_report_path: Path | None = None,
+) -> dict[str, Any]:
     before = integrity_snapshot()
     reviewed = sorted((to_review_candidate(candidate) for candidate in raw_candidates), key=candidate_sort_key)
     malformed_candidates = [item for item in reviewed if item["classification"] == "malformed"]
@@ -820,7 +951,6 @@ def review_candidates(raw_candidates: list[dict[str, Any]], report: dict[str, An
     gal_join_eligible = [item for item in unique_valid_candidates if clean_text(item.get("article_identifier"))]
     gal_join_attempt_count = len(gal_join_eligible)
     gal_join_success_count = sum(1 for item in gal_join_eligible if item.get("gal_join_status") == "joined")
-    live = summarize_live_acceptance(report, source)
     after = integrity_snapshot()
     integrity = integrity_unchanged(before, after)
     all_country_status_counts = Counter(item["country_resolution_status"] for item in reviewed)
@@ -837,19 +967,45 @@ def review_candidates(raw_candidates: list[dict[str, Any]], report: dict[str, An
     country_conflicting_count = valid_country_status_counts.get("conflicting", 0)
     country_resolution_success_count = country_confirmed_count + country_inferred_count
     input_mode = "fixture" if source == "fixture" else "artifact"
-    source_artifact = "" if source == "fixture" else source
-    source_artifact_hash = file_hash(Path(source)) if source_artifact and Path(source).exists() else None
+    resolved_source_mode = source_mode or ("fixture" if source == "fixture" else "artifact")
+    source_artifact = "" if source == "fixture" else safe_path_label(candidates_path or Path(source))
+    live = summarize_live_acceptance(report, source_artifact or source)
+    source_artifact_hash = file_hash(candidates_path or Path(source)) if source_artifact and (candidates_path or Path(source)).exists() else None
+    probe_hash = file_hash(probe_report_path) if probe_report_path and probe_report_path.exists() else None
+    input_file_hashes = {}
+    if candidates_path:
+        input_file_hashes[safe_path_label(candidates_path)] = file_hash(candidates_path)
+    elif source_artifact:
+        input_file_hashes[source_artifact] = source_artifact_hash
+    if probe_report_path:
+        input_file_hashes[safe_path_label(probe_report_path)] = probe_hash
+    probe_id = probe_run_id(report, source, source_artifact_hash)
+    run_id = review_run_id(probe_id, source_artifact_hash or probe_hash)
+    timestamp = clean_text(report.get("timestamp") if report else "")
+    config_fingerprint = clean_text(report.get("config_fingerprint") if report else "") or fallback_fingerprint("config", {"source_mode": resolved_source_mode})[:32]
+    query_fingerprint = clean_text(report.get("query_fingerprint") if report else "") or fallback_fingerprint(
+        "query",
+        {"timestamp": timestamp, "source_hash": source_artifact_hash, "probe_hash": probe_hash},
+    )[:32]
     report_payload = {
         "schema_version": SCHEMA_VERSION,
+        "run_id": run_id,
+        "probe_run_id": probe_id,
         "classifier_version": CLASSIFIER_VERSION,
         "country_resolver_version": COUNTRY_RESOLVER_VERSION,
         "duplicate_resolver_version": DUPLICATE_RESOLVER_VERSION,
         "checked_at": utc_now_iso(),
         "generated_at": utc_now_iso(),
-        "input_source": source,
+        "input_source": source_artifact or source,
         "input_mode": input_mode,
+        "source_mode": resolved_source_mode,
         "source_artifact": source_artifact,
         "source_artifact_hash": source_artifact_hash,
+        "input_file_hashes": dict(sorted(input_file_hashes.items())),
+        "timestamp": timestamp,
+        "config_fingerprint": config_fingerprint,
+        "query_fingerprint": query_fingerprint,
+        "transport_acceptance_passed": live["transport_acceptance_passed"],
         "total_input_count": len(raw_candidates),
         "malformed_input_count": len(malformed_candidates),
         "valid_input_count": len(valid_pre_dedup),
@@ -892,9 +1048,34 @@ def review_candidates(raw_candidates: list[dict[str, Any]], report: dict[str, An
         "positive_keyword_count": sum(1 for item in reviewed if item.get("positive_reason_codes")),
         "exclusion_keyword_count": sum(1 for item in reviewed if item.get("exclusion_reason_codes")),
         "live_acceptance_status": live,
+        "candidate_schema_valid": True,
         "external_http_request_count": 0,
         **integrity,
     }
+    conservation = metric_conservation(report_payload)
+    report_payload["metric_conservation"] = conservation
+    report_payload["metric_conservation_passed"] = all(conservation.values())
+    report_payload["publish_candidates_present"] = report_payload["publish_candidate_count"] > 0
+    report_payload["manual_review_required"] = any(
+        [
+            report_payload["review_required_count"] > 0,
+            report_payload["malformed_count"] > 0,
+            report_payload["country_unresolved_count"] > 0,
+            report_payload["country_conflicting_count"] > 0,
+            not report_payload["transport_acceptance_passed"] and resolved_source_mode == "live",
+        ]
+    )
+    report_payload["quality_pipeline_valid"] = bool(
+        report_payload["candidate_schema_valid"]
+        and report_payload["metric_conservation_passed"]
+        and report_payload["public_json_unchanged"]
+        and report_payload["db_unchanged"]
+        and report_payload["env_unchanged"]
+        and report_payload["checkpoint_unchanged"]
+    )
+    report_payload["shadow_ready"] = bool(report_payload["transport_acceptance_passed"] and report_payload["quality_pipeline_valid"])
+    report_payload["production_publish_allowed"] = False
+    report_payload["normalized_result_hash"] = stable_hash(normalize_for_result_hash(report_payload))
     write_review_artifacts(output_dir, report_payload, buckets, reviewed, duplicate_groups)
     return report_payload
 
@@ -913,6 +1094,26 @@ def write_review_artifacts(
     duplicate_groups: list[dict[str, Any]],
 ) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
+    report_filename = "live_review_report.json" if report.get("source_mode") == "live" else "review_report.json"
+    report_markdown_filename = "live_review_report.md" if report.get("source_mode") == "live" else "review_report.md"
+    common = {
+        "schema_version": SCHEMA_VERSION,
+        "run_id": report["run_id"],
+        "probe_run_id": report["probe_run_id"],
+        "timestamp": report["timestamp"],
+        "source_mode": report["source_mode"],
+        "generated_at": report["generated_at"],
+        "normalized_result_hash": report["normalized_result_hash"],
+        "input_file_hashes": report["input_file_hashes"],
+        "config_fingerprint": report["config_fingerprint"],
+        "query_fingerprint": report["query_fingerprint"],
+        "transport_acceptance_passed": report["transport_acceptance_passed"],
+        "quality_pipeline_valid": report["quality_pipeline_valid"],
+        "manual_review_required": report["manual_review_required"],
+        "public_json_unchanged": report["public_json_unchanged"],
+        "db_unchanged": report["db_unchanged"],
+        "env_unchanged": report["env_unchanged"],
+    }
     country_resolution_items = [
         {
             "item_id": item["item_id"],
@@ -926,14 +1127,14 @@ def write_review_artifacts(
         for item in sorted(reviewed, key=lambda candidate: candidate["item_id"])
     ]
     files = {
-        "review_report.json": report,
-        "publish_candidates.json": {"schema_version": SCHEMA_VERSION, "items": buckets["publish_candidate"]},
-        "review_required.json": {"schema_version": SCHEMA_VERSION, "items": buckets["review_required"]},
-        "irrelevant.json": {"schema_version": SCHEMA_VERSION, "items": buckets["irrelevant"]},
-        "malformed.json": {"schema_version": SCHEMA_VERSION, "items": buckets["malformed"]},
-        "duplicate_groups.json": {"schema_version": SCHEMA_VERSION, "items": duplicate_groups},
+        report_filename: report,
+        "publish_candidates.json": {**common, "items": buckets["publish_candidate"]},
+        "review_required.json": {**common, "items": buckets["review_required"]},
+        "irrelevant.json": {**common, "items": buckets["irrelevant"]},
+        "malformed.json": {**common, "items": buckets["malformed"]},
+        "duplicate_groups.json": {**common, "duplicate_resolver_version": DUPLICATE_RESOLVER_VERSION, "items": duplicate_groups},
         "country_resolution.json": {
-            "schema_version": SCHEMA_VERSION,
+            **common,
             "generated_at": report["generated_at"],
             "classifier_version": CLASSIFIER_VERSION,
             "country_resolver_version": COUNTRY_RESOLVER_VERSION,
@@ -944,11 +1145,12 @@ def write_review_artifacts(
         (output_dir / filename).write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
     output_hashes = {filename: file_hash(output_dir / filename) for filename in sorted(files)}
     manifest = {
-            "schema_version": SCHEMA_VERSION,
+            **common,
             "generated_at": report["checked_at"],
             "input_mode": report["input_mode"],
             "source_artifact": report["source_artifact"],
             "source_artifact_hash": report["source_artifact_hash"],
+            "source_mode": report["source_mode"],
             "total_input_count": report["total_input_count"],
             "valid_input_count": report["valid_input_count"],
             "malformed_input_count": report["malformed_input_count"],
@@ -956,6 +1158,10 @@ def write_review_artifacts(
             "unique_valid_candidate_count": report["unique_valid_candidate_count"],
             "output_file_hashes": output_hashes,
             "external_http_request_count": 0,
+            "transport_acceptance_passed": report["transport_acceptance_passed"],
+            "quality_pipeline_valid": report["quality_pipeline_valid"],
+            "shadow_ready": report["shadow_ready"],
+            "production_publish_allowed": report["production_publish_allowed"],
             "public_json_unchanged": report["public_json_unchanged"],
             "db_unchanged": report["db_unchanged"],
             "env_unchanged": report["env_unchanged"],
@@ -1030,17 +1236,25 @@ def write_review_artifacts(
         f"- country_resolution_eligible_count: `{report['country_resolution_eligible_count']}`",
         f"- country_resolution_success_ratio: `{report['country_resolution_success_ratio']}`",
         f"- live_acceptance_status: `{report['live_acceptance_status']['live_acceptance_status']}`",
+        f"- transport_acceptance_passed: `{report['transport_acceptance_passed']}`",
+        f"- metric_conservation_passed: `{report['metric_conservation_passed']}`",
+        f"- quality_pipeline_valid: `{report['quality_pipeline_valid']}`",
+        f"- shadow_ready: `{report['shadow_ready']}`",
+        f"- production_publish_allowed: `{report['production_publish_allowed']}`",
         f"- external_http_request_count: `{report['external_http_request_count']}`",
         f"- public_json_unchanged: `{report['public_json_unchanged']}`",
         f"- db_unchanged: `{report['db_unchanged']}`",
         f"- env_unchanged: `{report['env_unchanged']}`",
     ]
-    (output_dir / "review_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (output_dir / report_markdown_filename).write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Review GDELT Web NGrams candidate quality without network access.")
     parser.add_argument("--input", type=Path, default=None, help="Path to live candidates.json")
+    parser.add_argument("--input-candidates", type=Path, default=None, help="Path to live probe candidates.json")
+    parser.add_argument("--input-probe-report", type=Path, default=None, help="Path to live probe report.json")
+    parser.add_argument("--source-mode", choices=["fixture", "artifact", "live"], default="artifact")
     parser.add_argument("--fixture", action="store_true", help="Use local Web NGrams and GAL fixtures")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     args = parser.parse_args()
@@ -1048,11 +1262,34 @@ def main() -> int:
     try:
         if args.fixture:
             candidates, report, source = load_fixture_candidates()
+            source_mode = "fixture"
+            candidates_path = None
+            probe_report_path = None
+        elif args.input_candidates:
+            candidates, report, source = load_candidate_artifact(
+                args.input_candidates,
+                args.input_probe_report,
+                source_mode=args.source_mode,
+            )
+            source_mode = args.source_mode
+            candidates_path = args.input_candidates
+            probe_report_path = args.input_probe_report
         elif args.input:
             candidates, report, source = load_input_candidates(args.input)
+            source_mode = args.source_mode
+            candidates_path = args.input
+            probe_report_path = args.input.with_name("report.json") if args.input.with_name("report.json").exists() else None
         else:
-            parser.error("--input or --fixture is required")
-        result = review_candidates(candidates, report, source=source, output_dir=args.output_dir)
+            parser.error("--input, --input-candidates, or --fixture is required")
+        result = review_candidates(
+            candidates,
+            report,
+            source=source,
+            output_dir=args.output_dir,
+            source_mode=source_mode,
+            candidates_path=candidates_path,
+            probe_report_path=probe_report_path,
+        )
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
