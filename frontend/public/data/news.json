@@ -1,10 +1,154 @@
 {
-  "generated_at": "2026-07-01T08:08:12+09:00",
+  "generated_at": "2026-07-02T08:08:54+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 887,
-  "current_news_count": 290,
-  "merged_news_count": 896,
+  "previous_news_count": 896,
+  "current_news_count": 291,
+  "merged_news_count": 918,
   "items": [
+    {
+      "id": 6075,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "반도체ㆍ데이터센터에 OSC 공법 뜬다",
+      "summary": "건설사들은 전통적인 RC(철근콘크리트) 건축 공법 대신 공장 제작 후 현장 조립하는 PC 공법의 적용을 검토하고 있다. 일부 대형건설사는 모듈러 공법을 활용한 데이터센터 구축도 추진 중이다. 이미 해외에서는 PC와...",
+      "published_at": "2026-07-02",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607011349388520514",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607011349388520514",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 6074,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "의왕초평 모듈러 공공주택, 장수명주택 첫 ‘우수’ 인증",
+      "summary": "이번 인증은 모듈러 건축이 공기 단축뿐 아니라, 유지관리와 장기 주거성 측면에서도 우수함을 공인받았다는 점에서 의미가 크다. 특히 엔알비는 22층 모듈러 주택에서 이를 구현해 뛰어난 설계ㆍ제작ㆍ시공 역량을...",
+      "published_at": "2026-07-02",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607011514256840559",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607011514256840559",
+      "keywords": "모듈러 건축;모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 6073,
+      "source": "네이버뉴스",
+      "media": "dailian.co.kr",
+      "title": "“ESG도 AI시대”…건설사, 안전 넘어 AI·스마트건설로 진화",
+      "summary": "이를 위해 DL이앤씨는 ▲친환경 건설 기술 ▲스마트건설·탈현장건설(OSC) 기술 ▲고객 중심 기술을 3대 중점 과제로 설정하고 분야별 실행전략에 따라 지속가능한 기술개발을 추진하고 있다. 특히 스마트 통합 안전...",
+      "published_at": "2026-07-02",
+      "original_url": "https://www.dailian.co.kr/news/view/1662256/?sc=Naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/119/0003107029?sid=101",
+      "keywords": "OSC 건설",
+      "relevance_score": 6
+    },
+    {
+      "id": 368,
+      "source": "네이버뉴스",
+      "media": "cstimes.com",
+      "title": "인천시, '로보컵 2026' 연계 '로봇서비스 기반' 미래 주거 모델 공개",
+      "summary": "이번 행사는 인천시 주거정비과와 LG CNS, 자이가이스트(XIGEIST)가 협력해 도시정비사업의 미래 비전을 제시하기 위해 마련됐다. 송도컨벤시아 전시장에는 모듈러 주거 전시 부스가 설치되어 관람객들이 순찰 및 배송...",
+      "published_at": "2026-07-02",
+      "original_url": "https://www.cstimes.com/news/articleView.html?idxno=711939",
+      "naver_url": "https://www.cstimes.com/news/articleView.html?idxno=711939",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 6083,
+      "source": "네이버뉴스",
+      "media": "isplus.com",
+      "title": "‘탈현장 시공’ OSC 코어 공법 구축… 이지코어, 건설 패러다임 바꿔 ...",
+      "summary": "OSC 공법은 공동주택·오피스 빌딩·모듈러 건축물 등의 핵심 뼈대인 계단실과 엘리베이터 샤프트를 공장에서 3차원 모듈 형태로 완벽하게 제작해 현장에서는 조립만 하는 혁신 방식이다. 이 공법은 기존의 복잡한...",
+      "published_at": "2026-07-01",
+      "original_url": "https://isplus.com/article/view/isp202607010188",
+      "naver_url": "https://n.news.naver.com/mnews/article/241/0003517759?sid=101",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 6082,
+      "source": "네이버뉴스",
+      "media": "enetnews.co.kr",
+      "title": "공간제작소, 채널A '대한민국 브랜딩코리아' 출연···AI·로봇 자동화...",
+      "summary": "공간제작소 측은 미래 건축의 대부분이 OSC 방식으로 이루어질 것으로 전망했다. 한편 공간제작소는 구조재로 목재를 사용하는 것으로 알려졌다. 회사 측에 따르면 이 공법은 기존 시공 방식 대비 폐기물을 최대 80...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.enetnews.co.kr/news/articleView.html?idxno=51922",
+      "naver_url": "https://www.enetnews.co.kr/news/articleView.html?idxno=51922",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 6081,
+      "source": "네이버뉴스",
+      "media": "dnews.co.kr",
+      "title": "M3시스템즈, 글로벌 건축 연구 플랫폼 '네스트'와 업무협약 체결",
+      "summary": "철골 모듈러 건축 전문기업인 M3시스템즈(대표 김인한)는 지난달 24일 스위스 연방 재료과학기술연구소(Empa)가 운영하는 글로벌 건축 연구 플랫폼 네스트(NEST)와 업무협약(MOU)을 체결했다고 1일 밝혔다. M3시스템즈는...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607010937431240430",
+      "naver_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607010937431240430",
+      "keywords": "모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 6080,
+      "source": "네이버뉴스",
+      "media": "pinpointnews.co.kr",
+      "title": "공장에서 주택도 찍어낸다…원가 절감 대안 부상에 모듈러주택株 덕신...",
+      "summary": "차세대 모듈러 건축 공법을 스마트 빌딩 시스템과 연계해 대형 프로젝트 공략에 나선 코오롱글로벌과 식생 블록 및 대규모 환경 복원형 모듈러 인프라 사업을 영위하는 자연과환경 역시 동조 흐름을 보이고 있다. 전통적...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=464559",
+      "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=464559",
+      "keywords": "모듈러 건축",
+      "relevance_score": 16
+    },
+    {
+      "id": 6079,
+      "source": "네이버뉴스",
+      "media": "breaknews.com",
+      "title": "경기도의회 도시환경위원회, 2년 의정활동 마무리…‘현장·입법’ 성과...",
+      "summary": "또 「경기도 모듈러주택 공급 활성화 지원 조례」, 「경기도 공공주택지구 기업유치 활성화 지원 조례」 등은 한국지방자치학회와 경기도의회 우수조례로 선정돼...",
+      "published_at": "2026-07-01",
+      "original_url": "http://www.breaknews.com/1218365",
+      "naver_url": "http://www.breaknews.com/1218365",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 6078,
+      "source": "네이버뉴스",
+      "media": "newstown.co.kr",
+      "title": "인천시, 로봇이 함께 사는 미래주택 공개…송도서 첨단기술 선보인다",
+      "summary": "행사 기간 송도컨벤시아 1층 전시장에는 미래형 모듈러 주거 전시 부스가 운영된다. 관람객들은 순찰 로봇과 배송 로봇 시연을 비롯해 디지털트윈 기반 주거관제 시스템을 직접 체험할 수 있으며, 첨단 주방 로봇이...",
+      "published_at": "2026-07-01",
+      "original_url": "http://www.newstown.co.kr/news/articleView.html?idxno=707797",
+      "naver_url": "http://www.newstown.co.kr/news/articleView.html?idxno=707797",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 6077,
+      "source": "네이버뉴스",
+      "media": "greened.kr",
+      "title": "하반기 달라지는 건설 규제·인허가…중견사 영향은?",
+      "summary": "이 밖에도 정부는 공업화주택 인정제도를 개선해 모듈러 등 OSC(탈현장건설) 주택의 인정 절차와 사후관리 기준을 정비하고, 노후 시설물의 보수·보강 기한을 단축하는 등 건설산업 전반의 사업 추진 여건 개선에 나설...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.greened.kr/news/articleView.html?idxno=343864",
+      "naver_url": "https://www.greened.kr/news/articleView.html?idxno=343864",
+      "keywords": "공업화주택;모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 6076,
+      "source": "네이버뉴스",
+      "media": "fnnews.com",
+      "title": "조재천 현대엘리베이터 대표 \"승강기도 친환경·고효율 기술 중요성 커...",
+      "summary": "기반의 스마트 모빌리티 산업으로 진화하고 있다\"고 밝혔다. 이어 \"탄소중립에 대한 요구가 확대되면서... 높이는 모듈러 공법 적용으로 현장 자원 사용과 공사 과정의 환경 영향을 줄여 나가고 있다\"고 설명했다. 안전...",
+      "published_at": "2026-07-01",
+      "original_url": "http://www.fnnews.com/news/202607010945087212",
+      "naver_url": "https://n.news.naver.com/mnews/article/014/0005542068?sid=101",
+      "keywords": "스마트건설 모듈러",
+      "relevance_score": 6
+    },
     {
       "id": 6066,
       "source": "네이버뉴스",
@@ -34,12 +178,132 @@
       "source": "네이버뉴스",
       "media": "slownews.kr",
       "title": "“민주주의 지켜온 호남에 보상, 투자 유도했지만 억압이나 강요는 아니...",
-      "summary": "양승훈(경남대 교수)은 “1970년대 중화학공업화 이후 이 정도로 투자 규모가 큰 산업정책을 제시하면서... 주택 담보 비율이 무주택자는 70%에서 40%로 줄고 유주택자는 아예 막힌다. 다주택자는 양도세와 취득세 중과를...",
+      "summary": "양승훈(경남대 교수)은 “1970년대 중화학 공업화 이후 이 정도로 투자 규모가 큰 산업정책을 제시하면서... 주택 담보 비율이 무주택자는 70%에서 40%로 줄고 유주택자는 아예 막힌다. 다주택자는 양도세와 취득세 중과를...",
       "published_at": "2026-07-01",
       "original_url": "https://slownews.kr/162491",
       "naver_url": "https://slownews.kr/162491",
       "keywords": "공업화주택",
       "relevance_score": 3
+    },
+    {
+      "id": 377,
+      "source": "네이버뉴스",
+      "media": "viva100.com",
+      "title": "“로봇이 빵 굽고 커피 내린다”…인천 로보컵 2026서 미래형 주거 첫 공...",
+      "summary": "인천시와 LG CNS, 자이가이스트는 오는 2∼5일까지 송도컨벤시아에서 미래형 모듈러 주거 전시와 도시정비 정책 포럼을 개최한다고 1일 밝혔다. 송도컨벤시아 1층 전시장에서는 AI와 디지털 트윈 기술이 적용된 주거공간이...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.viva100.com/article/20260701500235",
+      "naver_url": "https://www.viva100.com/article/20260701500235",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 376,
+      "source": "네이버뉴스",
+      "media": "gukjenews.com",
+      "title": "인천, 2026 로보컵 연계 '로봇 주거 모델' 첫선",
+      "summary": "이번 행사는 인천시 주거정비과, LG CNS, 자이가이스트가 공동으로 참여한다. 행사 기간 송도컨벤시아 1층 전시장에는 모듈러 주거 전시 부스가 운영된다. 관람객들은 순찰 로봇과 배송 로봇 시연, 디지털 트윈 기반...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.gukjenews.com/news/articleView.html?idxno=3622681",
+      "naver_url": "https://www.gukjenews.com/news/articleView.html?idxno=3622681",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 375,
+      "source": "네이버뉴스",
+      "media": "tournews21.com",
+      "title": "인천시, 로보컵 2026 연계 로봇서비스 기반 미래 주거 비전 제시",
+      "summary": "CNS, 자이가이스트(XIGEIST)가 공동으로 참여하며, 인천시 도시정비사업의 미래지향적 방향과 정책 비전을 국내외에 널리 공유하기 위해 마련됐다. 행사 기간 송도컨벤시아 1층 전시장에는 모듈러 주거 전시 부스가...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.tournews21.com/news/articleView.html?idxno=137625",
+      "naver_url": "https://www.tournews21.com/news/articleView.html?idxno=137625",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 374,
+      "source": "네이버뉴스",
+      "media": "discoverynews.kr",
+      "title": "인천시, 로봇서비스 기반 미래 주거 비전 '첫 선'",
+      "summary": "이번 행사는 인천시 주거정비과와 LG CNS 자이가이스트가 공동 참여하며 인천시 도시정비사업의 미래지향적 방향과 정책 비전을 국내외에 공유하기 위해 마련됐다. 행사 기간 동안 송도컨벤시아 1층 전시장에서는 모듈러...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.discoverynews.kr/news/articleView.html?idxno=1094901",
+      "naver_url": "https://www.discoverynews.kr/news/articleView.html?idxno=1094901",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 373,
+      "source": "네이버뉴스",
+      "media": "incheontoday.com",
+      "title": "인천시, '로보컵 2026'서 로봇서비스 미래 주거 비전 제시한다",
+      "summary": "이번 행사는 인천시 주거정비과와 LG CNS, 자이가이스트(XIGEIST)가 공동 참여하며, 인천시 도시정비사업의 미래지향적 방향과 정책 비전을 공유하기 위해 마련됐다. 행사 기간 송도컨벤시아 1층 전시장에는 모듈러 주거...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.incheontoday.com/news/articleView.html?idxno=320742",
+      "naver_url": "https://www.incheontoday.com/news/articleView.html?idxno=320742",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 372,
+      "source": "네이버뉴스",
+      "media": "kmaeil.com",
+      "title": "인천시, 로봇서비스 기반 미래 주거모델 공개...도시정비 정책 확장",
+      "summary": "이번 행사는 인천시 주거정비과와 LG CNS, 자이가이스트(XIGEIST)가 공동 참여해 미래 도시정비 정책의 방향과 기술 적용 사례를 국내외에 소개하기 위해 마련됐다. 행사 기간 송도컨벤시아 1층 전시장에서는 모듈러 주거...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.kmaeil.com/news/articleView.html?idxno=643991",
+      "naver_url": "https://www.kmaeil.com/news/articleView.html?idxno=643991",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 371,
+      "source": "네이버뉴스",
+      "media": "siminsori.com",
+      "title": "인천시, 로보컵 2026서 AI·로봇 기반 미래 주거 비전 공개",
+      "summary": "미래형 모듈러 주거 모델을 선보인다. 이번 행사는 인천시 주거정비과와 LG CNS, 자이가이스트(XIGEIST)가 공동 참여해 도시정비사업의 미래 비전과 정책 방향을 국내외에 소개하기 위해 마련됐다. Q. 시민들이 체험할 수...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.siminsori.com/news/articleView.html?idxno=400029",
+      "naver_url": "https://www.siminsori.com/news/articleView.html?idxno=400029",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 370,
+      "source": "네이버뉴스",
+      "media": "dt.co.kr",
+      "title": "인천시, ‘로보컵 2026’ 연계…로봇서비스 미래 주거 비전 제시",
+      "summary": "이번 행사는 인천시 주거정비과, LG CNS, 자이가이스트(XIGEIST)가 공동으로 참여하며, 인천시 도시정비사업의 미래지향적 방향과 정책 비전을 국내외에 널리 공유하기 위한 것이디. 행사 기간 1층 전시장에는 모듈러...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.dt.co.kr/article/12070524?ref=naver",
+      "naver_url": "https://n.news.naver.com/mnews/article/029/0003034685?sid=105",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 369,
+      "source": "네이버뉴스",
+      "media": "irobotnews.com",
+      "title": "인천시, 로보컵 2026서 '로봇 서비스 기반 미래 주거 모델' 첫선",
+      "summary": "CNS, 자이가이스트(XIGEIST)가 공동으로 참여하며, 인천시 도시정비사업의 미래지향적 방향과 정책 비전을 국내외에 널리 공유하기 위해 마련됐다. 행사 기간 송도컨벤시아 1층 전시장에는 모듈러 주거 전시 부스가...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.irobotnews.com/news/articleView.html?idxno=47207",
+      "naver_url": "https://www.irobotnews.com/news/articleView.html?idxno=47207",
+      "keywords": "자이가이스트 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 215,
+      "source": "네이버뉴스",
+      "media": "pinpointnews.co.kr",
+      "title": "한양이엔지·GS건설 주가 파죽지세…K-원전 글로벌 공급망 장악에 매수...",
+      "summary": "해외 원전 시공권 확보와 모듈러 공법을 적용한 차세대 차폐 구조물 건설 분야에서 두각을 나타내는... 국내 원전 가동 원천 기술과 유지보수 부문에서 탄탄한 입지를 다진 우진엔텍과 원전 스마트그리드 및 디지털 전력...",
+      "published_at": "2026-07-01",
+      "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=464565",
+      "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=464565",
+      "keywords": "스마트건설 모듈러",
+      "relevance_score": 6
     },
     {
       "id": 6072,
@@ -1198,11 +1462,11 @@
       "source": "네이버뉴스",
       "media": "thepublic.kr",
       "title": "집 한 채가 거대한 가전제품…삼성, 'AI 모듈러 홈'으로 단독주택 시장...",
-      "summary": "삼성전자의 공략 지점은 주택 건축 자체가 아닌 'AI 생태계의 영토 확장'이다. 삼성전자 관계자는 \"이번 단독주택형 모듈러 홈은 시작일 뿐\"이라며 \"향후 아파트 등 공동주택을 비롯해 오피스, 숙박시설, 문화공간 등...",
+      "summary": "플랫폼 '스마트싱스'를 앞세워 급성장하는 모듈러(조립식) 주택 시장에 출사표를 던졌다. 설계 단계부터 AI... 여기에 최근 건설 인력 부족과 공사비 급등 여파로 공장에서 골조를 제작해 현장에서 조립하는 모듈러...",
       "published_at": "2026-06-25",
       "original_url": "https://www.thepublic.kr/news/articleView.html?idxno=309056",
       "naver_url": "https://www.thepublic.kr/news/articleView.html?idxno=309056",
-      "keywords": "모듈러 건축",
+      "keywords": "스마트건설 모듈러",
       "relevance_score": 16
     },
     {
@@ -1234,11 +1498,11 @@
       "source": "네이버뉴스",
       "media": "biz.heraldcorp.com",
       "title": "삼성전자 “AI 모듈러 홈, 3년 1만호 공급 목표”",
-      "summary": "3㎡당 500만~600만원선에서 건축비가 들고 프리미엄은 3.3㎡당 1200만~1500만원이 투입된다. 삼성전자 가전 제품 구입 비용은 별도다. 박 대표는 “30평대 모듈러 주택을 기준으로 하루에 2채씩 만들 수 있다”며 “한 달...",
+      "summary": "삼성전자는 단독주택 시장 성장과 함께 모듈러 홈에 최적화된 인공지능(AI) 가전과 스마트싱스(SmartThings)를... 상승과 건설 인력 부족이 걸림돌로 지적 받는다. 모듈러 주택은 공시 기간이 짧고 비용도 적게 드는 장점이...",
       "published_at": "2026-06-25",
       "original_url": "https://biz.heraldcorp.com/article/10787953?ref=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/016/0002661459?sid=101",
-      "keywords": "모듈러 주택;모듈러 건축",
+      "keywords": "모듈러 주택;스마트건설 모듈러",
       "relevance_score": 16
     },
     {
@@ -1246,23 +1510,23 @@
       "source": "네이버뉴스",
       "media": "sportschosun.com",
       "title": "LG전자, 김제에 복합문화공간 ‘죽산모락’ 조성...스마트코티지 활용한...",
-      "summary": "스마트코티지는 모듈러 주택 방식으로 제작돼 공사 기간을 크게 단축할 수 있다는 장점도 갖고 있어 이에... 방식 건축물 중 최초로 한국에너지공단에서 부여하는 제로에너지건축물 인증 중 최고 등급인 'ZEB 플러스(Plus)...",
+      "summary": "죽산모락에 설치된 모노 플러스(태양광 패널 설치 모델) 26의 경우, 에너지 자립률 120% 이상을 달성해 모든 국내 프리패브 방식 건축물 중 최초로 한국에너지공단에서 부여하는 제로에너지건축물 인증 중 최고 등급인 'ZEB...",
       "published_at": "2026-06-25",
       "original_url": "https://www.sportschosun.com/life/2026-06-25/202606230100161390010558",
       "naver_url": "https://n.news.naver.com/mnews/article/076/0004419365?sid=101",
-      "keywords": "모듈러 주택;모듈러 건축",
-      "relevance_score": 6
+      "keywords": "프리패브 건축",
+      "relevance_score": 3
     },
     {
       "id": 5978,
       "source": "네이버뉴스",
       "media": "wikileaks-kr.org",
       "title": "[창간특집-건설의 미래]③ 현장 안팎이 바뀐다…건설사 신공법 확보 경...",
-      "summary": "건설사들은 구조 안전성을 높이는 신공법과 공기 단축 기술, 모듈러 건축 등 새로운 시공 방식을 잇달아 선보이며 생산성 혁신에 나서고 있다. 과거 장비와 인력 중심의 경쟁에서 벗어나 '어떻게 짓느냐' 또한 기업...",
+      "summary": "특히 AI, 디지털 기술, 자동화 기술을 활용한 스마트 건설이 빠르게 확산되면서 건설산업은 노동집약형... 건설사들은 구조 안전성을 높이는 신공법과 공기 단축 기술, 모듈러 건축 등 새로운 시공 방식을 잇달아 선보이며...",
       "published_at": "2026-06-25",
       "original_url": "http://www.wikileaks-kr.org/news/articleView.html?idxno=189023",
       "naver_url": "http://www.wikileaks-kr.org/news/articleView.html?idxno=189023",
-      "keywords": "모듈러 건축",
+      "keywords": "모듈러 건축;스마트건설 모듈러",
       "relevance_score": 6
     },
     {
@@ -1563,7 +1827,7 @@
       "original_url": "https://www.asiatoday.co.kr/kn/view.php",
       "naver_url": "https://www.asiatoday.co.kr/kn/view.php",
       "keywords": "LH 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5964,
@@ -1575,7 +1839,7 @@
       "original_url": "https://www.hankyung.com/article/2026062461111",
       "naver_url": "https://n.news.naver.com/mnews/article/015/0005302500?sid=101",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5963,
@@ -1587,7 +1851,7 @@
       "original_url": "https://biz.heraldcorp.com/article/10787219?ref=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/016/0002661140?sid=101",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5962,
@@ -1599,7 +1863,7 @@
       "original_url": "https://www.gnnews.co.kr/news/articleView.html?idxno=639747",
       "naver_url": "https://www.gnnews.co.kr/news/articleView.html?idxno=639747",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5961,
@@ -1611,7 +1875,7 @@
       "original_url": "https://www.etoday.co.kr/news/view/2596963",
       "naver_url": "https://www.etoday.co.kr/news/view/2596963",
       "keywords": "GH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5960,
@@ -1623,7 +1887,7 @@
       "original_url": "https://view.asiae.co.kr/article/2026062418440092768",
       "naver_url": "https://n.news.naver.com/mnews/article/277/0005781033?sid=101",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5959,
@@ -1635,7 +1899,7 @@
       "original_url": "http://www.lak.co.kr/news/boardview.php?id=23368",
       "naver_url": "http://www.lak.co.kr/news/boardview.php?id=23368",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5958,
@@ -1647,7 +1911,7 @@
       "original_url": "https://biz.chosun.com/it-science/ict/2026/06/24/ODBWQGP4UVF6DLCJOKFX6FP5DA/?utm_source=naver&utm_medium=original&utm_campaign=biz",
       "naver_url": "https://n.news.naver.com/mnews/article/366/0001174153?sid=105",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5957,
@@ -1683,7 +1947,7 @@
       "original_url": "https://www.koscaj.com/news/articleView.html?idxno=324843",
       "naver_url": "https://www.koscaj.com/news/articleView.html?idxno=324843",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5954,
@@ -1707,7 +1971,7 @@
       "original_url": "https://www.donga.com/news/Economy/article/all/20260624/134175547/1",
       "naver_url": "https://n.news.naver.com/mnews/article/020/0003729169?sid=101",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5952,
@@ -1719,7 +1983,7 @@
       "original_url": "https://view.asiae.co.kr/article/2026062417214476469",
       "naver_url": "https://n.news.naver.com/mnews/article/277/0005780995?sid=101",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5951,
@@ -1731,7 +1995,7 @@
       "original_url": "https://www.sisaon.co.kr/news/articleView.html?idxno=202129",
       "naver_url": "https://www.sisaon.co.kr/news/articleView.html?idxno=202129",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5950,
@@ -1743,7 +2007,7 @@
       "original_url": "https://www.dailian.co.kr/news/view/1659474/?sc=Naver",
       "naver_url": "https://n.news.naver.com/mnews/article/119/0003104376?sid=101",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5949,
@@ -1887,7 +2151,7 @@
       "original_url": "https://www.newspim.com/news/view/20260624001073",
       "naver_url": "https://www.newspim.com/news/view/20260624001073",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 22
+      "relevance_score": 20
     },
     {
       "id": 5937,
@@ -1899,7 +2163,7 @@
       "original_url": "https://www.betanews.net/article/view/beta202606240102",
       "naver_url": "https://www.betanews.net/article/view/beta202606240102",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5936,
@@ -1911,7 +2175,7 @@
       "original_url": "https://www.insightkorea.co.kr/news/articleView.html?idxno=248685",
       "naver_url": "https://www.insightkorea.co.kr/news/articleView.html?idxno=248685",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5935,
@@ -1935,7 +2199,7 @@
       "original_url": "https://www.dt.co.kr/article/12069313?ref=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/029/0003033486?sid=101",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5933,
@@ -1947,7 +2211,7 @@
       "original_url": "http://www.fnnews.com/news/202606241517542820",
       "naver_url": "https://n.news.naver.com/mnews/article/014/0005539127?sid=101",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5932,
@@ -1959,7 +2223,7 @@
       "original_url": "https://www.etoday.co.kr/news/view/2596858",
       "naver_url": "https://www.etoday.co.kr/news/view/2596858",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5931,
@@ -1971,7 +2235,7 @@
       "original_url": "https://www.mediapen.com/news/view/1106261",
       "naver_url": "https://www.mediapen.com/news/view/1106261",
       "keywords": "프리팹 건축",
-      "relevance_score": 3
+      "relevance_score": 1
     },
     {
       "id": 5930,
@@ -1983,7 +2247,7 @@
       "original_url": "https://www.1conomynews.co.kr/news/articleView.html?idxno=49239",
       "naver_url": "https://www.1conomynews.co.kr/news/articleView.html?idxno=49239",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5929,
@@ -1995,7 +2259,7 @@
       "original_url": "http://www.thevaluenews.co.kr/news/view.php?idx=199595",
       "naver_url": "http://www.thevaluenews.co.kr/news/view.php?idx=199595",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 11
+      "relevance_score": 9
     },
     {
       "id": 5928,
@@ -2007,7 +2271,7 @@
       "original_url": "http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202606240402&t=NN",
       "naver_url": "https://n.news.naver.com/mnews/article/215/0001256457?sid=101",
       "keywords": "LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5927,
@@ -2139,7 +2403,7 @@
       "original_url": "https://www.newspim.com/news/view/20260624001111",
       "naver_url": "https://www.newspim.com/news/view/20260624001111",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5916,
@@ -2163,7 +2427,7 @@
       "original_url": "http://www.iminju.net/news/articleView.html?idxno=165763",
       "naver_url": "http://www.iminju.net/news/articleView.html?idxno=165763",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5914,
@@ -2175,7 +2439,7 @@
       "original_url": "https://www.newscj.com/news/articleView.html?idxno=3411821",
       "naver_url": "https://www.newscj.com/news/articleView.html?idxno=3411821",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5913,
@@ -2223,7 +2487,7 @@
       "original_url": "https://www.chosun.com/economy/tech_it/2026/06/24/4FHXKZHF5VCRBNIK36RJ65DMBU/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news",
       "naver_url": "https://n.news.naver.com/mnews/article/023/0003983863?sid=105",
       "keywords": "모듈러 주택;스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5909,
@@ -2247,7 +2511,7 @@
       "original_url": "https://www.lcnews.co.kr/news/articleView.html?idxno=203937",
       "naver_url": "https://www.lcnews.co.kr/news/articleView.html?idxno=203937",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5907,
@@ -2295,7 +2559,7 @@
       "original_url": "https://zdnet.co.kr/view/?no=20260624164603",
       "naver_url": "https://n.news.naver.com/mnews/article/092/0002427898?sid=105",
       "keywords": "LH 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5903,
@@ -2307,7 +2571,7 @@
       "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440710",
       "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440710",
       "keywords": "OSC 건설",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5902,
@@ -2319,7 +2583,7 @@
       "original_url": "https://www.hankyung.com/article/202606233465i",
       "naver_url": "https://n.news.naver.com/mnews/article/015/0005302126?sid=101",
       "keywords": "OSC 건설",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5901,
@@ -2331,7 +2595,7 @@
       "original_url": "https://www.ajunews.com/view/20260624081142153",
       "naver_url": "https://www.ajunews.com/view/20260624081142153",
       "keywords": "OSC 건설",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5900,
@@ -2343,7 +2607,7 @@
       "original_url": "https://www.theguru.co.kr/news/article.html?no=103474",
       "naver_url": "https://www.theguru.co.kr/news/article.html?no=103474",
       "keywords": "OSC 건설",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5899,
@@ -2355,7 +2619,7 @@
       "original_url": "http://www.ftoday.co.kr/news/articleView.html?idxno=360933",
       "naver_url": "http://www.ftoday.co.kr/news/articleView.html?idxno=360933",
       "keywords": "프리패브 건축",
-      "relevance_score": 13
+      "relevance_score": 11
     },
     {
       "id": 5898,
@@ -2367,7 +2631,7 @@
       "original_url": "https://www.public25.com/news/articleView.html?idxno=49124",
       "naver_url": "https://www.public25.com/news/articleView.html?idxno=49124",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5897,
@@ -2379,7 +2643,7 @@
       "original_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=462358",
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=462358",
       "keywords": "모듈러 주택;유창이앤씨 모듈러",
-      "relevance_score": 16
+      "relevance_score": 14
     },
     {
       "id": 5896,
@@ -2391,7 +2655,7 @@
       "original_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416777",
       "naver_url": "https://www.bizwork.co.kr/news/articleView.html?idxno=416777",
       "keywords": "LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5895,
@@ -2403,7 +2667,7 @@
       "original_url": "http://www.ikld.kr/news/articleView.html?idxno=336469",
       "naver_url": "http://www.ikld.kr/news/articleView.html?idxno=336469",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 5894,
@@ -2571,7 +2835,7 @@
       "original_url": "https://www.seoulfn.com/news/articleView.html?idxno=631855",
       "naver_url": "https://www.seoulfn.com/news/articleView.html?idxno=631855",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 222,
@@ -2583,7 +2847,7 @@
       "original_url": "http://www.newsdream.kr/news/articleView.html?idxno=113555",
       "naver_url": "http://www.newsdream.kr/news/articleView.html?idxno=113555",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 220,
@@ -2595,7 +2859,7 @@
       "original_url": "https://www.fetv.co.kr/news/articleView.html?idxno=305034",
       "naver_url": "https://www.fetv.co.kr/news/articleView.html?idxno=305034",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 204,
@@ -2655,7 +2919,7 @@
       "original_url": "http://www.dailypop.kr/news/articleView.html?idxno=100007",
       "naver_url": "http://www.dailypop.kr/news/articleView.html?idxno=100007",
       "keywords": "모듈러 주택;LH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 198,
@@ -2667,7 +2931,7 @@
       "original_url": "https://www.smartbizn.com/news/articleView.html?idxno=146961",
       "naver_url": "https://www.smartbizn.com/news/articleView.html?idxno=146961",
       "keywords": "LH 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 197,
@@ -2703,7 +2967,7 @@
       "original_url": "https://www.news1.kr/world/usa-canada/6206444",
       "naver_url": "https://n.news.naver.com/mnews/article/421/0009020164?sid=104",
       "keywords": "OSC 건설",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 119,
