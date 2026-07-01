@@ -240,11 +240,98 @@ jobs:
           from pathlib import Path
 
           endpoint = "api." + "gdeltproject.org/api/v2/" + "doc/doc"
-          for name in ["scripts/probe_gdelt_webngrams.py", "scripts/test_gdelt_webngrams_probe.py"]:
-              assert endpoint not in Path(name).read_text(encoding="utf-8"), "DOC API endpoint must not be referenced"
+          production_files = [
+              "scripts/probe_gdelt_webngrams.py",
+          ]
+          for name in production_files:
+              text = Path(name).read_text(encoding="utf-8")
+              assert endpoint not in text, f"DOC API endpoint must not be referenced in production code: {name}"
           PY
           )
           code=$?
+          if [ "$code" -ne 0 ]; then
+            PREFLIGHT_EXIT_CODE="$code" python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          def now() -> str:
+              return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+          probe_dir = Path("artifacts/global_news_webngrams_probe")
+          probe_dir.mkdir(parents=True, exist_ok=True)
+          run_control_path = probe_dir / "run_control.json"
+          run_control = json.loads(run_control_path.read_text(encoding="utf-8")) if run_control_path.exists() else {}
+          run_control.update(
+              {
+                  "schema_version": 1,
+                  "workflow_name": "Verify GDELT Web NGrams live",
+                  "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+                  "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+                  "branch": os.environ.get("GITHUB_REF_NAME", ""),
+                  "commit_sha": os.environ.get("GITHUB_SHA", ""),
+                  "timestamp": os.environ.get("TIMESTAMP", ""),
+                  "max_candidates": os.environ.get("MAX_CANDIDATES", ""),
+                  "acknowledge_single_run": os.environ.get("ACKNOWLEDGE_SINGLE_RUN_NORMALIZED", "false"),
+                  "validation_status": run_control.get("validation_status", "passed"),
+                  "failure_type": "preflight_failed",
+                  "actual_http_request_count": 0,
+                  "generated_at": now(),
+              }
+          )
+          run_control_path.write_text(json.dumps(run_control, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
+          failure_report = {
+              "schema_version": 1,
+              "workflow_name": "Verify GDELT Web NGrams live",
+              "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+              "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+              "branch": os.environ.get("GITHUB_REF_NAME", ""),
+              "commit_sha": os.environ.get("GITHUB_SHA", ""),
+              "failed_step": "Run offline preflight checks",
+              "failure_type": "preflight_failed",
+              "failure_reason": "offline preflight checks returned a non-zero exit code",
+              "preflight_exit_code": int(os.environ.get("PREFLIGHT_EXIT_CODE", "1")),
+              "actual_http_request_count": 0,
+              "timestamp": os.environ.get("TIMESTAMP", ""),
+              "max_candidates": os.environ.get("MAX_CANDIDATES", ""),
+              "acknowledge_single_run_normalized": os.environ.get("ACKNOWLEDGE_SINGLE_RUN_NORMALIZED", "false"),
+              "public_json_status": "not_evaluated",
+              "db_status": "not_evaluated",
+              "env_status": "not_evaluated",
+              "checkpoint_status": "not_evaluated",
+              "production_publish_allowed": False,
+              "generated_at": now(),
+          }
+          (probe_dir / "failure_report.json").write_text(
+              json.dumps(failure_report, ensure_ascii=False, indent=2, sort_keys=True),
+              encoding="utf-8",
+          )
+          (probe_dir / "failure_report.md").write_text(
+              "\n".join(
+                  [
+                      "# GDELT Web NGrams Live Verification Failure",
+                      "",
+                      "- failed_step: `Run offline preflight checks`",
+                      "- failure_type: `preflight_failed`",
+                      "- failure_reason: `offline preflight checks returned a non-zero exit code`",
+                      f"- preflight_exit_code: `{failure_report['preflight_exit_code']}`",
+                      "- actual_http_request_count: `0`",
+                      f"- timestamp: `{failure_report['timestamp']}`",
+                      f"- max_candidates: `{failure_report['max_candidates']}`",
+                      f"- acknowledge_single_run_normalized: `{failure_report['acknowledge_single_run_normalized']}`",
+                      "- public_json_status: `not_evaluated`",
+                      "- db_status: `not_evaluated`",
+                      "- env_status: `not_evaluated`",
+                      "- checkpoint_status: `not_evaluated`",
+                      "- production_publish_allowed: `False`",
+                  ]
+              )
+              + "\n",
+              encoding="utf-8",
+          )
+          PY
+          fi
           echo "preflight_exit_code=${code}" >> "$GITHUB_OUTPUT"
           exit 0
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import ast
+import re
 from pathlib import Path
 
 
@@ -10,6 +12,14 @@ WORKFLOW_PATH = ROOT / ".github" / "workflows" / "verify-gdelt-webngrams-live.ym
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
+
+
+def production_doc_api_check_targets(workflow_text: str) -> list[str]:
+    match = re.search(r"production_files\s*=\s*(\[[^\]]+\])", workflow_text, re.S)
+    require(match is not None, "production_files list missing from DOC API preflight check")
+    value = ast.literal_eval(match.group(1))
+    require(isinstance(value, list) and all(isinstance(item, str) for item in value), "production_files must be a string list")
+    return value
 
 
 def main() -> int:
@@ -42,6 +52,8 @@ def main() -> int:
     require("manual_approval_missing" in text, "manual approval failure type missing")
     require("timestamp_invalid" in text, "timestamp failure type missing")
     require("max_candidates_invalid" in text, "max_candidates failure type missing")
+    require("preflight_failed" in text, "preflight failure type missing")
+    require("preflight_exit_code" in text and "PREFLIGHT_EXIT_CODE" in text, "preflight exit code must be reported")
     require("if: ${{ always() }}" in text, "artifact upload must run always")
     require("retention-days: 7" in text, "artifact retention mismatch")
     require("if-no-files-found: error" in text, "artifact upload must fail when run_control is absent")
@@ -53,6 +65,13 @@ def main() -> int:
     require("review_exit_code" in text, "live review exit code is not preserved")
     require("contract_exit_code" in text, "live contract exit code is not preserved")
     require("api.gdeltproject.org/api/v2/doc/doc" not in text, "DOC API endpoint must not appear in workflow")
+    production_targets = production_doc_api_check_targets(text)
+    require(production_targets == ["scripts/probe_gdelt_webngrams.py"], "DOC API preflight must check only production probe files")
+    require("scripts/test_gdelt_webngrams_probe.py" not in production_targets, "DOC API preflight must not scan negative assertion tests")
+    endpoint = "api.gdeltproject.org/api/v2/doc/doc"
+    for target in production_targets:
+        require(endpoint not in (ROOT / target).read_text(encoding="utf-8"), f"DOC API endpoint leaked into production file: {target}")
+    require(endpoint in (ROOT / "scripts" / "test_gdelt_webngrams_probe.py").read_text(encoding="utf-8"), "negative assertion test fixture should be allowed to mention DOC API endpoint")
     require("git push" not in lowered and "git commit" not in lowered and "git add" not in lowered, "workflow must not mutate repository")
     require("--timestamp \"${TIMESTAMP}\"" in text, "live probe must use the approved timestamp input")
     require("--max-candidates \"${MAX_CANDIDATES}\"" in text, "live probe must use max_candidates input")
@@ -68,6 +87,7 @@ def main() -> int:
     require("acknowledge_single_run must be true" in text, "acknowledgement guard missing")
     require("max_candidates must be between 1 and 100" in text, "max_candidates range guard missing")
     require("not_evaluated" in text, "summary must support not_evaluated state")
+    require("Failure Type:" in text, "summary must report failure type")
     require("Retry count: `0`" in text, "summary must report retry count zero")
     require("Fallback count: `0`" in text, "summary must report fallback count zero")
     require("--retry" not in lowered and "max-attempts" not in lowered, "workflow must not implement request retry")
