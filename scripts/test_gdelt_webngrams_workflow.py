@@ -59,8 +59,10 @@ def main() -> int:
     require("if-no-files-found: error" in text, "artifact upload must fail when run_control is absent")
     require("gdelt-webngrams-live-review-${{ github.run_id }}-${{ inputs.timestamp }}" in text, "review artifact name mismatch")
     require("probe_exit_code" in text and "Preserve live verification exit code" in text, "live probe exit code is not preserved")
-    require("continue-on-error: true" in text, "live probe step must preserve artifacts after failures")
+    require("continue-on-error: true" not in text, "live probe should not need continue-on-error after preserving probe_exit_code")
     require("GDELT live probe failed" in text, "live probe failure annotation missing")
+    require('exit "$code"' not in text, "live probe step must continue to artifact upload after saving probe_exit_code")
+    require("exit 0" in text, "live probe step must exit zero after recording probe_exit_code")
     require("validation_exit_code" in text, "validation exit code is not preserved")
     require("dependency_exit_code" in text, "dependency exit code is not preserved")
     require("preflight_exit_code" in text, "preflight exit code is not preserved")
@@ -96,10 +98,32 @@ def main() -> int:
     require("Failure Type:" in text, "summary must report failure type")
     require("Failed Source:" in text, "summary must report failed source")
     require("Request Attempts:" in text and "HTTP Responses:" in text, "summary must report request attempt and response counts")
+    for summary_field in [
+        "Transport Scheme:",
+        "Transport Security:",
+        "Endpoint Contract Valid:",
+        "Redirect Received:",
+        "Redirect Followed:",
+        "Compressed SHA-256:",
+        "Compressed Bytes:",
+        "Decompressed Bytes:",
+        "Source Integrity Checks Passed:",
+    ]:
+        require(summary_field in text, f"summary field missing: {summary_field}")
     require("Retry count: `0`" in text, "summary must report retry count zero")
     require("Fallback count: `0`" in text, "summary must report fallback count zero")
     require("--retry" not in lowered and "max-attempts" not in lowered, "workflow must not implement request retry")
     require("fallback timestamp" not in lowered and "fallback_timestamp" not in lowered, "workflow must not implement timestamp fallback")
+    forbidden_ssl_patterns = [
+        "verify=false",
+        "session.verify = false",
+        "urllib3.disable_warnings",
+        "pythonhttpsverify=0",
+        "requests_ca_bundle=\"\"",
+        "curl_ca_bundle=\"\"",
+    ]
+    for pattern in forbidden_ssl_patterns:
+        require(pattern not in lowered, f"forbidden SSL bypass pattern present: {pattern}")
 
     print("GDELT WEBNGRAMS WORKFLOW TEST PASSED")
     return 0

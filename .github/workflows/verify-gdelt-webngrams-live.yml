@@ -338,7 +338,6 @@ jobs:
       - name: Run live Web NGrams and GAL probe
         if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' }}
         id: live_probe
-        continue-on-error: true
         run: |
           set +e
           python scripts/probe_gdelt_webngrams.py --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}" --output-dir "${PROBE_DIR}"
@@ -360,7 +359,7 @@ jobs:
           print(f"::error title=GDELT live probe failed::{failure_type} source={failed_source}")
           PY
           fi
-          exit "$code"
+          exit 0
 
       - name: Run live candidate quality review
         id: live_review
@@ -492,6 +491,15 @@ jobs:
               f"- DOC API request count: `{probe.get('doc_api_request_count', 0)}`",
               "- Retry count: `0`",
               "- Fallback count: `0`",
+              f"- Transport Scheme: `{probe.get('transport_scheme', 'not_evaluated')}`",
+              f"- Transport Security: `{probe.get('transport_security', 'not_evaluated')}`",
+              f"- Endpoint Contract Valid: `{tri(probe.get('endpoint_contract_valid'))}`",
+              f"- Redirect Received: `{tri(probe.get('redirect_received'))}`",
+              f"- Redirect Followed: `{tri(probe.get('redirect_followed'))}`",
+              f"- Compressed SHA-256: `{probe.get('compressed_sha256', 'not_evaluated')}`",
+              f"- Compressed Bytes: `{probe.get('compressed_bytes', 'not_evaluated')}`",
+              f"- Decompressed Bytes: `{probe.get('decompressed_bytes', 'not_evaluated')}`",
+              f"- Source Integrity Checks Passed: `{tri(probe.get('source_integrity_checks_passed'))}`",
               f"- Web NGrams status: `{web_status}`",
               f"- GAL status: `{gal_status}`",
               f"- Transport Acceptance: `{tri(probe.get('transport_acceptance_passed'))}`",

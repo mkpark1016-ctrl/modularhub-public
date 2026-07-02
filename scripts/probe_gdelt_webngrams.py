@@ -13,15 +13,26 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Iterator
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, unquote, urlencode, urlsplit, urlunsplit
 
 import requests
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = ROOT / "artifacts" / "global_news_webngrams_probe"
-WEBNGRAMS_TEMPLATE = "https://data.gdeltproject.org/gdeltv3/webngrams/{timestamp}.webngrams.json.gz"
-GAL_TEMPLATE = "https://data.gdeltproject.org/gdeltv3/gal/{timestamp}.gal.json.gz"
+GDELT_DATA_SCHEME = "http"
+GDELT_DATA_HOST = "data.gdeltproject.org"
+WEBNGRAMS_PATH_PREFIX = "/gdeltv3/webngrams/"
+GAL_PATH_PREFIX = "/gdeltv3/gal/"
+# GDELT raw bulk data is published as public static files on the data CDN.
+# Plain HTTP is allowed only for this host/path contract; TLS is not disabled
+# globally, and HTTPS failures are not retried or downgraded.
+WEBNGRAMS_TEMPLATE = f"{GDELT_DATA_SCHEME}://{GDELT_DATA_HOST}{WEBNGRAMS_PATH_PREFIX}{{timestamp}}.webngrams.json.gz"
+GAL_TEMPLATE = f"{GDELT_DATA_SCHEME}://{GDELT_DATA_HOST}{GAL_PATH_PREFIX}{{timestamp}}.gal.json.gz"
+PROBE_VERSION = "0.2"
+MAX_COMPRESSED_BYTES = 2 * 1024 * 1024 * 1024
+MAX_DECOMPRESSED_BYTES = 8 * 1024 * 1024 * 1024
+MAX_JSONL_LINE_BYTES = 8 * 1024 * 1024
 FIXTURE_WEBNGRAMS = ROOT / "tests" / "fixtures" / "webngrams_sample.jsonl"
 FIXTURE_GAL = ROOT / "tests" / "fixtures" / "gal_sample.jsonl"
 PUBLIC_DATA_PATHS = [
@@ -109,6 +120,46 @@ def webngrams_url(timestamp: str) -> str:
 
 def gal_url(timestamp: str) -> str:
     return GAL_TEMPLATE.format(timestamp=validate_timestamp(timestamp))
+
+
+def expected_source_path(source_name: str, timestamp: str) -> str:
+    timestamp = validate_timestamp(timestamp)
+    if source_name == "webngrams":
+        return f"{WEBNGRAMS_PATH_PREFIX}{timestamp}.webngrams.json.gz"
+    if source_name == "gal":
+        return f"{GAL_PATH_PREFIX}{timestamp}.gal.json.gz"
+    raise ValueError(f"unknown source_name: {source_name}")
+
+
+def validate_source_url(source_name: str, url: str, *, timestamp: str) -> tuple[bool, str, dict[str, Any]]:
+    parts = urlsplit(clean_text(url))
+    details = {
+        "transport_scheme": parts.scheme,
+        "endpoint_host": parts.hostname or "",
+        "endpoint_path": parts.path,
+        "tls_verification_applicable": False,
+    }
+    if parts.scheme != GDELT_DATA_SCHEME:
+        return False, "scheme_must_be_http_for_gdelt_raw_data", details
+    if (parts.hostname or "").lower() != GDELT_DATA_HOST:
+        return False, "host_not_allowed_for_gdelt_raw_data", details
+    if parts.port not in {None, 80}:
+        return False, "port_not_allowed_for_gdelt_raw_data", details
+    if parts.username or parts.password:
+        return False, "url_credentials_not_allowed", details
+    if parts.query:
+        return False, "query_string_not_allowed", details
+    if parts.fragment:
+        return False, "fragment_not_allowed", details
+    decoded_path = unquote(parts.path)
+    if decoded_path != parts.path:
+        return False, "percent_encoded_path_not_allowed", details
+    if ".." in decoded_path.split("/"):
+        return False, "path_traversal_not_allowed", details
+    expected_path = expected_source_path(source_name, timestamp)
+    if decoded_path != expected_path:
+        return False, "path_or_timestamp_not_allowed", details
+    return True, "", details
 
 
 def normalize_text(value: Any) -> str:
@@ -377,10 +428,15 @@ def read_fixture_lines(path: Path) -> list[str]:
 
 
 class CountingReader(io.RawIOBase):
-    def __init__(self, raw: Any, prefix: bytes = b"") -> None:
+    def __init__(self, raw: Any, prefix: bytes = b"", *, max_bytes: int = MAX_COMPRESSED_BYTES, source_name: str = "") -> None:
         self.raw = raw
         self.prefix = io.BytesIO(prefix)
         self.bytes_read = len(prefix)
+        self.max_bytes = max_bytes
+        self.source_name = source_name
+        self.sha256 = hashlib.sha256()
+        if prefix:
+            self.sha256.update(prefix)
 
     def readable(self) -> bool:
         return True
@@ -394,7 +450,18 @@ class CountingReader(io.RawIOBase):
         raw_chunk = self.raw.read(remaining_size) if remaining_size != 0 else b""
         chunk = prefix_chunk + (raw_chunk or b"")
         self.bytes_read += len(raw_chunk or b"")
+        if raw_chunk:
+            self.sha256.update(raw_chunk)
+        if self.bytes_read > self.max_bytes:
+            raise SourceSizeLimitError(self.source_name, "compressed_size_limit_exceeded")
         return chunk
+
+
+class SourceSizeLimitError(OSError):
+    def __init__(self, source_name: str, reason: str) -> None:
+        super().__init__(reason)
+        self.source_name = source_name
+        self.reason = reason
 
 
 def sanitize_exception_message(value: BaseException | str, *, limit: int = 300) -> str:
@@ -405,9 +472,22 @@ def sanitize_exception_message(value: BaseException | str, *, limit: int = 300) 
 
 
 def source_info(source_name: str, url: str) -> dict[str, Any]:
+    parts = urlsplit(clean_text(url))
     return {
         "source_name": source_name,
         "url": url,
+        "transport_scheme": parts.scheme,
+        "transport_security": "plaintext_public_bulk_data" if parts.scheme == "http" else "tls",
+        "tls_verification_applicable": parts.scheme == "https",
+        "endpoint_host": parts.hostname or "",
+        "endpoint_path": parts.path,
+        "endpoint_contract_valid": False,
+        "endpoint_contract_failure": "",
+        "redirects_allowed": False,
+        "redirect_received": False,
+        "redirect_status": None,
+        "redirect_location": "",
+        "redirect_followed": False,
         "request_attempted": False,
         "request_attempt_count": 0,
         "response_received": False,
@@ -415,7 +495,16 @@ def source_info(source_name: str, url: str) -> dict[str, Any]:
         "content_type": "",
         "content_length": "",
         "downloaded_bytes": 0,
+        "compressed_bytes": 0,
+        "decompressed_bytes": 0,
+        "compressed_sha256": "",
         "gzip_valid": False,
+        "jsonl_valid": False,
+        "timestamp_rows_valid": False,
+        "source_integrity_checks_passed": False,
+        "authentication_sent": False,
+        "cookies_sent": False,
+        "security_posture": "public_bulk_data_over_plain_http_with_strict_content_validation",
         "exception_type": "",
         "exception_message": "",
         "elapsed_seconds": 0.0,
@@ -440,13 +529,27 @@ def safe_close_response(response: Any) -> None:
         pass
 
 
-def open_gzip_jsonl(source_name: str, url: str, *, timeout: float) -> tuple[Iterator[str], dict[str, Any]]:
+def open_gzip_jsonl(source_name: str, url: str, *, timeout: float, timestamp: str) -> tuple[Iterator[str], dict[str, Any]]:
     started = time.monotonic()
     info = source_info(source_name, url)
+    endpoint_ok, endpoint_reason, endpoint_details = validate_source_url(source_name, url, timestamp=timestamp)
+    info.update(endpoint_details)
+    info["endpoint_contract_valid"] = endpoint_ok
+    info["endpoint_contract_failure"] = endpoint_reason
+    if not endpoint_ok:
+        info["exception_type"] = "SourceContractError"
+        info["exception_message"] = endpoint_reason
+        info["elapsed_seconds"] = round(time.monotonic() - started, 3)
+        return iter(()), info
     info["request_attempted"] = True
     info["request_attempt_count"] = 1
+    headers = {
+        "User-Agent": f"ModularHubWebNGramsProbe/{PROBE_VERSION}",
+        "Accept": "application/gzip, application/octet-stream, */*",
+        "Accept-Encoding": "identity",
+    }
     try:
-        response = requests.get(url, stream=True, timeout=timeout, headers={"User-Agent": "ModularHubWebNGramsProbe/0.1"})
+        response = requests.get(url, stream=True, timeout=timeout, headers=headers, allow_redirects=False)
     except (requests.Timeout, requests.ConnectionError, requests.exceptions.SSLError, requests.RequestException, OSError) as exc:
         mark_source_exception(info, exc, started)
         return iter(()), info
@@ -466,6 +569,13 @@ def open_gzip_jsonl(source_name: str, url: str, *, timeout: float) -> tuple[Iter
         "gzip_valid": False,
         "elapsed_seconds": round(time.monotonic() - started, 3),
     }
+    if 300 <= response.status_code < 400:
+        info["redirect_received"] = True
+        info["redirect_status"] = int(response.status_code)
+        info["redirect_location"] = sanitize_exception_message(response.headers.get("Location", ""), limit=300)
+        info["redirect_followed"] = False
+        safe_close_response(response)
+        return iter(()), info
     if response.status_code != 200:
         safe_close_response(response)
         return iter(()), info
@@ -476,19 +586,55 @@ def open_gzip_jsonl(source_name: str, url: str, *, timeout: float) -> tuple[Iter
         safe_close_response(response)
         return iter(()), info
     info["downloaded_bytes"] = len(first)
+    info["compressed_bytes"] = len(first)
     if first != b"\x1f\x8b":
         safe_close_response(response)
         return iter(()), info
-    reader = CountingReader(response.raw, first)
+    reader = CountingReader(response.raw, first, max_bytes=MAX_COMPRESSED_BYTES, source_name=source_name)
     gz = gzip.GzipFile(fileobj=reader)
     info["gzip_valid"] = True
 
     def _lines() -> Iterator[str]:
+        decompressed_bytes = 0
+        jsonl_valid = True
+        timestamp_rows_valid = True
+        row_count = 0
         try:
             for raw_line in gz:
-                yield raw_line.decode("utf-8", errors="replace")
+                decompressed_bytes += len(raw_line)
+                if decompressed_bytes > MAX_DECOMPRESSED_BYTES:
+                    raise SourceSizeLimitError(source_name, "decompressed_size_limit_exceeded")
+                if len(raw_line) > MAX_JSONL_LINE_BYTES:
+                    raise SourceSizeLimitError(source_name, "jsonl_line_size_limit_exceeded")
+                text = raw_line.decode("utf-8", errors="replace")
+                stripped = text.strip()
+                if stripped:
+                    try:
+                        payload = json.loads(stripped)
+                    except json.JSONDecodeError:
+                        jsonl_valid = False
+                    else:
+                        if not isinstance(payload, dict):
+                            jsonl_valid = False
+                        elif clean_text(payload.get("date")) != timestamp:
+                            timestamp_rows_valid = False
+                    row_count += 1
+                yield text
         finally:
             info["downloaded_bytes"] = reader.bytes_read
+            info["compressed_bytes"] = reader.bytes_read
+            info["compressed_sha256"] = reader.sha256.hexdigest()
+            info["decompressed_bytes"] = decompressed_bytes
+            info["jsonl_valid"] = jsonl_valid and row_count > 0
+            info["timestamp_rows_valid"] = timestamp_rows_valid and row_count > 0
+            info["source_integrity_checks_passed"] = bool(
+                info["endpoint_contract_valid"]
+                and info["http_status"] == 200
+                and not info["redirect_received"]
+                and info["gzip_valid"]
+                and info["jsonl_valid"]
+                and info["timestamp_rows_valid"]
+            )
             info["elapsed_seconds"] = round(time.monotonic() - started, 3)
             gz.close()
             safe_close_response(response)
@@ -497,6 +643,10 @@ def open_gzip_jsonl(source_name: str, url: str, *, timeout: float) -> tuple[Iter
 
 
 def failure_from_source(info: dict[str, Any]) -> tuple[str, str]:
+    if info.get("endpoint_contract_valid") is False:
+        return "source_contract_invalid", clean_text(info.get("endpoint_contract_failure")) or "endpoint_contract_invalid"
+    if info.get("redirect_received"):
+        return "provider_redirect_rejected", "raw_data_redirect_not_allowed"
     exception_type = clean_text(info.get("exception_type"))
     if exception_type:
         if exception_type == "Timeout":
@@ -527,8 +677,15 @@ def failure_from_source(info: dict[str, Any]) -> tuple[str, str]:
 
 def classify_source_failure(web_info: dict[str, Any], gal_info: dict[str, Any]) -> tuple[str, str, str]:
     for info in [web_info, gal_info]:
-        if info.get("request_attempted") and (
-            info.get("exception_type") or info.get("http_status") != 200 or not info.get("gzip_valid")
+        if (
+            info.get("endpoint_contract_valid") is False
+            or info.get("request_attempted")
+            and (
+                info.get("exception_type")
+                or info.get("redirect_received")
+                or info.get("http_status") != 200
+                or not info.get("gzip_valid")
+            )
         ):
             failure_type, reason = failure_from_source(info)
             return failure_type, reason, clean_text(info.get("source_name")) or "unknown"
@@ -606,6 +763,15 @@ def update_run_control(output_dir: Path, report: dict[str, Any]) -> None:
             "failure_type": report.get("failure_type") or "",
             "failed_source": report.get("failed_source") or "",
             "probe_status": report.get("status", ""),
+            "transport_scheme": report.get("transport_scheme", ""),
+            "tls_verification_applicable": report.get("tls_verification_applicable", False),
+            "endpoint_contract_valid": report.get("endpoint_contract_valid", False),
+            "redirect_count": report.get("redirect_count", 0),
+            "compressed_sha256": report.get("compressed_sha256", {}),
+            "compressed_bytes": report.get("compressed_bytes", 0),
+            "decompressed_bytes": report.get("decompressed_bytes", 0),
+            "source_integrity_checks_passed": report.get("source_integrity_checks_passed", False),
+            "production_publish_allowed": False,
             "generated_at": utc_now_iso(),
         }
     )
@@ -638,6 +804,16 @@ def build_failure_report(report: dict[str, Any], *, failed_step: str = "Run live
         "doc_api_request_count": report.get("doc_api_request_count", 0),
         "retry_count": 0,
         "fallback_count": 0,
+        "transport_scheme": report.get("transport_scheme", ""),
+        "transport_security": report.get("transport_security", ""),
+        "tls_verification_applicable": report.get("tls_verification_applicable", False),
+        "endpoint_contract_valid": report.get("endpoint_contract_valid", False),
+        "redirect_count": report.get("redirect_count", 0),
+        "redirect_followed": False,
+        "compressed_sha256": report.get("compressed_sha256", {}),
+        "compressed_bytes": report.get("compressed_bytes", 0),
+        "decompressed_bytes": report.get("decompressed_bytes", 0),
+        "source_integrity_checks_passed": report.get("source_integrity_checks_passed", False),
         "transport_acceptance_passed": False,
         "quality_pipeline_valid": "not_evaluated",
         "shadow_ready": False,
@@ -692,7 +868,16 @@ def write_artifacts(
         "",
         f"- status: `{report['status']}`",
         f"- timestamp: `{report['timestamp']}`",
+        f"- transport_scheme: `{report.get('transport_scheme', '')}`",
+        f"- transport_security: `{report.get('transport_security', '')}`",
+        f"- endpoint_contract_valid: `{report.get('endpoint_contract_valid', False)}`",
+        f"- redirect_received: `{report.get('redirect_received', False)}`",
+        f"- redirect_followed: `{report.get('redirect_followed', False)}`",
         f"- http_request_count: `{report['http_request_count']}`",
+        f"- compressed_sha256: `{report.get('compressed_sha256', {})}`",
+        f"- compressed_bytes: `{report.get('compressed_bytes', 0)}`",
+        f"- decompressed_bytes: `{report.get('decompressed_bytes', 0)}`",
+        f"- source_integrity_checks_passed: `{report.get('source_integrity_checks_passed', False)}`",
         f"- scanned_row_count: `{report['scanned_row_count']}`",
         f"- unique_candidate_count: `{report['unique_candidate_count']}`",
         f"- gal_join_success_count: `{report['gal_join_success_count']}`",
@@ -726,6 +911,9 @@ def write_artifacts(
             "- doc_api_request_count: `0`",
             "- retry_count: `0`",
             "- fallback_count: `0`",
+            f"- transport_scheme: `{failure_report.get('transport_scheme', '')}`",
+            f"- endpoint_contract_valid: `{failure_report.get('endpoint_contract_valid', False)}`",
+            f"- redirect_followed: `{failure_report.get('redirect_followed', False)}`",
             "- production_publish_allowed: `False`",
         ]
         (output_dir / "failure_report.md").write_text("\n".join(failure_lines) + "\n", encoding="utf-8")
@@ -738,6 +926,10 @@ def print_plan(timestamp: str, *, max_candidates: int) -> dict[str, Any]:
         "webngrams_url": webngrams_url(timestamp),
         "gal_url": gal_url(timestamp),
         "max_candidates": max_candidates,
+        "transport_scheme": GDELT_DATA_SCHEME,
+        "transport_security": "plaintext_public_bulk_data",
+        "endpoint_host": GDELT_DATA_HOST,
+        "redirects_allowed": False,
         "keywords": KEYWORDS,
         "phrase_rules": PHRASES,
         "network_request_count": 0,
@@ -841,6 +1033,10 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             "timestamp": timestamp,
             "webngrams_url": web_url,
             "gal_url": article_url,
+            "transport_scheme": GDELT_DATA_SCHEME,
+            "transport_security": "plaintext_public_bulk_data",
+            "security_posture": "public_bulk_data_over_plain_http_with_strict_content_validation",
+            "redirects_allowed": False,
             "http_request_count": counts["http_request_count"],
             "network_request_count": counts["network_request_count"],
             "request_attempt_count": counts["request_attempt_count"],
@@ -869,6 +1065,18 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
         counts = request_counts(web_info, gal_info)
         after = integrity_snapshot()
         source = web_info if failed_source == "webngrams" else gal_info if failed_source == "gal" else {}
+        relevant_sources = [
+            info
+            for info in [web_info, gal_info]
+            if info.get("request_attempted") or info.get("exception_type") == "SourceContractError" or info.get("endpoint_contract_valid")
+        ]
+        endpoint_contract_valid = all(info.get("endpoint_contract_valid") is True for info in relevant_sources) if relevant_sources else False
+        redirect_count = sum(1 for info in [web_info, gal_info] if info.get("redirect_received"))
+        source_integrity_checks_passed = (
+            transport_acceptance
+            and web_info.get("source_integrity_checks_passed") is True
+            and gal_info.get("source_integrity_checks_passed") is True
+        )
         report = {
             "checked_at": utc_now_iso(),
             "started_at": started_at,
@@ -884,6 +1092,20 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             "max_candidates": max_candidates,
             "webngrams_url": web_url,
             "gal_url": article_url,
+            "transport_scheme": GDELT_DATA_SCHEME,
+            "transport_security": "plaintext_public_bulk_data",
+            "tls_verification_applicable": False,
+            "endpoint_contract_valid": endpoint_contract_valid,
+            "redirect_count": redirect_count,
+            "redirect_received": redirect_count > 0,
+            "redirect_followed": False,
+            "compressed_sha256": {
+                "webngrams": web_info.get("compressed_sha256", ""),
+                "gal": gal_info.get("compressed_sha256", ""),
+            },
+            "compressed_bytes": int(web_info.get("compressed_bytes") or 0) + int(gal_info.get("compressed_bytes") or 0),
+            "decompressed_bytes": int(web_info.get("decompressed_bytes") or 0) + int(gal_info.get("decompressed_bytes") or 0),
+            "source_integrity_checks_passed": source_integrity_checks_passed,
             **counts,
             "actual_http_request_count": counts["network_request_count"],
             "downloaded_file_count": manifest["downloaded_file_count"],
@@ -914,7 +1136,7 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
         return report, manifest
 
     try:
-        web_lines, web_info = open_gzip_jsonl("webngrams", web_url, timeout=timeout)
+        web_lines, web_info = open_gzip_jsonl("webngrams", web_url, timeout=timeout, timestamp=timestamp)
         if web_info.get("http_status") != 200 or not web_info.get("gzip_valid") or web_info.get("exception_type"):
             status, failure_reason, failed_source = classify_source_failure(web_info, gal_info)
             close_iterable(web_lines)
@@ -922,7 +1144,7 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             write_artifacts(output_dir, report, [], manifest, failure_report=build_failure_report(report))
             return report
 
-        gal_lines, gal_info = open_gzip_jsonl("gal", article_url, timeout=timeout)
+        gal_lines, gal_info = open_gzip_jsonl("gal", article_url, timeout=timeout, timestamp=timestamp)
         if gal_info.get("http_status") != 200 or not gal_info.get("gzip_valid") or gal_info.get("exception_type"):
             status, failure_reason, failed_source = classify_source_failure(web_info, gal_info)
             close_iterable(web_lines)
@@ -936,6 +1158,20 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             close_iterable(web_lines)
             gal_stats = join_gal(gal_lines, candidates, smoke_samples)
             close_iterable(gal_lines)
+        except SourceSizeLimitError as exc:
+            close_iterable(web_lines)
+            close_iterable(gal_lines)
+            stats = empty_live_stats()
+            report, manifest = build_report(
+                status="source_size_limit_exceeded",
+                failure_reason=exc.reason,
+                failed_source=exc.source_name,
+                stats=stats,
+            )
+            report["exception_type"] = type(exc).__name__
+            report["exception_message"] = sanitize_exception_message(exc)
+            write_artifacts(output_dir, report, [], manifest, failure_report=build_failure_report(report))
+            return report
         except (OSError, EOFError, gzip.BadGzipFile, UnicodeError, json.JSONDecodeError) as exc:
             close_iterable(web_lines)
             close_iterable(gal_lines)
@@ -954,18 +1190,35 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
         stats["unique_candidate_count"] = len(candidates)
         stats["suspected_noise_count"] = sum(1 for candidate in candidates if candidate.get("suspected_noise"))
         manifest = build_manifest()
+        source_integrity_ok = web_info.get("source_integrity_checks_passed") is True and gal_info.get("source_integrity_checks_passed") is True
         transport_acceptance = (
             manifest["http_request_count"] == 2
             and web_info.get("http_status") == 200
             and gal_info.get("http_status") == 200
+            and web_info.get("endpoint_contract_valid") is True
+            and gal_info.get("endpoint_contract_valid") is True
+            and not web_info.get("redirect_received")
+            and not gal_info.get("redirect_received")
             and web_info.get("gzip_valid") is True
             and gal_info.get("gzip_valid") is True
+            and source_integrity_ok
+            and manifest["doc_api_request_count"] == 0
+            and manifest["retry_count"] == 0
+            and manifest["fallback_count"] == 0
             and stats.get("scanned_row_count", 0) > 0
             and stats.get("gal_scanned_row_count", 0) > 0
             and stats.get("join_smoke_sample_size", 0) > 0
             and stats.get("join_smoke_gal_joined_count", 0) > 0
         )
-        if stats.get("scanned_row_count", 0) == 0 or stats.get("gal_scanned_row_count", 0) == 0:
+        if web_info.get("jsonl_valid") is False or gal_info.get("jsonl_valid") is False:
+            status = "parser_or_archive_failure"
+            failure_reason = "jsonl_validation_failed"
+            failed_source = "webngrams" if web_info.get("jsonl_valid") is False else "gal"
+        elif web_info.get("timestamp_rows_valid") is False or gal_info.get("timestamp_rows_valid") is False:
+            status = "invalid_response"
+            failure_reason = "row_timestamp_mismatch"
+            failed_source = "webngrams" if web_info.get("timestamp_rows_valid") is False else "gal"
+        elif stats.get("scanned_row_count", 0) == 0 or stats.get("gal_scanned_row_count", 0) == 0:
             status = "parser_or_archive_failure"
             failure_reason = "jsonl_scan_returned_no_rows"
             failed_source = "parser"
@@ -993,6 +1246,13 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
         after = integrity_snapshot()
         counts = request_counts(web_info, gal_info)
         manifest = build_manifest()
+        relevant_sources = [
+            info
+            for info in [web_info, gal_info]
+            if info.get("request_attempted") or info.get("exception_type") == "SourceContractError" or info.get("endpoint_contract_valid")
+        ]
+        endpoint_contract_valid = all(info.get("endpoint_contract_valid") is True for info in relevant_sources) if relevant_sources else False
+        redirect_count = sum(1 for info in [web_info, gal_info] if info.get("redirect_received"))
         report = {
             "checked_at": utc_now_iso(),
             "started_at": started_at,
@@ -1008,6 +1268,20 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             "max_candidates": max_candidates,
             "webngrams_url": web_url,
             "gal_url": article_url,
+            "transport_scheme": GDELT_DATA_SCHEME,
+            "transport_security": "plaintext_public_bulk_data",
+            "tls_verification_applicable": False,
+            "endpoint_contract_valid": endpoint_contract_valid,
+            "redirect_count": redirect_count,
+            "redirect_received": redirect_count > 0,
+            "redirect_followed": False,
+            "compressed_sha256": {
+                "webngrams": web_info.get("compressed_sha256", ""),
+                "gal": gal_info.get("compressed_sha256", ""),
+            },
+            "compressed_bytes": int(web_info.get("compressed_bytes") or 0) + int(gal_info.get("compressed_bytes") or 0),
+            "decompressed_bytes": int(web_info.get("decompressed_bytes") or 0) + int(gal_info.get("decompressed_bytes") or 0),
+            "source_integrity_checks_passed": False,
             **counts,
             "actual_http_request_count": counts["network_request_count"],
             "downloaded_file_count": manifest["downloaded_file_count"],
