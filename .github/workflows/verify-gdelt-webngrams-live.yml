@@ -338,18 +338,43 @@ jobs:
       - name: Run live Web NGrams and GAL probe
         if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' }}
         id: live_probe
+        continue-on-error: true
         run: |
           set +e
           python scripts/probe_gdelt_webngrams.py --timestamp "${TIMESTAMP}" --max-candidates "${MAX_CANDIDATES}" --output-dir "${PROBE_DIR}"
           code=$?
           echo "probe_exit_code=${code}" >> "$GITHUB_OUTPUT"
-          exit 0
+          if [ "$code" -ne 0 ]; then
+            python - <<'PY'
+          import json
+          from pathlib import Path
+
+          failure_path = Path("artifacts/global_news_webngrams_probe/failure_report.json")
+          if failure_path.exists():
+              failure = json.loads(failure_path.read_text(encoding="utf-8"))
+              failure_type = failure.get("failure_type", "unknown_failure")
+              failed_source = failure.get("failed_source", "unknown")
+          else:
+              failure_type = "unknown_failure"
+              failed_source = "unknown"
+          print(f"::error title=GDELT live probe failed::{failure_type} source={failed_source}")
+          PY
+          fi
+          exit "$code"
 
       - name: Run live candidate quality review
         id: live_review
-        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' && hashFiles('artifacts/global_news_webngrams_probe/report.json') != '' }}
+        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' && steps.live_probe.outputs.probe_exit_code == '0' && hashFiles('artifacts/global_news_webngrams_probe/report.json') != '' && hashFiles('artifacts/global_news_webngrams_probe/candidates.json') != '' }}
         run: |
           set +e
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/global_news_webngrams_probe/report.json").read_text(encoding="utf-8"))
+          if report.get("transport_acceptance_passed") is not True:
+              raise SystemExit("transport_acceptance_passed must be true before live candidate review")
+          PY
           python scripts/review_gdelt_webngrams_candidates.py \
             --input-candidates "${PROBE_DIR}/candidates.json" \
             --input-probe-report "${PROBE_DIR}/report.json" \
@@ -361,7 +386,7 @@ jobs:
 
       - name: Validate live report contract
         id: live_contract
-        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' && hashFiles('artifacts/global_news_webngrams_probe/report.json') != '' && hashFiles('artifacts/global_news_webngrams_review/live_review_report.json') != '' }}
+        if: ${{ steps.input_validation.outputs.validation_exit_code == '0' && steps.dependencies.outputs.dependency_exit_code == '0' && steps.preflight.outputs.preflight_exit_code == '0' && steps.live_probe.outputs.probe_exit_code == '0' && steps.live_review.outputs.review_exit_code == '0' && hashFiles('artifacts/global_news_webngrams_probe/report.json') != '' && hashFiles('artifacts/global_news_webngrams_review/live_review_report.json') != '' }}
         run: |
           set +e
           python - <<'PY'
@@ -431,6 +456,25 @@ jobs:
           review = load_json("artifacts/global_news_webngrams_review/live_review_report.json")
           manual_approval = run_control.get("acknowledge_single_run") == "true"
           validation_passed = run_control.get("validation_status") == "passed"
+          failure_type = failure.get("failure_type") or probe.get("failure_type") or run_control.get("failure_type") or ""
+          failed_source = failure.get("failed_source") or probe.get("failed_source") or run_control.get("failed_source") or ""
+          web_count = probe.get("webngrams_request_count", run_control.get("webngrams_request_count", 0))
+          gal_count = probe.get("gal_request_count", run_control.get("gal_request_count", 0))
+          network_count = probe.get("network_request_count", probe.get("http_request_count", run_control.get("actual_http_request_count", 0)))
+          web_status = probe.get("webngrams_http_status")
+          if web_status is None:
+              web_status = probe.get("webngrams_source_info", {}).get("exception_type") or "not_evaluated"
+          gal_status = probe.get("gal_http_status")
+          if gal_status is None:
+              gal_status = probe.get("gal_source_info", {}).get("exception_type") or "not_evaluated"
+          if not validation_passed:
+              shadow_ready = False
+          elif failure_type == "preflight_failed":
+              shadow_ready = None
+          elif probe and probe.get("transport_acceptance_passed") is not True:
+              shadow_ready = False
+          else:
+              shadow_ready = review.get("shadow_ready")
           lines = [
               "# GDELT Web NGrams Live Verification",
               "",
@@ -438,15 +482,18 @@ jobs:
               f"- Probe Run ID: `{review.get('probe_run_id', '')}`",
               f"- Manual Approval: `{str(manual_approval).lower()}`",
               f"- Validation Status: `{run_control.get('validation_status', 'not_evaluated')}`",
-              f"- Failure Type: `{failure.get('failure_type') or run_control.get('failure_type') or ''}`",
-              f"- HTTP requests: `{probe.get('network_request_count', probe.get('http_request_count', run_control.get('actual_http_request_count', 0)))}`",
-              "- Web NGrams request count: `0`" if not probe else "- Web NGrams request count: `1`",
-              "- GAL request count: `0`" if not probe else "- GAL request count: `1`",
+              f"- Failure Type: `{failure_type}`",
+              f"- Failed Source: `{failed_source}`",
+              f"- Request Attempts: `{probe.get('request_attempt_count', run_control.get('request_attempt_count', network_count))}`",
+              f"- HTTP Responses: `{probe.get('http_response_count', run_control.get('http_response_count', 0))}`",
+              f"- HTTP requests: `{network_count}`",
+              f"- Web NGrams request count: `{web_count}`",
+              f"- GAL request count: `{gal_count}`",
               f"- DOC API request count: `{probe.get('doc_api_request_count', 0)}`",
               "- Retry count: `0`",
               "- Fallback count: `0`",
-              f"- Web NGrams status: `{probe.get('webngrams_http_status', 'not_evaluated')}`",
-              f"- GAL status: `{probe.get('gal_http_status', 'not_evaluated')}`",
+              f"- Web NGrams status: `{web_status}`",
+              f"- GAL status: `{gal_status}`",
               f"- Transport Acceptance: `{tri(probe.get('transport_acceptance_passed'))}`",
               f"- Total input candidates: `{review.get('total_input_count', 0)}`",
               f"- Valid candidates: `{review.get('valid_input_count', 0)}`",
@@ -460,7 +507,7 @@ jobs:
               f"- Country confirmed/inferred/unresolved/conflicting: `{review.get('country_confirmed_count', 0)}` / `{review.get('country_inferred_count', 0)}` / `{review.get('country_unresolved_count', 0)}` / `{review.get('country_conflicting_count', 0)}`",
               f"- Country resolution success ratio: `{review.get('country_resolution_success_ratio', 'not_evaluated')}`",
               f"- Quality Pipeline Valid: `{tri(review.get('quality_pipeline_valid'))}`",
-              f"- Shadow Ready: `{tri(review.get('shadow_ready') if validation_passed else False)}`",
+              f"- Shadow Ready: `{tri(shadow_ready)}`",
               "- Production Publish Allowed: `false`",
               f"- Public JSON Unchanged: `{tri(review.get('public_json_unchanged', probe.get('public_json_unchanged')) if validation_passed else None)}`",
               f"- DB Unchanged: `{tri(review.get('db_unchanged', probe.get('db_unchanged')) if validation_passed else None)}`",

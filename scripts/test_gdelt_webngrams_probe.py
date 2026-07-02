@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import gzip
+import io
 import json
 import subprocess
 import sys
@@ -10,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from scripts import probe_gdelt_webngrams as probe  # noqa: E402
 from scripts.probe_gdelt_webngrams import (  # noqa: E402
     FIXTURE_GAL,
     FIXTURE_WEBNGRAMS,
@@ -18,6 +21,7 @@ from scripts.probe_gdelt_webngrams import (  # noqa: E402
     print_plan,
     read_fixture_lines,
     run_fixture,
+    run_live,
     scan_webngrams,
     validate_timestamp,
 )
@@ -26,6 +30,81 @@ from scripts.probe_gdelt_webngrams import (  # noqa: E402
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
+
+
+class FakeResponse:
+    def __init__(self, status_code: int, body: bytes, *, content_type: str = "application/gzip") -> None:
+        self.status_code = status_code
+        self.headers = {"Content-Type": content_type, "Content-Length": str(len(body))}
+        self.raw = io.BytesIO(body)
+
+    def close(self) -> None:
+        self.raw.close()
+
+
+class BrokenRawResponse(FakeResponse):
+    def __init__(self) -> None:
+        super().__init__(200, b"", content_type="application/gzip")
+
+    @property
+    def raw(self):  # type: ignore[override]
+        class BrokenRaw:
+            def read(self, size: int = -1) -> bytes:
+                raise OSError("simulated local stream failure")
+
+        return BrokenRaw()
+
+    @raw.setter
+    def raw(self, value: object) -> None:
+        pass
+
+
+def gzip_jsonl(lines: list[str]) -> bytes:
+    return gzip.compress(("\n".join(lines) + "\n").encode("utf-8"))
+
+
+def run_live_with_fake(items: list[object], tmp: Path) -> tuple[dict[str, object], list[str]]:
+    calls: list[str] = []
+    original_get = probe.requests.get
+
+    def fake_get(url: str, **kwargs: object) -> FakeResponse:
+        calls.append(url)
+        index = len(calls) - 1
+        if index >= len(items):
+            raise AssertionError("unexpected extra HTTP request")
+        item = items[index]
+        if callable(item):
+            item = item()
+        if isinstance(item, BaseException):
+            raise item
+        return item  # type: ignore[return-value]
+
+    probe.requests.get = fake_get  # type: ignore[assignment]
+    try:
+        report = run_live("20211215000100", max_candidates=20, timeout=0.1, output_dir=tmp)
+    finally:
+        probe.requests.get = original_get  # type: ignore[assignment]
+    return report, calls
+
+
+def require_failure_artifacts(tmp: Path, *, expected_failure: str, expected_source: str) -> dict[str, object]:
+    for filename in [
+        "report.json",
+        "report.md",
+        "candidates.json",
+        "manual_review.csv",
+        "download_manifest.json",
+        "failure_report.json",
+        "failure_report.md",
+    ]:
+        require((tmp / filename).exists(), f"{filename} missing for failed live probe")
+    failure = json.loads((tmp / "failure_report.json").read_text(encoding="utf-8"))
+    require(failure["failure_type"] == expected_failure, f"failure type mismatch: {failure}")
+    require(failure["failed_source"] == expected_source, f"failed source mismatch: {failure}")
+    require(failure["doc_api_request_count"] == 0, "failed live probe must not call DOC API")
+    require(failure["retry_count"] == 0, "failed live probe must not retry")
+    require(failure["fallback_count"] == 0, "failed live probe must not fallback")
+    return failure
 
 
 def main() -> int:
@@ -130,6 +209,59 @@ def main() -> int:
             require((Path(tmp) / filename).exists(), f"{filename} missing")
         stored = json.loads((Path(tmp) / "candidates.json").read_text(encoding="utf-8"))
         require(len(stored) == 6, "stored candidate count mismatch")
+
+    def live_web() -> FakeResponse:
+        return FakeResponse(200, gzip_jsonl(read_fixture_lines(FIXTURE_WEBNGRAMS)))
+
+    def live_gal() -> FakeResponse:
+        return FakeResponse(200, gzip_jsonl(read_fixture_lines(FIXTURE_GAL)))
+
+    failure_cases = [
+        ("web timeout", [probe.requests.Timeout("timeout")], "provider_timeout", "webngrams", 1, 0, 0),
+        ("web connection", [probe.requests.ConnectionError("connection")], "provider_connection_error", "webngrams", 1, 0, 0),
+        ("web ssl", [probe.requests.exceptions.SSLError("ssl")], "provider_ssl_error", "webngrams", 1, 0, 0),
+        ("web request exception", [probe.requests.RequestException("request")], "provider_request_error", "webngrams", 1, 0, 0),
+        ("web local stream", [BrokenRawResponse()], "local_io_error", "webngrams", 1, 0, 0),
+        ("web 404", [FakeResponse(404, b"missing", content_type="text/plain")], "timestamp_missing", "webngrams", 1, 1, 0),
+        ("web 403", [FakeResponse(403, b"forbidden", content_type="text/plain")], "provider_access_limited", "webngrams", 1, 1, 0),
+        ("web 429", [FakeResponse(429, b"rate limited", content_type="text/plain")], "provider_access_limited", "webngrams", 1, 1, 0),
+        ("web invalid gzip", [FakeResponse(200, b"not gzip")], "parser_or_archive_failure", "webngrams", 1, 1, 0),
+        ("gal timeout", [live_web, probe.requests.Timeout("timeout")], "provider_timeout", "gal", 2, 1, 1),
+        ("gal connection", [live_web, probe.requests.ConnectionError("connection")], "provider_connection_error", "gal", 2, 1, 1),
+        ("unexpected exception", [ValueError("surprise")], "unexpected_probe_error", "webngrams", 1, 0, 0),
+    ]
+    for name, items, failure_type, failed_source, attempts, responses, gal_count in failure_cases:
+        with tempfile.TemporaryDirectory() as tmp:
+            report, calls = run_live_with_fake(items, Path(tmp))
+            require(report["status"] == failure_type, f"{name}: status mismatch {report}")
+            require(report["failure_type"] == failure_type, f"{name}: failure_type mismatch")
+            require(report["failed_source"] == failed_source, f"{name}: failed_source mismatch")
+            require(report["request_attempt_count"] == attempts, f"{name}: attempt count mismatch")
+            require(report["network_request_count"] == attempts, f"{name}: network count mismatch")
+            require(report["http_response_count"] == responses, f"{name}: response count mismatch")
+            require(report["webngrams_request_count"] == 1, f"{name}: web count mismatch")
+            require(report["gal_request_count"] == gal_count, f"{name}: GAL count mismatch")
+            require(report["doc_api_request_count"] == 0, f"{name}: DOC API count mismatch")
+            require(report["retry_count"] == 0 and report["fallback_count"] == 0, f"{name}: retry/fallback mismatch")
+            failure = require_failure_artifacts(Path(tmp), expected_failure=failure_type, expected_source=failed_source)
+            require(failure["request_attempt_count"] == attempts, f"{name}: failure report attempt mismatch")
+            require(len(calls) == attempts, f"{name}: fake request count mismatch")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        report, calls = run_live_with_fake([FakeResponse(200, gzip_jsonl(read_fixture_lines(FIXTURE_WEBNGRAMS))), FakeResponse(200, gzip_jsonl(read_fixture_lines(FIXTURE_GAL)))], Path(tmp))
+        require(report["status"] == "success", "successful live fake should succeed")
+        require(report["network_request_count"] == 2, "successful fake request count mismatch")
+        require(report["http_response_count"] == 2, "successful fake response count mismatch")
+        require(report["transport_acceptance_passed"] is True, "successful fake transport mismatch")
+        require(not (Path(tmp) / "failure_report.json").exists(), "successful fake must not write failure report")
+        require(len(calls) == 2, "successful fake should request two files")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        report, _calls = run_live_with_fake([FakeResponse(200, b"\x1f\x8bnot-valid"), FakeResponse(200, gzip_jsonl(read_fixture_lines(FIXTURE_GAL)))], Path(tmp))
+        require(report["status"] == "parser_or_archive_failure", "parser failure status mismatch")
+        require(report["failed_source"] == "parser", "parser failure source mismatch")
+        require(report["network_request_count"] == 2, "parser failure request count mismatch")
+        require_failure_artifacts(Path(tmp), expected_failure="parser_or_archive_failure", expected_source="parser")
 
     script_text = (ROOT / "scripts" / "probe_gdelt_webngrams.py").read_text(encoding="utf-8")
     require("api.gdeltproject.org/api/v2/doc/doc" not in script_text, "DOC API endpoint must not be used")
