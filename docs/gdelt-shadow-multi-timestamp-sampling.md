@@ -42,11 +42,25 @@ workflow, including:
 - `live_review_report.json`
 - `live_review_report.md`
 
+`artifact_dir` paths in the manifest are resolved from the repository root when
+they are relative paths. This is true no matter where the manifest file lives.
+Absolute paths are also accepted. The artifact directories remain local ignored
+directories and must not be committed.
+
+Example repository-root relative path:
+
+```text
+artifacts/gdelt_shadow_samples/baseline-20211215000100
+```
+
 ## Manifest
 
 Copy `config/gdelt_shadow_sample_manifest.example.json` to a local manifest such
 as `config/gdelt_shadow_sample_manifest.json` and point each sample at its
 artifact directory. Timestamp values come from the manifest, not from code.
+Relative `artifact_dir` values are still resolved from the repository root, not
+from the manifest file's parent directory, so a manifest under `config/` can
+refer to `artifacts/gdelt_shadow_samples/...` directly.
 
 ## Aggregation
 
@@ -75,6 +89,10 @@ The evaluator writes `manual_labels_template.csv` with these labels:
 - `uncertain`
 - `duplicate`
 - `inaccessible`
+
+The template includes one row per aggregated candidate. Candidate identity,
+title, canonical URL, observed classification, and observed reason are
+pre-filled. Reviewers only fill the ground-truth fields and notes.
 
 Manual labels evaluate candidate-pool precision and candidate-pool recall only.
 They do not measure source-level recall because the full GDELT source rows are

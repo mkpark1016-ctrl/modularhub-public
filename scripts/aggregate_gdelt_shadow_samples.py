@@ -49,6 +49,8 @@ LABEL_COLUMNS = [
 RUN_MATRIX_COLUMNS = [
     "sample_id",
     "timestamp",
+    "artifact_dir_configured",
+    "artifact_dir_resolved",
     "workflow_run_id",
     "commit_sha",
     "workflow_status",
@@ -145,9 +147,11 @@ def ratio(numerator: int, denominator: int) -> float | str:
     return round(numerator / denominator, 4)
 
 
-def resolve_path(path_text: str, base: Path) -> Path:
+def resolve_artifact_path(path_text: str) -> Path:
     path = Path(path_text)
-    return path if path.is_absolute() else (base / path)
+    if path.is_absolute():
+        return path.resolve()
+    return (ROOT / path).resolve()
 
 
 def find_artifact_file(base: Path, filename: str) -> Path | None:
@@ -242,10 +246,11 @@ def classify_sample_status(run: dict[str, Any], errors: list[str]) -> str:
     return "failed"
 
 
-def summarize_sample(sample: dict[str, Any], manifest_base: Path) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+def summarize_sample(sample: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
     sample_id = clean_text(sample.get("sample_id"))
     timestamp = clean_text(sample.get("timestamp"))
-    artifact_dir = resolve_path(clean_text(sample.get("artifact_dir")), manifest_base)
+    artifact_dir_configured = clean_text(sample.get("artifact_dir"))
+    artifact_dir = resolve_artifact_path(artifact_dir_configured)
     errors: list[str] = []
     loaded: dict[str, Any] = {}
     paths: dict[str, Path] = {}
@@ -282,7 +287,9 @@ def summarize_sample(sample: dict[str, Any], manifest_base: Path) -> tuple[dict[
     run = {
         "sample_id": sample_id,
         "timestamp": timestamp,
-        "artifact_dir": clean_text(sample.get("artifact_dir")),
+        "artifact_dir": artifact_dir_configured,
+        "artifact_dir_configured": artifact_dir_configured,
+        "artifact_dir_resolved": str(artifact_dir),
         "workflow_run_id": clean_text(run_control.get("run_id") or probe.get("workflow_run_id") or review.get("probe_run_id")),
         "commit_sha": clean_text(run_control.get("commit_sha") or probe.get("commit_sha")),
         "workflow_status": clean_text(probe.get("status") or run_control.get("validation_status") or sample.get("expected_status")),
@@ -354,7 +361,9 @@ def summarize_sample(sample: dict[str, Any], manifest_base: Path) -> tuple[dict[
         {
             "sample_id": sample_id,
             "timestamp": timestamp,
-            "artifact_dir": clean_text(sample.get("artifact_dir")),
+            "artifact_dir": artifact_dir_configured,
+            "artifact_dir_configured": artifact_dir_configured,
+            "artifact_dir_resolved": str(artifact_dir),
             "error": error,
         }
         for error in errors
@@ -480,6 +489,29 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
             writer.writerow({field: csv_value(row.get(field, "")) for field in fieldnames})
 
 
+def label_template_rows(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for item in sorted(candidates, key=lambda value: (value["sample_id"], value["timestamp"], value["candidate_id"])):
+        observed_reason = clean_text(item.get("duplicate_reason")) or clean_text(item.get("classification_reason"))
+        rows.append(
+            {
+                "sample_id": item["sample_id"],
+                "timestamp": item["timestamp"],
+                "candidate_id": item["candidate_id"],
+                "title": item["title"],
+                "canonical_url": item["canonical_url"],
+                "observed_classification": item["classification"],
+                "observed_reason": observed_reason,
+                "ground_truth_label": "",
+                "ground_truth_reason": "",
+                "reviewer": "",
+                "reviewed_at": "",
+                "notes": "",
+            }
+        )
+    return rows
+
+
 def decide_evaluation_status(summary: dict[str, Any], label_metrics: dict[str, Any]) -> str:
     if summary["successful_sample_count"] < 6 or int(label_metrics["labeled_candidate_count"]) < 20:
         return "insufficient_sample"
@@ -503,13 +535,12 @@ def decide_evaluation_status(summary: dict[str, Any], label_metrics: dict[str, A
 def aggregate(manifest_path: Path, output_dir: Path, labels_path: Path | None = None) -> dict[str, Any]:
     manifest = load_manifest(manifest_path)
     output_dir.mkdir(parents=True, exist_ok=True)
-    manifest_base = manifest_path.resolve().parent
     enabled_samples = [sample for sample in manifest["samples"] if sample.get("enabled", True)]
     run_rows: list[dict[str, Any]] = []
     candidates: list[dict[str, Any]] = []
     validation_errors: list[dict[str, Any]] = []
     for sample in enabled_samples:
-        run, sample_candidates, errors = summarize_sample(sample, manifest_base)
+        run, sample_candidates, errors = summarize_sample(sample)
         run_rows.append(run)
         candidates.extend(sample_candidates)
         validation_errors.extend(errors)
@@ -626,7 +657,7 @@ def write_outputs(
         json.dumps({"schema_version": SCHEMA_VERSION, "items": validation_errors}, ensure_ascii=False, indent=2, sort_keys=True),
         encoding="utf-8",
     )
-    write_csv(output_dir / "manual_labels_template.csv", [{column: "" for column in LABEL_COLUMNS}], LABEL_COLUMNS)
+    write_csv(output_dir / "manual_labels_template.csv", label_template_rows(candidates), LABEL_COLUMNS)
     reason_counter: Counter[str] = Counter()
     exclusion_counter: Counter[str] = Counter()
     duplicate_counter: Counter[str] = Counter()

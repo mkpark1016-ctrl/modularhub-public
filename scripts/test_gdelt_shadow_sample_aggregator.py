@@ -187,6 +187,11 @@ def write_manifest(path: Path, samples_root: Path) -> None:
     )
 
 
+def csv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8", newline="") as file:
+        return list(csv.DictReader(file))
+
+
 def main() -> int:
     with tempfile.TemporaryDirectory() as tmp_text:
         tmp = Path(tmp_text)
@@ -266,31 +271,27 @@ def main() -> int:
         require(len(duplicate_groups["items"]) == 1, "duplicate artifact mismatch")
         errors = json.loads((output / "validation_errors.json").read_text(encoding="utf-8"))["items"]
         require(any(error["sample_id"] == "sample-c" for error in errors), "missing sample error not recorded")
+        template_rows = csv_rows(output / "manual_labels_template.csv")
+        require(len(template_rows) == 4, "manual label template must contain one row per candidate")
+        require([row["candidate_id"] for row in template_rows] == ["a-log4j", "b-log4j", "b-publish", "b-review"], "manual label template sort mismatch")
+        require(template_rows[0]["title"] == shared["title"], "template title metadata missing")
+        require(template_rows[0]["canonical_url"] == shared["canonical_url"], "template URL metadata missing")
+        require(template_rows[0]["observed_classification"] == "irrelevant", "template classification metadata missing")
+        require(template_rows[0]["observed_reason"] == "score_0", "template observed reason mismatch")
+        require(all(not row["ground_truth_label"] and not row["reviewer"] for row in template_rows), "ground-truth columns must be blank")
+        require({"a-log4j", "b-log4j"}.issubset({row["candidate_id"] for row in template_rows}), "cross-sample duplicate candidates missing from template")
 
         labels = output / "manual_labels.csv"
         with labels.open("w", encoding="utf-8", newline="") as file:
-            writer = csv.DictWriter(
-                file,
-                fieldnames=[
-                    "sample_id",
-                    "timestamp",
-                    "candidate_id",
-                    "title",
-                    "canonical_url",
-                    "observed_classification",
-                    "observed_reason",
-                    "ground_truth_label",
-                    "ground_truth_reason",
-                    "reviewer",
-                    "reviewed_at",
-                    "notes",
-                ],
-            )
+            writer = csv.DictWriter(file, fieldnames=list(template_rows[0].keys()))
             writer.writeheader()
-            writer.writerow({"sample_id": "sample-a", "candidate_id": "a-log4j", "ground_truth_label": "irrelevant"})
-            writer.writerow({"sample_id": "sample-b", "candidate_id": "b-publish", "ground_truth_label": "relevant_building_modular"})
-            writer.writerow({"sample_id": "sample-b", "candidate_id": "b-review", "ground_truth_label": "relevant_building_modular"})
-            writer.writerow({"sample_id": "sample-b", "candidate_id": "b-log4j", "ground_truth_label": "irrelevant"})
+            for row in template_rows:
+                row = dict(row)
+                row["ground_truth_label"] = "relevant_building_modular" if row["candidate_id"] in {"b-publish", "b-review"} else "irrelevant"
+                row["ground_truth_reason"] = "fixture_label"
+                row["reviewer"] = "tester"
+                row["reviewed_at"] = "2026-07-02"
+                writer.writerow(row)
         labeled_summary = aggregate(manifest, output / "labeled", labels)
         require(labeled_summary["labeled_candidate_count"] == 4, "labeled count mismatch")
         require(labeled_summary["unlabeled_candidate_count"] == 0, "unlabeled count mismatch")
@@ -318,6 +319,113 @@ def main() -> int:
         parsed = json.loads(result.stdout)
         require(parsed["external_http_request_count"] == 0, "aggregator must not report HTTP requests")
         require((cli_output / "shadow_evaluation_summary.json").exists(), "CLI summary missing")
+
+    artifacts_root = ROOT / "artifacts" / "gdelt_shadow_samples"
+    artifacts_root.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(dir=artifacts_root) as repo_artifact_text, tempfile.TemporaryDirectory() as tmp_text:
+        repo_artifact = Path(repo_artifact_text)
+        sample_dir = repo_artifact / "sample-root-relative"
+        write_sample(
+            sample_dir,
+            sample_id="root-relative",
+            timestamp="20211218000100",
+            status="success",
+            items=[
+                candidate(
+                    "root-candidate",
+                    "Modular construction sample",
+                    "publish_candidate",
+                    url="https://root-relative.test/modular",
+                    published_at="2021-12-18T00:01:00.000Z",
+                    description="A modular construction sample for root-relative manifest path testing.",
+                    matched_strength="strong",
+                )
+            ],
+        )
+        tmp = Path(tmp_text)
+        config_dir = tmp / "config"
+        config_dir.mkdir()
+        relative_artifact = sample_dir.resolve().relative_to(ROOT).as_posix()
+        manifest_config = config_dir / "gdelt_shadow_sample_manifest.json"
+        write_json(
+            manifest_config,
+            {
+                "schema_version": "1.0",
+                "sample_set_id": "root-path-test",
+                "description": "config manifest path test",
+                "samples": [
+                    {
+                        "sample_id": "root-relative",
+                        "timestamp": "20211218000100",
+                        "artifact_dir": relative_artifact,
+                        "expected_status": "success",
+                        "enabled": True,
+                    }
+                ],
+            },
+        )
+        output = tmp / "root-output"
+        summary = aggregate(manifest_config, output)
+        require(summary["successful_sample_count"] == 1, "config manifest relative path should resolve from repository root")
+        rows = csv_rows(output / "run_matrix.csv")
+        require(rows[0]["artifact_dir_configured"] == relative_artifact, "configured artifact path missing from run matrix")
+        require(Path(rows[0]["artifact_dir_resolved"]) == sample_dir.resolve(), "resolved artifact path mismatch")
+        require(not (config_dir / relative_artifact).exists(), "test setup unexpectedly created config/artifacts path")
+
+    with tempfile.TemporaryDirectory() as tmp_text:
+        tmp = Path(tmp_text)
+        missing_manifest = tmp / "config" / "gdelt_shadow_sample_manifest.json"
+        write_json(
+            missing_manifest,
+            {
+                "schema_version": "1.0",
+                "sample_set_id": "missing-path-test",
+                "description": "missing path test",
+                "samples": [
+                    {
+                        "sample_id": "missing",
+                        "timestamp": "20211219000100",
+                        "artifact_dir": "artifacts/gdelt_shadow_samples/definitely-missing-shadow-sample",
+                        "expected_status": "failed",
+                        "enabled": True,
+                    }
+                ],
+            },
+        )
+        output = tmp / "missing-output"
+        summary = aggregate(missing_manifest, output)
+        require(summary["incomplete_sample_count"] == 1, "missing artifact should be incomplete")
+        errors = json.loads((output / "validation_errors.json").read_text(encoding="utf-8"))["items"]
+        require(errors and errors[0]["error"] == "artifact_dir_missing", "missing artifact error mismatch")
+        require("artifact_dir_resolved" in errors[0], "resolved path missing from validation error")
+
+    with tempfile.TemporaryDirectory() as tmp_text:
+        tmp = Path(tmp_text)
+        samples_root = tmp / "empty-samples"
+        manifest = tmp / "manifest-empty.json"
+        write_sample(samples_root / "empty", sample_id="empty", timestamp="20211220000100", status="success", items=[])
+        write_json(
+            manifest,
+            {
+                "schema_version": "1.0",
+                "sample_set_id": "empty-candidate-test",
+                "description": "empty candidate test",
+                "samples": [
+                    {
+                        "sample_id": "empty",
+                        "timestamp": "20211220000100",
+                        "artifact_dir": str(samples_root / "empty"),
+                        "expected_status": "success",
+                        "enabled": True,
+                    }
+                ],
+            },
+        )
+        output = tmp / "empty-output"
+        aggregate(manifest, output)
+        with (output / "manual_labels_template.csv").open("r", encoding="utf-8", newline="") as file:
+            lines = list(csv.reader(file))
+        require(len(lines) == 1, "empty candidate template should contain header only")
 
     print("GDELT SHADOW SAMPLE AGGREGATOR TEST PASSED")
     return 0

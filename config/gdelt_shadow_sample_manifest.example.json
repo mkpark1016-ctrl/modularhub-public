@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "sample_set_id": "gdelt-shadow-sample-001",
-  "description": "Multi-timestamp shadow evaluation",
+  "description": "Multi-timestamp shadow evaluation. Relative artifact_dir values are resolved from the repository root.",
   "samples": [
     {
       "sample_id": "baseline-20211215000100",
@@ -9,7 +9,7 @@
       "artifact_dir": "artifacts/gdelt_shadow_samples/baseline-20211215000100",
       "expected_status": "success",
       "enabled": true,
-      "notes": "Run #9 baseline"
+      "notes": "Run #9 baseline. artifacts/... is a local ignored directory relative to the repository root."
     }
   ]
 }
