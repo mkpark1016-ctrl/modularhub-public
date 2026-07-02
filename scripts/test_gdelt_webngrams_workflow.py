@@ -108,6 +108,14 @@ def main() -> int:
         "Compressed Bytes:",
         "Decompressed Bytes:",
         "Source Integrity Checks Passed:",
+        "Batch Timestamp:",
+        "Batch Timestamp Contract Valid:",
+        "Article Date Semantics:",
+        "Web NGrams Article Dates Parseable:",
+        "Web NGrams Article Dates Invalid:",
+        "GAL Article Dates Parseable:",
+        "GAL Article Dates Invalid:",
+        "Article Date Range:",
     ]:
         require(summary_field in text, f"summary field missing: {summary_field}")
     require("Retry count: `0`" in text, "summary must report retry count zero")

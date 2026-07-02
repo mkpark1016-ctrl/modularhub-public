@@ -33,6 +33,7 @@ PROBE_VERSION = "0.2"
 MAX_COMPRESSED_BYTES = 2 * 1024 * 1024 * 1024
 MAX_DECOMPRESSED_BYTES = 8 * 1024 * 1024 * 1024
 MAX_JSONL_LINE_BYTES = 8 * 1024 * 1024
+ARTICLE_DATE_SEMANTICS = "article_publication_time_independent_of_batch_timestamp"
 FIXTURE_WEBNGRAMS = ROOT / "tests" / "fixtures" / "webngrams_sample.jsonl"
 FIXTURE_GAL = ROOT / "tests" / "fixtures" / "gal_sample.jsonl"
 PUBLIC_DATA_PATHS = [
@@ -162,6 +163,39 @@ def validate_source_url(source_name: str, url: str, *, timestamp: str) -> tuple[
     return True, "", details
 
 
+def parse_article_datetime(value: Any) -> datetime | None:
+    text = clean_text(value)
+    if not text:
+        return None
+    if re.fullmatch(r"\d{14}", text):
+        try:
+            return datetime.strptime(text, "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
+        except ValueError:
+            return None
+    normalized = text.replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def article_datetime_key(value: datetime) -> str:
+    return value.isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+def is_source_schema_valid_row(source_name: str, row: dict[str, Any], *, article_date_parseable: bool) -> bool:
+    if not article_date_parseable:
+        return False
+    if source_name == "webngrams":
+        return all(key in row and clean_text(row.get(key)) for key in ("ngram", "pre", "post", "lang", "type", "url"))
+    if source_name == "gal":
+        return bool(clean_text(row.get("url")))
+    return False
+
+
 def normalize_text(value: Any) -> str:
     text = clean_text(value).lower()
     text = text.replace("off-site", "off site")
@@ -237,10 +271,12 @@ def smoke_sample_from_row(row: dict[str, Any], *, timestamp: str) -> dict[str, A
     domain = domain_from_url(canonical_url)
     return {
         "timestamp": timestamp,
+        "batch_timestamp": timestamp,
         "url": clean_text(row.get("url")),
         "canonical_url": canonical_url,
         "domain": domain,
         "published_at": clean_text(row.get("date")),
+        "article_published_at": clean_text(row.get("date")),
         "language": clean_text(row.get("lang")),
         "ngram": clean_text(row.get("ngram")),
         "gal_joined": False,
@@ -280,6 +316,7 @@ def match_webngram_row(row: dict[str, Any]) -> dict[str, Any] | None:
         "canonical_url": canonical_url,
         "domain": domain,
         "published_at": clean_text(row.get("date")),
+        "article_published_at": clean_text(row.get("date")),
         "language": clean_text(row.get("lang")),
         "matched_keyword": matched_keyword,
         "matched_phrase": matched_phrase,
@@ -354,6 +391,7 @@ def scan_webngrams(
             continue
         seen_urls.add(canonical_url)
         candidate["timestamp"] = timestamp
+        candidate["batch_timestamp"] = timestamp
         candidates.append(candidate)
         if len(candidates) >= max_candidates and len(smoke_samples) >= smoke_sample_limit:
             stats["early_stopped"] = 1
@@ -387,6 +425,7 @@ def join_gal(lines: Iterable[str], candidates: list[dict[str, Any]], smoke_sampl
                     "domain": domain,
                     "outlet_name": clean_text(row.get("outletName")),
                     "published_at": clean_text(row.get("date")) or candidate.get("published_at", ""),
+                    "article_published_at": clean_text(row.get("date")) or candidate.get("article_published_at", ""),
                     "language": clean_text(row.get("lang")) or candidate.get("language", ""),
                     "author": clean_text(row.get("author")),
                     "image": clean_text(row.get("image")),
@@ -500,7 +539,21 @@ def source_info(source_name: str, url: str) -> dict[str, Any]:
         "compressed_sha256": "",
         "gzip_valid": False,
         "jsonl_valid": False,
-        "timestamp_rows_valid": False,
+        "timestamp_rows_valid": "not_applicable",
+        "batch_timestamp_contract_valid": False,
+        "article_date_semantics": ARTICLE_DATE_SEMANTICS,
+        "article_date_validation_status": "not_evaluated",
+        "row_count": 0,
+        "source_schema_valid_row_count": 0,
+        "article_date_present_count": 0,
+        "article_date_parseable_count": 0,
+        "article_date_missing_count": 0,
+        "article_date_invalid_count": 0,
+        "article_date_min": "",
+        "article_date_max": "",
+        "article_date_before_batch_count": 0,
+        "article_date_equal_batch_count": 0,
+        "article_date_after_batch_count": 0,
         "source_integrity_checks_passed": False,
         "authentication_sent": False,
         "cookies_sent": False,
@@ -535,6 +588,7 @@ def open_gzip_jsonl(source_name: str, url: str, *, timeout: float, timestamp: st
     endpoint_ok, endpoint_reason, endpoint_details = validate_source_url(source_name, url, timestamp=timestamp)
     info.update(endpoint_details)
     info["endpoint_contract_valid"] = endpoint_ok
+    info["batch_timestamp_contract_valid"] = endpoint_ok
     info["endpoint_contract_failure"] = endpoint_reason
     if not endpoint_ok:
         info["exception_type"] = "SourceContractError"
@@ -597,8 +651,18 @@ def open_gzip_jsonl(source_name: str, url: str, *, timeout: float, timestamp: st
     def _lines() -> Iterator[str]:
         decompressed_bytes = 0
         jsonl_valid = True
-        timestamp_rows_valid = True
         row_count = 0
+        schema_valid_row_count = 0
+        article_date_present_count = 0
+        article_date_parseable_count = 0
+        article_date_missing_count = 0
+        article_date_invalid_count = 0
+        article_date_min: datetime | None = None
+        article_date_max: datetime | None = None
+        article_date_before_batch_count = 0
+        article_date_equal_batch_count = 0
+        article_date_after_batch_count = 0
+        batch_datetime = parse_article_datetime(timestamp)
         try:
             for raw_line in gz:
                 decompressed_bytes += len(raw_line)
@@ -616,8 +680,28 @@ def open_gzip_jsonl(source_name: str, url: str, *, timeout: float, timestamp: st
                     else:
                         if not isinstance(payload, dict):
                             jsonl_valid = False
-                        elif clean_text(payload.get("date")) != timestamp:
-                            timestamp_rows_valid = False
+                        else:
+                            article_date = clean_text(payload.get("date"))
+                            parsed_article_date = parse_article_datetime(article_date)
+                            if article_date:
+                                article_date_present_count += 1
+                                if parsed_article_date is None:
+                                    article_date_invalid_count += 1
+                                else:
+                                    article_date_parseable_count += 1
+                                    article_date_min = parsed_article_date if article_date_min is None else min(article_date_min, parsed_article_date)
+                                    article_date_max = parsed_article_date if article_date_max is None else max(article_date_max, parsed_article_date)
+                                    if batch_datetime is not None:
+                                        if parsed_article_date < batch_datetime:
+                                            article_date_before_batch_count += 1
+                                        elif parsed_article_date == batch_datetime:
+                                            article_date_equal_batch_count += 1
+                                        else:
+                                            article_date_after_batch_count += 1
+                            else:
+                                article_date_missing_count += 1
+                            if is_source_schema_valid_row(source_name, payload, article_date_parseable=parsed_article_date is not None):
+                                schema_valid_row_count += 1
                     row_count += 1
                 yield text
         finally:
@@ -626,14 +710,35 @@ def open_gzip_jsonl(source_name: str, url: str, *, timeout: float, timestamp: st
             info["compressed_sha256"] = reader.sha256.hexdigest()
             info["decompressed_bytes"] = decompressed_bytes
             info["jsonl_valid"] = jsonl_valid and row_count > 0
-            info["timestamp_rows_valid"] = timestamp_rows_valid and row_count > 0
+            info["timestamp_rows_valid"] = "not_applicable"
+            info["row_count"] = row_count
+            info["source_schema_valid_row_count"] = schema_valid_row_count
+            info["article_date_present_count"] = article_date_present_count
+            info["article_date_parseable_count"] = article_date_parseable_count
+            info["article_date_missing_count"] = article_date_missing_count
+            info["article_date_invalid_count"] = article_date_invalid_count
+            info["article_date_min"] = article_datetime_key(article_date_min) if article_date_min else ""
+            info["article_date_max"] = article_datetime_key(article_date_max) if article_date_max else ""
+            info["article_date_before_batch_count"] = article_date_before_batch_count
+            info["article_date_equal_batch_count"] = article_date_equal_batch_count
+            info["article_date_after_batch_count"] = article_date_after_batch_count
+            if not info["jsonl_valid"]:
+                info["article_date_validation_status"] = "invalid_jsonl"
+            elif row_count == 0:
+                info["article_date_validation_status"] = "no_json_objects"
+            elif schema_valid_row_count == 0:
+                info["article_date_validation_status"] = "no_valid_source_rows"
+            elif article_date_missing_count or article_date_invalid_count:
+                info["article_date_validation_status"] = "partially_invalid"
+            else:
+                info["article_date_validation_status"] = "valid"
             info["source_integrity_checks_passed"] = bool(
                 info["endpoint_contract_valid"]
                 and info["http_status"] == 200
                 and not info["redirect_received"]
                 and info["gzip_valid"]
                 and info["jsonl_valid"]
-                and info["timestamp_rows_valid"]
+                and schema_valid_row_count > 0
             )
             info["elapsed_seconds"] = round(time.monotonic() - started, 3)
             gz.close()
@@ -763,6 +868,10 @@ def update_run_control(output_dir: Path, report: dict[str, Any]) -> None:
             "failure_type": report.get("failure_type") or "",
             "failed_source": report.get("failed_source") or "",
             "probe_status": report.get("status", ""),
+            "batch_timestamp": report.get("batch_timestamp", report.get("timestamp", "")),
+            "batch_timestamp_contract_valid": report.get("batch_timestamp_contract_valid", False),
+            "article_date_semantics": report.get("article_date_semantics", ARTICLE_DATE_SEMANTICS),
+            "article_date_validation_status": report.get("article_date_validation_status", "not_evaluated"),
             "transport_scheme": report.get("transport_scheme", ""),
             "tls_verification_applicable": report.get("tls_verification_applicable", False),
             "endpoint_contract_valid": report.get("endpoint_contract_valid", False),
@@ -793,6 +902,10 @@ def build_failure_report(report: dict[str, Any], *, failed_step: str = "Run live
         "exception_type": report.get("exception_type", ""),
         "exception_message": report.get("exception_message", ""),
         "timestamp": report.get("timestamp", ""),
+        "batch_timestamp": report.get("batch_timestamp", report.get("timestamp", "")),
+        "batch_timestamp_contract_valid": report.get("batch_timestamp_contract_valid", False),
+        "article_date_semantics": report.get("article_date_semantics", ARTICLE_DATE_SEMANTICS),
+        "article_date_validation_status": report.get("article_date_validation_status", "not_evaluated"),
         "max_candidates": report.get("max_candidates", ""),
         "acknowledge_single_run_normalized": os.environ.get("ACKNOWLEDGE_SINGLE_RUN_NORMALIZED", ""),
         "request_attempt_count": report.get("request_attempt_count", 0),
@@ -868,6 +981,12 @@ def write_artifacts(
         "",
         f"- status: `{report['status']}`",
         f"- timestamp: `{report['timestamp']}`",
+        f"- batch_timestamp: `{report.get('batch_timestamp', report.get('timestamp', ''))}`",
+        f"- batch_timestamp_contract_valid: `{report.get('batch_timestamp_contract_valid', False)}`",
+        f"- article_date_semantics: `{report.get('article_date_semantics', '')}`",
+        f"- article_date_validation_status: `{report.get('article_date_validation_status', '')}`",
+        f"- article_date_min: `{report.get('article_date_min', '')}`",
+        f"- article_date_max: `{report.get('article_date_max', '')}`",
         f"- transport_scheme: `{report.get('transport_scheme', '')}`",
         f"- transport_security: `{report.get('transport_security', '')}`",
         f"- endpoint_contract_valid: `{report.get('endpoint_contract_valid', False)}`",
@@ -923,6 +1042,8 @@ def write_artifacts(
 def print_plan(timestamp: str, *, max_candidates: int) -> dict[str, Any]:
     return {
         "timestamp": validate_timestamp(timestamp),
+        "batch_timestamp": validate_timestamp(timestamp),
+        "article_date_semantics": ARTICLE_DATE_SEMANTICS,
         "webngrams_url": webngrams_url(timestamp),
         "gal_url": gal_url(timestamp),
         "max_candidates": max_candidates,
@@ -1031,6 +1152,10 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
         return {
             "mode": "live",
             "timestamp": timestamp,
+            "batch_timestamp": timestamp,
+            "batch_timestamp_contract_valid": web_info.get("batch_timestamp_contract_valid") is True
+            and (gal_info.get("batch_timestamp_contract_valid") is True if gal_info.get("request_attempted") else True),
+            "article_date_semantics": ARTICLE_DATE_SEMANTICS,
             "webngrams_url": web_url,
             "gal_url": article_url,
             "transport_scheme": GDELT_DATA_SCHEME,
@@ -1071,12 +1196,11 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             if info.get("request_attempted") or info.get("exception_type") == "SourceContractError" or info.get("endpoint_contract_valid")
         ]
         endpoint_contract_valid = all(info.get("endpoint_contract_valid") is True for info in relevant_sources) if relevant_sources else False
+        batch_timestamp_contract_valid = all(info.get("batch_timestamp_contract_valid") is True for info in relevant_sources) if relevant_sources else False
         redirect_count = sum(1 for info in [web_info, gal_info] if info.get("redirect_received"))
-        source_integrity_checks_passed = (
-            transport_acceptance
-            and web_info.get("source_integrity_checks_passed") is True
-            and gal_info.get("source_integrity_checks_passed") is True
-        )
+        source_integrity_checks_passed = web_info.get("source_integrity_checks_passed") is True and gal_info.get("source_integrity_checks_passed") is True
+        article_date_mins = [clean_text(info.get("article_date_min")) for info in [web_info, gal_info] if clean_text(info.get("article_date_min"))]
+        article_date_maxs = [clean_text(info.get("article_date_max")) for info in [web_info, gal_info] if clean_text(info.get("article_date_max"))]
         report = {
             "checked_at": utc_now_iso(),
             "started_at": started_at,
@@ -1089,6 +1213,23 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             "exception_type": source.get("exception_type", ""),
             "exception_message": source.get("exception_message", ""),
             "timestamp": timestamp,
+            "batch_timestamp": timestamp,
+            "batch_timestamp_contract_valid": batch_timestamp_contract_valid,
+            "article_date_semantics": ARTICLE_DATE_SEMANTICS,
+            "article_date_validation_status": {
+                "webngrams": web_info.get("article_date_validation_status", "not_evaluated"),
+                "gal": gal_info.get("article_date_validation_status", "not_evaluated"),
+            },
+            "webngrams_article_date_present_count": web_info.get("article_date_present_count", 0),
+            "webngrams_article_date_parseable_count": web_info.get("article_date_parseable_count", 0),
+            "webngrams_article_date_missing_count": web_info.get("article_date_missing_count", 0),
+            "webngrams_article_date_invalid_count": web_info.get("article_date_invalid_count", 0),
+            "gal_article_date_present_count": gal_info.get("article_date_present_count", 0),
+            "gal_article_date_parseable_count": gal_info.get("article_date_parseable_count", 0),
+            "gal_article_date_missing_count": gal_info.get("article_date_missing_count", 0),
+            "gal_article_date_invalid_count": gal_info.get("article_date_invalid_count", 0),
+            "article_date_min": min(article_date_mins) if article_date_mins else "",
+            "article_date_max": max(article_date_maxs) if article_date_maxs else "",
             "max_candidates": max_candidates,
             "webngrams_url": web_url,
             "gal_url": article_url,
@@ -1214,10 +1355,10 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             status = "parser_or_archive_failure"
             failure_reason = "jsonl_validation_failed"
             failed_source = "webngrams" if web_info.get("jsonl_valid") is False else "gal"
-        elif web_info.get("timestamp_rows_valid") is False or gal_info.get("timestamp_rows_valid") is False:
+        elif web_info.get("source_schema_valid_row_count", 0) == 0 or gal_info.get("source_schema_valid_row_count", 0) == 0:
             status = "invalid_response"
-            failure_reason = "row_timestamp_mismatch"
-            failed_source = "webngrams" if web_info.get("timestamp_rows_valid") is False else "gal"
+            failure_reason = "no_valid_source_rows"
+            failed_source = "webngrams" if web_info.get("source_schema_valid_row_count", 0) == 0 else "gal"
         elif stats.get("scanned_row_count", 0) == 0 or stats.get("gal_scanned_row_count", 0) == 0:
             status = "parser_or_archive_failure"
             failure_reason = "jsonl_scan_returned_no_rows"
@@ -1252,7 +1393,10 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             if info.get("request_attempted") or info.get("exception_type") == "SourceContractError" or info.get("endpoint_contract_valid")
         ]
         endpoint_contract_valid = all(info.get("endpoint_contract_valid") is True for info in relevant_sources) if relevant_sources else False
+        batch_timestamp_contract_valid = all(info.get("batch_timestamp_contract_valid") is True for info in relevant_sources) if relevant_sources else False
         redirect_count = sum(1 for info in [web_info, gal_info] if info.get("redirect_received"))
+        article_date_mins = [clean_text(info.get("article_date_min")) for info in [web_info, gal_info] if clean_text(info.get("article_date_min"))]
+        article_date_maxs = [clean_text(info.get("article_date_max")) for info in [web_info, gal_info] if clean_text(info.get("article_date_max"))]
         report = {
             "checked_at": utc_now_iso(),
             "started_at": started_at,
@@ -1265,6 +1409,23 @@ def run_live(timestamp: str, *, max_candidates: int, timeout: float, output_dir:
             "exception_type": type(exc).__name__,
             "exception_message": sanitize_exception_message(exc),
             "timestamp": timestamp,
+            "batch_timestamp": timestamp,
+            "batch_timestamp_contract_valid": batch_timestamp_contract_valid,
+            "article_date_semantics": ARTICLE_DATE_SEMANTICS,
+            "article_date_validation_status": {
+                "webngrams": web_info.get("article_date_validation_status", "not_evaluated"),
+                "gal": gal_info.get("article_date_validation_status", "not_evaluated"),
+            },
+            "webngrams_article_date_present_count": web_info.get("article_date_present_count", 0),
+            "webngrams_article_date_parseable_count": web_info.get("article_date_parseable_count", 0),
+            "webngrams_article_date_missing_count": web_info.get("article_date_missing_count", 0),
+            "webngrams_article_date_invalid_count": web_info.get("article_date_invalid_count", 0),
+            "gal_article_date_present_count": gal_info.get("article_date_present_count", 0),
+            "gal_article_date_parseable_count": gal_info.get("article_date_parseable_count", 0),
+            "gal_article_date_missing_count": gal_info.get("article_date_missing_count", 0),
+            "gal_article_date_invalid_count": gal_info.get("article_date_invalid_count", 0),
+            "article_date_min": min(article_date_mins) if article_date_mins else "",
+            "article_date_max": max(article_date_maxs) if article_date_maxs else "",
             "max_candidates": max_candidates,
             "webngrams_url": web_url,
             "gal_url": article_url,

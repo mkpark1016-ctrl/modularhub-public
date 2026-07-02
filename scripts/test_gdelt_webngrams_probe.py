@@ -67,7 +67,7 @@ def gzip_jsonl(lines: list[str]) -> bytes:
     return gzip.compress(("\n".join(lines) + "\n").encode("utf-8"))
 
 
-def live_jsonl_lines(path: Path, *, timestamp: str = "20211215000100") -> list[str]:
+def live_jsonl_lines(path: Path, *, article_date: str = "2021-12-14T13:18:01.000Z") -> list[str]:
     lines: list[str] = []
     for line in read_fixture_lines(path):
         try:
@@ -75,7 +75,7 @@ def live_jsonl_lines(path: Path, *, timestamp: str = "20211215000100") -> list[s
         except json.JSONDecodeError:
             continue
         if isinstance(payload, dict):
-            payload["date"] = timestamp
+            payload["date"] = article_date
             lines.append(json.dumps(payload, ensure_ascii=False, sort_keys=True))
     return lines
 
@@ -305,6 +305,13 @@ def main() -> int:
         require(report["network_request_count"] == 2, "successful fake request count mismatch")
         require(report["http_response_count"] == 2, "successful fake response count mismatch")
         require(report["transport_acceptance_passed"] is True, "successful fake transport mismatch")
+        require(report["batch_timestamp"] == "20211215000100", "successful fake batch timestamp mismatch")
+        require(report["batch_timestamp_contract_valid"] is True, "successful fake batch timestamp contract mismatch")
+        require(report["article_date_semantics"] == "article_publication_time_independent_of_batch_timestamp", "article date semantics mismatch")
+        require(report["webngrams_article_date_parseable_count"] > 0, "Web NGrams article dates should parse")
+        require(report["gal_article_date_parseable_count"] > 0, "GAL article dates should parse")
+        require(report["article_date_min"].startswith("2021-12-14"), "article date min should reflect row publication date")
+        require(report["webngrams_source_info"]["timestamp_rows_valid"] == "not_applicable", "timestamp row equality must be deprecated")
         require(report["transport_scheme"] == "http", "successful fake transport scheme mismatch")
         require(report["endpoint_contract_valid"] is True, "successful fake endpoint contract mismatch")
         require(report["redirect_count"] == 0 and report["redirect_followed"] is False, "successful fake redirect mismatch")
@@ -316,6 +323,11 @@ def main() -> int:
         require(len(calls) == 2, "successful fake should request two files")
         require(calls[0]["url"] == "http://data.gdeltproject.org/gdeltv3/webngrams/20211215000100.webngrams.json.gz", "wrong Web NGrams URL requested")
         require(calls[1]["url"] == "http://data.gdeltproject.org/gdeltv3/gal/20211215000100.gal.json.gz", "wrong GAL URL requested")
+        stored_candidates = json.loads((Path(tmp) / "candidates.json").read_text(encoding="utf-8"))
+        require(stored_candidates[0]["timestamp"] == "20211215000100", "candidate timestamp must be batch timestamp")
+        require(stored_candidates[0]["batch_timestamp"] == "20211215000100", "candidate batch timestamp alias mismatch")
+        require(stored_candidates[0]["published_at"].startswith("2021-12-14"), "candidate published_at must be article date")
+        require(stored_candidates[0]["article_published_at"].startswith("2021-12-14"), "candidate article_published_at alias mismatch")
 
     with tempfile.TemporaryDirectory() as tmp:
         report, _calls = run_live_with_fake([FakeResponse(200, b"\x1f\x8bnot-valid"), live_gal], Path(tmp))
@@ -330,9 +342,9 @@ def main() -> int:
         require(report["failed_source"] == "webngrams", "invalid JSONL source mismatch")
         require_failure_artifacts(Path(tmp), expected_failure="parser_or_archive_failure", expected_source="webngrams")
 
-    wrong_timestamp = json.dumps(
+    invalid_article_date_row = json.dumps(
         {
-            "date": "19990101000000",
+            "date": "not-a-date",
             "ngram": "modular",
             "pre": "new",
             "post": "construction project",
@@ -342,10 +354,31 @@ def main() -> int:
         }
     )
     with tempfile.TemporaryDirectory() as tmp:
-        report, _calls = run_live_with_fake([FakeResponse(200, gzip_jsonl([wrong_timestamp])), live_gal], Path(tmp))
-        require(report["status"] == "invalid_response", "timestamp mismatch status mismatch")
-        require(report["failed_source"] == "webngrams", "timestamp mismatch source mismatch")
+        report, _calls = run_live_with_fake([FakeResponse(200, gzip_jsonl([invalid_article_date_row])), live_gal], Path(tmp))
+        require(report["status"] == "invalid_response", "all-invalid article date status mismatch")
+        require(report["failure_reason"] == "no_valid_source_rows", "all-invalid article date reason mismatch")
+        require(report["failed_source"] == "webngrams", "all-invalid article date source mismatch")
         require_failure_artifacts(Path(tmp), expected_failure="invalid_response", expected_source="webngrams")
+
+    missing_article_date_row = json.dumps(
+        {
+            "date": "",
+            "ngram": "modular",
+            "pre": "new",
+            "post": "construction project",
+            "lang": "en",
+            "type": 1,
+            "url": "https://news.invalid/missing-date",
+        }
+    )
+    with tempfile.TemporaryDirectory() as tmp:
+        mixed_web = FakeResponse(200, gzip_jsonl(live_jsonl_lines(FIXTURE_WEBNGRAMS) + [invalid_article_date_row, missing_article_date_row]))
+        report, _calls = run_live_with_fake([mixed_web, live_gal], Path(tmp))
+        require(report["status"] == "success", "partially invalid article dates should not fail source")
+        require(report["transport_acceptance_passed"] is True, "partially invalid date transport mismatch")
+        require(report["webngrams_article_date_invalid_count"] == 1, "invalid article date count mismatch")
+        require(report["webngrams_article_date_missing_count"] == 1, "missing article date count mismatch")
+        require(report["article_date_validation_status"]["webngrams"] == "partially_invalid", "partial article date status mismatch")
 
     with tempfile.TemporaryDirectory() as tmp:
         original_limit = probe.MAX_DECOMPRESSED_BYTES
@@ -391,6 +424,19 @@ def main() -> int:
         require(report["failed_source"] == "webngrams", "source contract invalid source mismatch")
         require(report["network_request_count"] == 0, "source contract invalid must block before request")
         require(len(calls) == 0, "source contract invalid must not call requests.get")
+        require_failure_artifacts(Path(tmp), expected_failure="source_contract_invalid", expected_source="webngrams")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        original_template = probe.WEBNGRAMS_TEMPLATE
+        probe.WEBNGRAMS_TEMPLATE = "http://data.gdeltproject.org/gdeltv3/webngrams/19990101000000.webngrams.json.gz"
+        try:
+            report, calls = run_live_with_fake([live_web], Path(tmp))
+        finally:
+            probe.WEBNGRAMS_TEMPLATE = original_template
+        require(report["status"] == "source_contract_invalid", "URL timestamp mismatch status mismatch")
+        require(report["failed_source"] == "webngrams", "URL timestamp mismatch source mismatch")
+        require(report["network_request_count"] == 0, "URL timestamp mismatch must block before request")
+        require(len(calls) == 0, "URL timestamp mismatch must not call requests.get")
         require_failure_artifacts(Path(tmp), expected_failure="source_contract_invalid", expected_source="webngrams")
 
     script_text = (ROOT / "scripts" / "probe_gdelt_webngrams.py").read_text(encoding="utf-8")
