@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "sample_set_id": "gdelt-shadow-sample-001",
+  "description": "Multi-timestamp shadow evaluation",
+  "samples": [
+    {
+      "sample_id": "baseline-20211215000100",
+      "timestamp": "20211215000100",
+      "artifact_dir": "artifacts/gdelt_shadow_samples/baseline-20211215000100",
+      "expected_status": "success",
+      "enabled": true,
+      "notes": "Run #9 baseline"
+    }
+  ]
+}
