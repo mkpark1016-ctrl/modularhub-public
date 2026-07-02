@@ -116,6 +116,16 @@ def main() -> int:
         "GAL Article Dates Parseable:",
         "GAL Article Dates Invalid:",
         "Article Date Range:",
+        "Pipeline Shadow Ready:",
+        "Content Sample Usable:",
+        "Candidate Manual Review Required:",
+        "Artifact Audit Required:",
+        "Irrelevant input count:",
+        "Irrelevant unique count:",
+        "Country resolution eligible count:",
+        "Strong match count:",
+        "Weak match count:",
+        "Excluded context count:",
     ]:
         require(summary_field in text, f"summary field missing: {summary_field}")
     require("Retry count: `0`" in text, "summary must report retry count zero")

@@ -21,6 +21,9 @@ from scripts.review_gdelt_webngrams_candidates import (  # noqa: E402
 )
 
 
+RUN8_QUALITY_FIXTURE = ROOT / "tests" / "fixtures" / "gdelt_webngrams_run8_quality_sample.json"
+
+
 def require(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
@@ -122,9 +125,9 @@ def main() -> int:
     require(to_review_candidate(candidate("Modular school opens", "https://news.example.org/e"))["classification"] == "publish_candidate", "modular school should publish")
     require(to_review_candidate(candidate("Modular hotel accommodation reaches site", "https://news.example.org/f"))["classification"] == "publish_candidate", "modular hotel should publish")
 
-    score_49 = to_review_candidate(candidate("Modular site update", "https://score.example.org/49"))
+    score_49 = to_review_candidate(candidate("Modular project update", "https://score.example.org/49"))
     score_50 = to_review_candidate(candidate("Modular parts for construction", "https://score.example.org/50"))
-    score_79 = to_review_candidate(candidate("Modular site home factory office apartment dormitory council", "https://score.example.org/79"))
+    score_79 = to_review_candidate(candidate("Modular project home factory office apartment dormitory council", "https://score.example.org/79"))
     score_80 = to_review_candidate(candidate("Modular construction", "https://score.example.org/80"))
     require(score_49["relevance_score"] == 49 and score_49["classification"] == "irrelevant", "49 boundary mismatch")
     require(score_50["relevance_score"] == 50 and score_50["classification"] == "review_required", "50 boundary mismatch")
@@ -140,6 +143,18 @@ def main() -> int:
     ]:
         reviewed = to_review_candidate(candidate(title, f"https://noise.example.org/{abs(hash(title))}"))
         require(reviewed["classification"] == "irrelevant", f"noise should be irrelevant: {title}")
+
+    positive_cases = [
+        "Modular housing project adds residential apartments",
+        "Volumetric modular hotel factory starts construction",
+        "Prefabricated school building opens classrooms",
+        "Off-site construction factory builds hospital modules",
+        "Modular apartment development reaches construction stage",
+    ]
+    for index, title in enumerate(positive_cases, start=1):
+        reviewed = to_review_candidate(candidate(title, f"https://positive.example.org/{index}"))
+        require(reviewed["classification"] in {"publish_candidate", "review_required"}, f"positive fixture lost: {title}")
+        require(not reviewed["exclusion_reason_codes"], f"positive fixture was excluded: {title}")
 
     require(to_review_candidate(candidate("", "https://bad.example.org/no-title"))["classification"] == "malformed", "missing title should be malformed")
     require(to_review_candidate(candidate("Missing URL", ""))["classification"] == "malformed", "missing URL should be malformed")
@@ -189,6 +204,15 @@ def main() -> int:
             report["classified_candidate_count"]
             == report["publish_candidate_count"] + report["review_required_count"] + report["irrelevant_count"],
             "metric conservation E failed",
+        )
+        require(
+            report["total_input_count"]
+            == report["malformed_count"]
+            + report["duplicate_suppressed_count"]
+            + report["publish_candidate_count"]
+            + report["review_required_count"]
+            + report["irrelevant_unique_count"],
+            "deduped input bucket conservation failed",
         )
         require(report["publish_candidate_count"] >= 1, "fixture publish candidates missing")
         require(report["review_required_count"] >= 1, "fixture review required missing")
@@ -247,6 +271,63 @@ def main() -> int:
         publish_payload = json.loads((Path(tmp) / "publish_candidates.json").read_text(encoding="utf-8"))
         publish_text = json.dumps(publish_payload, ensure_ascii=False).lower()
         require("localhost" not in publish_text and "example.com" not in publish_text, "publish candidates contain forbidden local/example host")
+
+    run8_candidates = json.loads(RUN8_QUALITY_FIXTURE.read_text(encoding="utf-8"))
+    for raw in run8_candidates:
+        reviewed = to_review_candidate(raw)
+        if raw["id"] == "run8_vertical_lift_army":
+            require(reviewed["classification"] == "irrelevant", "Run #8 Army candidate must be irrelevant")
+            require("defense_modular_system" in reviewed["exclusion_reason_codes"], "Army exclusion reason missing")
+        if raw["id"] in {"run8_log4j_wfsu", "run8_log4j_tpr"}:
+            require(reviewed["classification"] == "irrelevant", "Run #8 Log4j candidate must be irrelevant")
+            require("software_component" in reviewed["exclusion_reason_codes"], "Log4j exclusion reason missing")
+        if raw["id"] == "run8_fashion_week_wiki":
+            require(reviewed["classification"] == "irrelevant", "Run #8 off-site venue candidate must be irrelevant")
+            require("offsite_venue_not_construction" in reviewed["exclusion_reason_codes"], "off-site venue exclusion reason missing")
+        if raw["id"] == "run8_modular_bridge_forces":
+            require(reviewed["classification"] == "irrelevant", "Run #8 modular bridge candidate must be irrelevant")
+            require("non_building_military_infrastructure" in reviewed["exclusion_reason_codes"], "modular bridge exclusion reason missing")
+
+    live_probe_report = {
+        "timestamp": "20211215000100",
+        "status": "success",
+        "transport_acceptance_passed": True,
+        "10.10-B1_live_accepted": True,
+        "network_request_count": 2,
+        "http_request_count": 2,
+        "doc_api_request_count": 0,
+        "public_json_unchanged": True,
+        "db_unchanged": True,
+        "env_unchanged": True,
+        "config_fingerprint": "run8-quality-fixture",
+        "query_fingerprint": "run8-quality-fixture",
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        report = review_candidates(run8_candidates, live_probe_report, source="run8-quality", output_dir=Path(tmp), source_mode="live")
+        require(report["total_input_count"] == 5, "Run #8 total input mismatch")
+        require(report["valid_input_count"] == 5, "Run #8 valid count mismatch")
+        require(report["duplicate_group_count"] == 1, "Run #8 duplicate group mismatch")
+        require(report["duplicate_member_count"] == 2, "Run #8 duplicate member mismatch")
+        require(report["duplicate_suppressed_count"] == 1, "Run #8 duplicate suppressed mismatch")
+        require(report["unique_post_dedup_count"] == 4, "Run #8 unique post-dedup mismatch")
+        require(report["publish_candidate_count"] == 0, "Run #8 publish candidate mismatch")
+        require(report["review_required_count"] == 0, "Run #8 review required mismatch")
+        require(report["irrelevant_input_count"] == 5, "Run #8 irrelevant input mismatch")
+        require(report["irrelevant_unique_count"] == 4, "Run #8 irrelevant unique mismatch")
+        require(report["country_resolution_eligible_count"] == 0, "Run #8 country eligibility mismatch")
+        require(report["country_resolution_success_ratio"] == "not_applicable", "Run #8 country ratio must be not_applicable")
+        require(report["pipeline_shadow_ready"] is True, "Run #8 pipeline shadow ready mismatch")
+        require(report["shadow_ready"] is True, "Run #8 backward shadow ready mismatch")
+        require(report["content_sample_usable"] is False, "Run #8 content usability mismatch")
+        require(report["candidate_manual_review_required"] is False, "Run #8 candidate manual review mismatch")
+        require(report["artifact_audit_required"] is True, "Run #8 artifact audit should remain required")
+        require(report["production_publish_allowed"] is False, "Run #8 production publish guard mismatch")
+        groups = json.loads((Path(tmp) / "duplicate_groups.json").read_text(encoding="utf-8"))["items"]
+        require(len(groups) == 1, "Run #8 duplicate artifact count mismatch")
+        require(groups[0]["duplicate_reason"] == "cross_domain_syndicated_duplicate", "Run #8 duplicate reason mismatch")
+        require(set(groups[0]["member_item_ids"]) == {"run8_log4j_wfsu", "run8_log4j_tpr"}, "Run #8 duplicate members mismatch")
+        country_items = json.loads((Path(tmp) / "country_resolution.json").read_text(encoding="utf-8"))["items"]
+        require(all(item["country_resolution_status"] == "not_applicable" for item in country_items), "Run #8 irrelevant country status mismatch")
 
     with tempfile.TemporaryDirectory() as tmp_a, tempfile.TemporaryDirectory() as tmp_b:
         report_a = run_fixture_cli(Path(tmp_a))

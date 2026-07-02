@@ -35,12 +35,19 @@ STRONG_POSITIVE_KEYWORDS = [
     "modular building",
     "modular housing",
     "modular home",
+    "modular apartment",
     "prefabricated building",
+    "prefabricated housing",
+    "prefab building",
     "prefab construction",
     "prefabricated construction",
     "offsite construction",
     "off-site construction",
+    "offsite manufacturing",
+    "off-site manufacturing",
+    "factory-built housing",
     "volumetric modular",
+    "industrialized construction",
     "modular school",
     "modular classroom",
     "modular hospital",
@@ -89,11 +96,12 @@ STRONG_EXCLUSION_KEYWORDS = [
 STRONG_POSITIVE_SCORE = 70
 SUPPORTING_POSITIVE_SCORE = 18
 WEAK_POSITIVE_SCORE = 40
+WEAK_KEYWORDS = ["modular", "prefab", "prefabricated", "off site", "offsite"]
 CONSTRUCTION_CONTEXT_WEIGHTS = {
     "construction": 10,
-    "site": 9,
     "building": 10,
     "housing": 10,
+    "residential": 8,
     "home": 5,
     "school": 10,
     "classroom": 5,
@@ -102,11 +110,60 @@ CONSTRUCTION_CONTEXT_WEIGHTS = {
     "dormitory": 5,
     "apartment": 5,
     "factory": 5,
+    "manufacturing": 10,
+    "module": 5,
+    "volumetric": 10,
+    "contractor": 5,
     "office": 5,
     "accommodation": 5,
     "developer": 5,
+    "architecture": 5,
+    "project": 9,
+    "facility": 5,
     "council": 5,
 }
+NON_CONSTRUCTION_EXCLUSION_RULES = [
+    {
+        "reason": "software_component",
+        "indicators": [
+            "software",
+            "log4j",
+            "digital flaw",
+            "vulnerability",
+            "cyber",
+            "computer security",
+            "programming",
+        ],
+        "modular_terms": ["modular component", "software module", "module"],
+    },
+    {
+        "reason": "defense_modular_system",
+        "phrases": [
+            "modular open systems approach",
+            "modular open system approach",
+            "weapons system",
+            "military aviation system",
+        ],
+        "indicators": ["army", "military", "defense", "future vertical lift", "adversaries", "forces"],
+        "modular_terms": ["modular", "open systems", "systems approach"],
+    },
+    {
+        "reason": "offsite_venue_not_construction",
+        "indicators": ["venue", "venues", "fashion", "event"],
+        "modular_terms": ["off site", "offsite"],
+    },
+    {
+        "reason": "non_building_military_infrastructure",
+        "phrases": ["modular bridge", "assault bridge", "military bridge"],
+        "indicators": ["military", "army", "forces", "adversaries"],
+        "modular_terms": ["bridge", "modular"],
+    },
+    {
+        "reason": "non_building_use_of_modular",
+        "indicators": ["electronics", "electronic", "computer architecture", "smartphone", "battery", "camera", "memory"],
+        "modular_terms": ["modular", "module"],
+    },
+]
 TRACKING_PARAMS = {
     "utm_source",
     "utm_medium",
@@ -385,6 +442,12 @@ def parse_date(value: Any) -> datetime | None:
     text = clean_text(value)
     if not text:
         return None
+    iso_text = text.replace("Z", "+00:00") if text.endswith("Z") else text
+    try:
+        parsed = datetime.fromisoformat(iso_text)
+        return parsed.replace(tzinfo=None)
+    except ValueError:
+        pass
     for fmt in ("%Y%m%d%H%M%S", "%Y%m%d%H%M", "%Y%m%d", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%d", "%Y-%m-%d %H:%M:%S"):
         try:
             return datetime.strptime(text, fmt)
@@ -405,6 +468,21 @@ def article_identifier(candidate: dict[str, Any], item_id: str) -> str:
     return clean_text(candidate.get("article_identifier") or candidate.get("gal_article_id") or candidate.get("id") or item_id)
 
 
+def non_construction_exclusions(normalized_context: str) -> tuple[list[str], list[str]]:
+    reasons: list[str] = []
+    terms: list[str] = []
+    for rule in NON_CONSTRUCTION_EXCLUSION_RULES:
+        phrase_hit = any(contains_phrase(normalized_context, phrase) for phrase in rule.get("phrases", []))
+        indicator_hits = [term for term in rule.get("indicators", []) if contains_phrase(normalized_context, term)]
+        modular_hit = any(contains_phrase(normalized_context, term) for term in rule.get("modular_terms", []))
+        if phrase_hit or (indicator_hits and modular_hit):
+            reason = clean_text(rule.get("reason"))
+            if reason and reason not in reasons:
+                reasons.append(reason)
+            terms.extend(indicator_hits or [clean_text(term) for term in rule.get("phrases", []) if contains_phrase(normalized_context, term)])
+    return reasons, sorted(set(term for term in terms if term))
+
+
 def evaluate_relevance(candidate: dict[str, Any], normalized_title: str) -> dict[str, Any]:
     url_text = " ".join(
         [
@@ -420,13 +498,18 @@ def evaluate_relevance(candidate: dict[str, Any], normalized_title: str) -> dict
     normalized_context = normalize_text(f"{context} {url_text}")
     positives: list[str] = []
     exclusions: list[str] = []
+    construction_terms: list[str] = []
+    non_construction_terms: list[str] = []
     score = 0
     keyword_positive_found = False
+    strong_positive_found = False
+    weak_positive_found = False
     for term in STRONG_POSITIVE_KEYWORDS:
         if contains_phrase(normalized_context, term):
             positives.append(f"strong_positive:{term}")
             score += STRONG_POSITIVE_SCORE
             keyword_positive_found = True
+            strong_positive_found = True
     for term in SUPPORTING_POSITIVE_KEYWORDS:
         if contains_phrase(normalized_context, term):
             positives.append(f"supporting_positive:{term}")
@@ -434,8 +517,11 @@ def evaluate_relevance(candidate: dict[str, Any], normalized_title: str) -> dict
             keyword_positive_found = True
     for term, weight in CONSTRUCTION_CONTEXT_WEIGHTS.items():
         if contains_phrase(normalized_context, term):
+            construction_terms.append(term)
             positives.append(f"construction_context:{term}")
             score += weight
+    exclusion_reasons, non_construction_terms = non_construction_exclusions(normalized_context)
+    exclusions.extend(exclusion_reasons)
     for term in STRONG_EXCLUSION_KEYWORDS:
         if contains_phrase(normalized_context, term):
             exclusions.append(f"strong_exclusion:{term}")
@@ -443,13 +529,16 @@ def evaluate_relevance(candidate: dict[str, Any], normalized_title: str) -> dict
     if candidate.get("suspected_noise") and candidate.get("noise_reason"):
         exclusions.append(f"probe_noise:{candidate.get('noise_reason')}")
         score -= 20
-    if not keyword_positive_found and contains_phrase(normalized_context, "modular"):
-        positives.append("weak_positive:modular")
-        score += WEAK_POSITIVE_SCORE
-    if not keyword_positive_found and contains_phrase(normalized_context, "prefab"):
-        positives.append("weak_positive:prefab")
-        score += WEAK_POSITIVE_SCORE
+    weak_hits = [term for term in WEAK_KEYWORDS if contains_phrase(normalized_context, term)]
+    if not keyword_positive_found and weak_hits:
+        if construction_terms:
+            weak_positive_found = True
+            positives.extend(f"weak_positive:{term}" for term in weak_hits)
+            score += WEAK_POSITIVE_SCORE
+        else:
+            positives.extend(f"weak_keyword_without_construction_context:{term}" for term in weak_hits)
     score = max(0, min(100, score))
+    matched_strength = "excluded" if exclusions else "strong" if strong_positive_found else "weak" if weak_positive_found else "none"
     if (
         not clean_text(candidate.get("title"))
         or not clean_text(candidate.get("original_url") or candidate.get("url"))
@@ -461,6 +550,9 @@ def evaluate_relevance(candidate: dict[str, Any], normalized_title: str) -> dict
             "positive_reason_codes": positives,
             "exclusion_reason_codes": exclusions or ["missing_required_title_or_url_or_invalid_url"],
             "classification_reason": "missing_required_title_or_url_or_invalid_url",
+            "matched_strength": "excluded",
+            "construction_context_terms": construction_terms,
+            "non_construction_context_terms": non_construction_terms,
         }
     if score >= 80 and not exclusions:
         classification = "publish_candidate"
@@ -478,6 +570,9 @@ def evaluate_relevance(candidate: dict[str, Any], normalized_title: str) -> dict
         "positive_reason_codes": positives,
         "exclusion_reason_codes": exclusions,
         "classification_reason": f"score_{score}",
+        "matched_strength": matched_strength,
+        "construction_context_terms": sorted(set(construction_terms)),
+        "non_construction_context_terms": sorted(set(non_construction_terms)),
     }
 
 
@@ -642,6 +737,19 @@ def to_review_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
     language = resolve_language(candidate, title)
     country = resolve_country(candidate, url_info["domain"], language["language"])
     relevance = evaluate_relevance({**candidate, **url_info, "title": title}, normalized_title)
+    country_resolution_eligible = relevance["classification"] in {"publish_candidate", "review_required"}
+    if not country_resolution_eligible:
+        country = {
+            "country_code": None,
+            "country_name": None,
+            "country_confidence": 0.0,
+            "country_evidence": [],
+            "conflicting_evidence": [],
+            "country_resolution_status": "not_applicable",
+            "resolution_status": "not_applicable",
+            "confidence": 0.0,
+            "evidence": [],
+        }
     gal_joined = bool(candidate.get("gal_joined"))
     if gal_joined:
         gal_join_status = "joined"
@@ -659,6 +767,7 @@ def to_review_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
         "item_id": item_id,
         "title": title,
         "normalized_title": normalized_title,
+        "description": clean_text(candidate.get("description") or candidate.get("desc")),
         "original_url": url_info["original_url"],
         "canonical_url": canonical_info["normalized_url"] or url_info["canonical_url"],
         "normalized_url": url_info["normalized_url"],
@@ -678,6 +787,7 @@ def to_review_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
         "article_identifier": article_id,
         "gal_join_status": gal_join_status,
         "gal_join_failure_reason": gal_join_failure_reason,
+        "country_resolution_eligible": country_resolution_eligible,
         "review_status": "pending_manual_review",
         "raw_candidate": candidate,
         **relevance,
@@ -739,6 +849,22 @@ def duplicate_group_id(member_ids: list[str]) -> str:
     return f"dup-{hashlib.sha256(joined.encode('utf-8')).hexdigest()[:12]}"
 
 
+def description_prefix(candidate: dict[str, Any], length: int = 140) -> str:
+    description = normalize_text(candidate.get("description") or candidate.get("raw_candidate", {}).get("description") or candidate.get("raw_candidate", {}).get("desc"))
+    return description[:length].strip()
+
+
+def syndicated_fingerprint(candidate: dict[str, Any]) -> str:
+    title = clean_text(candidate.get("normalized_title"))
+    parsed = parse_date(candidate.get("published_at"))
+    description = description_prefix(candidate)
+    language = clean_text(candidate.get("language") or "unknown").lower()
+    if not title or len(title) < 12 or not parsed or len(description) < 40:
+        return ""
+    date_bucket = parsed.strftime("%Y%m%d")
+    return f"{title}|{date_bucket}|{description}|{language}"
+
+
 def build_duplicate_groups(candidates: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, str]]:
     if not candidates:
         return [], {}
@@ -762,6 +888,7 @@ def build_duplicate_groups(candidates: list[dict[str, Any]]) -> tuple[list[dict[
     union_for("canonical_url", lambda item: item.get("canonical_url"), "same_canonical_url")
     union_for("normalized_url", lambda item: item.get("normalized_url"), "same_normalized_url")
     union_for("domain_title", lambda item: f"{item.get('domain')}|{item.get('normalized_title')}", "same_domain_normalized_title")
+    union_for("syndicated_title_date_description_language", syndicated_fingerprint, "cross_domain_syndicated_duplicate")
     for index, left in enumerate(candidates):
         for right in candidates[index + 1 :]:
             if left.get("domain") != right.get("domain"):
@@ -907,6 +1034,12 @@ def metric_conservation(report: dict[str, Any]) -> dict[str, bool]:
         "classified_count_conserved": report["classified_candidate_count"] == report["unique_valid_candidate_count"],
         "classification_bucket_count_conserved": report["classified_candidate_count"]
         == report["publish_candidate_count"] + report["review_required_count"] + report["irrelevant_count"],
+        "deduped_input_bucket_count_conserved": report["total_input_count"]
+        == report["malformed_count"]
+        + report["duplicate_suppressed_count"]
+        + report["publish_candidate_count"]
+        + report["review_required_count"]
+        + report["irrelevant_unique_count"],
         "country_status_count_conserved": report["country_confirmed_count"]
         + report["country_inferred_count"]
         + report["country_unresolved_count"]
@@ -953,18 +1086,20 @@ def review_candidates(
     gal_join_success_count = sum(1 for item in gal_join_eligible if item.get("gal_join_status") == "joined")
     after = integrity_snapshot()
     integrity = integrity_unchanged(before, after)
+    country_eligible_candidates = [item for item in unique_valid_candidates if item.get("country_resolution_eligible")]
     all_country_status_counts = Counter(item["country_resolution_status"] for item in reviewed)
     valid_country_status_counts = Counter(item["country_resolution_status"] for item in unique_valid_candidates)
-    country_counts = Counter(item.get("country_code") or "UNRESOLVED" for item in unique_valid_candidates)
+    eligible_country_status_counts = Counter(item["country_resolution_status"] for item in country_eligible_candidates)
+    country_counts = Counter(item.get("country_code") or "UNRESOLVED" for item in country_eligible_candidates)
     language_counts = Counter(item.get("language") or "unknown" for item in unique_valid_candidates)
     duplicate_member_count = len(duplicate_member_ids)
     duplicate_suppressed_count = sum(len(group["member_item_ids"]) - 1 for group in duplicate_groups)
     classified_candidate_count = len(unique_valid_candidates)
-    country_resolution_eligible_count = len(unique_valid_candidates)
-    country_confirmed_count = valid_country_status_counts.get("confirmed", 0)
-    country_inferred_count = valid_country_status_counts.get("inferred", 0)
-    country_unresolved_count = valid_country_status_counts.get("unresolved", 0)
-    country_conflicting_count = valid_country_status_counts.get("conflicting", 0)
+    country_resolution_eligible_count = len(country_eligible_candidates)
+    country_confirmed_count = eligible_country_status_counts.get("confirmed", 0)
+    country_inferred_count = eligible_country_status_counts.get("inferred", 0)
+    country_unresolved_count = eligible_country_status_counts.get("unresolved", 0)
+    country_conflicting_count = eligible_country_status_counts.get("conflicting", 0)
     country_resolution_success_count = country_confirmed_count + country_inferred_count
     input_mode = "fixture" if source == "fixture" else "artifact"
     resolved_source_mode = source_mode or ("fixture" if source == "fixture" else "artifact")
@@ -1014,11 +1149,15 @@ def review_candidates(
         "duplicate_group_count": len(duplicate_groups),
         "duplicate_suppressed_count": duplicate_suppressed_count,
         "unique_all_input_count": len(raw_candidates) - duplicate_suppressed_count,
+        "unique_pre_dedup_count": len(valid_pre_dedup),
+        "unique_post_dedup_count": len(unique_valid_candidates),
         "unique_valid_candidate_count": len(unique_valid_candidates),
         "classified_candidate_count": classified_candidate_count,
         "publish_candidate_count": len(buckets["publish_candidate"]),
         "review_required_count": len(buckets["review_required"]),
         "irrelevant_count": len(buckets["irrelevant"]),
+        "irrelevant_input_count": sum(1 for item in valid_pre_dedup if item["classification"] == "irrelevant"),
+        "irrelevant_unique_count": len(buckets["irrelevant"]),
         "malformed_count": len(malformed_candidates),
         "input_count": len(raw_candidates),
         "valid_count": len(valid_pre_dedup),
@@ -1041,12 +1180,16 @@ def review_candidates(
         "country_resolution_success_count": country_resolution_success_count,
         "country_resolution_success_ratio": round(country_resolution_success_count / country_resolution_eligible_count, 4)
         if country_resolution_eligible_count
-        else None,
+        else "not_applicable",
         "all_input_country_status_counts": dict(sorted(all_country_status_counts.items())),
         "valid_candidate_country_status_counts": dict(sorted(valid_country_status_counts.items())),
+        "eligible_candidate_country_status_counts": dict(sorted(eligible_country_status_counts.items())),
         "suspected_noise_count": sum(1 for item in reviewed if item.get("raw_candidate", {}).get("suspected_noise")),
         "positive_keyword_count": sum(1 for item in reviewed if item.get("positive_reason_codes")),
         "exclusion_keyword_count": sum(1 for item in reviewed if item.get("exclusion_reason_codes")),
+        "strong_match_count": sum(1 for item in unique_valid_candidates if item.get("matched_strength") == "strong"),
+        "weak_match_count": sum(1 for item in unique_valid_candidates if item.get("matched_strength") == "weak"),
+        "excluded_context_count": sum(1 for item in unique_valid_candidates if item.get("matched_strength") == "excluded"),
         "live_acceptance_status": live,
         "candidate_schema_valid": True,
         "external_http_request_count": 0,
@@ -1056,14 +1199,10 @@ def review_candidates(
     report_payload["metric_conservation"] = conservation
     report_payload["metric_conservation_passed"] = all(conservation.values())
     report_payload["publish_candidates_present"] = report_payload["publish_candidate_count"] > 0
-    report_payload["manual_review_required"] = any(
-        [
-            report_payload["review_required_count"] > 0,
-            report_payload["malformed_count"] > 0,
-            report_payload["country_unresolved_count"] > 0,
-            report_payload["country_conflicting_count"] > 0,
-            not report_payload["transport_acceptance_passed"] and resolved_source_mode == "live",
-        ]
+    report_payload["candidate_manual_review_required"] = report_payload["review_required_count"] > 0
+    report_payload["artifact_audit_required"] = True
+    report_payload["manual_review_required"] = bool(
+        report_payload["candidate_manual_review_required"] or report_payload["artifact_audit_required"]
     )
     report_payload["quality_pipeline_valid"] = bool(
         report_payload["candidate_schema_valid"]
@@ -1073,7 +1212,9 @@ def review_candidates(
         and report_payload["env_unchanged"]
         and report_payload["checkpoint_unchanged"]
     )
-    report_payload["shadow_ready"] = bool(report_payload["transport_acceptance_passed"] and report_payload["quality_pipeline_valid"])
+    report_payload["pipeline_shadow_ready"] = bool(report_payload["transport_acceptance_passed"] and report_payload["quality_pipeline_valid"])
+    report_payload["content_sample_usable"] = bool(report_payload["publish_candidate_count"] + report_payload["review_required_count"] > 0)
+    report_payload["shadow_ready"] = report_payload["pipeline_shadow_ready"]
     report_payload["production_publish_allowed"] = False
     report_payload["normalized_result_hash"] = stable_hash(normalize_for_result_hash(report_payload))
     write_review_artifacts(output_dir, report_payload, buckets, reviewed, duplicate_groups)
@@ -1110,6 +1251,11 @@ def write_review_artifacts(
         "transport_acceptance_passed": report["transport_acceptance_passed"],
         "quality_pipeline_valid": report["quality_pipeline_valid"],
         "manual_review_required": report["manual_review_required"],
+        "pipeline_shadow_ready": report["pipeline_shadow_ready"],
+        "content_sample_usable": report["content_sample_usable"],
+        "candidate_manual_review_required": report["candidate_manual_review_required"],
+        "artifact_audit_required": report["artifact_audit_required"],
+        "production_publish_allowed": report["production_publish_allowed"],
         "public_json_unchanged": report["public_json_unchanged"],
         "db_unchanged": report["db_unchanged"],
         "env_unchanged": report["env_unchanged"],
@@ -1121,6 +1267,7 @@ def write_review_artifacts(
             "country_name": item["country_name"],
             "country_confidence": item["country_confidence"],
             "country_resolution_status": item["country_resolution_status"],
+            "country_resolution_eligible": item["country_resolution_eligible"],
             "country_evidence": item["country_evidence"],
             "conflicting_evidence": item["conflicting_evidence"],
         }
@@ -1231,14 +1378,23 @@ def write_review_artifacts(
         f"- malformed_count: `{report['malformed_count']}`",
         f"- duplicate_group_count: `{report['duplicate_group_count']}`",
         f"- duplicate_suppressed_count: `{report['duplicate_suppressed_count']}`",
+        f"- irrelevant_input_count: `{report['irrelevant_input_count']}`",
+        f"- irrelevant_unique_count: `{report['irrelevant_unique_count']}`",
         f"- gal_join_attempt_count: `{report['gal_join_attempt_count']}`",
         f"- gal_join_success_ratio: `{report['gal_join_success_ratio']}`",
         f"- country_resolution_eligible_count: `{report['country_resolution_eligible_count']}`",
         f"- country_resolution_success_ratio: `{report['country_resolution_success_ratio']}`",
+        f"- strong_match_count: `{report['strong_match_count']}`",
+        f"- weak_match_count: `{report['weak_match_count']}`",
+        f"- excluded_context_count: `{report['excluded_context_count']}`",
         f"- live_acceptance_status: `{report['live_acceptance_status']['live_acceptance_status']}`",
         f"- transport_acceptance_passed: `{report['transport_acceptance_passed']}`",
         f"- metric_conservation_passed: `{report['metric_conservation_passed']}`",
         f"- quality_pipeline_valid: `{report['quality_pipeline_valid']}`",
+        f"- pipeline_shadow_ready: `{report['pipeline_shadow_ready']}`",
+        f"- content_sample_usable: `{report['content_sample_usable']}`",
+        f"- candidate_manual_review_required: `{report['candidate_manual_review_required']}`",
+        f"- artifact_audit_required: `{report['artifact_audit_required']}`",
         f"- shadow_ready: `{report['shadow_ready']}`",
         f"- production_publish_allowed: `{report['production_publish_allowed']}`",
         f"- external_http_request_count: `{report['external_http_request_count']}`",
