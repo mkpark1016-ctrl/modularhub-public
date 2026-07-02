@@ -4,6 +4,7 @@ from src.collectors.d2b_plan import D2BPlanCollector
 from src.collectors.d2b_procurement_plan import D2BProcurementPlanCollector
 from src.collectors.g2b import G2BCollector
 from src.collectors.g2b_procurement_plan import G2BProcurementPlanCollector
+from src.collectors.gdelt_doc_news import GdeltDocNewsCollector
 from src.collectors.lh import LHCollector
 from src.collectors.mock_collector import MockCollector
 from src.collectors.naver_news import NaverNewsCollector
@@ -15,6 +16,7 @@ __all__ = [
     "D2BProcurementPlanCollector",
     "G2BCollector",
     "G2BProcurementPlanCollector",
+    "GdeltDocNewsCollector",
     "LHCollector",
     "MockCollector",
     "NaverNewsCollector",

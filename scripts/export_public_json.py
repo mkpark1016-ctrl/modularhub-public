@@ -43,6 +43,19 @@ PUBLIC_AGENCY_BOARD_URLS = {
     "SH": "https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do",
 }
 MODULAR_TERMS = ("모듈러", "osc", "공업화주택", "프리패브", "프리팹")
+ENGLISH_MODULAR_TERMS = (
+    "modular construction",
+    "modular building",
+    "modular housing",
+    "volumetric modular",
+    "prefabricated building",
+    "prefab building",
+    "offsite construction",
+    "off-site construction",
+    "factory-built housing",
+    "industrialized construction",
+    "modern methods of construction",
+)
 SENSITIVE_KEY_PARTS = (
     "servicekey",
     "service_key",
@@ -82,7 +95,7 @@ def scalar(value: Any) -> Any:
 def contains_modular(*values: Any) -> bool:
     text = " ".join(clean_text(value) for value in values).lower()
     compact = re.sub(r"[\s·ㆍ\-_()\[\]]+", "", text)
-    return any(term.replace(" ", "") in compact for term in MODULAR_TERMS)
+    return any(term.replace(" ", "") in compact for term in MODULAR_TERMS + ENGLISH_MODULAR_TERMS)
 
 
 def sanitize_url(value: str) -> str:

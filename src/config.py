@@ -13,6 +13,39 @@ DATA_DIR = BASE_DIR / "data"
 DB_PATH = DATA_DIR / "modular_info.db"
 SAMPLE_CSV_PATH = DATA_DIR / "sample_items.csv"
 
+
+def _env_bool(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def _env_int(name: str, default: int, *, min_value: int | None = None, max_value: int | None = None) -> int:
+    raw = os.getenv(name, str(default))
+    try:
+        value = int(str(raw).strip())
+    except (TypeError, ValueError):
+        value = default
+    if min_value is not None:
+        value = max(min_value, value)
+    if max_value is not None:
+        value = min(max_value, value)
+    return value
+
+
+def _env_float(name: str, default: float, *, min_value: float | None = None, max_value: float | None = None) -> float:
+    raw = os.getenv(name, str(default))
+    try:
+        value = float(str(raw).strip())
+    except (TypeError, ValueError):
+        value = default
+    if min_value is not None:
+        value = max(min_value, value)
+    if max_value is not None:
+        value = min(max_value, value)
+    return value
+
 DATA_GO_KR_SERVICE_KEY = os.getenv("DATA_GO_KR_SERVICE_KEY", "")
 NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID", "")
 NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", "")
@@ -23,6 +56,21 @@ NAVER_NEWS_ENDPOINT = os.getenv(
     "NAVER_NEWS_ENDPOINT",
     "https://openapi.naver.com/v1/search/news.json",
 )
+GDELT_DOC_NEWS_ENABLED = _env_bool("GDELT_DOC_NEWS_ENABLED", True)
+GDELT_DOC_NEWS_ENDPOINT = os.getenv(
+    "GDELT_DOC_NEWS_ENDPOINT",
+    "https://api.gdeltproject.org/api/v2/doc/doc",
+)
+GDELT_DOC_NEWS_TIMESPAN = os.getenv("GDELT_DOC_NEWS_TIMESPAN", "7d")
+GDELT_DOC_NEWS_MAX_RECORDS = _env_int("GDELT_DOC_NEWS_MAX_RECORDS", 250, min_value=1, max_value=250)
+GDELT_DOC_NEWS_TIMEOUT_SECONDS = _env_float("GDELT_DOC_NEWS_TIMEOUT_SECONDS", 30.0, min_value=1.0)
+GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE = _env_float(
+    "GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE",
+    70.0,
+    min_value=0.0,
+    max_value=100.0,
+)
+GDELT_DOC_NEWS_LANGUAGE = os.getenv("GDELT_DOC_NEWS_LANGUAGE", "English")
 KIPRIS_API_KEY = os.getenv("KIPRIS_API_KEY", "")
 NTIS_API_KEY = os.getenv("NTIS_API_KEY", "")
 DASHBOARD_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")

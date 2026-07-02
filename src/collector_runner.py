@@ -55,6 +55,7 @@ def run_collector(collector: BaseCollector) -> CollectorRunResult:
             inserted_count=inserted_count,
             updated_count=updated_count,
             skipped_count=skipped_count,
+            db_path=DB_PATH,
         )
         return CollectorRunResult(
             collector_name=collector_name,
@@ -77,6 +78,7 @@ def run_collector(collector: BaseCollector) -> CollectorRunResult:
             updated_count=updated_count,
             skipped_count=skipped_count,
             error_message=error_message,
+            db_path=DB_PATH,
         )
         return CollectorRunResult(
             collector_name=collector_name,

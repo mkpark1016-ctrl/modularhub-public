@@ -68,7 +68,13 @@ jobs:
             "IH_CONTEST_REQUEST_INTERVAL_SECONDS=1.5" \
             "IH_CONTEST_TIMEOUT_SECONDS=20" \
             "NAVER_NEWS_LOOKBACK_DAYS=14" \
-            "NAVER_NEWS_DISPLAY=50" > .env
+            "NAVER_NEWS_DISPLAY=50" \
+            "GDELT_DOC_NEWS_ENABLED=true" \
+            "GDELT_DOC_NEWS_TIMESPAN=7d" \
+            "GDELT_DOC_NEWS_MAX_RECORDS=250" \
+            "GDELT_DOC_NEWS_TIMEOUT_SECONDS=30" \
+            "GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE=70" \
+            "GDELT_DOC_NEWS_LANGUAGE=English" > .env
 
       - name: Back up currently published JSON
         run: |

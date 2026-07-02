@@ -1825,3 +1825,33 @@ Live artifact review:
 The review step keeps original titles and URLs, normalizes URLs for duplicate detection, scores modular construction relevance, classifies candidates as `publish_candidate`, `review_required`, `irrelevant`, or `malformed`, and writes manual review files under `artifacts/global_news_webngrams_review/`. Country resolution is evidence-based: missing evidence remains `unresolved`, conflicting evidence remains `conflicting`, and a ccTLD alone is not enough to confirm a country. `shadow_ready=true` only means the read-only transport and quality pipelines completed; overseas news scheduling and public `news.json` publication require a later explicit approval step.
 
 Review metrics are split by denominator. `total_input_count` is every input candidate, while `valid_input_count` excludes malformed rows and `malformed_input_count` records title or URL failures. `unique_valid_candidate_count` is after duplicate suppression; `duplicate_member_count` counts all members in duplicate groups, while `duplicate_suppressed_count` counts only non-representative candidates. GAL join success uses unique valid candidates with an article identifier as the denominator. Country resolution success uses unique valid candidates and counts only `confirmed` plus `inferred`. Fixture results are not live approval results: if `live_acceptance_status` is not `accepted` or `10.10-B1_live_accepted=false`, overseas candidates must remain out of public `news.json`. The next approval step is to review a successful live artifact with the same command and inspect `manual_review.csv`.
+
+## GDELT DOC overseas news collector
+
+`GdeltDocNewsCollector` is the operating collector for overseas modular building news. It uses the GDELT DOC 2.0 Article List API once per collector run, filters article titles for high-precision modular construction relevance, and writes matching items through the existing collector runner, SQLite upsert, and public JSON export path.
+
+Environment variables:
+
+- `GDELT_DOC_NEWS_ENABLED`: default `true`.
+- `GDELT_DOC_NEWS_ENDPOINT`: default `https://api.gdeltproject.org/api/v2/doc/doc`.
+- `GDELT_DOC_NEWS_TIMESPAN`: default `7d`.
+- `GDELT_DOC_NEWS_MAX_RECORDS`: default `250`, clamped to `1..250`.
+- `GDELT_DOC_NEWS_TIMEOUT_SECONDS`: default `30`.
+- `GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE`: default `70`.
+- `GDELT_DOC_NEWS_LANGUAGE`: default `English`.
+
+Dry run:
+
+```bat
+python scripts\collect_gdelt_doc_news.py --dry-run --timespan 7d --max-records 20 --show-limit 10
+```
+
+Apply:
+
+```bat
+python scripts\collect_gdelt_doc_news.py --apply --timespan 7d --max-records 250
+```
+
+The scheduled `Update public data` workflow runs daily at 22:00 UTC, which is 07:00 KST the next day. It enables the GDELT DOC collector without adding a new secret. If GDELT collection fails, the existing collector runner records a failed collect log and the workflow continues with the existing public data guard; prior DB rows and public JSON are not treated as deleted. The Web NGrams live verification workflow remains an optional diagnostic and shadow-quality path, not the operating news collector.
+
+HTTP 429 from the GDELT DOC API is treated as a provider rate-limit failure, not as a successful collection. The collector reports `gdelt_doc_rate_limited`, preserves `Retry-After` when the provider sends it, performs no retry or fallback, and returns no candidates for that run. A local dry run that receives 429 should not be repeated immediately. If offline tests and the non-destructive failure contract pass, the release is not blocked solely by the local 429; the final live operating check should be performed once through GitHub Actions: `Update public data` -> `Run workflow`. On failure, existing DB rows and public JSON remain protected by the normal export and cumulative-data guard.

@@ -13,6 +13,7 @@ from src.collectors import (
     D2BProcurementPlanCollector,
     G2BCollector,
     G2BProcurementPlanCollector,
+    GdeltDocNewsCollector,
     LHCollector,
     MockCollector,
     NaverNewsCollector,
@@ -20,6 +21,7 @@ from src.collectors import (
 from src.config import (
     DATA_GO_KR_SERVICE_KEY,
     D2B_LEGACY_API_ENABLED,
+    GDELT_DOC_NEWS_ENABLED,
     G2B_BUSINESS_TYPES,
     G2B_MODULAR_LOOKBACK_DAYS,
     G2B_MODULAR_PAGE_SIZE,
@@ -80,6 +82,11 @@ def main() -> int:
         collectors.append(NaverNewsCollector())
     else:
         print("NAVER_CLIENT_ID 또는 NAVER_CLIENT_SECRET이 없어 NaverNewsCollector를 건너뜁니다.")
+
+    if GDELT_DOC_NEWS_ENABLED:
+        collectors.append(GdeltDocNewsCollector())
+    else:
+        print("GDELT_DOC_NEWS_ENABLED=false; skipping GdeltDocNewsCollector.")
 
     exit_code = 0
     for collector in collectors:
