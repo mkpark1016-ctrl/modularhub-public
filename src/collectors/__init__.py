@@ -8,6 +8,7 @@ from src.collectors.gdelt_doc_news import GdeltDocNewsCollector
 from src.collectors.lh import LHCollector
 from src.collectors.mock_collector import MockCollector
 from src.collectors.naver_news import NaverNewsCollector
+from src.collectors.overseas_rss_news import OverseasRssNewsCollector
 
 __all__ = [
     "BaseCollector",
@@ -20,4 +21,5 @@ __all__ = [
     "LHCollector",
     "MockCollector",
     "NaverNewsCollector",
+    "OverseasRssNewsCollector",
 ]

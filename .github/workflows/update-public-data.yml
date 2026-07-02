@@ -69,12 +69,17 @@ jobs:
             "IH_CONTEST_TIMEOUT_SECONDS=20" \
             "NAVER_NEWS_LOOKBACK_DAYS=14" \
             "NAVER_NEWS_DISPLAY=50" \
-            "GDELT_DOC_NEWS_ENABLED=true" \
+            "GDELT_DOC_NEWS_ENABLED=false" \
             "GDELT_DOC_NEWS_TIMESPAN=7d" \
             "GDELT_DOC_NEWS_MAX_RECORDS=250" \
             "GDELT_DOC_NEWS_TIMEOUT_SECONDS=30" \
             "GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE=70" \
-            "GDELT_DOC_NEWS_LANGUAGE=English" > .env
+            "GDELT_DOC_NEWS_LANGUAGE=English" \
+            "OVERSEAS_RSS_NEWS_ENABLED=true" \
+            "OVERSEAS_RSS_NEWS_TIMEOUT_SECONDS=20" \
+            "OVERSEAS_RSS_NEWS_LOOKBACK_DAYS=14" \
+            "OVERSEAS_RSS_NEWS_MAX_ITEMS_PER_FEED=100" \
+            "OVERSEAS_RSS_NEWS_MIN_RELEVANCE_SCORE=70" > .env
 
       - name: Back up currently published JSON
         run: |

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
 
@@ -46,6 +47,43 @@ def _env_float(name: str, default: float, *, min_value: float | None = None, max
         value = min(max_value, value)
     return value
 
+
+def _env_feed_list(name: str, default: list[dict[str, str]]) -> list[dict[str, str]]:
+    raw = os.getenv(name, "").strip()
+    if not raw:
+        return default
+    feeds: list[dict[str, str]] = []
+    for part in raw.split(";"):
+        text = part.strip()
+        if not text:
+            continue
+        if "|" in text:
+            feed_name, feed_url = [value.strip() for value in text.split("|", 1)]
+        else:
+            feed_url = text
+            feed_name = text
+        if feed_name and feed_url:
+            feeds.append({"name": feed_name, "url": feed_url})
+    return feeds or default
+
+
+GOOGLE_NEWS_MODULAR_QUERY = (
+    '"modular construction" OR "modular housing" OR "volumetric modular" '
+    'OR "offsite construction" OR "prefabricated building" when:7d'
+)
+DEFAULT_OVERSEAS_RSS_NEWS_FEEDS = [
+    {"name": "Construction Dive News", "url": "https://www.constructiondive.com/feeds/news/"},
+    {"name": "Construction Enquirer", "url": "https://www.constructionenquirer.com/feed/"},
+    {"name": "The Construction Index", "url": "https://www.theconstructionindex.co.uk/feeds/news.xml"},
+    {
+        "name": "Google News modular construction",
+        "url": (
+            "https://news.google.com/rss/search?q="
+            f"{quote_plus(GOOGLE_NEWS_MODULAR_QUERY)}&hl=en-US&gl=US&ceid=US:en"
+        ),
+    },
+]
+
 DATA_GO_KR_SERVICE_KEY = os.getenv("DATA_GO_KR_SERVICE_KEY", "")
 NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID", "")
 NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", "")
@@ -56,7 +94,7 @@ NAVER_NEWS_ENDPOINT = os.getenv(
     "NAVER_NEWS_ENDPOINT",
     "https://openapi.naver.com/v1/search/news.json",
 )
-GDELT_DOC_NEWS_ENABLED = _env_bool("GDELT_DOC_NEWS_ENABLED", True)
+GDELT_DOC_NEWS_ENABLED = _env_bool("GDELT_DOC_NEWS_ENABLED", False)
 GDELT_DOC_NEWS_ENDPOINT = os.getenv(
     "GDELT_DOC_NEWS_ENDPOINT",
     "https://api.gdeltproject.org/api/v2/doc/doc",
@@ -71,6 +109,17 @@ GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE = _env_float(
     max_value=100.0,
 )
 GDELT_DOC_NEWS_LANGUAGE = os.getenv("GDELT_DOC_NEWS_LANGUAGE", "English")
+OVERSEAS_RSS_NEWS_ENABLED = _env_bool("OVERSEAS_RSS_NEWS_ENABLED", True)
+OVERSEAS_RSS_NEWS_TIMEOUT_SECONDS = _env_float("OVERSEAS_RSS_NEWS_TIMEOUT_SECONDS", 20.0, min_value=1.0)
+OVERSEAS_RSS_NEWS_LOOKBACK_DAYS = _env_int("OVERSEAS_RSS_NEWS_LOOKBACK_DAYS", 14, min_value=1)
+OVERSEAS_RSS_NEWS_MAX_ITEMS_PER_FEED = _env_int("OVERSEAS_RSS_NEWS_MAX_ITEMS_PER_FEED", 100, min_value=1)
+OVERSEAS_RSS_NEWS_MIN_RELEVANCE_SCORE = _env_float(
+    "OVERSEAS_RSS_NEWS_MIN_RELEVANCE_SCORE",
+    70.0,
+    min_value=0.0,
+    max_value=100.0,
+)
+OVERSEAS_RSS_NEWS_FEEDS = _env_feed_list("OVERSEAS_RSS_NEWS_FEEDS", DEFAULT_OVERSEAS_RSS_NEWS_FEEDS)
 KIPRIS_API_KEY = os.getenv("KIPRIS_API_KEY", "")
 NTIS_API_KEY = os.getenv("NTIS_API_KEY", "")
 DASHBOARD_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")

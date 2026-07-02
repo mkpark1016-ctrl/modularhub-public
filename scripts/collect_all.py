@@ -17,6 +17,7 @@ from src.collectors import (
     LHCollector,
     MockCollector,
     NaverNewsCollector,
+    OverseasRssNewsCollector,
 )
 from src.config import (
     DATA_GO_KR_SERVICE_KEY,
@@ -30,6 +31,7 @@ from src.config import (
     G2B_SERVICE_SUBTYPE,
     NAVER_CLIENT_ID,
     NAVER_CLIENT_SECRET,
+    OVERSEAS_RSS_NEWS_ENABLED,
 )
 
 
@@ -87,6 +89,11 @@ def main() -> int:
         collectors.append(GdeltDocNewsCollector())
     else:
         print("GDELT_DOC_NEWS_ENABLED=false; skipping GdeltDocNewsCollector.")
+
+    if OVERSEAS_RSS_NEWS_ENABLED:
+        collectors.append(OverseasRssNewsCollector())
+    else:
+        print("OVERSEAS_RSS_NEWS_ENABLED=false; skipping OverseasRssNewsCollector.")
 
     exit_code = 0
     for collector in collectors:

@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import hashlib
-import html
 import re
 from datetime import date, datetime
 from typing import Any, Callable
-from urllib.parse import parse_qsl, quote, unquote, urlencode, urlsplit, urlunsplit
+from urllib.parse import urlsplit
 
 import requests
 
@@ -19,24 +18,19 @@ from src.config import (
     GDELT_DOC_NEWS_TIMEOUT_SECONDS,
 )
 from src.keywords import (
-    GDELT_DOC_NEWS_CONSTRUCTION_CONTEXT,
-    GDELT_DOC_NEWS_EXCLUDE_CONTEXT,
     GDELT_DOC_NEWS_STRONG_PHRASES,
+)
+from src.overseas_news_rules import (
+    calculate_overseas_news_relevance,
+    canonicalize_url,
+    clean_overseas_news_text,
+    normalize_overseas_news_text,
+    normalize_title,
 )
 
 
 SOURCE_NAME = "GDELT 해외뉴스"
 SOURCE_PORTAL_NAME = "GDELT DOC"
-TRACKING_QUERY_KEYS = {
-    "utm_source",
-    "utm_medium",
-    "utm_campaign",
-    "utm_term",
-    "utm_content",
-    "fbclid",
-    "gclid",
-}
-WEAK_TERMS = ("modular", "prefab", "prefabricated", "offsite", "off-site")
 RAW_ARTICLE_KEYS = {
     "url",
     "url_mobile",
@@ -247,51 +241,7 @@ def build_gdelt_doc_query() -> str:
 
 
 def calculate_gdelt_doc_relevance(title: Any) -> tuple[float, list[str]]:
-    text = clean_text(title)
-    normalized = normalize_for_match(text)
-    if not normalized:
-        return 0.0, []
-    if any(phrase.lower() in normalized for phrase in GDELT_DOC_NEWS_EXCLUDE_CONTEXT):
-        return 0.0, []
-
-    strong_matches = [phrase for phrase in GDELT_DOC_NEWS_STRONG_PHRASES if phrase.lower() in normalized]
-    if strong_matches:
-        score = 90.0 + min(10.0, float((len(strong_matches) - 1) * 5))
-        return min(100.0, score), strong_matches
-
-    weak_matches = [term for term in WEAK_TERMS if term in normalized]
-    context_matches = [term for term in GDELT_DOC_NEWS_CONSTRUCTION_CONTEXT if term.lower() in normalized]
-    if weak_matches and context_matches:
-        return 80.0, sorted(set(weak_matches + context_matches))
-    return 0.0, []
-
-
-def canonicalize_url(value: Any) -> str:
-    text = clean_text(value)
-    if not text:
-        return ""
-    try:
-        parts = urlsplit(text)
-    except ValueError:
-        return ""
-    if parts.scheme.lower() not in {"http", "https"} or not parts.netloc:
-        return ""
-    host = parts.hostname.lower() if parts.hostname else ""
-    if not host:
-        return ""
-    port = parts.port
-    netloc = host
-    if port and not ((parts.scheme.lower() == "http" and port == 80) or (parts.scheme.lower() == "https" and port == 443)):
-        netloc = f"{host}:{port}"
-    path = quote(unquote(parts.path or "/"), safe="/:@")
-    query = [
-        (key, value)
-        for key, value in parse_qsl(parts.query, keep_blank_values=True)
-        if key.lower() not in TRACKING_QUERY_KEYS
-    ]
-    query.sort(key=lambda item: (item[0].lower(), item[1]))
-    normalized = urlunsplit((parts.scheme.lower(), netloc, path.rstrip("/") or "/", urlencode(query), ""))
-    return normalized
+    return calculate_overseas_news_relevance(title)
 
 
 def parse_gdelt_date(value: Any) -> date | None:
@@ -348,12 +298,7 @@ def normalize_for_match(value: Any) -> str:
 
 
 def clean_text(value: Any) -> str:
-    if value is None:
-        return ""
-    text = html.unescape(str(value))
-    text = re.sub(r"<[^>]+>", "", text)
-    text = re.sub(r"\s+", " ", text)
-    return text.strip()
+    return clean_overseas_news_text(value)
 
 
 def safe_error(value: str) -> str:
