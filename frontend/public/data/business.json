@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-07-03T08:01:53+09:00",
+  "generated_at": "2026-07-03T15:43:08+09:00",
   "procurement_plan_count": 18,
   "procurement_plan_collection_status": "success",
   "procurement_plan_source_status": {
     "나라장터": "success"
   },
-  "procurement_plan_last_collected_at": "2026-07-03T07:57:20",
+  "procurement_plan_last_collected_at": "2026-07-03T15:38:37",
   "g2b_order_plan_status": "success",
   "g2b_order_plan_message": "정상 호출되어 18건을 공개 데이터에 반영했습니다.",
   "d2b_status": "disabled_stopped",
@@ -14,8 +14,8 @@
   "d2b_gw_migration_required": true,
   "lh_contest_status": "success",
   "lh_contest_message": "LH 민간참여 공공주택 공모 10건을 공개 사업정보에 반영했습니다.",
-  "lh_contest_last_attempt": "2026-07-03T07:58:22+09:00",
-  "lh_contest_last_success": "2026-07-03T07:58:22+09:00",
+  "lh_contest_last_attempt": "2026-07-03T15:39:47+09:00",
+  "lh_contest_last_success": "2026-07-03T15:39:47+09:00",
   "lh_contest_scanned_count": 100,
   "lh_contest_matched_count": 14,
   "lh_contest_inserted_count": 14,
@@ -25,8 +25,8 @@
   "lh_contest_failure_reason": "",
   "gh_contest_status": "success",
   "gh_contest_message": "GH 공모 관련사항 14건을 공개 사업정보에 반영했습니다.",
-  "gh_contest_last_attempt": "2026-07-03T07:59:38+09:00",
-  "gh_contest_last_success": "2026-07-03T07:59:38+09:00",
+  "gh_contest_last_attempt": "2026-07-03T15:41:11+09:00",
+  "gh_contest_last_success": "2026-07-03T15:41:11+09:00",
   "gh_contest_scanned_count": 100,
   "gh_contest_matched_count": 23,
   "gh_contest_opportunity_count": 14,
@@ -38,8 +38,8 @@
   "gh_contest_failure_reason": "",
   "ih_contest_status": "success",
   "ih_contest_message": "iH 공지사항 4건을 공개 사업정보에 반영했습니다.",
-  "ih_contest_last_attempt": "2026-07-03T08:00:13+09:00",
-  "ih_contest_last_success": "2026-07-03T08:00:13+09:00",
+  "ih_contest_last_attempt": "2026-07-03T15:41:48+09:00",
+  "ih_contest_last_success": "2026-07-03T15:41:48+09:00",
   "ih_contest_scanned_count": 100,
   "ih_contest_matched_count": 6,
   "ih_contest_opportunity_count": 4,
@@ -67,27 +67,81 @@
     "D2B: 방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
   ],
   "previous_business_count": 165,
-  "current_business_count": 123,
-  "merged_business_count": 165,
+  "current_business_count": 124,
+  "merged_business_count": 166,
   "previous_news_count": 928,
-  "current_news_count": 244,
-  "merged_news_count": 928,
+  "current_news_count": 271,
+  "merged_news_count": 959,
   "public_data_guard_status": "passed",
-  "public_data_guard_message": "Cumulative merge protected public data: business 165 -> 165, news 928 -> 928.",
+  "public_data_guard_message": "Cumulative merge protected public data: business 165 -> 166, news 928 -> 959.",
   "data_policy": "cumulative_verified",
-  "business_total": 165,
-  "business_active": 9,
+  "business_total": 166,
+  "business_active": 10,
   "business_closed": 128,
   "business_unknown": 28,
-  "bid_total": 119,
+  "bid_total": 120,
   "procurement_plan_total": 18,
   "public_agency_contest_total": 28,
   "lh_public_count": 10,
   "gh_public_count": 14,
   "ih_public_count": 4,
   "sh_public_count": 0,
-  "last_updated_at": "2026-07-03T08:01:53+09:00",
+  "last_updated_at": "2026-07-03T15:43:08+09:00",
   "items": [
+    {
+      "id": 54,
+      "source": "나라장터",
+      "source_name": "나라장터",
+      "source_type": "bid",
+      "type": "입찰공고",
+      "title": "제주대학교 의과대학 모듈러 교사 제작·설치 및 임차 용역",
+      "organization": "조달청 제주지방조달청",
+      "demand_org": "제주대학교",
+      "business_type": "용역",
+      "business_subtype": "일반용역",
+      "notice_status": "등록공고",
+      "notice_stage": "등록공고",
+      "source_record_id": "R26BK01602718",
+      "source_record_no": "000",
+      "plan_no": "",
+      "bid_no": "R26BK01602718",
+      "bid_order": "000",
+      "posted_at": "2026-07-03",
+      "due_at": "2026-07-14",
+      "amount": 7690176000,
+      "region": "조달청 또는 나라장터 자체 공고건",
+      "summary": "공고번호: R26BK01602718; 공고차수: 000; 업무구분: 용역; 공고상태: 등록공고; 계약방법: 일반경쟁; 입찰방법: 전자입찰; 공고기관: 조달청 제주지방조달청; 수요기관: 제주대학교; 마감일: 2026-07-14 10:00:00",
+      "keywords": "모듈러;학교;제작·설치",
+      "relevance_score": 21,
+      "is_known_important": false,
+      "is_operating_scope": true,
+      "display_type": "입찰공고",
+      "modular_relevance": "",
+      "modular_evidence": [],
+      "project_name": "",
+      "project_sites": [],
+      "project_blocks": [],
+      "application_schedule_text": "",
+      "household_count": null,
+      "housing_type": "",
+      "attachments": [],
+      "related_group_key": "",
+      "exact_link_verified": false,
+      "external_original_url": null,
+      "manual_check": {
+        "site_name": "나라장터",
+        "site_url": "https://www.g2b.go.kr",
+        "search_text": "R26BK01602718 000 제주대학교 의과대학 모듈러 교사 제작·설치 및 임차 용역 조달청 제주지방조달청",
+        "guide_text": "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
+      },
+      "detail": null,
+      "opportunity_status": "active",
+      "is_closed": false,
+      "days_until_deadline": 11,
+      "closed_at": null,
+      "last_seen_at": "2026-07-03",
+      "lifecycle_reason": "deadline_today_or_future"
+    },
     {
       "id": 53,
       "source": "나라장터",
@@ -1303,7 +1357,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:57:50+09:00",
+        "collected_at": "2026-07-03T15:39:12+09:00",
         "fingerprint": "bd3575f7f28524517a9b539fe5a937ed7bec64b2ec0c1d11d374496b02d31547",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -1570,7 +1624,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T08:00:03+09:00",
+        "collected_at": "2026-07-03T15:41:38+09:00",
         "fingerprint": "1da7952a9c13f44b2829addc6c4373669398ba558267c9a63365ff212bdd76ca",
         "related_group_key": "인천도시공사|검단신도시 휴먼에너지타운 공동주택용지 민간사업자 공모 공고|검단신도시",
         "exact_link_verified": true,
@@ -1695,7 +1749,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:57:53+09:00",
+        "collected_at": "2026-07-03T15:39:14+09:00",
         "fingerprint": "f48ef9dcb4ba3f2f7d2d5d48ede9a221d56a294aabde1596a97475551c5df87f",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -1821,7 +1875,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:57:55+09:00",
+        "collected_at": "2026-07-03T15:39:17+09:00",
         "fingerprint": "d2cb2c49849e146a5306fd5d12cbe4095cb340fff3a460e05813b47721663f5b",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -2072,7 +2126,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:48+09:00",
+        "collected_at": "2026-07-03T15:40:16+09:00",
         "fingerprint": "4711fa1cc552a5b550aeb482fd4283c53001a9d922300c46e56948185fd6ca88",
         "related_group_key": "경기주택도시공사|고양창릉 S16블록, 남양주왕숙2 A8, A12블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|S16블록",
         "exact_link_verified": true,
@@ -2207,7 +2261,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:00+09:00",
+        "collected_at": "2026-07-03T15:39:22+09:00",
         "fingerprint": "2beb4dfaa957852672ae4979fc0223c94b0e9a133ebe37bfa9be4a3779279745",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -2333,7 +2387,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:57:58+09:00",
+        "collected_at": "2026-07-03T15:39:20+09:00",
         "fingerprint": "baf3094c0185026204978c0ab9c2de2086c1764068094e9469ec7b791d31c908",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -28763,10 +28817,10 @@
                 "bidNtceDt": "2026-05-11 12:51:32",
                 "refNo": "광주광역시교육청 공고(계약) 제2026-226호",
                 "bidNtceNm": "2026년 한국어교육기반 국제교류 활성화 일본 국제교류 위탁용역 2단계(규격가격동시) 제한경쟁 입찰 공고",
-                "ntceInsttCd": "7380000",
-                "ntceInsttNm": "광주광역시교육청",
-                "dminsttCd": "7380000",
-                "dminsttNm": "광주광역시교육청",
+                "ntceInsttCd": "",
+                "ntceInsttNm": "",
+                "dminsttCd": "",
+                "dminsttNm": "",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "제한경쟁",
                 "ntceInsttOfclNm": "정정연",
@@ -42448,10 +42502,10 @@
                 "bidNtceDt": "2026-05-11 14:29:04",
                 "refNo": "상일여자고등학교 공고 제2026-19호",
                 "bidNtceNm": "2026학년도 상일여자고등학교 2학년 수학여행 위탁용역 2단계(규격가격동시) 입찰 공고",
-                "ntceInsttCd": "7380177",
-                "ntceInsttNm": "광주광역시교육청 상일여자고등학교",
-                "dminsttCd": "7380177",
-                "dminsttNm": "광주광역시교육청 상일여자고등학교",
+                "ntceInsttCd": "",
+                "ntceInsttNm": "",
+                "dminsttCd": "",
+                "dminsttNm": "",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "제한경쟁",
                 "ntceInsttOfclNm": "민재석",
@@ -52000,7 +52054,7 @@
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "일반경쟁",
                 "ntceInsttOfclNm": "권동환",
-                "ntceInsttOfclTelNo": "042-724-7610",
+                "ntceInsttOfclTelNo": "042-724-7262",
                 "ntceInsttOfclEmailAdrs": "",
                 "exctvNm": "백지훈",
                 "bidQlfctRgstDt": "2026-06-10 18:00",
@@ -67633,10 +67687,10 @@
                 "bidNtceDt": "2026-05-11 17:03:00",
                 "refNo": "광주광역시AI교육원 제2026-9호",
                 "bidNtceNm": "초‧중등 인공지능 윤리 교수학습자료  개발 연구 용역 ",
-                "ntceInsttCd": "7380412",
-                "ntceInsttNm": "광주광역시교육청 광주광역시교육청AI교육원",
-                "dminsttCd": "7380412",
-                "dminsttNm": "광주광역시교육청 광주광역시교육청AI교육원",
+                "ntceInsttCd": "",
+                "ntceInsttNm": "",
+                "dminsttCd": "",
+                "dminsttNm": "",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "제한경쟁",
                 "ntceInsttOfclNm": "박혜진",
@@ -106740,7 +106794,7 @@
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "일반경쟁",
                 "ntceInsttOfclNm": "이종웅",
-                "ntceInsttOfclTelNo": "042-724-6285",
+                "ntceInsttOfclTelNo": "042-724-7356",
                 "ntceInsttOfclEmailAdrs": "",
                 "exctvNm": "설명수",
                 "bidQlfctRgstDt": "2026-06-08 17:29",
@@ -108690,8 +108744,8 @@
                 "bidNtceNm": "제5차 포항시 교통약자 이동편의 증진계획 수립 용역",
                 "ntceInsttCd": "5020000",
                 "ntceInsttNm": "경상북도 포항시",
-                "dminsttCd": "5020327",
-                "dminsttNm": "경상북도 포항시 건설교통사업본부",
+                "dminsttCd": "5020499",
+                "dminsttNm": "경상북도 포항시 건설교통사업소",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "수의계약",
                 "ntceInsttOfclNm": "김종덕",
@@ -108920,8 +108974,8 @@
                 "bidNtceNm": "제5차 포항시 보행교통 개선계획 수립 용역",
                 "ntceInsttCd": "5020000",
                 "ntceInsttNm": "경상북도 포항시",
-                "dminsttCd": "5020327",
-                "dminsttNm": "경상북도 포항시 건설교통사업본부",
+                "dminsttCd": "5020499",
+                "dminsttNm": "경상북도 포항시 건설교통사업소",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "수의계약",
                 "ntceInsttOfclNm": "김종덕",
@@ -109035,8 +109089,8 @@
                 "bidNtceNm": "제5차 포항시 교통안전 기본계획 수립 용역",
                 "ntceInsttCd": "5020000",
                 "ntceInsttNm": "경상북도 포항시",
-                "dminsttCd": "5020327",
-                "dminsttNm": "경상북도 포항시 건설교통사업본부",
+                "dminsttCd": "5020499",
+                "dminsttNm": "경상북도 포항시 건설교통사업소",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "수의계약",
                 "ntceInsttOfclNm": "김종덕",
@@ -114668,10 +114722,10 @@
                 "bidNtceDt": "2026-05-11 18:51:04",
                 "refNo": "광주광역시교육청 공고(계약) 제2026-227호",
                 "bidNtceNm": "광주동운초 공간재구조화 리모델링공사 재해예방 기술지도용역 견적제출 안내공고",
-                "ntceInsttCd": "7380000",
-                "ntceInsttNm": "광주광역시교육청",
-                "dminsttCd": "7380000",
-                "dminsttNm": "광주광역시교육청",
+                "ntceInsttCd": "",
+                "ntceInsttNm": "",
+                "dminsttCd": "",
+                "dminsttNm": "",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "수의계약",
                 "ntceInsttOfclNm": "윤지혜",
@@ -115013,10 +115067,10 @@
                 "bidNtceDt": "2026-05-11 18:59:43",
                 "refNo": "광주광역시교육청 공고(계약) 제2026-228호",
                 "bidNtceNm": "광주동운초 공간재구조화 리모델링 기계설비공사 재해예방 기술지도용역 견적제출 안내공고",
-                "ntceInsttCd": "7380000",
-                "ntceInsttNm": "광주광역시교육청",
-                "dminsttCd": "7380000",
-                "dminsttNm": "광주광역시교육청",
+                "ntceInsttCd": "",
+                "ntceInsttNm": "",
+                "dminsttCd": "",
+                "dminsttNm": "",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "수의계약",
                 "ntceInsttOfclNm": "윤지혜",
@@ -115358,10 +115412,10 @@
                 "bidNtceDt": "2026-05-11 19:08:42",
                 "refNo": "광주광역시교육청 공고(계약) 제2026-229호",
                 "bidNtceNm": "광주동운초 공간재구조화 리모델링 전기,통신,소방공사 재해예방 기술지도용역 견적제출 안내공고",
-                "ntceInsttCd": "7380000",
-                "ntceInsttNm": "광주광역시교육청",
-                "dminsttCd": "7380000",
-                "dminsttNm": "광주광역시교육청",
+                "ntceInsttCd": "",
+                "ntceInsttNm": "",
+                "dminsttCd": "",
+                "dminsttNm": "",
                 "bidMethdNm": "전자입찰",
                 "cntrctCnclsMthdNm": "수의계약",
                 "ntceInsttOfclNm": "윤지혜",
@@ -118225,7 +118279,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:05+09:00",
+        "collected_at": "2026-07-03T15:39:28+09:00",
         "fingerprint": "ad7b8491f7a05e035331231a8f2b1b89bb5b41eecc9283ebabd7c17dc7e19713",
         "related_group_key": "한국토지주택공사|2026년 제2 2차 민간참여 공공주택 건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -118503,7 +118557,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:10+09:00",
+        "collected_at": "2026-07-03T15:39:33+09:00",
         "fingerprint": "ed87b66b9f17e9962db43e5e6fdf805427ca44dedbf4a02df9b77b08e3e84139",
         "related_group_key": "한국토지주택공사|2026년 제2 2차 민간참여 공공주택 건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -118628,7 +118682,7 @@
       ],
       "related_group_key": "인천도시공사|도화 B 3BL 민간참여 공공주택건설사업 민간사업자 공모 민간사업자 평가위원회 평가위원 선정공고|인천경제자유구역|B-3BL",
       "exact_link_verified": true,
-      "external_original_url": "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq=4252&bcd=notice&pgno=8",
+      "external_original_url": "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq=4252&bcd=notice&pgno=9",
       "manual_check": {
         "site_name": "iH 공지사항",
         "site_url": "https://www.ih.co.kr/main/customer/notification/notice.jsp",
@@ -118661,7 +118715,7 @@
           "B-3BL"
         ],
         "body_summary": "공지사항-도화 B-3BL 민간참여 공공주택건설사업 민간사업자 공모 민간사업자 평가위원회 평가위원 선정공고 내용 | 인천도시공사>iH알림 본문내용 바로가기 / 주요사업사이트 광역도시재생지원센터 / 인천 상수도사업본부 / 비공개대상정보",
-        "original_url": "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq=4252&bcd=notice&pgno=8",
+        "original_url": "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq=4252&bcd=notice&pgno=9",
         "board_url": "https://www.ih.co.kr/main/customer/notification/notice.jsp",
         "attachments": [
           {
@@ -118682,7 +118736,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T08:00:09+09:00",
+        "collected_at": "2026-07-03T15:41:44+09:00",
         "fingerprint": "f507dd39e8712df64714792ff674c3b85cc4ca390a1139770d14964eae1d266c",
         "related_group_key": "인천도시공사|도화 B 3BL 민간참여 공공주택건설사업 민간사업자 공모 민간사업자 평가위원회 평가위원 선정공고|인천경제자유구역|B-3BL",
         "exact_link_verified": true,
@@ -118696,7 +118750,7 @@
       },
       "source_code": "IH_NOTICE",
       "link_verified": true,
-      "original_url": "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq=4252&bcd=notice&pgno=8",
+      "original_url": "https://www.ih.co.kr/main/bbs/bbsMsgDetail.do?msg_seq=4252&bcd=notice&pgno=9",
       "opportunity_status": "unknown",
       "is_closed": false,
       "days_until_deadline": null,
@@ -118821,7 +118875,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:15+09:00",
+        "collected_at": "2026-07-03T15:39:39+09:00",
         "fingerprint": "b606ec09c2296b62e9490c8aded5019c707e6371e116309230d7dd55f960fb24",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시|34BL",
         "exact_link_verified": true,
@@ -120605,7 +120659,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:17+09:00",
+        "collected_at": "2026-07-03T15:39:41+09:00",
         "fingerprint": "6b99a33ea780b84fef6b3d7147ba0999a429895f88c76f3c91fbde4b44089993",
         "related_group_key": "한국토지주택공사|2026년 제1 1차 민간참여 공공주택 건설사업의 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -120981,7 +121035,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:20+09:00",
+        "collected_at": "2026-07-03T15:39:44+09:00",
         "fingerprint": "1fcd4f7c69d7c5afb34fb6b4d2ba3d2ec9f1ac0a8534ad1680a2076897accfb8",
         "related_group_key": "한국토지주택공사|민간참여 공공주택 건설사업 민간사업자 공모 공고|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -121872,7 +121926,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T08:00:11+09:00",
+        "collected_at": "2026-07-03T15:41:46+09:00",
         "fingerprint": "2101b83e39e184ad5b10431d14165f98da93a120754e2e193d86c8aec72399b4",
         "related_group_key": "인천도시공사|도화 B 3BL 민간참여 공공주택건설사업 민간사업자 공모 공고|인천경제자유구역|B-3BL",
         "exact_link_verified": true,
@@ -122872,7 +122926,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T08:00:13+09:00",
+        "collected_at": "2026-07-03T15:41:48+09:00",
         "fingerprint": "81fd50a22222c3161f2c77306e966d89e02e89b5f420daafc1e1e7f2d9a239a3",
         "related_group_key": "인천도시공사|검암 S 2BL 민간참여 공공주택건설사업 민간사업자 공모 공고|인천경제자유구역|S-2BL",
         "exact_link_verified": true,
@@ -123022,7 +123076,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:53+09:00",
+        "collected_at": "2026-07-03T15:40:21+09:00",
         "fingerprint": "67641214f472e780c4b46ec7e4cca18e75bd3ed9f55f250fd28ef1cb272ae4d1",
         "related_group_key": "경기주택도시공사|하남교산 S1블록 민간참여 공공주택사업 민간사업자 재공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|S1블록",
         "exact_link_verified": true,
@@ -123172,7 +123226,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:58:55+09:00",
+        "collected_at": "2026-07-03T15:40:24+09:00",
         "fingerprint": "14a66e2efd8c1bc64d5ee862c1bf0bd3509121da5e2fc9260c96368cf937a175",
         "related_group_key": "경기주택도시공사|하남교산 S1블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|S1블록",
         "exact_link_verified": true,
@@ -123314,7 +123368,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:04+09:00",
+        "collected_at": "2026-07-03T15:40:34+09:00",
         "fingerprint": "4d8a38d89b2b3bd27c91eca97036ba39c35d17c7acce543184243360e1fa8c2f",
         "related_group_key": "경기주택도시공사|광교 A17블록 및 교산 A1블록 민간참여공공주택사업 민간사업자 재공모 제안서 평가 세부사항 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A17블록",
         "exact_link_verified": true,
@@ -123442,7 +123496,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:11+09:00",
+        "collected_at": "2026-07-03T15:40:41+09:00",
         "fingerprint": "d2ea4e0c4977e24b64e9dfd7237d1f89447a7c6bcd2c87f98b9def5230ed41f7",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 사업계획서 평가 관련 세부사항 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -123594,7 +123648,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:15+09:00",
+        "collected_at": "2026-07-03T15:40:46+09:00",
         "fingerprint": "bc702091caa7b69f34cfbadc9dd37c6b2399547f10f45b7b1338066dc1908189",
         "related_group_key": "경기주택도시공사|광교 A17블록 및 교산 A1블록 민간참여 공공주택사업 민간사업자 재공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A17블록",
         "exact_link_verified": true,
@@ -123722,7 +123776,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:13+09:00",
+        "collected_at": "2026-07-03T15:40:44+09:00",
         "fingerprint": "dcbaf1d1dd2af67fac20487ecd707c30f9741e1dd6f8e4e042f71399db611731",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 공모지침서 정정사항 안내|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -123850,7 +123904,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:18+09:00",
+        "collected_at": "2026-07-03T15:40:49+09:00",
         "fingerprint": "3a98f51c89bb05c84a21e597b64c83bf9a3765588d533c2d3475bc0490f36280",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 관련 질의 답변 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -124008,7 +124062,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:20+09:00",
+        "collected_at": "2026-07-03T15:40:51+09:00",
         "fingerprint": "d3cc0d32dcdf57aefb73043512b302884b04d65cfa8796cdb30310b1e1cf1da2",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -124160,7 +124214,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:22+09:00",
+        "collected_at": "2026-07-03T15:40:54+09:00",
         "fingerprint": "8d3c3c364d6fc58650a6f468ee19e95c8a0b7988c5cbd05b7c97f58e22cce585",
         "related_group_key": "경기주택도시공사|광교 A17블록 및 교산 A1블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A17블록",
         "exact_link_verified": true,
@@ -124300,7 +124354,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:31+09:00",
+        "collected_at": "2026-07-03T15:41:04+09:00",
         "fingerprint": "858a4c32cfb08f4a555bbf0baab28a08f8c554a8a63062c90a7656d376712f02",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 재공모 제안서 평가 세부사항 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,
@@ -124450,7 +124504,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:33+09:00",
+        "collected_at": "2026-07-03T15:41:06+09:00",
         "fingerprint": "7748141485e340ba301c3602f4e9faee4f382826f2c52bb386856c5946df5102",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 재공모|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,
@@ -124600,7 +124654,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:35+09:00",
+        "collected_at": "2026-07-03T15:41:09+09:00",
         "fingerprint": "60eff4f0b87c08a00d85064d3b8187accdf50eb843d8a70b6a18fe200306a0ea",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 재공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,
@@ -124750,7 +124804,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-03T07:59:38+09:00",
+        "collected_at": "2026-07-03T15:41:11+09:00",
         "fingerprint": "e0a79ea0312ec65bf6006a3ebfd4aea52a90eae7813ad9d3a589b168f08a487c",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,

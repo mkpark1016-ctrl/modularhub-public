@@ -1,10 +1,94 @@
 {
-  "generated_at": "2026-07-03T08:01:53+09:00",
+  "generated_at": "2026-07-03T15:43:08+09:00",
   "data_policy": "cumulative_verified",
   "previous_news_count": 928,
-  "current_news_count": 244,
-  "merged_news_count": 928,
+  "current_news_count": 271,
+  "merged_news_count": 959,
   "items": [
+    {
+      "id": 6098,
+      "source": "네이버뉴스",
+      "media": "etoday.co.kr",
+      "title": "자연과환경, 프리캐스트 콘크리트 부재용 몰드 특허 등록",
+      "summary": "자연과환경은 이번 특허 외에도 건축용 PC 부문에서 다수의 지식재산권을 보유하고 있다. 이와 함께 투수형 호안 및 광촉매 블록 등 친환경 블록 제품군과 건설신기술 제971호로 지정된 모듈러 주택 등 핵심 사업 중심의...",
+      "published_at": "2026-07-03",
+      "original_url": "https://www.etoday.co.kr/news/view/2599980",
+      "naver_url": "https://www.etoday.co.kr/news/view/2599980",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 6
+    },
+    {
+      "id": 6097,
+      "source": "네이버뉴스",
+      "media": "snmnews.com",
+      "title": "엔알비, 국내 최고층 22층 모듈러 공동주택에 '장수명주택 우수등급' 획...",
+      "summary": "모듈러 1호 상장사 엔알비는 국내 최고층(22층) 모듈러 공동주택 '한국토지주택공사(LH) 의왕초평 A-4BL 통합형 민간참여 공공주택'이 장수명주택 인증 우수등급을 취득했다고 밝혔다. 엔알비는 이 사업의 설계·제작...",
+      "published_at": "2026-07-03",
+      "original_url": "http://www.snmnews.com/news/articleView.html?idxno=571617",
+      "naver_url": "http://www.snmnews.com/news/articleView.html?idxno=571617",
+      "keywords": "모듈러 주택",
+      "relevance_score": 16
+    },
+    {
+      "id": 6096,
+      "source": "네이버뉴스",
+      "media": "4th.kr",
+      "title": "대우건설, 美 부동산 시장 재진출..뉴저지 주거개발",
+      "summary": "대우건설은 뉴저지 주거개발과 텍사스 복합개발을 통해 북미 부동산 개발시장에 재진출하고 있다면 삼성물산은 텍사스 반도체 공장, 현대건설은 원전·에너지 인프라, GS건설은 모듈러 주택을 중심으로 미국 시장...",
+      "published_at": "2026-07-03",
+      "original_url": "http://www.4th.kr/news/articleView.html?idxno=2114154",
+      "naver_url": "http://www.4th.kr/news/articleView.html?idxno=2114154",
+      "keywords": "모듈러 주택",
+      "relevance_score": 6
+    },
+    {
+      "id": 6095,
+      "source": "네이버뉴스",
+      "media": "ebn.co.kr",
+      "title": "[Tech & Now] 티엑스알로보틱스, 글로벌 반도체사에 130억 규모 로봇 공...",
+      "summary": "규모의 모듈러 리프팅 로봇(Modular Lifting Robot) 공급 계약을 체결했다고 3일 밝혔다. 이번 계약은 앞서... 드론, 스마트팩토리 장비, 엣지 서버 등에 폭넓게 적용될 수 있다. 김녹원 딥엑스 대표는 \"일본 파트너와의...",
+      "published_at": "2026-07-03",
+      "original_url": "https://www.ebn.co.kr/news/articleView.html?idxno=1714968",
+      "naver_url": "https://www.ebn.co.kr/news/articleView.html?idxno=1714968",
+      "keywords": "스마트건설 모듈러",
+      "relevance_score": 6
+    },
+    {
+      "id": 6094,
+      "source": "해외 모듈러 RSS",
+      "media": "Newcastle Herald",
+      "title": "How the Hunter can cash in on NSW's modular housing revolution - Newcastle Herald",
+      "summary": "How the Hunter can cash in on NSW's modular housing revolution Newcastle Herald",
+      "published_at": "2026-07-03",
+      "original_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNcHF2Wm1UcFBoNXFaeVlMMUVRMFA3cHhMNVpUbUQtbnhHd1RydHA1eFN5em1nbFdLTjlleVdEbURsLWFHX25kQzBMUVBSZ3Mxb2IxX0xBZktxWk1rS29EaHIyM1VhUHJaQXB1RFU2bmVLNUs4d2xLa0t6M1NPQWQ5MlYyQWFwTzRkU1hobEdMUlBETWhHZWpDeDFYdmJMb1FiclNtTUNNVHhVWlpjOW41UDdWVUM?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 6100,
+      "source": "해외 모듈러 RSS",
+      "media": "Australian Manufacturing",
+      "title": "NSW opens manufacturing EOI to expand modular housing production - Australian Manufacturing",
+      "summary": "NSW opens manufacturing EOI to expand modular housing production Australian Manufacturing",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOT2lBaXY1TmpOSG5SdF90ZVZGUGRXalVCang1a1V4N281aERSbjg4WHNEWHhVcXk5RXYxOGVUdXVya281QkFKVG83MWZ5a2tVTDA0bkMwZVhybDZVWVpnTkxPODNlVlJiWGxGLVkxZlVBUmlPT1c1d2pPaVh3bzRya0ViNG1hYmI0Szdhelo0cmR0c29hZzZyZDNNcUNzZVY4M29sN0NUNWVHd0E0?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 6099,
+      "source": "해외 모듈러 RSS",
+      "media": "Limerick Post",
+      "title": "Mayor of Limerick criticised over proposed €100,000 modular housing PR campaign spend - Limerick Post",
+      "summary": "Mayor of Limerick criticised over proposed €100,000 modular housing PR campaign spend Limerick Post",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNMzVqMkd5a1dBeDlkR0Q5eDk1T3VETi1saVpNeG1MMDlGcTBfQ3VobnJ3c2VJQlhWXzQxUjhPbGE0d0kwZ0RnR29oV3BjTU01MnZBRjh3aTU5ekd2V0dRczloSl85Nk5ZWm4tUzl2VkFzOHNLQkl2YjZMOEpsZE1RcmpaNmxtU2VQRDA5N04ta003U2pVVnRWZW1jWl9za0hoS0tJd2R1c3loajNMeVpndVZqQkpEcXBPZDEzTlVfWThhQQ?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
     {
       "id": 6093,
       "source": "네이버뉴스",
@@ -172,6 +256,90 @@
       "naver_url": "https://www.cstimes.com/news/articleView.html?idxno=711939",
       "keywords": "자이가이스트 모듈러",
       "relevance_score": 6
+    },
+    {
+      "id": 365,
+      "source": "해외 모듈러 RSS",
+      "media": "Built Offsite",
+      "title": "NSW seeks global manufacturing partners to expand modular housing production - Built Offsite",
+      "summary": "NSW seeks global manufacturing partners to expand modular housing production Built Offsite",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQdDBUM2I4Q0VNd3Z4QThsaGVrb1IzZzRPWGNyd0huVGlVRExXc19NN3JyVklBa1p6LUZtVWZZOEZNZDVVU3dlQ01pVU9RalYwelVVNlIta0pYZU5kWEJGY1JLUlNJeEY4NFg5YlNCVW50dGVVcnh6ZERTRWhPSS0wVDNmc1VRNWF4ckQ1VGRnMEdoYTBya3ZxYk9pUHpZNG1iVHhYcE56RUF2QlJuZ1ZN?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 364,
+      "source": "해외 모듈러 RSS",
+      "media": "Infrastructure Magazine",
+      "title": "Industry partners sought to expand modular housing - Infrastructure Magazine",
+      "summary": "Industry partners sought to expand modular housing Infrastructure Magazine",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPT3Z2VXZLZFhjNHlRYTJWMl9kaXg0azE5UUkwSGtXLWMzZkVQRWZqWE1fdGZCeWpLWG5PeXlsN3c1Z2kxRnI3V2pGSVFRWG85SVhjM0k4SFhUQTZYeldDR2ZLRm5BU2JaNDlxQVlLYXBHQzY1ZWZUTFZ5UkFuWHRnX09xUGZRN0UzLUZqX1RDSzNhdW8?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 360,
+      "source": "해외 모듈러 RSS",
+      "media": "Mirage News",
+      "title": "Hunter Firms Urged to Lead Modular Housing Drive - Mirage News",
+      "summary": "Hunter Firms Urged to Lead Modular Housing Drive Mirage News",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOUmFBZy1JWXh2MkhUR1BFcHJmNlZ5R0JKbk1oSDMzY21wUzV2amhfZDkwNXR6TWE5WGpmaHowVEJReU1YbXZRRGNkV1NIeTFHODVTek5HUGdqRll4UllQYVQ2QUNxejFMY3loeEszXzZ4bDFBbF9xZ1cydnBIaVRsWG83WUo2U09pZ0Fqeg?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 353,
+      "source": "해외 모듈러 RSS",
+      "media": "Montreal Gazette",
+      "title": "Montreal defends decision to axe modular housing project for the unhoused - Montreal Gazette",
+      "summary": "Montreal defends decision to axe modular housing project for the unhoused Montreal Gazette",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPTGlzb3JoWGlsVFdNMnNJMHR3QTdGRTQ2Z2JZMDVOZE5PS1RRZEZKNkN3Z0xBVWVFTGVlajZhYTF0akxKM0ctQnFlSTBGUlBXQzQ4WEwtS3c3RkRiRGRVYlFmUHhUSVRTdUEya3RGMEtEY0VpUHpmeUMxbW5jWmV2Q2FTbVpKS1dtNGpfTjRHMlZUS1pLX2pmOWhleE85aHVGS3FUYm4tdEFSRjA?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 344,
+      "source": "해외 모듈러 RSS",
+      "media": "HousingWire",
+      "title": "Government-backed modular housing trend arrives in Cleveland - HousingWire",
+      "summary": "Government-backed modular housing trend arrives in Cleveland HousingWire",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPZmtMNnJDWHFTUmh2NGd1M2hXX1dnaUQ5c3JoZ0c4VGN3c0F1QjVhWU5uU3JtOUI3UEVMSU9IUWRlZFY3dVE5dWFTSG1RcHQwSXhFaEgyWHVRNDQ1RjJ4VVBGMW5YcWswbXQzam1rUTJacm9KbHZ2UmZqdHVrRFc0c3BwN2lFbC1qdjNQSHVuZ1QtZw?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 343,
+      "source": "해외 모듈러 RSS",
+      "media": "The Construction Index",
+      "title": "Thurston invests in Combilift",
+      "summary": "Offsite modular construction specialist Thurston Group has invested in a Combilift straddlecarrier for its Wakefield site.",
+      "published_at": "2026-07-02",
+      "original_url": "https://www.theconstructionindex.co.uk/news/view/thurston-invests-in-combilift",
+      "naver_url": null,
+      "keywords": "modular construction",
+      "relevance_score": 70
+    },
+    {
+      "id": 6101,
+      "source": "해외 모듈러 RSS",
+      "media": "openPR.com",
+      "title": "Prefabricated Building System Market Set for Strong Growth - openPR.com",
+      "summary": "Prefabricated Building System Market Set for Strong Growth openPR.com",
+      "published_at": "2026-07-01",
+      "original_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPRG9KOV9EREJXR1FXTVQ4V0RaWnBTZlkyX05FZUp5Y1FTY0lOcVNTNDJKRDFGWEpma1ZvMFZwQ1BXY1ZSb3ktQTBQbmwyXzk2b1BFR21sVTVnY3RieHBhcnEtUnNuRFVXdlFnUzM0cGVXbjRaUWJzR2JCa0g0MnVnMUoxRlptdXBkUHhKU0VnVWtoNEM1U3NXX2NB?oc=5",
+      "naver_url": null,
+      "keywords": "prefabricated building",
+      "relevance_score": 90
     },
     {
       "id": 6083,
@@ -414,6 +582,66 @@
       "relevance_score": 6
     },
     {
+      "id": 367,
+      "source": "해외 모듈러 RSS",
+      "media": "Інтент",
+      "title": "The proposal for a modular housing complex for internally displaced persons was not supported in Mykolaiv - Інтент",
+      "summary": "The proposal for a modular housing complex for internally displaced persons was not supported in Mykolaiv Інтент",
+      "published_at": "2026-07-01",
+      "original_url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPT0g3cFZCRHdEcG8wNzBKZkVJUmt4UEM5MEgwb0FEY05aaENCUUhyYlFRd1RTc18zZm9DVTVOYnFkT2xqdlVzVG5GUXZzaUVrcjBQWkYtQmVjU2ttUUlDV0RtZ1daNEVBZUl1RE5LS0FHbTFxdEVZWkN6YnBpbFRqWVVnR3QxTzAyUnNVZnpTOVJOYUtrcm13Zg?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 361,
+      "source": "해외 모듈러 RSS",
+      "media": "Kalkine",
+      "title": "Parkd (PKD): Why This Modular Construction Stock Is Under Pressure? - Kalkine",
+      "summary": "Parkd (PKD): Why This Modular Construction Stock Is Under Pressure? Kalkine",
+      "published_at": "2026-07-01",
+      "original_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNOE1ndE1GSkl5TF9lOXNqQWpoMGJhdHliYk1DZ2VzV2J1d1dnM08zWVFaZ3BDVWVfYklEMXc5MXZwUE0xeXpnUzBDcjF0bmF2c1JIY0xoWkExaG80cHVDcVNlV2lTMnY2VV9qSWNzMERwaTVyVGJScXRfeWZ4bHBzSDdNVHJrNWlsd1cxUVZYbVZhaXU5Ulk3MHlEdVdrMXhEbVlheGt3?oc=5",
+      "naver_url": null,
+      "keywords": "modular construction",
+      "relevance_score": 90
+    },
+    {
+      "id": 358,
+      "source": "해외 모듈러 RSS",
+      "media": "Built Offsite",
+      "title": "How Freecity is delivering modular construction at scale in Australia - Built Offsite",
+      "summary": "How Freecity is delivering modular construction at scale in Australia Built Offsite",
+      "published_at": "2026-07-01",
+      "original_url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOZ0xHbEhDUTdISzhmODY5Z2lHVmN2UHZ5ZTZ6ZDFoRmJTNHZMWjFYWWVROHNZeGhtOC0zMWM2aEJBWXNCMGxfOEpmdjhZS3MyVUsyUjczSHpsc3FqbENOSW9pZFdaRmNRVXRFbGJOMENzUm8zZERnMFBhcE00MTdoS2pSc1ZwdnhSYlJxdEM1bFI3VkRYQzNDenR2aEljV0RZalo0bWFB?oc=5",
+      "naver_url": null,
+      "keywords": "modular construction",
+      "relevance_score": 90
+    },
+    {
+      "id": 355,
+      "source": "해외 모듈러 RSS",
+      "media": "News 5 Cleveland WEWS",
+      "title": "Cleveland taps modular housing manufacturer to remake historic East Side factory - News 5 Cleveland WEWS",
+      "summary": "Cleveland taps modular housing manufacturer to remake historic East Side factory News 5 Cleveland WEWS",
+      "published_at": "2026-07-01",
+      "original_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNcFJfVnJzaDc2ekZzNEhobnhDM1Z4Njc3eWg0cnhZRGlWY1NCT0ZNUHFBS0lCZW1HYlRWM1Ryc2tFSGctWFVOcU9vakxjYVg1OHZzQkZvOU10LUtGVDc5RkwzTFcwMndRbkZrZDdfQVF4UHFqWUlPbmk2ZERRbUVvZWNhTmkwNWpReWFPaGRTR0xQSTJPbkRkOUozc0VuN3BTMXRRaTBCNzB1TVFoblBJWlVyT1VkZXBOd1o2WFY5OUl4MWtkaHdYQUIzcUhQbVU?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 345,
+      "source": "해외 모듈러 RSS",
+      "media": "Yahoo Finance",
+      "title": "How Limbach Holdings, Inc. (LMB) Is Using Modular Construction to Speed Data Center Cooling Infrastructure - Yahoo Finance",
+      "summary": "How Limbach Holdings, Inc. (LMB) Is Using Modular Construction to Speed Data Center Cooling Infrastructure Yahoo Finance",
+      "published_at": "2026-07-01",
+      "original_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPYXppb09BUVdES18xM1M0bVFfSjdiaERNV0hxWW8yVU5DVEhsWS0zelBpZFFXN1N5S2tUMlo4dzhTbzk0WkNxV3FCQi1VVXVEMTVYZC1zMHhKSkNaaHUwZEpVeFVpQ0k3eUhLN1VWYV82NV9OQXVrZFRPUXJET0swRFd0TTlNZTdHNWZOaFJSdUpvZUNWek5CQy1iQQ?oc=5",
+      "naver_url": null,
+      "keywords": "modular construction",
+      "relevance_score": 90
+    },
+    {
       "id": 215,
       "source": "네이버뉴스",
       "media": "pinpointnews.co.kr",
@@ -424,6 +652,30 @@
       "naver_url": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=464565",
       "keywords": "스마트건설 모듈러",
       "relevance_score": 6
+    },
+    {
+      "id": 6103,
+      "source": "해외 모듈러 RSS",
+      "media": "MSN",
+      "title": "Cleveland to host $26M modular housing plant in historic factory - MSN",
+      "summary": "Cleveland to host $26M modular housing plant in historic factory MSN",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNNFp0Y2hrX2NnU1p6MmV3cHVPUHIzRXFzUmtFNmxheGY0VkpIVjZReDlFT0NZQTVHaEgzb1YzLXAxdm1LV3ZqYlVUbTU4cW82eWVianBwSk5oT2lYNXdLMXhWWWFLMVg4V2MyU05KZWEzeUp5OG8xb1VwME5NMEVJdnFWRXdqb2dCbVFrVGt4ejlUS1k3NndrUmdKX0hWRk9hZDM4OW1rX0ZEdkpfMG45NEhGNlE1aXk1TkxYRWJhSzc4eW02NV9NWlZFOFo1ZHYwYnpDUXczRVZDbENI?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 6102,
+      "source": "해외 모듈러 RSS",
+      "media": "deadlinenews.co.uk",
+      "title": "Social Bite reopens flagship modular housing village to help tackle national homelessness crisis - deadlinenews.co.uk",
+      "summary": "Social Bite reopens flagship modular housing village to help tackle national homelessness crisis deadlinenews.co.uk",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOZzBPSTc0VlB3R2NfM1NXYmc1UXlEZG5hcERGS0d6dGxnLTU4ZVRoaGhBYTJHWTgwaWMzN0MtQ1g1ektNWXZIX2RvVllIcWpVbkJDaVo1YkxaVE1vRXdWSlRUVUQxZ1VYX2Q4a3QxU19rQk5UdlRWR0xlTWg1b0REMGZlWUtXSVJORHJMZEhDS05Edk1hN2hhUDd4RdIBowFBVV95cUxNcWJoUG1YRC1wYV9wekc4S3owZW55a1dQTGRQTmc2YkNjU3hNcXNjM0IzQU5tLVVDQXV0MGQtcXR2NHVhdGFMUE5fbXpYR3dwZjE1bnRtUlZudFhPSmJsbnN5V1ZWcGtUUXp1RkotejN6cWFwaktUVzczWEE2WjUtZHg1QnI4MTdXTERnajh0X2hQcV9CU3c4SEV6V0s0TG9CZHRv?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
     },
     {
       "id": 6072,
@@ -640,6 +892,78 @@
       "naver_url": "https://www.etoday.co.kr/news/view/2598421",
       "keywords": "공업화주택",
       "relevance_score": 6
+    },
+    {
+      "id": 379,
+      "source": "해외 모듈러 RSS",
+      "media": "TipRanks",
+      "title": "BauMart Seeks ASX Trading Halt Ahead of Modular Housing Update - TipRanks",
+      "summary": "BauMart Seeks ASX Trading Halt Ahead of Modular Housing Update TipRanks",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNc01RNWVVcThkLU1XNHRvS2t2QjlIdWMxX2FZeEJVN1R4MUxyaDFwTWhvM3FnaEU3MG11UEpWQWxDcXpjdVBXRG1DT1ZOWUZnRUdRNFhiSnNvek5sMmhWaXhVVFpFRVRwVWFtc25NZVJxNVpfT1lHX1lROWpWYU1JWWNzVFhMNXNaZ3JGOHg3R0xTZGhuVDFYUm01NFRqcmtFcURWVzQwUTgxRC1jV1hhY1JjNm8?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 363,
+      "source": "해외 모듈러 RSS",
+      "media": "The Standard (HK)",
+      "title": "Giant modular construction eyed for Hung Shui Kiu Station, says transport chief - The Standard (HK)",
+      "summary": "Giant modular construction eyed for Hung Shui Kiu Station, says transport chief The Standard (HK)",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOVnNOYW5qZ3gxNG44TTVNLVRYOHpjLVhWa0FRZDM3elk3NU05dmdsZXp0QURUVjRsR1dkTld2STZJSUg4SXlfZjZTYmFhLW1oWEVyMUxUZE1xc3Y2VWJLeWVXLXVNRllkM0ExMW5IdHZvT2p0TXEtMFpHNllJd0lJc0FUampYR2ViSm5YN0d2VF9IVHJ2cC05cFBJVXNxODZua0RUZElpcGl0V2IyRERjbW5nYzNoS3h2MkZHZWtWZzBHYU1DUUNhYg?oc=5",
+      "naver_url": null,
+      "keywords": "modular construction",
+      "relevance_score": 90
+    },
+    {
+      "id": 362,
+      "source": "해외 모듈러 RSS",
+      "media": "Kalkine",
+      "title": "BauMart Holdings Requests Trading Halt Pending Supplementary Update on Modular Housing Project - Kalkine",
+      "summary": "BauMart Holdings Requests Trading Halt Pending Supplementary Update on Modular Housing Project Kalkine",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPRUpVd09pU29icmNIaGxva3hZaHY5UXFQbDNTNVVybjFBMUxCVFVOTG1LNkxoYzN3MWx0R2lkRUVKZkZTaVJnMWJnOHVldDVtVElVRU4yNUVIZ3FKRV9tbWxZZW5rNUg4c21wRE5ZbDhaQlg1V3lFNVhVMzRDYVdvOXJSbC0tdVZDNkdnMUt6bWdkMmtHejBOMXMxb1VpODB3RjktQ1haeGRyVFVKOUJqOVl2OGlpWUpDc08zdFZ5bENkM0cyX05FNzZYZ2dRT3JDdEE?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 356,
+      "source": "해외 모듈러 RSS",
+      "media": "Yahoo",
+      "title": "Cleveland taps modular housing manufacturer to remake historic East Side factory - Yahoo",
+      "summary": "Cleveland taps modular housing manufacturer to remake historic East Side factory Yahoo",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPVnlaOG95OHMtUmp4N0xIa3hQSGFmZ3FDMUFhMEx4TVJHT3ozcVRjZXkzN1ZlU0d0QllBLTc3M0hkMHRjN2VkZ1I0TTZrdHBUVE85R1RFX0c3Vk9kbFg1RzNPV29NQjlZOEthZ3QtWE9nY01hdGZSNEtxQ04ySDVQOTRaTG9yTnBrWUJ2LW5IQ3N5VTJVOEJn?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 354,
+      "source": "해외 모듈러 RSS",
+      "media": "The Business Journals",
+      "title": "Louisville company to acquire historic Cleveland factory for modular housing manufacturing - The Business Journals",
+      "summary": "Louisville company to acquire historic Cleveland factory for modular housing manufacturing The Business Journals",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxNVEU0cjlpdVBxMGF5SHVqeG5VLTNKX3ZpRV9zdlFHVFlURzF3V3IzSmRFbTBrY3RUWmhPY3lMWWFHWlZPcUR3aUhfNGFTNWx0bF83MHR3dkpEeERMVXJCRF9ZekZoV2NjU3k0cGxZaE5Qa0kyWjUwTzlWU19rbk83am1SQWZMSGxmWU5wMWw2dmswODRleTUxblFRbkxvQ0o5cW93Tk9aYw?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 347,
+      "source": "해외 모듈러 RSS",
+      "media": "News 5 Cleveland WEWS",
+      "title": "Cleveland taps modular housing manufacturer to remake historic factory, aiming for 150 jobs - News 5 Cleveland WEWS",
+      "summary": "Cleveland taps modular housing manufacturer to remake historic factory, aiming for 150 jobs News 5 Cleveland WEWS",
+      "published_at": "2026-06-30",
+      "original_url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPZ2RkaW5aWjhYbWlYNmhWd0UzOV8zUGExRkViZWpfTUNPWVFzRjFzdGVjZS1wNGlvWnBWQUE3eENzWHZhZjBzbE5oWU41cE9kelVFVjU4am1JUXFZV0VGTWR3dW9pVGpSMzV3WnE4OHlxVEZZVmRzMm4wVWpnbnhac2hFdUdXTWZLQTc4WmtLU3RfV3FDS3dkMXp4TGJVdkJ2amd4Sk1NVV9SZGhQekJfT0pLenVXRkdZOG5aU0gxZWJTbGlCTjl4akNOLTI2T0lCcDRB?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
     },
     {
       "id": 292,
@@ -1086,6 +1410,30 @@
       "relevance_score": 6
     },
     {
+      "id": 378,
+      "source": "해외 모듈러 RSS",
+      "media": "TipRanks",
+      "title": "BauMart Advances Modular Housing Strategy with First Units On Site - TipRanks",
+      "summary": "BauMart Advances Modular Housing Strategy with First Units On Site TipRanks",
+      "published_at": "2026-06-29",
+      "original_url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPWkNFM0NXbXRwSmhHQzNNVlQ3RUxlMHR4cDRrUFJHemdUUEoyNkdKSTFNS3VIckItSDRvTE4yb3ZmTFZwNmdNNmZGZXR5UlpKSjAxOHQ3VDdwUkxTUHBNSTJxbHdhYkp4MThCUDJlbGlTNk5rcjI1dGM3WGJXZEpjX2xqZWU1OVJ4UkNDZGhZRlMzaldITkVoNGU4OV9QVDRFM093UTRDVTZvQlNKQ0hrRWo3OGYyc29Ydmc?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 357,
+      "source": "해외 모듈러 RSS",
+      "media": "The Standard (HK)",
+      "title": "Govt adopts modular construction to lower costs for $9.7b Kwu Tung North complex - The Standard (HK)",
+      "summary": "Govt adopts modular construction to lower costs for $9.7b Kwu Tung North complex The Standard (HK)",
+      "published_at": "2026-06-29",
+      "original_url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPcnZGUUw0ZmdUbEtjQ3BRV1A0R1owOXNmRFliMU13eUFUamNFRFNENGJ0UE9hYTVUOUZpOUhUVlRtSjI2OXNSZHF3LTRPSlp1NEtxT09VTXdXdmhud3hjemVvZjBETmpfZnF1dkw1bW5ZMFN2TFBxeWJxbWFyQkFjQlh3YjloUHpBeG55LWI4eGg2a2hNdzY2YWt5dmtZa1FMLXB4MTdYc09vR0hOSG9fQnlkSUY4czZlRlpsYjROR2tKTlBJTVJWTA?oc=5",
+      "naver_url": null,
+      "keywords": "modular construction",
+      "relevance_score": 90
+    },
+    {
       "id": 294,
       "source": "네이버뉴스",
       "media": "newsjeju.net",
@@ -1278,6 +1626,18 @@
       "relevance_score": 6
     },
     {
+      "id": 359,
+      "source": "해외 모듈러 RSS",
+      "media": "매일경제",
+      "title": "[Photo] LG Modular Home Maximizes Space; LG Electronics' Modular Housing - 매일경제",
+      "summary": "[Photo] LG Modular Home Maximizes Space; LG Electronics' Modular Housing 매일경제",
+      "published_at": "2026-06-28",
+      "original_url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBGZndyRG9mZ3BvdFgzeDdHakJwM1hYTUVMZkc2WVFlU0hiMFVVRlRFMjB0NkR4VGdHM1RDNWhyQzZEenhCZUVyam5lX0Nta3UtcktR?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing;modular home",
+      "relevance_score": 95
+    },
+    {
       "id": 218,
       "source": "네이버뉴스",
       "media": "financialreview.co.kr",
@@ -1468,6 +1828,18 @@
       "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440688",
       "keywords": "모듈러 건축",
       "relevance_score": 6
+    },
+    {
+      "id": 346,
+      "source": "해외 모듈러 RSS",
+      "media": "The Business Journals",
+      "title": "Modular housing development on 8th Avenue to deliver in just 6 months - The Business Journals",
+      "summary": "Modular housing development on 8th Avenue to deliver in just 6 months The Business Journals",
+      "published_at": "2026-06-26",
+      "original_url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxORGYtOWxFNHdDYW9mUk9ZN1VCV1BFWURGejBKWmFLYXhpbmdianBjRDh5VWc2cjFmbTRoZUJ1Zkplc1hSTm5TR0ZpTDdkd3VlT1piQmc2amZyT1FvTTBmNi1sdzFIS2xqUG1aVkN6aXJLVnp6N21LSHpLemhpWnRjZDlHbzh3eXlNOVdPT2xwX1dHSDNhSXQ0Z081MVIwcnpy?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
     },
     {
       "id": 178,
@@ -2098,11 +2470,11 @@
       "source": "네이버뉴스",
       "media": "view.asiae.co.kr",
       "title": "[르포]\"삼전이 집도 만들어?\" 일주일만에 찍어낸 단독주택 'AI 모듈러 홈...",
-      "summary": "AI 모듈러 홈은 스마트싱스의 'AI 절약 모드'를 통해 누진 구간 도달 전 가전들을 절전 모드로 선제 전환해... 실제로 이미 북미 시장에서는 유력 건설사인 '클레이턴 홈 빌딩 그룹'과 생활가전 제품 공급 사업을 진행 중이며...",
+      "summary": "모듈러 주택은 삼성 AI 홈 솔루션을 가장 빠르고 완벽하게 구현해 소비자에게 체험시킬 수 있는 최적의 교두보\"라고 강조했다. 삼성전자는 이번 단독주택 진출을 시작으로 아파트, 빌딩, 오피스, 숙박 문화 공간, 그리고 LH...",
       "published_at": "2026-06-24",
       "original_url": "https://view.asiae.co.kr/article/2026062417214476469",
       "naver_url": "https://n.news.naver.com/mnews/article/277/0005780995?sid=101",
-      "keywords": "스마트건설 모듈러",
+      "keywords": "모듈러 주택;LH 모듈러",
       "relevance_score": 14
     },
     {
@@ -2950,11 +3322,11 @@
       "source": "네이버뉴스",
       "media": "seoulfn.com",
       "title": "[건설브리핑] 동부건설, 육군 장성 교육시설 BTL 수주 외",
-      "summary": "LH, 코엑스서 'LH가 그리는 탄소중립의 내일' 특별관 운영 LH는 24일부터 3일간 서울 코엑스에서 열리는 '2026... △청정에너지 △제로에너지 주택(가상체험·실물체험) △모듈러 주택 △탄소중립 체험 등으로 구성됐다....",
+      "summary": "현대건설, 힐스테이트 고객 맞춤 웰컴 키트 출시 현대건설은 힐스테이트 입주 고객을 위한 새로운 웰컴... △청정에너지 △제로에너지 주택(가상체험·실물체험) △모듈러 주택 △탄소중립 체험 등으로 구성됐다....",
       "published_at": "2026-06-24",
       "original_url": "https://www.seoulfn.com/news/articleView.html?idxno=631855",
       "naver_url": "https://www.seoulfn.com/news/articleView.html?idxno=631855",
-      "keywords": "모듈러 주택;LH 모듈러",
+      "keywords": "모듈러 주택;현대건설 모듈러",
       "relevance_score": 4
     },
     {
