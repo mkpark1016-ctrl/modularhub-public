@@ -1,10 +1,22 @@
 {
-  "generated_at": "2026-07-03T18:51:31+09:00",
+  "generated_at": "2026-07-03T21:28:03+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 959,
-  "current_news_count": 272,
-  "merged_news_count": 961,
+  "previous_news_count": 961,
+  "current_news_count": 273,
+  "merged_news_count": 962,
   "items": [
+    {
+      "id": 6106,
+      "source": "해외 모듈러 RSS",
+      "media": "Business Post",
+      "title": "Irish Rail’s modular construction for landmark Dart training facility - Business Post",
+      "summary": "Irish Rail’s modular construction for landmark Dart training facility Business Post",
+      "published_at": "2026-07-03",
+      "original_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOVUZIdWpLTE1teWRNYWUwUjRmUDRNWDRuQ3RJM052WXpOZzYwYXhlQTR1TUxaX3FNcGY3OTdsSkhKbnFUS1c5UXNBQlRHc084RGlCbjd1cGhka01EQlRmVVNrdkxrNXhRZ0VNY0thVnNHckRGZkFUMWxhM0RwWlotZTB6TjMxM09VcGIyOWduc2doNkM2SWFPYVlMYk93M2JTN2tqOEowclp1UXItdXJkV1Z1QjdzX3hWM3NPNw?oc=5",
+      "naver_url": null,
+      "keywords": "modular construction",
+      "relevance_score": 90
+    },
     {
       "id": 6104,
       "source": "네이버뉴스",
