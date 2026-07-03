@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-07-03T21:28:03+09:00",
+  "generated_at": "2026-07-04T07:57:48+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 961,
-  "current_news_count": 273,
-  "merged_news_count": 962,
+  "previous_news_count": 962,
+  "current_news_count": 255,
+  "merged_news_count": 963,
   "items": [
     {
       "id": 6106,
@@ -87,6 +87,30 @@
       "original_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNcHF2Wm1UcFBoNXFaeVlMMUVRMFA3cHhMNVpUbUQtbnhHd1RydHA1eFN5em1nbFdLTjlleVdEbURsLWFHX25kQzBMUVBSZ3Mxb2IxX0xBZktxWk1rS29EaHIyM1VhUHJaQXB1RFU2bmVLNUs4d2xLa0t6M1NPQWQ5MlYyQWFwTzRkU1hobEdMUlBETWhHZWpDeDFYdmJMb1FiclNtTUNNVHhVWlpjOW41UDdWVUM?oc=5",
       "naver_url": null,
       "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 353,
+      "source": "해외 모듈러 RSS",
+      "media": "Montreal Gazette",
+      "title": "Montreal defends decision to axe Outremont modular housing project - Montreal Gazette",
+      "summary": "Montreal defends decision to axe Outremont modular housing project Montreal Gazette",
+      "published_at": "2026-07-03",
+      "original_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPTGlzb3JoWGlsVFdNMnNJMHR3QTdGRTQ2Z2JZMDVOZE5PS1RRZEZKNkN3Z0xBVWVFTGVlajZhYTF0akxKM0ctQnFlSTBGUlBXQzQ4WEwtS3c3RkRiRGRVYlFmUHhUSVRTdUEya3RGMEtEY0VpUHpmeUMxbW5jWmV2Q2FTbVpKS1dtNGpfTjRHMlZUS1pLX2pmOWhleE85aHVGS3FUYm4tdEFSRjA?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 331,
+      "source": "해외 모듈러 RSS",
+      "media": "Data Center Dynamics",
+      "title": "NTT Facilities develops modular construction system for hyperscale data centers - Data Center Dynamics",
+      "summary": "NTT Facilities develops modular construction system for hyperscale data centers Data Center Dynamics",
+      "published_at": "2026-07-03",
+      "original_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQeEZtUU1CNnVuOWwzQnk5WmM2a1NxeU1fYmhUNjRQYnpnTjRzYUM5NDZSSlVRNVBnZ0E3aVBSYzBkMGVQelFiUVNiMHNpZHpJVVc2TGJ4cTktZG12NWswTFhsM1M1QlB5RzZEdzh4MnFNSnRIUTJEVXBoYmVCYVBtamVsd0NJdmIwQ2kzYWdROWhUQktIb2RrSFVDR3p5Y2ZVMFJLNS1jRGtSRUVWcVFkaHV3QlMtalRiRXJjRFZ2eWE?oc=5",
+      "naver_url": null,
+      "keywords": "modular construction",
       "relevance_score": 90
     },
     {
@@ -325,18 +349,6 @@
       "summary": "Hunter Firms Urged to Lead Modular Housing Drive Mirage News",
       "published_at": "2026-07-02",
       "original_url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOUmFBZy1JWXh2MkhUR1BFcHJmNlZ5R0JKbk1oSDMzY21wUzV2amhfZDkwNXR6TWE5WGpmaHowVEJReU1YbXZRRGNkV1NIeTFHODVTek5HUGdqRll4UllQYVQ2QUNxejFMY3loeEszXzZ4bDFBbF9xZ1cydnBIaVRsWG83WUo2U09pZ0Fqeg?oc=5",
-      "naver_url": null,
-      "keywords": "modular housing",
-      "relevance_score": 90
-    },
-    {
-      "id": 353,
-      "source": "해외 모듈러 RSS",
-      "media": "Montreal Gazette",
-      "title": "Montreal defends decision to axe modular housing project for the unhoused - Montreal Gazette",
-      "summary": "Montreal defends decision to axe modular housing project for the unhoused Montreal Gazette",
-      "published_at": "2026-07-02",
-      "original_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPTGlzb3JoWGlsVFdNMnNJMHR3QTdGRTQ2Z2JZMDVOZE5PS1RRZEZKNkN3Z0xBVWVFTGVlajZhYTF0akxKM0ctQnFlSTBGUlBXQzQ4WEwtS3c3RkRiRGRVYlFmUHhUSVRTdUEya3RGMEtEY0VpUHpmeUMxbW5jWmV2Q2FTbVpKS1dtNGpfTjRHMlZUS1pLX2pmOWhleE85aHVGS3FUYm4tdEFSRjA?oc=5",
       "naver_url": null,
       "keywords": "modular housing",
       "relevance_score": 90
@@ -1791,7 +1803,7 @@
       "original_url": "https://www.tokenpost.kr/news/economy/373079",
       "naver_url": "https://www.tokenpost.kr/news/economy/373079",
       "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 6062,
@@ -1803,7 +1815,7 @@
       "original_url": "https://www.seoul.co.kr/news/publicnews/local_govern/kyungki_do/2026/06/26/20260626500227?wlog_tag3=naver",
       "naver_url": "https://n.news.naver.com/mnews/article/081/0003656273?sid=102",
       "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 6061,
@@ -1815,7 +1827,7 @@
       "original_url": "https://www.yna.co.kr/view/AKR20260626110200009?input=1195m",
       "naver_url": "https://n.news.naver.com/mnews/article/001/0016161789?sid=101",
       "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 6060,
@@ -1827,7 +1839,7 @@
       "original_url": "http://www.paxetv.com/news/articleView.html?idxno=275684",
       "naver_url": "http://www.paxetv.com/news/articleView.html?idxno=275684",
       "keywords": "모듈러 주택;모듈러 건축",
-      "relevance_score": 12
+      "relevance_score": 10
     },
     {
       "id": 6059,
@@ -1839,7 +1851,7 @@
       "original_url": "https://www.newsworks.co.kr/news/articleView.html?idxno=845128",
       "naver_url": "https://www.newsworks.co.kr/news/articleView.html?idxno=845128",
       "keywords": "모듈러 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 6058,
@@ -1851,7 +1863,7 @@
       "original_url": "https://www.electimes.com/news/articleView.html?idxno=369602",
       "naver_url": "https://www.electimes.com/news/articleView.html?idxno=369602",
       "keywords": "스마트건설 모듈러",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5992,
@@ -1863,7 +1875,7 @@
       "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440688",
       "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440688",
       "keywords": "프리패브 건축",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 346,
@@ -1887,7 +1899,7 @@
       "original_url": "https://www.mk.co.kr/article/12084263",
       "naver_url": "https://n.news.naver.com/mnews/article/009/0005699369?sid=103",
       "keywords": "OSC 건설",
-      "relevance_score": 6
+      "relevance_score": 4
     },
     {
       "id": 5991,
@@ -4254,6 +4266,18 @@
       "relevance_score": 16
     },
     {
+      "id": 5302,
+      "source": "네이버뉴스",
+      "media": "thebell.co.kr",
+      "title": "[더벨][i-point] 엔알비 경영진, 회사 주식 자발적 취득",
+      "summary": "엔알비 관계자는 \"현재 건설산업은 여러 구조적 과제에 직면해 있다\"며 \"엔알비는 공장에서 만들고 현장에서 조립하는 OSC·모듈러 공법을 기반으로 건설업의 제조업화 전환을 선도해 기업가치를 극대화할 것\"이라고...",
+      "published_at": "2026-06-22",
+      "original_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
+      "naver_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
+      "keywords": "OSC 건설",
+      "relevance_score": 4
+    },
+    {
       "id": 253,
       "source": "네이버뉴스",
       "media": "jeonmae.co.kr",
@@ -4816,18 +4840,6 @@
       "naver_url": "https://n.news.naver.com/mnews/article/022/0004136634?sid=101",
       "keywords": "모듈러 주택;모듈러 건축",
       "relevance_score": 16
-    },
-    {
-      "id": 5302,
-      "source": "네이버뉴스",
-      "media": "thebell.co.kr",
-      "title": "[더벨][떠오르는 모듈러 건축] 자연과환경, 'OSC 사업부' 신설…미래 성...",
-      "summary": "자연과환경이 OSC(탈현장건설) 사업부를 신설하며 기술 중심의 미래 성장동력 확보에 드라이브를 걸었다. 이번 조직 개편은 급변하는 글로벌 건설시장 트렌드에 발맞춰 사업 체질을 근본적으로 개선하겠다는 이병용...",
-      "published_at": "2026-06-19",
-      "original_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
-      "naver_url": "https://www.thebell.co.kr/free/content/ArticleView.asp",
-      "keywords": "모듈러 건축;OSC 건설",
-      "relevance_score": 14
     },
     {
       "id": 254,
