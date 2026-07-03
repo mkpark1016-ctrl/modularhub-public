@@ -150,6 +150,7 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
     invalid_ids: set[int | str] = set()
     url_seen: dict[str, dict[str, Any]] = {}
     title_date_seen: dict[str, dict[str, Any]] = {}
+    google_news_rss_url_sample: list[dict[str, Any]] = []
 
     counters: Counter[str] = Counter()
     media_distribution: Counter[str] = Counter()
@@ -236,7 +237,15 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
                 title_date_seen[title_date_key] = item
 
         if canonical and urlparse(canonical).hostname == "news.google.com":
-            add_issue(warnings, "google_news_rss_url", item, "Google News RSS URL is allowed but should remain visible for manual review", original_url=canonical)
+            counters["google_news_rss_url_count"] += 1
+            if len(google_news_rss_url_sample) < 5:
+                google_news_rss_url_sample.append(
+                    {
+                        "id": item.get("id"),
+                        "title": item.get("title"),
+                        "original_url": canonical,
+                    }
+                )
 
         if len(validation_errors) > item_errors_before:
             invalid_ids.add(item_key)
@@ -271,6 +280,9 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
         "date_missing_count": counters["date_missing_count"],
         "date_invalid_count": counters["date_invalid_count"],
         "keywords_missing_count": counters["keywords_missing_count"],
+        "google_news_rss_url_count": counters["google_news_rss_url_count"],
+        "google_news_rss_url_sample": google_news_rss_url_sample,
+        "google_news_rss_url_policy": "allowed_intermediary_url",
         "media_distribution": dict(sorted(media_distribution.items())),
         "keyword_distribution": dict(sorted(keyword_distribution.items())),
         "validation_errors": validation_errors,
@@ -294,16 +306,30 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- Duplicate title/date count: {report['duplicate_title_date_count']}",
         f"- Excluded context count: {report['excluded_context_count']}",
         "",
+        "## Information",
+        "",
+        f"- Google News RSS intermediary URL count: {report.get('google_news_rss_url_count', 0)}",
+        f"- Google News RSS URL policy: {report.get('google_news_rss_url_policy', 'allowed_intermediary_url')}",
+        "",
     ]
+    samples = report.get("google_news_rss_url_sample") or []
+    if samples:
+        lines.append("### Google News RSS URL Samples")
+        for sample in samples[:5]:
+            lines.append(f"- {sample.get('id')}: {sample.get('title')} ({sample.get('original_url')})")
+        lines.append("")
     if report["validation_errors"]:
         lines.append("## Validation Errors")
         for error in report["validation_errors"]:
             lines.append(f"- {error.get('code')}: {error.get('title') or error.get('message')}")
         lines.append("")
+    lines.append("## Warnings")
     if report["warnings"]:
-        lines.append("## Warnings")
         for warning in report["warnings"]:
             lines.append(f"- {warning.get('code')}: {warning.get('title') or warning.get('message')}")
+        lines.append("")
+    else:
+        lines.append("- None")
         lines.append("")
     return "\n".join(lines)
 
@@ -334,6 +360,9 @@ def audit_file(input_path: Path, output_dir: Path) -> dict[str, Any]:
             "date_missing_count": 0,
             "date_invalid_count": 0,
             "keywords_missing_count": 0,
+            "google_news_rss_url_count": 0,
+            "google_news_rss_url_sample": [],
+            "google_news_rss_url_policy": "allowed_intermediary_url",
             "media_distribution": {},
             "keyword_distribution": {},
             "validation_errors": load_errors,
@@ -357,6 +386,7 @@ def main() -> int:
         "overseas_rss_audit "
         f"status={report['audit_status']} "
         f"overseas={report['overseas_rss_count']} "
+        f"google_news_rss_urls={report.get('google_news_rss_url_count', 0)} "
         f"errors={len(report['validation_errors'])} "
         f"warnings={len(report['warnings'])}"
     )

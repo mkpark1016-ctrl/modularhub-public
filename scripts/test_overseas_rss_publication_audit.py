@@ -114,16 +114,21 @@ def test_warnings():
     require(has_code(report, "overseas_rss_empty"), "zero overseas warning absent")
 
 
-def test_google_news_url_allowed_with_warning():
+def test_google_news_url_allowed_as_information():
     report = audit([
         rss_item(
-            id=30,
-            original_url="https://news.google.com/rss/articles/CBMi?hl=en-US&gl=US&ceid=US:en",
-            title="Modular housing development approved",
+            id=30 + idx,
+            original_url=f"https://news.google.com/rss/articles/CBMi{idx}?hl=en-US&gl=US&ceid=US:en",
+            title=f"Modular housing development approved {idx}",
         )
+        for idx in range(6)
     ])
-    require(report["audit_status"] == "passed_with_warnings", "Google News RSS URL should be allowed with warning")
-    require(has_code(report, "google_news_rss_url"), "Google News warning missing")
+    require(report["audit_status"] == "passed", "Google News RSS URL alone should not warn")
+    require(not has_code(report, "google_news_rss_url"), "Google News URL must not be a warning")
+    require(report["warning_count"] == 0, "Google News URL must not increase warning count")
+    require(report["google_news_rss_url_count"] == 6, "Google News URL count mismatch")
+    require(report["google_news_rss_url_policy"] == "allowed_intermediary_url", "Google News policy mismatch")
+    require(len(report["google_news_rss_url_sample"]) == 5, "Google News sample must be capped at 5")
     require(report["invalid_url_count"] == 0, "Google News URL must not be invalid")
 
 
@@ -150,6 +155,10 @@ def test_output_files_are_written():
         require((output_dir / "overseas_rss_audit.md").exists(), "audit markdown not written")
         parsed = json.loads((output_dir / "overseas_rss_audit.json").read_text(encoding="utf-8"))
         require(parsed["overseas_rss_count"] == 5, "audit JSON content mismatch")
+        markdown = (output_dir / "overseas_rss_audit.md").read_text(encoding="utf-8")
+        require("## Information" in markdown, "information section missing")
+        require("Google News RSS intermediary URL count" in markdown, "Google News info metric missing")
+        require("## Warnings" in markdown and "- None" in markdown, "empty warnings section should say None")
 
 
 def main():
@@ -158,7 +167,7 @@ def main():
         test_hard_failures,
         test_duplicate_failures,
         test_warnings,
-        test_google_news_url_allowed_with_warning,
+        test_google_news_url_allowed_as_information,
         test_output_files_are_written,
     ]
     for test in tests:
