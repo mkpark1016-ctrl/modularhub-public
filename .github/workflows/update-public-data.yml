@@ -189,6 +189,24 @@ jobs:
       - name: Export public JSON
         run: python scripts/export_public_json.py
 
+      - name: Audit overseas RSS publication
+        run: |
+          set +e
+          python scripts/audit_overseas_rss_publication.py \
+            --input frontend/public/data/news.json \
+            --output-dir artifacts/overseas_rss_audit
+          code=$?
+          if [ -f artifacts/overseas_rss_audit/overseas_rss_audit.md ]; then
+            cat artifacts/overseas_rss_audit/overseas_rss_audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+          status=$(python -c "import json; print(json.load(open('artifacts/overseas_rss_audit/overseas_rss_audit.json', encoding='utf-8'))['audit_status'])")
+          if [ "$status" = "passed_with_warnings" ]; then
+            echo "::warning::Overseas RSS publication audit passed with warnings."
+          fi
+
       - name: Diagnose procurement plan pipeline
         run: |
           if [ -f scripts/diagnose_procurement_plan_gap.py ]; then

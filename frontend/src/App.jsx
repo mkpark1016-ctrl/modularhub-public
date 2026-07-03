@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Link, NavLink, Route, Routes, useParams } from "react-router-dom";
 import { matchesBusinessFilters } from "./businessFilters";
+import { compareNewsItems, getNewsRegionType, newsRegionCounts, newsRegionMatches } from "./newsRegion";
 
 const DATA_BASE = import.meta.env.VITE_DATA_BASE_URL || "/data";
 
@@ -357,15 +358,30 @@ function BusinessCard({ item }) {
 }
 
 function NewsCard({ item }) {
+  const isOverseas = getNewsRegionType(item) === "overseas";
+  const original = item.original_url;
+  const keywords = Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords;
+  const score = Number(item.relevance_score);
   return (
     <article className="result-card news-card">
-      <div className="badge-row"><span>뉴스</span><span>{formatDate(item.published_at)}</span></div>
+      <div className="badge-row">
+        <span>{isOverseas ? "해외뉴스" : "뉴스"}</span>
+        {isOverseas && <span className="overseas-badge">해외 모듈러 RSS</span>}
+        <span>{item.media || item.source || "네이버뉴스"}</span>
+        <span>{formatDate(item.published_at)}</span>
+      </div>
       <h2><Link to={`/news/${item.id}`}>{item.title}</Link></h2>
       <p>{item.summary || "요약이 없습니다."}</p>
+      {isOverseas && (
+        <div className="news-extra">
+          {keywords && <span>{keywords}</span>}
+          <span>Score {Number.isFinite(score) ? score : 0}</span>
+        </div>
+      )}
       <div className="card-footer">
         <span>{item.media || item.source || "네이버뉴스"}</span>
         <div className="card-actions">
-          <a href={item.original_url} target="_blank" rel="noreferrer">원문 보기</a>
+          {original && <a href={original} target="_blank" rel="noopener noreferrer">원문 보기</a>}
           <Link to={`/news/${item.id}`}>상세보기</Link>
         </div>
       </div>
@@ -404,10 +420,28 @@ function BusinessFilters({ query, setQuery, typeFilter, setTypeFilter, agencyFil
   );
 }
 
-function NewsFilters({ query, setQuery, source, setSource, sources, newsDays, setNewsDays, filteredCount }) {
+function NewsFilters({ query, setQuery, newsRegion, setNewsRegion, regionCounts, source, setSource, sources, newsDays, setNewsDays, filteredCount }) {
+  const regionOptions = [
+    { value: "all", label: "전체", count: regionCounts.all },
+    { value: "domestic", label: "국내뉴스", count: regionCounts.domestic },
+    { value: "overseas", label: "해외뉴스", count: regionCounts.overseas },
+  ];
   return (
     <aside className="filters">
       <h2>검색 조건</h2>
+      <div className="segmented-filter" role="group" aria-label="뉴스 유형">
+        {regionOptions.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            className={newsRegion === option.value ? "active" : ""}
+            onClick={() => setNewsRegion(option.value)}
+          >
+            <span>{option.label}</span>
+            <strong>{option.count.toLocaleString("ko-KR")}</strong>
+          </button>
+        ))}
+      </div>
       <SearchBar value={query} onChange={setQuery} placeholder="뉴스 제목, 요약" />
       <label>출처
         <select aria-label="출처" value={source} onChange={(event) => setSource(event.target.value)}>
@@ -431,6 +465,7 @@ function ListingPage({ type }) {
   const isBusiness = type === "business";
   const { loading, error, data } = useDataset(type);
   const [query, setQuery] = useState("");
+  const [newsRegion, setNewsRegion] = useState("all");
   const [source, setSource] = useState("전체");
   const [newsDays, setNewsDays] = useState("전체");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -452,6 +487,7 @@ function ListingPage({ type }) {
   }, [isBusiness, items]);
 
   const sources = useMemo(() => ["전체", ...new Set(items.map((item) => item.media || item.source || item.source_name).filter(Boolean))], [items]);
+  const regionCounts = useMemo(() => (isBusiness ? { all: 0, domestic: 0, overseas: 0 } : newsRegionCounts(items)), [isBusiness, items]);
 
   const filtered = useMemo(() => {
     const queryText = normalizeText(query);
@@ -467,6 +503,7 @@ function ListingPage({ type }) {
       }
 
       const text = `${item.title || ""} ${item.media || ""} ${item.source || ""} ${item.summary || ""}`.toLowerCase();
+      if (!newsRegionMatches(item, newsRegion)) return false;
       const sourceMatches = source === "전체" || item.media === source || item.source === source;
       let dateMatches = true;
       if (newsDays !== "전체") {
@@ -476,8 +513,8 @@ function ListingPage({ type }) {
         dateMatches = Boolean(published) && published >= threshold;
       }
       return (!queryText || text.includes(queryText)) && sourceMatches && dateMatches;
-    }).sort((a, b) => (isBusiness ? compareBusinessItems(a, b) : 0));
-  }, [agencyFilter, isBusiness, items, newsDays, query, source, statusFilter, typeFilter]);
+    }).sort((a, b) => (isBusiness ? compareBusinessItems(a, b) : compareNewsItems(a, b)));
+  }, [agencyFilter, isBusiness, items, newsDays, newsRegion, query, source, statusFilter, typeFilter]);
 
   function resetBusinessFilters() {
     setQuery("");
@@ -525,6 +562,9 @@ function ListingPage({ type }) {
           <NewsFilters
             query={query}
             setQuery={setQuery}
+            newsRegion={newsRegion}
+            setNewsRegion={setNewsRegion}
+            regionCounts={regionCounts}
             source={source}
             setSource={setSource}
             sources={sources}
@@ -541,7 +581,7 @@ function ListingPage({ type }) {
           )}
           {loading && <div className="state">데이터를 불러오는 중입니다.</div>}
           {error && <div className="state error">{error}</div>}
-          {!loading && !error && filtered.length === 0 && <div className="state">{isBusiness ? emptyMessage : "조건에 맞는 뉴스가 없습니다."}</div>}
+          {!loading && !error && filtered.length === 0 && <div className="state">{isBusiness ? emptyMessage : (newsRegion === "overseas" ? "현재 조건에 맞는 해외 모듈러 뉴스가 없습니다." : "조건에 맞는 뉴스가 없습니다.")}</div>}
           {filtered.map((item) => (isBusiness ? <BusinessCard key={item.id} item={item} /> : <NewsCard key={item.id} item={item} />))}
         </section>
       </div>
