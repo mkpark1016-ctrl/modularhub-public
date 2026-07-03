@@ -1,10 +1,22 @@
 {
-  "generated_at": "2026-07-03T15:43:08+09:00",
+  "generated_at": "2026-07-03T18:51:31+09:00",
   "data_policy": "cumulative_verified",
-  "previous_news_count": 928,
-  "current_news_count": 271,
-  "merged_news_count": 959,
+  "previous_news_count": 959,
+  "current_news_count": 272,
+  "merged_news_count": 961,
   "items": [
+    {
+      "id": 6104,
+      "source": "네이버뉴스",
+      "media": "imwood.co.kr",
+      "title": "캠핑카 가격으로 강원도에 내집 '하루홈 아지트'",
+      "summary": "스마트하우스(대표 이영주)가 강원도 횡성의 해발 600미터 고지에 조성한 '아지트'는 모듈러 주택과... 스마트하우스 이영주 대표는 \"개인이 시골에 땅을 구해 인허가를 받고 토목공사와 건축을 진행하다 보면 예상치 못한...",
+      "published_at": "2026-07-03",
+      "original_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41338",
+      "naver_url": "https://www.imwood.co.kr/news/articleView.html?idxno=41338",
+      "keywords": "모듈러 주택;모듈러 건축",
+      "relevance_score": 6
+    },
     {
       "id": 6098,
       "source": "네이버뉴스",
@@ -61,6 +73,18 @@
       "summary": "How the Hunter can cash in on NSW's modular housing revolution Newcastle Herald",
       "published_at": "2026-07-03",
       "original_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNcHF2Wm1UcFBoNXFaeVlMMUVRMFA3cHhMNVpUbUQtbnhHd1RydHA1eFN5em1nbFdLTjlleVdEbURsLWFHX25kQzBMUVBSZ3Mxb2IxX0xBZktxWk1rS29EaHIyM1VhUHJaQXB1RFU2bmVLNUs4d2xLa0t6M1NPQWQ5MlYyQWFwTzRkU1hobEdMUlBETWhHZWpDeDFYdmJMb1FiclNtTUNNVHhVWlpjOW41UDdWVUM?oc=5",
+      "naver_url": null,
+      "keywords": "modular housing",
+      "relevance_score": 90
+    },
+    {
+      "id": 6105,
+      "source": "해외 모듈러 RSS",
+      "media": "Newcastle Weekly",
+      "title": "Call for Hunter firms to lead delivery of modular housing - Newcastle Weekly",
+      "summary": "Call for Hunter firms to lead delivery of modular housing Newcastle Weekly",
+      "published_at": "2026-07-02",
+      "original_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOeHpTbVRpNG9LYVZ3R2l1TllaM2FtNTRSMWVVSk9GeVB0MzJLaWtyM2w5cW9SU28ycjhVaDB6bjBwWnVNeUE4TjdneS1JSVJ2Vjlfdzd0NE5pVTdYdzN6bzliR3hxLXdRbkY4QTJYTVdMSXMxQnpud1Z1RGVMTXAxX09FVGVjNFk0UW90R0M5UHc3VWM?oc=5",
       "naver_url": null,
       "keywords": "modular housing",
       "relevance_score": 90
@@ -1822,11 +1846,11 @@
       "source": "네이버뉴스",
       "media": "businesspost.co.kr",
       "title": "[Who Is ?] 허윤홍 GS건설 대표이사 사장",
-      "summary": "2026년 1분기에는 건설·부동산 경기 악화에 따른 주택공급 감소 영향으로 건축·주택사업본부 매출이... GS건설 신사업부문은 2022년 수처리와 모듈러주택을 중심으로 매출이 1조 원을 넘으면서 성공적으로 자리를...",
+      "summary": "2026년 1분기에는 건설·부동산 경기 악화에 따른 주택공급 감소 영향으로 건축·주택사업본부 매출이... GS건설은 2025년 6월 '프리패브 목조 모듈러'를 자이 아파트 내 티하우스를 비롯한 부대시설 건설에 도입하며...",
       "published_at": "2026-06-26",
       "original_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440688",
       "naver_url": "https://www.businesspost.co.kr/BP?command=article_view&num=440688",
-      "keywords": "모듈러 건축",
+      "keywords": "프리패브 건축",
       "relevance_score": 6
     },
     {
