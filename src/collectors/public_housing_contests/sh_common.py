@@ -153,23 +153,31 @@ def parse_landing_notice_links(page_html: str, base_url: str = LANDING_URL) -> l
 
 
 def parse_bid_list_rows(page_html: str) -> list[dict[str, Any]]:
-    row_pattern = re.compile(r"<tr[^>]*>\s*<td>(?P<number>\d+)</td>(?P<body>.*?)</tr>", re.IGNORECASE | re.DOTALL)
+    row_pattern = re.compile(r"<tr\b[^>]*>(?P<body>.*?)</tr>", re.IGNORECASE | re.DOTALL)
+    cell_pattern = re.compile(r"<t[dh]\b[^>]*>(.*?)</t[dh]>", re.IGNORECASE | re.DOTALL)
+    onclick_pattern = re.compile(
+        r"openBidblancDetail\s*\(\s*['\"]([^'\"]+)['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\)",
+        re.IGNORECASE | re.DOTALL,
+    )
     rows: list[dict[str, Any]] = []
     for match in row_pattern.finditer(page_html or ""):
-        row_html = match.group("body")
-        onclick_match = re.search(r"openBidblancDetail\('([^']+)'\s*,\s*'([^']+)'\)", row_html)
-        title_match = re.search(r"<a\b[^>]*>(.*?)</a>", row_html, flags=re.IGNORECASE | re.DOTALL)
+        row_html = match.group(0)
         cells = [
             clean_text(re.sub(r"<[^>]+>", " ", cell))
-            for cell in re.findall(r"<td[^>]*>(.*?)</td>", match.group(0), flags=re.IGNORECASE | re.DOTALL)
+            for cell in cell_pattern.findall(row_html)
         ]
-        if not onclick_match or not title_match or len(cells) < 5:
+        if len(cells) < 5:
+            continue
+        row_no_match = re.search(r"\d+", cells[0])
+        onclick_match = onclick_pattern.search(row_html)
+        title_match = re.search(r"<a\b[^>]*>(.*?)</a>", row_html, flags=re.IGNORECASE | re.DOTALL)
+        if not row_no_match or not onclick_match or not title_match:
             continue
         title = clean_text(re.sub(r"<[^>]+>", " ", title_match.group(1)))
         bid_no, bid_order = onclick_match.groups()
         rows.append(
             {
-                "row_no": int(match.group("number")),
+                "row_no": int(row_no_match.group(0)),
                 "title": title,
                 "posted_at": cells[2],
                 "bid_open_at": cells[3],
@@ -186,7 +194,7 @@ def parse_bid_list_rows(page_html: str) -> list[dict[str, Any]]:
     return rows
 
 
-def parse_page_count(text: str) -> dict[str, int | None]:
+def _parse_page_count_legacy(text: str) -> dict[str, int | None]:
     match = re.search(r"총\s*([\d,]+)\s*건\s*\[(\d+)/(\d+)페이지\]", clean_text(text))
     if not match:
         return {"total_count": None, "current_page": None, "page_count": None}
@@ -194,6 +202,28 @@ def parse_page_count(text: str) -> dict[str, int | None]:
         "total_count": int(match.group(1).replace(",", "")),
         "current_page": int(match.group(2)),
         "page_count": int(match.group(3)),
+    }
+
+
+def parse_page_count(text: str) -> dict[str, int | None]:
+    body = clean_text(re.sub(r"<[^>]+>", " ", text or ""))
+    match = re.search(
+        r"(?:총|전체|검색결과)?\s*([\d,]+)\s*건\s*\[\s*(\d+)\s*/\s*(\d+)\s*페이지\s*\]",
+        body,
+    )
+    if match:
+        return {
+            "total_count": int(match.group(1).replace(",", "")),
+            "current_page": int(match.group(2)),
+            "page_count": int(match.group(3)),
+        }
+    match = re.search(r"(?:총|전체|검색결과)\s*([\d,]+)\s*건", body)
+    if not match:
+        return {"total_count": None, "current_page": None, "page_count": None}
+    return {
+        "total_count": int(match.group(1).replace(",", "")),
+        "current_page": None,
+        "page_count": None,
     }
 
 

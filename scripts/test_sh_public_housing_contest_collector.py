@@ -12,9 +12,11 @@ sys.path.insert(0, str(ROOT))
 from src.collectors.public_housing_contests.sh import (  # noqa: E402
     BID_LIST_URL,
     BOARD_URL,
+    FetchResult,
     SHCollectStats,
     SHContestRecord,
     SHG2BDiscovery,
+    SHPublicHousingContestCollector,
     apply_sh_stats,
     bid_list_health,
     classify_sh_candidate,
@@ -26,6 +28,7 @@ from src.collectors.public_housing_contests.sh import (  # noqa: E402
     parse_bid_list_rows,
     parse_down_list,
     parse_landing_notice_links,
+    parse_page_count,
     parse_date,
     verify_sh_detail_url,
 )
@@ -35,6 +38,22 @@ from src.models import Item  # noqa: E402
 
 
 FIXTURE_DIR = ROOT / "tests" / "fixtures"
+
+
+class FixtureSHCollector(SHPublicHousingContestCollector):
+    def __init__(self, page_html: str) -> None:
+        super().__init__(max_pages=1, request_interval_seconds=0.0, timeout_seconds=1, list_url=BID_LIST_URL)
+        self.page_html = page_html
+
+    def fetch(self, url: str, method: str = "GET", data: dict[str, str] | None = None) -> FetchResult:
+        return FetchResult(
+            url=url,
+            final_url=BID_LIST_URL,
+            status_code=200,
+            content_type="text/html; charset=utf-8",
+            encoding="utf-8",
+            text=self.page_html,
+        )
 
 
 def read_fixture(name: str) -> str:
@@ -129,6 +148,41 @@ def test_parsers() -> None:
     assert empty_rows == []
 
 
+def test_bid_list_parser_variants_and_page_count() -> None:
+    html = """
+    <html><body>
+      <p>총 1건 [1/1페이지]</p>
+      <table><tbody>
+        <tr>
+          <td class="num"><span>1</span></td>
+          <td><a href="#" onclick=' openBidblancDetail( "R26BK01594237" , "000" ) '><span>민간참여 공고 &amp; 안내</span></a></td>
+          <td>2026-06-22</td>
+          <td>2026-06-28</td>
+          <td>2026-06-29</td>
+        </tr>
+      </tbody></table>
+    </body></html>
+    """
+    rows = parse_bid_list_rows(html)
+    assert len(rows) == 1
+    assert rows[0]["row_no"] == 1
+    assert rows[0]["title"] == "민간참여 공고 & 안내"
+    assert rows[0]["bid_no"] == "R26BK01594237"
+    assert rows[0]["bid_order"] == "000"
+
+    assert parse_page_count("총 0건") == {"total_count": 0, "current_page": None, "page_count": None}
+    assert parse_page_count("총 1,156 건 [1/116페이지]") == {
+        "total_count": 1156,
+        "current_page": 1,
+        "page_count": 116,
+    }
+    assert parse_page_count("검색결과 0건 [0/0페이지]") == {
+        "total_count": 0,
+        "current_page": 0,
+        "page_count": 0,
+    }
+
+
 def test_live_verification_page_contract() -> None:
     source = load_sh_source()
     assert source["list_url"] == BID_LIST_URL
@@ -154,6 +208,35 @@ def test_live_verification_page_contract() -> None:
     old_url = "https://www.i-sh.co.kr/main/lay2/program/S1T1C222/subMain4.do?menu=instOpenResultCdList"
     assert detect_page_type(wrapper_html, old_url) == "sh_result_list"
     assert detect_page_type("<html>Access denied</html>", BID_LIST_URL) == "blocked_page"
+
+
+def test_empty_state_and_parser_mismatch_contract() -> None:
+    total_zero_html = "<html><body><h1>입찰공고</h1><p>총 0건 [0/0페이지]</p><table><tbody></tbody></table></body></html>"
+    total_zero = FixtureSHCollector(total_zero_html).collect()
+    assert total_zero.status == "success_no_matches"
+    assert not total_zero.parser_mismatch
+    assert total_zero.total_count == 0
+    assert total_zero.empty_state_evidence == "total_count_zero"
+
+    explicit_empty_html = "<html><body><h1>입찰공고</h1><p>조회된 결과가 없습니다</p><table></table></body></html>"
+    explicit_empty = FixtureSHCollector(explicit_empty_html).collect()
+    assert explicit_empty.status == "success_no_matches"
+    assert not explicit_empty.parser_mismatch
+    assert explicit_empty.empty_state_evidence == "explicit_message"
+
+    expected_rows_html = "<html><body><h1>입찰공고</h1><p>총 5건 [1/1페이지]</p><table><tbody></tbody></table></body></html>"
+    expected_rows = FixtureSHCollector(expected_rows_html).collect()
+    assert expected_rows.status == "parser_mismatch"
+    assert expected_rows.parser_mismatch
+    assert expected_rows.empty_state_evidence == "rows_expected_but_unparsed"
+    assert expected_rows.parser_mismatch_reasons == ["rows_expected_but_unparsed"]
+
+    ambiguous_html = "<html><body><h1>입찰공고</h1><table><tbody></tbody></table></body></html>"
+    ambiguous = FixtureSHCollector(ambiguous_html).collect()
+    assert ambiguous.status == "parser_mismatch"
+    assert ambiguous.parser_mismatch
+    assert ambiguous.empty_state_evidence == "ambiguous_zero_rows"
+    assert ambiguous.parser_mismatch_reasons == ["ambiguous_zero_rows"]
 
 
 def test_classification_and_exact_url() -> None:
@@ -240,7 +323,9 @@ def test_duplicate_upsert_and_g2b_merge() -> None:
 
 def main() -> int:
     test_parsers()
+    test_bid_list_parser_variants_and_page_count()
     test_live_verification_page_contract()
+    test_empty_state_and_parser_mismatch_contract()
     test_classification_and_exact_url()
     test_duplicate_upsert_and_g2b_merge()
     print("SH public housing contest collector tests passed")

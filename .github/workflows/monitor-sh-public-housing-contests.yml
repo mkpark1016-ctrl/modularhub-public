@@ -110,7 +110,11 @@ jobs:
               f"- checked_at: {report.get('checked_at')}",
               f"- detected_page_type: {report.get('detected_page_type')}",
               f"- HTTP status: {report.get('http_status')}",
+              f"- Total count: {report.get('total_count')}",
               f"- row_count: {report.get('row_count')}",
+              f"- Parsed row count: {report.get('rows_with_title')}",
+              f"- Empty-state evidence: {report.get('empty_state_evidence')}",
+              f"- Parser mismatch reason: {', '.join(report.get('parser_mismatch_reasons') or [])}",
               f"- parse_success_ratio: {report.get('parse_success_ratio')}",
               f"- g2b_linked_count: {report.get('g2b_linked_count')}",
               f"- confirmed_count: {report.get('confirmed_count')}",
@@ -123,6 +127,10 @@ jobs:
           ]
           if report.get("status") == "success_no_matches":
               lines.extend(["", "SH 목록 구조는 정상이며 현재 공개 대상 민간참여 공공주택 공모가 없습니다."])
+          if report.get("status") == "success_no_matches":
+              lines.extend(["", "SH 목록 구조가 정상이며 현재 공개 가능한 입찰공고가 없습니다."])
+          if report.get("parser_mismatch"):
+              lines.extend(["", "SH 목록 구조를 확정할 수 없습니다. 업로드된 page_structure.json과 list_table_excerpt.html을 검토하십시오."])
           if report.get("publish_eligible_count"):
               lines.extend(["", "SH 공개 검토 후보가 발견되었습니다. candidates.json을 검토하십시오."])
           Path(summary_path).write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -137,5 +145,7 @@ jobs:
             artifacts/sh_shadow/report.json
             artifacts/sh_shadow/report.md
             artifacts/sh_shadow/candidates.json
+            artifacts/sh_shadow/page_structure.json
+            artifacts/sh_shadow/list_table_excerpt.html
           if-no-files-found: warn
           retention-days: 14

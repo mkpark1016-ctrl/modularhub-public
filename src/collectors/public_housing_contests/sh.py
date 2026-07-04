@@ -28,6 +28,7 @@ from src.collectors.public_housing_contests.sh_common import (
     parse_bid_list_rows,
     parse_down_list,
     parse_landing_notice_links,
+    parse_page_count,
 )
 from src.config import DB_PATH
 from src.database import (
@@ -162,6 +163,12 @@ class SHCollectStats:
     detected_page_type: str = "unknown_page"
     table_found: bool = False
     empty_list_message_found: bool = False
+    total_count: int | None = None
+    current_page: int | None = None
+    page_count: int | None = None
+    empty_state_evidence: str = "ambiguous_zero_rows"
+    page_sha256: str = ""
+    html_byte_count: int = 0
     row_count: int = 0
     rows_with_title: int = 0
     rows_with_identifier: int = 0
@@ -180,6 +187,7 @@ class SHCollectStats:
     detail_fetch_failed_count: int = 0
     parser_mismatch: bool = False
     parser_mismatch_reasons: list[str] = field(default_factory=list)
+    legacy_parser_mismatch_reason: str = ""
     failure_reason: str = ""
     scanned: int = 0
     sh_notice_count: int = 0
@@ -201,6 +209,7 @@ class SHCollectStats:
     records: list[SHContestRecord] = field(default_factory=list)
     g2b_discoveries: list[SHG2BDiscovery] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    diagnostic_page_html: str = field(default="", repr=False)
 
     @property
     def published_count(self) -> int:
@@ -221,6 +230,12 @@ class SHCollectStats:
             "detected_page_type": self.detected_page_type,
             "table_found": self.table_found,
             "empty_list_message_found": self.empty_list_message_found,
+            "total_count": self.total_count,
+            "current_page": self.current_page,
+            "page_count": self.page_count,
+            "empty_state_evidence": self.empty_state_evidence,
+            "page_sha256": self.page_sha256,
+            "html_byte_count": self.html_byte_count,
             "row_count": self.row_count,
             "rows_with_title": self.rows_with_title,
             "rows_with_identifier": self.rows_with_identifier,
@@ -239,6 +254,7 @@ class SHCollectStats:
             "detail_fetch_failed_count": self.detail_fetch_failed_count,
             "parser_mismatch": self.parser_mismatch,
             "parser_mismatch_reasons": self.parser_mismatch_reasons,
+            "legacy_parser_mismatch_reason": self.legacy_parser_mismatch_reason,
             "failure_reason": self.failure_reason,
             "scanned": self.scanned,
             "scanned_count": self.scanned,
@@ -446,10 +462,18 @@ def is_blocked_page(page_html: str) -> bool:
 
 
 def empty_list_message_found(page_html: str) -> bool:
-    text = clean_text(re.sub(r"<[^>]+>", " ", page_html or "")).lower()
+    text = html_to_text(page_html).lower()
     tokens = (
         "no data",
         "no results",
+        "조회 결과가 없습니다",
+        "조회된 결과가 없습니다",
+        "조회된 목록이 없습니다",
+        "등록된 입찰공고가 없습니다",
+        "등록된 공고가 없습니다",
+        "데이터가 존재하지 않습니다",
+        "검색된 자료가 없습니다",
+        "게시물이 없습니다",
         "\uc870\ud68c\ub41c \ub370\uc774\ud130\uac00 \uc5c6",
         "\ub4f1\ub85d\ub41c \uac8c\uc2dc\ubb3c\uc774 \uc5c6",
         "\uac80\uc0c9\uacb0\uacfc\uac00 \uc5c6",
@@ -485,9 +509,9 @@ def bid_list_health(page_html: str, final_url: str, parsed_rows: list[dict[str, 
     for row_html in row_candidates:
         onclick_candidates.extend(
             re.findall(
-                r"openBidblancDetail\('([^']+)'\s*,\s*'([^']+)'\)",
+                r"openBidblancDetail\s*\(\s*['\"]([^'\"]+)['\"]\s*,\s*['\"]([^'\"]+)['\"]\s*\)",
                 row_html,
-                flags=re.IGNORECASE,
+                flags=re.IGNORECASE | re.DOTALL,
             )
         )
         seq_candidates.extend(re.findall(r"seq=(\d+)", row_html, flags=re.IGNORECASE))
@@ -502,11 +526,30 @@ def bid_list_health(page_html: str, final_url: str, parsed_rows: list[dict[str, 
     }
     unique_detail_candidates.update(f"seq:{seq}" for seq in seq_candidates if clean_text(seq))
     ratio = round(rows_with_title / row_count, 3) if row_count else 0.0
+    page_count_info = parse_page_count(page_html)
+    empty_found = empty_list_message_found(page_html)
+    total_count = page_count_info["total_count"]
+    if parsed_rows:
+        empty_state_evidence = "parsed_rows_present"
+    elif empty_found:
+        empty_state_evidence = "explicit_message"
+    elif total_count == 0:
+        empty_state_evidence = "total_count_zero"
+    elif total_count is not None and total_count > 0:
+        empty_state_evidence = "rows_expected_but_unparsed"
+    else:
+        empty_state_evidence = "ambiguous_zero_rows"
     return {
         "page_title": extract_page_title(page_html),
         "detected_page_type": detect_page_type(page_html, final_url),
         "table_found": bool(re.search(r"<table\b", page_html or "", flags=re.IGNORECASE)),
-        "empty_list_message_found": empty_list_message_found(page_html),
+        "empty_list_message_found": empty_found,
+        "total_count": total_count,
+        "current_page": page_count_info["current_page"],
+        "page_count": page_count_info["page_count"],
+        "empty_state_evidence": empty_state_evidence,
+        "page_sha256": hashlib.sha256((page_html or "").encode("utf-8")).hexdigest(),
+        "html_byte_count": len((page_html or "").encode("utf-8")),
         "row_count": row_count,
         "rows_with_title": rows_with_title,
         "rows_with_identifier": sum(1 for row in parsed_rows if clean_text(row.get("source_record_id"))),
@@ -728,6 +771,7 @@ class SHPublicHousingContestCollector:
                 health = bid_list_health(fetch.text, fetch.final_url, page_rows)
                 for key, value in health.items():
                     setattr(stats, key, value)
+                stats.diagnostic_page_html = fetch.text
                 stats.final_url = fetch.final_url
                 stats.http_status = fetch.status_code
                 if health["detected_page_type"] not in {"sh_bid_list", "empty_list"}:
@@ -738,12 +782,18 @@ class SHPublicHousingContestCollector:
                     break
             if not page_rows:
                 if page_no == 1:
-                    if stats.empty_list_message_found:
+                    if stats.empty_state_evidence in {"explicit_message", "total_count_zero"}:
                         break
-                    stats.errors.append("bid list parser returned zero rows")
+                    mismatch_reason = (
+                        "rows_expected_but_unparsed"
+                        if stats.empty_state_evidence == "rows_expected_but_unparsed"
+                        else "ambiguous_zero_rows"
+                    )
+                    stats.errors.append(f"bid list parser returned zero rows: {mismatch_reason}")
                     stats.parser_mismatch = True
                     stats.failure_reason = "parser_mismatch"
-                    stats.parser_mismatch_reasons.append("no_rows_without_empty_list_message")
+                    stats.parser_mismatch_reasons.append(mismatch_reason)
+                    stats.legacy_parser_mismatch_reason = "no_rows_without_empty_list_message"
                 break
             if page_no == 1:
                 if stats.row_count and stats.rows_with_title / max(stats.row_count, 1) < 0.5:

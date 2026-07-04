@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 import time
 import traceback
@@ -146,6 +147,89 @@ def build_candidates(stats: Any) -> list[dict[str, Any]]:
     return unique
 
 
+def strip_scripts_and_styles(page_html: str) -> str:
+    return re.sub(r"(?is)<(script|style)\b.*?</\1>", "", page_html or "")
+
+
+def mask_hidden_input_values(page_html: str) -> str:
+    input_pattern = re.compile(r"<input\b[^>]*>", re.IGNORECASE | re.DOTALL)
+    type_pattern = re.compile(r"\btype\s*=\s*(['\"]?)hidden\1", re.IGNORECASE)
+    value_pattern = re.compile(r"\bvalue\s*=\s*(\"[^\"]*\"|'[^']*'|[^\s>]+)", re.IGNORECASE)
+
+    def mask_input(match: re.Match[str]) -> str:
+        tag = match.group(0)
+        if not type_pattern.search(tag):
+            return tag
+        return value_pattern.sub('value="{masked}"', tag)
+
+    return input_pattern.sub(mask_input, page_html or "")
+
+
+def bounded_text(value: str, limit: int = 500) -> str:
+    text = re.sub(r"\s+", " ", value or "").strip()
+    return text[:limit]
+
+
+def html_byte_prefix(value: str, limit: int = 50 * 1024) -> str:
+    data = (value or "").encode("utf-8")[:limit]
+    return data.decode("utf-8", errors="ignore")
+
+
+def select_list_table_excerpt(page_html: str) -> str:
+    cleaned = mask_hidden_input_values(strip_scripts_and_styles(page_html))
+    tables = re.findall(r"<table\b[\s\S]*?</table>", cleaned or "", flags=re.IGNORECASE)
+    selected = ""
+    for table in tables:
+        if re.search(r"openBidblancDetail|bidNtce|Bidblanc", table, flags=re.IGNORECASE):
+            selected = table
+            break
+    if not selected and tables:
+        selected = tables[0]
+    if not selected:
+        selected = cleaned
+    return html_byte_prefix(selected)
+
+
+def form_actions(page_html: str) -> list[str]:
+    actions: list[str] = []
+    for form_match in re.finditer(r"<form\b[^>]*>", page_html or "", flags=re.IGNORECASE | re.DOTALL):
+        action_match = re.search(r"\baction\s*=\s*(['\"])(.*?)\1", form_match.group(0), flags=re.IGNORECASE | re.DOTALL)
+        if action_match:
+            actions.append(bounded_text(action_match.group(2), 300))
+    return actions[:20]
+
+
+def write_parser_diagnostics(page_html: str, report: dict[str, Any], output_dir: Path) -> bool:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    html = page_html or ""
+    structure = {
+        "page_sha256": report.get("page_sha256") or hashlib.sha256(html.encode("utf-8")).hexdigest(),
+        "html_byte_count": report.get("html_byte_count") or len(html.encode("utf-8")),
+        "page_title": report.get("page_title") or "",
+        "final_url": report.get("final_url") or "",
+        "detected_page_type": report.get("detected_page_type") or "",
+        "total_count": report.get("total_count"),
+        "current_page": report.get("current_page"),
+        "page_count": report.get("page_count"),
+        "table_count": len(re.findall(r"<table\b", html, flags=re.IGNORECASE)),
+        "tbody_count": len(re.findall(r"<tbody\b", html, flags=re.IGNORECASE)),
+        "tr_count": len(re.findall(r"<tr\b", html, flags=re.IGNORECASE)),
+        "td_count": len(re.findall(r"<td\b", html, flags=re.IGNORECASE)),
+        "anchor_count": len(re.findall(r"<a\b", html, flags=re.IGNORECASE)),
+        "onclick_count": len(re.findall(r"\bonclick\s*=", html, flags=re.IGNORECASE)),
+        "open_bid_detail_count": len(re.findall(r"openBidblancDetail", html, flags=re.IGNORECASE)),
+        "seq_parameter_count": len(re.findall(r"\bseq\s*=", html, flags=re.IGNORECASE)),
+        "form_count": len(re.findall(r"<form\b", html, flags=re.IGNORECASE)),
+        "form_actions": form_actions(html),
+        "empty_state_evidence": report.get("empty_state_evidence") or "",
+        "parser_mismatch_reasons": report.get("parser_mismatch_reasons") or [],
+    }
+    (output_dir / "page_structure.json").write_text(json.dumps(structure, ensure_ascii=False, indent=2), encoding="utf-8")
+    excerpt = select_list_table_excerpt(html)
+    (output_dir / "list_table_excerpt.html").write_text(excerpt, encoding="utf-8")
+    return True
+
+
 def write_outputs(report: dict[str, Any], stdout_lines: list[str], output_dir: Path, candidates: list[dict[str, Any]]) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -163,6 +247,12 @@ def write_outputs(report: dict[str, Any], stdout_lines: list[str], output_dir: P
         f"- collector_mode: {report.get('collector_mode')}",
         f"- detected_page_type: {report.get('detected_page_type')}",
         f"- http_status: {report.get('http_status')}",
+        f"- total_count: {report.get('total_count')}",
+        f"- current_page: {report.get('current_page')}",
+        f"- page_count: {report.get('page_count')}",
+        f"- empty_state_evidence: {report.get('empty_state_evidence')}",
+        f"- page_sha256: {report.get('page_sha256')}",
+        f"- html_byte_count: {report.get('html_byte_count')}",
         f"- row_count: {report.get('row_count')}",
         f"- rows_with_title: {report.get('rows_with_title')}",
         f"- rows_with_identifier: {report.get('rows_with_identifier')}",
@@ -181,12 +271,18 @@ def write_outputs(report: dict[str, Any], stdout_lines: list[str], output_dir: P
         f"- publish_eligible_count: {report.get('publish_eligible_count')}",
         f"- parser_mismatch: {report.get('parser_mismatch')}",
         f"- parser_mismatch_reasons: {', '.join(report.get('parser_mismatch_reasons') or [])}",
+        f"- legacy_parser_mismatch_reason: {report.get('legacy_parser_mismatch_reason') or ''}",
+        f"- diagnostic_artifact_generated: {report.get('diagnostic_artifact_generated')}",
         f"- public_json_unchanged: {report.get('public_json_unchanged')}",
         f"- db_unchanged: {report.get('db_unchanged')}",
         f"- env_unchanged: {report.get('env_unchanged')}",
     ]
     if report.get("status") == "success_no_matches":
         markdown.extend(["", "SH 수집 성공, 현재 공개 가능한 민간참여 공공주택 공모 없음"])
+    if report.get("status") == "success_no_matches":
+        markdown.extend(["", "SH 목록 구조가 정상이며 현재 공개 가능한 입찰공고가 없습니다."])
+    if report.get("parser_mismatch"):
+        markdown.extend(["", "SH 목록 구조를 확정할 수 없습니다. 업로드된 page_structure.json과 list_table_excerpt.html을 검토하십시오."])
     if report.get("publish_eligible_count"):
         markdown.extend(["", "SH 공개 검토 후보가 발견되었습니다. candidates.json을 검토하십시오."])
     (output_dir / "report.md").write_text("\n".join(markdown) + "\n", encoding="utf-8")
@@ -235,6 +331,7 @@ def main() -> int:
     started = time.perf_counter()
     stdout_lines: list[str] = []
     candidates: list[dict[str, Any]] = []
+    diagnostic_page_html = ""
     before = file_snapshot(MUTATION_FILES)
     counts_before = load_public_counts()
     checked_at = now_iso()
@@ -253,6 +350,14 @@ def main() -> int:
         "detected_page_type": "unknown_page",
         "table_found": False,
         "empty_list_message_found": False,
+        "total_count": None,
+        "current_page": None,
+        "page_count": None,
+        "empty_state_evidence": "ambiguous_zero_rows",
+        "page_sha256": "",
+        "html_byte_count": 0,
+        "diagnostic_artifact_generated": False,
+        "legacy_parser_mismatch_reason": "",
         "row_count": 0,
         "rows_with_title": 0,
         "rows_with_identifier": 0,
@@ -298,6 +403,7 @@ def main() -> int:
         )
         candidates = build_candidates(stats)
         summary = stats.summary()
+        diagnostic_page_html = getattr(stats, "diagnostic_page_html", "") or ""
         stdout_lines.append(json.dumps(summary, ensure_ascii=False))
         report.update(
             {
@@ -313,6 +419,13 @@ def main() -> int:
                 "detected_page_type": summary.get("detected_page_type") or "unknown_page",
                 "table_found": bool(summary.get("table_found")),
                 "empty_list_message_found": bool(summary.get("empty_list_message_found")),
+                "total_count": summary.get("total_count"),
+                "current_page": summary.get("current_page"),
+                "page_count": summary.get("page_count"),
+                "empty_state_evidence": summary.get("empty_state_evidence") or "ambiguous_zero_rows",
+                "page_sha256": summary.get("page_sha256") or "",
+                "html_byte_count": summary.get("html_byte_count") or 0,
+                "legacy_parser_mismatch_reason": summary.get("legacy_parser_mismatch_reason") or "",
                 "row_count": summary.get("row_count") or 0,
                 "rows_with_title": summary.get("rows_with_title") or 0,
                 "rows_with_identifier": summary.get("rows_with_identifier") or 0,
@@ -366,7 +479,11 @@ def main() -> int:
     elif report.get("final_url") and not official_domain(str(report.get("final_url") or "")):
         failure = "unexpected_domain"
         status = "blocked"
-    elif status in {"success", "success_no_matches"} and not report.get("scanned_count") and not report.get("empty_list_message_found"):
+    elif (
+        status in {"success", "success_no_matches"}
+        and not report.get("scanned_count")
+        and report.get("empty_state_evidence") not in {"explicit_message", "total_count_zero"}
+    ):
         failure = "parser_mismatch"
         status = "parser_mismatch"
     elif report.get("parser_mismatch"):
@@ -379,6 +496,13 @@ def main() -> int:
             status = failure
         report["status"] = status
         report["failure_reason"] = failure
+        if status == "parser_mismatch":
+            report["parser_mismatch"] = True
+            if not report.get("parser_mismatch_reasons"):
+                report["parser_mismatch_reasons"] = [str(report.get("empty_state_evidence") or "ambiguous_zero_rows")]
+
+    if report.get("parser_mismatch") or report.get("status") == "parser_mismatch":
+        report["diagnostic_artifact_generated"] = write_parser_diagnostics(diagnostic_page_html, report, output_dir)
 
     write_outputs(report, stdout_lines, output_dir, candidates)
     print(json.dumps(report, ensure_ascii=False, indent=2))
