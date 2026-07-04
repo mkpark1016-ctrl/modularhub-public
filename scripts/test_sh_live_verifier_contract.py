@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -15,6 +17,49 @@ from scripts.verify_sh_public_housing_contests_live import (  # noqa: E402
     write_outputs,
     write_parser_diagnostics,
 )
+
+
+def build_success_no_matches_report() -> dict[str, object]:
+    return {
+        "checked_at": "2026-06-24T00:00:00+09:00",
+        "status": "success_no_matches",
+        "failure_reason": "",
+        "source_url": "https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do",
+        "list_url": "https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do",
+        "final_url": "https://www.i-sh.co.kr/main/lay2/program/S1T316C7212/www/m_2428/BidblancList.do",
+        "collector_mode": "http_html",
+        "detected_page_type": "sh_bid_list",
+        "http_status": 200,
+        "total_count": 0,
+        "current_page": 1,
+        "page_count": 1,
+        "empty_state_evidence": "total_count_zero",
+        "page_sha256": "fixture",
+        "html_byte_count": 1234,
+        "diagnostic_artifact_generated": False,
+        "legacy_parser_mismatch_reason": "",
+        "row_count": 0,
+        "rows_with_title": 0,
+        "rows_with_identifier": 0,
+        "parse_success_ratio": 0,
+        "detail_link_candidate_count": 0,
+        "unique_detail_candidate_count": 0,
+        "detail_fetch_target_count": 0,
+        "scanned_count": 0,
+        "sh_notice_count": 0,
+        "g2b_linked_count": 0,
+        "confirmed_count": 0,
+        "review_required_count": 0,
+        "result_count": 0,
+        "exact_link_count": 0,
+        "attachment_count": 0,
+        "publish_eligible_count": 0,
+        "parser_mismatch": False,
+        "parser_mismatch_reasons": [],
+        "public_json_unchanged": True,
+        "db_unchanged": True,
+        "env_unchanged": True,
+    }
 
 
 def test_exit_codes() -> None:
@@ -105,6 +150,56 @@ def test_candidates_and_artifacts() -> None:
         assert (output_dir / "candidates.json").read_text(encoding="utf-8").strip() == "[]"
 
 
+def test_write_outputs_does_not_pollute_github_summary_by_default() -> None:
+    report = build_success_no_matches_report()
+    old_summary = os.environ.get("GITHUB_STEP_SUMMARY")
+    try:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            output_dir = Path(tmp) / "artifacts"
+            summary_path = Path(tmp) / "summary.md"
+
+            os.environ.pop("GITHUB_STEP_SUMMARY", None)
+            write_outputs(report, [], output_dir, [])
+            assert (output_dir / "report.json").exists()
+
+            summary_path.write_text("sentinel\n", encoding="utf-8")
+            os.environ["GITHUB_STEP_SUMMARY"] = str(summary_path)
+            write_outputs(report, [], output_dir, [])
+            assert summary_path.read_text(encoding="utf-8") == "sentinel\n"
+
+            write_outputs(report, [], output_dir, [], append_github_summary=True)
+            summary = summary_path.read_text(encoding="utf-8")
+            assert summary.startswith("sentinel\n")
+            assert summary.count("# SH live verification") == 1
+            assert summary.count("2026-06-24T00:00:00+09:00") == 1
+    finally:
+        if old_summary is None:
+            os.environ.pop("GITHUB_STEP_SUMMARY", None)
+        else:
+            os.environ["GITHUB_STEP_SUMMARY"] = old_summary
+
+
+def test_success_no_matches_notice_is_single_in_report_md() -> None:
+    report = build_success_no_matches_report()
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+        output_dir = Path(tmp)
+        write_outputs(report, [], output_dir, [])
+        markdown = (output_dir / "report.md").read_text(encoding="utf-8")
+        notice = "SH 목록 구조가 정상이며 현재 공개 가능한 민간참여 공공주택 공모가 없습니다."
+        assert markdown.count(notice) == 1
+        assert "SH 수집 성공" not in markdown
+        assert "현재 공개 가능한 입찰공고" not in markdown
+
+
+def test_workflow_summary_is_single_owner() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "monitor-sh-public-housing-contests.yml").read_text(encoding="utf-8")
+    verify_script = (ROOT / "scripts" / "verify_sh_public_housing_contests_live.py").read_text(encoding="utf-8")
+    assert "append_github_summary: bool = False" in verify_script
+    assert workflow.count("## SH Shadow Monitor") == 1
+    assert "## SH live verification" not in workflow
+    assert workflow.count("SH 목록 구조가 정상이며 현재 공개 가능한 민간참여 공공주택 공모가 없습니다.") == 1
+
+
 def test_parser_mismatch_diagnostics() -> None:
     html = """
     <html>
@@ -136,7 +231,7 @@ def test_parser_mismatch_diagnostics() -> None:
         excerpt_path = output_dir / "list_table_excerpt.html"
         assert structure_path.exists()
         assert excerpt_path.exists()
-        structure = __import__("json").loads(structure_path.read_text(encoding="utf-8"))
+        structure = json.loads(structure_path.read_text(encoding="utf-8"))
         assert structure["page_sha256"] == "fixture-sha"
         assert structure["table_count"] == 1
         assert structure["form_count"] == 1
@@ -155,6 +250,9 @@ def test_parser_mismatch_diagnostics() -> None:
 def main() -> int:
     test_exit_codes()
     test_candidates_and_artifacts()
+    test_write_outputs_does_not_pollute_github_summary_by_default()
+    test_success_no_matches_notice_is_single_in_report_md()
+    test_workflow_summary_is_single_owner()
     test_parser_mismatch_diagnostics()
     print("SH live verifier contract tests passed")
     return 0

@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import sys
 import time
@@ -230,7 +231,14 @@ def write_parser_diagnostics(page_html: str, report: dict[str, Any], output_dir:
     return True
 
 
-def write_outputs(report: dict[str, Any], stdout_lines: list[str], output_dir: Path, candidates: list[dict[str, Any]]) -> None:
+def write_outputs(
+    report: dict[str, Any],
+    stdout_lines: list[str],
+    output_dir: Path,
+    candidates: list[dict[str, Any]],
+    *,
+    append_github_summary: bool = False,
+) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     (output_dir / "stdout.log").write_text("\n".join(stdout_lines) + "\n", encoding="utf-8")
@@ -285,12 +293,16 @@ def write_outputs(report: dict[str, Any], stdout_lines: list[str], output_dir: P
         markdown.extend(["", "SH 목록 구조를 확정할 수 없습니다. 업로드된 page_structure.json과 list_table_excerpt.html을 검토하십시오."])
     if report.get("publish_eligible_count"):
         markdown.extend(["", "SH 공개 검토 후보가 발견되었습니다. candidates.json을 검토하십시오."])
+    markdown = [line for line in markdown if not line or line.startswith(("#", "-"))]
+    if report.get("status") == "success_no_matches":
+        markdown.extend(["", "SH 목록 구조가 정상이며 현재 공개 가능한 민간참여 공공주택 공모가 없습니다."])
+    if report.get("parser_mismatch"):
+        markdown.extend(["", "SH 목록 구조를 확정할 수 없습니다. 업로드된 page_structure.json과 list_table_excerpt.html을 검토하십시오."])
+    if report.get("publish_eligible_count"):
+        markdown.extend(["", "SH 공개 검토 후보가 발견되었습니다. candidates.json을 검토하십시오."])
     (output_dir / "report.md").write_text("\n".join(markdown) + "\n", encoding="utf-8")
 
-    summary_path = Path(str(Path.cwd() / "_github_step_summary_placeholder"))
-    import os
-
-    if os.getenv("GITHUB_STEP_SUMMARY"):
+    if append_github_summary and os.getenv("GITHUB_STEP_SUMMARY"):
         summary_path = Path(os.environ["GITHUB_STEP_SUMMARY"])
         with summary_path.open("a", encoding="utf-8") as handle:
             handle.write("\n".join(markdown) + "\n")
