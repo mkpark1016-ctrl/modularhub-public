@@ -128,3 +128,60 @@ code { overflow-wrap: anywhere; }
   .topbar nav a svg { display: none; }
   .button, .reset-button { width: 100%; }
 }
+
+.dashboard-section { margin: 24px 0; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.section-heading h2 { margin: 0; font-size: 22px; }
+.section-heading p, .section-heading a { margin: 0; color: #666; font-size: 13px; }
+.section-heading a { font-weight: 800; color: #171717; }
+.kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.kpi-tile { display: grid; gap: 6px; padding: 16px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; }
+.kpi-tile span { color: #666; font-size: 12px; font-weight: 800; }
+.kpi-tile strong { font-size: 24px; }
+.priority-list, .news-brief-list, .source-health-grid { display: grid; gap: 10px; }
+.priority-item, .news-brief-item, .source-health-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 18px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; }
+.priority-item h3, .news-brief-item h3 { margin: 8px 0; font-size: 17px; line-height: 1.45; }
+.priority-item p, .news-brief-item p, .source-health-row p { margin: 0; color: #666; font-size: 13px; line-height: 1.5; }
+.priority-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.text-button { display: inline-flex; align-items: center; min-height: 34px; padding: 0 10px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; font-weight: 800; font-size: 13px; }
+.source-health-row { grid-template-columns: 110px auto minmax(0, 1fr); }
+.health-badge { width: fit-content; padding: 4px 8px; border-radius: 999px; border: 1px solid #cfcfca; background: #fafafa; font-size: 12px; font-weight: 800; }
+.health-badge.ok, .health-badge.empty { color: #166534; border-color: #86efac; background: #f0fdf4; }
+.health-badge.warning { color: #92400e; border-color: #fcd34d; background: #fffbeb; }
+.health-badge.stopped { color: #991b1b; border-color: #fecaca; background: #fef2f2; }
+.health-badge.not_collected { color: #555; background: #f4f4f1; }
+.filter-toggle { display: none; align-items: center; justify-content: space-between; width: 100%; min-height: 42px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; padding: 0 12px; font-weight: 800; }
+.filter-body { display: grid; gap: 16px; }
+.active-filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.active-filter-chips button { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 0 8px; border: 1px solid #cfcfca; border-radius: 999px; background: #fff; cursor: pointer; font-size: 12px; font-weight: 800; }
+.active-filter-chips .clear-all { border-radius: 6px; background: #f7f7f4; }
+.priority-badge.immediate { color: #991b1b; border-color: #fecaca; background: #fef2f2; }
+.priority-badge.this_week { color: #92400e; border-color: #fcd34d; background: #fffbeb; }
+.priority-badge.watch { color: #174b31; border-color: #8fd0a6; background: #eef7f1; }
+.priority-badge.archived { color: #666; border-color: #d7d7d2; background: #f4f4f1; }
+.new-badge { color: #075985; border-color: #bae6fd; background: #f0f9ff; }
+.card-topline, .detail-action-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.favorite-button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 34px; padding: 0 10px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; color: #444; cursor: pointer; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.favorite-button.active { color: #9a3412; border-color: #fdba74; background: #fff7ed; }
+.reason-list { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0 16px; }
+.reason-list span { padding: 4px 8px; border: 1px solid #d7d7d2; border-radius: 999px; background: #f7f7f4; color: #444; font-size: 12px; font-weight: 800; }
+.mini-bars { display: grid; gap: 6px; margin-top: 12px; }
+.mini-bars div { display: grid; grid-template-columns: 110px minmax(0, 1fr) 24px; align-items: center; gap: 8px; font-size: 12px; }
+.mini-bars b { display: block; height: 8px; max-width: 100%; border-radius: 999px; background: #237349; }
+.mini-bars em { font-style: normal; color: #666; }
+.ratio-bar { display: flex; height: 28px; overflow: hidden; margin-top: 12px; border-radius: 6px; border: 1px solid #d7d7d2; background: #f4f4f1; }
+.ratio-bar span, .ratio-bar b { display: flex; align-items: center; justify-content: center; min-width: 44px; color: #fff; font-size: 12px; font-weight: 800; }
+.ratio-bar span { background: #237349; }
+.ratio-bar b { background: #6b7280; }
+.empty-inline { margin: 0; color: #666; }
+
+@media (max-width: 760px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .filters { padding: 12px; }
+  .filter-toggle { display: inline-flex; }
+  .filter-body { display: none; }
+  .filters.open .filter-body { display: grid; }
+  .priority-item, .news-brief-item, .source-health-row { grid-template-columns: 1fr; align-items: start; }
+  .priority-actions { justify-content: flex-start; }
+  .card-topline, .detail-action-row { flex-direction: column; }
+}

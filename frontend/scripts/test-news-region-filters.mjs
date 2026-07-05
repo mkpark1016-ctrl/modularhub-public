@@ -62,9 +62,12 @@ assert.match(appSource, /overseas-badge/);
 assert.match(appSource, /original_url/);
 assert.match(appSource, /noopener noreferrer/);
 assert.match(appSource, /현재 조건에 맞는 해외 모듈러 뉴스가 없습니다\./);
+assert.match(appSource, /getNewsTopic/);
+assert.match(appSource, /FavoriteButton/);
 
 const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 assert.match(styles, /segmented-filter/);
+assert.match(styles, /active-filter-chips/);
 assert.match(styles, /@media \(max-width: 760px\)/);
 
 console.log("NEWS REGION FILTER TESTS PASSED");
