@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { getNewsRelevance, getNewsRelevanceLabel, selectHomeBriefingNews } from "../newsInsights";
 import { getNewsRegionType } from "../newsRegion";
 import FavoriteButton from "./FavoriteButton";
 
@@ -18,7 +19,9 @@ export default function DashboardSummary({
   isNewsFavorite,
   onToggleNewsFavorite,
 }) {
-  const latestNews = newsItems.slice(0, 5);
+  const latestNews = selectHomeBriefingNews(newsItems, 5);
+  const directCount = latestNews.filter((item) => getNewsRelevance(item) === "direct").length;
+  const adjacentCount = latestNews.filter((item) => getNewsRelevance(item) === "adjacent").length;
   return (
     <>
       <section className="dashboard-section">
@@ -31,21 +34,24 @@ export default function DashboardSummary({
           <Kpi label="마감 7일 이내" value={summary.dueWithin7} />
           <Kpi label="최근 7일 신규 사업" value={summary.recentlyPosted7} />
           <Kpi label="중요공고" value={summary.important} />
-          <Kpi label="최근 7일 뉴스" value={summary.recentNews7} />
+          <Kpi label="최근 7일 직접 관련 뉴스" value={summary.recentDirect7} />
         </div>
+        <p className="kpi-helper">최근 7일 전체 뉴스 {Number(summary.recentNews7 || 0).toLocaleString("ko-KR")}건 · 연관 산업 {Number(summary.recentAdjacent7 || 0).toLocaleString("ko-KR")}건</p>
       </section>
 
       <section className="dashboard-section">
         <div className="section-heading">
           <h2>최신 시장 뉴스</h2>
-          <Link to="/news?sort=newest">전체 보기</Link>
+          <Link to="/news?relevance=direct&sort=newest">직접 관련 뉴스 보기</Link>
         </div>
+        <p className="brief-helper">직접 관련 {directCount}건을 우선 표시하고, 부족한 경우 연관 산업 {adjacentCount}건으로 보충합니다.</p>
         <div className="news-brief-list">
           {latestNews.map((item) => (
             <article key={item.id} className="news-brief-item">
               <div>
                 <div className="badge-row">
                   <span>{getNewsRegionType(item) === "overseas" ? "해외뉴스" : "국내뉴스"}</span>
+                  <span className={`relevance-badge ${getNewsRelevance(item)}`}>{getNewsRelevanceLabel(item)}</span>
                   <span>{item.topic || "기타"}</span>
                   <span>{item.media || item.source || "출처 미확인"}</span>
                 </div>

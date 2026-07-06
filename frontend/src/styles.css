@@ -11,10 +11,11 @@ button, input, select { font: inherit; }
 .topbar nav a.active { background: #171717; color: #fff; }
 main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; flex: 1; }
 footer { margin-top: 72px; padding: 28px 20px; text-align: center; color: #777; border-top: 1px solid #deded9; background: #fff; font-size: 13px; }
-.intro { padding: 88px 0 52px; max-width: 780px; }
+.intro { padding: 56px 0 34px; max-width: 780px; }
 .eyebrow { font-size: 12px; font-weight: 800; color: #237349; margin: 0 0 14px; }
 .intro h1, .page-heading h1, .detail-page h1 { margin: 0; letter-spacing: 0; line-height: 1.15; }
-.intro h1 { font-size: clamp(40px, 6vw, 72px); }
+.intro h1 { font-size: clamp(34px, 4.6vw, 54px); word-break: keep-all; overflow-wrap: normal; }
+.intro h1 span { display: block; }
 .intro > p:not(.eyebrow) { color: #626262; font-size: 18px; line-height: 1.7; }
 .intro-actions, .detail-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 0 18px; border-radius: 6px; font-weight: 700; }
@@ -129,7 +130,7 @@ code { overflow-wrap: anywhere; }
   .button, .reset-button { width: 100%; }
 }
 
-.dashboard-section { margin: 24px 0; }
+.dashboard-section { margin: 20px 0; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
 .section-heading h2 { margin: 0; font-size: 22px; }
 .section-heading p, .section-heading a { margin: 0; color: #666; font-size: 13px; }
@@ -138,18 +139,26 @@ code { overflow-wrap: anywhere; }
 .kpi-tile { display: grid; gap: 6px; padding: 16px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; }
 .kpi-tile span { color: #666; font-size: 12px; font-weight: 800; }
 .kpi-tile strong { font-size: 24px; }
+.kpi-helper, .brief-helper, .source-health-note { margin: 8px 0 0; color: #666; font-size: 13px; line-height: 1.5; }
 .priority-list, .news-brief-list, .source-health-grid { display: grid; gap: 10px; }
 .priority-item, .news-brief-item, .source-health-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 18px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; }
 .priority-item h3, .news-brief-item h3 { margin: 8px 0; font-size: 17px; line-height: 1.45; }
 .priority-item p, .news-brief-item p, .source-health-row p { margin: 0; color: #666; font-size: 13px; line-height: 1.5; }
 .priority-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .text-button { display: inline-flex; align-items: center; min-height: 34px; padding: 0 10px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; font-weight: 800; font-size: 13px; }
+.source-health-panel { padding: 18px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; }
+.compact-heading { align-items: center; margin-bottom: 10px; }
+.source-health-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.source-health-summary div { display: grid; gap: 5px; min-width: 0; padding: 12px; border: 1px solid #e2e2dd; border-radius: 8px; background: #fafafa; }
+.source-health-summary span { color: #666; font-size: 12px; font-weight: 800; }
+.source-health-summary strong { font-size: 18px; }
 .source-health-row { grid-template-columns: 110px auto minmax(0, 1fr); }
 .health-badge { width: fit-content; padding: 4px 8px; border-radius: 999px; border: 1px solid #cfcfca; background: #fafafa; font-size: 12px; font-weight: 800; }
-.health-badge.ok, .health-badge.empty { color: #166534; border-color: #86efac; background: #f0fdf4; }
+.health-badge.ok, .health-badge.empty, .health-badge.success { color: #166534; border-color: #86efac; background: #f0fdf4; }
 .health-badge.warning { color: #92400e; border-color: #fcd34d; background: #fffbeb; }
-.health-badge.stopped { color: #991b1b; border-color: #fecaca; background: #fef2f2; }
-.health-badge.not_collected { color: #555; background: #f4f4f1; }
+.health-badge.stopped, .health-badge.error { color: #991b1b; border-color: #fecaca; background: #fef2f2; }
+.health-badge.not_collected, .health-badge.notice { color: #555; background: #f4f4f1; }
+.health-badge.limited { color: #6b4e16; border-color: #fde68a; background: #fffbeb; }
 .filter-toggle { display: none; align-items: center; justify-content: space-between; width: 100%; min-height: 42px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; padding: 0 12px; font-weight: 800; }
 .filter-body { display: grid; gap: 16px; }
 .active-filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -160,6 +169,10 @@ code { overflow-wrap: anywhere; }
 .priority-badge.watch { color: #174b31; border-color: #8fd0a6; background: #eef7f1; }
 .priority-badge.archived { color: #666; border-color: #d7d7d2; background: #f4f4f1; }
 .new-badge { color: #075985; border-color: #bae6fd; background: #f0f9ff; }
+.relevance-badge.direct { color: #174b31; border-color: #8fd0a6; background: #eef7f1; }
+.relevance-badge.adjacent { color: #075985; border-color: #bae6fd; background: #f0f9ff; }
+.relevance-badge.reference { color: #555; background: #f4f4f1; }
+.relevance-badge.excluded { color: #991b1b; border-color: #fecaca; background: #fef2f2; }
 .card-topline, .detail-action-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .favorite-button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 34px; padding: 0 10px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; color: #444; cursor: pointer; font-size: 12px; font-weight: 800; white-space: nowrap; }
 .favorite-button.active { color: #9a3412; border-color: #fdba74; background: #fff7ed; }
@@ -177,6 +190,9 @@ code { overflow-wrap: anywhere; }
 
 @media (max-width: 760px) {
   .kpi-grid { grid-template-columns: 1fr; }
+  .intro { padding-top: 38px; }
+  .intro h1 { font-size: 34px; }
+  .source-health-summary { grid-template-columns: 1fr 1fr; }
   .filters { padding: 12px; }
   .filter-toggle { display: inline-flex; }
   .filter-body { display: none; }

@@ -25,7 +25,16 @@ import {
   isRecentlyPosted,
   parseDate,
 } from "./businessInsights";
-import { compareNewsBySort, getNewsSummary, getNewsTopic, matchesNewsSearch, NEWS_TOPICS } from "./newsInsights";
+import {
+  compareNewsBySort,
+  getNewsRelevance,
+  getNewsRelevanceLabel,
+  getNewsSummary,
+  getNewsTopic,
+  matchesNewsSearch,
+  NEWS_RELEVANCE_LEVELS,
+  NEWS_TOPICS,
+} from "./newsInsights";
 import { getNewsRegionType, newsRegionCounts, newsRegionMatches } from "./newsRegion";
 import {
   addRecentId,
@@ -89,6 +98,13 @@ const NEWS_SORT_OPTIONS = [
   { value: "newest", label: "최신순" },
   { value: "relevance", label: "관련도순" },
   { value: "oldest", label: "오래된순" },
+];
+
+const NEWS_RELEVANCE_FILTERS = [
+  { value: "all", label: "전체" },
+  { value: "direct", label: NEWS_RELEVANCE_LEVELS.direct.label },
+  { value: "adjacent", label: NEWS_RELEVANCE_LEVELS.adjacent.label },
+  { value: "reference", label: NEWS_RELEVANCE_LEVELS.reference.label },
 ];
 
 function useDataset(name) {
@@ -285,7 +301,7 @@ function HomePage() {
   const newsState = useDataset("news");
   const favorites = useFavorites();
   const businessItems = getItems(businessState.data);
-  const newsItems = getItems(newsState.data).map((item) => ({ ...item, topic: getNewsTopic(item) })).sort((a, b) => compareNewsBySort(a, b, "newest"));
+  const newsItems = getItems(newsState.data).map((item) => ({ ...item, topic: getNewsTopic(item), relevanceGrade: getNewsRelevance(item) })).sort((a, b) => compareNewsBySort(a, b, "newest"));
   const businessSummary = getBusinessSummary(businessItems);
   const newsSummary = getNewsSummary(newsItems);
   const summary = { ...businessSummary, recentNews7: newsSummary.recent7 };
@@ -303,7 +319,7 @@ function HomePage() {
     <Layout>
       <section className="intro">
         <p className="eyebrow">모듈러 건축 영업 인사이트</p>
-        <h1>오늘 확인할 사업과 시장 뉴스를 한 화면에서 봅니다.</h1>
+        <h1><span>오늘 확인할 사업과</span><span>모듈러 시장 뉴스</span></h1>
         <p>수집된 사업정보와 뉴스정보를 영업 우선순위, 관심목록, 최근 본 항목 기준으로 빠르게 탐색하세요.</p>
         <div className="intro-actions">
           <Link className="button primary" to="/business">사업정보 보기</Link>
@@ -329,8 +345,8 @@ function HomePage() {
       <section className="category-grid" aria-label="서비스 카테고리">
         <Link className="category-panel" to="/business">
           <Building2 size={26} />
-          <div><strong>사업정보</strong><span>입찰공고, 발주계획, 공공기관 공모</span></div>
-          <b>{metaState.data?.business_count ?? businessItems.length}건</b>
+          <div><strong>사업정보</strong><span>진행 중 {businessSummary.active}건 · 누적 {businessSummary.total}건 · 마감 {businessSummary.closed}건 · 확인 필요 {businessSummary.unknown}건</span></div>
+          <b>{businessSummary.active}건 진행 중</b>
         </Link>
         <Link className="category-panel" to="/news">
           <Newspaper size={26} />
@@ -342,7 +358,7 @@ function HomePage() {
         <strong>검증된 공개 데이터 기준</strong>
         <span>데이터 갱신: {metaState.data?.generated_at ? formatDate(metaState.data.generated_at) : "확인 중"}</span>
         {lastVisit && <span>마지막 방문: {formatDate(lastVisit)}</span>}
-        {metaState.data?.workflow_last_run_status === "warning" && <p>일부 수집원은 경고 상태이며 기존 검증 데이터를 유지했습니다.</p>}
+        {businessSummary.unknown > 0 && <p>상태 확인 필요 {businessSummary.unknown}건: 마감일 또는 상태 정보가 부족한 누적 사업입니다.</p>}
       </div>
     </Layout>
   );
@@ -411,7 +427,7 @@ function NewsFilters({ values, setParam, regionCounts, sources, filteredCount, c
     { value: "overseas", label: "해외뉴스", count: regionCounts.overseas },
   ];
   const reset = () => {
-    ["q", "region", "source", "days", "topic", "sort"].forEach((key) => setParam(key, ""));
+    ["q", "region", "source", "days", "topic", "relevance", "sort"].forEach((key) => setParam(key, ""));
   };
   return (
     <FilterPanel title="뉴스 검색조건" open={open} setOpen={setOpen}>
@@ -442,6 +458,11 @@ function NewsFilters({ values, setParam, regionCounts, sources, filteredCount, c
         <select value={values.topic} onChange={(event) => setParam("topic", event.target.value)}>
           {NEWS_TOPICS.map((topic) => <option key={topic} value={topic}>{topic}</option>)}
           <option value="favorites">관심목록 ({favoriteCount})</option>
+        </select>
+      </label>
+      <label>관련도
+        <select value={values.relevance} onChange={(event) => setParam("relevance", event.target.value)}>
+          {NEWS_RELEVANCE_FILTERS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
       </label>
       <label>정렬
@@ -513,11 +534,13 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
   const keywords = Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords;
   const score = Number(item.relevance_score);
   const topic = getNewsTopic(item);
+  const relevance = getNewsRelevance(item);
   return (
     <article className="result-card news-card">
       <div className="card-topline">
         <div className="badge-row">
           <span className={isOverseas ? "overseas-badge" : ""}>{isOverseas ? "해외뉴스" : "국내뉴스"}</span>
+          <span className={`relevance-badge ${relevance}`}>{getNewsRelevanceLabel(relevance)}</span>
           <span>{topic}</span>
           <span>{item.media || item.source || "출처 미확인"}</span>
           <span>{formatDate(item.published_at)}</span>
@@ -643,7 +666,7 @@ function NewsListingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const favorites = useFavorites();
   const items = getItems(data);
-  const enriched = useMemo(() => items.map((item) => ({ ...item, topic: getNewsTopic(item) })), [items]);
+  const enriched = useMemo(() => items.map((item) => ({ ...item, topic: getNewsTopic(item), relevanceGrade: getNewsRelevance(item) })), [items]);
   const sources = useMemo(() => ["전체", ...new Set(enriched.map((item) => item.media || item.source || item.source_name).filter(Boolean))], [enriched]);
   const values = {
     q: searchParams.get("q") || "",
@@ -651,11 +674,12 @@ function NewsListingPage() {
     source: sources.includes(searchParams.get("source")) ? searchParams.get("source") : "전체",
     days: getValidParam(searchParams, "days", ["all", "7", "30", "90"], "all"),
     topic: NEWS_TOPICS.includes(searchParams.get("topic")) || searchParams.get("topic") === "favorites" ? searchParams.get("topic") : "전체 주제",
+    relevance: getValidParam(searchParams, "relevance", NEWS_RELEVANCE_FILTERS.map((item) => item.value), "all"),
     sort: getValidParam(searchParams, "sort", NEWS_SORT_OPTIONS.map((item) => item.value), "newest"),
   };
   const setParam = (key, value) => {
     const next = new URLSearchParams(searchParams);
-    const defaults = { region: "all", source: "전체", days: "all", topic: "전체 주제", sort: "newest", q: "" };
+    const defaults = { region: "all", source: "전체", days: "all", topic: "전체 주제", relevance: "all", sort: "newest", q: "" };
     if (!value || value === defaults[key]) next.delete(key);
     else next.set(key, value);
     setSearchParams(next, { replace: true });
@@ -667,6 +691,7 @@ function NewsListingPage() {
       if (values.source !== "전체" && item.media !== values.source && item.source !== values.source) return false;
       if (values.topic === "favorites" && !favorites.isNewsFavorite(item.id)) return false;
       if (values.topic !== "전체 주제" && values.topic !== "favorites" && item.topic !== values.topic) return false;
+      if (values.relevance !== "all" && item.relevanceGrade !== values.relevance) return false;
       if (values.days !== "all") {
         const published = parseDate(item.published_at);
         const threshold = new Date();
@@ -675,7 +700,7 @@ function NewsListingPage() {
       }
       return matchesNewsSearch(item, values.q);
     }).sort((a, b) => compareNewsBySort(a, b, values.sort));
-  }, [enriched, favorites, values.days, values.q, values.region, values.sort, values.source, values.topic]);
+  }, [enriched, favorites, values.days, values.q, values.region, values.relevance, values.sort, values.source, values.topic]);
 
   const counts = newsRegionCounts(enriched);
   const chips = [
@@ -684,6 +709,7 @@ function NewsListingPage() {
     { key: "source", active: values.source !== "전체", label: `출처: ${values.source}`, onRemove: () => setParam("source", "전체") },
     { key: "days", active: values.days !== "all", label: `최근 ${values.days}일`, onRemove: () => setParam("days", "all") },
     { key: "topic", active: values.topic !== "전체 주제", label: values.topic === "favorites" ? "관심목록" : values.topic, onRemove: () => setParam("topic", "전체 주제") },
+    { key: "relevance", active: values.relevance !== "all", label: `관련도: ${getNewsRelevanceLabel(values.relevance)}`, onRemove: () => setParam("relevance", "all") },
   ];
   const domesticCount = counts.domestic;
   const overseasCount = counts.overseas;

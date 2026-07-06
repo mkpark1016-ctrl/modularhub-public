@@ -93,14 +93,27 @@ try {
 
   await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
   await page.evaluate(() => localStorage.clear());
-  await page.getByRole("heading", { name: /오늘 확인할 사업과 시장 뉴스/ }).waitFor();
+  await page.getByRole("heading", { name: /오늘 확인할 사업과\s*모듈러 시장 뉴스/ }).waitFor();
   const homeText = await page.locator("main").innerText();
   for (const label of ["오늘의 영업 브리핑", "지금 확인할 사업", "최신 시장 뉴스", "수집원 상태"]) {
     check(homeText.includes(label), `home briefing missing ${label}`);
   }
+  check(await page.locator(".intro h1 span").count() === 2, "hero heading should be two explicit lines");
+  check((await page.locator(".intro h1").evaluate((node) => getComputedStyle(node).wordBreak)) === "keep-all", "hero heading should keep Korean words together");
   check(homeText.includes("D2B"), "source health is missing D2B");
-  check(homeText.includes("해외 RSS"), "source health is missing overseas RSS");
-  await page.screenshot({ path: `${artifactDir}/home.png`, fullPage: false });
+  check(homeText.includes("일부 제한"), "workflow should be displayed as partially limited");
+  check(homeText.includes("중지"), "D2B should be displayed as stopped, not a generic error");
+  const healthToggle = page.locator(".source-health-panel button").first();
+  check(await healthToggle.getAttribute("aria-expanded") === "false", "source health details should start collapsed");
+  await healthToggle.click();
+  check(await healthToggle.getAttribute("aria-expanded") === "true", "source health details should expand");
+  const healthText = await page.locator(".source-health-panel").innerText();
+  check(healthText.includes("SH"), "source health details should include SH");
+  check(healthText.includes("해외 RSS"), "source health details should include overseas RSS");
+  check(healthText.includes("미수집") || healthText.includes("수집 기록 없음"), "SH not_collected should be shown as not collected");
+  check(!healthText.includes("SH\n현재 공고 없음"), "SH not_collected must not be shown as no current notices");
+  check(healthText.includes("GW API 전환 필요"), "D2B migration note missing");
+  check(await page.locator(".news-brief-item .relevance-badge.reference, .news-brief-item .relevance-badge.excluded").count() === 0, "home latest news should exclude reference/excluded items");
 
   await page.goto(`${baseUrl}/business`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: "모듈러 사업정보" }).waitFor();
@@ -143,7 +156,6 @@ try {
   );
   await page.goto(`${baseUrl}/business`, { waitUntil: "networkidle" });
   check((await page.locator("main").innerText()).includes("최근 본 항목"), "recently viewed business marker missing");
-  await page.screenshot({ path: `${artifactDir}/business.png`, fullPage: true });
 
   await page.goto(`${baseUrl}/business?priority=due7&sort=deadline`, { waitUntil: "networkidle" });
   check((await selectedFilterValue(page, "빠른 필터")) === "due7", "business priority URL param not restored");
@@ -172,7 +184,12 @@ try {
   await page.goto(`${baseUrl}/news?region=overseas&sort=relevance`, { waitUntil: "networkidle" });
   check(page.url().includes("region=overseas"), "news region URL param missing");
   check((await selectedFilterValue(page, "정렬")) === "relevance", "news sort URL param not restored");
-  await page.screenshot({ path: `${artifactDir}/news.png`, fullPage: true });
+  await selectFilter(page, "관련도", "direct");
+  check(page.url().includes("relevance=direct"), "news relevance URL param missing");
+  check(await page.locator("article.result-card").count() >= 1, "direct relevance filter should show at least one item");
+  check((await page.locator("main").innerText()).includes("직접 관련"), "direct relevance badge missing");
+  await page.goto(`${baseUrl}/news?relevance=direct`, { waitUntil: "networkidle" });
+  check((await selectedFilterValue(page, "관련도")) === "direct", "news relevance URL param not restored");
 
   await page.getByRole("link", { name: "상세보기" }).first().click();
   await page.locator("article.detail-page").waitFor();
@@ -185,17 +202,18 @@ try {
   check((await page.locator("main").innerText()).includes("최근 본 항목"), "recently viewed news marker missing");
 
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "home mobile has horizontal overflow");
+  check(await page.locator(".intro h1 span").count() === 2, "mobile hero heading should remain two explicit lines");
   await page.goto(`${baseUrl}/business`, { waitUntil: "networkidle" });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "business mobile has horizontal overflow");
   await page.getByRole("button", { name: /사업 검색조건/ }).click();
   await selectFilter(page, "빠른 필터", "due7");
-  await page.screenshot({ path: `${artifactDir}/business-mobile.png`, fullPage: true });
 
   await page.goto(`${baseUrl}/news`, { waitUntil: "networkidle" });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "news mobile has horizontal overflow");
   await page.getByRole("button", { name: /뉴스 검색조건/ }).click();
   await page.getByRole("button", { name: /해외뉴스/ }).click();
-  await page.screenshot({ path: `${artifactDir}/news-mobile.png`, fullPage: true });
 
   const credentialTokens = [
     "service" + "Key",
