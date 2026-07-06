@@ -49,6 +49,7 @@ import DashboardSummary from "./components/DashboardSummary";
 import FavoriteButton from "./components/FavoriteButton";
 import PriorityBusinessList from "./components/PriorityBusinessList";
 import SourceHealthPanel from "./components/SourceHealthPanel";
+import { buildDashboardSummary } from "./dashboardSummary";
 
 const DATA_BASE = import.meta.env.VITE_DATA_BASE_URL || "/data";
 
@@ -302,9 +303,10 @@ function HomePage() {
   const favorites = useFavorites();
   const businessItems = getItems(businessState.data);
   const newsItems = getItems(newsState.data).map((item) => ({ ...item, topic: getNewsTopic(item), relevanceGrade: getNewsRelevance(item) })).sort((a, b) => compareNewsBySort(a, b, "newest"));
-  const businessSummary = getBusinessSummary(businessItems);
-  const newsSummary = getNewsSummary(newsItems);
-  const summary = { ...businessSummary, recentNews7: newsSummary.recent7 };
+  const dashboardAsOf = parseDate(metaState.data?.generated_at) || parseDate(metaState.data?.last_updated_at) || new Date();
+  const businessSummary = getBusinessSummary(businessItems, dashboardAsOf);
+  const newsSummary = getNewsSummary(newsItems, dashboardAsOf);
+  const summary = buildDashboardSummary({ businessSummary, newsSummary });
   const priorityItems = businessItems
     .filter((item) => getBusinessStatus(item) === "active")
     .sort(compareBusinessByPriority)

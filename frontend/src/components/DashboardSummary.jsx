@@ -3,9 +3,9 @@ import { getNewsRelevance, getNewsRelevanceLabel, selectHomeBriefingNews } from 
 import { getNewsRegionType } from "../newsRegion";
 import FavoriteButton from "./FavoriteButton";
 
-function Kpi({ label, value }) {
+function Kpi({ id, label, value }) {
   return (
-    <div className="kpi-tile">
+    <div className="kpi-tile" data-kpi={id || undefined}>
       <span>{label}</span>
       <strong>{Number(value || 0).toLocaleString("ko-KR")}</strong>
     </div>
@@ -30,11 +30,11 @@ export default function DashboardSummary({
           <p>공개 데이터 기준으로 매일 확인할 항목을 정리했습니다.</p>
         </div>
         <div className="kpi-grid">
-          <Kpi label="진행 중 사업" value={summary.active} />
-          <Kpi label="마감 7일 이내" value={summary.dueWithin7} />
-          <Kpi label="최근 7일 신규 사업" value={summary.recentlyPosted7} />
-          <Kpi label="중요공고" value={summary.important} />
-          <Kpi label="최근 7일 직접 관련 뉴스" value={summary.recentDirect7} />
+          <Kpi id="active-business" label="진행 중 사업" value={summary.active} />
+          <Kpi id="due-within-7" label="마감 7일 이내" value={summary.dueWithin7} />
+          <Kpi id="recently-posted-business" label="최근 7일 신규 사업" value={summary.recentlyPosted7} />
+          <Kpi id="important-business" label="중요공고" value={summary.important} />
+          <Kpi id="recent-direct-news" label="최근 7일 직접 관련 뉴스" value={summary.recentDirect7} />
         </div>
         <p className="kpi-helper">최근 7일 전체 뉴스 {Number(summary.recentNews7 || 0).toLocaleString("ko-KR")}건 · 연관 산업 {Number(summary.recentAdjacent7 || 0).toLocaleString("ko-KR")}건</p>
       </section>

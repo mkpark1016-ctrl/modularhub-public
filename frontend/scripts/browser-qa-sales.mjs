@@ -1,6 +1,8 @@
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
+import { parseDate } from "../src/businessInsights.js";
+import { getNewsSummary } from "../src/newsInsights.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -70,6 +72,16 @@ function countBy(items, predicate) {
   return items.filter(predicate).length;
 }
 
+function displayedNumber(value) {
+  const digits = String(value || "").replace(/[^\d]/g, "");
+  return digits ? Number(digits) : 0;
+}
+
+async function kpiNumber(page, id) {
+  const text = await page.locator(`[data-kpi="${id}"] strong`).innerText();
+  return displayedNumber(text);
+}
+
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
@@ -86,6 +98,8 @@ try {
   const metaData = await metaResponse.json();
   const businessItems = itemsFrom(businessData);
   const newsItems = itemsFrom(newsData);
+  const dashboardAsOf = parseDate(metaData.generated_at) || parseDate(metaData.last_updated_at) || new Date();
+  const expectedNewsSummary = getNewsSummary(newsItems, dashboardAsOf);
   check(businessItems.length === metaData.business_count, "business count does not match meta");
   check(newsItems.length === metaData.news_count, "news count does not match meta");
   check(businessItems.length > 0, "business data is empty");
@@ -101,6 +115,14 @@ try {
   check(await page.locator(".intro h1 span").count() === 2, "hero heading should be two explicit lines");
   check((await page.locator(".intro h1").evaluate((node) => getComputedStyle(node).wordBreak)) === "keep-all", "hero heading should keep Korean words together");
   check(homeText.includes("D2B"), "source health is missing D2B");
+  const directNewsKpi = await kpiNumber(page, "recent-direct-news");
+  check(directNewsKpi === expectedNewsSummary.recentDirect7, `recent direct news KPI mismatch: expected ${expectedNewsSummary.recentDirect7}, got ${directNewsKpi}`);
+  if (expectedNewsSummary.recentDirect7 > 0) {
+    check(directNewsKpi > 0, "recent direct news KPI must not display zero when direct news exists");
+  }
+  const kpiHelperText = await page.locator(".kpi-helper").innerText();
+  check(kpiHelperText.includes(`최근 7일 전체 뉴스 ${expectedNewsSummary.recent7.toLocaleString("ko-KR")}건`), "recent total news helper count mismatch");
+  check(kpiHelperText.includes(`연관 산업 ${expectedNewsSummary.recentAdjacent7.toLocaleString("ko-KR")}건`), "recent adjacent news helper count mismatch");
   check(homeText.includes("일부 제한"), "workflow should be displayed as partially limited");
   check(homeText.includes("중지"), "D2B should be displayed as stopped, not a generic error");
   const healthToggle = page.locator(".source-health-panel button").first();
