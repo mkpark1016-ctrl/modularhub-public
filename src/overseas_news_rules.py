@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import html
 import re
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Any
 from urllib.parse import parse_qsl, quote, unquote, urlencode, urlsplit, urlunsplit
 
@@ -41,6 +43,48 @@ def normalize_overseas_news_text(value: Any) -> str:
 
 def normalize_title(value: Any) -> str:
     return re.sub(r"\s+", " ", clean_overseas_news_text(value).lower()).strip()
+
+
+def normalize_overseas_title_identity(value: Any) -> str:
+    text = clean_overseas_news_text(value).lower()
+    text = re.sub(r"[^\w\s]|_", " ", text, flags=re.UNICODE)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def normalize_overseas_publication_day(value: Any) -> str:
+    text = clean_overseas_news_text(value)
+    if not text:
+        return ""
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+        try:
+            return datetime.strptime(text, "%Y-%m-%d").date().isoformat()
+        except ValueError:
+            return ""
+
+    candidates = [text, text.replace("Z", "+00:00")]
+    for candidate in candidates:
+        try:
+            parsed = datetime.fromisoformat(candidate)
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            return parsed.astimezone(timezone.utc).date().isoformat()
+        except ValueError:
+            pass
+
+    try:
+        parsed = parsedate_to_datetime(text)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc).date().isoformat()
+    except (TypeError, ValueError, IndexError, OverflowError):
+        return ""
+
+
+def overseas_news_content_key(title: Any, published_at: Any) -> tuple[str, str]:
+    return (
+        normalize_overseas_title_identity(title),
+        normalize_overseas_publication_day(published_at),
+    )
 
 
 def matches_excluded_context(title: Any, summary: Any = "") -> bool:

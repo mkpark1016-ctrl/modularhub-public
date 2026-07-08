@@ -19,6 +19,7 @@ from src.config import DB_PATH, D2B_LEGACY_API_ENABLED  # noqa: E402
 from src.database import init_db, load_collect_logs_dataframe, load_items_dataframe  # noqa: E402
 from src.public_data_policy import (  # noqa: E402
     apply_business_lifecycle,
+    dedupe_overseas_rss_public_items,
     guard_result,
     load_removal_allowlist,
     merge_public_items,
@@ -581,6 +582,10 @@ def main() -> int:
         removal_allowlist=removal_allowlist,
     )
     news = merge_public_items(previous_news, current_news, kind="news", now=merge_time)
+    overseas_rss_before_dedup_count = sum(item.get("source") == "해외 모듈러 RSS" for item in news)
+    news = dedupe_overseas_rss_public_items(news)
+    overseas_rss_after_dedup_count = sum(item.get("source") == "해외 모듈러 RSS" for item in news)
+    overseas_rss_duplicate_removed_count = overseas_rss_before_dedup_count - overseas_rss_after_dedup_count
     business = apply_business_lifecycle(business, now=merge_time, default_last_seen_at=generated_at)
 
     logs = load_collect_logs_dataframe(limit=500)
@@ -716,6 +721,9 @@ def main() -> int:
         "previous_news_count": len(baseline_news),
         "current_news_count": len(current_news),
         "merged_news_count": len(news),
+        "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
+        "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
+        "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,
         "public_data_guard_status": guard_status,
         "public_data_guard_message": guard_message,
         "data_policy": "cumulative_verified",
@@ -752,6 +760,9 @@ def main() -> int:
             "previous_news_count": len(baseline_news),
             "current_news_count": len(current_news),
             "merged_news_count": len(news),
+            "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
+            "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
+            "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,
             "items": news,
         },
     )

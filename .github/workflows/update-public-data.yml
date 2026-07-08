@@ -207,6 +207,15 @@ jobs:
             echo "::warning::Overseas RSS publication audit passed with warnings."
           fi
 
+      - name: Upload overseas RSS audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: overseas-rss-audit-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/overseas_rss_audit/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Diagnose procurement plan pipeline
         run: |
           if [ -f scripts/diagnose_procurement_plan_gap.py ]; then

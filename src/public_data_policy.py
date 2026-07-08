@@ -1,16 +1,20 @@
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
+from urllib.parse import urlsplit
 
+from src.overseas_news_rules import overseas_news_content_key
 
 ROOT = Path(__file__).resolve().parents[1]
 REMOVAL_ALLOWLIST_PATH = ROOT / "config" / "public_data_removal_allowlist.json"
 BUSINESS_SHRINK_THRESHOLD = 0.20
 NEWS_SHRINK_THRESHOLD = 0.30
 KST = timezone(timedelta(hours=9), "KST")
+OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS"
 
 
 def clean_text(value: Any) -> str:
@@ -88,6 +92,133 @@ def news_identity(item: dict[str, Any]) -> tuple[str, ...]:
         clean_text(item.get("media") or item.get("source")).lower(),
         clean_text(item.get("published_at"))[:10],
     )
+
+
+def is_overseas_rss_public_item(item: dict[str, Any]) -> bool:
+    return clean_text(item.get("source")) == OVERSEAS_RSS_SOURCE
+
+
+def _numeric_id(value: Any) -> int | None:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _is_google_news_url(value: Any) -> bool:
+    text = clean_text(value)
+    if not text:
+        return False
+    try:
+        return (urlsplit(text).hostname or "").lower() == "news.google.com"
+    except ValueError:
+        return False
+
+
+def _url_quality(value: Any) -> int:
+    text = clean_text(value)
+    if not text:
+        return 0
+    return 1 if _is_google_news_url(text) else 2
+
+
+def _text_quality(value: Any) -> int:
+    text = clean_text(value)
+    if not text or text.lower() in {"rss", "google news", "unknown", "출처 미확인"}:
+        return 0
+    return len(text)
+
+
+def _keyword_parts(value: Any) -> list[str]:
+    if isinstance(value, list):
+        raw_parts = value
+    else:
+        raw_parts = re.split(r"[,;|]", clean_text(value))
+    parts: list[str] = []
+    seen: set[str] = set()
+    for part in raw_parts:
+        text = clean_text(part)
+        key = text.lower()
+        if text and key not in seen:
+            seen.add(key)
+            parts.append(text)
+    return parts
+
+
+def _choose_stable_public_item(items: list[dict[str, Any]]) -> dict[str, Any]:
+    def sort_key(pair: tuple[int, dict[str, Any]]) -> tuple[int, int, str]:
+        index, item = pair
+        numeric = _numeric_id(item.get("id"))
+        return (0 if numeric is not None else 1, numeric if numeric is not None else index, clean_text(item.get("id")))
+
+    return dict(sorted(enumerate(items), key=sort_key)[0][1])
+
+
+def _merge_overseas_rss_group(items: list[dict[str, Any]], content_key: tuple[str, str]) -> dict[str, Any]:
+    survivor = _choose_stable_public_item(items)
+    for item in items:
+        if _url_quality(item.get("original_url")) > _url_quality(survivor.get("original_url")):
+            survivor["original_url"] = item.get("original_url")
+        if _text_quality(item.get("media") or item.get("source_name")) > _text_quality(survivor.get("media") or survivor.get("source_name")):
+            if _nonempty(item.get("media")):
+                survivor["media"] = item.get("media")
+            elif _nonempty(item.get("source_name")):
+                survivor["source_name"] = item.get("source_name")
+        if len(clean_text(item.get("summary"))) > len(clean_text(survivor.get("summary"))):
+            survivor["summary"] = item.get("summary")
+        try:
+            item_score = float(item.get("relevance_score"))
+        except (TypeError, ValueError):
+            item_score = 0.0
+        try:
+            survivor_score = float(survivor.get("relevance_score"))
+        except (TypeError, ValueError):
+            survivor_score = 0.0
+        if item_score > survivor_score:
+            survivor["relevance_score"] = item.get("relevance_score")
+
+    merged_keywords: list[str] = []
+    seen_keywords: set[str] = set()
+    for item in items:
+        for keyword in _keyword_parts(item.get("keywords")):
+            key = keyword.lower()
+            if key not in seen_keywords:
+                seen_keywords.add(key)
+                merged_keywords.append(keyword)
+    if merged_keywords:
+        survivor["keywords"] = ", ".join(merged_keywords)
+    if content_key[1]:
+        survivor["published_at"] = content_key[1]
+    survivor["source"] = OVERSEAS_RSS_SOURCE
+    return survivor
+
+
+def dedupe_overseas_rss_public_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    ordered: list[tuple[str, dict[str, Any] | tuple[str, str]]] = []
+
+    for item in items:
+        copied = dict(item)
+        if not is_overseas_rss_public_item(copied):
+            ordered.append(("item", copied))
+            continue
+        content_key = overseas_news_content_key(copied.get("title"), copied.get("published_at"))
+        if not all(content_key):
+            ordered.append(("item", copied))
+            continue
+        if content_key not in groups:
+            groups[content_key] = [copied]
+            ordered.append(("group", content_key))
+        else:
+            groups[content_key].append(copied)
+
+    result: list[dict[str, Any]] = []
+    for kind, value in ordered:
+        if kind == "group":
+            result.append(_merge_overseas_rss_group(groups[value], value))  # type: ignore[index,arg-type]
+        else:
+            result.append(value)  # type: ignore[arg-type]
+    return result
 
 
 def _nonempty(value: Any) -> bool:

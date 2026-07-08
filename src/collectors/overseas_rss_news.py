@@ -22,7 +22,7 @@ from src.overseas_news_rules import (
     calculate_overseas_news_relevance,
     canonicalize_url,
     clean_overseas_news_text,
-    normalize_title,
+    overseas_news_content_key,
 )
 
 try:  # feedparser is preferred when installed; stdlib XML parsing is the offline fallback.
@@ -82,7 +82,7 @@ class OverseasRssNewsCollector(BaseCollector):
     def collect(self) -> list[dict]:
         collected: list[dict] = []
         seen_urls: set[str] = set()
-        seen_title_date_org: set[tuple[str, str, str]] = set()
+        seen_content_keys: set[tuple[str, str]] = set()
 
         for feed in self.feeds:
             try:
@@ -100,22 +100,18 @@ class OverseasRssNewsCollector(BaseCollector):
                     continue
 
                 url_key = str(raw_item.get("url") or "").lower()
-                dedup_key = (
-                    normalize_title(raw_item.get("title")),
-                    str(raw_item.get("posted_at") or ""),
-                    str(raw_item.get("organization") or "").lower(),
-                )
+                dedup_key = overseas_news_content_key(raw_item.get("title"), raw_item.get("posted_at"))
                 if url_key and url_key in seen_urls:
                     self.stats["duplicate_excluded_count"] += 1
                     continue
-                if all(dedup_key) and dedup_key in seen_title_date_org:
+                if all(dedup_key) and dedup_key in seen_content_keys:
                     self.stats["duplicate_excluded_count"] += 1
                     continue
 
                 if url_key:
                     seen_urls.add(url_key)
                 if all(dedup_key):
-                    seen_title_date_org.add(dedup_key)
+                    seen_content_keys.add(dedup_key)
                 collected.append(raw_item)
 
         if self.feeds and self.stats["successful_feed_count"] == 0:

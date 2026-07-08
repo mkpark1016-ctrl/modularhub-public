@@ -16,6 +16,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.keywords import GDELT_DOC_NEWS_EXCLUDE_CONTEXT  # noqa: E402
+from src.overseas_news_rules import overseas_news_content_key  # noqa: E402
 
 OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS"
 RECENT_DAYS = 14
@@ -32,10 +33,6 @@ TRACKING_PARAMS = {
 
 def normalize_text(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "").strip().lower())
-
-
-def normalize_title(value: Any) -> str:
-    return re.sub(r"\s+", " ", re.sub(r"[^\w\s가-힣]", " ", normalize_text(value))).strip()
 
 
 def parse_datetime(value: Any) -> datetime | None:
@@ -222,19 +219,20 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
         else:
             if parsed_date >= threshold:
                 counters["recent_14_day_count"] += 1
-            title_date_key = f"{normalize_title(title)}|{published_at}"
-            if title_date_key in title_date_seen:
-                counters["duplicate_title_date_count"] += 1
-                add_issue(
-                    validation_errors,
-                    "duplicate_title_published_at",
-                    item,
-                    "duplicate normalized title and published_at",
-                    duplicate_of=title_date_seen[title_date_key].get("id"),
-                    published_at=published_at,
-                )
-            else:
-                title_date_seen[title_date_key] = item
+            title_date_key = overseas_news_content_key(title, published_at)
+            if all(title_date_key):
+                if title_date_key in title_date_seen:
+                    counters["duplicate_title_date_count"] += 1
+                    add_issue(
+                        validation_errors,
+                        "duplicate_title_published_at",
+                        item,
+                        "duplicate normalized title and published_at",
+                        duplicate_of=title_date_seen[title_date_key].get("id"),
+                        published_at=published_at,
+                    )
+                else:
+                    title_date_seen[title_date_key] = item
 
         if canonical and urlparse(canonical).hostname == "news.google.com":
             counters["google_news_rss_url_count"] += 1
