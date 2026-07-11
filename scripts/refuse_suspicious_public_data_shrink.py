@@ -147,6 +147,8 @@ def main() -> int:
     )
     merged_business = integer(meta, "merged_business_count", len(business))
     merged_news = integer(meta, "merged_news_count", len(news))
+    approved_news_policy_removals = max(0, integer(meta, "news_policy_removed_count", 0))
+    effective_merged_news = merged_news + approved_news_policy_removals
     allow = os.getenv("ALLOW_PUBLIC_DATA_SHRINK", "false").lower() in {"1", "true", "yes", "y"}
 
     if merged_business != len(business) or merged_news != len(news):
@@ -158,11 +160,13 @@ def main() -> int:
 
     business_limit = int(previous_business * 0.80)
     news_limit = int(previous_news * 0.70)
-    suspicious = merged_business < business_limit or merged_news < news_limit
+    suspicious = merged_business < business_limit or effective_merged_news < news_limit
     if suspicious and not allow:
         print(
             "Public data shrink detected. "
-            f"business {previous_business} -> {merged_business}, news {previous_news} -> {merged_news}. Refusing commit."
+            f"business {previous_business} -> {merged_business}, "
+            f"news {previous_news} -> {merged_news}, "
+            f"policy_removed={approved_news_policy_removals}. Refusing commit."
         )
         return 1
     previous_source_types = count_by(baseline_business, "source_type")
@@ -185,8 +189,14 @@ def main() -> int:
     if vanished_sources:
         print(f"Public data source vanished: {', '.join(sorted(vanished_sources))}. Refusing commit.")
         return 1
-    status = "success" if merged_business >= previous_business and merged_news >= previous_news else "warning"
-    print(f"PUBLIC DATA GUARD PASSED: business {previous_business} -> {merged_business}, news {previous_news} -> {merged_news}, status={status}")
+    status = "success" if merged_business >= previous_business and effective_merged_news >= previous_news else "warning"
+    print(
+        "PUBLIC DATA GUARD PASSED: "
+        f"business {previous_business} -> {merged_business}, "
+        f"news {previous_news} -> {merged_news}, "
+        f"policy_removed={approved_news_policy_removals}, "
+        f"status={status}"
+    )
     return 0
 
 

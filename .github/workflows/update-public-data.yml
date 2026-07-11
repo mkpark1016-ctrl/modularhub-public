@@ -216,6 +216,30 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+      - name: Audit unified public news
+        if: always()
+        run: |
+          set +e
+          python scripts/audit_unified_news_live.py \
+            --input frontend/public/data/news.json \
+            --output-dir artifacts/unified_news_live_audit
+          code=$?
+          if [ -f artifacts/unified_news_live_audit/unified_news_live_audit.md ]; then
+            cat artifacts/unified_news_live_audit/unified_news_live_audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+
+      - name: Upload unified public news audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unified-news-audit-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/unified_news_live_audit/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Diagnose procurement plan pipeline
         run: |
           if [ -f scripts/diagnose_procurement_plan_gap.py ]; then

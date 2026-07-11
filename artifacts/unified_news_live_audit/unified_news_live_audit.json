@@ -1,248 +1,60 @@
 {
-  "generated_at": "2026-07-11T08:16:29.117579+00:00",
+  "generated_at": "2026-07-11T09:47:17.674539+00:00",
   "input_path": "frontend\\public\\data\\news.json",
-  "public_news_generated_at": "2026-07-11T14:18:15+09:00",
+  "public_news_generated_at": "2026-07-11T18:38:52+09:00",
   "public_news_last_updated_at": null,
-  "total_news_count": 1158,
-  "domestic_pipeline_count": 1105,
+  "total_news_count": 1125,
+  "domestic_pipeline_count": 1072,
   "rss_overseas_pipeline_count": 53,
   "load_errors": [],
   "unified_v2_contract": {
-    "counts": {
-      "title_published_at_duplicate_count": 7,
-      "excluded_public_count": 27
-    },
-    "issue_count": 34,
-    "issues_sample": [
-      {
-        "code": "title_published_at_duplicate",
-        "id": 54,
-        "duplicate_of": 6248,
-        "title": "김윤덕 장관, 모듈러 주택 제작 공장 방문",
-        "published_at": "2026-07-10"
-      },
-      {
-        "code": "title_published_at_duplicate",
-        "id": 6194,
-        "duplicate_of": 6203,
-        "title": "KCC X 공간제작소, 모듈러 주거 모델 개발 협력",
-        "published_at": "2026-07-09"
-      },
-      {
-        "code": "excluded_public",
-        "id": 6187,
-        "title": "[박정로의 주간 브리핑] 광주연구원, 목조건축물 활성화 방안 제시"
-      },
-      {
-        "code": "excluded_public",
-        "id": 755,
-        "title": "[장용동의 우리들의 주거복지] 주택공급난, 민간 공급 적극 살려야 해소..."
-      },
-      {
-        "code": "excluded_public",
-        "id": 6149,
-        "title": "삼성SDS-삼성물산, 춘천에 신규 AIDC 건립 추진"
-      },
-      {
-        "code": "excluded_public",
-        "id": 6082,
-        "title": "공간제작소, 채널A '대한민국 브랜딩코리아' 출연···AI·로봇 자동화..."
-      },
-      {
-        "code": "excluded_public",
-        "id": 6078,
-        "title": "인천시, 로봇이 함께 사는 미래주택 공개…송도서 첨단기술 선보인다"
-      },
-      {
-        "code": "excluded_public",
-        "id": 6076,
-        "title": "조재천 현대엘리베이터 대표 \"승강기도 친환경·고효율 기술 중요성 커..."
-      },
-      {
-        "code": "excluded_public",
-        "id": 6064,
-        "title": "“민주주의 지켜온 호남에 보상, 투자 유도했지만 억압이나 강요는 아니..."
-      },
-      {
-        "code": "excluded_public",
-        "id": 377,
-        "title": "“로봇이 빵 굽고 커피 내린다”…인천 로보컵 2026서 미래형 주거 첫 공..."
-      },
-      {
-        "code": "excluded_public",
-        "id": 376,
-        "title": "인천, 2026 로보컵 연계 '로봇 주거 모델' 첫선"
-      },
-      {
-        "code": "excluded_public",
-        "id": 375,
-        "title": "인천시, 로보컵 2026 연계 로봇서비스 기반 미래 주거 비전 제시"
-      },
-      {
-        "code": "excluded_public",
-        "id": 374,
-        "title": "인천시, 로봇서비스 기반 미래 주거 비전 '첫 선'"
-      },
-      {
-        "code": "excluded_public",
-        "id": 373,
-        "title": "인천시, '로보컵 2026'서 로봇서비스 미래 주거 비전 제시한다"
-      },
-      {
-        "code": "excluded_public",
-        "id": 372,
-        "title": "인천시, 로봇서비스 기반 미래 주거모델 공개...도시정비 정책 확장"
-      },
-      {
-        "code": "excluded_public",
-        "id": 371,
-        "title": "인천시, 로보컵 2026서 AI·로봇 기반 미래 주거 비전 공개"
-      },
-      {
-        "code": "excluded_public",
-        "id": 370,
-        "title": "인천시, ‘로보컵 2026’ 연계…로봇서비스 미래 주거 비전 제시"
-      },
-      {
-        "code": "excluded_public",
-        "id": 369,
-        "title": "인천시, 로보컵 2026서 '로봇 서비스 기반 미래 주거 모델' 첫선"
-      },
-      {
-        "code": "excluded_public",
-        "id": 206,
-        "title": "농업 희생 전제로 산업화 뒷받침한 1960년대 농업정책"
-      },
-      {
-        "code": "excluded_public",
-        "id": 5974,
-        "title": "연구원 출범 디벨로퍼협회 \"부동산은 생산적 산업, 업계 싱크탱크 역할..."
-      },
-      {
-        "code": "excluded_public",
-        "id": 5967,
-        "title": "[데일리픽] 스트래티지 폭락 우려…韓 반도체 지원 갈림길"
-      },
-      {
-        "code": "excluded_public",
-        "id": 5886,
-        "title": "[Who Is ?] 구본준 LX그룹 회장"
-      },
-      {
-        "code": "excluded_public",
-        "id": 5859,
-        "title": "깊이가 다른 글로벌 투자 정보 GAM - 맛보기편 (6/23)"
-      },
-      {
-        "code": "title_published_at_duplicate",
-        "id": 5809,
-        "duplicate_of": 5848,
-        "title": "\"엘리베이터 건설현장 중대재해 위험 95%까지 줄인다\"[R&D인사이드]",
-        "published_at": "2026-06-22"
-      },
-      {
-        "code": "excluded_public",
-        "id": 219,
-        "title": "[창간기획: 미래를 설계하는 기업들] 현대로템, K2 전차 넘어 미래 지상..."
-      },
-      {
-        "code": "title_published_at_duplicate",
-        "id": 238,
-        "duplicate_of": 5785,
-        "title": "삼성전자, 공간제작소와 'AI 모듈러 홈' 선봬",
-        "published_at": "2026-06-18"
-      },
-      {
-        "code": "excluded_public",
-        "id": 101,
-        "title": "“AX 제대로 하면 제조업에 ‘바이브 코딩’같은 시대 열릴 것”"
-      },
-      {
-        "code": "excluded_public",
-        "id": 188,
-        "title": "유닛랩, 넥스트라이즈·국토교통기술대전 참가"
-      },
-      {
-        "code": "title_published_at_duplicate",
-        "id": 188,
-        "duplicate_of": 5767,
-        "title": "유닛랩, 넥스트라이즈·국토교통기술대전 참가",
-        "published_at": "2026-06-17"
-      },
-      {
-        "code": "title_published_at_duplicate",
-        "id": 172,
-        "duplicate_of": 5646,
-        "title": "원광전력, 노후 공장 그린리모델링 BIPV 기술개발 동참",
-        "published_at": "2026-06-02"
-      },
-      {
-        "code": "excluded_public",
-        "id": 5363,
-        "title": "[기후위기, 지역에 묻다 ②] 경남 김해 \"정부, 지역 목소리 안 듣고 일방..."
-      },
-      {
-        "code": "title_published_at_duplicate",
-        "id": 5345,
-        "duplicate_of": 5350,
-        "title": "LH, ‘2026 프랑스 파리 국제 건축전시회’ 참가 중소기업 모집",
-        "published_at": "2026-05-18"
-      },
-      {
-        "code": "excluded_public",
-        "id": 736,
-        "title": "[건설 大개조, K-건설 생존 방정식]DL이앤씨, 박상신표 내실 경영…'숫자..."
-      },
-      {
-        "code": "excluded_public",
-        "id": 756,
-        "title": "북, 개정 헌법에 영토조항 신설...대남적대 표현은 미반영"
-      }
-    ]
+    "counts": {},
+    "issue_count": 0,
+    "issues_sample": []
   },
   "score_distribution": {
     "overall": {
-      "count": 1158,
-      "min": 0,
+      "count": 1125,
+      "min": 25,
       "p25": 40.0,
-      "median": 45.0,
-      "average": 49.17,
+      "median": 45,
+      "average": 50.28,
       "p75": 55.0,
       "max": 95,
       "level_counts": {
-        "direct": 296,
-        "adjacent": 834,
+        "direct": 292,
+        "adjacent": 832,
         "reference": 1,
-        "excluded": 27
+        "excluded": 0
       },
       "score_bins": {
-        "0_19": 27,
-        "20_39": 228,
+        "0_19": 0,
+        "20_39": 226,
         "40_59": 620,
-        "60_79": 193,
-        "80_100": 90
+        "60_79": 190,
+        "80_100": 89
       }
     },
     "domestic_pipeline": {
-      "count": 1105,
-      "min": 0,
+      "count": 1072,
+      "min": 25,
       "p25": 40.0,
-      "median": 45,
-      "average": 47.76,
+      "median": 45.0,
+      "average": 48.89,
       "p75": 55.0,
       "max": 95,
       "level_counts": {
-        "direct": 244,
-        "adjacent": 833,
+        "direct": 240,
+        "adjacent": 831,
         "reference": 1,
-        "excluded": 27
+        "excluded": 0
       },
       "score_bins": {
-        "0_19": 27,
-        "20_39": 228,
+        "0_19": 0,
+        "20_39": 226,
         "40_59": 619,
-        "60_79": 169,
-        "80_100": 62
+        "60_79": 166,
+        "80_100": 61
       }
     },
     "rss_overseas_pipeline": {
@@ -271,20 +83,20 @@
   "relevance_component_stats": {
     "domestic_pipeline": {
       "core": {
-        "average": 35.04,
-        "median": 35
+        "average": 35.88,
+        "median": 35.0
       },
       "business": {
-        "average": 5.25,
-        "median": 5
+        "average": 5.37,
+        "median": 5.0
       },
       "freshness": {
-        "average": 2.59,
-        "median": 0
+        "average": 2.64,
+        "median": 0.0
       },
       "completeness": {
-        "average": 4.88,
-        "median": 5
+        "average": 5,
+        "median": 5.0
       }
     },
     "rss_overseas_pipeline": {
@@ -308,24 +120,24 @@
   },
   "component_comparison": {
     "average_absolute_differences": {
-      "core": 24.49,
-      "business": 0.03,
-      "freshness": 6.09,
-      "completeness": 0.12
+      "core": 23.65,
+      "business": 0.09,
+      "freshness": 6.04,
+      "completeness": 0.0
     },
     "largest_difference_component": "core",
-    "largest_difference": 24.49
+    "largest_difference": 23.65
   },
   "region_audit": {
     "counts": {
-      "collector_domestic_pipeline": 1105,
-      "publisher_domestic": 790,
-      "publisher_unknown": 366,
+      "collector_domestic_pipeline": 1072,
+      "publisher_domestic": 770,
+      "publisher_unknown": 353,
       "collector_rss_overseas_pipeline": 53,
       "rss_overseas_pipeline_domestic_publisher_count": 5,
       "publisher_overseas": 2
     },
-    "unknown_count": 366,
+    "unknown_count": 353,
     "mismatch_count": 5,
     "mismatch_samples": [
       {
@@ -692,7 +504,7 @@
       "overseas": 1
     },
     "actual_modular_unrelated_count": 0,
-    "same_issue_duplicate_count": 1,
+    "same_issue_duplicate_count": 0,
     "unnatural_score_level_count": 0,
     "adjacent_before_direct_count": 0,
     "top_items": [
@@ -798,16 +610,6 @@
       },
       {
         "rank": 11,
-        "id": 6248,
-        "title": "김윤덕 장관, 모듈러 주택 제작 공장 방문",
-        "media": "yna.co.kr",
-        "source": "네이버뉴스",
-        "publisher_region_candidate": "domestic",
-        "relevance_level": "direct",
-        "relevance_score": 95
-      },
-      {
-        "rank": 12,
         "id": 54,
         "title": "김윤덕 장관, 모듈러 주택 제작 공장 방문",
         "media": "yna.co.kr",
@@ -817,7 +619,7 @@
         "relevance_score": 95
       },
       {
-        "rank": 13,
+        "rank": 12,
         "id": 4,
         "title": "모듈러 주택 공공발주 확대…특별법도 제정",
         "media": "4th.kr",
@@ -827,7 +629,7 @@
         "relevance_score": 95
       },
       {
-        "rank": 14,
+        "rank": 13,
         "id": 51,
         "title": "모듈러 주택 공급 확대..국토장관 \"좋은 집 더 빨리\"",
         "media": "kpenews.com",
@@ -837,7 +639,7 @@
         "relevance_score": 95
       },
       {
-        "rank": 15,
+        "rank": 14,
         "id": 6209,
         "title": "KCC·자이가이스트, 모듈러 주택 사업 확장 박차",
         "media": "wsobi.com",
@@ -847,7 +649,7 @@
         "relevance_score": 95
       },
       {
-        "rank": 16,
+        "rank": 15,
         "id": 280,
         "title": "Launchpad Collective Breaks Ground on 32-Unit Affordable Modular Housing Project in San Bernardino - ie community news",
         "media": "ie community news",
@@ -857,7 +659,7 @@
         "relevance_score": 95
       },
       {
-        "rank": 17,
+        "rank": 16,
         "id": 6240,
         "title": "Montreal scraps Outremont modular housing project amid contamination concerns - Global News",
         "media": "Global News",
@@ -867,7 +669,7 @@
         "relevance_score": 95
       },
       {
-        "rank": 18,
+        "rank": 17,
         "id": 6249,
         "title": "Montreal scraps Outremont modular housing project amid contamination concerns - unpublished.ca",
         "media": "unpublished.ca",
@@ -877,7 +679,7 @@
         "relevance_score": 95
       },
       {
-        "rank": 19,
+        "rank": 18,
         "id": 6229,
         "title": "KCC, 미래 주거시장 겨냥 모듈러 건축 협력 확대",
         "media": "thefirstmedia.net",
@@ -887,7 +689,7 @@
         "relevance_score": 90
       },
       {
-        "rank": 20,
+        "rank": 19,
         "id": 6224,
         "title": "KCC-공간제작소, 모듈러 주택 사업 협력 업무협약 체결",
         "media": "newsdream.kr",
@@ -897,7 +699,7 @@
         "relevance_score": 90
       },
       {
-        "rank": 21,
+        "rank": 20,
         "id": 6169,
         "title": "주택 공급 속도전 속 '모듈러 주택' 대안될까",
         "media": "news.mtn.co.kr",
@@ -907,7 +709,7 @@
         "relevance_score": 90
       },
       {
-        "rank": 22,
+        "rank": 21,
         "id": 305,
         "title": "Modular Housing Manufacturer to Redevelop Historic Factory in Cleveland - Assembly Magazine",
         "media": "Assembly Magazine",
@@ -917,7 +719,7 @@
         "relevance_score": 90
       },
       {
-        "rank": 23,
+        "rank": 22,
         "id": 6152,
         "title": "\"공장에서 짓고 현장에선 조립\"···모듈러 건축, 건설업 새 표준 되나",
         "media": "enewstoday.co.kr",
@@ -927,7 +729,7 @@
         "relevance_score": 90
       },
       {
-        "rank": 24,
+        "rank": 23,
         "id": 6107,
         "title": "삼성·LG도 뛰어든 모듈러 주택…입주절벽 막으려면 '공공 발주' 관건[부...",
         "media": "view.asiae.co.kr",
@@ -937,7 +739,7 @@
         "relevance_score": 90
       },
       {
-        "rank": 25,
+        "rank": 24,
         "id": 324,
         "title": "Cleveland has 18,000 vacant lots. Could a modular housing factory help fill them? - News 5 Cleveland WEWS",
         "media": "News 5 Cleveland WEWS",
@@ -947,7 +749,7 @@
         "relevance_score": 90
       },
       {
-        "rank": 26,
+        "rank": 25,
         "id": 14,
         "title": "KCC, 공간제작소와 미래형 모듈러 주택 맞손… 건자재 기술력으로 신성...",
         "media": "biztribune.co.kr",
@@ -957,7 +759,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 27,
+        "rank": 26,
         "id": 52,
         "title": "‘건설 위기 돌파구’… 국토부, 30% 비싼 ‘모듈러 주택’ 키운다",
         "media": "segye.com",
@@ -967,7 +769,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 28,
+        "rank": 27,
         "id": 18,
         "title": "中 모듈러 주택, 전 세계서 주문 폭주",
         "media": "kr.people.com.cn",
@@ -977,7 +779,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 29,
+        "rank": 28,
         "id": 17,
         "title": "국토부, 모듈러 공공주택 확대 공급 등 산업 육성 지원방안 적극 추진한...",
         "media": "ikld.kr",
@@ -987,7 +789,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 30,
+        "rank": 29,
         "id": 12,
         "title": "국토장관 \"모듈러 기술, 고품질 주택 공급 핵심 돌파구\"",
         "media": "wowtv.co.kr",
@@ -997,7 +799,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 31,
+        "rank": 30,
         "id": 22,
         "title": "국토장관 \"좋은 집 더 빠르게 공급하도록 모듈러 기술 키울 것\"",
         "media": "newsis.com",
@@ -1007,7 +809,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 32,
+        "rank": 31,
         "id": 9,
         "title": "군산 모듈러 공장 찾은 김윤덕 국토 장관 “좋은 집, 더 빠르게 공급”",
         "media": "biz.chosun.com",
@@ -1017,7 +819,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 33,
+        "rank": 32,
         "id": 16,
         "title": "김윤덕 국토부 장관 \"모듈러 주택 활성화\" ... 고층·대형화 위한 노력",
         "media": "ppss.kr",
@@ -1027,7 +829,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 34,
+        "rank": 33,
         "id": 2,
         "title": "김윤덕 국토부 장관 \"모듈러 주택이 건설혁신 돌파구 만들 것\"",
         "media": "news.tvchosun.com",
@@ -1037,7 +839,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 35,
+        "rank": 34,
         "id": 19,
         "title": "김윤덕 국토부 장관 \"모듈러 주택이 건설혁신 돌파구\"",
         "media": "news1.kr",
@@ -1047,7 +849,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 36,
+        "rank": 35,
         "id": 20,
         "title": "김윤덕 국토장관 \"좋은 집 빠르게 공급\"…모듈러 기술 키운다",
         "media": "news.tf.co.kr",
@@ -1057,7 +859,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 37,
+        "rank": 36,
         "id": 6219,
         "title": "[뉴스워커_KCC] 스마트팩토리 기반 모듈러 주택 공동 개발 나선다",
         "media": "newsworker.co.kr",
@@ -1067,7 +869,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 38,
+        "rank": 37,
         "id": 288,
         "title": "First 10 modular housing units leave Hay River manufacturer for Ulukhaktok - Yellowknifer",
         "media": "Yellowknifer",
@@ -1077,7 +879,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 39,
+        "rank": 38,
         "id": 6225,
         "title": "KCC - 공간제작소, 모듈러 주택 개발 협력 … 스마트건설 시장 공략",
         "media": "worktoday.co.kr",
@@ -1087,7 +889,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 40,
+        "rank": 39,
         "id": 187,
         "title": "KCC 공간제작소와 미래형 모듈러 주택",
         "media": "newsclaim.co.kr",
@@ -1097,7 +899,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 41,
+        "rank": 40,
         "id": 6196,
         "title": "KCC, 공간제작소와 모듈러 주택 개발 협력...6월 관심도 급증",
         "media": "thebigdata.co.kr",
@@ -1107,7 +909,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 42,
+        "rank": 41,
         "id": 6202,
         "title": "KCC, 공간제작소와 미래 주택시장 공략… 모듈러 건축 표준화 추진",
         "media": "koreaittimes.com",
@@ -1117,7 +919,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 43,
+        "rank": 42,
         "id": 6201,
         "title": "KCC, 공간제작소와 미래형 모듈러 주택 개발 ‘맞손’",
         "media": "g-enews.com",
@@ -1127,7 +929,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 44,
+        "rank": 43,
         "id": 6197,
         "title": "KCC, 공간제작소와 손잡고 미래형 모듈러 주택 개발",
         "media": "popcornnews.net",
@@ -1137,7 +939,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 45,
+        "rank": 44,
         "id": 6207,
         "title": "KCC, 공간제작소와 손잡고 미래형 모듈러 주택 시장 공략",
         "media": "cstimes.com",
@@ -1147,7 +949,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 46,
+        "rank": 45,
         "id": 6206,
         "title": "KCC, 모듈러 주택 승부수… 공간제작소와 미래 주거시장 공략",
         "media": "ilyoseoul.co.kr",
@@ -1157,7 +959,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 47,
+        "rank": 46,
         "id": 6199,
         "title": "KCC, 스마트팩토리 기반 모듈러 주택 개발…시장 선점 나선다",
         "media": "newslock.co.kr",
@@ -1167,7 +969,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 48,
+        "rank": 47,
         "id": 6205,
         "title": "KCC-공간제작소 '모듈러 주택' 자재개발 공동연구 '맞손'",
         "media": "newstree.kr",
@@ -1177,7 +979,7 @@
         "relevance_score": 85
       },
       {
-        "rank": 49,
+        "rank": 48,
         "id": 6213,
         "title": "KCC-공간제작소, 미래형 모듈러 주택 개발 '맞손'",
         "media": "financialreview.co.kr",
@@ -1187,10 +989,20 @@
         "relevance_score": 85
       },
       {
-        "rank": 50,
+        "rank": 49,
         "id": 6222,
         "title": "모듈러 주택, '주거 플랫폼' 경쟁…KCC 밸류체인 선점 추진",
         "media": "4th.kr",
+        "source": "네이버뉴스",
+        "publisher_region_candidate": "domestic",
+        "relevance_level": "direct",
+        "relevance_score": 85
+      },
+      {
+        "rank": 50,
+        "id": 6223,
+        "title": "커지는 모듈러 주택 시장…건자재업계도 미래 주거 경쟁 본격화",
+        "media": "newsprime.co.kr",
         "source": "네이버뉴스",
         "publisher_region_candidate": "domestic",
         "relevance_level": "direct",
@@ -1225,10 +1037,10 @@
       "suggested_priority": "workflow maintenance"
     }
   ],
-  "final_status": "FAIL",
+  "final_status": "PASS_WITH_REGION_FIX_REQUIRED",
   "next_recommendations": [
-    "Fix public export or collection policy so relevance_level=excluded items are not published.",
-    "Add whole-news title/date duplicate normalization or review duplicate carry-over in cumulative public news.",
+    "Split collector_region from publisher_region in frontend filtering before changing production data.",
+    "Keep overseas RSS collector active, but display Korean publishers from RSS as domestic publisher candidates.",
     "Audit RSS-sourced domestic publishers and plan a separate publisher_region display hotfix.",
     "Add explicit publisher-domain mappings for high-volume unknown publishers after manual review.",
     "Keep unified-v2 scoring unchanged until region-display behavior is fixed in a separate hotfix."

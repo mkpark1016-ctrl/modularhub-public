@@ -53,6 +53,14 @@ def main() -> int:
         "previous_news_count",
         "current_news_count",
         "merged_news_count",
+        "news_before_global_dedup_count",
+        "news_after_global_dedup_count",
+        "news_global_duplicate_removed_count",
+        "news_before_publish_filter_count",
+        "news_after_publish_filter_count",
+        "news_excluded_removed_count",
+        "news_policy_removed_count",
+        "news_policy_version",
         "public_data_guard_status",
         "public_data_guard_message",
         "d2b_legacy_status",
@@ -88,6 +96,7 @@ def main() -> int:
     require(meta.get("data_policy") == "cumulative_verified", "unexpected public data policy")
     require(meta.get("merged_business_count") == len(business["items"]), "merged business count mismatch")
     require(meta.get("merged_news_count") == len(news["items"]), "merged news count mismatch")
+    require(meta.get("news_policy_version") == "unified-v2-publication-v1", "unexpected news policy version")
     require(meta.get("public_data_guard_status") in {"passed", "warning", "override"}, "public data guard did not pass")
 
     for item in business["items"]:
@@ -123,6 +132,8 @@ def main() -> int:
     for item in news["items"]:
         require(item.get("original_url"), "news original_url is missing")
         require(item.get("source_type") is None, "news contract must not expose unrelated source_type")
+        require(item.get("relevance_level") != "excluded", "excluded news must not be published")
+        require(item.get("relevance_score_version") == "unified-v2", "news score version mismatch")
 
     print(f"business items: {len(business['items'])}")
     print(f"news items: {len(news['items'])}")

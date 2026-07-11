@@ -19,11 +19,14 @@ from src.config import DB_PATH, D2B_LEGACY_API_ENABLED  # noqa: E402
 from src.database import init_db, load_collect_logs_dataframe, load_items_dataframe  # noqa: E402
 from src.public_data_policy import (  # noqa: E402
     apply_business_lifecycle,
-    dedupe_overseas_rss_public_items,
+    dedupe_all_public_news_items,
+    filter_publishable_news_items,
     guard_result,
     load_removal_allowlist,
     merge_public_items,
+    OVERSEAS_RSS_SOURCE,
     payload_items,
+    PUBLIC_NEWS_POLICY_VERSION,
 )
 from src.news_scoring import apply_unified_news_scores, news_score_audit_stats  # noqa: E402
 
@@ -583,13 +586,21 @@ def main() -> int:
         removal_allowlist=removal_allowlist,
     )
     news = merge_public_items(previous_news, current_news, kind="news", now=merge_time)
+    news_before_global_dedup_count = len(news)
     overseas_rss_before_dedup_count = sum(item.get("source") == "해외 모듈러 RSS" for item in news)
-    news = dedupe_overseas_rss_public_items(news)
+    news = dedupe_all_public_news_items(news)
+    news_after_global_dedup_count = len(news)
+    news_global_duplicate_removed_count = news_before_global_dedup_count - news_after_global_dedup_count
     overseas_rss_after_dedup_count = sum(item.get("source") == "해외 모듈러 RSS" for item in news)
     overseas_rss_duplicate_removed_count = overseas_rss_before_dedup_count - overseas_rss_after_dedup_count
     news_before_scoring = [dict(item) for item in news]
-    news = apply_unified_news_scores(news, today=datetime.now().astimezone().date())
-    news_score_stats = news_score_audit_stats(news_before_scoring, news)
+    scored_news = apply_unified_news_scores(news, today=datetime.now().astimezone().date())
+    news_before_publish_filter_count = len(scored_news)
+    news = filter_publishable_news_items(scored_news)
+    news_after_publish_filter_count = len(news)
+    news_excluded_removed_count = news_before_publish_filter_count - news_after_publish_filter_count
+    news_policy_removed_count = news_global_duplicate_removed_count + news_excluded_removed_count
+    news_score_stats = news_score_audit_stats(news, news)
     business = apply_business_lifecycle(business, now=merge_time, default_last_seen_at=generated_at)
 
     logs = load_collect_logs_dataframe(limit=500)
@@ -676,6 +687,7 @@ def main() -> int:
         previous_news=len(baseline_news),
         merged_news=len(news),
         allow_shrink=os.getenv("ALLOW_PUBLIC_DATA_SHRINK", "false").lower() in {"1", "true", "yes", "y"},
+        approved_news_policy_removals=news_policy_removed_count,
     )
 
     warnings: list[str] = []
@@ -725,6 +737,14 @@ def main() -> int:
         "previous_news_count": len(baseline_news),
         "current_news_count": len(current_news),
         "merged_news_count": len(news),
+        "news_before_global_dedup_count": news_before_global_dedup_count,
+        "news_after_global_dedup_count": news_after_global_dedup_count,
+        "news_global_duplicate_removed_count": news_global_duplicate_removed_count,
+        "news_before_publish_filter_count": news_before_publish_filter_count,
+        "news_after_publish_filter_count": news_after_publish_filter_count,
+        "news_excluded_removed_count": news_excluded_removed_count,
+        "news_policy_removed_count": news_policy_removed_count,
+        "news_policy_version": PUBLIC_NEWS_POLICY_VERSION,
         "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
         "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
         "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,
@@ -765,6 +785,14 @@ def main() -> int:
             "previous_news_count": len(baseline_news),
             "current_news_count": len(current_news),
             "merged_news_count": len(news),
+            "news_before_global_dedup_count": news_before_global_dedup_count,
+            "news_after_global_dedup_count": news_after_global_dedup_count,
+            "news_global_duplicate_removed_count": news_global_duplicate_removed_count,
+            "news_before_publish_filter_count": news_before_publish_filter_count,
+            "news_after_publish_filter_count": news_after_publish_filter_count,
+            "news_excluded_removed_count": news_excluded_removed_count,
+            "news_policy_removed_count": news_policy_removed_count,
+            "news_policy_version": PUBLIC_NEWS_POLICY_VERSION,
             "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
             "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
             "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,

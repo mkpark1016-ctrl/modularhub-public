@@ -14,6 +14,8 @@ REMOVAL_ALLOWLIST_PATH = ROOT / "config" / "public_data_removal_allowlist.json"
 BUSINESS_SHRINK_THRESHOLD = 0.20
 NEWS_SHRINK_THRESHOLD = 0.30
 KST = timezone(timedelta(hours=9), "KST")
+PUBLIC_NEWS_POLICY_VERSION = "unified-v2-publication-v1"
+PUBLISHABLE_RELEVANCE_LEVELS = {"direct", "adjacent", "reference"}
 OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS"
 
 
@@ -193,6 +195,55 @@ def _merge_overseas_rss_group(items: list[dict[str, Any]], content_key: tuple[st
     return survivor
 
 
+def _merge_public_news_group(items: list[dict[str, Any]], content_key: tuple[str, str]) -> dict[str, Any]:
+    survivor = _choose_stable_public_item(items)
+    for item in items:
+        if _url_quality(item.get("original_url")) > _url_quality(survivor.get("original_url")):
+            survivor["original_url"] = item.get("original_url")
+        if _url_quality(item.get("url")) > _url_quality(survivor.get("url")):
+            survivor["url"] = item.get("url")
+        if _text_quality(item.get("media") or item.get("source_name") or item.get("organization")) > _text_quality(
+            survivor.get("media") or survivor.get("source_name") or survivor.get("organization")
+        ):
+            if _nonempty(item.get("media")):
+                survivor["media"] = item.get("media")
+            elif _nonempty(item.get("source_name")):
+                survivor["source_name"] = item.get("source_name")
+            elif _nonempty(item.get("organization")):
+                survivor["organization"] = item.get("organization")
+        if len(clean_text(item.get("summary"))) > len(clean_text(survivor.get("summary"))):
+            survivor["summary"] = item.get("summary")
+
+    merged_keywords: list[str] = []
+    seen_keywords: set[str] = set()
+    for item in items:
+        for keyword in _keyword_parts(item.get("keywords")):
+            key = keyword.lower()
+            if key not in seen_keywords:
+                seen_keywords.add(key)
+                merged_keywords.append(keyword)
+    if merged_keywords:
+        survivor["keywords"] = ", ".join(merged_keywords)
+
+    merged_reasons: list[str] = []
+    seen_reasons: set[str] = set()
+    for item in items:
+        raw_reasons = item.get("relevance_reasons")
+        reason_parts = raw_reasons if isinstance(raw_reasons, list) else re.split(r"[,;|]", clean_text(raw_reasons))
+        for reason in reason_parts:
+            text = clean_text(reason)
+            key = text.lower()
+            if text and key not in seen_reasons:
+                seen_reasons.add(key)
+                merged_reasons.append(text)
+    if merged_reasons:
+        survivor["relevance_reasons"] = merged_reasons
+
+    if content_key[1]:
+        survivor["published_at"] = content_key[1]
+    return survivor
+
+
 def dedupe_overseas_rss_public_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
     ordered: list[tuple[str, dict[str, Any] | tuple[str, str]]] = []
@@ -219,6 +270,42 @@ def dedupe_overseas_rss_public_items(items: list[dict[str, Any]]) -> list[dict[s
         else:
             result.append(value)  # type: ignore[arg-type]
     return result
+
+
+def dedupe_all_public_news_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    ordered: list[tuple[str, dict[str, Any] | tuple[str, str]]] = []
+
+    for item in items:
+        copied = dict(item)
+        content_key = overseas_news_content_key(copied.get("title"), copied.get("published_at"))
+        if not all(content_key):
+            ordered.append(("item", copied))
+            continue
+        if content_key not in groups:
+            groups[content_key] = [copied]
+            ordered.append(("group", content_key))
+        else:
+            groups[content_key].append(copied)
+
+    result: list[dict[str, Any]] = []
+    for kind, value in ordered:
+        if kind == "group":
+            result.append(_merge_public_news_group(groups[value], value))  # type: ignore[index,arg-type]
+        else:
+            result.append(value)  # type: ignore[arg-type]
+    return result
+
+
+def is_publishable_news_item(item: dict[str, Any]) -> bool:
+    return (
+        clean_text(item.get("relevance_score_version")) == "unified-v2"
+        and clean_text(item.get("relevance_level")) in PUBLISHABLE_RELEVANCE_LEVELS
+    )
+
+
+def filter_publishable_news_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [dict(item) for item in items if is_publishable_news_item(item)]
 
 
 def _nonempty(value: Any) -> bool:
@@ -416,22 +503,30 @@ def guard_result(
     previous_news: int,
     merged_news: int,
     allow_shrink: bool = False,
+    approved_news_policy_removals: int = 0,
 ) -> tuple[str, str]:
     business_limit = int(previous_business * (1 - BUSINESS_SHRINK_THRESHOLD))
     news_limit = int(previous_news * (1 - NEWS_SHRINK_THRESHOLD))
+    effective_merged_news = merged_news + max(0, approved_news_policy_removals)
     problems = []
     if previous_business and merged_business < business_limit:
         problems.append(f"business {previous_business} -> {merged_business}")
-    if previous_news and merged_news < news_limit:
-        problems.append(f"news {previous_news} -> {merged_news}")
+    if previous_news and effective_merged_news < news_limit:
+        problems.append(f"news {previous_news} -> {merged_news}, policy_removed={approved_news_policy_removals}")
     if problems and not allow_shrink:
         return "blocked", "Public data shrink detected. " + ", ".join(problems) + ". Refusing commit."
     if problems:
         return "override", "Public data shrink allowed by ALLOW_PUBLIC_DATA_SHRINK=true: " + ", ".join(problems)
     if merged_business < previous_business or merged_news < previous_news:
+        if approved_news_policy_removals and effective_merged_news >= previous_news and merged_business >= previous_business:
+            return "passed", (
+                f"Cumulative merge protected public data with approved news policy removals: "
+                f"business {previous_business} -> {merged_business}, news {previous_news} -> {merged_news}, "
+                f"policy_removed={approved_news_policy_removals}."
+            )
         return "warning", (
             f"Cumulative normalization reduced data within guard limits: business {previous_business} -> {merged_business}, "
-            f"news {previous_news} -> {merged_news}."
+            f"news {previous_news} -> {merged_news}, policy_removed={approved_news_policy_removals}."
         )
     return "passed", (
         f"Cumulative merge protected public data: business {previous_business} -> {merged_business}, "
