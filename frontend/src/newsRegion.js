@@ -4,9 +4,18 @@ function textValue(value) {
   return String(value || "").trim();
 }
 
-function isLegacyRssSource(value) {
-  const source = textValue(value);
-  return source === OVERSEAS_RSS_SOURCE || source.toLowerCase().includes("rss");
+function combinedSourceText(item) {
+  return [item?.collection_source, item?.source, item?.source_name].map(textValue).filter(Boolean).join(" ").toLowerCase();
+}
+
+function sourceSuggestsDomestic(item) {
+  const text = combinedSourceText(item);
+  return text.includes("국내") || text.includes("네이버") || text.includes("naver");
+}
+
+function sourceSuggestsOverseas(item) {
+  const text = combinedSourceText(item);
+  return text.includes("해외") || text.includes("rss") || text.includes("overseas");
 }
 
 export function getNewsPublisherLabel(item) {
@@ -31,37 +40,74 @@ export function getNewsCollectionLabel(item) {
   return "";
 }
 
-export function getNewsRegionType(item) {
+export function getNewsDisplayRegionReason(item) {
   if (item?.publisher_region === "domestic" || item?.publisher_region === "overseas") {
-    return item.publisher_region;
+    return { region: item.publisher_region, reason: "publisher_region" };
   }
-  if (item?.publisher_region === "unknown") return "unknown";
-  return isLegacyRssSource(item?.source) ? "overseas" : "domestic";
+  if (item?.collection_pipeline === "domestic_pipeline") {
+    return { region: "domestic", reason: "collection_pipeline" };
+  }
+  if (item?.collection_pipeline === "rss_overseas_pipeline") {
+    return { region: "overseas", reason: "collection_pipeline" };
+  }
+  if (sourceSuggestsDomestic(item)) return { region: "domestic", reason: "collection_source" };
+  if (sourceSuggestsOverseas(item)) return { region: "overseas", reason: "collection_source" };
+  return { region: "domestic", reason: "fallback_default_domestic" };
 }
 
-export function newsRegionCounts(items) {
+export function getNewsDisplayRegion(item) {
+  return getNewsDisplayRegionReason(item).region;
+}
+
+export function getNewsRegionType(item) {
+  return getNewsDisplayRegion(item);
+}
+
+export function newsDisplayRegionCounts(items) {
   const counts = {
     all: items.length,
     domestic: 0,
     overseas: 0,
-    unknown: 0,
   };
   items.forEach((item) => {
-    const region = getNewsRegionType(item);
-    counts[region] = (counts[region] || 0) + 1;
+    const region = getNewsDisplayRegion(item);
+    counts[region] += 1;
   });
   return counts;
 }
 
+export function newsDisplayRegionDiagnostics(items) {
+  const diagnostics = {
+    publisher_region: 0,
+    collection_pipeline: 0,
+    collection_source: 0,
+    fallback_default_domestic: 0,
+  };
+  items.forEach((item) => {
+    const { reason } = getNewsDisplayRegionReason(item);
+    diagnostics[reason] = (diagnostics[reason] || 0) + 1;
+  });
+  return diagnostics;
+}
+
+export function newsRegionCounts(items) {
+  return newsDisplayRegionCounts(items);
+}
+
+export function newsDisplayRegionMatches(item, region) {
+  return region === "all" || getNewsDisplayRegion(item) === region;
+}
+
 export function newsRegionMatches(item, region) {
-  return region === "all" || getNewsRegionType(item) === region;
+  return newsDisplayRegionMatches(item, region);
+}
+
+export function getNewsDisplayRegionLabel(item) {
+  return getNewsDisplayRegion(item) === "overseas" ? "해외" : "국내";
 }
 
 export function getNewsRegionLabel(item) {
-  const region = getNewsRegionType(item);
-  if (region === "overseas") return "해외뉴스";
-  if (region === "domestic") return "국내뉴스";
-  return "지역 미확인";
+  return getNewsDisplayRegionLabel(item);
 }
 
 export function newsSortTime(item) {

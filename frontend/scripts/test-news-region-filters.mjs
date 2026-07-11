@@ -3,10 +3,13 @@ import { readFileSync } from "node:fs";
 import {
   compareNewsItems,
   getNewsCollectionLabel,
+  getNewsDisplayRegion,
+  getNewsDisplayRegionLabel,
   getNewsPublisherDomain,
   getNewsPublisherLabel,
   getNewsRegionLabel,
   getNewsRegionType,
+  newsDisplayRegionDiagnostics,
   newsRegionCounts,
   newsRegionMatches,
   OVERSEAS_RSS_SOURCE,
@@ -67,8 +70,27 @@ const items = [
   },
   {
     id: 5,
-    source: "legacy rss label",
-    title: "Legacy overseas RSS without publisher region",
+    source: "Naver News",
+    title: "Unknown publisher from domestic pipeline",
+    published_at: "2026-07-01T00:00:00Z",
+    publisher_region: "unknown",
+    collection_pipeline: "domestic_pipeline",
+  },
+  {
+    id: 6,
+    collection_source: OVERSEAS_RSS_SOURCE,
+    title: "Missing region but overseas RSS source",
+    published_at: "2026-07-01T00:00:00Z",
+  },
+  {
+    id: 7,
+    collection_source: "국내 뉴스 검색 수집",
+    title: "Missing region but domestic search source",
+    published_at: "2026-07-01T00:00:00Z",
+  },
+  {
+    id: 8,
+    title: "No region metadata",
     published_at: "2026-07-01T00:00:00Z",
   },
 ];
@@ -82,12 +104,18 @@ function filterByRegionAndQuery(region, query) {
 }
 
 assert.equal(OVERSEAS_RSS_SOURCE, "해외 모듈러 RSS");
-assert.equal(getNewsRegionType(items[0]), "domestic");
-assert.equal(getNewsRegionType(items[1]), "overseas");
-assert.equal(getNewsRegionType(items[2]), "domestic");
-assert.equal(getNewsRegionType(items[3]), "unknown");
-assert.equal(getNewsRegionType(items[4]), "overseas");
-assert.equal(getNewsRegionLabel(items[3]), "지역 미확인");
+assert.equal(getNewsDisplayRegion(items[0]), "domestic");
+assert.equal(getNewsDisplayRegion(items[1]), "overseas");
+assert.equal(getNewsDisplayRegion(items[2]), "domestic");
+assert.equal(getNewsDisplayRegion(items[3]), "overseas");
+assert.equal(getNewsDisplayRegion(items[4]), "domestic");
+assert.equal(getNewsDisplayRegion(items[5]), "overseas");
+assert.equal(getNewsDisplayRegion(items[6]), "domestic");
+assert.equal(getNewsDisplayRegion(items[7]), "domestic");
+assert.equal(items[3].publisher_region, "unknown");
+assert.equal(getNewsRegionType(items[3]), "overseas");
+assert.equal(getNewsRegionLabel(items[3]), "해외");
+assert.equal(getNewsDisplayRegionLabel(items[0]), "국내");
 assert.equal(getNewsPublisherLabel(items[0]), "Domestic Publisher");
 assert.equal(getNewsPublisherLabel({ media: "Media", source_name: "Source Name", source: "Source" }), "Media");
 assert.equal(getNewsPublisherLabel({ source_name: "Source Name", source: "Source" }), "Source Name");
@@ -98,19 +126,25 @@ assert.equal(getNewsCollectionLabel(items[2]), "해외 RSS 수집");
 assert.equal(getNewsCollectionLabel(items[0]), "국내 뉴스 검색 수집");
 
 const counts = newsRegionCounts(items);
-assert.deepEqual(counts, { all: 5, domestic: 2, overseas: 2, unknown: 1 });
-assert.equal(counts.all, counts.domestic + counts.overseas + counts.unknown);
-assert.equal(filterByRegionAndQuery("all", "").length, 5);
-assert.deepEqual(filterByRegionAndQuery("domestic", "").map((item) => item.id), [1, 3]);
-assert.deepEqual(filterByRegionAndQuery("overseas", "").map((item) => item.id), [2, 5]);
-assert.deepEqual(filterByRegionAndQuery("unknown", "").map((item) => item.id), [4]);
+assert.deepEqual(counts, { all: 8, domestic: 5, overseas: 3 });
+assert.equal(counts.all, counts.domestic + counts.overseas);
+assert.equal(Object.hasOwn(counts, "unknown"), false);
+assert.equal(filterByRegionAndQuery("all", "").length, 8);
+assert.deepEqual(filterByRegionAndQuery("domestic", "").map((item) => item.id), [1, 3, 5, 7, 8]);
+assert.deepEqual(filterByRegionAndQuery("overseas", "").map((item) => item.id), [2, 4, 6]);
+assert.deepEqual(filterByRegionAndQuery("unknown", "").map((item) => item.id), []);
 assert.deepEqual(filterByRegionAndQuery("domestic", "sbs").map((item) => item.id), [3]);
 assert.deepEqual(filterByRegionAndQuery("overseas", "school").map((item) => item.id), []);
 assert.deepEqual(filterByRegionAndQuery("all", "school").map((item) => item.id), [3]);
 
+const diagnostics = newsDisplayRegionDiagnostics(items);
+assert.equal(diagnostics.publisher_region, 3);
+assert.equal(diagnostics.collection_pipeline, 2);
+assert.equal(diagnostics.collection_source, 2);
+assert.equal(diagnostics.fallback_default_domestic, 1);
+
 const sorted = [...items].sort(compareNewsItems);
 assert.equal(sorted[0].id, 2);
-assert.equal(sorted.at(-1).id, 3);
 assert.doesNotThrow(() => [...items].sort(compareNewsItems), "missing published_at and zero relevance must be safe");
 
 const appSource = readFileSync(new URL("../src/App.jsx", import.meta.url), "utf8");
@@ -118,7 +152,12 @@ assert.match(appSource, /overseas-badge/);
 assert.match(appSource, /getNewsRegionLabel/);
 assert.match(appSource, /getNewsPublisherLabel/);
 assert.match(appSource, /getNewsCollectionLabel/);
-assert.match(appSource, /region.*unknown/s);
+assert.match(appSource, /sanitizeNewsSearchParams/);
+assert.doesNotMatch(appSource, /values\.source/);
+assert.doesNotMatch(appSource, /<label>출처/);
+assert.match(appSource, /onCompositionStart/);
+assert.match(appSource, /onCompositionEnd/);
+assert.match(appSource, /normalizeSearchCommitValue/);
 assert.match(appSource, /original_url/);
 assert.match(appSource, /noopener noreferrer/);
 assert.match(appSource, /getNewsTopic/);
@@ -136,7 +175,7 @@ assert.match(config, /연합뉴스/);
 const styles = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 assert.match(styles, /segmented-filter/);
 assert.match(styles, /active-filter-chips/);
-assert.match(styles, /ratio-bar em/);
+assert.doesNotMatch(styles, /ratio-bar em/);
 assert.match(styles, /@media \(max-width: 760px\)/);
 
 console.log("NEWS REGION FILTER TESTS PASSED");

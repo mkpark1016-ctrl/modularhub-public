@@ -3,6 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { parseDate } from "../src/businessInsights.js";
 import { getNewsSummary } from "../src/newsInsights.js";
+import { newsRegionCounts } from "../src/newsRegion.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -189,19 +190,35 @@ try {
   await checkNoBadDisplayText(page, "main", "news list");
   check(await page.locator("article.result-card").first().getByText(/관련도 \d+\/100/).count() >= 1, "news card relevance score should use N/100 label");
 
-  const domesticCount = countBy(newsItems, (item) => item.publisher_region === "domestic");
-  const overseasCount = countBy(newsItems, (item) => item.publisher_region === "overseas");
-  const unknownRegionCount = countBy(newsItems, (item) => item.publisher_region === "unknown");
-  check(domesticCount + overseasCount + unknownRegionCount === newsItems.length, "news region counts should add up to total");
-  await page.getByRole("button", { name: /해외뉴스/ }).click();
+  const displayRegionCounts = newsRegionCounts(newsItems);
+  const domesticCount = displayRegionCounts.domestic;
+  const overseasCount = displayRegionCounts.overseas;
+  check(displayRegionCounts.all === newsItems.length, "display region total should match news count");
+  check(domesticCount + overseasCount === newsItems.length, "news display region counts should add up to total");
+  check(await page.getByRole("button", { name: /지역 미확인/ }).count() === 0, "unknown region button should not be visible");
+  check(await selectForLabel(page, "출처").count() === 0, "source dropdown should not be rendered");
+  await page.getByRole("button", { name: /해외/ }).click();
   await waitForCardCount(page, overseasCount, "overseas news filter mismatch");
-  check((await page.locator("main").innerText()).includes("해외뉴스"), "overseas badge missing");
+  check((await page.locator("main").innerText()).includes("해외"), "overseas badge missing");
 
-  await page.getByRole("button", { name: /지역 미확인/ }).click();
-  await waitForCardCount(page, unknownRegionCount, "unknown region news filter mismatch");
-  check((await page.locator("main").innerText()).includes("지역 미확인"), "unknown region label missing");
   await page.getByRole("button", { name: /전체/ }).first().click();
   await waitForCardCount(page, newsItems.length, "news all filter should restore after unknown check");
+
+  const searchInput = page.getByPlaceholder("뉴스 제목, 내용, 언론사 검색");
+  await searchInput.dispatchEvent("compositionstart");
+  await searchInput.fill("사상초등학교 모듈러 교실");
+  check(!page.url().includes("q="), "Korean composition should not update URL before compositionend");
+  await searchInput.dispatchEvent("compositionend");
+  await page.waitForURL(/q=/);
+  check(new URL(page.url()).searchParams.get("q") === "사상초등학교 모듈러 교실", "Korean composed query should be committed to URL");
+  check(await searchInput.inputValue() === "사상초등학교 모듈러 교실", "Korean composed input should stay intact");
+  await searchInput.fill('"modular housing" factory');
+  await page.keyboard.press("Enter");
+  await page.waitForURL(/modular%20housing|modular\+housing/);
+  check(new URL(page.url()).searchParams.get("q") === '"modular housing" factory', "quoted English query should be preserved");
+  await page.getByRole("button", { name: /필터 초기화/ }).first().click();
+  await page.waitForFunction(() => document.querySelector('input[placeholder="뉴스 제목, 내용, 언론사 검색"]')?.value === "");
+  check(await searchInput.inputValue() === "", "news search input should clear after reset");
 
   const originalLink = page.getByRole("link", { name: "원문 보기" }).first();
   check(await originalLink.count() >= 1, "original news link missing");
@@ -215,9 +232,11 @@ try {
   await page.goto(`${baseUrl}/news?region=overseas&sort=relevance`, { waitUntil: "networkidle" });
   check(page.url().includes("region=overseas"), "news region URL param missing");
   check((await selectedFilterValue(page, "정렬")) === "relevance", "news sort URL param not restored");
-  await page.goto(`${baseUrl}/news?region=unknown`, { waitUntil: "networkidle" });
-  check(page.url().includes("region=unknown"), "unknown news region URL param missing");
-  await waitForCardCount(page, unknownRegionCount, "unknown news URL param should restore filter");
+  await page.goto(`${baseUrl}/news?region=unknown&q=모듈러&source=SBS&days=30`, { waitUntil: "networkidle" });
+  check(!page.url().includes("region=unknown"), "legacy unknown region param should be removed");
+  check(!page.url().includes("source="), "legacy source param should be removed");
+  check(decodeURIComponent(page.url()).includes("q=모듈러"), "legacy URL cleanup should preserve q");
+  check(page.url().includes("days=30"), "legacy URL cleanup should preserve days");
   await selectFilter(page, "관련도", "direct");
   check(page.url().includes("relevance=direct"), "news relevance URL param missing");
   check(await page.locator("article.result-card").count() >= 1, "direct relevance filter should show at least one item");
@@ -247,7 +266,8 @@ try {
   await page.goto(`${baseUrl}/news`, { waitUntil: "networkidle" });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "news mobile has horizontal overflow");
   await page.getByRole("button", { name: /뉴스 검색조건/ }).click();
-  await page.getByRole("button", { name: /해외뉴스/ }).click();
+  check(await selectForLabel(page, "출처").count() === 0, "mobile source dropdown should not be rendered");
+  await page.getByRole("button", { name: /해외/ }).click();
 
   const credentialTokens = [
     "service" + "Key",

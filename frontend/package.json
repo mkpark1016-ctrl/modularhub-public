@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint src --max-warnings=0",
     "test:news": "node scripts/test-news-region-filters.mjs",
+    "test:news-ime": "node scripts/test-news-search-ime.mjs",
+    "test:news-url": "node scripts/test-news-url-compat.mjs",
     "test:relevance": "node scripts/test-news-relevance.mjs",
     "test:source-health": "node scripts/test-source-health.mjs",
     "qa:browser": "node scripts/browser-qa-runner.mjs"

@@ -183,10 +183,9 @@ code { overflow-wrap: anywhere; }
 .mini-bars b { display: block; height: 8px; max-width: 100%; border-radius: 999px; background: #237349; }
 .mini-bars em { font-style: normal; color: #666; }
 .ratio-bar { display: flex; height: 28px; overflow: hidden; margin-top: 12px; border-radius: 6px; border: 1px solid #d7d7d2; background: #f4f4f1; }
-.ratio-bar span, .ratio-bar b, .ratio-bar em { display: flex; align-items: center; justify-content: center; min-width: 44px; color: #fff; font-size: 12px; font-weight: 800; font-style: normal; }
+.ratio-bar span, .ratio-bar b { display: flex; align-items: center; justify-content: center; min-width: 44px; color: #fff; font-size: 12px; font-weight: 800; }
 .ratio-bar span { background: #237349; }
 .ratio-bar b { background: #6b7280; }
-.ratio-bar em { background: #9ca3af; }
 .empty-inline { margin: 0; color: #666; }
 
 @media (max-width: 760px) {
