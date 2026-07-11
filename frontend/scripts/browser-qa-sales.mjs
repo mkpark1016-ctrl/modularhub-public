@@ -189,10 +189,19 @@ try {
   await checkNoBadDisplayText(page, "main", "news list");
   check(await page.locator("article.result-card").first().getByText(/관련도 \d+\/100/).count() >= 1, "news card relevance score should use N/100 label");
 
+  const domesticCount = countBy(newsItems, (item) => item.publisher_region === "domestic");
   const overseasCount = countBy(newsItems, (item) => item.publisher_region === "overseas");
+  const unknownRegionCount = countBy(newsItems, (item) => item.publisher_region === "unknown");
+  check(domesticCount + overseasCount + unknownRegionCount === newsItems.length, "news region counts should add up to total");
   await page.getByRole("button", { name: /해외뉴스/ }).click();
   await waitForCardCount(page, overseasCount, "overseas news filter mismatch");
   check((await page.locator("main").innerText()).includes("해외뉴스"), "overseas badge missing");
+
+  await page.getByRole("button", { name: /지역 미확인/ }).click();
+  await waitForCardCount(page, unknownRegionCount, "unknown region news filter mismatch");
+  check((await page.locator("main").innerText()).includes("지역 미확인"), "unknown region label missing");
+  await page.getByRole("button", { name: /전체/ }).first().click();
+  await waitForCardCount(page, newsItems.length, "news all filter should restore after unknown check");
 
   const originalLink = page.getByRole("link", { name: "원문 보기" }).first();
   check(await originalLink.count() >= 1, "original news link missing");
@@ -206,6 +215,9 @@ try {
   await page.goto(`${baseUrl}/news?region=overseas&sort=relevance`, { waitUntil: "networkidle" });
   check(page.url().includes("region=overseas"), "news region URL param missing");
   check((await selectedFilterValue(page, "정렬")) === "relevance", "news sort URL param not restored");
+  await page.goto(`${baseUrl}/news?region=unknown`, { waitUntil: "networkidle" });
+  check(page.url().includes("region=unknown"), "unknown news region URL param missing");
+  await waitForCardCount(page, unknownRegionCount, "unknown news URL param should restore filter");
   await selectFilter(page, "관련도", "direct");
   check(page.url().includes("relevance=direct"), "news relevance URL param missing");
   check(await page.locator("article.result-card").count() >= 1, "direct relevance filter should show at least one item");

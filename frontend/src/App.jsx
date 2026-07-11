@@ -36,7 +36,14 @@ import {
   NEWS_TOPICS,
   newsScore,
 } from "./newsInsights";
-import { getNewsRegionLabel, getNewsRegionType, newsRegionCounts, newsRegionMatches } from "./newsRegion";
+import {
+  getNewsCollectionLabel,
+  getNewsPublisherLabel,
+  getNewsRegionLabel,
+  getNewsRegionType,
+  newsRegionCounts,
+  newsRegionMatches,
+} from "./newsRegion";
 import {
   addRecentId,
   getLastVisitAt,
@@ -428,6 +435,7 @@ function NewsFilters({ values, setParam, regionCounts, sources, filteredCount, c
     { value: "all", label: "전체", count: regionCounts.all },
     { value: "domestic", label: "국내뉴스", count: regionCounts.domestic },
     { value: "overseas", label: "해외뉴스", count: regionCounts.overseas },
+    { value: "unknown", label: "지역 미확인", count: regionCounts.unknown },
   ];
   const reset = () => {
     ["q", "region", "source", "days", "topic", "relevance", "sort"].forEach((key) => setParam(key, ""));
@@ -534,6 +542,8 @@ function BusinessCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
 function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
   const isOverseas = getNewsRegionType(item) === "overseas";
   const regionLabel = getNewsRegionLabel(item);
+  const publisherLabel = getNewsPublisherLabel(item);
+  const collectionLabel = getNewsCollectionLabel(item);
   const original = item.original_url;
   const keywords = Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords;
   const score = newsScore(item);
@@ -547,7 +557,8 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
           <span className={isOverseas ? "overseas-badge" : ""}>{regionLabel}</span>
           <span className={`relevance-badge ${relevance}`}>{getNewsRelevanceLabel(relevance)}</span>
           <span>{topic}</span>
-          <span>{item.media || item.source || "출처 미확인"}</span>
+          <span>{publisherLabel}</span>
+          {collectionLabel && <span>{collectionLabel}</span>}
           <span>{formatDate(item.published_at)}</span>
           {recentlyViewed && <span>최근 본 항목</span>}
         </div>
@@ -560,7 +571,7 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
         <span title={scoreReasons || undefined} aria-label={scoreReasons ? `관련도 ${score}/100. ${scoreReasons}` : `관련도 ${score}/100`}>관련도 {score}/100</span>
       </div>
       <div className="card-footer">
-        <span>{item.media || item.source || "뉴스"}</span>
+        <span>{publisherLabel}</span>
         <div className="card-actions">
           {original && <a href={original} target="_blank" rel="noopener noreferrer">원문 보기</a>}
           <Link to={`/news/${item.id}`}>상세보기</Link>
@@ -672,10 +683,13 @@ function NewsListingPage() {
   const favorites = useFavorites();
   const items = getItems(data);
   const enriched = useMemo(() => items.map((item) => ({ ...item, topic: getNewsTopic(item), relevanceGrade: getNewsRelevance(item) })), [items]);
-  const sources = useMemo(() => ["전체", ...new Set(enriched.map((item) => item.media || item.source || item.source_name).filter(Boolean))], [enriched]);
+  const sources = useMemo(() => {
+    const names = [...new Set(enriched.map((item) => getNewsPublisherLabel(item)).filter((name) => name && name !== "출처 미확인"))];
+    return ["전체", ...names.sort((a, b) => a.localeCompare(b, "ko-KR"))];
+  }, [enriched]);
   const values = {
     q: searchParams.get("q") || "",
-    region: getValidParam(searchParams, "region", ["all", "domestic", "overseas"], "all"),
+    region: getValidParam(searchParams, "region", ["all", "domestic", "overseas", "unknown"], "all"),
     source: sources.includes(searchParams.get("source")) ? searchParams.get("source") : "전체",
     days: getValidParam(searchParams, "days", ["all", "7", "30", "90"], "all"),
     topic: NEWS_TOPICS.includes(searchParams.get("topic")) || searchParams.get("topic") === "favorites" ? searchParams.get("topic") : "전체 주제",
@@ -693,7 +707,7 @@ function NewsListingPage() {
   const filtered = useMemo(() => {
     return enriched.filter((item) => {
       if (!newsRegionMatches(item, values.region)) return false;
-      if (values.source !== "전체" && item.media !== values.source && item.source !== values.source) return false;
+      if (values.source !== "전체" && getNewsPublisherLabel(item) !== values.source) return false;
       if (values.topic === "favorites" && !favorites.isNewsFavorite(item.id)) return false;
       if (values.topic !== "전체 주제" && values.topic !== "favorites" && item.topic !== values.topic) return false;
       if (values.relevance !== "all" && item.relevanceGrade !== values.relevance) return false;
@@ -710,7 +724,7 @@ function NewsListingPage() {
   const counts = newsRegionCounts(enriched);
   const chips = [
     { key: "q", active: Boolean(values.q), label: `검색어: ${values.q}`, onRemove: () => setParam("q", "") },
-    { key: "region", active: values.region !== "all", label: values.region === "overseas" ? "해외뉴스" : "국내뉴스", onRemove: () => setParam("region", "all") },
+    { key: "region", active: values.region !== "all", label: { domestic: "국내뉴스", overseas: "해외뉴스", unknown: "지역 미확인" }[values.region], onRemove: () => setParam("region", "all") },
     { key: "source", active: values.source !== "전체", label: `출처: ${values.source}`, onRemove: () => setParam("source", "전체") },
     { key: "days", active: values.days !== "all", label: `최근 ${values.days}일`, onRemove: () => setParam("days", "all") },
     { key: "topic", active: values.topic !== "전체 주제", label: values.topic === "favorites" ? "관심목록" : values.topic, onRemove: () => setParam("topic", "전체 주제") },
@@ -718,6 +732,7 @@ function NewsListingPage() {
   ];
   const domesticCount = counts.domestic;
   const overseasCount = counts.overseas;
+  const unknownCount = counts.unknown;
   const total = Math.max(counts.all, 1);
 
   return (
@@ -731,10 +746,11 @@ function NewsListingPage() {
         <NewsFilters values={values} setParam={setParam} regionCounts={counts} sources={sources} filteredCount={filtered.length} chips={chips} favoriteCount={favorites.newsFavorites.length} />
         <section className="results" aria-live="polite">
           <div className="source-status lifecycle-summary">
-            <p>국내뉴스 {domesticCount.toLocaleString("ko-KR")}건 · 해외뉴스 {overseasCount.toLocaleString("ko-KR")}건</p>
-            <div className="ratio-bar" aria-label="국내뉴스 해외뉴스 비중">
+            <p>국내뉴스 {domesticCount.toLocaleString("ko-KR")}건 · 해외뉴스 {overseasCount.toLocaleString("ko-KR")}건 · 지역 미확인 {unknownCount.toLocaleString("ko-KR")}건</p>
+            <div className="ratio-bar" aria-label="국내뉴스 해외뉴스 지역 미확인 비중">
               <span style={{ width: `${(domesticCount / total) * 100}%` }}>국내</span>
               <b style={{ width: `${(overseasCount / total) * 100}%` }}>해외</b>
+              <em style={{ width: `${(unknownCount / total) * 100}%` }}>미확인</em>
             </div>
           </div>
           {loading && <div className="state">뉴스를 불러오는 중입니다.</div>}
@@ -778,6 +794,8 @@ function DetailPage({ type }) {
   const noticeStatus = isBusiness ? displayNoticeStatus(item) : "";
   const attachments = Array.isArray(item.attachments) ? item.attachments : [];
   const topic = !isBusiness ? getNewsTopic(item) : "";
+  const newsPublisherLabel = !isBusiness ? getNewsPublisherLabel(item) : "";
+  const newsCollectionLabel = !isBusiness ? getNewsCollectionLabel(item) : "";
   const newsRelevanceScore = !isBusiness ? newsScore(item) : 0;
   const newsRelevanceReasons = !isBusiness && Array.isArray(item.relevance_reasons) ? item.relevance_reasons.slice(0, 3).join(" · ") : "";
 
@@ -789,6 +807,8 @@ function DetailPage({ type }) {
           <div className="badge-row">
             <span>{isBusiness ? displayAgency(item) : getNewsRegionLabel(item)}</span>
             <span>{isBusiness ? businessKind(item) : topic}</span>
+            {!isBusiness && <span>{newsPublisherLabel}</span>}
+            {!isBusiness && newsCollectionLabel && <span>{newsCollectionLabel}</span>}
             {isBusiness && <span className={`status-badge ${status}`}>{getBusinessStatusLabel(item)}</span>}
             {isBusiness && <PriorityBadge item={item} />}
             {isBusiness && noticeStatus && <span>{noticeStatus}</span>}
@@ -802,9 +822,9 @@ function DetailPage({ type }) {
         <h1>{item.title}</h1>
         {isBusiness && <div className="reason-list">{getBusinessPriorityReasons(item).map((reason) => <span key={reason}>{reason}</span>)}</div>}
         <dl className="detail-grid">
-          <div><dt>기관</dt><dd>{(isBusiness ? item.organization : item.media) || "-"}</dd></div>
+          <div><dt>{isBusiness ? "기관" : "발행 언론사"}</dt><dd>{(isBusiness ? item.organization : newsPublisherLabel) || "-"}</dd></div>
           <div><dt>게시일</dt><dd>{formatDate(isBusiness ? item.posted_at : item.published_at)}</dd></div>
-          <div><dt>{isBusiness ? "마감일" : "출처"}</dt><dd>{isBusiness ? formatDate(item.due_at || item.deadline_at) : (item.source || "뉴스")}</dd></div>
+          <div><dt>{isBusiness ? "마감일" : "수집 경로"}</dt><dd>{isBusiness ? formatDate(item.due_at || item.deadline_at) : (newsCollectionLabel || item.collection_source || item.source || "뉴스")}</dd></div>
           {isBusiness && <div><dt>수요기관</dt><dd>{item.demand_org || "-"}</dd></div>}
           {isBusiness && <div><dt>업무구분</dt><dd>{[item.business_type, item.business_subtype].filter(Boolean).join(" / ") || "-"}</dd></div>}
           {isBusiness && <div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div>}

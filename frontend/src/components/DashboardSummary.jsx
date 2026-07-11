@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { getNewsRelevance, getNewsRelevanceLabel, selectHomeBriefingNews } from "../newsInsights";
-import { getNewsRegionLabel } from "../newsRegion";
+import { getNewsCollectionLabel, getNewsPublisherLabel, getNewsRegionLabel } from "../newsRegion";
 import FavoriteButton from "./FavoriteButton";
 
 function Kpi({ id, label, value }) {
@@ -53,7 +53,8 @@ export default function DashboardSummary({
                   <span>{getNewsRegionLabel(item)}</span>
                   <span className={`relevance-badge ${getNewsRelevance(item)}`}>{getNewsRelevanceLabel(item)}</span>
                   <span>{item.topic || "기타"}</span>
-                  <span>{item.media || item.source || "출처 미확인"}</span>
+                  <span>{getNewsPublisherLabel(item)}</span>
+                  {getNewsCollectionLabel(item) && <span>{getNewsCollectionLabel(item)}</span>}
                 </div>
                 <h3><Link to={`/news/${item.id}`}>{item.title}</Link></h3>
                 <p>{formatDate(item.published_at)}</p>

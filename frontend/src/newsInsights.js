@@ -148,7 +148,17 @@ export function normalizeNewsText(value) {
 
 export function newsSearchText(item) {
   const keywords = Array.isArray(item?.keywords) ? item.keywords.join(" ") : item?.keywords;
-  return normalizeNewsText([item?.title, item?.summary, item?.media, item?.source, keywords].filter(Boolean).join(" "));
+  return normalizeNewsText([
+    item?.title,
+    item?.summary,
+    item?.media,
+    item?.source,
+    item?.source_name,
+    item?.publisher_name,
+    item?.publisher_domain,
+    item?.collection_source,
+    keywords,
+  ].filter(Boolean).join(" "));
 }
 
 function newsRelevanceText(item) {

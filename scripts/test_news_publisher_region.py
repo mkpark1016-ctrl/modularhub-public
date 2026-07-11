@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -8,6 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.news_publisher_region import apply_publisher_region_fields, publisher_region_fields  # noqa: E402
+
+OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS"
 
 
 def require(condition: bool, message: str) -> None:
@@ -40,7 +43,7 @@ def test_naver_domestic_url() -> None:
 def test_rss_overseas_url() -> None:
     fields = publisher_region_fields(
         item(
-            source="해외 모듈러 RSS",
+            source=OVERSEAS_RSS_SOURCE,
             media="Assembly Magazine",
             original_url="https://www.assemblymag.com/articles/modular-building-factory",
         )
@@ -52,7 +55,7 @@ def test_rss_overseas_url() -> None:
 def test_rss_domestic_publisher() -> None:
     fields = publisher_region_fields(
         item(
-            source="해외 모듈러 RSS",
+            source=OVERSEAS_RSS_SOURCE,
             media="news.sbs.co.kr",
             title="Land Minister Pledges Faster Supply - news.sbs.co.kr",
             original_url="https://news.google.com/rss/articles/fixture?oc=5",
@@ -67,7 +70,7 @@ def test_rss_domestic_publisher() -> None:
 def test_google_news_unknown() -> None:
     fields = publisher_region_fields(
         item(
-            source="해외 모듈러 RSS",
+            source=OVERSEAS_RSS_SOURCE,
             media="Unmapped Publisher",
             title="Modular housing project - Unmapped Publisher",
             original_url="https://news.google.com/rss/articles/unknown?oc=5",
@@ -85,6 +88,15 @@ def test_apply_preserves_identity_and_score() -> None:
     require(enriched["relevance_level"] == "direct", "relevance level must be preserved")
 
 
+def test_region_config_utf8() -> None:
+    text = (ROOT / "config" / "news_publisher_regions.json").read_text(encoding="utf-8")
+    payload = json.loads(text)
+    replacement = "\ufffd"
+    require(replacement not in text, "publisher region config must not contain replacement characters")
+    require(payload["publishers"].get("아시아경제") == "domestic", "Asia Economy mapping must use valid UTF-8")
+    require(payload["publishers"].get("연합뉴스") == "domestic", "Yonhap mapping must use valid UTF-8")
+
+
 def main() -> int:
     tests = [
         test_naver_domestic_url,
@@ -92,6 +104,7 @@ def main() -> int:
         test_rss_domestic_publisher,
         test_google_news_unknown,
         test_apply_preserves_identity_and_score,
+        test_region_config_utf8,
     ]
     for test in tests:
         test()
