@@ -18,6 +18,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.news_scoring import SCORE_VERSION  # noqa: E402
+from src.news_publisher_region import publisher_region_fields  # noqa: E402
 from src.overseas_news_rules import overseas_news_content_key  # noqa: E402
 
 
@@ -34,77 +35,6 @@ TRACKING_PARAMS = {
     "gclid",
 }
 
-DOMESTIC_DOMAINS = {
-    "news.sbs.co.kr",
-    "sbs.co.kr",
-    "asiae.co.kr",
-    "yna.co.kr",
-    "hankyung.com",
-    "mk.co.kr",
-    "chosun.com",
-    "biz.chosun.com",
-    "joongang.co.kr",
-    "donga.com",
-    "kbs.co.kr",
-    "mbc.co.kr",
-    "etnews.com",
-    "sedaily.com",
-    "fnnews.com",
-    "heraldcorp.com",
-    "newsis.com",
-    "edaily.co.kr",
-    "ajunews.com",
-    "news1.kr",
-    "mt.co.kr",
-    "hansbiz.co.kr",
-    "biz.heraldcorp.com",
-}
-DOMESTIC_MEDIA_HINTS = {
-    "아시아경제",
-    "SBS",
-    "연합뉴스",
-    "한국경제",
-    "매일경제",
-    "조선",
-    "중앙일보",
-    "동아일보",
-    "KBS",
-    "MBC",
-    "전자신문",
-    "서울경제",
-    "파이낸셜뉴스",
-    "헤럴드",
-    "뉴시스",
-    "이데일리",
-    "아주경제",
-    "뉴스1",
-    "머니투데이",
-}
-OVERSEAS_DOMAINS = {
-    "assemblymag.com",
-    "businesspost.ie",
-    "constructiondive.com",
-    "constructionenquirer.com",
-    "theconstructionindex.co.uk",
-    "globalconstructionreview.com",
-    "modular.org",
-    "offsitehub.co.uk",
-    "irishbuildingmagazine.ie",
-    "pbctoday.co.uk",
-    "constructionbriefing.com",
-}
-OVERSEAS_MEDIA_HINTS = {
-    "Assembly Magazine",
-    "Business Post Ireland",
-    "Construction Dive",
-    "Construction Enquirer",
-    "The Construction Index",
-    "Global Construction Review",
-    "Modular Building Institute",
-    "Offsite Hub",
-    "Irish Building Magazine",
-    "PBC Today",
-}
 REFERENCE_OR_UNRELATED_HINTS = (
     "software module",
     "modular software",
@@ -210,29 +140,14 @@ def masked_url_for_report(value: Any) -> str:
 
 
 def collector_region(item: dict[str, Any]) -> str:
-    return "rss_overseas_pipeline" if item.get("source") == OVERSEAS_RSS_SOURCE else "domestic_pipeline"
-
-
-def _domain_matches(domain: str, candidates: set[str]) -> bool:
-    return any(domain == candidate or domain.endswith(f".{candidate}") for candidate in candidates)
+    value = item.get("collection_pipeline")
+    if value in {"domestic_pipeline", "rss_overseas_pipeline"}:
+        return str(value)
+    return str(publisher_region_fields(item).get("collection_pipeline") or "domestic_pipeline")
 
 
 def publisher_region_candidate(item: dict[str, Any]) -> str:
-    domain = domain_from_item(item)
-    media = clean_text(item.get("media") or item.get("organization") or item.get("source_name"))
-    if domain and domain != "news.google.com":
-        if _domain_matches(domain, DOMESTIC_DOMAINS) or domain.endswith(".kr") or domain.endswith(".co.kr"):
-            return "domestic"
-        if _domain_matches(domain, OVERSEAS_DOMAINS):
-            return "overseas"
-    if any(hint.casefold() in media.casefold() for hint in DOMESTIC_MEDIA_HINTS):
-        return "domestic"
-    if any(hint.casefold() in media.casefold() for hint in OVERSEAS_MEDIA_HINTS):
-        return "overseas"
-    if domain and domain != "news.google.com":
-        if domain.endswith((".co.uk", ".ie", ".com.au", ".ca")):
-            return "overseas"
-    return "unknown"
+    return str(publisher_region_fields(item).get("publisher_region") or "unknown")
 
 
 def load_news_payload(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
@@ -420,35 +335,47 @@ def contract_audit(items: list[dict[str, Any]]) -> dict[str, Any]:
 def region_audit(items: list[dict[str, Any]]) -> dict[str, Any]:
     mismatches: list[dict[str, Any]] = []
     unknowns: list[dict[str, Any]] = []
+    cross_pipeline_rows: list[dict[str, Any]] = []
     counters: Counter[str] = Counter()
     for item in items:
+        calculated = publisher_region_fields(item)
         c_region = collector_region(item)
-        p_region = publisher_region_candidate(item)
+        p_region = str(item.get("publisher_region") or calculated.get("publisher_region") or "unknown")
         counters[f"collector_{c_region}"] += 1
         counters[f"publisher_{p_region}"] += 1
         row = {
             "id": item.get("id"),
             "title": item.get("title"),
             "media": item.get("media") or item.get("organization"),
-            "domain": domain_from_item(item),
+            "domain": item.get("publisher_domain") or calculated.get("publisher_domain") or "",
             "source": item.get("source"),
             "collector_region": c_region,
             "publisher_region_candidate": p_region,
+            "calculated_collection_pipeline": calculated.get("collection_pipeline"),
+            "calculated_publisher_region": calculated.get("publisher_region"),
             "original_url": masked_url_for_report(item.get("original_url") or item.get("url")),
         }
         if p_region == "unknown":
             unknowns.append(row)
         if c_region == "rss_overseas_pipeline" and p_region == "domestic":
             counters["rss_overseas_pipeline_domestic_publisher_count"] += 1
-            mismatches.append(row)
+            cross_pipeline_rows.append(row)
         elif c_region == "domestic_pipeline" and p_region == "overseas":
             counters["domestic_pipeline_overseas_publisher_count"] += 1
+            cross_pipeline_rows.append(row)
+        if (
+            item.get("collection_pipeline") != calculated.get("collection_pipeline")
+            or item.get("publisher_region") != calculated.get("publisher_region")
+            or item.get("publisher_domain", "") != calculated.get("publisher_domain", "")
+        ):
+            counters["stored_region_mismatch_count"] += 1
             mismatches.append(row)
     return {
         "counts": dict(counters),
         "unknown_count": len(unknowns),
         "mismatch_count": len(mismatches),
         "mismatch_samples": mismatches[:30],
+        "cross_pipeline_region_samples": cross_pipeline_rows[:30],
         "unknown_samples": unknowns[:30],
     }
 
@@ -544,13 +471,14 @@ def sample_rows(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if group != "lowest_score_top10":
             group_items = sorted(group_items, key=news_sort_key)
         for item in group_items[:10]:
+            calculated = publisher_region_fields(item)
             rows.append(
                 {
                     "sample_group": group,
                     "id": item.get("id"),
                     "title": item.get("title"),
                     "media": item.get("media") or item.get("organization"),
-                    "domain": domain_from_item(item),
+                    "domain": item.get("publisher_domain") or calculated.get("publisher_domain") or "",
                     "source": item.get("source"),
                     "collector_region": collector_region(item),
                     "publisher_region_candidate": publisher_region_candidate(item),
@@ -597,7 +525,7 @@ def final_status(contract: dict[str, Any], region: dict[str, Any], top50: dict[s
         return "FAIL"
     if top50.get("adjacent_before_direct_count", 0) or top50.get("unnatural_score_level_count", 0):
         return "FAIL"
-    if region.get("counts", {}).get("rss_overseas_pipeline_domestic_publisher_count", 0):
+    if region.get("counts", {}).get("stored_region_mismatch_count", 0):
         return "PASS_WITH_REGION_FIX_REQUIRED"
     return "PASS"
 
@@ -658,7 +586,7 @@ def recommendations(status: str, region: dict[str, Any], contract: dict[str, Any
         recs.append("Split collector_region from publisher_region in frontend filtering before changing production data.")
         recs.append("Keep overseas RSS collector active, but display Korean publishers from RSS as domestic publisher candidates.")
     if region.get("counts", {}).get("rss_overseas_pipeline_domestic_publisher_count", 0):
-        recs.append("Audit RSS-sourced domestic publishers and plan a separate publisher_region display hotfix.")
+        recs.append("RSS-sourced domestic publishers are expected to use publisher_region=domestic in UI filters.")
     if region.get("unknown_count", 0):
         recs.append("Add explicit publisher-domain mappings for high-volume unknown publishers after manual review.")
     recs.append("Keep unified-v2 scoring unchanged until region-display behavior is fixed in a separate hotfix.")
@@ -721,6 +649,7 @@ def render_markdown(report: dict[str, Any]) -> str:
             "",
             f"- RSS overseas pipeline with domestic publisher candidate: {region_counts['rss_overseas_pipeline_domestic_publisher_count']}",
             f"- Domestic pipeline with overseas publisher candidate: {region_counts['domestic_pipeline_overseas_publisher_count']}",
+            f"- Stored publisher-region mismatch count: {region_counts['stored_region_mismatch_count']}",
             f"- Unknown publisher region count: {report['region_audit']['unknown_count']}",
             "",
             "## Relevance Sort Top 50",
@@ -803,7 +732,8 @@ def main() -> int:
         f"rss_overseas_pipeline={report['rss_overseas_pipeline_count']} "
         f"score_version_mismatch={contract_counts['score_version_mismatch_count']} "
         f"score_range_violation={contract_counts['relevance_score_range_violation_count']} "
-        f"region_mismatch={region_counts['rss_overseas_pipeline_domestic_publisher_count'] + region_counts['domestic_pipeline_overseas_publisher_count']}"
+        f"stored_region_mismatch={region_counts['stored_region_mismatch_count']} "
+        f"rss_domestic_publishers={region_counts['rss_overseas_pipeline_domestic_publisher_count']}"
     )
     return 1 if report["final_status"] == "FAIL" else 0
 

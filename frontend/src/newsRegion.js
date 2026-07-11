@@ -1,6 +1,10 @@
-export const OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS";
+export const OVERSEAS_RSS_SOURCE = "�ؿ� ��ⷯ RSS";
 
 export function getNewsRegionType(item) {
+  if (item?.publisher_region === "domestic" || item?.publisher_region === "overseas") {
+    return item.publisher_region;
+  }
+  if (item?.publisher_region === "unknown") return "unknown";
   return item?.source === OVERSEAS_RSS_SOURCE ? "overseas" : "domestic";
 }
 
@@ -9,15 +13,24 @@ export function newsRegionCounts(items) {
     all: items.length,
     domestic: 0,
     overseas: 0,
+    unknown: 0,
   };
   items.forEach((item) => {
-    counts[getNewsRegionType(item)] += 1;
+    const region = getNewsRegionType(item);
+    counts[region] = (counts[region] || 0) + 1;
   });
   return counts;
 }
 
 export function newsRegionMatches(item, region) {
   return region === "all" || getNewsRegionType(item) === region;
+}
+
+export function getNewsRegionLabel(item) {
+  const region = getNewsRegionType(item);
+  if (region === "overseas") return "해외뉴스";
+  if (region === "domestic") return "국내뉴스";
+  return "지역 미확인";
 }
 
 export function newsSortTime(item) {

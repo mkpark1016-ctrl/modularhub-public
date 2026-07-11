@@ -1,16 +1,18 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { compareNewsItems, getNewsRegionType, newsRegionCounts, newsRegionMatches, OVERSEAS_RSS_SOURCE } from "../src/newsRegion.js";
+import { compareNewsItems, getNewsRegionLabel, getNewsRegionType, newsRegionCounts, newsRegionMatches, OVERSEAS_RSS_SOURCE } from "../src/newsRegion.js";
 
 const items = [
   {
     id: 1,
-    source: "네이버뉴스",
-    media: "domestic.example",
-    title: "국내 모듈러 뉴스",
-    summary: "국내 기사",
+    source: "Naver News",
+    media: "Domestic Daily",
+    title: "Domestic modular housing news",
+    summary: "Domestic article",
     published_at: "2026-07-02T00:00:00+09:00",
     relevance_score: 0,
+    publisher_region: "domestic",
+    collection_pipeline: "domestic_pipeline",
   },
   {
     id: 2,
@@ -21,16 +23,33 @@ const items = [
     published_at: "2026-07-03T00:00:00Z",
     relevance_score: 90,
     original_url: "https://publisher.example/news",
+    publisher_region: "overseas",
+    collection_pipeline: "rss_overseas_pipeline",
   },
   {
     id: 3,
     source: OVERSEAS_RSS_SOURCE,
-    media: "Construction Index",
+    media: "news.sbs.co.kr",
     title: "Prefabricated school building approved",
     summary: "Factory-built school",
     published_at: "",
     relevance_score: "not-a-number",
-    original_url: "https://publisher.example/school",
+    original_url: "https://news.google.com/rss/articles/sbs",
+    publisher_region: "domestic",
+    collection_pipeline: "rss_overseas_pipeline",
+    publisher_domain: "news.sbs.co.kr",
+  },
+  {
+    id: 4,
+    source: OVERSEAS_RSS_SOURCE,
+    media: "Unmapped Publisher",
+    title: "Modular housing project",
+    summary: "Factory-built housing",
+    published_at: "2026-07-01T00:00:00Z",
+    relevance_score: 80,
+    original_url: "https://news.google.com/rss/articles/unknown",
+    publisher_region: "unknown",
+    collection_pipeline: "rss_overseas_pipeline",
   },
 ];
 
@@ -44,13 +63,16 @@ function filterByRegionAndQuery(region, query) {
 
 assert.equal(getNewsRegionType(items[0]), "domestic");
 assert.equal(getNewsRegionType(items[1]), "overseas");
+assert.equal(getNewsRegionType(items[2]), "domestic");
+assert.equal(getNewsRegionType(items[3]), "unknown");
+assert.equal(getNewsRegionLabel(items[3]), "지역 미확인");
 
-assert.deepEqual(newsRegionCounts(items), { all: 3, domestic: 1, overseas: 2 });
-assert.equal(filterByRegionAndQuery("all", "").length, 3);
-assert.deepEqual(filterByRegionAndQuery("domestic", "").map((item) => item.id), [1]);
-assert.deepEqual(filterByRegionAndQuery("overseas", "").map((item) => item.id), [2, 3]);
-assert.deepEqual(filterByRegionAndQuery("overseas", "school").map((item) => item.id), [3]);
-assert.deepEqual(filterByRegionAndQuery("overseas", "국내").map((item) => item.id), []);
+assert.deepEqual(newsRegionCounts(items), { all: 4, domestic: 2, overseas: 1, unknown: 1 });
+assert.equal(filterByRegionAndQuery("all", "").length, 4);
+assert.deepEqual(filterByRegionAndQuery("domestic", "").map((item) => item.id), [1, 3]);
+assert.deepEqual(filterByRegionAndQuery("overseas", "").map((item) => item.id), [2]);
+assert.deepEqual(filterByRegionAndQuery("overseas", "school").map((item) => item.id), []);
+assert.deepEqual(filterByRegionAndQuery("all", "school").map((item) => item.id), [3]);
 
 const sorted = [...items].sort(compareNewsItems);
 assert.equal(sorted[0].id, 2);
@@ -59,9 +81,9 @@ assert.doesNotThrow(() => [...items].sort(compareNewsItems), "missing published_
 
 const appSource = readFileSync(new URL("../src/App.jsx", import.meta.url), "utf8");
 assert.match(appSource, /overseas-badge/);
+assert.match(appSource, /getNewsRegionLabel/);
 assert.match(appSource, /original_url/);
 assert.match(appSource, /noopener noreferrer/);
-assert.match(appSource, /현재 조건에 맞는 해외 모듈러 뉴스가 없습니다\./);
 assert.match(appSource, /getNewsTopic/);
 assert.match(appSource, /FavoriteButton/);
 

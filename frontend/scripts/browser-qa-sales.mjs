@@ -6,7 +6,6 @@ import { getNewsSummary } from "../src/newsInsights.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
-const OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS";
 
 function check(condition, message) {
   if (!condition) throw new Error(message);
@@ -190,7 +189,7 @@ try {
   await checkNoBadDisplayText(page, "main", "news list");
   check(await page.locator("article.result-card").first().getByText(/관련도 \d+\/100/).count() >= 1, "news card relevance score should use N/100 label");
 
-  const overseasCount = countBy(newsItems, (item) => item.source === OVERSEAS_RSS_SOURCE);
+  const overseasCount = countBy(newsItems, (item) => item.publisher_region === "overseas");
   await page.getByRole("button", { name: /해외뉴스/ }).click();
   await waitForCardCount(page, overseasCount, "overseas news filter mismatch");
   check((await page.locator("main").innerText()).includes("해외뉴스"), "overseas badge missing");

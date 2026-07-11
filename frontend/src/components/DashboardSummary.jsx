@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { getNewsRelevance, getNewsRelevanceLabel, selectHomeBriefingNews } from "../newsInsights";
-import { getNewsRegionType } from "../newsRegion";
+import { getNewsRegionLabel } from "../newsRegion";
 import FavoriteButton from "./FavoriteButton";
 
 function Kpi({ id, label, value }) {
@@ -50,7 +50,7 @@ export default function DashboardSummary({
             <article key={item.id} className="news-brief-item">
               <div>
                 <div className="badge-row">
-                  <span>{getNewsRegionType(item) === "overseas" ? "해외뉴스" : "국내뉴스"}</span>
+                  <span>{getNewsRegionLabel(item)}</span>
                   <span className={`relevance-badge ${getNewsRelevance(item)}`}>{getNewsRelevanceLabel(item)}</span>
                   <span>{item.topic || "기타"}</span>
                   <span>{item.media || item.source || "출처 미확인"}</span>

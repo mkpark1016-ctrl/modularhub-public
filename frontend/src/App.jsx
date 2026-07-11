@@ -36,7 +36,7 @@ import {
   NEWS_TOPICS,
   newsScore,
 } from "./newsInsights";
-import { getNewsRegionType, newsRegionCounts, newsRegionMatches } from "./newsRegion";
+import { getNewsRegionLabel, getNewsRegionType, newsRegionCounts, newsRegionMatches } from "./newsRegion";
 import {
   addRecentId,
   getLastVisitAt,
@@ -533,6 +533,7 @@ function BusinessCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
 
 function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
   const isOverseas = getNewsRegionType(item) === "overseas";
+  const regionLabel = getNewsRegionLabel(item);
   const original = item.original_url;
   const keywords = Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords;
   const score = newsScore(item);
@@ -543,7 +544,7 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
     <article className="result-card news-card">
       <div className="card-topline">
         <div className="badge-row">
-          <span className={isOverseas ? "overseas-badge" : ""}>{isOverseas ? "해외뉴스" : "국내뉴스"}</span>
+          <span className={isOverseas ? "overseas-badge" : ""}>{regionLabel}</span>
           <span className={`relevance-badge ${relevance}`}>{getNewsRelevanceLabel(relevance)}</span>
           <span>{topic}</span>
           <span>{item.media || item.source || "출처 미확인"}</span>
@@ -786,7 +787,7 @@ function DetailPage({ type }) {
         <Link className="back" to={`/${type}`}><ArrowLeft size={17} />목록으로</Link>
         <div className="detail-action-row">
           <div className="badge-row">
-            <span>{isBusiness ? displayAgency(item) : getNewsRegionType(item) === "overseas" ? "해외뉴스" : "국내뉴스"}</span>
+            <span>{isBusiness ? displayAgency(item) : getNewsRegionLabel(item)}</span>
             <span>{isBusiness ? businessKind(item) : topic}</span>
             {isBusiness && <span className={`status-badge ${status}`}>{getBusinessStatusLabel(item)}</span>}
             {isBusiness && <PriorityBadge item={item} />}

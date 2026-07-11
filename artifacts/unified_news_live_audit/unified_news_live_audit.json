@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-07-11T09:47:17.674539+00:00",
+  "generated_at": "2026-07-11T13:09:35.979793+00:00",
   "input_path": "frontend\\public\\data\\news.json",
-  "public_news_generated_at": "2026-07-11T18:38:52+09:00",
+  "public_news_generated_at": "2026-07-11T22:02:40+09:00",
   "public_news_last_updated_at": null,
-  "total_news_count": 1125,
-  "domestic_pipeline_count": 1072,
-  "rss_overseas_pipeline_count": 53,
+  "total_news_count": 1127,
+  "domestic_pipeline_count": 1073,
+  "rss_overseas_pipeline_count": 54,
   "load_errors": [],
   "unified_v2_contract": {
     "counts": {},
@@ -14,15 +14,37 @@
   },
   "score_distribution": {
     "overall": {
-      "count": 1125,
+      "count": 1127,
       "min": 25,
       "p25": 40.0,
       "median": 45,
-      "average": 50.28,
+      "average": 50.31,
       "p75": 55.0,
       "max": 95,
       "level_counts": {
-        "direct": 292,
+        "direct": 293,
+        "adjacent": 833,
+        "reference": 1,
+        "excluded": 0
+      },
+      "score_bins": {
+        "0_19": 0,
+        "20_39": 226,
+        "40_59": 621,
+        "60_79": 190,
+        "80_100": 90
+      }
+    },
+    "domestic_pipeline": {
+      "count": 1073,
+      "min": 25,
+      "p25": 40.0,
+      "median": 45,
+      "average": 48.89,
+      "p75": 55.0,
+      "max": 95,
+      "level_counts": {
+        "direct": 240,
         "adjacent": 832,
         "reference": 1,
         "excluded": 0
@@ -31,42 +53,20 @@
         "0_19": 0,
         "20_39": 226,
         "40_59": 620,
-        "60_79": 190,
-        "80_100": 89
-      }
-    },
-    "domestic_pipeline": {
-      "count": 1072,
-      "min": 25,
-      "p25": 40.0,
-      "median": 45.0,
-      "average": 48.89,
-      "p75": 55.0,
-      "max": 95,
-      "level_counts": {
-        "direct": 240,
-        "adjacent": 831,
-        "reference": 1,
-        "excluded": 0
-      },
-      "score_bins": {
-        "0_19": 0,
-        "20_39": 226,
-        "40_59": 619,
         "60_79": 166,
         "80_100": 61
       }
     },
     "rss_overseas_pipeline": {
-      "count": 53,
+      "count": 54,
       "min": 45,
       "p25": 70.0,
-      "median": 80,
-      "average": 78.49,
+      "median": 80.0,
+      "average": 78.52,
       "p75": 85.0,
       "max": 95,
       "level_counts": {
-        "direct": 52,
+        "direct": 53,
         "adjacent": 1,
         "reference": 0,
         "excluded": 0
@@ -76,122 +76,145 @@
         "20_39": 0,
         "40_59": 1,
         "60_79": 24,
-        "80_100": 28
+        "80_100": 29
       }
     }
   },
   "relevance_component_stats": {
     "domestic_pipeline": {
       "core": {
-        "average": 35.88,
-        "median": 35.0
+        "average": 35.87,
+        "median": 35
       },
       "business": {
         "average": 5.37,
-        "median": 5.0
+        "median": 5
       },
       "freshness": {
-        "average": 2.64,
-        "median": 0.0
+        "average": 2.65,
+        "median": 0
       },
       "completeness": {
         "average": 5,
-        "median": 5.0
+        "median": 5
       }
     },
     "rss_overseas_pipeline": {
       "core": {
-        "average": 59.53,
-        "median": 60
+        "average": 59.54,
+        "median": 60.0
       },
       "business": {
-        "average": 5.28,
-        "median": 0
+        "average": 5.19,
+        "median": 0.0
       },
       "freshness": {
-        "average": 8.68,
-        "median": 5
+        "average": 8.8,
+        "median": 5.0
       },
       "completeness": {
         "average": 5,
-        "median": 5
+        "median": 5.0
       }
     }
   },
   "component_comparison": {
     "average_absolute_differences": {
-      "core": 23.65,
-      "business": 0.09,
-      "freshness": 6.04,
+      "core": 23.67,
+      "business": 0.18,
+      "freshness": 6.15,
       "completeness": 0.0
     },
     "largest_difference_component": "core",
-    "largest_difference": 23.65
+    "largest_difference": 23.67
   },
   "region_audit": {
     "counts": {
-      "collector_domestic_pipeline": 1072,
-      "publisher_domestic": 770,
-      "publisher_unknown": 353,
-      "collector_rss_overseas_pipeline": 53,
-      "rss_overseas_pipeline_domestic_publisher_count": 5,
-      "publisher_overseas": 2
+      "collector_domestic_pipeline": 1073,
+      "publisher_unknown": 460,
+      "publisher_domestic": 662,
+      "collector_rss_overseas_pipeline": 54,
+      "rss_overseas_pipeline_domestic_publisher_count": 4,
+      "publisher_overseas": 5
     },
-    "unknown_count": 353,
-    "mismatch_count": 5,
-    "mismatch_samples": [
+    "unknown_count": 460,
+    "mismatch_count": 0,
+    "mismatch_samples": [],
+    "cross_pipeline_region_samples": [
       {
         "id": 6247,
         "title": "Land Minister Pledges Faster Supply of Quality Housing Through Expanded Modular Construction - news.sbs.co.kr",
         "media": "news.sbs.co.kr",
-        "domain": "news.google.com",
+        "domain": "news.sbs.co.kr",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "domestic",
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "domestic",
         "original_url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1FMHFLaEdaVWpSa24zLXFsUFRQR3ctZ3o4UE5uVS1PSWVGS1ItOEJFS2Vld2xqT0Y3SUlPSFZxWVNfZzc1SGpDd1Y4ZmN4X2tkVGowS0N1MHU1dnp5NXc5bGVQLU9qUQ?query=masked"
       },
       {
         "id": 211,
         "title": "Minister Yoon-Duk Kim Visits Modular Housing Factory: \"30% Faster Construction for Rapid Supply\" - 아시아경제",
         "media": "아시아경제",
-        "domain": "news.google.com",
+        "domain": "",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "domestic",
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "domestic",
         "original_url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5PekdPZ0loZTZ2eU5FZWE4ZlBDT0xwZ283RUdwVlZqdy00N2FDU2hUSk5jb0llUC1UR2lUNHNmLUJFMGZvZkFfQ05yVkdSWWZDeGJfWnE3Sm1iSlRMamc5V0dMeVk?query=masked"
       },
       {
         "id": 285,
         "title": "KCC and Gonggan Production Studio to Develop Next-Generation Modular Housing Models - 아시아경제",
         "media": "아시아경제",
-        "domain": "news.google.com",
+        "domain": "",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "domestic",
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "domestic",
         "original_url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9zam83ckJiRkNpQlN3b0JNNElQRzNBcExkcEdDUFVwR3hNa3d1ZmJLNkw3QVJhdXY3dm9uMU1vbXMxa0xMOXljOS14UW9zYjRGeFNuRjZ2a2lNWU9YRjc3cDBrSFc?query=masked"
       },
       {
         "id": 326,
         "title": "Samsung and LG Join Modular Housing Boom... 'Public Orders' Key to Preventing Move-In Cliff [Real Estate AtoZ] - 아시아경제",
         "media": "아시아경제",
-        "domain": "news.google.com",
+        "domain": "",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "domestic",
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "domestic",
         "original_url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9aRHc4NVpIYzNNa1FQdWdFR1ZVVFNEalVRZFlPQW1xckF3TGJtV2IxUXRJM095NXFtc0NvalpVemNENkpLalBENVJKRGViei03Q0VnNjUyMUZpNzN4dHJPVWtBRjE?query=masked"
-      },
-      {
-        "id": 359,
-        "title": "[Photo] LG Modular Home Maximizes Space; LG Electronics' Modular Housing - 매일경제",
-        "media": "매일경제",
-        "domain": "news.google.com",
-        "source": "해외 모듈러 RSS",
-        "collector_region": "rss_overseas_pipeline",
-        "publisher_region_candidate": "domestic",
-        "original_url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBGZndyRG9mZ3BvdFgzeDdHakJwM1hYTUVMZkc2WVFlU0hiMFVVRlRFMjB0NkR4VGdHM1RDNWhyQzZEenhCZUVyam5lX0Nta3UtcktR?query=masked"
       }
     ],
     "unknown_samples": [
+      {
+        "id": 6250,
+        "title": "육동한 춘천시장 \"데이터센터는 '창고'… 지속가능성 제고 방안 고민할...",
+        "media": "kado.net",
+        "domain": "kado.net",
+        "source": "네이버뉴스",
+        "collector_region": "domestic_pipeline",
+        "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
+        "original_url": "https://www.kado.net/news/articleView.html?idxno=2060663"
+      },
+      {
+        "id": 6241,
+        "title": "'전국 최대 콩나물 교실' 검단의 울분, 한 아파트서 학교 3곳 배정",
+        "media": "realty.chosun.com",
+        "domain": "realty.chosun.com",
+        "source": "네이버뉴스",
+        "collector_region": "domestic_pipeline",
+        "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
+        "original_url": "https://realty.chosun.com/site/data/html_dir/2026/07/09/2026070902296.html"
+      },
       {
         "id": 50,
         "title": "‘주택 공급 확대법안’이 애틀랜타에 미치는 영향은?",
@@ -200,7 +223,21 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.koreadaily.com/article/20260710142830989"
+      },
+      {
+        "id": 9,
+        "title": "군산 모듈러 공장 찾은 김윤덕 국토 장관 “좋은 집, 더 빠르게 공급”",
+        "media": "biz.chosun.com",
+        "domain": "biz.chosun.com",
+        "source": "네이버뉴스",
+        "collector_region": "domestic_pipeline",
+        "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
+        "original_url": "https://biz.chosun.com/real_estate/real_estate_general/2026/07/10/QJVE3WZZQZARDGBSX3VB76SSYI/"
       },
       {
         "id": 7,
@@ -210,17 +247,21 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "http://www.snmnews.com/news/articleView.html?idxno=571885"
       },
       {
-        "id": 6246,
-        "title": "Modular housing put forward as alternate solution to home shortage before 2032 Olympics - realestate.com.au",
-        "media": "realestate.com.au",
-        "domain": "news.google.com",
+        "id": 6251,
+        "title": "China's \"Prefab Buildings\" Go Global: CIMC Modular Solutions Embed into the Global Digital Infrastructure Wave - TradingView",
+        "media": "TradingView",
+        "domain": "",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "unknown",
-        "original_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPZXR6NjJ1bU1vSDlNYmhWYTdIZXB1V2FONl9IZ3NPdXItVDJqamtkRS11ZldOM184TktjV09Na2otRXE3aktvQ3l4emkwWlZlQW45N3RlcUpmNmVZNkE2a2pwSy1FZS1wZllzcTNZS3VYeDNJMjF3a1doWk5MejNHa01lTVE3WHpkcUJSR0l0OGk2S3FRMmo3YzhLMHdxb3d1anliRHA3M3ZUN1Y0dEhtbVBrTFFSMWhQS2pHQkxzeFk?query=masked"
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "unknown",
+        "original_url": "https://news.google.com/rss/articles/CBMikAJBVV95cUxQTUoxRmczQUZQLVpLQ3Q4ZzlqN0x6WGtqeFRiaWtnQ25FdlRGVEc3RkxrckRuanZtTl8tSldhQWd2RHFMVHlwNUpPRkVleTJYNDF3TnhmS01lS0JNRVBpM3pmM3BVUjlKb1VWbXVXbi1WbU5wM2w3d0J0VHM3bVNvek1KTk44c0s0TmFKTmxEOHNqbm1QRlllVXdjNTdGOUZ5YUdRWVB4S2JwcmFwR0NtT3NFaklTX0V2Tld0QnFHNmRwcEE1SGtrOG5YeTNUSmpSSnQ0aXY2X19xd0xhZXhGXy1NcXQzeEVNNTk0X1p5MTNpd0E2LWlDSEZuZ0FJeGtNVnlPdDBFNW1mel9aZUR4Zw?query=masked"
       },
       {
         "id": 6243,
@@ -230,17 +271,33 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.thisisgame.com/articles/427702"
       },
       {
         "id": 6242,
         "title": "China's \"Prefab Buildings\" Go Global: CIMC Modular Solutions Embed into the Global Digital Infrastructure Wave - The Globe and Mail",
         "media": "The Globe and Mail",
-        "domain": "news.google.com",
+        "domain": "",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://news.google.com/rss/articles/CBMikAJBVV95cUxQMEFVRDZEUmlwWjRjMkFuZ000SUdwNWp3Y3NxM0Q3RDZGaU5aZ2xsZ0xDelZDVGpTTTZaM2NVUXE5QkNISXFnRHVsd2pkZVVSSU9ibS01NDB5ZDFSMXpTRmFBUGZ2ak9YdlJLTWpCYWRhMzF2b2xBTEZmSTZucmFUa2JKdU9kUXJPRGRHSHRpRVh0VHRadjhKQWF6NjhQV2ozcl8yX09BWHdrZHA2RFh3NlFIY2pXeTdHWHVDWTlyQkxQcWZLMmlPUi03dHJhd1R6eGxtVXVfZTJOTmZMLVRyMXZFRWJEbTF4bFJhbXVDcW85VkZKQjdkZW11M1gyM0VEUzBzVGJKMmpucko1Qmotag?query=masked"
+      },
+      {
+        "id": 6171,
+        "title": "[오늘의 주요일정]국토교통부(7월10일 금요일)",
+        "media": "newsis.com",
+        "domain": "newsis.com",
+        "source": "네이버뉴스",
+        "collector_region": "domestic_pipeline",
+        "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
+        "original_url": "https://www.newsis.com/view/NISX20260705_0003696366"
       },
       {
         "id": 59,
@@ -250,6 +307,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "http://www.breaknews.com/1220965"
       },
       {
@@ -260,6 +319,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.segye.com/newsView/20260710515304?OutUrl=naver"
       },
       {
@@ -270,6 +331,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://kpenews.com/View.aspx?No=4144962"
       },
       {
@@ -280,7 +343,21 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "http://www.weeklytoday.com/news/articleView.html?idxno=784279"
+      },
+      {
+        "id": 28,
+        "title": "KCC-공간제작소, 미래형 모듈러 주거 모델 개발 맞손",
+        "media": "etnews.com",
+        "domain": "etnews.com",
+        "source": "네이버뉴스",
+        "collector_region": "domestic_pipeline",
+        "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
+        "original_url": "https://www.etnews.com/20260710000007"
       },
       {
         "id": 23,
@@ -290,16 +367,32 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.sidae.com/article/2026071014403216132"
+      },
+      {
+        "id": 22,
+        "title": "국토장관 \"좋은 집 더 빠르게 공급하도록 모듈러 기술 키울 것\"",
+        "media": "newsis.com",
+        "domain": "newsis.com",
+        "source": "네이버뉴스",
+        "collector_region": "domestic_pipeline",
+        "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
+        "original_url": "https://www.newsis.com/view/NISX20260710_0003704447"
       },
       {
         "id": 214,
         "title": "5 modular housing buildings to soon begin construction at CFB Esquimalt - CHEK News",
         "media": "CHEK News",
-        "domain": "news.google.com",
+        "domain": "",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPX0Vad1JZeFFQaHB3cVhMZ1JPaHVRTS12dC1zazdtZDhvMEZJRW9VUl9mZ2F1ZENNN2ZTX3IyMXdhSmZOSF9RNFRKTXRuVW45bnNoSEdZemxvbnJzdUs2dmdXX0w2WW9YVjktdFk0VHVmMmt3ODVZMjd0Nl90Y2dlYmxsZm82dWVoMTVRdlN2RnkwQkZiTHFmWE9oUTZNbTR0N1E?query=masked"
       },
       {
@@ -310,16 +403,20 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.newspim.com/news/view/20260710001134"
       },
       {
         "id": 208,
         "title": "Kim Yun-duk pushes modular housing to speed delivery, strengthen South Korea’s industry - CHOSUNBIZ - Chosunbiz",
         "media": "Chosunbiz",
-        "domain": "news.google.com",
+        "domain": "",
         "source": "해외 모듈러 RSS",
         "collector_region": "rss_overseas_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "rss_overseas_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNeWp3UHBJSzQxQ0JXcDZINjhTTkZrSXNQRzdEUl9kZjgyQkJka2Q1SExreHlxeEQ4TGVVMmFXZXFiMjZhV2xSRXg5VjVPVVVzSTZkc0ZQRThGVUFNMHpFUVJsSWNfME4yMHhsZnNyR3VwbWFyMXgxNW1TMnluVkthc1EzU2TSAZgBQVVfeXFMUFZrTm55UXVrbTg4bk02SktWd1JnNDBBOWJsRWxpZ1VmTUhwaXJ4Yzdzc1dDcnp4S3dWYnphMXN1SGxiNEd5ellHTmppaG9JM2hHTHZsVXVweDVWMlRSS1MtQ0xpN0RmUUoteG55ck5WbXd3QmtJUUJlMUVvUzE4aDM0SFR4Vl9rR1NHRk1UZnBudC1yeXFrTFo?query=masked"
       },
       {
@@ -330,6 +427,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://news.tvchosun.com/site/data/html_dir/2026/07/10/2026071090293.html"
       },
       {
@@ -340,6 +439,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "http://kr.people.com.cn/n3/2026/0710/c203280-20476513.html"
       },
       {
@@ -350,6 +451,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.viva100.com/article/20260710500704"
       },
       {
@@ -360,6 +463,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "http://www.iminju.net/news/articleView.html?idxno=166482"
       },
       {
@@ -370,6 +475,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://hbnpress.com/news/view/1065593269763300"
       },
       {
@@ -380,6 +487,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.seoulfn.com/news/articleView.html?idxno=633032"
       },
       {
@@ -390,6 +499,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "http://www.thefirstmedia.net/news/articleView.html?idxno=203464"
       },
       {
@@ -400,6 +511,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.cnbizm.com/news/articleView.html?idxno=308074"
       },
       {
@@ -410,6 +523,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.sidae.com/article/2026070910470064512"
       },
       {
@@ -420,6 +535,8 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "https://www.cnbnews.com/news/articleView.html?idxno=1007517"
       },
       {
@@ -430,67 +547,9 @@
         "source": "네이버뉴스",
         "collector_region": "domestic_pipeline",
         "publisher_region_candidate": "unknown",
+        "calculated_collection_pipeline": "domestic_pipeline",
+        "calculated_publisher_region": "unknown",
         "original_url": "http://www.wsobi.com/news/articleView.html?idxno=314966"
-      },
-      {
-        "id": 6207,
-        "title": "KCC, 공간제작소와 손잡고 미래형 모듈러 주택 시장 공략",
-        "media": "cstimes.com",
-        "domain": "cstimes.com",
-        "source": "네이버뉴스",
-        "collector_region": "domestic_pipeline",
-        "publisher_region_candidate": "unknown",
-        "original_url": "https://www.cstimes.com/news/articleView.html?idxno=712821"
-      },
-      {
-        "id": 6202,
-        "title": "KCC, 공간제작소와 미래 주택시장 공략… 모듈러 건축 표준화 추진",
-        "media": "koreaittimes.com",
-        "domain": "koreaittimes.com",
-        "source": "네이버뉴스",
-        "collector_region": "domestic_pipeline",
-        "publisher_region_candidate": "unknown",
-        "original_url": "https://www.koreaittimes.com/news/articleView.html?idxno=155068"
-      },
-      {
-        "id": 6201,
-        "title": "KCC, 공간제작소와 미래형 모듈러 주택 개발 ‘맞손’",
-        "media": "g-enews.com",
-        "domain": "g-enews.com",
-        "source": "네이버뉴스",
-        "collector_region": "domestic_pipeline",
-        "publisher_region_candidate": "unknown",
-        "original_url": "https://www.g-enews.com/view.php?ud=202607090929278045514e0091f6_1"
-      },
-      {
-        "id": 6200,
-        "title": "미래 주거시장 선점 나선 KCC…공간제작소와 모듈러 주거 개발",
-        "media": "kdfnews.com",
-        "domain": "kdfnews.com",
-        "source": "네이버뉴스",
-        "collector_region": "domestic_pipeline",
-        "publisher_region_candidate": "unknown",
-        "original_url": "http://www.kdfnews.com/news/articleView.html?idxno=184992"
-      },
-      {
-        "id": 6197,
-        "title": "KCC, 공간제작소와 손잡고 미래형 모듈러 주택 개발",
-        "media": "popcornnews.net",
-        "domain": "popcornnews.net",
-        "source": "네이버뉴스",
-        "collector_region": "domestic_pipeline",
-        "publisher_region_candidate": "unknown",
-        "original_url": "http://www.popcornnews.net/news/articleView.html?idxno=126054"
-      },
-      {
-        "id": 6186,
-        "title": "“공간이 바뀌면 일하는 방식도 바뀝니다”…강지수 넵스랩 대표의 AI 시...",
-        "media": "venturesquare.net",
-        "domain": "venturesquare.net",
-        "source": "네이버뉴스",
-        "collector_region": "domestic_pipeline",
-        "publisher_region_candidate": "unknown",
-        "original_url": "https://www.venturesquare.net/1091853/"
       }
     ]
   },
@@ -499,9 +558,9 @@
       "direct": 50
     },
     "publisher_region_counts": {
-      "unknown": 18,
-      "domestic": 31,
-      "overseas": 1
+      "unknown": 19,
+      "domestic": 29,
+      "overseas": 2
     },
     "actual_modular_unrelated_count": 0,
     "same_issue_duplicate_count": 0,
@@ -674,7 +733,7 @@
         "title": "Montreal scraps Outremont modular housing project amid contamination concerns - unpublished.ca",
         "media": "unpublished.ca",
         "source": "해외 모듈러 RSS",
-        "publisher_region_candidate": "unknown",
+        "publisher_region_candidate": "overseas",
         "relevance_level": "direct",
         "relevance_score": 95
       },
@@ -804,7 +863,7 @@
         "title": "국토장관 \"좋은 집 더 빠르게 공급하도록 모듈러 기술 키울 것\"",
         "media": "newsis.com",
         "source": "네이버뉴스",
-        "publisher_region_candidate": "domestic",
+        "publisher_region_candidate": "unknown",
         "relevance_level": "direct",
         "relevance_score": 85
       },
@@ -814,7 +873,7 @@
         "title": "군산 모듈러 공장 찾은 김윤덕 국토 장관 “좋은 집, 더 빠르게 공급”",
         "media": "biz.chosun.com",
         "source": "네이버뉴스",
-        "publisher_region_candidate": "domestic",
+        "publisher_region_candidate": "unknown",
         "relevance_level": "direct",
         "relevance_score": 85
       },
@@ -1037,11 +1096,9 @@
       "suggested_priority": "workflow maintenance"
     }
   ],
-  "final_status": "PASS_WITH_REGION_FIX_REQUIRED",
+  "final_status": "PASS",
   "next_recommendations": [
-    "Split collector_region from publisher_region in frontend filtering before changing production data.",
-    "Keep overseas RSS collector active, but display Korean publishers from RSS as domestic publisher candidates.",
-    "Audit RSS-sourced domestic publishers and plan a separate publisher_region display hotfix.",
+    "RSS-sourced domestic publishers are expected to use publisher_region=domestic in UI filters.",
     "Add explicit publisher-domain mappings for high-volume unknown publishers after manual review.",
     "Keep unified-v2 scoring unchanged until region-display behavior is fixed in a separate hotfix."
   ]
