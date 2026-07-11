@@ -25,6 +25,7 @@ from src.public_data_policy import (  # noqa: E402
     merge_public_items,
     payload_items,
 )
+from src.news_scoring import apply_unified_news_scores, news_score_audit_stats  # noqa: E402
 
 
 OUTPUT_DIR = ROOT / "frontend" / "public" / "data"
@@ -586,6 +587,9 @@ def main() -> int:
     news = dedupe_overseas_rss_public_items(news)
     overseas_rss_after_dedup_count = sum(item.get("source") == "해외 모듈러 RSS" for item in news)
     overseas_rss_duplicate_removed_count = overseas_rss_before_dedup_count - overseas_rss_after_dedup_count
+    news_before_scoring = [dict(item) for item in news]
+    news = apply_unified_news_scores(news, today=datetime.now().astimezone().date())
+    news_score_stats = news_score_audit_stats(news_before_scoring, news)
     business = apply_business_lifecycle(business, now=merge_time, default_last_seen_at=generated_at)
 
     logs = load_collect_logs_dataframe(limit=500)
@@ -724,6 +728,7 @@ def main() -> int:
         "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
         "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
         "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,
+        **news_score_stats,
         "public_data_guard_status": guard_status,
         "public_data_guard_message": guard_message,
         "data_policy": "cumulative_verified",
@@ -763,6 +768,7 @@ def main() -> int:
             "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
             "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
             "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,
+            **news_score_stats,
             "items": news,
         },
     )

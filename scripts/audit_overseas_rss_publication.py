@@ -164,6 +164,8 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
         canonical = normalized_url(original)
         keywords = split_keywords(item.get("keywords"))
         relevance = item.get("relevance_score")
+        relevance_level = str(item.get("relevance_level") or "").strip()
+        score_version = str(item.get("relevance_score_version") or "").strip()
 
         if not title:
             counters["title_missing_count"] += 1
@@ -188,10 +190,22 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
         try:
             score = float(relevance)
         except (TypeError, ValueError):
-            score = 0.0
-        if score < 70:
+            score = -1.0
+        if score < 0 or score > 100:
+            counters["score_range_violation_count"] += 1
+            add_issue(validation_errors, "score_range_violation", item, "relevance_score must be in the 0..100 range", relevance_score=relevance)
+        if score_version == "unified-v2":
+            if relevance_level not in {"direct", "adjacent", "reference", "excluded"}:
+                counters["relevance_level_missing_count"] += 1
+                add_issue(validation_errors, "relevance_level_missing", item, "unified-v2 news must include a valid relevance_level")
+            elif relevance_level == "excluded":
+                counters["excluded_context_count"] += 1
+                add_issue(validation_errors, "excluded_relevance_level_public", item, "excluded relevance_level must not be published")
+        elif score < 70:
             counters["low_relevance_count"] += 1
-            add_issue(validation_errors, "low_relevance_score", item, "relevance_score must be at least 70", relevance_score=relevance)
+            add_issue(validation_errors, "low_relevance_score", item, "legacy relevance_score must be at least 70", relevance_score=relevance)
+        else:
+            counters["score_version_missing_count"] += 1
 
         if not keywords:
             counters["keywords_missing_count"] += 1
@@ -273,6 +287,9 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
         "duplicate_title_date_count": counters["duplicate_title_date_count"],
         "invalid_url_count": counters["invalid_url_count"],
         "low_relevance_count": counters["low_relevance_count"],
+        "score_range_violation_count": counters["score_range_violation_count"],
+        "relevance_level_missing_count": counters["relevance_level_missing_count"],
+        "score_version_missing_count": counters["score_version_missing_count"],
         "excluded_context_count": counters["excluded_context_count"],
         "media_missing_count": counters["media_missing_count"],
         "date_missing_count": counters["date_missing_count"],
@@ -303,6 +320,9 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- Duplicate URL count: {report['duplicate_url_count']}",
         f"- Duplicate title/date count: {report['duplicate_title_date_count']}",
         f"- Excluded context count: {report['excluded_context_count']}",
+        f"- Score range violation count: {report.get('score_range_violation_count', 0)}",
+        f"- Relevance level missing count: {report.get('relevance_level_missing_count', 0)}",
+        f"- Score version missing count: {report.get('score_version_missing_count', 0)}",
         "",
         "## Information",
         "",
@@ -353,6 +373,9 @@ def audit_file(input_path: Path, output_dir: Path) -> dict[str, Any]:
             "duplicate_title_date_count": 0,
             "invalid_url_count": 0,
             "low_relevance_count": 0,
+            "score_range_violation_count": 0,
+            "relevance_level_missing_count": 0,
+            "score_version_missing_count": 0,
             "excluded_context_count": 0,
             "media_missing_count": 0,
             "date_missing_count": 0,

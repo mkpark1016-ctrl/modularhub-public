@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   compareNewsByRelevance,
+  compareNewsBySort,
   getNewsRelevance,
   getNewsRelevanceLabel,
   getNewsSummary,
+  newsScore,
   selectHomeBriefingNews,
 } from "../src/newsInsights.js";
 import { buildDashboardSummary } from "../src/dashboardSummary.js";
@@ -53,6 +55,9 @@ assert.equal(getNewsRelevance(smartConstruction), "reference");
 
 assert.equal(getNewsRelevance(item("Software module gets security update", "software component release")), "excluded");
 assert.equal(getNewsRelevance(item("Small modular reactor investment announced")), "excluded");
+assert.equal(getNewsRelevance(item("Legacy text fallback", "", { relevance_level: "direct" })), "direct");
+assert.equal(newsScore(item("Oversized score", "", { relevance_score: 123 })), 100);
+assert.equal(newsScore(item("Negative score", "", { relevance_score: -5 })), 0);
 
 const pool = [
   smartConstruction,
@@ -66,6 +71,17 @@ assert.ok(home.length >= 2);
 assert.ok(home.every((entry) => ["direct", "adjacent"].includes(getNewsRelevance(entry))));
 assert.ok(!home.some((entry) => ["reference", "excluded"].includes(getNewsRelevance(entry))));
 assert.equal([...pool].sort(compareNewsByRelevance)[0].title, "Modular building project starts");
+
+const relevanceSorted = [
+  item("Adjacent high score", "", { relevance_level: "adjacent", relevance_score: 80, published_at: "2026-07-06T00:00:00+09:00" }),
+  item("Direct lower score", "", { relevance_level: "direct", relevance_score: 60, published_at: "2026-07-01T00:00:00+09:00" }),
+  item("Direct higher score", "", { relevance_level: "direct", relevance_score: 70, published_at: "2026-07-01T00:00:00+09:00" }),
+  item("Direct newer same score", "", { relevance_level: "direct", relevance_score: 70, published_at: "2026-07-05T00:00:00+09:00" }),
+].sort((a, b) => compareNewsBySort(a, b, "relevance"));
+assert.deepEqual(
+  relevanceSorted.map((entry) => entry.title),
+  ["Direct newer same score", "Direct higher score", "Direct lower score", "Adjacent high score"],
+);
 
 const summaryAsOf = new Date("2026-07-06T12:00:00+09:00");
 const summaryFixtures = [

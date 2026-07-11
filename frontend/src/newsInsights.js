@@ -168,6 +168,7 @@ function hasStandaloneCode(text, code) {
 }
 
 export function getNewsRelevance(item) {
+  if (NEWS_RELEVANCE_LEVELS[item?.relevance_level]) return item.relevance_level;
   const text = newsRelevanceText(item);
   const title = newsTitleText(item);
   if (!text) return "excluded";
@@ -218,7 +219,8 @@ export function matchesNewsSearch(item, query) {
 
 export function newsScore(item) {
   const score = Number(item?.relevance_score);
-  return Number.isFinite(score) ? score : 0;
+  if (!Number.isFinite(score)) return 0;
+  return Math.max(0, Math.min(100, Math.round(score)));
 }
 
 export function newsTime(item) {
@@ -229,6 +231,10 @@ export function newsTime(item) {
 
 export function compareNewsBySort(a, b, sort = "newest") {
   if (sort === "relevance") {
+    const aLevel = getNewsRelevance(a);
+    const bLevel = getNewsRelevance(b);
+    const levelDelta = (NEWS_RELEVANCE_LEVELS[aLevel]?.order ?? 9) - (NEWS_RELEVANCE_LEVELS[bLevel]?.order ?? 9);
+    if (levelDelta !== 0) return levelDelta;
     const scoreDelta = newsScore(b) - newsScore(a);
     if (scoreDelta !== 0) return scoreDelta;
   }
@@ -266,11 +272,7 @@ function normalizedTitle(item) {
 }
 
 export function compareNewsByRelevance(a, b) {
-  const aLevel = getNewsRelevance(a);
-  const bLevel = getNewsRelevance(b);
-  const levelDelta = (NEWS_RELEVANCE_LEVELS[aLevel]?.order ?? 9) - (NEWS_RELEVANCE_LEVELS[bLevel]?.order ?? 9);
-  if (levelDelta !== 0) return levelDelta;
-  return compareNewsBySort(a, b, "newest");
+  return compareNewsBySort(a, b, "relevance");
 }
 
 export function selectHomeBriefingNews(items, limit = 5) {

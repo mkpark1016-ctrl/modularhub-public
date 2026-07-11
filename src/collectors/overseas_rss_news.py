@@ -24,6 +24,7 @@ from src.overseas_news_rules import (
     clean_overseas_news_text,
     overseas_news_content_key,
 )
+from src.news_scoring import apply_unified_news_score
 
 try:  # feedparser is preferred when installed; stdlib XML parsing is the offline fallback.
     import feedparser  # type: ignore
@@ -187,7 +188,7 @@ class OverseasRssNewsCollector(BaseCollector):
             "image": clean_overseas_news_text(entry.get("image")),
         }
 
-        return {
+        raw_item = {
             "source_type": self.get_source_type(),
             "source_name": self.get_source_name(),
             "category": "overseas modular",
@@ -209,6 +210,9 @@ class OverseasRssNewsCollector(BaseCollector):
             "data_quality": "real",
             "raw": raw,
         }
+        raw_item["legacy_relevance_score"] = score
+        raw_item.update(apply_unified_news_score(raw_item, today=self.today))
+        return raw_item
 
 
 def normalize_feed_configs(feeds: list[dict[str, str]] | list[FeedConfig]) -> list[FeedConfig]:

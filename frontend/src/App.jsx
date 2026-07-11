@@ -34,6 +34,7 @@ import {
   matchesNewsSearch,
   NEWS_RELEVANCE_LEVELS,
   NEWS_TOPICS,
+  newsScore,
 } from "./newsInsights";
 import { getNewsRegionType, newsRegionCounts, newsRegionMatches } from "./newsRegion";
 import {
@@ -534,7 +535,8 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
   const isOverseas = getNewsRegionType(item) === "overseas";
   const original = item.original_url;
   const keywords = Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords;
-  const score = Number(item.relevance_score);
+  const score = newsScore(item);
+  const scoreReasons = Array.isArray(item.relevance_reasons) ? item.relevance_reasons.slice(0, 3).join(" · ") : "";
   const topic = getNewsTopic(item);
   const relevance = getNewsRelevance(item);
   return (
@@ -554,7 +556,7 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
       <p>{item.summary || "요약이 없습니다."}</p>
       <div className="news-extra">
         {keywords && <span>{keywords}</span>}
-        <span>Score {Number.isFinite(score) ? score : 0}</span>
+        <span title={scoreReasons || undefined} aria-label={scoreReasons ? `관련도 ${score}/100. ${scoreReasons}` : `관련도 ${score}/100`}>관련도 {score}/100</span>
       </div>
       <div className="card-footer">
         <span>{item.media || item.source || "뉴스"}</span>
@@ -775,6 +777,8 @@ function DetailPage({ type }) {
   const noticeStatus = isBusiness ? displayNoticeStatus(item) : "";
   const attachments = Array.isArray(item.attachments) ? item.attachments : [];
   const topic = !isBusiness ? getNewsTopic(item) : "";
+  const newsRelevanceScore = !isBusiness ? newsScore(item) : 0;
+  const newsRelevanceReasons = !isBusiness && Array.isArray(item.relevance_reasons) ? item.relevance_reasons.slice(0, 3).join(" · ") : "";
 
   return (
     <Layout>
@@ -806,7 +810,7 @@ function DetailPage({ type }) {
           {isBusiness && <div><dt>공고/판단/계획번호</dt><dd>{item.source_record_id || item.plan_no || item.bid_no || "-"}</dd></div>}
           {isBusiness && <div><dt>진행 상태</dt><dd>{getBusinessStatusLabel(item)}</dd></div>}
           {isContest && <div><dt>대상지구/블록</dt><dd>{projectLocation(item) || "공고문 확인 필요"}</dd></div>}
-          {!isBusiness && <div><dt>관련도</dt><dd>{Number(item.relevance_score) || 0}</dd></div>}
+          {!isBusiness && <div><dt>관련도</dt><dd title={newsRelevanceReasons || undefined}>{newsRelevanceScore}/100</dd></div>}
         </dl>
         <section className="summary"><h2>내용</h2><p>{item.summary || "상세 요약이 없습니다."}</p></section>
         {isContest && <section className="summary"><h2>공모 일정</h2><p>{item.application_schedule_text || "공모 일정은 첨부 공고문 확인"}</p></section>}

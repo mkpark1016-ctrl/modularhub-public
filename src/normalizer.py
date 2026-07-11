@@ -409,7 +409,7 @@ def _normalize_naver_news_item(raw_item: dict) -> dict:
         "keywords": keyword_text,
         "summary": _optional_text(raw_item.get("summary")),
         "url": _optional_text(raw_item.get("original_link") or raw_item.get("url") or raw_item.get("naver_link")),
-        "relevance_score": calculate_naver_news_relevance(raw_item),
+        "relevance_score": _generic_relevance_score(raw_item, matched_keywords),
     }
     return _finalize_item(
         {**raw_item, "keyword_query": keyword_query},

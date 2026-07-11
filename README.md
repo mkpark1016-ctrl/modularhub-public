@@ -130,6 +130,8 @@ npm.cmd run qa:browser
 - **뉴스 주제 분류:** 제목, 요약, 키워드를 키워드 사전으로 분류합니다. AI API나 불투명한 자동 점수는 사용하지 않습니다.
 - **검색조건 공유:** `/business?q=...&priority=...&sort=...`, `/news?q=...&region=...&topic=...`처럼 주요 검색조건을 URL에 반영하므로 주소를 복사해 같은 필터 상태를 공유할 수 있습니다.
 - **수집원 상태:** `meta.json`을 기반으로 나라장터, D2B, LH, GH, iH, SH, 해외 RSS, 전체 Workflow 상태와 마지막 갱신시각을 표시합니다. D2B 중단은 오류가 아니라 `GW API 전환 필요` 상태로 안내합니다.
+
+뉴스 `relevance_score`는 `relevance_score_version: "unified-v2"` 기준의 국내·해외 공통 0~100점입니다. `relevance_level`은 `direct`, `adjacent`, `reference`, `excluded`로 나뉘며, 관련도순 정렬은 level → 점수 → 게시일 → 제목 순으로 결정됩니다. 점수는 영업 검토를 돕기 위한 결정론적 키워드 기반 보조값이며, 최종 판단 전에는 원문을 확인해야 합니다.
 ### 기존 로컬 대시보드
 
 아래 내용은 수집 상태 확인과 내부 운영용 Streamlit 대시보드 안내입니다.

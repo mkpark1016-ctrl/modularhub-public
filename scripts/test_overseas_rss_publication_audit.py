@@ -132,6 +132,27 @@ def test_google_news_url_allowed_as_information():
     require(report["invalid_url_count"] == 0, "Google News URL must not be invalid")
 
 
+def test_unified_v2_score_contract():
+    report = audit([
+        rss_item(id=40, relevance_score=55, relevance_score_version="unified-v2", relevance_level="adjacent")
+    ])
+    require(report["audit_status"] == "passed_with_warnings", "unified-v2 score below legacy 70 should not be a hard failure")
+    require(report["low_relevance_count"] == 0, "unified-v2 scores must not use the legacy low relevance threshold")
+    require(report["score_range_violation_count"] == 0, "valid unified-v2 score must be in range")
+
+    report = audit([
+        rss_item(id=41, relevance_score=101, relevance_score_version="unified-v2", relevance_level="direct")
+    ])
+    require(report["audit_status"] == "failed", "score above 100 must fail")
+    require(has_code(report, "score_range_violation"), "score range violation missing")
+
+    report = audit([
+        rss_item(id=42, relevance_score=55, relevance_score_version="unified-v2", relevance_level="")
+    ])
+    require(report["audit_status"] == "failed", "unified-v2 missing relevance_level must fail")
+    require(has_code(report, "relevance_level_missing"), "relevance level error missing")
+
+
 def test_output_files_are_written():
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -168,6 +189,7 @@ def main():
         test_duplicate_failures,
         test_warnings,
         test_google_news_url_allowed_as_information,
+        test_unified_v2_score_contract,
         test_output_files_are_written,
     ]
     for test in tests:

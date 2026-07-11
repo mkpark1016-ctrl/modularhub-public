@@ -114,7 +114,6 @@ try {
   }
   check(await page.locator(".intro h1 span").count() === 2, "hero heading should be two explicit lines");
   check((await page.locator(".intro h1").evaluate((node) => getComputedStyle(node).wordBreak)) === "keep-all", "hero heading should keep Korean words together");
-  check(homeText.includes("D2B"), "source health is missing D2B");
   const directNewsKpi = await kpiNumber(page, "recent-direct-news");
   check(directNewsKpi === expectedNewsSummary.recentDirect7, `recent direct news KPI mismatch: expected ${expectedNewsSummary.recentDirect7}, got ${directNewsKpi}`);
   if (expectedNewsSummary.recentDirect7 > 0) {
@@ -124,12 +123,13 @@ try {
   check(kpiHelperText.includes(`최근 7일 전체 뉴스 ${expectedNewsSummary.recent7.toLocaleString("ko-KR")}건`), "recent total news helper count mismatch");
   check(kpiHelperText.includes(`연관 산업 ${expectedNewsSummary.recentAdjacent7.toLocaleString("ko-KR")}건`), "recent adjacent news helper count mismatch");
   check(homeText.includes("일부 제한"), "workflow should be displayed as partially limited");
-  check(homeText.includes("중지"), "D2B should be displayed as stopped, not a generic error");
   const healthToggle = page.locator(".source-health-panel button").first();
   check(await healthToggle.getAttribute("aria-expanded") === "false", "source health details should start collapsed");
   await healthToggle.click();
   check(await healthToggle.getAttribute("aria-expanded") === "true", "source health details should expand");
   const healthText = await page.locator(".source-health-panel").innerText();
+  check(healthText.includes("D2B"), "source health details should include D2B");
+  check(healthText.includes("중지"), "D2B should be displayed as stopped, not a generic error");
   check(healthText.includes("SH"), "source health details should include SH");
   check(healthText.includes("해외 RSS"), "source health details should include overseas RSS");
   check(healthText.includes("미수집") || healthText.includes("수집 기록 없음"), "SH not_collected should be shown as not collected");
@@ -188,6 +188,7 @@ try {
   await page.locator("article.result-card").first().waitFor();
   await waitForCardCount(page, newsItems.length, "news default card count mismatch");
   await checkNoBadDisplayText(page, "main", "news list");
+  check(await page.locator("article.result-card").first().getByText(/관련도 \d+\/100/).count() >= 1, "news card relevance score should use N/100 label");
 
   const overseasCount = countBy(newsItems, (item) => item.source === OVERSEAS_RSS_SOURCE);
   await page.getByRole("button", { name: /해외뉴스/ }).click();

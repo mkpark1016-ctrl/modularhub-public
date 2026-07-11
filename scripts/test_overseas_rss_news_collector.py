@@ -104,6 +104,9 @@ def test_rss_2_parsing() -> None:
     items = collector.collect()
     assert_true(len(items) == 1, "RSS item must be collected")
     assert_true(items[0]["url"] == "https://news.example.org/article", "RSS URL must be normalized")
+    assert_true(items[0]["relevance_score_version"] == "unified-v2", "RSS item must use unified score version")
+    assert_true(isinstance(items[0]["relevance_score"], int) and 0 <= items[0]["relevance_score"] <= 100, "RSS score must be a 0..100 integer")
+    assert_true(items[0]["relevance_level"] == "direct", "RSS strong phrase should be direct")
     assert_true("full body" not in str(items[0].get("raw")), "full article body must not be stored")
     assert_true(len(fake_get.calls) == 1 and collector.request_count == 1, "one feed request expected")
 

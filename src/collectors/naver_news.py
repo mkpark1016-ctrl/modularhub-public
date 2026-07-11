@@ -25,6 +25,7 @@ from src.keywords import (
     NAVER_NEWS_KEYWORD_GROUPS,
     NAVER_NEWS_PUBLIC_KEYWORDS,
 )
+from src.news_scoring import apply_unified_news_score
 
 
 DEFAULT_NAVER_NEWS_ENDPOINT = "https://openapi.naver.com/v1/search/news.json"
@@ -129,7 +130,8 @@ class NaverNewsCollector(BaseCollector):
             "pub_date": pub_date.isoformat() if pub_date else None,
         }
         raw_item["keywords"] = matched_news_keywords(raw_item)
-        raw_item["relevance_score"] = calculate_naver_news_relevance(raw_item)
+        raw_item["legacy_relevance_score"] = calculate_naver_news_relevance(raw_item)
+        raw_item.update(apply_unified_news_score(raw_item))
         return raw_item
 
     def _within_lookback(self, raw_item: dict) -> bool:
