@@ -44,6 +44,31 @@ assert.equal(result.changed, false);
 assert.equal(result.params.get("region"), "overseas");
 assert.equal(result.params.get("q"), "modular");
 
+result = sanitize("region=overseas&country=us&q=modular");
+assert.equal(result.changed, true);
+assert.equal(result.params.get("country"), "US");
+assert.equal(result.params.get("q"), "modular");
+
+result = sanitize("region=overseas&country=unknown&days=30");
+assert.equal(result.changed, false);
+assert.equal(result.params.get("country"), "unknown");
+assert.equal(result.params.get("days"), "30");
+
+result = sanitize("region=domestic&country=US&q=모듈러");
+assert.equal(result.changed, true);
+assert.equal(result.params.get("region"), "domestic");
+assert.equal(result.params.has("country"), false);
+assert.equal(result.params.get("q"), "모듈러");
+
+result = sanitize("country=US&q=modular");
+assert.equal(result.changed, true);
+assert.equal(result.params.has("country"), false);
+assert.equal(result.params.get("q"), "modular");
+
+result = sanitize("region=overseas&country=USA");
+assert.equal(result.changed, true);
+assert.equal(result.params.has("country"), false);
+
 result = sanitize("region=invalid&q=모듈러");
 assert.equal(result.changed, true);
 assert.equal(result.params.has("region"), false);

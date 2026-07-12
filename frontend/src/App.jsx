@@ -37,6 +37,13 @@ import {
   newsScore,
 } from "./newsInsights";
 import {
+  countryOptionLabel,
+  getNewsCountryBadgeLabel,
+  getNewsDetailCountryLabel,
+  getOverseasCountryOptions,
+  newsCountryMatches,
+} from "./newsCountry";
+import {
   getNewsCollectionLabel,
   getNewsPublisherLabel,
   getNewsRegionLabel,
@@ -508,7 +515,7 @@ function BusinessFilters({ values, setParam, filteredCount, onReset, chips, favo
   );
 }
 
-function NewsFilters({ values, setParam, regionCounts, filteredCount, chips, favoriteCount }) {
+function NewsFilters({ values, setParam, regionCounts, countryOptions, filteredCount, chips, favoriteCount }) {
   const [open, setOpen] = useState(false);
   const regionOptions = [
     { value: "all", label: "전체", count: regionCounts.all },
@@ -516,7 +523,7 @@ function NewsFilters({ values, setParam, regionCounts, filteredCount, chips, fav
     { value: "overseas", label: "해외", count: regionCounts.overseas },
   ];
   const reset = () => {
-    ["q", "region", "days", "topic", "relevance", "sort"].forEach((key) => setParam(key, ""));
+    ["q", "region", "country", "days", "topic", "relevance", "sort"].forEach((key) => setParam(key, ""));
   };
   return (
     <FilterPanel title="뉴스 검색조건" open={open} setOpen={setOpen}>
@@ -529,6 +536,16 @@ function NewsFilters({ values, setParam, regionCounts, filteredCount, chips, fav
           </button>
         ))}
       </div>
+      {values.region === "overseas" && (
+        <label>국가
+          <select value={values.country} onChange={(event) => setParam("country", event.target.value)}>
+            <option value="all">전체 국가</option>
+            {countryOptions.map((option) => (
+              <option key={option.value} value={option.value}>{countryOptionLabel(option)}</option>
+            ))}
+          </select>
+        </label>
+      )}
       <SearchBar value={values.q} onChange={(value) => setParam("q", value)} placeholder="뉴스 제목, 내용, 언론사 검색" />
       <label>기간
         <select value={values.days} onChange={(event) => setParam("days", event.target.value)}>
@@ -614,7 +631,7 @@ function BusinessCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
 
 function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
   const isOverseas = getNewsRegionType(item) === "overseas";
-  const regionLabel = getNewsRegionLabel(item);
+  const regionLabel = getNewsCountryBadgeLabel(item, isOverseas ? "overseas" : "domestic");
   const publisherLabel = getNewsPublisherLabel(item);
   const original = item.original_url;
   const keywords = Array.isArray(item.keywords) ? item.keywords.join(", ") : item.keywords;
@@ -663,12 +680,12 @@ function BusinessListingPage() {
     priority: getValidParam(searchParams, "priority", BUSINESS_PRIORITY_FILTERS.map((item) => item.value), "all"),
     sort: getValidParam(searchParams, "sort", BUSINESS_SORT_OPTIONS.map((item) => item.value), "priority"),
   };
-  const setParam = (key, value) => {
+  const setParam = useCallback((key, value) => {
     const next = new URLSearchParams(searchParams);
     if (!value || value === "all" || (key === "sort" && value === "priority")) next.delete(key);
     else next.set(key, value);
     setSearchParams(next, { replace: true });
-  };
+  }, [searchParams, setSearchParams]);
   const reset = () => setSearchParams({}, { replace: true });
 
   const filtered = useMemo(() => {
@@ -758,27 +775,43 @@ function NewsListingPage() {
     if (changed) setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
 
+  const countryParam = searchParams.get("country");
   const values = {
     q: searchParams.get("q") || "",
     region: getValidParam(searchParams, "region", NEWS_REGION_VALUES, "all"),
+    country: countryParam ? (countryParam === "unknown" ? "unknown" : countryParam.toUpperCase()) : "all",
     days: getValidParam(searchParams, "days", ["all", "7", "30", "90"], "all"),
     topic: NEWS_TOPICS.includes(searchParams.get("topic")) || searchParams.get("topic") === "favorites" ? searchParams.get("topic") : "전체 주제",
     relevance: getValidParam(searchParams, "relevance", NEWS_RELEVANCE_FILTERS.map((item) => item.value), "all"),
     sort: getValidParam(searchParams, "sort", NEWS_SORT_OPTIONS.map((item) => item.value), "newest"),
   };
-  const setParam = (key, value) => {
+  const setParam = useCallback((key, value) => {
     const next = new URLSearchParams(searchParams);
     const before = searchParams.toString();
     const defaults = { region: "all", days: "all", topic: "전체 주제", relevance: "all", sort: "newest", q: "" };
+    defaults.country = "all";
     if (!value || value === defaults[key]) next.delete(key);
     else next.set(key, value);
+    if (key === "region" && value !== "overseas") next.delete("country");
+    if (key === "country" && values.region !== "overseas") next.delete("country");
     if (next.toString() === before) return;
     setSearchParams(next, { replace: true });
-  };
+  }, [searchParams, setSearchParams, values.region]);
+
+  const countryOptions = useMemo(() => getOverseasCountryOptions(enriched, getNewsRegionType), [enriched]);
+
+  useEffect(() => {
+    if (values.region !== "overseas") return;
+    if (values.country === "all") return;
+    if (!enriched.length) return;
+    if (countryOptions.some((option) => option.value === values.country)) return;
+    setParam("country", "all");
+  }, [countryOptions, enriched.length, setParam, values.country, values.region]);
 
   const filtered = useMemo(() => {
     return enriched.filter((item) => {
       if (!newsRegionMatches(item, values.region)) return false;
+      if (values.region === "overseas" && !newsCountryMatches(item, values.country)) return false;
       if (values.topic === "favorites" && !favorites.isNewsFavorite(item.id)) return false;
       if (values.topic !== "전체 주제" && values.topic !== "favorites" && item.topic !== values.topic) return false;
       if (values.relevance !== "all" && item.relevanceGrade !== values.relevance) return false;
@@ -790,7 +823,7 @@ function NewsListingPage() {
       }
       return matchesNewsSearch(item, values.q);
     }).sort((a, b) => compareNewsBySort(a, b, values.sort));
-  }, [enriched, favorites, values.days, values.q, values.region, values.relevance, values.sort, values.topic]);
+  }, [enriched, favorites, values.country, values.days, values.q, values.region, values.relevance, values.sort, values.topic]);
 
   const counts = newsRegionCounts(enriched);
   const chips = [
@@ -800,10 +833,20 @@ function NewsListingPage() {
     { key: "topic", active: values.topic !== "전체 주제", label: values.topic === "favorites" ? "관심목록" : values.topic, onRemove: () => setParam("topic", "전체 주제") },
     { key: "relevance", active: values.relevance !== "all", label: `관련도: ${getNewsRelevanceLabel(values.relevance)}`, onRemove: () => setParam("relevance", "all") },
   ];
+  if (values.region === "overseas" && values.country !== "all") {
+    chips.splice(2, 0, {
+      key: "country",
+      active: true,
+      label: countryOptions.find((option) => option.value === values.country)?.label || "국가",
+      onRemove: () => setParam("country", "all"),
+    });
+  }
   const domesticCount = counts.domestic;
   const overseasCount = counts.overseas;
   const total = Math.max(counts.all, 1);
-  const emptyMessage = values.topic === "favorites"
+  const emptyMessage = values.region === "overseas" && values.country !== "all"
+    ? "현재 선택한 국가와 검색조건에 맞는 뉴스가 없습니다."
+    : values.topic === "favorites"
     ? "관심목록에 저장한 뉴스가 없습니다."
     : values.q
       ? "입력한 검색어와 일치하는 뉴스가 없습니다."
@@ -817,7 +860,7 @@ function NewsListingPage() {
         <p>국내·해외 뉴스와 주제, 기간, 관련도를 조합해 모듈러 시장 신호를 확인합니다.</p>
       </section>
       <div className="content-layout">
-        <NewsFilters values={values} setParam={setParam} regionCounts={counts} filteredCount={filtered.length} chips={chips} favoriteCount={favorites.newsFavorites.length} />
+        <NewsFilters values={values} setParam={setParam} regionCounts={counts} countryOptions={countryOptions} filteredCount={filtered.length} chips={chips} favoriteCount={favorites.newsFavorites.length} />
         <section className="results" aria-live="polite">
           <div className="source-status lifecycle-summary">
             <p>전체 {counts.all.toLocaleString("ko-KR")}건 · 국내 {domesticCount.toLocaleString("ko-KR")}건 · 해외 {overseasCount.toLocaleString("ko-KR")}건</p>
@@ -869,6 +912,8 @@ function DetailPage({ type }) {
   const topic = !isBusiness ? getNewsTopic(item) : "";
   const newsPublisherLabel = !isBusiness ? getNewsPublisherLabel(item) : "";
   const newsCollectionLabel = !isBusiness ? getNewsCollectionLabel(item) : "";
+  const newsDisplayRegionLabel = !isBusiness ? getNewsRegionLabel(item) : "";
+  const newsCountryLabel = !isBusiness ? getNewsDetailCountryLabel(item) : "";
   const newsRelevanceScore = !isBusiness ? newsScore(item) : 0;
   const newsRelevanceReasons = !isBusiness && Array.isArray(item.relevance_reasons) ? item.relevance_reasons.slice(0, 3).join(" · ") : "";
 
@@ -878,7 +923,7 @@ function DetailPage({ type }) {
         <Link className="back" to={`/${type}`}><ArrowLeft size={17} />목록으로</Link>
         <div className="detail-action-row">
           <div className="badge-row">
-            <span>{isBusiness ? displayAgency(item) : getNewsRegionLabel(item)}</span>
+            <span>{isBusiness ? displayAgency(item) : newsDisplayRegionLabel}</span>
             <span>{isBusiness ? businessKind(item) : topic}</span>
             {!isBusiness && <span>{newsPublisherLabel}</span>}
             {!isBusiness && newsCollectionLabel && <span>{newsCollectionLabel}</span>}
@@ -895,6 +940,8 @@ function DetailPage({ type }) {
         <h1>{item.title}</h1>
         {isBusiness && <div className="reason-list">{getBusinessPriorityReasons(item).map((reason) => <span key={reason}>{reason}</span>)}</div>}
         <dl className="detail-grid">
+          {!isBusiness && <div><dt>표시 지역</dt><dd>{newsDisplayRegionLabel}</dd></div>}
+          {!isBusiness && <div><dt>발행 국가</dt><dd>{newsCountryLabel}</dd></div>}
           <div><dt>{isBusiness ? "기관" : "발행 언론사"}</dt><dd>{(isBusiness ? item.organization : newsPublisherLabel) || "-"}</dd></div>
           <div><dt>게시일</dt><dd>{formatDate(isBusiness ? item.posted_at : item.published_at)}</dd></div>
           <div><dt>{isBusiness ? "마감일" : "수집 경로"}</dt><dd>{isBusiness ? formatDate(item.due_at || item.deadline_at) : (newsCollectionLabel || item.collection_source || item.source || "뉴스")}</dd></div>

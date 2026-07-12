@@ -15,5 +15,23 @@ export function sanitizeNewsSearchParams(params) {
     changed = true;
   }
 
+  const resolvedRegion = NEWS_REGION_VALUES.includes(next.get("region")) ? next.get("region") : "all";
+  const country = next.get("country");
+  if (country && resolvedRegion !== "overseas") {
+    next.delete("country");
+    changed = true;
+  } else if (country && country !== "unknown") {
+    const normalized = country.toUpperCase();
+    if (/^[A-Z]{2}$/.test(normalized)) {
+      if (normalized !== country) {
+        next.set("country", normalized);
+        changed = true;
+      }
+    } else {
+      next.delete("country");
+      changed = true;
+    }
+  }
+
   return { params: next, changed };
 }

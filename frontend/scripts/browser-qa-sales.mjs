@@ -3,7 +3,8 @@ import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { parseDate } from "../src/businessInsights.js";
 import { getNewsSummary } from "../src/newsInsights.js";
-import { newsRegionCounts } from "../src/newsRegion.js";
+import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
+import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -193,16 +194,42 @@ try {
   const displayRegionCounts = newsRegionCounts(newsItems);
   const domesticCount = displayRegionCounts.domestic;
   const overseasCount = displayRegionCounts.overseas;
+  const countryOptions = getOverseasCountryOptions(newsItems, getNewsDisplayRegion);
+  const countryOptionTotal = countryOptions.reduce((sum, option) => sum + option.count, 0);
   check(displayRegionCounts.all === newsItems.length, "display region total should match news count");
   check(domesticCount + overseasCount === newsItems.length, "news display region counts should add up to total");
+  check(countryOptionTotal === overseasCount, "country option counts should add up to overseas count");
+  check(!countryOptions.some((option) => option.value === "KR"), "KR should not appear in overseas country options");
+  check(await selectForLabel(page, "국가").count() === 0, "country dropdown should be hidden before overseas filter");
   check(await page.getByRole("button", { name: /지역 미확인/ }).count() === 0, "unknown region button should not be visible");
   check(await selectForLabel(page, "출처").count() === 0, "source dropdown should not be rendered");
   await page.getByRole("button", { name: /해외/ }).click();
   await waitForCardCount(page, overseasCount, "overseas news filter mismatch");
+  check(await selectForLabel(page, "국가").count() === 1, "country dropdown should be shown for overseas filter");
+  const firstCountry = countryOptions.find((option) => option.value !== "unknown");
+  if (firstCountry) {
+    await selectFilter(page, "국가", firstCountry.value);
+    await waitForCardCount(
+      page,
+      newsItems.filter((item) => getNewsDisplayRegion(item) === "overseas" && newsCountryMatches(item, firstCountry.value)).length,
+      "country filter card count mismatch",
+    );
+    check(new URL(page.url()).searchParams.get("country") === firstCountry.value, "country URL param missing");
+    await selectFilter(page, "국가", "all");
+    await waitForCardCount(page, overseasCount, "all countries should restore overseas count");
+  }
+  const unknownCountry = countryOptions.find((option) => option.value === "unknown");
+  if (unknownCountry) {
+    await selectFilter(page, "국가", "unknown");
+    await waitForCardCount(page, unknownCountry.count, "unknown country filter card count mismatch");
+    await selectFilter(page, "국가", "all");
+    await waitForCardCount(page, overseasCount, "all countries should restore after unknown country");
+  }
   check((await page.locator("main").innerText()).includes("해외"), "overseas badge missing");
 
   await page.getByRole("button", { name: /전체/ }).first().click();
   await waitForCardCount(page, newsItems.length, "news all filter should restore after unknown check");
+  check(!page.url().includes("country="), "country param should be removed outside overseas filter");
 
   const searchInput = page.getByPlaceholder("뉴스 제목, 내용, 언론사 검색");
   await searchInput.dispatchEvent("compositionstart");
@@ -231,6 +258,18 @@ try {
 
   await page.goto(`${baseUrl}/news?region=overseas&sort=relevance`, { waitUntil: "networkidle" });
   check(page.url().includes("region=overseas"), "news region URL param missing");
+  if (firstCountry) {
+    await page.goto(`${baseUrl}/news?region=overseas&country=${firstCountry.value}&q=modular`, { waitUntil: "networkidle" });
+    check(new URL(page.url()).searchParams.get("country") === firstCountry.value, "country URL param should restore");
+    check(new URL(page.url()).searchParams.get("q") === "modular", "country URL should preserve q");
+    await page.goto(`${baseUrl}/news?region=domestic&country=${firstCountry.value}`, { waitUntil: "networkidle" });
+    check(!page.url().includes("country="), "domestic URL should remove country param");
+    await page.goto(`${baseUrl}/news?country=${firstCountry.value}`, { waitUntil: "networkidle" });
+    check(!page.url().includes("country="), "country without overseas region should be removed");
+  }
+  await page.goto(`${baseUrl}/news?region=overseas&country=XX`, { waitUntil: "networkidle" });
+  check(!page.url().includes("country=XX"), "invalid country param should be removed");
+  await page.goto(`${baseUrl}/news?region=overseas&sort=relevance`, { waitUntil: "networkidle" });
   check((await selectedFilterValue(page, "정렬")) === "relevance", "news sort URL param not restored");
   await page.goto(`${baseUrl}/news?region=unknown&q=모듈러&source=SBS&days=30`, { waitUntil: "networkidle" });
   check(!page.url().includes("region=unknown"), "legacy unknown region param should be removed");
