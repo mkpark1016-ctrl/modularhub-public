@@ -29,6 +29,7 @@ from src.public_data_policy import (  # noqa: E402
     PUBLIC_NEWS_POLICY_VERSION,
 )
 from src.news_scoring import apply_unified_news_scores, news_score_audit_stats  # noqa: E402
+from src.news_publisher_country import apply_publisher_country_fields_to_items  # noqa: E402
 from src.news_publisher_region import apply_publisher_region_fields_to_items  # noqa: E402
 
 
@@ -599,6 +600,7 @@ def main() -> int:
     news_before_publish_filter_count = len(scored_news)
     news = filter_publishable_news_items(scored_news)
     news = apply_publisher_region_fields_to_items(news)
+    news = apply_publisher_country_fields_to_items(news)
     news_after_publish_filter_count = len(news)
     news_excluded_removed_count = news_before_publish_filter_count - news_after_publish_filter_count
     news_policy_removed_count = news_global_duplicate_removed_count + news_excluded_removed_count

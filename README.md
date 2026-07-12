@@ -134,6 +134,8 @@ npm.cmd run qa:browser
 뉴스 `relevance_score`는 `relevance_score_version: "unified-v2"` 기준의 국내·해외 공통 0~100점입니다. `relevance_level`은 `direct`, `adjacent`, `reference`, `excluded`로 나뉘며, 관련도순 정렬은 level → 점수 → 게시일 → 제목 순으로 결정됩니다. 점수는 영업 검토를 돕기 위한 결정론적 키워드 기반 보조값이며, 최종 판단 전에는 원문을 확인해야 합니다.
 
 뉴스 화면의 기본 지역 필터는 `전체`, `국내`, `해외` 3개입니다. `publisher_region`은 발행 언론사 기준 원본 지역이고 `collection_pipeline`은 수집 경로이며, `publisher_region`이 `unknown`인 항목은 화면 표시용으로만 `collection_pipeline`과 수집원 문자열을 fallback으로 사용해 국내 또는 해외에 배치합니다. 이 표시 지역은 프런트엔드 전용이며 공개 JSON에 저장하지 않고, 국가별 해외 필터는 별도 단계에서 다룹니다. 검색창은 한글 IME 조합 중 URL을 변경하지 않고 조합 완료 후 NFC 정규화된 검색어만 `q`에 반영합니다. 출처 select는 제거했지만 발행 언론사와 도메인은 검색창에서 계속 검색할 수 있습니다.
+
+뉴스의 `publisher_country_code`, `publisher_country_name`, `publisher_country_confidence`, `publisher_country_reason`은 발행 언론사 국가를 나타내는 파생 메타데이터입니다. 국가 코드는 ISO 3166-1 alpha-2를 사용하고, 국가명은 화면 표시용 한국어명을 저장합니다. `news.google.com` 같은 중계 도메인은 발행 언론사 도메인으로 쓰지 않으며, 국가를 안전하게 확정할 수 없으면 `국가 미확인`으로 둡니다. 현재 화면의 기본 필터는 계속 `전체 | 국내 | 해외`이며, 국가별 필터 UI는 후속 단계에서 추가합니다. `scripts/audit_news_publisher_country.py`는 국가 코드·국가명 정합성, 국내/해외 충돌, 미확인 국가 표본을 감사하고 workflow artifact로 남깁니다.
 ### 기존 로컬 대시보드
 
 아래 내용은 수집 상태 확인과 내부 운영용 Streamlit 대시보드 안내입니다.

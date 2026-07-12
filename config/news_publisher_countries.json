@@ -1,0 +1,218 @@
+{
+  "domains": {
+    "assemblymag.com": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "businesspost.ie": {
+      "country_code": "IE",
+      "country_name": "아일랜드"
+    },
+    "realestate.com.au": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "unpublished.ca": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "theconstructionindex.co.uk": {
+      "country_code": "GB",
+      "country_name": "영국"
+    },
+    "deadlinenews.co.uk": {
+      "country_code": "GB",
+      "country_name": "영국"
+    },
+    "news.sbs.co.kr": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "sbs.co.kr": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "asiae.co.kr": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "view.asiae.co.kr": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "yna.co.kr": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    }
+  },
+  "publishers": {
+    "Assembly Magazine": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "Business Post Ireland": {
+      "country_code": "IE",
+      "country_name": "아일랜드"
+    },
+    "Business Post": {
+      "country_code": "IE",
+      "country_name": "아일랜드"
+    },
+    "realestate.com.au": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "unpublished.ca": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "The Construction Index": {
+      "country_code": "GB",
+      "country_name": "영국"
+    },
+    "deadlinenews.co.uk": {
+      "country_code": "GB",
+      "country_name": "영국"
+    },
+    "CHEK News": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "Global News": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "Montreal Gazette": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "The Globe and Mail": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "The Spec": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "Yellowknifer": {
+      "country_code": "CA",
+      "country_name": "캐나다"
+    },
+    "News 5 Cleveland WEWS": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "Idaho Business Review": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "HousingWire": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "The Business Journals": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "Yahoo": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "Yahoo Finance": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "MSN": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "TipRanks": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "TradingView": {
+      "country_code": "US",
+      "country_name": "미국"
+    },
+    "Data Center Dynamics": {
+      "country_code": "GB",
+      "country_name": "영국"
+    },
+    "Australian Manufacturing": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "Built Offsite": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "Infrastructure Magazine": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "Mirage News": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "Newcastle Herald": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "Newcastle Weekly": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "Kalkine": {
+      "country_code": "AU",
+      "country_name": "호주"
+    },
+    "Limerick Post": {
+      "country_code": "IE",
+      "country_name": "아일랜드"
+    },
+    "Jamaica Observer": {
+      "country_code": "JM",
+      "country_name": "자메이카"
+    },
+    "IRIE FM": {
+      "country_code": "JM",
+      "country_name": "자메이카"
+    },
+    "The Standard (HK)": {
+      "country_code": "HK",
+      "country_name": "홍콩"
+    },
+    "consumerthai": {
+      "country_code": "TH",
+      "country_name": "태국"
+    },
+    "Інтент": {
+      "country_code": "UA",
+      "country_name": "우크라이나"
+    },
+    "Chosunbiz": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "매일경제": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "news.sbs.co.kr": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "SBS": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "아시아경제": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    },
+    "연합뉴스": {
+      "country_code": "KR",
+      "country_name": "대한민국"
+    }
+  }
+}

@@ -240,6 +240,37 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+      - name: Audit news publisher country metadata
+        if: always()
+        run: |
+          set +e
+          python scripts/audit_news_publisher_country.py \
+            --input frontend/public/data/news.json \
+            --output-dir artifacts/news_publisher_country_audit \
+            --strict-stored-fields
+          code=$?
+          if [ -f artifacts/news_publisher_country_audit/news_publisher_country_audit.md ]; then
+            cat artifacts/news_publisher_country_audit/news_publisher_country_audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+          status=$(python -c "import json; print(json.load(open('artifacts/news_publisher_country_audit/news_publisher_country_audit.json', encoding='utf-8'))['audit_status'])")
+          if [ "$status" = "passed_with_country_mapping_required" ]; then
+            echo "::warning::Publisher country audit passed with country mapping follow-up required."
+          elif [ "$status" = "passed_with_warnings" ]; then
+            echo "::warning::Publisher country audit passed with warnings."
+          fi
+
+      - name: Upload publisher country audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-publisher-country-audit-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/news_publisher_country_audit/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Diagnose procurement plan pipeline
         run: |
           if [ -f scripts/diagnose_procurement_plan_gap.py ]; then

@@ -134,6 +134,14 @@ def main() -> int:
         require(item.get("source_type") is None, "news contract must not expose unrelated source_type")
         require(item.get("relevance_level") != "excluded", "excluded news must not be published")
         require(item.get("relevance_score_version") == "unified-v2", "news score version mismatch")
+        for field in (
+            "publisher_country_code",
+            "publisher_country_name",
+            "publisher_country_confidence",
+            "publisher_country_reason",
+        ):
+            if field in item:
+                require(isinstance(item.get(field), str), f"news {field} must be a string")
 
     print(f"business items: {len(business['items'])}")
     print(f"news items: {len(news['items'])}")
