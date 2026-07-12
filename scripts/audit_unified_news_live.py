@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from src.news_publisher_country import COUNTRY_NAMES  # noqa: E402
 from src.news_scoring import SCORE_VERSION  # noqa: E402
 from src.news_publisher_region import publisher_region_fields  # noqa: E402
 from src.overseas_news_rules import overseas_news_content_key  # noqa: E402
@@ -148,6 +149,43 @@ def collector_region(item: dict[str, Any]) -> str:
 
 def publisher_region_candidate(item: dict[str, Any]) -> str:
     return str(publisher_region_fields(item).get("publisher_region") or "unknown")
+
+
+def confirmed_publisher_country_code(item: dict[str, Any]) -> str:
+    code = clean_text(item.get("publisher_country_code")).upper()
+    confidence = clean_text(item.get("publisher_country_confidence")).lower()
+    if code not in COUNTRY_NAMES:
+        return ""
+    if confidence == "unknown":
+        return ""
+    return code
+
+
+def display_region_reason(item: dict[str, Any]) -> dict[str, str]:
+    country_code = confirmed_publisher_country_code(item)
+    if country_code:
+        return {
+            "region": "domestic" if country_code == "KR" else "overseas",
+            "basis": "publisher_country_code",
+        }
+    publisher_region = clean_text(item.get("publisher_region"))
+    if publisher_region in {"domestic", "overseas"}:
+        return {"region": publisher_region, "basis": "publisher_region"}
+    pipeline = clean_text(item.get("collection_pipeline"))
+    if pipeline == "domestic_pipeline":
+        return {"region": "domestic", "basis": "collection_pipeline"}
+    if pipeline == "rss_overseas_pipeline":
+        return {"region": "overseas", "basis": "collection_pipeline"}
+    source_text = " ".join(
+        clean_text(item.get(key)).casefold()
+        for key in ("collection_source", "source", "source_name")
+        if clean_text(item.get(key))
+    )
+    if "naver" in source_text or "국내" in source_text:
+        return {"region": "domestic", "basis": "collection_source"}
+    if "rss" in source_text or "overseas" in source_text or "해외" in source_text:
+        return {"region": "overseas", "basis": "collection_source"}
+    return {"region": "domestic", "basis": "fallback"}
 
 
 def load_news_payload(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
@@ -341,8 +379,14 @@ def region_audit(items: list[dict[str, Any]]) -> dict[str, Any]:
         calculated = publisher_region_fields(item)
         c_region = collector_region(item)
         p_region = str(item.get("publisher_region") or calculated.get("publisher_region") or "unknown")
+        display = display_region_reason(item)
+        display_region = display["region"]
+        display_basis = display["basis"]
+        country_code = confirmed_publisher_country_code(item)
         counters[f"collector_{c_region}"] += 1
         counters[f"publisher_{p_region}"] += 1
+        counters[f"display_region_{display_region}"] += 1
+        counters[f"display_region_basis_{display_basis}"] += 1
         row = {
             "id": item.get("id"),
             "title": item.get("title"),
@@ -351,6 +395,10 @@ def region_audit(items: list[dict[str, Any]]) -> dict[str, Any]:
             "source": item.get("source"),
             "collector_region": c_region,
             "publisher_region_candidate": p_region,
+            "publisher_country_code": item.get("publisher_country_code") or "",
+            "publisher_country_confidence": item.get("publisher_country_confidence") or "",
+            "display_region": display_region,
+            "display_region_basis": display_basis,
             "calculated_collection_pipeline": calculated.get("collection_pipeline"),
             "calculated_publisher_region": calculated.get("publisher_region"),
             "original_url": masked_url_for_report(item.get("original_url") or item.get("url")),
@@ -363,6 +411,20 @@ def region_audit(items: list[dict[str, Any]]) -> dict[str, Any]:
         elif c_region == "domestic_pipeline" and p_region == "overseas":
             counters["domestic_pipeline_overseas_publisher_count"] += 1
             cross_pipeline_rows.append(row)
+        if country_code == "KR" and display_region == "overseas":
+            counters["known_kr_country_displayed_overseas_count"] += 1
+            mismatches.append({**row, "code": "known_kr_country_displayed_overseas"})
+        if country_code and country_code != "KR" and display_region == "domestic":
+            counters["known_non_kr_country_displayed_domestic_count"] += 1
+            mismatches.append({**row, "code": "known_non_kr_country_displayed_domestic"})
+        if display_region == "overseas" and p_region == "domestic":
+            counters["domestic_publisher_in_overseas_result_count"] += 1
+        if display_region == "domestic" and p_region == "overseas":
+            counters["overseas_publisher_in_domestic_result_count"] += 1
+        if display_region == "overseas" and country_code:
+            expected_country_option = "unknown" if country_code == "KR" else country_code
+            if expected_country_option == "unknown":
+                counters["unknown_country_option_containing_known_country_count"] += 1
         if (
             item.get("collection_pipeline") != calculated.get("collection_pipeline")
             or item.get("publisher_region") != calculated.get("publisher_region")
@@ -525,6 +587,15 @@ def final_status(contract: dict[str, Any], region: dict[str, Any], top50: dict[s
         return "FAIL"
     if top50.get("adjacent_before_direct_count", 0) or top50.get("unnatural_score_level_count", 0):
         return "FAIL"
+    region_counts = defaultdict(int, region.get("counts", {}))
+    display_fail_keys = (
+        "known_kr_country_displayed_overseas_count",
+        "known_non_kr_country_displayed_domestic_count",
+        "domestic_publisher_in_overseas_result_count",
+        "unknown_country_option_containing_known_country_count",
+    )
+    if any(region_counts[key] for key in display_fail_keys):
+        return "FAIL"
     if region.get("counts", {}).get("stored_region_mismatch_count", 0):
         return "PASS_WITH_REGION_FIX_REQUIRED"
     return "PASS"
@@ -651,6 +722,13 @@ def render_markdown(report: dict[str, Any]) -> str:
             f"- Domestic pipeline with overseas publisher candidate: {region_counts['domestic_pipeline_overseas_publisher_count']}",
             f"- Stored publisher-region mismatch count: {region_counts['stored_region_mismatch_count']}",
             f"- Unknown publisher region count: {report['region_audit']['unknown_count']}",
+            f"- Display region domestic count: {region_counts['display_region_domestic']}",
+            f"- Display region overseas count: {region_counts['display_region_overseas']}",
+            f"- Display basis publisher country code: {region_counts['display_region_basis_publisher_country_code']}",
+            f"- Known KR country displayed overseas: {region_counts['known_kr_country_displayed_overseas_count']}",
+            f"- Known non-KR country displayed domestic: {region_counts['known_non_kr_country_displayed_domestic_count']}",
+            f"- Domestic publisher in overseas result: {region_counts['domestic_publisher_in_overseas_result_count']}",
+            f"- Unknown country option containing known country: {region_counts['unknown_country_option_containing_known_country_count']}",
             "",
             "## Relevance Sort Top 50",
             "",
@@ -708,6 +786,10 @@ def write_outputs(report: dict[str, Any], samples: list[dict[str, Any]], mismatc
         "source",
         "collector_region",
         "publisher_region_candidate",
+        "publisher_country_code",
+        "publisher_country_confidence",
+        "display_region",
+        "display_region_basis",
         "original_url",
     ]
     write_csv(output_dir / "news_score_samples.csv", samples, sample_fields)

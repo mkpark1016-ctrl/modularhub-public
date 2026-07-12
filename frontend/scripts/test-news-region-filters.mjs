@@ -4,6 +4,7 @@ import {
   compareNewsItems,
   getNewsCollectionLabel,
   getNewsDisplayRegion,
+  getNewsDisplayRegionReason,
   getNewsDisplayRegionLabel,
   getNewsPublisherDomain,
   getNewsPublisherLabel,
@@ -93,6 +94,34 @@ const items = [
     title: "No region metadata",
     published_at: "2026-07-01T00:00:00Z",
   },
+  {
+    id: 9,
+    title: "Korean publisher through overseas RSS",
+    publisher_name: "Chosunbiz",
+    publisher_country_code: "KR",
+    publisher_country_name: "대한민국",
+    publisher_country_confidence: "high",
+    publisher_region: "unknown",
+    collection_pipeline: "rss_overseas_pipeline",
+  },
+  {
+    id: 10,
+    title: "US publisher through domestic pipeline",
+    publisher_name: "US Publisher",
+    publisher_country_code: "US",
+    publisher_country_name: "미국",
+    publisher_country_confidence: "high",
+    publisher_region: "unknown",
+    collection_pipeline: "domestic_pipeline",
+  },
+  {
+    id: 11,
+    title: "Unknown country explicit domestic publisher region",
+    publisher_country_code: "",
+    publisher_country_confidence: "unknown",
+    publisher_region: "domestic",
+    collection_pipeline: "rss_overseas_pipeline",
+  },
 ];
 
 function filterByRegionAndQuery(region, query) {
@@ -112,6 +141,12 @@ assert.equal(getNewsDisplayRegion(items[4]), "domestic");
 assert.equal(getNewsDisplayRegion(items[5]), "overseas");
 assert.equal(getNewsDisplayRegion(items[6]), "domestic");
 assert.equal(getNewsDisplayRegion(items[7]), "domestic");
+assert.equal(getNewsDisplayRegion(items[8]), "domestic");
+assert.equal(getNewsDisplayRegionReason(items[8]).reason, "publisher_country_code");
+assert.equal(getNewsDisplayRegion(items[9]), "overseas");
+assert.equal(getNewsDisplayRegionReason(items[9]).reason, "publisher_country_code");
+assert.equal(getNewsDisplayRegion(items[10]), "domestic");
+assert.equal(getNewsDisplayRegionReason(items[10]).reason, "publisher_region");
 assert.equal(items[3].publisher_region, "unknown");
 assert.equal(getNewsRegionType(items[3]), "overseas");
 assert.equal(getNewsRegionLabel(items[3]), "해외");
@@ -126,19 +161,20 @@ assert.equal(getNewsCollectionLabel(items[2]), "해외 RSS 수집");
 assert.equal(getNewsCollectionLabel(items[0]), "국내 뉴스 검색 수집");
 
 const counts = newsRegionCounts(items);
-assert.deepEqual(counts, { all: 8, domestic: 5, overseas: 3 });
+assert.deepEqual(counts, { all: 11, domestic: 7, overseas: 4 });
 assert.equal(counts.all, counts.domestic + counts.overseas);
 assert.equal(Object.hasOwn(counts, "unknown"), false);
-assert.equal(filterByRegionAndQuery("all", "").length, 8);
-assert.deepEqual(filterByRegionAndQuery("domestic", "").map((item) => item.id), [1, 3, 5, 7, 8]);
-assert.deepEqual(filterByRegionAndQuery("overseas", "").map((item) => item.id), [2, 4, 6]);
+assert.equal(filterByRegionAndQuery("all", "").length, 11);
+assert.deepEqual(filterByRegionAndQuery("domestic", "").map((item) => item.id), [1, 3, 5, 7, 8, 9, 11]);
+assert.deepEqual(filterByRegionAndQuery("overseas", "").map((item) => item.id), [2, 4, 6, 10]);
 assert.deepEqual(filterByRegionAndQuery("unknown", "").map((item) => item.id), []);
 assert.deepEqual(filterByRegionAndQuery("domestic", "sbs").map((item) => item.id), [3]);
 assert.deepEqual(filterByRegionAndQuery("overseas", "school").map((item) => item.id), []);
 assert.deepEqual(filterByRegionAndQuery("all", "school").map((item) => item.id), [3]);
 
 const diagnostics = newsDisplayRegionDiagnostics(items);
-assert.equal(diagnostics.publisher_region, 3);
+assert.equal(diagnostics.publisher_country_code, 2);
+assert.equal(diagnostics.publisher_region, 4);
 assert.equal(diagnostics.collection_pipeline, 2);
 assert.equal(diagnostics.collection_source, 2);
 assert.equal(diagnostics.fallback_default_domestic, 1);

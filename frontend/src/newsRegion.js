@@ -18,6 +18,14 @@ function sourceSuggestsOverseas(item) {
   return text.includes("해외") || text.includes("rss") || text.includes("overseas");
 }
 
+function confirmedPublisherCountryCode(item) {
+  const code = textValue(item?.publisher_country_code).toUpperCase();
+  const confidence = textValue(item?.publisher_country_confidence).toLowerCase();
+  if (!/^[A-Z]{2}$/.test(code)) return "";
+  if (confidence === "unknown") return "";
+  return code;
+}
+
 export function getNewsPublisherLabel(item) {
   return (
     textValue(item?.publisher_name) ||
@@ -41,18 +49,26 @@ export function getNewsCollectionLabel(item) {
 }
 
 export function getNewsDisplayRegionReason(item) {
+  const countryCode = confirmedPublisherCountryCode(item);
+  if (countryCode) {
+    return {
+      region: countryCode === "KR" ? "domestic" : "overseas",
+      reason: "publisher_country_code",
+      basis: "publisher_country_code",
+    };
+  }
   if (item?.publisher_region === "domestic" || item?.publisher_region === "overseas") {
-    return { region: item.publisher_region, reason: "publisher_region" };
+    return { region: item.publisher_region, reason: "publisher_region", basis: "publisher_region" };
   }
   if (item?.collection_pipeline === "domestic_pipeline") {
-    return { region: "domestic", reason: "collection_pipeline" };
+    return { region: "domestic", reason: "collection_pipeline", basis: "collection_pipeline" };
   }
   if (item?.collection_pipeline === "rss_overseas_pipeline") {
-    return { region: "overseas", reason: "collection_pipeline" };
+    return { region: "overseas", reason: "collection_pipeline", basis: "collection_pipeline" };
   }
-  if (sourceSuggestsDomestic(item)) return { region: "domestic", reason: "collection_source" };
-  if (sourceSuggestsOverseas(item)) return { region: "overseas", reason: "collection_source" };
-  return { region: "domestic", reason: "fallback_default_domestic" };
+  if (sourceSuggestsDomestic(item)) return { region: "domestic", reason: "collection_source", basis: "collection_source" };
+  if (sourceSuggestsOverseas(item)) return { region: "overseas", reason: "collection_source", basis: "collection_source" };
+  return { region: "domestic", reason: "fallback_default_domestic", basis: "fallback" };
 }
 
 export function getNewsDisplayRegion(item) {
@@ -78,6 +94,7 @@ export function newsDisplayRegionCounts(items) {
 
 export function newsDisplayRegionDiagnostics(items) {
   const diagnostics = {
+    publisher_country_code: 0,
     publisher_region: 0,
     collection_pipeline: 0,
     collection_source: 0,

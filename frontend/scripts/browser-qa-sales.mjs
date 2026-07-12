@@ -196,10 +196,21 @@ try {
   const overseasCount = displayRegionCounts.overseas;
   const countryOptions = getOverseasCountryOptions(newsItems, getNewsDisplayRegion);
   const countryOptionTotal = countryOptions.reduce((sum, option) => sum + option.count, 0);
+  const knownKrDisplayedOverseas = newsItems.filter(
+    (item) => String(item.publisher_country_code || "").toUpperCase() === "KR" && getNewsDisplayRegion(item) === "overseas",
+  );
+  const knownNonKrDisplayedDomestic = newsItems.filter(
+    (item) => {
+      const code = String(item.publisher_country_code || "").toUpperCase();
+      return /^[A-Z]{2}$/.test(code) && code !== "KR" && String(item.publisher_country_confidence || "") !== "unknown" && getNewsDisplayRegion(item) === "domestic";
+    },
+  );
   check(displayRegionCounts.all === newsItems.length, "display region total should match news count");
   check(domesticCount + overseasCount === newsItems.length, "news display region counts should add up to total");
   check(countryOptionTotal === overseasCount, "country option counts should add up to overseas count");
   check(!countryOptions.some((option) => option.value === "KR"), "KR should not appear in overseas country options");
+  check(knownKrDisplayedOverseas.length === 0, "known KR publisher country must not be displayed as overseas");
+  check(knownNonKrDisplayedDomestic.length === 0, "known non-KR publisher country must not be displayed as domestic");
   check(await selectForLabel(page, "국가").count() === 0, "country dropdown should be hidden before overseas filter");
   check(await page.getByRole("button", { name: /지역 미확인/ }).count() === 0, "unknown region button should not be visible");
   check(await selectForLabel(page, "출처").count() === 0, "source dropdown should not be rendered");
