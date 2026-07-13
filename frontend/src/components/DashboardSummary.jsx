@@ -33,7 +33,7 @@ export default function DashboardSummary({
           <Kpi id="active-business" label="진행 중 사업" value={summary.active} />
           <Kpi id="due-within-7" label="마감 7일 이내" value={summary.dueWithin7} />
           <Kpi id="recently-posted-business" label="최근 7일 신규 사업" value={summary.recentlyPosted7} />
-          <Kpi id="important-business" label="중요공고" value={summary.important} />
+          <Kpi id="important-business" label="우선 검토" value={summary.important} />
           <Kpi id="recent-direct-news" label="최근 7일 직접 관련 뉴스" value={summary.recentDirect7} />
         </div>
         <p className="kpi-helper">최근 7일 전체 뉴스 {Number(summary.recentNews7 || 0).toLocaleString("ko-KR")}건 · 연관 산업 {Number(summary.recentAdjacent7 || 0).toLocaleString("ko-KR")}건</p>

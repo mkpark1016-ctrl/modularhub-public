@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { getBusinessSummary, isImportantBusiness, parseDate } from "../src/businessInsights.js";
+import { getBusinessPriorityInfo, getBusinessSummary, isImportantBusiness, parseDate } from "../src/businessInsights.js";
 import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
@@ -166,7 +166,15 @@ try {
   await selectFilter(page, "빠른 필터", "important");
   await waitForCardCount(page, importantBusinessCount, "important business quick filter mismatch");
   const importantText = await page.locator("main").innerText();
+  check(importantText.includes("우선 검토"), "important quick filter should be labeled as priority review");
+  check(importantText.includes("검토 예정"), "scheduled review timing should be visible in important filter");
+  check(importantText.includes("중장기 검토"), "long-term review timing should be visible in important filter");
   check(!importantText.includes("R26BK01510994"), "closed known important bid should not appear in important filter");
+  const liveImportant = businessItems.filter((item) => isImportantBusiness(item, businessAsOf));
+  const liveTimingLabels = new Set(liveImportant.map((item) => getBusinessPriorityInfo(item, businessAsOf).reviewLabel));
+  check(liveTimingLabels.has("즉시 검토"), "live important set should include immediate review");
+  check(liveTimingLabels.has("검토 예정"), "live important set should include scheduled review");
+  check(liveTimingLabels.has("중장기 검토"), "live important set should include long-term review");
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
   await waitForCardCount(page, businessItems.length, "business reset after important filter failed");
 

@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import {
   compareBusinessBySort,
   getBusinessPriority,
@@ -13,78 +15,107 @@ import {
 
 const now = new Date("2026-07-05T00:00:00+09:00");
 
-const urgent = {
+const d1 = {
   id: 1,
-  title: "Urgent school equipment",
+  title: "Urgent modular school",
   opportunity_status: "active",
   posted_at: "2026-07-01",
-  due_at: "2026-07-08",
-  days_until_deadline: 3,
+  due_at: "2026-07-06",
   source_type: "bid",
+  amount: 2_000_000_000,
 };
 
-const important = { ...urgent, id: 2, days_until_deadline: 20, due_at: "2026-07-25", is_known_important: true };
-const recent = { ...urgent, id: 3, title: "Routine school equipment", days_until_deadline: 15, due_at: "2026-07-20", posted_at: "2026-07-03" };
-const recentDirect = { ...recent, id: 7, title: "모듈러 교실 제작 설치", posted_at: "2026-07-04" };
-const contest = { ...urgent, id: 4, days_until_deadline: 15, due_at: "2026-07-20", posted_at: "2026-06-01", source_type: "public_agency_contest" };
-const watch = { ...urgent, id: 5, days_until_deadline: 40, due_at: "2026-08-20", posted_at: "2026-06-01" };
-const closed = { ...urgent, id: 6, opportunity_status: "closed", posted_at: "2026-06-01", days_until_deadline: -1, due_at: "2026-07-01" };
-const closedImportant = { ...important, id: 8, opportunity_status: "closed", posted_at: "2026-05-11", days_until_deadline: -55, due_at: "2026-05-11" };
-const canceledUrgent = { ...urgent, id: 9, notice_status: "취소공고", days_until_deadline: 3 };
-const highValueDirect = { ...watch, id: 10, title: "모듈러 주택 공급 사업", amount: 2_000_000_000 };
-const futureHighPriority = { ...highValueDirect, id: 11, is_known_important: true, days_until_deadline: 30 };
-const unknownFutureHigh = { ...highValueDirect, id: 12, opportunity_status: "unknown", due_at: "2026-08-15", days_until_deadline: 41 };
-const unknownWithoutDeadline = { ...contest, id: 13, opportunity_status: "unknown", due_at: "", days_until_deadline: 0 };
+const d5 = { ...d1, id: 2, due_at: "2026-07-10" };
+const d22 = { ...d1, id: 3, due_at: "2026-07-27" };
+const d80 = { ...d1, id: 4, source_type: "procurement_plan", due_at: "2026-09-23" };
+const recentAdjacent = { ...d1, id: 5, title: "Routine school equipment", due_at: "2026-07-20", posted_at: "2026-07-03", amount: 0 };
+const contest = { ...d1, id: 6, title: "Public housing contest", due_at: "2026-07-20", posted_at: "2026-06-01", source_type: "public_agency_contest", amount: 0 };
+const closed = { ...d1, id: 7, opportunity_status: "closed", posted_at: "2026-06-01", due_at: "2026-07-01" };
+const closedImportant = { ...d1, id: 8, opportunity_status: "closed", posted_at: "2026-05-11", due_at: "2026-05-11", is_known_important: true };
+const canceledUrgent = { ...d1, id: 9, notice_status: "취소공고", due_at: "2026-07-08" };
+const knownFuture = { ...recentAdjacent, id: 10, is_known_important: true, due_at: "2026-08-04" };
+const unknownWithoutDeadline = { ...contest, id: 11, opportunity_status: "unknown", due_at: "", days_until_deadline: 0 };
+const noDeadlineActionable = { ...d1, id: 12, due_at: "", days_until_deadline: undefined };
 
-assert.equal(getBusinessPriority(urgent, now), "immediate");
-assert.equal(getBusinessPriority(important, now), "immediate");
-assert.equal(getBusinessPriority(recent, now), "this_week");
-assert.equal(getBusinessPriority(contest, now), "this_week");
-assert.equal(getBusinessPriority(watch, now), "watch");
-assert.equal(getBusinessPriority(closed, now), "archived");
+function expectTiming(item, reviewTiming, reviewLabel) {
+  const info = getBusinessPriorityInfo(item, now);
+  assert.equal(info.reviewTiming, reviewTiming);
+  assert.equal(info.reviewLabel, reviewLabel);
+  assert.equal(getBusinessPriority(item, now), reviewTiming);
+  return info;
+}
 
-assert.equal(isBusinessActionable(urgent, now), true);
+assert.equal(expectTiming(d1, "immediate", "즉시 검토").important, true);
+assert.equal(expectTiming(d5, "this_week", "이번 주 검토").important, true);
+assert.equal(expectTiming(d22, "scheduled", "검토 예정").important, true);
+assert.equal(expectTiming(d80, "long_term", "중장기 검토").important, true);
+assert.equal(expectTiming(closed, "closed", "마감").important, false);
+assert.equal(expectTiming(knownFuture, "scheduled", "검토 예정").priorityLevel, "critical");
+assert.equal(getBusinessPriorityInfo(knownFuture, now).important, true);
+
+assert.equal(isBusinessActionable(d1, now), true);
 assert.equal(isBusinessActionable(closedImportant, now), false);
 assert.equal(isBusinessActionable(canceledUrgent, now), false);
+assert.equal(isBusinessActionable(unknownWithoutDeadline, now), false);
+assert.equal(isBusinessActionable(noDeadlineActionable, now), true);
 
-assert.equal(isImportantBusiness(urgent, now), true);
-assert.equal(isImportantBusiness(important, now), true);
+assert.equal(isImportantBusiness(d1, now), true);
+assert.equal(isImportantBusiness(d22, now), true);
+assert.equal(isImportantBusiness(d80, now), true);
+assert.equal(isImportantBusiness(recentAdjacent, now), false);
+assert.equal(isImportantBusiness(contest, now), false);
 assert.equal(isImportantBusiness(closedImportant, now), false);
 assert.equal(isImportantBusiness(canceledUrgent, now), false);
-assert.equal(isImportantBusiness(recentDirect, now), true);
-assert.equal(isImportantBusiness(recent, now), false);
-assert.equal(isImportantBusiness(highValueDirect, now), true);
-assert.equal(isImportantBusiness(futureHighPriority, now), true);
-assert.equal(isImportantBusiness(unknownFutureHigh, now), true);
-assert.equal(isBusinessActionable(unknownWithoutDeadline, now), false);
 
-assert.ok(getBusinessPriorityReasons(urgent, now).includes("마감 D-3"));
-assert.ok(getBusinessPriorityReasons(important, now).includes("중요공고 후보"));
-assert.ok(getBusinessPriorityReasons(recent, now).includes("최근 공고"));
-assert.ok(getBusinessPriorityReasons(contest, now).includes("공공기관 공모"));
-assert.ok(getBusinessPriorityReasons(watch, now).length > 0);
-assert.ok(!getBusinessPriorityReasons(closedImportant, now).includes("중요공고 후보"));
+assert.ok(getBusinessPriorityReasons(d1, now).includes("마감 D-1"));
+assert.ok(getBusinessPriorityReasons(knownFuture, now).includes("기존 중요 사업"));
+assert.ok(getBusinessPriorityReasons(d80, now).includes("직접 관련"));
+assert.ok(!getBusinessPriorityReasons(closedImportant, now).includes("기존 중요 사업"));
 
-assert.equal(isRecentlyPosted(recent, 7, now), true);
-assert.equal(isDeadlineWithin(urgent, 7, now), true);
+assert.equal(isRecentlyPosted(recentAdjacent, 7, now), true);
+assert.equal(isDeadlineWithin(d1, 7, now), true);
 
-const sorted = [watch, closed, recent, urgent].sort((a, b) => compareBusinessBySort(a, b, "priority", now));
-assert.deepEqual(sorted.map((item) => item.id), [1, 3, 5, 6]);
+const sorted = [d80, closed, d22, d5, d1].sort((a, b) => compareBusinessBySort(a, b, "priority", now));
+assert.deepEqual(sorted.map((item) => item.id), [1, 2, 3, 4, 7]);
 
-const scoreSorted = [highValueDirect, urgent].sort((a, b) => compareBusinessBySort(a, b, "priority", now));
-assert.deepEqual(scoreSorted.map((item) => item.id), [1, 10]);
-assert.ok(getBusinessPriorityInfo(urgent, now).score > getBusinessPriorityInfo(watch, now).score);
+const deadlineSorted = [d80, d22, d1].sort((a, b) => compareBusinessBySort(a, b, "deadline", now));
+assert.deepEqual(deadlineSorted.map((item) => item.id), [1, 3, 4]);
 
-const deadlineSorted = [watch, recent, urgent].sort((a, b) => compareBusinessBySort(a, b, "deadline", now));
-assert.deepEqual(deadlineSorted.map((item) => item.id), [1, 3, 5]);
-
-const fixtureItems = [urgent, important, recent, recentDirect, contest, watch, closed, closedImportant, canceledUrgent];
+const fixtureItems = [d1, d5, d22, d80, recentAdjacent, contest, closed, closedImportant, canceledUrgent];
 const summary = getBusinessSummary(fixtureItems, now);
 const quickFilterImportantCount = fixtureItems.filter((item) => isImportantBusiness(item, now)).length;
-assert.equal(summary.active, 6);
-assert.equal(summary.dueWithin7, 1);
-assert.equal(summary.recentlyPosted7, 5);
+assert.equal(summary.dueWithin7, 2);
 assert.equal(summary.important, quickFilterImportantCount);
-assert.equal(summary.important, 3);
+assert.equal(summary.important, 4);
+
+const kstBoundaryNow = new Date("2026-07-12T23:30:00+09:00");
+assert.equal(getBusinessPriorityInfo({ ...d1, due_at: "2026-07-13" }, kstBoundaryNow).daysRemaining, 1);
+
+const businessPath = fileURLToPath(new URL("../public/data/business.json", import.meta.url));
+const businessItems = JSON.parse(readFileSync(businessPath, "utf8")).items || [];
+const asOf = new Date("2026-07-13T07:40:40+09:00");
+const byId = new Map(businessItems.map((item) => [String(item.id), item]));
+
+const jeju = byId.get("54");
+const busan = byId.get("5772");
+const icheon = byId.get("208");
+assert.ok(jeju && busan && icheon, "expected live business fixtures are missing");
+assert.deepEqual(
+  [jeju, busan, icheon].map((item) => {
+    const info = getBusinessPriorityInfo(item, asOf);
+    return [String(item.id), info.actionable, info.important, info.reviewTiming, info.reviewLabel];
+  }),
+  [
+    ["54", true, true, "immediate", "즉시 검토"],
+    ["5772", true, true, "scheduled", "검토 예정"],
+    ["208", true, true, "long_term", "중장기 검토"],
+  ],
+);
+
+const liveSummary = getBusinessSummary(businessItems, asOf);
+const liveImportant = businessItems.filter((item) => isImportantBusiness(item, asOf));
+assert.equal(liveSummary.important, liveImportant.length);
+assert.equal(liveImportant.filter((item) => getBusinessPriorityInfo(item, asOf).reviewTiming === "this_week").length, 0);
+assert.equal(liveImportant.some((item) => String(item.source_record_id || item.bid_no) === "R26BK01510994"), false);
 
 console.log("BUSINESS INSIGHT TESTS PASSED");

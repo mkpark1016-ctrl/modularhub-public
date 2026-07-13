@@ -166,6 +166,8 @@ code { overflow-wrap: anywhere; }
 .active-filter-chips .clear-all { border-radius: 6px; background: #f7f7f4; }
 .priority-badge.immediate { color: #991b1b; border-color: #fecaca; background: #fef2f2; }
 .priority-badge.this_week { color: #92400e; border-color: #fcd34d; background: #fffbeb; }
+.priority-badge.scheduled { color: #075985; border-color: #bae6fd; background: #f0f9ff; }
+.priority-badge.long_term { color: #315a3d; border-color: #bbd7c2; background: #f3faf4; }
 .priority-badge.watch { color: #174b31; border-color: #8fd0a6; background: #eef7f1; }
 .priority-badge.archived { color: #666; border-color: #d7d7d2; background: #f4f4f1; }
 .new-badge { color: #075985; border-color: #bae6fd; background: #f0f9ff; }

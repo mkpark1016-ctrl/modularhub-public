@@ -1,16 +1,29 @@
-export const PRIORITY_ORDER = {
+export const REVIEW_TIMING_ORDER = {
   immediate: 0,
   this_week: 1,
-  watch: 2,
-  archived: 3,
+  scheduled: 2,
+  long_term: 3,
+  closed: 4,
+  archived: 4,
+  watch: 3,
 };
 
-export const PRIORITY_LABELS = {
+export const PRIORITY_ORDER = REVIEW_TIMING_ORDER;
+
+export const REVIEW_TIMING_LABELS = {
   immediate: "즉시 검토",
   this_week: "이번 주 검토",
-  watch: "관찰",
+  scheduled: "검토 예정",
+  long_term: "중장기 검토",
+  closed: "마감",
   archived: "마감",
+  watch: "중장기 검토",
 };
+
+export const PRIORITY_LABELS = REVIEW_TIMING_LABELS;
+
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 const CLOSED_STATUS_VALUES = new Set([
   "closed",
@@ -54,16 +67,18 @@ export function parseDate(value) {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
-export function startOfDay(value = new Date()) {
+function kstDayStamp(value = new Date()) {
   const date = parseDate(value) || new Date();
-  date.setHours(0, 0, 0, 0);
-  return date;
+  const shifted = new Date(date.getTime() + KST_OFFSET_MS);
+  return Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate());
+}
+
+export function startOfDay(value = new Date()) {
+  return new Date(kstDayStamp(value) - KST_OFFSET_MS);
 }
 
 export function daysBetween(from, to) {
-  const start = startOfDay(from);
-  const end = startOfDay(to);
-  return Math.round((end.getTime() - start.getTime()) / 86400000);
+  return Math.round((kstDayStamp(to) - kstDayStamp(from)) / DAY_MS);
 }
 
 export function getBusinessStatus(item) {
@@ -142,6 +157,19 @@ function isHighValueBusiness(item) {
   return getAmountValue(item) >= HIGH_VALUE_THRESHOLD;
 }
 
+function reviewTimingForDays(actionable, daysRemaining) {
+  if (!actionable) return "closed";
+  if (daysRemaining === null) return "scheduled";
+  if (daysRemaining <= 3) return "immediate";
+  if (daysRemaining <= 7) return "this_week";
+  if (daysRemaining <= 30) return "scheduled";
+  return "long_term";
+}
+
+function priorityBadgeClass(reviewTiming) {
+  return reviewTiming === "closed" ? "archived" : reviewTiming;
+}
+
 export function isBusinessActionable(item, now = new Date()) {
   if (hasClosedSignal(item)) return false;
   const days = getDaysUntilDeadline(item, now);
@@ -161,79 +189,96 @@ export function isDeadlineWithin(item, days = 7, now = new Date()) {
 
 export function getBusinessPriorityInfo(item, now = new Date()) {
   const actionable = isBusinessActionable(item, now);
-  const deadline = getDaysUntilDeadline(item, now);
-  const dueWithin7 = deadline !== null && deadline >= 0 && deadline <= 7;
+  const daysRemaining = getDaysUntilDeadline(item, now);
+  const dueWithin7 = daysRemaining !== null && daysRemaining >= 0 && daysRemaining <= 7;
+  const dueWithin3 = daysRemaining !== null && daysRemaining >= 0 && daysRemaining <= 3;
   const recent = isRecentlyPosted(item, 7, now);
   const direct = hasDirectModularSignal(item);
   const knownImportant = item?.is_known_important === true;
   const urgentSignal = hasUrgentSignal(item);
   const highValue = isHighValueBusiness(item);
   const publicAgencyContest = item?.source_type === "public_agency_contest";
-  const reasons = [];
+  const priorityReasons = [];
+  const reviewTiming = reviewTimingForDays(actionable, daysRemaining);
+  const reviewLabel = REVIEW_TIMING_LABELS[reviewTiming];
 
   if (!actionable) {
     return {
       actionable: false,
-      score: 0,
-      priority: "archived",
-      level: "archived",
       important: false,
+      priorityScore: 0,
+      priorityLevel: "watch",
+      priorityReasons: ["마감 사업"],
+      daysRemaining,
+      reviewTiming,
+      reviewLabel,
+      reviewBadgeClass: priorityBadgeClass(reviewTiming),
+      score: 0,
+      priority: reviewTiming,
+      level: "watch",
       reasons: ["마감 사업"],
     };
   }
 
-  let score = 20;
+  let priorityScore = 20;
   if (dueWithin7) {
-    score += 35;
-    reasons.push(deadline === 0 ? "마감 D-Day" : `마감 D-${deadline}`);
+    priorityScore += 35;
+    priorityReasons.push(daysRemaining === 0 ? "마감 D-Day" : `마감 D-${daysRemaining}`);
   }
   if (knownImportant) {
-    score += 25;
-    reasons.push("중요공고 후보");
+    priorityScore += 25;
+    priorityReasons.push("기존 중요 사업");
   }
   if (urgentSignal) {
-    score += 10;
-    reasons.push("긴급");
+    priorityScore += 10;
+    priorityReasons.push("긴급");
   }
   if (recent) {
-    score += 15;
-    reasons.push("최근 공고");
+    priorityScore += 15;
+    priorityReasons.push("최근 등록");
   }
   if (direct) {
-    score += 15;
-    reasons.push("직접 관련");
+    priorityScore += 15;
+    priorityReasons.push("직접 관련");
   }
   if (publicAgencyContest) {
-    score += 10;
-    reasons.push("공공기관 공모");
+    priorityScore += 10;
+    priorityReasons.push("공공기관 공모");
   }
   if (highValue) {
-    score += 10;
-    reasons.push("고액 사업");
+    priorityScore += 10;
+    priorityReasons.push("고액 사업");
   }
 
-  const priority = dueWithin7 || knownImportant ? "immediate" : (recent || direct || publicAgencyContest ? "this_week" : "watch");
-  const level = dueWithin7 || knownImportant
-    ? "urgent"
-    : ((recent && direct) || (direct && highValue) || score >= 55 ? "high" : (priority === "this_week" ? "normal" : "watch"));
+  const priorityLevel = dueWithin3 || knownImportant
+    ? "critical"
+    : (dueWithin7 || (recent && direct) || (direct && highValue) || priorityScore >= 55 ? "high" : (direct || publicAgencyContest ? "normal" : "watch"));
   const important = actionable && (
     dueWithin7 ||
-    priority === "immediate" ||
-    level === "urgent" ||
-    level === "high" ||
+    knownImportant ||
+    priorityLevel === "critical" ||
+    priorityLevel === "high" ||
     (recent && direct) ||
     (direct && highValue)
   );
 
-  if (!reasons.length) reasons.push("진행 가능");
+  if (!priorityReasons.length) priorityReasons.push("진행 가능");
 
+  const normalizedScore = Math.min(100, priorityScore);
   return {
     actionable,
-    score: Math.min(100, score),
-    priority,
-    level,
     important,
-    reasons,
+    priorityScore: normalizedScore,
+    priorityLevel,
+    priorityReasons,
+    daysRemaining,
+    reviewTiming,
+    reviewLabel,
+    reviewBadgeClass: priorityBadgeClass(reviewTiming),
+    score: normalizedScore,
+    priority: reviewTiming,
+    level: priorityLevel,
+    reasons: priorityReasons,
   };
 }
 
@@ -242,15 +287,15 @@ export function isImportantBusiness(item, now = new Date()) {
 }
 
 export function getBusinessPriority(item, now = new Date()) {
-  return getBusinessPriorityInfo(item, now).priority;
+  return getBusinessPriorityInfo(item, now).reviewTiming;
 }
 
 export function getBusinessPriorityLabel(item, now = new Date()) {
-  return PRIORITY_LABELS[getBusinessPriority(item, now)];
+  return getBusinessPriorityInfo(item, now).reviewLabel;
 }
 
 export function getBusinessPriorityReasons(item, now = new Date()) {
-  return getBusinessPriorityInfo(item, now).reasons;
+  return getBusinessPriorityInfo(item, now).priorityReasons;
 }
 
 export function dDayLabel(item, now = new Date()) {
@@ -261,12 +306,16 @@ export function dDayLabel(item, now = new Date()) {
   return `마감 ${Math.abs(diff)}일 경과`;
 }
 
+function stableId(value) {
+  return String(value?.id || value?.source_record_id || value?.bid_no || value?.plan_no || "");
+}
+
 export function compareBusinessByPriority(a, b, now = new Date()) {
   const aInfo = getBusinessPriorityInfo(a, now);
   const bInfo = getBusinessPriorityInfo(b, now);
-  const priorityDelta = PRIORITY_ORDER[aInfo.priority] - PRIORITY_ORDER[bInfo.priority];
-  if (priorityDelta !== 0) return priorityDelta;
-  const scoreDelta = bInfo.score - aInfo.score;
+  const timingDelta = REVIEW_TIMING_ORDER[aInfo.reviewTiming] - REVIEW_TIMING_ORDER[bInfo.reviewTiming];
+  if (timingDelta !== 0) return timingDelta;
+  const scoreDelta = bInfo.priorityScore - aInfo.priorityScore;
   if (scoreDelta !== 0) return scoreDelta;
   const aDeadline = getDeadlineDate(a)?.getTime();
   const bDeadline = getDeadlineDate(b)?.getTime();
@@ -276,7 +325,7 @@ export function compareBusinessByPriority(a, b, now = new Date()) {
   const aPosted = getPostedDate(a)?.getTime() || 0;
   const bPosted = getPostedDate(b)?.getTime() || 0;
   if (aPosted !== bPosted) return bPosted - aPosted;
-  return String(a?.title || "").localeCompare(String(b?.title || ""), "ko-KR");
+  return stableId(a).localeCompare(stableId(b), "ko-KR", { numeric: true });
 }
 
 export function compareBusinessBySort(a, b, sort, now = new Date(), getAgency = () => "") {

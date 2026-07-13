@@ -17,7 +17,7 @@ import {
   compareBusinessBySort,
   dDayLabel,
   getBusinessPriority,
-  getBusinessPriorityLabel,
+  getBusinessPriorityInfo,
   getBusinessPriorityReasons,
   getBusinessStatus,
   getBusinessSummary,
@@ -102,7 +102,7 @@ const BUSINESS_PRIORITY_FILTERS = [
   { value: "this_week", label: "이번 주 검토" },
   { value: "recent7", label: "최근 7일 신규" },
   { value: "due7", label: "마감 7일 이내" },
-  { value: "important", label: "중요공고" },
+  { value: "important", label: "우선 검토" },
   { value: "favorites", label: "관심목록" },
 ];
 
@@ -438,6 +438,7 @@ function HomePage() {
         displayAgency={displayAgency}
         isFavorite={favorites.isBusinessFavorite}
         onToggleFavorite={favorites.toggleBusiness}
+        referenceDate={dashboardAsOf}
       />
       <SourceHealthPanel meta={metaState.data || {}} />
       <section className="category-grid" aria-label="서비스 카테고리">
@@ -580,15 +581,16 @@ function NewsFilters({ values, setParam, regionCounts, countryOptions, filteredC
   );
 }
 
-function PriorityBadge({ item }) {
-  const priority = getBusinessPriority(item);
-  return <span className={`priority-badge ${priority}`}>{getBusinessPriorityLabel(item)}</span>;
+function PriorityBadge({ item, referenceDate }) {
+  const info = getBusinessPriorityInfo(item, referenceDate);
+  return <span className={`priority-badge ${info.reviewBadgeClass}`}>{info.reviewLabel}</span>;
 }
 
-function BusinessCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
+function BusinessCard({ item, isFavorite, onToggleFavorite, recentlyViewed, referenceDate }) {
   const status = getBusinessStatus(item);
   const official = originalUrl(item);
-  const reasons = getBusinessPriorityReasons(item);
+  const info = getBusinessPriorityInfo(item, referenceDate);
+  const reasons = info.priorityReasons;
   const isContest = item.source_type === "public_agency_contest";
   const attachments = attachmentCount(item);
   return (
@@ -598,10 +600,10 @@ function BusinessCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
           <span>{displayAgency(item)}</span>
           <span>{businessKind(item)}</span>
           <span className={`status-badge ${status}`}>{getBusinessStatusLabel(item)}</span>
-          <PriorityBadge item={item} />
-          {isRecentlyPosted(item, 7) && <span className="new-badge">신규</span>}
+          {info.important && <span className="important">우선 검토</span>}
+          <PriorityBadge item={item} referenceDate={referenceDate} />
+          {isRecentlyPosted(item, 7, referenceDate) && <span className="new-badge">신규</span>}
           {recentlyViewed && <span>최근 본 항목</span>}
-          {isImportantBusiness(item) && <span className="important">중요공고</span>}
         </div>
         <FavoriteButton active={isFavorite} onClick={onToggleFavorite} />
       </div>
@@ -671,9 +673,14 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
 
 function BusinessListingPage() {
   const { loading, error, data } = useDataset("business");
+  const metaState = useDataset("meta");
   const [searchParams, setSearchParams] = useSearchParams();
   const favorites = useFavorites();
   const items = getItems(data);
+  const businessAsOf = useMemo(
+    () => parseDate(metaState.data?.generated_at) || parseDate(metaState.data?.last_updated_at) || new Date(),
+    [metaState.data?.generated_at, metaState.data?.last_updated_at],
+  );
   const values = {
     q: searchParams.get("q") || "",
     type: getValidParam(searchParams, "type", TYPE_OPTIONS.map((item) => item.value), "all"),
@@ -701,16 +708,16 @@ function BusinessListingPage() {
       );
       if (!filterMatches) return false;
       if (values.priority === "favorites" && !favorites.isBusinessFavorite(item.id)) return false;
-      if (values.priority === "recent7" && !isRecentlyPosted(item, 7)) return false;
-      if (values.priority === "due7" && !isDeadlineWithin(item, 7)) return false;
-      if (values.priority === "important" && !isImportantBusiness(item)) return false;
-      if (["immediate", "this_week"].includes(values.priority) && getBusinessPriority(item) !== values.priority) return false;
+      if (values.priority === "recent7" && !isRecentlyPosted(item, 7, businessAsOf)) return false;
+      if (values.priority === "due7" && !isDeadlineWithin(item, 7, businessAsOf)) return false;
+      if (values.priority === "important" && !isImportantBusiness(item, businessAsOf)) return false;
+      if (["immediate", "this_week"].includes(values.priority) && getBusinessPriority(item, businessAsOf) !== values.priority) return false;
       const text = getSearchText(item);
       return !queryTerms.length || queryTerms.every((term) => text.includes(term));
-    }).sort((a, b) => compareBusinessBySort(a, b, values.sort, new Date(), displayAgency));
-  }, [favorites, items, values.agency, values.priority, values.q, values.sort, values.status, values.type]);
+    }).sort((a, b) => compareBusinessBySort(a, b, values.sort, businessAsOf, displayAgency));
+  }, [businessAsOf, favorites, items, values.agency, values.priority, values.q, values.sort, values.status, values.type]);
 
-  const summary = useMemo(() => getBusinessSummary(items), [items]);
+  const summary = useMemo(() => getBusinessSummary(items, businessAsOf), [businessAsOf, items]);
   const chips = [
     { key: "q", active: Boolean(values.q), label: `검색어: ${values.q}`, onRemove: () => setParam("q", "") },
     { key: "priority", active: values.priority !== "all", label: BUSINESS_PRIORITY_FILTERS.find((item) => item.value === values.priority)?.label, onRemove: () => setParam("priority", "all") },
@@ -721,7 +728,7 @@ function BusinessListingPage() {
 
   let emptyMessage = "조건에 맞는 사업정보가 없습니다. 검색어 또는 필터를 줄여보세요.";
   if (values.priority === "favorites") emptyMessage = "관심목록에 저장한 사업이 없습니다.";
-  if (values.priority === "important") emptyMessage = "현재 진행 가능한 중요공고가 없습니다.";
+  if (values.priority === "important") emptyMessage = "현재 검토 가능한 우선 사업이 없습니다.";
   if (values.agency === "SH") emptyMessage = "현재 공개 가능한 SH 민간참여 공공주택 공모가 없습니다. SH 수집기는 정상 모니터링 중입니다.";
 
   return (
@@ -736,7 +743,7 @@ function BusinessListingPage() {
         <SummaryItem label="진행 중" value={summary.active} />
         <SummaryItem label="마감 7일" value={summary.dueWithin7} />
         <SummaryItem label="최근 7일" value={summary.recentlyPosted7} />
-        <SummaryItem label="중요공고" value={summary.important} />
+        <SummaryItem label="우선 검토" value={summary.important} />
       </section>
       <div className="content-layout">
         <BusinessFilters values={values} setParam={setParam} filteredCount={filtered.length} onReset={reset} chips={chips} favoriteCount={favorites.businessFavorites.length} />
@@ -759,6 +766,7 @@ function BusinessListingPage() {
               isFavorite={favorites.isBusinessFavorite(item.id)}
               onToggleFavorite={() => favorites.toggleBusiness(item.id)}
               recentlyViewed={favorites.recentBusiness.includes(String(item.id))}
+              referenceDate={businessAsOf}
             />
           ))}
         </section>
@@ -895,6 +903,7 @@ function DetailPage({ type }) {
   const { id } = useParams();
   const isBusiness = type === "business";
   const { loading, error, data } = useDataset(type);
+  const metaState = useDataset("meta");
   const favorites = useFavorites();
   const { addRecentBusiness, addRecentNews } = favorites;
   const item = getItems(data).find((entry) => String(entry.id) === String(id));
@@ -909,6 +918,8 @@ function DetailPage({ type }) {
   if (error || !item) return <Layout><div className="state error">해당 정보를 찾을 수 없습니다.</div></Layout>;
 
   const official = isBusiness ? originalUrl(item) : item.original_url;
+  const detailAsOf = parseDate(metaState.data?.generated_at) || parseDate(metaState.data?.last_updated_at) || new Date();
+  const businessPriorityInfo = isBusiness ? getBusinessPriorityInfo(item, detailAsOf) : null;
   const isContest = isBusiness && item.source_type === "public_agency_contest";
   const status = isBusiness ? getBusinessStatus(item) : "";
   const noticeStatus = isBusiness ? displayNoticeStatus(item) : "";
@@ -932,7 +943,8 @@ function DetailPage({ type }) {
             {!isBusiness && <span>{newsPublisherLabel}</span>}
             {!isBusiness && newsCollectionLabel && <span>{newsCollectionLabel}</span>}
             {isBusiness && <span className={`status-badge ${status}`}>{getBusinessStatusLabel(item)}</span>}
-            {isBusiness && <PriorityBadge item={item} />}
+            {isBusiness && businessPriorityInfo.important && <span className="important">우선 검토</span>}
+            {isBusiness && <PriorityBadge item={item} referenceDate={detailAsOf} />}
             {isBusiness && noticeStatus && <span>{noticeStatus}</span>}
           </div>
           <FavoriteButton
@@ -942,7 +954,7 @@ function DetailPage({ type }) {
           />
         </div>
         <h1>{item.title}</h1>
-        {isBusiness && <div className="reason-list">{getBusinessPriorityReasons(item).map((reason) => <span key={reason}>{reason}</span>)}</div>}
+        {isBusiness && <div className="reason-list">{getBusinessPriorityReasons(item, detailAsOf).map((reason) => <span key={reason}>{reason}</span>)}</div>}
         <dl className="detail-grid">
           {!isBusiness && <div><dt>표시 지역</dt><dd>{newsDisplayRegionLabel}</dd></div>}
           {!isBusiness && <div><dt>발행 국가</dt><dd>{newsCountryLabel}</dd></div>}
@@ -951,6 +963,8 @@ function DetailPage({ type }) {
           <div><dt>{isBusiness ? "마감일" : "수집 경로"}</dt><dd>{isBusiness ? formatDate(item.due_at || item.deadline_at) : (newsCollectionLabel || item.collection_source || item.source || "뉴스")}</dd></div>
           {isBusiness && <div><dt>수요기관</dt><dd>{item.demand_org || "-"}</dd></div>}
           {isBusiness && <div><dt>업무구분</dt><dd>{[item.business_type, item.business_subtype].filter(Boolean).join(" / ") || "-"}</dd></div>}
+          {isBusiness && <div><dt>검토 시점</dt><dd>{businessPriorityInfo.reviewLabel}</dd></div>}
+          {isBusiness && <div><dt>우선 검토</dt><dd>{businessPriorityInfo.important ? "대상" : "아님"}</dd></div>}
           {isBusiness && <div><dt>금액</dt><dd>{formatAmount(item.amount)}</dd></div>}
           {isBusiness && <div><dt>공고/판단/계획번호</dt><dd>{item.source_record_id || item.plan_no || item.bid_no || "-"}</dd></div>}
           {isBusiness && <div><dt>진행 상태</dt><dd>{getBusinessStatusLabel(item)}</dd></div>}
