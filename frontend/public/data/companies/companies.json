@@ -117,10 +117,74 @@
           "area": "recent_signals",
           "status": "not_confirmed",
           "note": "No 2025+ source-backed signal was confirmed in this wave."
+        },
+        {
+          "area": "dart_financials",
+          "status": "api_key_required",
+          "description": "OPENDART_API_KEY is required before DART identity, filing, and audit financial lookup can be completed.",
+          "source_ids": [],
+          "verified_at": ""
         }
       ],
       "unsupported_claims": [],
-      "conflicting_values": []
+      "conflicting_values": [],
+      "dart_identity": {
+        "company_id": "yuchang-enc",
+        "legal_name": "유창이앤씨",
+        "normalized_legal_name": "유창이앤씨",
+        "aliases": [
+          "유창이앤씨",
+          "유창E&C",
+          "Yuchang E&C"
+        ],
+        "dart_corp_code": "",
+        "stock_code": "",
+        "corp_class": "",
+        "business_number": "",
+        "corporate_registration_number": "",
+        "headquarters": null,
+        "website_url": "https://yoochangenc.com/",
+        "identity_status": "api_key_required",
+        "identity_confidence": "unknown",
+        "identity_source_ids": [],
+        "verified_at": "",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00",
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed."
+      },
+      "filing_availability": {
+        "status": "api_key_required",
+        "searched_period": [
+          2025,
+          2024,
+          2023,
+          2022,
+          2021
+        ],
+        "searched_report_types": [
+          "audit_report",
+          "consolidated_audit_report",
+          "business_report",
+          "corrected_audit_report",
+          "corrected_business_report"
+        ],
+        "reports_found_count": 0,
+        "selected_reports": [],
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed.",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00"
+      },
+      "dart_filings": [],
+      "audit_information": [],
+      "financial_summary": {
+        "financial_area_status": "api_key_required",
+        "years_available": [],
+        "modular_segment_available": false,
+        "modular_segment_name": null,
+        "modular_segment_revenue": null,
+        "modular_segment_operating_profit": null,
+        "modular_segment_basis": "No audited DART report was fetched or parsed for modular segment disclosure.",
+        "source_ids": [],
+        "verified_at": ""
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -351,10 +415,74 @@
           "area": "project_details",
           "status": "partial",
           "note": "Representative projects are official examples, but client, amount, role, and delivery dates remain unverified."
+        },
+        {
+          "area": "dart_financials",
+          "status": "api_key_required",
+          "description": "OPENDART_API_KEY is required before DART identity, filing, and audit financial lookup can be completed.",
+          "source_ids": [],
+          "verified_at": ""
         }
       ],
       "unsupported_claims": [],
-      "conflicting_values": []
+      "conflicting_values": [],
+      "dart_identity": {
+        "company_id": "kumkang-kind",
+        "legal_name": "금강공업",
+        "normalized_legal_name": "금강공업",
+        "aliases": [
+          "금강공업",
+          "KUMKANG KIND",
+          "Kumkang Kind"
+        ],
+        "dart_corp_code": "",
+        "stock_code": "",
+        "corp_class": "",
+        "business_number": "",
+        "corporate_registration_number": "",
+        "headquarters": "60 Gwacheondaero 7da-gil, Gwacheon-si, Gyeonggi-do, Korea",
+        "website_url": "https://www.kumkangkind.com/",
+        "identity_status": "api_key_required",
+        "identity_confidence": "unknown",
+        "identity_source_ids": [],
+        "verified_at": "",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00",
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed."
+      },
+      "filing_availability": {
+        "status": "api_key_required",
+        "searched_period": [
+          2025,
+          2024,
+          2023,
+          2022,
+          2021
+        ],
+        "searched_report_types": [
+          "audit_report",
+          "consolidated_audit_report",
+          "business_report",
+          "corrected_audit_report",
+          "corrected_business_report"
+        ],
+        "reports_found_count": 0,
+        "selected_reports": [],
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed.",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00"
+      },
+      "dart_filings": [],
+      "audit_information": [],
+      "financial_summary": {
+        "financial_area_status": "api_key_required",
+        "years_available": [],
+        "modular_segment_available": false,
+        "modular_segment_name": null,
+        "modular_segment_revenue": null,
+        "modular_segment_operating_profit": null,
+        "modular_segment_basis": "No audited DART report was fetched or parsed for modular segment disclosure.",
+        "source_ids": [],
+        "verified_at": ""
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -451,10 +579,74 @@
           "area": "recent_signals",
           "status": "not_confirmed",
           "note": "No 2025+ source-backed signal was confirmed in this wave."
+        },
+        {
+          "area": "dart_financials",
+          "status": "api_key_required",
+          "description": "OPENDART_API_KEY is required before DART identity, filing, and audit financial lookup can be completed.",
+          "source_ids": [],
+          "verified_at": ""
         }
       ],
       "unsupported_claims": [],
-      "conflicting_values": []
+      "conflicting_values": [],
+      "dart_identity": {
+        "company_id": "planm",
+        "legal_name": "플랜엠",
+        "normalized_legal_name": "플랜엠",
+        "aliases": [
+          "플랜엠",
+          "Plan M",
+          "PlanM"
+        ],
+        "dart_corp_code": "",
+        "stock_code": "",
+        "corp_class": "",
+        "business_number": "",
+        "corporate_registration_number": "",
+        "headquarters": null,
+        "website_url": null,
+        "identity_status": "api_key_required",
+        "identity_confidence": "unknown",
+        "identity_source_ids": [],
+        "verified_at": "",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00",
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed."
+      },
+      "filing_availability": {
+        "status": "api_key_required",
+        "searched_period": [
+          2025,
+          2024,
+          2023,
+          2022,
+          2021
+        ],
+        "searched_report_types": [
+          "audit_report",
+          "consolidated_audit_report",
+          "business_report",
+          "corrected_audit_report",
+          "corrected_business_report"
+        ],
+        "reports_found_count": 0,
+        "selected_reports": [],
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed.",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00"
+      },
+      "dart_filings": [],
+      "audit_information": [],
+      "financial_summary": {
+        "financial_area_status": "api_key_required",
+        "years_available": [],
+        "modular_segment_available": false,
+        "modular_segment_name": null,
+        "modular_segment_revenue": null,
+        "modular_segment_operating_profit": null,
+        "modular_segment_basis": "No audited DART report was fetched or parsed for modular segment disclosure.",
+        "source_ids": [],
+        "verified_at": ""
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -550,10 +742,73 @@
           "area": "recent_signals",
           "status": "not_confirmed",
           "note": "No 2025+ source-backed signal was confirmed in this wave."
+        },
+        {
+          "area": "dart_financials",
+          "status": "api_key_required",
+          "description": "OPENDART_API_KEY is required before DART identity, filing, and audit financial lookup can be completed.",
+          "source_ids": [],
+          "verified_at": ""
         }
       ],
       "unsupported_claims": [],
-      "conflicting_values": []
+      "conflicting_values": [],
+      "dart_identity": {
+        "company_id": "daeseung-engineering",
+        "legal_name": "대승엔지니어링",
+        "normalized_legal_name": "대승엔지니어링",
+        "aliases": [
+          "대승엔지니어링",
+          "Daeseung Engineering"
+        ],
+        "dart_corp_code": "",
+        "stock_code": "",
+        "corp_class": "",
+        "business_number": "",
+        "corporate_registration_number": "",
+        "headquarters": null,
+        "website_url": null,
+        "identity_status": "api_key_required",
+        "identity_confidence": "unknown",
+        "identity_source_ids": [],
+        "verified_at": "",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00",
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed."
+      },
+      "filing_availability": {
+        "status": "api_key_required",
+        "searched_period": [
+          2025,
+          2024,
+          2023,
+          2022,
+          2021
+        ],
+        "searched_report_types": [
+          "audit_report",
+          "consolidated_audit_report",
+          "business_report",
+          "corrected_audit_report",
+          "corrected_business_report"
+        ],
+        "reports_found_count": 0,
+        "selected_reports": [],
+        "not_found_reason": "OPENDART_API_KEY is not set; no live DART lookup was performed.",
+        "searched_at": "2026-07-13T13:08:05.334807+00:00"
+      },
+      "dart_filings": [],
+      "audit_information": [],
+      "financial_summary": {
+        "financial_area_status": "api_key_required",
+        "years_available": [],
+        "modular_segment_available": false,
+        "modular_segment_name": null,
+        "modular_segment_revenue": null,
+        "modular_segment_operating_profit": null,
+        "modular_segment_basis": "No audited DART report was fetched or parsed for modular segment disclosure.",
+        "source_ids": [],
+        "verified_at": ""
+      }
     },
     {
       "schema_version": "company-master-v1",

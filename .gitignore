@@ -22,6 +22,9 @@ logs/
 artifacts/
 *.log
 
+# API/cache downloads
+.cache/
+
 # Debug / temporary exports
 exports/debug/
 exports/tmp/

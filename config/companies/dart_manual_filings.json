@@ -1,0 +1,5 @@
+{
+  "schema_version": "dart-manual-filings-v1",
+  "description": "Optional manual OpenDART receipt numbers for company research. Keep empty unless a receipt number is manually verified from DART.",
+  "filings": []
+}
