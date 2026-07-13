@@ -44,9 +44,17 @@ def main() -> int:
     require(validation["unverified_numeric_count"] == 0, "unverified numeric count must be zero")
     require(validation["production_capacity_without_unit_count"] == 0, "production capacity without unit count must be zero")
     require(validation["financial_scope_missing_count"] == 0, "financial scope missing count must be zero")
-    require(all(company["review_status"] == "unresearched" for company in companies), "seed companies should be unresearched")
-    require(all(not company["production"] for company in companies), "seed production data must remain empty")
-    require(all(not company["financials"] for company in companies), "seed financial data must remain empty")
+    wave1_ids = {"yuchang-enc", "kumkang-kind", "planm", "daeseung-engineering"}
+    require(
+        all(company["review_status"] in {"unresearched", "collecting", "partially_verified"} for company in companies),
+        "company review statuses must follow the research lifecycle",
+    )
+    require(
+        all(company["review_status"] == "unresearched" for company in companies if company["company_id"] not in wave1_ids),
+        "non-Wave 1 companies should remain unresearched",
+    )
+    require(all(not company["production"] for company in companies), "production data must remain empty until facility facts are verified")
+    require(all(not company["financials"] for company in companies), "financial data must remain empty without filing sources")
     research = research_required(companies)
     require(sum(1 for row in research if row["analysis_tier"] == "tier_1" and row["research_priority"] == "P0") == 8, "Tier 1 research priority mismatch")
     print("COMPANY UNIVERSE TESTS PASSED")

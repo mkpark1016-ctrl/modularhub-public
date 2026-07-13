@@ -7,8 +7,12 @@
       "schema_version": "company-master-v1",
       "company_id": "yuchang-enc",
       "company_name": "유창이앤씨",
-      "company_name_en": null,
-      "aliases": ["유창이앤씨", "유창E&C", "Yuchang E&C"],
+      "company_name_en": "YooChang",
+      "aliases": [
+        "유창이앤씨",
+        "유창E&C",
+        "Yuchang E&C"
+      ],
       "country_code": "KR",
       "company_type": "specialist_manufacturer",
       "competitive_role": "direct_competitor",
@@ -17,21 +21,28 @@
       "modular_methods": [],
       "target_markets": [],
       "headquarters": null,
-      "website_url": null,
+      "website_url": "https://yoochangenc.com/",
       "listed_market": null,
       "ticker": null,
-      "summary": null,
-      "last_verified_at": null,
-      "data_confidence": "unknown",
-      "review_status": "unresearched",
+      "summary": "Official website identity and URL are confirmed; source-backed modular production, project, bidding, technology, and financial details remain under research.",
+      "last_verified_at": "2026-07-13",
+      "data_confidence": "low",
+      "review_status": "collecting",
       "company_profile": {
         "modular_business_started_year": null,
         "business_status": null,
         "scope": {
-          "design": null,
-          "manufacturing": null,
-          "construction": null,
-          "integration": null
+          "design": "not_confirmed",
+          "engineering": "not_confirmed",
+          "module_manufacturing": "not_confirmed",
+          "material_procurement": "not_confirmed",
+          "transportation": "not_confirmed",
+          "lifting": "not_confirmed",
+          "site_installation": "not_confirmed",
+          "general_construction": "not_confirmed",
+          "maintenance": "not_confirmed",
+          "rental": "not_confirmed",
+          "operation": "not_confirmed"
         }
       },
       "production": [],
@@ -50,41 +61,189 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [
+        {
+          "source_id": "yc_official_home",
+          "source_type": "official_website",
+          "source_name": "YooChang official website",
+          "title": "YooChang official website",
+          "source_url": "https://yoochangenc.com/",
+          "published_at": null,
+          "accessed_at": "2026-07-13",
+          "publisher": "YooChang",
+          "primary_source": true,
+          "confidence": "low",
+          "verification_note": "Official SPA was reachable and identifies the site as YooChang; detailed modular facts were not exposed in crawlable text."
+        }
+      ],
+      "field_sources": {
+        "company_name_en": [
+          "yc_official_home"
+        ],
+        "website_url": [
+          "yc_official_home"
+        ],
+        "summary": [
+          "yc_official_home"
+        ]
+      },
+      "research_gaps": [
+        {
+          "area": "production",
+          "status": "facility_not_confirmed",
+          "note": "No source-backed production facility record was confirmed in this wave."
+        },
+        {
+          "area": "projects",
+          "status": "not_confirmed",
+          "note": "No source-backed project record was confirmed in this wave."
+        },
+        {
+          "area": "bidding",
+          "status": "not_confirmed",
+          "note": "No validated competitor bidding dataset was found in the repository."
+        },
+        {
+          "area": "technology",
+          "status": "not_confirmed",
+          "note": "No official patent, certification, or technology record was confirmed in this wave."
+        },
+        {
+          "area": "financials",
+          "status": "not_confirmed",
+          "note": "No source-backed financial record was confirmed in this wave."
+        },
+        {
+          "area": "recent_signals",
+          "status": "not_confirmed",
+          "note": "No 2025+ source-backed signal was confirmed in this wave."
+        }
+      ],
+      "unsupported_claims": [],
+      "conflicting_values": []
     },
     {
       "schema_version": "company-master-v1",
       "company_id": "kumkang-kind",
       "company_name": "금강공업",
-      "company_name_en": null,
-      "aliases": ["금강공업", "KUMKANG KIND", "Kumkang Kind"],
+      "company_name_en": "Kumkang Kind",
+      "aliases": [
+        "금강공업",
+        "KUMKANG KIND",
+        "Kumkang Kind"
+      ],
       "country_code": "KR",
       "company_type": "specialist_manufacturer",
       "competitive_role": "direct_competitor",
       "analysis_tier": "tier_1",
-      "business_status": null,
-      "modular_methods": [],
-      "target_markets": [],
-      "headquarters": null,
-      "website_url": null,
+      "business_status": "active",
+      "modular_methods": [
+        "steel_volumetric"
+      ],
+      "target_markets": [
+        "temporary_building",
+        "overseas"
+      ],
+      "headquarters": "60 Gwacheondaero 7da-gil, Gwacheon-si, Gyeonggi-do, Korea",
+      "website_url": "https://www.kumkangkind.com/",
       "listed_market": null,
       "ticker": null,
-      "summary": null,
-      "last_verified_at": null,
-      "data_confidence": "unknown",
-      "review_status": "unresearched",
+      "summary": "Official website lists modular architecture as a business area and describes its Modular Unit System as a steel-frame unit system using dry panels and slabs; representative official examples include Jang Bogo Antarctic Station and the 2018 Pyeongchang organizing committee office.",
+      "last_verified_at": "2026-07-13",
+      "data_confidence": "medium",
+      "review_status": "collecting",
       "company_profile": {
         "modular_business_started_year": null,
         "business_status": null,
         "scope": {
-          "design": null,
-          "manufacturing": null,
-          "construction": null,
-          "integration": null
+          "design": "not_confirmed",
+          "engineering": "not_confirmed",
+          "module_manufacturing": "confirmed",
+          "material_procurement": "confirmed",
+          "transportation": "not_confirmed",
+          "lifting": "not_confirmed",
+          "site_installation": "not_confirmed",
+          "general_construction": "not_confirmed",
+          "maintenance": "not_confirmed",
+          "rental": "not_confirmed",
+          "operation": "not_confirmed"
         }
       },
       "production": [],
-      "project_portfolio": [],
+      "project_portfolio": [
+        {
+          "project_id": "kumkang-jangbogo-antarctic-station",
+          "project_name": "Jang Bogo Antarctic Station modular project",
+          "client": null,
+          "location": "Antarctica",
+          "building_use": "overseas_research_facility",
+          "modular_method": "steel_volumetric",
+          "company_role": "unknown",
+          "project_status": "unknown",
+          "contract_date": null,
+          "start_date": null,
+          "completion_date": null,
+          "floors": null,
+          "households": null,
+          "module_count": null,
+          "gross_floor_area": null,
+          "contract_amount": null,
+          "amount_scope": null,
+          "source_ids": [
+            "kumkang_official_home"
+          ],
+          "verified_at": "2026-07-13",
+          "confidence": "medium"
+        },
+        {
+          "project_id": "kumkang-pyeongchang-2018-office",
+          "project_name": "2018 Pyeongchang organizing committee office modular project",
+          "client": null,
+          "location": "Pyeongchang, Korea",
+          "building_use": "temporary_office",
+          "modular_method": "steel_volumetric",
+          "company_role": "unknown",
+          "project_status": "unknown",
+          "contract_date": null,
+          "start_date": null,
+          "completion_date": null,
+          "floors": null,
+          "households": null,
+          "module_count": null,
+          "gross_floor_area": null,
+          "contract_amount": null,
+          "amount_scope": null,
+          "source_ids": [
+            "kumkang_official_home"
+          ],
+          "verified_at": "2026-07-13",
+          "confidence": "medium"
+        },
+        {
+          "project_id": "kumkang-goryeong-modular-residential-complex",
+          "project_name": "Goryeong modular residential complex",
+          "client": null,
+          "location": "Goryeong, Korea",
+          "building_use": "housing",
+          "modular_method": "steel_volumetric",
+          "company_role": "unknown",
+          "project_status": "completed",
+          "contract_date": null,
+          "start_date": null,
+          "completion_date": null,
+          "floors": null,
+          "households": null,
+          "module_count": null,
+          "gross_floor_area": null,
+          "contract_amount": null,
+          "amount_scope": null,
+          "source_ids": [
+            "kumkang_official_home"
+          ],
+          "verified_at": "2026-07-13",
+          "confidence": "low"
+        }
+      ],
       "bidding_performance": [],
       "technology": {
         "structural_systems": [],
@@ -95,18 +254,118 @@
         "new_construction_technologies": [],
         "patents": [],
         "innovative_procurement_products": [],
-        "factory_completion_rate": null
+        "factory_completion_rate": null,
+        "proprietary_systems": [
+          {
+            "technology_id": "kumkang-modular-unit-system",
+            "record_type": "proprietary_system",
+            "name": "Kumkang Modular Unit System",
+            "registration_number": null,
+            "application_number": null,
+            "status": "claimed",
+            "registered_at": null,
+            "expired_at": null,
+            "technology_area": "steel modular unit system",
+            "summary": "Official website describes a steel-frame modular unit system using dry panels and dry slabs, assembled by stacking unit modules.",
+            "owner": "금강공업",
+            "joint_owners": [],
+            "source_ids": [
+              "kumkang_official_home"
+            ],
+            "verified_at": "2026-07-13",
+            "confidence": "medium"
+          }
+        ]
       },
       "financials": [],
-      "recent_signals": [],
-      "sources": []
+      "recent_signals": [
+        {
+          "signal_id": "kumkang-goryeong-completion",
+          "signal_type": "project_award",
+          "title": "Kumkang announced completion of Goryeong modular residential complex on its official news list",
+          "occurred_at": null,
+          "summary": "The official homepage news list includes an item titled that Kumkang completed a Goryeong modular residential complex.",
+          "significance": "Confirms recent public-facing modular project activity, but detailed project scope still requires primary project documentation.",
+          "source_ids": [
+            "kumkang_official_home"
+          ],
+          "verified_at": "2026-07-13",
+          "confidence": "low"
+        }
+      ],
+      "sources": [
+        {
+          "source_id": "kumkang_official_home",
+          "source_type": "official_website",
+          "source_name": "Kumkang Kind official website",
+          "title": "Kumkang Kind official website and modular business overview",
+          "source_url": "https://www.kumkangkind.com/",
+          "published_at": null,
+          "accessed_at": "2026-07-13",
+          "publisher": "Kumkang Kind",
+          "primary_source": true,
+          "confidence": "high",
+          "verification_note": "Official website exposes company address, Modular Unit System business area, modular system description, representative project examples, and recent modular news title."
+        }
+      ],
+      "field_sources": {
+        "company_name_en": [
+          "kumkang_official_home"
+        ],
+        "website_url": [
+          "kumkang_official_home"
+        ],
+        "headquarters": [
+          "kumkang_official_home"
+        ],
+        "business_status": [
+          "kumkang_official_home"
+        ],
+        "modular_methods": [
+          "kumkang_official_home"
+        ],
+        "target_markets": [
+          "kumkang_official_home"
+        ],
+        "summary": [
+          "kumkang_official_home"
+        ]
+      },
+      "research_gaps": [
+        {
+          "area": "production",
+          "status": "facility_not_confirmed",
+          "note": "No source-backed factory capacity or facility record was confirmed in this wave."
+        },
+        {
+          "area": "bidding",
+          "status": "not_confirmed",
+          "note": "No validated competitor bidding dataset was found in the repository."
+        },
+        {
+          "area": "financials",
+          "status": "not_confirmed",
+          "note": "Listed-company financials require a DART/KRX filing source before storage."
+        },
+        {
+          "area": "project_details",
+          "status": "partial",
+          "note": "Representative projects are official examples, but client, amount, role, and delivery dates remain unverified."
+        }
+      ],
+      "unsupported_claims": [],
+      "conflicting_values": []
     },
     {
       "schema_version": "company-master-v1",
       "company_id": "planm",
       "company_name": "플랜엠",
       "company_name_en": null,
-      "aliases": ["플랜엠", "Plan M", "PlanM"],
+      "aliases": [
+        "플랜엠",
+        "Plan M",
+        "PlanM"
+      ],
       "country_code": "KR",
       "company_type": "modular_integrator",
       "competitive_role": "direct_competitor",
@@ -119,17 +378,24 @@
       "listed_market": null,
       "ticker": null,
       "summary": null,
-      "last_verified_at": null,
+      "last_verified_at": "2026-07-13",
       "data_confidence": "unknown",
-      "review_status": "unresearched",
+      "review_status": "collecting",
       "company_profile": {
         "modular_business_started_year": null,
         "business_status": null,
         "scope": {
-          "design": null,
-          "manufacturing": null,
-          "construction": null,
-          "integration": null
+          "design": "not_confirmed",
+          "engineering": "not_confirmed",
+          "module_manufacturing": "not_confirmed",
+          "material_procurement": "not_confirmed",
+          "transportation": "not_confirmed",
+          "lifting": "not_confirmed",
+          "site_installation": "not_confirmed",
+          "general_construction": "not_confirmed",
+          "maintenance": "not_confirmed",
+          "rental": "not_confirmed",
+          "operation": "not_confirmed"
         }
       },
       "production": [],
@@ -148,14 +414,57 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "field_sources": {},
+      "research_gaps": [
+        {
+          "area": "official_website",
+          "status": "not_confirmed",
+          "note": "The reachable planm.co.kr site appears unrelated to modular construction and was not used as a source."
+        },
+        {
+          "area": "production",
+          "status": "facility_not_confirmed",
+          "note": "No source-backed production facility record was confirmed in this wave."
+        },
+        {
+          "area": "projects",
+          "status": "not_confirmed",
+          "note": "No source-backed project record was confirmed in this wave."
+        },
+        {
+          "area": "bidding",
+          "status": "not_confirmed",
+          "note": "No validated competitor bidding dataset was found in the repository."
+        },
+        {
+          "area": "technology",
+          "status": "not_confirmed",
+          "note": "No official patent, certification, or technology record was confirmed in this wave."
+        },
+        {
+          "area": "financials",
+          "status": "not_confirmed",
+          "note": "No source-backed financial record was confirmed in this wave."
+        },
+        {
+          "area": "recent_signals",
+          "status": "not_confirmed",
+          "note": "No 2025+ source-backed signal was confirmed in this wave."
+        }
+      ],
+      "unsupported_claims": [],
+      "conflicting_values": []
     },
     {
       "schema_version": "company-master-v1",
       "company_id": "daeseung-engineering",
       "company_name": "대승엔지니어링",
       "company_name_en": null,
-      "aliases": ["대승엔지니어링", "Daeseung Engineering"],
+      "aliases": [
+        "대승엔지니어링",
+        "Daeseung Engineering"
+      ],
       "country_code": "KR",
       "company_type": "specialist_manufacturer",
       "competitive_role": "direct_competitor",
@@ -168,17 +477,24 @@
       "listed_market": null,
       "ticker": null,
       "summary": null,
-      "last_verified_at": null,
+      "last_verified_at": "2026-07-13",
       "data_confidence": "unknown",
-      "review_status": "unresearched",
+      "review_status": "collecting",
       "company_profile": {
         "modular_business_started_year": null,
         "business_status": null,
         "scope": {
-          "design": null,
-          "manufacturing": null,
-          "construction": null,
-          "integration": null
+          "design": "not_confirmed",
+          "engineering": "not_confirmed",
+          "module_manufacturing": "not_confirmed",
+          "material_procurement": "not_confirmed",
+          "transportation": "not_confirmed",
+          "lifting": "not_confirmed",
+          "site_installation": "not_confirmed",
+          "general_construction": "not_confirmed",
+          "maintenance": "not_confirmed",
+          "rental": "not_confirmed",
+          "operation": "not_confirmed"
         }
       },
       "production": [],
@@ -197,14 +513,57 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "field_sources": {},
+      "research_gaps": [
+        {
+          "area": "official_website",
+          "status": "not_confirmed",
+          "note": "No official website with crawlable, source-backed modular facts was confirmed in this wave."
+        },
+        {
+          "area": "production",
+          "status": "facility_not_confirmed",
+          "note": "No source-backed production facility record was confirmed in this wave."
+        },
+        {
+          "area": "projects",
+          "status": "not_confirmed",
+          "note": "No source-backed project record was confirmed in this wave."
+        },
+        {
+          "area": "bidding",
+          "status": "not_confirmed",
+          "note": "No validated competitor bidding dataset was found in the repository."
+        },
+        {
+          "area": "technology",
+          "status": "not_confirmed",
+          "note": "No official patent, certification, or technology record was confirmed in this wave."
+        },
+        {
+          "area": "financials",
+          "status": "not_confirmed",
+          "note": "No source-backed financial record was confirmed in this wave."
+        },
+        {
+          "area": "recent_signals",
+          "status": "not_confirmed",
+          "note": "No 2025+ source-backed signal was confirmed in this wave."
+        }
+      ],
+      "unsupported_claims": [],
+      "conflicting_values": []
     },
     {
       "schema_version": "company-master-v1",
       "company_id": "sungji-steel",
       "company_name": "성지제강",
       "company_name_en": null,
-      "aliases": ["성지제강", "Sungji Steel"],
+      "aliases": [
+        "성지제강",
+        "Sungji Steel"
+      ],
       "country_code": "KR",
       "company_type": "specialist_manufacturer",
       "competitive_role": "direct_competitor",
@@ -253,7 +612,10 @@
       "company_id": "geogwang-enterprise",
       "company_name": "거광기업",
       "company_name_en": null,
-      "aliases": ["거광기업", "Geogwang Enterprise"],
+      "aliases": [
+        "거광기업",
+        "Geogwang Enterprise"
+      ],
       "country_code": "KR",
       "company_type": "specialist_manufacturer",
       "competitive_role": "direct_competitor",
@@ -302,7 +664,11 @@
       "company_id": "m3-systems",
       "company_name": "엠쓰리시스템즈",
       "company_name_en": null,
-      "aliases": ["엠쓰리시스템즈", "M3 Systems", "M3시스템즈"],
+      "aliases": [
+        "엠쓰리시스템즈",
+        "M3 Systems",
+        "M3시스템즈"
+      ],
       "country_code": "KR",
       "company_type": "solution_provider",
       "competitive_role": "direct_competitor",
@@ -351,7 +717,11 @@
       "company_id": "jinwoo-inc",
       "company_name": "진우아이앤씨",
       "company_name_en": null,
-      "aliases": ["진우아이앤씨", "진우I&C", "Jinwoo I&C"],
+      "aliases": [
+        "진우아이앤씨",
+        "진우I&C",
+        "Jinwoo I&C"
+      ],
       "country_code": "KR",
       "company_type": "specialist_manufacturer",
       "competitive_role": "direct_competitor",
@@ -400,7 +770,10 @@
       "company_id": "nrb",
       "company_name": "엔알비",
       "company_name_en": null,
-      "aliases": ["엔알비", "NRB"],
+      "aliases": [
+        "엔알비",
+        "NRB"
+      ],
       "country_code": "KR",
       "company_type": "modular_integrator",
       "competitive_role": "substitute_competitor",
@@ -449,7 +822,11 @@
       "company_id": "gs-ec",
       "company_name": "GS건설",
       "company_name_en": null,
-      "aliases": ["GS건설", "GS E&C", "GS Engineering & Construction"],
+      "aliases": [
+        "GS건설",
+        "GS E&C",
+        "GS Engineering & Construction"
+      ],
       "country_code": "KR",
       "company_type": "general_contractor",
       "competitive_role": "internal_baseline",
@@ -498,7 +875,10 @@
       "company_id": "hyundai-engineering",
       "company_name": "현대엔지니어링",
       "company_name_en": null,
-      "aliases": ["현대엔지니어링", "Hyundai Engineering"],
+      "aliases": [
+        "현대엔지니어링",
+        "Hyundai Engineering"
+      ],
       "country_code": "KR",
       "company_type": "general_contractor",
       "competitive_role": "strategic_benchmark",
@@ -547,7 +927,11 @@
       "company_id": "hyundai-ec",
       "company_name": "현대건설",
       "company_name_en": null,
-      "aliases": ["현대건설", "Hyundai E&C", "Hyundai Engineering & Construction"],
+      "aliases": [
+        "현대건설",
+        "Hyundai E&C",
+        "Hyundai Engineering & Construction"
+      ],
       "country_code": "KR",
       "company_type": "general_contractor",
       "competitive_role": "strategic_benchmark",
@@ -596,7 +980,11 @@
       "company_id": "samsung-ct-construction",
       "company_name": "삼성물산 건설부문",
       "company_name_en": null,
-      "aliases": ["삼성물산 건설부문", "삼성물산", "Samsung C&T Construction"],
+      "aliases": [
+        "삼성물산 건설부문",
+        "삼성물산",
+        "Samsung C&T Construction"
+      ],
       "country_code": "KR",
       "company_type": "general_contractor",
       "competitive_role": "strategic_benchmark",
@@ -645,7 +1033,11 @@
       "company_id": "posco-enc",
       "company_name": "포스코이앤씨",
       "company_name_en": null,
-      "aliases": ["포스코이앤씨", "POSCO E&C", "포스코건설"],
+      "aliases": [
+        "포스코이앤씨",
+        "POSCO E&C",
+        "포스코건설"
+      ],
       "country_code": "KR",
       "company_type": "general_contractor",
       "competitive_role": "strategic_benchmark",
@@ -694,7 +1086,11 @@
       "company_id": "haean-architecture",
       "company_name": "해안건축",
       "company_name_en": null,
-      "aliases": ["해안건축", "HAEAHN Architecture", "해안종합건축사사무소"],
+      "aliases": [
+        "해안건축",
+        "HAEAHN Architecture",
+        "해안종합건축사사무소"
+      ],
       "country_code": "KR",
       "company_type": "design_firm",
       "competitive_role": "design_influencer",
@@ -743,7 +1139,11 @@
       "company_id": "da-group-engineering",
       "company_name": "dA그룹엔지니어링",
       "company_name_en": null,
-      "aliases": ["dA그룹엔지니어링", "디에이그룹엔지니어링", "dA Group Engineering"],
+      "aliases": [
+        "dA그룹엔지니어링",
+        "디에이그룹엔지니어링",
+        "dA Group Engineering"
+      ],
       "country_code": "KR",
       "company_type": "engineering_firm",
       "competitive_role": "design_influencer",
@@ -792,7 +1192,11 @@
       "company_id": "samoo-architects-engineers",
       "company_name": "삼우종합건축",
       "company_name_en": null,
-      "aliases": ["삼우종합건축", "SAMOO Architects & Engineers", "삼우"],
+      "aliases": [
+        "삼우종합건축",
+        "SAMOO Architects & Engineers",
+        "삼우"
+      ],
       "country_code": "KR",
       "company_type": "design_firm",
       "competitive_role": "design_influencer",

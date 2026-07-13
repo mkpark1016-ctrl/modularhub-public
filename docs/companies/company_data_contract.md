@@ -46,6 +46,13 @@ Each company must include:
 
 Unverified numeric values must remain `null`. Unverified collections must remain empty arrays.
 
+Field-level verification uses `field_sources`, a map from a master field name
+to one or more `source_id` values. Structured research records such as
+production facilities, projects, bidding records, technology records,
+financials, and recent signals use `source_ids`, `verified_at`, `confidence`,
+and optional `verification_note` fields. Facts and numbers without source
+links must not be stored as verified data.
+
 ## Enums
 
 `competitive_role`:
@@ -209,6 +216,9 @@ Capacity values must not be converted across units unless the source provides th
 - accessed date
 - confidence
 - verification note
+
+The same `source_url` should not be duplicated inside a Wave research set.
+When the same source supports multiple facts, reuse the same `source_id`.
 
 ## List Card View Model
 
