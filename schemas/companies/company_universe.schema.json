@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modularhub.local/schemas/company_universe.schema.json",
+  "title": "ModularHub Company Universe",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "companies"],
+  "properties": {
+    "schema_version": { "const": "company-universe-v1" },
+    "generated_at": { "type": "string" },
+    "description": { "type": "string" },
+    "companies": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/company" }
+    }
+  },
+  "$defs": {
+    "competitive_role": {
+      "enum": [
+        "direct_competitor",
+        "substitute_competitor",
+        "strategic_benchmark",
+        "design_influencer",
+        "internal_baseline",
+        "watchlist"
+      ]
+    },
+    "company_type": {
+      "enum": [
+        "general_contractor",
+        "specialist_manufacturer",
+        "modular_integrator",
+        "design_firm",
+        "engineering_firm",
+        "material_supplier",
+        "solution_provider"
+      ]
+    },
+    "modular_method": {
+      "enum": [
+        "steel_volumetric",
+        "steel_panelized",
+        "pc_volumetric",
+        "pc_ramen",
+        "wood_volumetric",
+        "wood_panelized",
+        "hybrid",
+        "bathroom_pod",
+        "unknown"
+      ]
+    },
+    "target_market": {
+      "enum": [
+        "public_housing",
+        "private_housing",
+        "school",
+        "dormitory",
+        "hotel",
+        "senior_housing",
+        "office",
+        "military",
+        "hospital",
+        "industrial",
+        "data_center",
+        "temporary_building",
+        "overseas",
+        "unknown"
+      ]
+    },
+    "review_status": {
+      "enum": ["unresearched", "collecting", "partially_verified", "verified", "update_required"]
+    },
+    "data_confidence": {
+      "enum": ["high", "medium", "low", "review", "unknown"]
+    },
+    "analysis_tier": {
+      "enum": ["tier_1", "tier_1b", "tier_2", "tier_3", "watchlist"]
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "source_id",
+        "source_type",
+        "source_name",
+        "source_url",
+        "published_at",
+        "accessed_at",
+        "confidence",
+        "verification_note"
+      ],
+      "properties": {
+        "source_id": { "type": "string" },
+        "source_type": { "type": "string" },
+        "source_name": { "type": "string" },
+        "source_url": { "type": ["string", "null"] },
+        "published_at": { "type": ["string", "null"] },
+        "accessed_at": { "type": ["string", "null"] },
+        "confidence": { "$ref": "#/$defs/data_confidence" },
+        "verification_note": { "type": ["string", "null"] }
+      }
+    },
+    "company": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "company_id",
+        "company_name",
+        "company_name_en",
+        "aliases",
+        "country_code",
+        "company_type",
+        "competitive_role",
+        "analysis_tier",
+        "business_status",
+        "modular_methods",
+        "target_markets",
+        "headquarters",
+        "website_url",
+        "listed_market",
+        "ticker",
+        "summary",
+        "last_verified_at",
+        "data_confidence",
+        "review_status",
+        "company_profile",
+        "production",
+        "project_portfolio",
+        "bidding_performance",
+        "technology",
+        "financials",
+        "recent_signals",
+        "sources"
+      ],
+      "properties": {
+        "schema_version": { "const": "company-master-v1" },
+        "company_id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "company_name": { "type": "string" },
+        "company_name_en": { "type": ["string", "null"] },
+        "aliases": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "country_code": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "company_type": { "$ref": "#/$defs/company_type" },
+        "competitive_role": { "$ref": "#/$defs/competitive_role" },
+        "analysis_tier": { "$ref": "#/$defs/analysis_tier" },
+        "business_status": { "type": ["string", "null"] },
+        "modular_methods": { "type": "array", "items": { "$ref": "#/$defs/modular_method" } },
+        "target_markets": { "type": "array", "items": { "$ref": "#/$defs/target_market" } },
+        "headquarters": { "type": ["string", "null"] },
+        "website_url": { "type": ["string", "null"] },
+        "listed_market": { "type": ["string", "null"] },
+        "ticker": { "type": ["string", "null"] },
+        "summary": { "type": ["string", "null"] },
+        "last_verified_at": { "type": ["string", "null"] },
+        "data_confidence": { "$ref": "#/$defs/data_confidence" },
+        "review_status": { "$ref": "#/$defs/review_status" },
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } }
+      }
+    }
+  }
+}
