@@ -12,6 +12,42 @@ export const PRIORITY_LABELS = {
   archived: "마감",
 };
 
+const CLOSED_STATUS_VALUES = new Set([
+  "closed",
+  "canceled",
+  "cancelled",
+  "ended",
+  "terminated",
+  "completed",
+  "awarded",
+]);
+
+const CLOSED_TEXT_PATTERNS = [
+  /마감/,
+  /취소/,
+  /종료/,
+  /유찰/,
+  /계약\s*완료/,
+  /closed/i,
+  /cancel(?:ed|led|lation)?/i,
+  /terminated/i,
+  /completed/i,
+  /awarded/i,
+];
+
+const URGENT_TEXT_PATTERNS = [/긴급/, /urgent/i];
+const DIRECT_MODULAR_PATTERNS = [
+  /모듈러/,
+  /modular/i,
+  /프리패브/,
+  /프리팹/,
+  /조립식/,
+  /prefab/i,
+  /prefabricated/i,
+  /off-?site/i,
+];
+const HIGH_VALUE_THRESHOLD = 1_000_000_000;
+
 export function parseDate(value) {
   if (!value) return null;
   const parsed = new Date(value);
@@ -65,27 +101,148 @@ export function isRecentlyPosted(item, days = 7, now = new Date()) {
   return diff >= 0 && diff <= days;
 }
 
+function statusText(item) {
+  return [
+    item?.lifecycle_status,
+    item?.opportunity_status,
+    item?.notice_status,
+    item?.bid_status,
+    item?.status,
+  ].filter(Boolean).join(" ");
+}
+
+function hasClosedSignal(item) {
+  const status = String(getBusinessStatus(item) || "").toLowerCase();
+  if (CLOSED_STATUS_VALUES.has(status)) return true;
+  return CLOSED_TEXT_PATTERNS.some((pattern) => pattern.test(statusText(item)));
+}
+
+function hasUrgentSignal(item) {
+  return URGENT_TEXT_PATTERNS.some((pattern) => pattern.test(`${item?.title || ""} ${statusText(item)}`));
+}
+
+function hasDirectModularSignal(item) {
+  if (item?.modular_relevance === "confirmed") return true;
+  const text = [
+    item?.title,
+    item?.summary,
+    item?.business_type,
+    item?.business_subtype,
+    item?.keywords,
+  ].filter(Boolean).join(" ");
+  return DIRECT_MODULAR_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+function getAmountValue(item) {
+  const value = Number(item?.amount || item?.estimated_amount || item?.budget_amount);
+  return Number.isFinite(value) ? value : 0;
+}
+
+function isHighValueBusiness(item) {
+  return getAmountValue(item) >= HIGH_VALUE_THRESHOLD;
+}
+
+export function isBusinessActionable(item, now = new Date()) {
+  if (hasClosedSignal(item)) return false;
+  const days = getDaysUntilDeadline(item, now);
+  const deadline = getDeadlineDate(item);
+  if (days !== null && days < 0) return false;
+  const status = getBusinessStatus(item);
+  if (status === "active") return true;
+  if (deadline && days !== null && days >= 0) return true;
+  return false;
+}
+
 export function isDeadlineWithin(item, days = 7, now = new Date()) {
-  if (!isBusinessActive(item)) return false;
+  if (!isBusinessActionable(item, now)) return false;
   const diff = getDaysUntilDeadline(item, now);
   return diff !== null && diff >= 0 && diff <= days;
 }
 
-export function getBusinessPriority(item, now = new Date()) {
-  if (getBusinessStatus(item) === "closed") return "archived";
-  if (isDeadlineWithin(item, 7, now) || item?.is_known_important === true) return "immediate";
-  if (
-    isBusinessActive(item) &&
-    (
-      isRecentlyPosted(item, 7, now) ||
-      item?.modular_relevance === "confirmed" ||
-      item?.source_type === "public_agency_contest"
-    )
-  ) {
-    return "this_week";
+export function getBusinessPriorityInfo(item, now = new Date()) {
+  const actionable = isBusinessActionable(item, now);
+  const deadline = getDaysUntilDeadline(item, now);
+  const dueWithin7 = deadline !== null && deadline >= 0 && deadline <= 7;
+  const recent = isRecentlyPosted(item, 7, now);
+  const direct = hasDirectModularSignal(item);
+  const knownImportant = item?.is_known_important === true;
+  const urgentSignal = hasUrgentSignal(item);
+  const highValue = isHighValueBusiness(item);
+  const publicAgencyContest = item?.source_type === "public_agency_contest";
+  const reasons = [];
+
+  if (!actionable) {
+    return {
+      actionable: false,
+      score: 0,
+      priority: "archived",
+      level: "archived",
+      important: false,
+      reasons: ["마감 사업"],
+    };
   }
-  if (isBusinessActive(item)) return "watch";
-  return "archived";
+
+  let score = 20;
+  if (dueWithin7) {
+    score += 35;
+    reasons.push(deadline === 0 ? "마감 D-Day" : `마감 D-${deadline}`);
+  }
+  if (knownImportant) {
+    score += 25;
+    reasons.push("중요공고 후보");
+  }
+  if (urgentSignal) {
+    score += 10;
+    reasons.push("긴급");
+  }
+  if (recent) {
+    score += 15;
+    reasons.push("최근 공고");
+  }
+  if (direct) {
+    score += 15;
+    reasons.push("직접 관련");
+  }
+  if (publicAgencyContest) {
+    score += 10;
+    reasons.push("공공기관 공모");
+  }
+  if (highValue) {
+    score += 10;
+    reasons.push("고액 사업");
+  }
+
+  const priority = dueWithin7 || knownImportant ? "immediate" : (recent || direct || publicAgencyContest ? "this_week" : "watch");
+  const level = dueWithin7 || knownImportant
+    ? "urgent"
+    : ((recent && direct) || (direct && highValue) || score >= 55 ? "high" : (priority === "this_week" ? "normal" : "watch"));
+  const important = actionable && (
+    dueWithin7 ||
+    priority === "immediate" ||
+    level === "urgent" ||
+    level === "high" ||
+    (recent && direct) ||
+    (direct && highValue)
+  );
+
+  if (!reasons.length) reasons.push("진행 가능");
+
+  return {
+    actionable,
+    score: Math.min(100, score),
+    priority,
+    level,
+    important,
+    reasons,
+  };
+}
+
+export function isImportantBusiness(item, now = new Date()) {
+  return getBusinessPriorityInfo(item, now).important;
+}
+
+export function getBusinessPriority(item, now = new Date()) {
+  return getBusinessPriorityInfo(item, now).priority;
 }
 
 export function getBusinessPriorityLabel(item, now = new Date()) {
@@ -93,19 +250,7 @@ export function getBusinessPriorityLabel(item, now = new Date()) {
 }
 
 export function getBusinessPriorityReasons(item, now = new Date()) {
-  const reasons = [];
-  const deadline = getDaysUntilDeadline(item, now);
-  if (getBusinessStatus(item) === "closed") reasons.push("마감 사업");
-  if (deadline !== null && deadline >= 0 && deadline <= 7) {
-    reasons.push(deadline === 0 ? "마감 D-Day" : `마감 D-${deadline}`);
-  }
-  if (item?.is_known_important === true) reasons.push("중요공고");
-  if (isRecentlyPosted(item, 7, now)) reasons.push("최근 등록");
-  if (item?.modular_relevance === "confirmed") reasons.push("모듈러 명시");
-  if (isBusinessActive(item) && item?.source_type === "public_agency_contest") reasons.push("공공기관 공모");
-  if (!reasons.length && isBusinessActive(item)) reasons.push("진행 중 사업");
-  if (!reasons.length) reasons.push("보관 대상");
-  return reasons;
+  return getBusinessPriorityInfo(item, now).reasons;
 }
 
 export function dDayLabel(item, now = new Date()) {
@@ -117,8 +262,12 @@ export function dDayLabel(item, now = new Date()) {
 }
 
 export function compareBusinessByPriority(a, b, now = new Date()) {
-  const priorityDelta = PRIORITY_ORDER[getBusinessPriority(a, now)] - PRIORITY_ORDER[getBusinessPriority(b, now)];
+  const aInfo = getBusinessPriorityInfo(a, now);
+  const bInfo = getBusinessPriorityInfo(b, now);
+  const priorityDelta = PRIORITY_ORDER[aInfo.priority] - PRIORITY_ORDER[bInfo.priority];
   if (priorityDelta !== 0) return priorityDelta;
+  const scoreDelta = bInfo.score - aInfo.score;
+  if (scoreDelta !== 0) return scoreDelta;
   const aDeadline = getDeadlineDate(a)?.getTime();
   const bDeadline = getDeadlineDate(b)?.getTime();
   if (aDeadline && bDeadline && aDeadline !== bDeadline) return aDeadline - bDeadline;
@@ -153,7 +302,7 @@ export function compareBusinessBySort(a, b, sort, now = new Date(), getAgency = 
 }
 
 export function getBusinessSummary(items, now = new Date()) {
-  const activeItems = items.filter(isBusinessActive);
+  const activeItems = items.filter((item) => isBusinessActionable(item, now));
   const sourceCounts = new Map();
   activeItems.forEach((item) => {
     const name = item.source_name || item.source || item.organization || "기타";
@@ -171,7 +320,7 @@ export function getBusinessSummary(items, now = new Date()) {
       return days === null || days > 30;
     }).length,
     recentlyPosted7: items.filter((item) => isRecentlyPosted(item, 7, now)).length,
-    important: items.filter((item) => item.is_known_important === true).length,
+    important: items.filter((item) => isImportantBusiness(item, now)).length,
     sourceCounts: [...sourceCounts.entries()].sort((a, b) => b[1] - a[1]),
   };
 }

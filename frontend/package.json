@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src --max-warnings=0",
+    "test:business": "node scripts/test-business-insights.mjs",
     "test:news": "node scripts/test-news-region-filters.mjs",
     "test:news-ime": "node scripts/test-news-search-ime.mjs",
     "test:news-url": "node scripts/test-news-url-compat.mjs",

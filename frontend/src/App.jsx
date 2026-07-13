@@ -21,7 +21,9 @@ import {
   getBusinessPriorityReasons,
   getBusinessStatus,
   getBusinessSummary,
+  isBusinessActionable,
   isDeadlineWithin,
+  isImportantBusiness,
   isRecentlyPosted,
   parseDate,
 } from "./businessInsights";
@@ -402,8 +404,8 @@ function HomePage() {
   const newsSummary = getNewsSummary(newsItems, dashboardAsOf);
   const summary = buildDashboardSummary({ businessSummary, newsSummary });
   const priorityItems = businessItems
-    .filter((item) => getBusinessStatus(item) === "active")
-    .sort(compareBusinessByPriority)
+    .filter((item) => isBusinessActionable(item, dashboardAsOf))
+    .sort((a, b) => compareBusinessByPriority(a, b, dashboardAsOf))
     .slice(0, 5);
   const lastVisit = getLastVisitAt();
 
@@ -599,13 +601,13 @@ function BusinessCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
           <PriorityBadge item={item} />
           {isRecentlyPosted(item, 7) && <span className="new-badge">신규</span>}
           {recentlyViewed && <span>최근 본 항목</span>}
-          {item.is_known_important && <span className="important">중요공고</span>}
+          {isImportantBusiness(item) && <span className="important">중요공고</span>}
         </div>
         <FavoriteButton active={isFavorite} onClick={onToggleFavorite} />
       </div>
       <h2><Link to={`/business/${item.id}`}>{item.title}</Link></h2>
       {isContest && <p className="contest-subline">{projectLocation(item) || item.organization || "대상지구는 공고문 확인 필요"}</p>}
-      <div className="reason-list">{reasons.map((reason) => <span key={reason}>{reason}</span>)}</div>
+      <div className="reason-list">{reasons.slice(0, 2).map((reason) => <span key={reason}>{reason}</span>)}</div>
       <dl className="metadata">
         <div><dt>기관</dt><dd>{item.organization || displayAgency(item)}</dd></div>
         <div><dt>게시일</dt><dd>{formatDate(item.posted_at)}</dd></div>
@@ -684,6 +686,7 @@ function BusinessListingPage() {
     const next = new URLSearchParams(searchParams);
     if (!value || value === "all" || (key === "sort" && value === "priority")) next.delete(key);
     else next.set(key, value);
+    if (key === "priority" && value === "important") next.delete("sort");
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
   const reset = () => setSearchParams({}, { replace: true });
@@ -700,7 +703,7 @@ function BusinessListingPage() {
       if (values.priority === "favorites" && !favorites.isBusinessFavorite(item.id)) return false;
       if (values.priority === "recent7" && !isRecentlyPosted(item, 7)) return false;
       if (values.priority === "due7" && !isDeadlineWithin(item, 7)) return false;
-      if (values.priority === "important" && item.is_known_important !== true) return false;
+      if (values.priority === "important" && !isImportantBusiness(item)) return false;
       if (["immediate", "this_week"].includes(values.priority) && getBusinessPriority(item) !== values.priority) return false;
       const text = getSearchText(item);
       return !queryTerms.length || queryTerms.every((term) => text.includes(term));
@@ -718,6 +721,7 @@ function BusinessListingPage() {
 
   let emptyMessage = "조건에 맞는 사업정보가 없습니다. 검색어 또는 필터를 줄여보세요.";
   if (values.priority === "favorites") emptyMessage = "관심목록에 저장한 사업이 없습니다.";
+  if (values.priority === "important") emptyMessage = "현재 진행 가능한 중요공고가 없습니다.";
   if (values.agency === "SH") emptyMessage = "현재 공개 가능한 SH 민간참여 공공주택 공모가 없습니다. SH 수집기는 정상 모니터링 중입니다.";
 
   return (

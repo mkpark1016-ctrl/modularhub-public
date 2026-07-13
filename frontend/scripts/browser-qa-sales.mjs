@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { parseDate } from "../src/businessInsights.js";
+import { getBusinessSummary, isImportantBusiness, parseDate } from "../src/businessInsights.js";
 import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
@@ -158,6 +158,17 @@ try {
   await waitForCardCount(page, countBy(businessItems, (item) => statusOf(item) === "active"), "active status filter mismatch");
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
   await waitForCardCount(page, businessItems.length, "business reset after status filter failed");
+
+  const businessAsOf = parseDate(metaData.generated_at) || parseDate(metaData.last_updated_at) || new Date();
+  const expectedBusinessSummary = getBusinessSummary(businessItems, businessAsOf);
+  const importantBusinessCount = countBy(businessItems, (item) => isImportantBusiness(item, businessAsOf));
+  check(expectedBusinessSummary.important === importantBusinessCount, "business important summary should match quick filter resolver");
+  await selectFilter(page, "빠른 필터", "important");
+  await waitForCardCount(page, importantBusinessCount, "important business quick filter mismatch");
+  const importantText = await page.locator("main").innerText();
+  check(!importantText.includes("R26BK01510994"), "closed known important bid should not appear in important filter");
+  await page.getByRole("button", { name: "필터 초기화" }).first().click();
+  await waitForCardCount(page, businessItems.length, "business reset after important filter failed");
 
   await selectFilter(page, "정렬", "deadline");
   check(page.url().includes("sort=deadline"), "business sort is not synced to URL");
