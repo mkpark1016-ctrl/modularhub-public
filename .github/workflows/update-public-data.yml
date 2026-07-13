@@ -271,6 +271,31 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+      - name: Audit business collection impact
+        if: always()
+        run: |
+          set +e
+          python scripts/audit_business_collection_impact.py \
+            --business frontend/public/data/business.json \
+            --output-dir artifacts/business-collection-impact-audit
+          code=$?
+          if [ -f artifacts/business-collection-impact-audit/business_collection_impact_audit.md ]; then
+            cat artifacts/business-collection-impact-audit/business_collection_impact_audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::Business collection impact audit failed. Public data export remains governed by the existing guard. exit_code=$code"
+          fi
+          exit 0
+
+      - name: Upload business collection impact audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: business-collection-impact-audit-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/business-collection-impact-audit/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Diagnose procurement plan pipeline
         run: |
           if [ -f scripts/diagnose_procurement_plan_gap.py ]; then
