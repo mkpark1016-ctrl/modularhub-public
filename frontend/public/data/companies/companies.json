@@ -71,7 +71,7 @@
           "source_ids": [
             "dart-00144960-20260408002280"
           ],
-          "verified_at": "2026-07-14T06:54:16.041613+00:00",
+          "verified_at": "2026-07-14T07:38:44.869231+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 270984904156,
@@ -238,7 +238,7 @@
           "source_ids": [
             "dart-00144960-20250404000800"
           ],
-          "verified_at": "2026-07-14T06:54:16.060429+00:00",
+          "verified_at": "2026-07-14T07:38:44.887312+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 210303317036,
@@ -405,7 +405,7 @@
           "source_ids": [
             "dart-00144960-20240405000501"
           ],
-          "verified_at": "2026-07-14T06:54:16.070526+00:00",
+          "verified_at": "2026-07-14T07:38:44.903185+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 224437469439,
@@ -700,10 +700,14 @@
         },
         {
           "area": "dart_financials",
-          "status": "manual_review_required",
-          "description": "Some OpenDART structured financial data was unavailable and requires original-report review.",
-          "source_ids": [],
-          "verified_at": ""
+          "status": "partially_verified",
+          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
+          "source_ids": [
+            "dart-00144960-20240405000501",
+            "dart-00144960-20250404000800",
+            "dart-00144960-20260408002280"
+          ],
+          "verified_at": "2026-07-14T07:38:44.911510+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -877,7 +881,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T06:54:16.027026+00:00"
+        "searched_at": "2026-07-14T07:38:44.765271+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -895,7 +899,7 @@
           "source_ids": [
             "dart-00144960-20260408002280"
           ],
-          "verified_at": "2026-07-14T06:54:16.027047+00:00",
+          "verified_at": "2026-07-14T07:38:44.782943+00:00",
           "confidence": "high",
           "verification_note": "manual_verified_from_audit_report"
         },
@@ -904,54 +908,54 @@
           "report_type": "audit_report",
           "receipt_number": "20250404000800",
           "filed_at": "20250404",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "감사회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-00144960-20250404000800"
           ],
-          "verified_at": "2026-07-14T06:54:16.027054+00:00",
+          "verified_at": "2026-07-14T07:38:44.796300+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2023,
           "report_type": "audit_report",
           "receipt_number": "20240405000501",
           "filed_at": "20240405",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "감사회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-00144960-20240405000501"
           ],
-          "verified_at": "2026-07-14T06:54:16.027057+00:00",
+          "verified_at": "2026-07-14T07:38:44.811276+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2022,
           "report_type": "audit_report",
           "receipt_number": "20230410002814",
           "filed_at": "20230410",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "신정회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-00144960-20230410002814"
           ],
-          "verified_at": "2026-07-14T06:54:16.027060+00:00",
+          "verified_at": "2026-07-14T07:38:44.824207+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2021,
@@ -967,9 +971,9 @@
           "source_ids": [
             "dart-00144960-20220413001002"
           ],
-          "verified_at": "2026-07-14T06:54:16.027062+00:00",
+          "verified_at": "2026-07-14T07:38:44.839262+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2020,
@@ -985,9 +989,9 @@
           "source_ids": [
             "dart-00144960-20210409002785"
           ],
-          "verified_at": "2026-07-14T06:54:16.027064+00:00",
+          "verified_at": "2026-07-14T07:38:44.852583+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
       ],
       "financial_summary": {
@@ -1007,7 +1011,7 @@
           "dart-00144960-20250404000800",
           "dart-00144960-20260408002280"
         ],
-        "verified_at": "2026-07-14T06:54:16.076250+00:00"
+        "verified_at": "2026-07-14T07:38:44.911510+00:00"
       },
       "filings": [
         {
@@ -1200,6 +1204,53 @@
           "difference": 0,
           "receipt_number": "20250404000800"
         }
+      ],
+      "dart_original_document_inventory": [
+        {
+          "company_id": "yuchang-enc",
+          "fiscal_year": 2025,
+          "receipt_number": "20260408002280",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20260408002280.zip",
+          "document_name": "20260408002280_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 233,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "yuchang-enc",
+          "fiscal_year": 2024,
+          "receipt_number": "20250404000800",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20250404000800.zip",
+          "document_name": "20250404000800_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 234,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "yuchang-enc",
+          "fiscal_year": 2023,
+          "receipt_number": "20240405000501",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20240405000501.zip",
+          "document_name": "20240405000501_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 230,
+          "extracted_metric_count": 9
+        }
       ]
     },
     {
@@ -1369,7 +1420,7 @@
           "source_ids": [
             "dart-00105299-20260312000935"
           ],
-          "verified_at": "2026-07-14T06:54:16.485931+00:00",
+          "verified_at": "2026-07-14T07:38:45.360689+00:00",
           "confidence": "high",
           "revenue": {
             "source_value": 290112635592,
@@ -1503,7 +1554,7 @@
           "source_ids": [
             "dart-00105299-20250319000431"
           ],
-          "verified_at": "2026-07-14T06:54:16.619257+00:00",
+          "verified_at": "2026-07-14T07:38:45.490772+00:00",
           "confidence": "high",
           "revenue": {
             "source_value": 293931258757,
@@ -1637,7 +1688,7 @@
           "source_ids": [
             "dart-00105299-20240314000999"
           ],
-          "verified_at": "2026-07-14T06:54:16.732330+00:00",
+          "verified_at": "2026-07-14T07:38:45.625064+00:00",
           "confidence": "high",
           "revenue": {
             "source_value": 361333475844,
@@ -1929,13 +1980,13 @@
         {
           "area": "dart_financials",
           "status": "partially_verified",
-          "description": "Structured OpenDART financial data extracted for available years; auditor/opinion text remains manual review.",
+          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
           "source_ids": [
             "dart-00105299-20240314000999",
             "dart-00105299-20250319000431",
             "dart-00105299-20260312000935"
           ],
-          "verified_at": "2026-07-14T06:54:16.735645+00:00"
+          "verified_at": "2026-07-14T07:38:45.898888+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -2095,7 +2146,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T06:54:16.732413+00:00"
+        "searched_at": "2026-07-14T07:38:45.625436+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -2105,17 +2156,17 @@
           "receipt_number": "20260312000935",
           "filed_at": "20260312",
           "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
-          "reporting_scope": "separate",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
+          "reporting_scope": "consolidated",
           "accounting_standard": "unknown",
           "unit": "KRW",
           "source_ids": [
             "dart-00105299-20260312000935"
           ],
-          "verified_at": "2026-07-14T06:54:16.732422+00:00",
+          "verified_at": "2026-07-14T07:38:45.658587+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2024,
@@ -2123,17 +2174,17 @@
           "receipt_number": "20250313001058",
           "filed_at": "20250313",
           "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "적정",
           "reporting_scope": "separate",
           "accounting_standard": "unknown",
           "unit": "KRW",
           "source_ids": [
             "dart-00105299-20250313001058"
           ],
-          "verified_at": "2026-07-14T06:54:16.732427+00:00",
+          "verified_at": "2026-07-14T07:38:45.684475+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2023,
@@ -2141,24 +2192,24 @@
           "receipt_number": "20240314000999",
           "filed_at": "20240314",
           "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
-          "reporting_scope": "separate",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
+          "reporting_scope": "consolidated",
           "accounting_standard": "unknown",
           "unit": "KRW",
           "source_ids": [
             "dart-00105299-20240314000999"
           ],
-          "verified_at": "2026-07-14T06:54:16.732429+00:00",
+          "verified_at": "2026-07-14T07:38:45.711573+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2022,
           "report_type": "business_report",
           "receipt_number": "20230316000643",
           "filed_at": "20230316",
-          "auditor": null,
+          "auditor": "태성회계법인",
           "audit_opinion": "unknown",
           "audit_opinion_raw": null,
           "reporting_scope": "separate",
@@ -2167,9 +2218,9 @@
           "source_ids": [
             "dart-00105299-20230316000643"
           ],
-          "verified_at": "2026-07-14T06:54:16.732432+00:00",
+          "verified_at": "2026-07-14T07:38:45.778379+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2021,
@@ -2185,9 +2236,9 @@
           "source_ids": [
             "dart-00105299-20220317000899"
           ],
-          "verified_at": "2026-07-14T06:54:16.732434+00:00",
+          "verified_at": "2026-07-14T07:38:45.809817+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2020,
@@ -2203,9 +2254,9 @@
           "source_ids": [
             "dart-00105299-20210318001269"
           ],
-          "verified_at": "2026-07-14T06:54:16.732437+00:00",
+          "verified_at": "2026-07-14T07:38:45.890813+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
       ],
       "financial_summary": {
@@ -2225,7 +2276,7 @@
           "dart-00105299-20250319000431",
           "dart-00105299-20260312000935"
         ],
-        "verified_at": "2026-07-14T06:54:16.735645+00:00"
+        "verified_at": "2026-07-14T07:38:45.898888+00:00"
       },
       "filings": [
         {
@@ -2348,7 +2399,8 @@
           ]
         }
       ],
-      "dart_original_document_fallback_results": []
+      "dart_original_document_fallback_results": [],
+      "dart_original_document_inventory": []
     },
     {
       "schema_version": "company-master-v1",
@@ -2418,7 +2470,7 @@
           "source_ids": [
             "dart-01661914-20260625000241"
           ],
-          "verified_at": "2026-07-14T06:54:17.295850+00:00",
+          "verified_at": "2026-07-14T07:38:46.658772+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 272444816577,
@@ -2585,7 +2637,7 @@
           "source_ids": [
             "dart-01661914-20250424000374"
           ],
-          "verified_at": "2026-07-14T06:54:17.308175+00:00",
+          "verified_at": "2026-07-14T07:38:46.673911+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 233816842234,
@@ -2752,7 +2804,7 @@
           "source_ids": [
             "dart-01661914-20240415000501"
           ],
-          "verified_at": "2026-07-14T06:54:17.317394+00:00",
+          "verified_at": "2026-07-14T07:38:46.684981+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 250915477340,
@@ -3003,10 +3055,14 @@
         },
         {
           "area": "dart_financials",
-          "status": "manual_review_required",
-          "description": "Some OpenDART structured financial data was unavailable and requires original-report review.",
-          "source_ids": [],
-          "verified_at": ""
+          "status": "partially_verified",
+          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
+          "source_ids": [
+            "dart-01661914-20240415000501",
+            "dart-01661914-20250424000374",
+            "dart-01661914-20260625000241"
+          ],
+          "verified_at": "2026-07-14T07:38:46.692569+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -3130,7 +3186,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T06:54:17.285104+00:00"
+        "searched_at": "2026-07-14T07:38:46.592348+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -3139,72 +3195,72 @@
           "report_type": "audit_report",
           "receipt_number": "20260625000241",
           "filed_at": "20260625",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "인덕회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-01661914-20260625000241"
           ],
-          "verified_at": "2026-07-14T06:54:17.285128+00:00",
+          "verified_at": "2026-07-14T07:38:46.605613+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2024,
           "report_type": "audit_report",
           "receipt_number": "20250424000374",
           "filed_at": "20250424",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "인덕회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-01661914-20250424000374"
           ],
-          "verified_at": "2026-07-14T06:54:17.285134+00:00",
+          "verified_at": "2026-07-14T07:38:46.618228+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2023,
           "report_type": "audit_report",
           "receipt_number": "20240415000501",
           "filed_at": "20240415",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "서정회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-01661914-20240415000501"
           ],
-          "verified_at": "2026-07-14T06:54:17.285137+00:00",
+          "verified_at": "2026-07-14T07:38:46.629946+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2022,
           "report_type": "audit_report",
           "receipt_number": "20230411000791",
           "filed_at": "20230411",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "서정회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-01661914-20230411000791"
           ],
-          "verified_at": "2026-07-14T06:54:17.285139+00:00",
+          "verified_at": "2026-07-14T07:38:46.642421+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
       ],
       "financial_summary": {
@@ -3224,7 +3280,7 @@
           "dart-01661914-20250424000374",
           "dart-01661914-20260625000241"
         ],
-        "verified_at": "2026-07-14T06:54:17.322619+00:00"
+        "verified_at": "2026-07-14T07:38:46.692569+00:00"
       },
       "filings": [
         {
@@ -3321,6 +3377,53 @@
           "status": "metrics_extracted",
           "note": "9 metrics extracted"
         }
+      ],
+      "dart_original_document_inventory": [
+        {
+          "company_id": "planm",
+          "fiscal_year": 2025,
+          "receipt_number": "20260625000241",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20260625000241.zip",
+          "document_name": "20260625000241_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 190,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "planm",
+          "fiscal_year": 2024,
+          "receipt_number": "20250424000374",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20250424000374.zip",
+          "document_name": "20250424000374_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 183,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "planm",
+          "fiscal_year": 2023,
+          "receipt_number": "20240415000501",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20240415000501.zip",
+          "document_name": "20240415000501_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 167,
+          "extracted_metric_count": 9
+        }
       ]
     },
     {
@@ -3380,7 +3483,7 @@
       },
       "financials": [
         {
-          "year": 2024,
+          "year": 2025,
           "scope": "separate",
           "reporting_scope": "separate",
           "accounting_standard": "general_korean_gaap",
@@ -3390,7 +3493,7 @@
           "source_ids": [
             "dart-01693685-20250917000346"
           ],
-          "verified_at": "2026-07-14T06:54:17.863623+00:00",
+          "verified_at": "2026-07-14T07:38:47.390806+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 82695337438,
@@ -3402,7 +3505,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3419,7 +3522,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3436,7 +3539,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3453,7 +3556,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3470,7 +3573,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3487,7 +3590,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3504,7 +3607,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3521,7 +3624,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3538,7 +3641,7 @@
             "receipt_number": "20250917000346",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20250917000346"
@@ -3547,7 +3650,7 @@
           }
         },
         {
-          "year": 2023,
+          "year": 2024,
           "scope": "separate",
           "reporting_scope": "separate",
           "accounting_standard": "general_korean_gaap",
@@ -3557,7 +3660,7 @@
           "source_ids": [
             "dart-01693685-20240919000117"
           ],
-          "verified_at": "2026-07-14T06:54:17.871807+00:00",
+          "verified_at": "2026-07-14T07:38:47.408628+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 81271797933,
@@ -3569,7 +3672,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3586,7 +3689,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3603,7 +3706,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3620,7 +3723,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3637,7 +3740,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3654,7 +3757,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3671,7 +3774,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3688,7 +3791,7 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
@@ -3705,10 +3808,177 @@
             "receipt_number": "20240919000117",
             "extraction_method": "audit_report_xml_acode",
             "verification_status": "extracted",
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
               "dart-01693685-20240919000117"
+            ],
+            "confidence": "high"
+          }
+        },
+        {
+          "year": 2023,
+          "scope": "separate",
+          "reporting_scope": "separate",
+          "accounting_standard": "general_korean_gaap",
+          "currency": "KRW",
+          "modular_segment_available": false,
+          "modular_segment_revenue": null,
+          "source_ids": [
+            "dart-01693685-20230919000046"
+          ],
+          "verified_at": "2026-07-14T07:38:47.426648+00:00",
+          "confidence": "high",
+          "total_assets": {
+            "source_value": 81604451252,
+            "source_unit": "KRW",
+            "normalized_value": 81604.451,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "자      산      총      계",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "total_liabilities": {
+            "source_value": 71741339923,
+            "source_unit": "KRW",
+            "normalized_value": 71741.34,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "부      채      총      계",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "total_equity": {
+            "source_value": 9863111329,
+            "source_unit": "KRW",
+            "normalized_value": 9863.111,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "자      본      총      계",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "revenue": {
+            "source_value": 32326080148,
+            "source_unit": "KRW",
+            "normalized_value": 32326.08,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "Ⅰ. 매출액(주석1,2,9)",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "cost_of_sales": {
+            "source_value": 24795579618,
+            "source_unit": "KRW",
+            "normalized_value": 24795.58,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "Ⅱ. 매출원가(주석2)",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "gross_profit": {
+            "source_value": 7530500530,
+            "source_unit": "KRW",
+            "normalized_value": 7530.501,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "Ⅲ. 매출총이익",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "operating_profit": {
+            "source_value": 4109790546,
+            "source_unit": "KRW",
+            "normalized_value": 4109.791,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "Ⅴ. 영업이익",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "net_income": {
+            "source_value": 3009792401,
+            "source_unit": "KRW",
+            "normalized_value": 3009.792,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "Ⅹ. 당기순이익",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
+            ],
+            "confidence": "high"
+          },
+          "operating_cash_flow": {
+            "source_value": 59283840033,
+            "source_unit": "KRW",
+            "normalized_value": 59283.84,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "Ⅰ. 영업활동으로 인한 현금흐름",
+            "receipt_number": "20230919000046",
+            "extraction_method": "audit_report_xml_acode",
+            "verification_status": "extracted",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "dart-01693685-20230919000046"
             ],
             "confidence": "high"
           }
@@ -3795,10 +4065,14 @@
         },
         {
           "area": "dart_financials",
-          "status": "manual_review_required",
-          "description": "Some OpenDART structured financial data was unavailable and requires original-report review.",
-          "source_ids": [],
-          "verified_at": ""
+          "status": "partially_verified",
+          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
+          "source_ids": [
+            "dart-01693685-20230919000046",
+            "dart-01693685-20240919000117",
+            "dart-01693685-20250917000346"
+          ],
+          "verified_at": "2026-07-14T07:38:47.433935+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -3852,7 +4126,7 @@
         "reports_found_count": 3,
         "selected_reports": [
           {
-            "fiscal_year": 2024,
+            "fiscal_year": 2025,
             "report_type": "audit_report",
             "report_detail_code": "F001",
             "report_title": "감사보고서 (2025.06)",
@@ -3869,7 +4143,7 @@
             ]
           },
           {
-            "fiscal_year": 2023,
+            "fiscal_year": 2024,
             "report_type": "audit_report",
             "report_detail_code": "F001",
             "report_title": "감사보고서 (2024.06)",
@@ -3886,7 +4160,7 @@
             ]
           },
           {
-            "fiscal_year": 2022,
+            "fiscal_year": 2023,
             "report_type": "audit_report",
             "report_detail_code": "F001",
             "report_title": "감사보고서 (2023.06)",
@@ -3904,68 +4178,69 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T06:54:17.855174+00:00"
+        "searched_at": "2026-07-14T07:38:47.319621+00:00"
       },
       "dart_filings": [],
       "audit_information": [
         {
-          "fiscal_year": 2024,
+          "fiscal_year": 2025,
           "report_type": "audit_report",
           "receipt_number": "20250917000346",
           "filed_at": "20250917",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "미립회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-01693685-20250917000346"
           ],
-          "verified_at": "2026-07-14T06:54:17.855196+00:00",
+          "verified_at": "2026-07-14T07:38:47.339815+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
-          "fiscal_year": 2023,
+          "fiscal_year": 2024,
           "report_type": "audit_report",
           "receipt_number": "20240919000117",
           "filed_at": "20240919",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "미립회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-01693685-20240919000117"
           ],
-          "verified_at": "2026-07-14T06:54:17.855200+00:00",
+          "verified_at": "2026-07-14T07:38:47.358646+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
-          "fiscal_year": 2022,
+          "fiscal_year": 2023,
           "report_type": "audit_report",
           "receipt_number": "20230919000046",
           "filed_at": "20230919",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "미립회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-01693685-20230919000046"
           ],
-          "verified_at": "2026-07-14T06:54:17.855203+00:00",
+          "verified_at": "2026-07-14T07:38:47.373705+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
       ],
       "financial_summary": {
         "financial_area_status": "partially_verified",
         "years_available": [
+          2025,
           2024,
           2023
         ],
@@ -3975,14 +4250,15 @@
         "modular_segment_operating_profit": null,
         "modular_segment_basis": "No explicit modular segment disclosure was extracted from DART data.",
         "source_ids": [
+          "dart-01693685-20230919000046",
           "dart-01693685-20240919000117",
           "dart-01693685-20250917000346"
         ],
-        "verified_at": "2026-07-14T06:54:17.876977+00:00"
+        "verified_at": "2026-07-14T07:38:47.433935+00:00"
       },
       "filings": [
         {
-          "fiscal_year": 2024,
+          "fiscal_year": 2025,
           "report_type": "audit_report",
           "report_detail_code": "F001",
           "report_title": "감사보고서 (2025.06)",
@@ -3999,7 +4275,7 @@
           ]
         },
         {
-          "fiscal_year": 2023,
+          "fiscal_year": 2024,
           "report_type": "audit_report",
           "report_detail_code": "F001",
           "report_title": "감사보고서 (2024.06)",
@@ -4016,7 +4292,7 @@
           ]
         },
         {
-          "fiscal_year": 2022,
+          "fiscal_year": 2023,
           "report_type": "audit_report",
           "report_detail_code": "F001",
           "report_title": "감사보고서 (2023.06)",
@@ -4036,7 +4312,7 @@
       "dart_original_document_fallback_results": [
         {
           "company_id": "daeseung-engineering",
-          "fiscal_year": 2024,
+          "fiscal_year": 2025,
           "receipt_number": "20250917000346",
           "fallback_type": "audit_report_xml",
           "status": "metrics_extracted",
@@ -4044,11 +4320,66 @@
         },
         {
           "company_id": "daeseung-engineering",
-          "fiscal_year": 2023,
+          "fiscal_year": 2024,
           "receipt_number": "20240919000117",
           "fallback_type": "audit_report_xml",
           "status": "metrics_extracted",
           "note": "9 metrics extracted"
+        },
+        {
+          "company_id": "daeseung-engineering",
+          "fiscal_year": 2023,
+          "receipt_number": "20230919000046",
+          "fallback_type": "audit_report_xml",
+          "status": "metrics_extracted",
+          "note": "9 metrics extracted"
+        }
+      ],
+      "dart_original_document_inventory": [
+        {
+          "company_id": "daeseung-engineering",
+          "fiscal_year": 2025,
+          "receipt_number": "20250917000346",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20250917000346.zip",
+          "document_name": "20250917000346_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 175,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "daeseung-engineering",
+          "fiscal_year": 2024,
+          "receipt_number": "20240919000117",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20240919000117.zip",
+          "document_name": "20240919000117_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 165,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "daeseung-engineering",
+          "fiscal_year": 2023,
+          "receipt_number": "20230919000046",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20230919000046.zip",
+          "document_name": "20230919000046_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 170,
+          "extracted_metric_count": 9
         }
       ]
     },

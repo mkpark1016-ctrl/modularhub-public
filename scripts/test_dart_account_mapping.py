@@ -30,11 +30,15 @@ def require(condition: bool, message: str) -> None:
 def main() -> int:
     payload = json.loads(ALIASES_PATH.read_text(encoding="utf-8"))
     aliases = payload.get("aliases", {})
-    require(payload.get("schema_version") == "dart-account-aliases-v1", "unexpected alias schema version")
+    require(payload.get("schema_version") == "dart-account-aliases-v2", "unexpected alias schema version")
     require(payload.get("normalized_unit") == "KRW_MILLION", "normalized financial unit must be KRW_MILLION")
     for field in REQUIRED_FIELDS:
         require(field in aliases, f"missing aliases for {field}")
         require(isinstance(aliases[field], list) and aliases[field], f"{field} aliases must be a non-empty list")
+    require("매출액" in aliases["revenue"], "revenue aliases must include Korean account name")
+    require("영업손실" in aliases["operating_profit"], "operating profit aliases must include operating loss")
+    require("당기순손실" in aliases["net_income"], "net income aliases must include net loss")
+    require("영업활동으로 인한 현금흐름" in aliases["operating_cash_flow"], "operating cash flow aliases must include full Korean account name")
 
     duplicate_aliases: dict[str, list[str]] = {}
     for field, values in aliases.items():
