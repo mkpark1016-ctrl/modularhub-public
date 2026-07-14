@@ -21,7 +21,7 @@ footer { margin-top: 72px; padding: 28px 20px; text-align: center; color: #777; 
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 0 18px; border-radius: 6px; font-weight: 700; }
 .button.primary { background: #171717; color: #fff; }
 .button.secondary { background: #fff; border: 1px solid #cfcfca; }
-.category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.category-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .category-panel { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 28px; border: 1px solid #d7d7d2; background: #fff; border-radius: 8px; }
 .category-panel div { display: grid; gap: 6px; }
 .category-panel strong { font-size: 20px; }
@@ -114,6 +114,7 @@ code { overflow-wrap: anywhere; }
   .intro h1 { font-size: 42px; }
   .category-grid, .content-layout { grid-template-columns: 1fr; }
   .summary-strip { grid-template-columns: 1fr 1fr; }
+  .company-summary-strip, .compact-detail-grid { grid-template-columns: 1fr 1fr; }
   .category-panel { grid-template-columns: auto 1fr; }
   .category-panel b { grid-column: 2; }
   .filters { position: static; }
@@ -126,6 +127,7 @@ code { overflow-wrap: anywhere; }
 
 @media (max-width: 520px) {
   .summary-strip, .metadata, .detail-grid { grid-template-columns: 1fr; }
+  .company-summary-strip, .compact-detail-grid { grid-template-columns: 1fr; }
   .topbar nav a svg { display: none; }
   .button, .reset-button { width: 100%; }
 }
@@ -189,6 +191,28 @@ code { overflow-wrap: anywhere; }
 .ratio-bar span { background: #237349; }
 .ratio-bar b { background: #6b7280; }
 .empty-inline { margin: 0; color: #666; }
+.company-summary-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.company-card > p { margin-bottom: 14px; }
+.company-status.verified { color: #166534; border-color: #86efac; background: #f0fdf4; }
+.company-status.partial { color: #075985; border-color: #bae6fd; background: #f0f9ff; }
+.company-status.collecting { color: #6b4e16; border-color: #fde68a; background: #fffbeb; }
+.company-highlight-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
+.company-highlight-grid span { padding: 7px 9px; border: 1px solid #d7d7d2; border-radius: 6px; background: #f7f7f4; color: #444; font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
+.company-detail .summary h2 { margin-bottom: 12px; }
+.compact-detail-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 0; padding-top: 0; }
+.company-section-list, .source-list { display: grid; gap: 10px; }
+.company-section-list div, .source-list div { display: grid; gap: 5px; padding: 14px; border: 1px solid #e2e2dd; border-radius: 8px; background: #fff; }
+.company-section-list strong, .source-list strong { line-height: 1.45; }
+.company-section-list span, .source-list span { color: #666; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.source-list a { width: fit-content; display: inline-flex; align-items: center; gap: 4px; font-weight: 800; font-size: 13px; }
+.company-table-wrap { width: 100%; overflow-x: auto; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-financial-table { width: 100%; min-width: 640px; border-collapse: collapse; }
+.company-financial-table th, .company-financial-table td { padding: 12px 14px; border-bottom: 1px solid #ecece8; text-align: right; white-space: nowrap; }
+.company-financial-table th:first-child, .company-financial-table td:first-child { text-align: left; }
+.company-financial-table thead th { color: #666; background: #f7f7f4; font-size: 12px; }
+.company-financial-table tbody tr:last-child th, .company-financial-table tbody tr:last-child td { border-bottom: 0; }
+.finance-note { margin: 8px 0 12px; color: #666; font-size: 13px; line-height: 1.6; }
+.company-not-found { flex-direction: column; }
 
 @media (max-width: 760px) {
   .kpi-grid { grid-template-columns: 1fr; }

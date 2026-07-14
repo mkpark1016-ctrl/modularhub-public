@@ -1,0 +1,281 @@
+export const COMPANY_TYPE_LABELS = {
+  general_contractor: "건설사",
+  specialist_manufacturer: "전문 제작사",
+  modular_integrator: "모듈러 통합사",
+  design_firm: "설계사",
+  engineering_firm: "엔지니어링사",
+  material_supplier: "자재 공급사",
+  solution_provider: "솔루션 기업",
+};
+
+export const COMPETITIVE_ROLE_LABELS = {
+  direct_competitor: "직접 경쟁사",
+  substitute_competitor: "대체 경쟁사",
+  strategic_benchmark: "전략 벤치마크",
+  design_influencer: "설계 영향사",
+  internal_baseline: "내부 기준",
+  watchlist: "관찰 대상",
+};
+
+export const TIER_LABELS = {
+  tier_1: "최우선 분석",
+  tier_1b: "우선 분석",
+  tier_2: "일반 분석",
+  tier_3: "장기 관찰",
+};
+
+export const REVIEW_STATUS_LABELS = {
+  verified: "검증 완료",
+  partially_verified: "부분 검증",
+  collecting: "조사 중",
+  unresearched: "조사 중",
+  update_required: "확인 필요",
+  manual_review_required: "확인 필요",
+  unknown: "조사 중",
+};
+
+export const DATA_STATUS_LABELS = {
+  verified: "검증 완료",
+  partial: "부분 검증",
+  collecting: "조사 중",
+};
+
+export const CONFIDENCE_LABELS = {
+  high: "높은 신뢰도",
+  medium: "보통 신뢰도",
+  low: "낮은 신뢰도",
+  review: "검토 필요",
+  unknown: "확인 중",
+  verified_manual: "수동 검증",
+};
+
+const ROLE_SORT_ORDER = ["direct_competitor", "substitute_competitor", "strategic_benchmark", "design_influencer", "internal_baseline", "watchlist"];
+const TIER_SORT_ORDER = ["tier_1", "tier_1b", "tier_2", "tier_3"];
+
+export function getCompanyItems(data) {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  return Array.isArray(data.companies) ? data.companies : [];
+}
+
+export function normalizeCompanyText(value) {
+  return String(value || "")
+    .normalize("NFC")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function labelFromMap(map, value, fallback = "확인 중") {
+  return map[value] || fallback;
+}
+
+export function getCompanyTypeLabel(company) {
+  return labelFromMap(COMPANY_TYPE_LABELS, company?.company_type);
+}
+
+export function getCompetitiveRoleLabel(company) {
+  return labelFromMap(COMPETITIVE_ROLE_LABELS, company?.competitive_role);
+}
+
+export function getTierLabel(company) {
+  return labelFromMap(TIER_LABELS, company?.analysis_tier);
+}
+
+export function getReviewStatusLabel(company) {
+  return labelFromMap(REVIEW_STATUS_LABELS, company?.review_status || "unknown");
+}
+
+export function getConfidenceLabel(company) {
+  return labelFromMap(CONFIDENCE_LABELS, company?.data_confidence || "unknown");
+}
+
+export function financialYears(company) {
+  return (Array.isArray(company?.financials) ? company.financials : [])
+    .map((item) => Number(item?.year))
+    .filter((year) => Number.isFinite(year))
+    .sort((a, b) => b - a);
+}
+
+export function isDartIdentityConfirmed(company) {
+  return company?.dart_identity?.identity_status === "confirmed" && Boolean(company?.dart_identity?.dart_corp_code);
+}
+
+export function getCompanyDataStatus(company) {
+  const reviewStatus = company?.review_status;
+  if (reviewStatus === "verified") return "verified";
+  if (isDartIdentityConfirmed(company) && financialYears(company).length >= 3) return "verified";
+  if (reviewStatus === "partially_verified" || financialYears(company).length > 0 || (company?.sources || []).length > 0) return "partial";
+  return "collecting";
+}
+
+export function getCompanyDataStatusLabel(company) {
+  return DATA_STATUS_LABELS[getCompanyDataStatus(company)] || "조사 중";
+}
+
+export function getLatestVerifiedAt(company) {
+  const dates = [
+    company?.last_verified_at,
+    company?.financial_summary?.verified_at,
+    ...(Array.isArray(company?.sources) ? company.sources.map((source) => source.accessed_at || source.published_at) : []),
+  ].filter(Boolean);
+  return dates.sort().at(-1) || "";
+}
+
+export function companySearchText(company) {
+  const projects = Array.isArray(company?.project_portfolio) ? company.project_portfolio : [];
+  const technology = company?.technology && typeof company.technology === "object" ? company.technology : {};
+  const technologyValues = Object.values(technology).flatMap((value) => {
+    if (Array.isArray(value)) return value;
+    if (value && typeof value === "object") return Object.values(value);
+    return [value];
+  });
+  const production = Array.isArray(company?.production) ? company.production : [];
+  const signals = Array.isArray(company?.recent_signals) ? company.recent_signals : [];
+  return normalizeCompanyText([
+    company?.company_name,
+    company?.company_name_en,
+    ...(Array.isArray(company?.aliases) ? company.aliases : []),
+    getCompanyTypeLabel(company),
+    getCompetitiveRoleLabel(company),
+    getTierLabel(company),
+    ...(Array.isArray(company?.modular_methods) ? company.modular_methods : []),
+    ...(Array.isArray(company?.target_markets) ? company.target_markets : []),
+    company?.summary,
+    ...production.flatMap((item) => [item.facility_name, item.location, item.capacity_unit]),
+    ...projects.flatMap((item) => [item.project_name, item.client, item.location, item.building_use, item.company_role]),
+    ...technologyValues.map((item) => {
+      if (item && typeof item === "object") return [item.name, item.summary, item.technology_area, item.status].join(" ");
+      return item;
+    }),
+    ...signals.flatMap((item) => [item.title, item.summary, item.signal_type]),
+  ].join(" "));
+}
+
+export function matchesCompanySearch(company, query) {
+  const terms = normalizeCompanyText(query).split(" ").filter(Boolean);
+  if (!terms.length) return true;
+  const text = companySearchText(company);
+  return terms.every((term) => text.includes(term));
+}
+
+export function companyMatchesFilters(company, values) {
+  if (values.role !== "all" && company.company_type !== values.role) return false;
+  if (values.relationship !== "all" && company.competitive_role !== values.relationship) return false;
+  if (values.tier !== "all" && company.analysis_tier !== values.tier) return false;
+  if (values.status !== "all" && getCompanyDataStatus(company) !== values.status) return false;
+  return matchesCompanySearch(company, values.q);
+}
+
+export function compareCompanies(a, b, sort = "tier") {
+  if (sort === "verified") {
+    return String(getLatestVerifiedAt(b)).localeCompare(String(getLatestVerifiedAt(a))) || compareCompanies(a, b, "tier");
+  }
+  if (sort === "name") {
+    return String(a.company_name || "").localeCompare(String(b.company_name || ""), "ko-KR");
+  }
+  const tierDelta = TIER_SORT_ORDER.indexOf(a.analysis_tier) - TIER_SORT_ORDER.indexOf(b.analysis_tier);
+  if (tierDelta !== 0) return tierDelta;
+  const roleDelta = ROLE_SORT_ORDER.indexOf(a.competitive_role) - ROLE_SORT_ORDER.indexOf(b.competitive_role);
+  if (roleDelta !== 0) return roleDelta;
+  return String(a.company_name || "").localeCompare(String(b.company_name || ""), "ko-KR");
+}
+
+export function optionCounts(companies, field, labelMap) {
+  const counts = new Map();
+  for (const company of companies) {
+    const value = company?.[field];
+    if (!value) continue;
+    counts.set(value, (counts.get(value) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort(([a], [b]) => String(labelMap[a] || a).localeCompare(String(labelMap[b] || b), "ko-KR"))
+    .map(([value, count]) => ({ value, label: labelMap[value] || value, count }));
+}
+
+export function statusOptions(companies) {
+  const counts = new Map();
+  for (const company of companies) {
+    const status = getCompanyDataStatus(company);
+    counts.set(status, (counts.get(status) || 0) + 1);
+  }
+  return ["verified", "partial", "collecting"]
+    .filter((value) => counts.has(value))
+    .map((value) => ({ value, label: DATA_STATUS_LABELS[value], count: counts.get(value) }));
+}
+
+export function getCompanySummary(companies) {
+  const list = Array.isArray(companies) ? companies : [];
+  return {
+    total: list.length,
+    directCompetitors: list.filter((company) => company.competitive_role === "direct_competitor").length,
+    verified: list.filter((company) => getCompanyDataStatus(company) === "verified").length,
+    facilityConfirmed: list.filter((company) => (company.production || []).some((item) => item.operating_status === "facility_confirmed" || item.facility_name)).length,
+    roleCounts: optionCounts(list, "company_type", COMPANY_TYPE_LABELS),
+    relationshipCounts: optionCounts(list, "competitive_role", COMPETITIVE_ROLE_LABELS),
+    statusCounts: statusOptions(list),
+  };
+}
+
+export function getLatestFinancial(company) {
+  const financials = Array.isArray(company?.financials) ? company.financials : [];
+  return [...financials].sort((a, b) => Number(b.year || 0) - Number(a.year || 0))[0] || null;
+}
+
+export function metricSourceValue(record) {
+  if (!record || typeof record !== "object") return null;
+  const value = Number(record.source_value);
+  return Number.isFinite(value) ? value : null;
+}
+
+export function formatKrwReadable(value) {
+  if (value === null || value === undefined || value === "") return "확인되지 않음";
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return "확인되지 않음";
+  if (amount === 0) return "0원";
+  const abs = Math.abs(amount);
+  const sign = amount < 0 ? "-" : "";
+  if (abs >= 100_000_000) {
+    return `${sign}${(abs / 100_000_000).toLocaleString("ko-KR", { maximumFractionDigits: 1 })}억원`;
+  }
+  if (abs >= 1_000_000) {
+    return `${sign}${(abs / 1_000_000).toLocaleString("ko-KR", { maximumFractionDigits: 1 })}백만원`;
+  }
+  return `${sign}${abs.toLocaleString("ko-KR")}원`;
+}
+
+export function formatCompanyDate(value) {
+  if (!value) return "확인 중";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value).slice(0, 10);
+  return new Intl.DateTimeFormat("ko-KR").format(date);
+}
+
+export function representativeProject(company) {
+  const projects = Array.isArray(company?.project_portfolio) ? company.project_portfolio : [];
+  return projects.find((item) => item.project_name) || null;
+}
+
+export function technologyCount(company) {
+  const technology = company?.technology && typeof company.technology === "object" ? company.technology : {};
+  return Object.values(technology).reduce((sum, value) => sum + (Array.isArray(value) ? value.length : 0), 0);
+}
+
+export function getCompanyHighlights(company) {
+  const highlights = [];
+  const production = Array.isArray(company?.production) ? company.production.find((item) => item.facility_name || item.capacity_value) : null;
+  if (production?.facility_name) highlights.push(production.facility_name);
+  if (production?.capacity_value && production?.capacity_unit) highlights.push(`${production.capacity_value} ${production.capacity_unit}`);
+  const project = representativeProject(company);
+  if (project?.project_name) highlights.push(project.project_name);
+  const latest = getLatestFinancial(company);
+  const revenue = metricSourceValue(latest?.revenue);
+  if (latest && revenue !== null) highlights.push(`최근 확인 매출 ${formatKrwReadable(revenue)}`);
+  const techCount = technologyCount(company);
+  if (techCount > 0) highlights.push(`기술·특허 ${techCount}건`);
+  return highlights.slice(0, 3);
+}
+
+export function sourceHasUrl(source) {
+  return Boolean(source?.source_url && !String(source.source_url).includes(".cache"));
+}

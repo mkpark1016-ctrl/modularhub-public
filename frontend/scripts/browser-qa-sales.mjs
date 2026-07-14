@@ -5,6 +5,7 @@ import { getBusinessPriorityInfo, getBusinessSummary, isImportantBusiness, parse
 import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
+import { getCompanyItems, getCompanySummary } from "../src/companyInsights.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -92,19 +93,25 @@ try {
   const businessResponse = await page.request.get(`${baseUrl}/data/business.json`);
   const newsResponse = await page.request.get(`${baseUrl}/data/news.json`);
   const metaResponse = await page.request.get(`${baseUrl}/data/meta.json`);
-  check(businessResponse.ok() && newsResponse.ok() && metaResponse.ok(), "public data JSON failed to load");
+  const companiesResponse = await page.request.get(`${baseUrl}/data/companies/companies.json`);
+  check(businessResponse.ok() && newsResponse.ok() && metaResponse.ok() && companiesResponse.ok(), "public data JSON failed to load");
 
   const businessData = await businessResponse.json();
   const newsData = await newsResponse.json();
   const metaData = await metaResponse.json();
+  const companiesData = await companiesResponse.json();
   const businessItems = itemsFrom(businessData);
   const newsItems = itemsFrom(newsData);
+  const companyItems = getCompanyItems(companiesData);
+  const companySummary = getCompanySummary(companyItems);
   const dashboardAsOf = parseDate(metaData.generated_at) || parseDate(metaData.last_updated_at) || new Date();
   const expectedNewsSummary = getNewsSummary(newsItems, dashboardAsOf);
   check(businessItems.length === metaData.business_count, "business count does not match meta");
   check(newsItems.length === metaData.news_count, "news count does not match meta");
   check(businessItems.length > 0, "business data is empty");
   check(newsItems.length > 0, "news data is empty");
+  check(companyItems.length === 17, "company data should contain 17 companies");
+  check(companySummary.verified === 4, "company verified count should be 4");
 
   await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
   await page.evaluate(() => localStorage.clear());
@@ -137,6 +144,36 @@ try {
   check(!healthText.includes("SH\n현재 공고 없음"), "SH not_collected must not be shown as no current notices");
   check(healthText.includes("GW API 전환 필요"), "D2B migration note missing");
   check(await page.locator(".news-brief-item .relevance-badge.reference, .news-brief-item .relevance-badge.excluded").count() === 0, "home latest news should exclude reference/excluded items");
+
+  await page.locator("header nav").getByRole("link", { name: "기업정보" }).click();
+  await page.getByRole("heading", { name: "스틸 모듈러 기업정보" }).waitFor();
+  await waitForCardCount(page, companyItems.length, "company default card count mismatch");
+  await checkNoBadDisplayText(page, "main", "company list");
+  const companyText = await page.locator("main").innerText();
+  check(companyText.includes(`전체 ${companySummary.total.toLocaleString("ko-KR")}개사`), "company summary total mismatch");
+  check(companyText.includes(`검증 완료 ${companySummary.verified.toLocaleString("ko-KR")}개사`), "company verified summary mismatch");
+  await selectFilter(page, "경쟁 관계", "direct_competitor");
+  await waitForCardCount(page, companySummary.directCompetitors, "direct competitor filter mismatch");
+  await selectFilter(page, "데이터 상태", "verified");
+  await waitForCardCount(page, companySummary.verified, "verified company filter mismatch");
+  await page.getByPlaceholder("기업명, 프로젝트, 기술 검색").fill("PlanM");
+  await page.keyboard.press("Enter");
+  await page.waitForURL(/q=PlanM/);
+  check(await countCards(page) >= 1, "company alias search should return results");
+  await page.getByRole("button", { name: "필터 초기화" }).first().click();
+  await waitForCardCount(page, companyItems.length, "company reset mismatch");
+  await page.goto(`${baseUrl}/companies/planm`, { waitUntil: "networkidle" });
+  await page.getByRole("heading", { name: /플랜엠/ }).waitFor();
+  const planmText = await page.locator("main").innerText();
+  check(planmText.includes("최근 3개년 재무"), "company detail financial section missing");
+  check(planmText.includes("회사 전체 재무"), "company detail should label company-total financials");
+  check(planmText.includes("모듈러 부문 별도 재무는 공개자료에서 확인되지 않았습니다."), "modular segment disclaimer missing");
+  check(planmText.includes("OpenDART 법인 식별 완료"), "DART identity label missing");
+  await page.goto(`${baseUrl}/companies/not-a-company`, { waitUntil: "networkidle" });
+  check((await page.locator("main").innerText()).includes("기업정보를 찾을 수 없습니다."), "company not found state missing");
+  await page.goto(`${baseUrl}/companies?role=bad&status=bad&q=PlanM`, { waitUntil: "networkidle" });
+  check(!page.url().includes("role=bad") && !page.url().includes("status=bad"), "invalid company URL params should be removed");
+  check(new URL(page.url()).searchParams.get("q") === "PlanM", "company URL cleanup should preserve q");
 
   await page.goto(`${baseUrl}/business`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: "모듈러 사업정보" }).waitFor();

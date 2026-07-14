@@ -4,6 +4,7 @@ import {
   Building2,
   ChevronDown,
   ExternalLink,
+  Factory,
   FileText,
   Home,
   Newspaper,
@@ -12,6 +13,35 @@ import {
 } from "lucide-react";
 import { Link, NavLink, Route, Routes, useParams, useSearchParams } from "react-router-dom";
 import { matchesBusinessFilters } from "./businessFilters";
+import {
+  COMPANY_TYPE_LABELS,
+  COMPETITIVE_ROLE_LABELS,
+  TIER_LABELS,
+  compareCompanies,
+  companyMatchesFilters,
+  formatCompanyDate,
+  formatKrwReadable,
+  getCompanyDataStatus,
+  getCompanyDataStatusLabel,
+  getCompanyHighlights,
+  getCompanyItems,
+  getCompanySummary,
+  getCompanyTypeLabel,
+  getCompetitiveRoleLabel,
+  getConfidenceLabel,
+  getLatestFinancial,
+  getLatestVerifiedAt,
+  getReviewStatusLabel,
+  getTierLabel,
+  isDartIdentityConfirmed,
+  metricSourceValue,
+  optionCounts,
+  representativeProject,
+  sourceHasUrl,
+  statusOptions,
+  technologyCount,
+} from "./companyInsights";
+import { COMPANY_SORT_VALUES, sanitizeCompanySearchParams } from "./companyUrlParams";
 import {
   compareBusinessByPriority,
   compareBusinessBySort,
@@ -125,6 +155,12 @@ const NEWS_RELEVANCE_FILTERS = [
   { value: "direct", label: NEWS_RELEVANCE_LEVELS.direct.label },
   { value: "adjacent", label: NEWS_RELEVANCE_LEVELS.adjacent.label },
   { value: "reference", label: NEWS_RELEVANCE_LEVELS.reference.label },
+];
+
+const COMPANY_SORT_OPTIONS = [
+  { value: "tier", label: "분석 우선순위" },
+  { value: "verified", label: "최신 검증순" },
+  { value: "name", label: "기업명순" },
 ];
 
 function useDataset(name) {
@@ -264,6 +300,7 @@ function Layout({ children }) {
         <nav aria-label="주요 메뉴">
           <NavLink to="/business"><Building2 size={17} />사업정보</NavLink>
           <NavLink to="/news"><Newspaper size={17} />뉴스정보</NavLink>
+          <NavLink to="/companies"><Factory size={17} />기업정보</NavLink>
         </nav>
       </header>
       <main>{children}</main>
@@ -358,11 +395,11 @@ function SearchBar({ value, onChange, placeholder, debounceMs = 300 }) {
   );
 }
 
-function SummaryItem({ label, value }) {
+function SummaryItem({ label, value, suffix = "건" }) {
   return (
     <div className="summary-chip">
       <span>{label}</span>
-      <strong>{Number(value || 0).toLocaleString("ko-KR")}건</strong>
+      <strong>{Number(value || 0).toLocaleString("ko-KR")}{suffix}</strong>
     </div>
   );
 }
@@ -396,9 +433,12 @@ function HomePage() {
   const metaState = useDataset("meta");
   const businessState = useDataset("business");
   const newsState = useDataset("news");
+  const companyState = useDataset("companies/companies");
   const favorites = useFavorites();
   const businessItems = getItems(businessState.data);
   const newsItems = getItems(newsState.data).map((item) => ({ ...item, topic: getNewsTopic(item), relevanceGrade: getNewsRelevance(item) })).sort((a, b) => compareNewsBySort(a, b, "newest"));
+  const companyItems = getCompanyItems(companyState.data);
+  const companySummary = getCompanySummary(companyItems);
   const dashboardAsOf = parseDate(metaState.data?.generated_at) || parseDate(metaState.data?.last_updated_at) || new Date();
   const businessSummary = getBusinessSummary(businessItems, dashboardAsOf);
   const newsSummary = getNewsSummary(newsItems, dashboardAsOf);
@@ -422,6 +462,7 @@ function HomePage() {
         <div className="intro-actions">
           <Link className="button primary" to="/business">사업정보 보기</Link>
           <Link className="button secondary" to="/news">뉴스정보 보기</Link>
+          <Link className="button secondary" to="/companies">기업정보 보기</Link>
         </div>
       </section>
       <DashboardSummary
@@ -451,6 +492,11 @@ function HomePage() {
           <Newspaper size={26} />
           <div><strong>뉴스정보</strong><span>국내뉴스와 해외 모듈러 RSS</span></div>
           <b>{metaState.data?.news_count ?? newsItems.length}건</b>
+        </Link>
+        <Link className="category-panel" to="/companies">
+          <Factory size={26} />
+          <div><strong>기업정보</strong><span>분석 대상 {companySummary.total}개사 · 직접 경쟁사 {companySummary.directCompetitors}개사 · 검증 완료 {companySummary.verified}개사</span></div>
+          <b>{companySummary.verified}개사 검증 완료</b>
         </Link>
       </section>
       <div className="public-data-note">
@@ -668,6 +714,384 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
         </div>
       </div>
     </article>
+  );
+}
+
+function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, tierOptions, statusFilterOptions, filteredCount, chips, onReset }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <FilterPanel title="기업 검색조건" open={open} setOpen={setOpen}>
+      <div className="filter-heading">
+        <h2>검색조건</h2>
+        <button type="button" className="icon-button" onClick={onReset} aria-label="필터 초기화" title="필터 초기화">
+          <RotateCcw size={16} />
+        </button>
+      </div>
+      <SearchBar value={values.q} onChange={(value) => setParam("q", value)} placeholder="기업명, 프로젝트, 기술 검색" />
+      <label>역할
+        <select value={values.role} onChange={(event) => setParam("role", event.target.value)}>
+          <option value="all">전체 역할</option>
+          {roleOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
+        </select>
+      </label>
+      <label>경쟁 관계
+        <select value={values.relationship} onChange={(event) => setParam("relationship", event.target.value)}>
+          <option value="all">전체</option>
+          {relationshipOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
+        </select>
+      </label>
+      <label>분석 우선순위
+        <select value={values.tier} onChange={(event) => setParam("tier", event.target.value)}>
+          <option value="all">전체</option>
+          {tierOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
+        </select>
+      </label>
+      <label>데이터 상태
+        <select value={values.status} onChange={(event) => setParam("status", event.target.value)}>
+          <option value="all">전체 상태</option>
+          {statusFilterOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
+        </select>
+      </label>
+      <label>정렬
+        <select value={values.sort} onChange={(event) => setParam("sort", event.target.value)}>
+          {COMPANY_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+        </select>
+      </label>
+      <ActiveFilterChips chips={chips} onReset={onReset} />
+      <button type="button" className="reset-button" onClick={onReset}>필터 초기화</button>
+      <p className="filter-note">검색 결과 {filteredCount.toLocaleString("ko-KR")}개사</p>
+    </FilterPanel>
+  );
+}
+
+function CompanyCard({ company }) {
+  const highlights = getCompanyHighlights(company);
+  const latestFinancial = getLatestFinancial(company);
+  const latestRevenue = metricSourceValue(latestFinancial?.revenue);
+  return (
+    <article className="result-card company-card">
+      <div className="card-topline">
+        <div className="badge-row">
+          <span>{getCompanyTypeLabel(company)}</span>
+          <span>{getCompetitiveRoleLabel(company)}</span>
+          <span>{getTierLabel(company)}</span>
+          <span className={`company-status ${getCompanyDataStatus(company)}`}>{getCompanyDataStatusLabel(company)}</span>
+        </div>
+      </div>
+      <h2><Link to={`/companies/${company.company_id}`}>{company.company_name}</Link></h2>
+      <p>{company.summary || "현재 공개자료를 추가 조사 중입니다."}</p>
+      {highlights.length > 0 ? (
+        <div className="company-highlight-grid">
+          {highlights.map((highlight) => <span key={highlight}>{highlight}</span>)}
+        </div>
+      ) : (
+        <p className="empty-inline">현재 공개자료를 추가 조사 중입니다.</p>
+      )}
+      <dl className="metadata">
+        <div><dt>최근 재무</dt><dd>{latestFinancial && latestRevenue !== null ? `${latestFinancial.year}년 ${formatKrwReadable(latestRevenue)}` : "공개자료 없음"}</dd></div>
+        <div><dt>기술·특허</dt><dd>{technologyCount(company) > 0 ? `${technologyCount(company)}건` : "확인 중"}</dd></div>
+        <div><dt>최신 기준일</dt><dd>{formatCompanyDate(getLatestVerifiedAt(company))}</dd></div>
+        <div><dt>신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
+      </dl>
+      <div className="card-footer">
+        <span>{company.company_name_en || (company.aliases || [])[0] || "별칭 확인 중"}</span>
+        <div className="card-actions">
+          <Link to={`/companies/${company.company_id}`}>상세보기</Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function CompanyListingPage() {
+  const { loading, error, data } = useDataset("companies/companies");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const items = getCompanyItems(data);
+  const summary = useMemo(() => getCompanySummary(items), [items]);
+  const roleOptions = useMemo(() => optionCounts(items, "company_type", COMPANY_TYPE_LABELS), [items]);
+  const relationshipOptions = useMemo(() => optionCounts(items, "competitive_role", COMPETITIVE_ROLE_LABELS), [items]);
+  const tierOptions = useMemo(() => optionCounts(items, "analysis_tier", TIER_LABELS), [items]);
+  const statusFilterOptions = useMemo(() => statusOptions(items), [items]);
+  const validValues = useMemo(() => ({
+    roles: roleOptions.map((option) => option.value),
+    relationships: relationshipOptions.map((option) => option.value),
+    tiers: tierOptions.map((option) => option.value),
+  }), [relationshipOptions, roleOptions, tierOptions]);
+
+  useEffect(() => {
+    if (!items.length) return;
+    const { params, changed } = sanitizeCompanySearchParams(searchParams, validValues);
+    if (changed) setSearchParams(params, { replace: true });
+  }, [items.length, searchParams, setSearchParams, validValues]);
+
+  const values = useMemo(() => ({
+    q: searchParams.get("q") || "",
+    role: getValidParam(searchParams, "role", ["all", ...validValues.roles], "all"),
+    relationship: getValidParam(searchParams, "relationship", ["all", ...validValues.relationships], "all"),
+    tier: getValidParam(searchParams, "tier", ["all", ...validValues.tiers], "all"),
+    status: getValidParam(searchParams, "status", ["all", "verified", "partial", "collecting"], "all"),
+    sort: getValidParam(searchParams, "sort", COMPANY_SORT_VALUES, "tier"),
+  }), [searchParams, validValues]);
+
+  const setParam = useCallback((key, value) => {
+    const next = new URLSearchParams(searchParams);
+    const defaults = { q: "", role: "all", relationship: "all", tier: "all", status: "all", sort: "tier" };
+    if (!value || value === defaults[key]) next.delete(key);
+    else next.set(key, value);
+    if (next.toString() === searchParams.toString()) return;
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
+
+  const reset = () => {
+    const next = new URLSearchParams(searchParams);
+    ["q", "role", "relationship", "tier", "status", "sort"].forEach((key) => next.delete(key));
+    setSearchParams(next, { replace: true });
+  };
+
+  const filtered = useMemo(() => items
+    .filter((company) => companyMatchesFilters(company, values))
+    .sort((a, b) => compareCompanies(a, b, values.sort)), [items, values]);
+
+  const chips = [
+    { key: "q", active: Boolean(values.q), label: `검색어: ${values.q}`, onRemove: () => setParam("q", "") },
+    { key: "role", active: values.role !== "all", label: COMPANY_TYPE_LABELS[values.role], onRemove: () => setParam("role", "all") },
+    { key: "relationship", active: values.relationship !== "all", label: COMPETITIVE_ROLE_LABELS[values.relationship], onRemove: () => setParam("relationship", "all") },
+    { key: "tier", active: values.tier !== "all", label: TIER_LABELS[values.tier], onRemove: () => setParam("tier", "all") },
+    { key: "status", active: values.status !== "all", label: statusFilterOptions.find((option) => option.value === values.status)?.label, onRemove: () => setParam("status", "all") },
+  ];
+
+  return (
+    <Layout>
+      <section className="page-heading">
+        <p className="eyebrow">COMPANY</p>
+        <h1>스틸 모듈러 기업정보</h1>
+        <p>건설사, 모듈러 전문 제작사, 설계사의 사업 역량과 경쟁 현황을 확인합니다.</p>
+      </section>
+      <section className="summary-strip company-summary-strip" aria-label="기업정보 요약">
+        <SummaryItem label="전체 기업" value={summary.total} suffix="개사" />
+        <SummaryItem label="직접 경쟁사" value={summary.directCompetitors} suffix="개사" />
+        <SummaryItem label="검증 완료" value={summary.verified} suffix="개사" />
+        <SummaryItem label="생산시설 확인 기업" value={summary.facilityConfirmed} suffix="개사" />
+      </section>
+      <div className="content-layout">
+        <CompanyFilters
+          values={values}
+          setParam={setParam}
+          roleOptions={roleOptions}
+          relationshipOptions={relationshipOptions}
+          tierOptions={tierOptions}
+          statusFilterOptions={statusFilterOptions}
+          filteredCount={filtered.length}
+          chips={chips}
+          onReset={reset}
+        />
+        <section className="results" aria-live="polite">
+          <div className="source-status lifecycle-summary">
+            <p>전체 {summary.total.toLocaleString("ko-KR")}개사 · 직접 경쟁사 {summary.directCompetitors.toLocaleString("ko-KR")}개사 · 검증 완료 {summary.verified.toLocaleString("ko-KR")}개사</p>
+            <div className="mini-bars" aria-label="기업 역할별 분포">
+              {summary.roleCounts.slice(0, 5).map((option) => (
+                <div key={option.value}><span>{option.label}</span><b style={{ width: `${Math.max(8, (option.count / Math.max(summary.total, 1)) * 100)}%` }} /> <em>{option.count}</em></div>
+              ))}
+            </div>
+          </div>
+          {loading && <div className="state">기업정보를 불러오는 중입니다.</div>}
+          {error && <div className="state error">기업정보 데이터를 불러오지 못했습니다.</div>}
+          {!loading && !error && items.length === 0 && <div className="state">등록된 기업정보가 없습니다.</div>}
+          {!loading && !error && items.length > 0 && filtered.length === 0 && <div className="state">현재 검색조건에 맞는 기업정보가 없습니다.</div>}
+          {filtered.map((company) => <CompanyCard key={company.company_id} company={company} />)}
+        </section>
+      </div>
+    </Layout>
+  );
+}
+
+function CompanyDetailPage() {
+  const { companyId } = useParams();
+  const { loading, error, data } = useDataset("companies/companies");
+  const company = getCompanyItems(data).find((item) => item.company_id === companyId);
+
+  if (loading) return <Layout><div className="state">기업정보를 불러오는 중입니다.</div></Layout>;
+  if (error) return <Layout><div className="state error">기업정보 데이터를 불러오지 못했습니다.</div></Layout>;
+  if (!company) {
+    return (
+      <Layout>
+        <div className="state company-not-found">
+          <span>기업정보를 찾을 수 없습니다.</span>
+          <Link className="button secondary" to="/companies">기업정보 목록으로 돌아가기</Link>
+        </div>
+      </Layout>
+    );
+  }
+
+  const financials = [...(Array.isArray(company.financials) ? company.financials : [])].sort((a, b) => Number(b.year || 0) - Number(a.year || 0)).slice(0, 3);
+  const latestAudit = [...(Array.isArray(company.audit_information) ? company.audit_information : [])].sort((a, b) => Number(b.fiscal_year || 0) - Number(a.fiscal_year || 0))[0];
+  const projects = Array.isArray(company.project_portfolio) ? company.project_portfolio : [];
+  const production = Array.isArray(company.production) ? company.production : [];
+  const signals = Array.isArray(company.recent_signals) ? company.recent_signals : [];
+  const sources = (Array.isArray(company.sources) ? company.sources : []).filter((source) => !String(source.source_url || "").includes(".cache"));
+  const technology = company.technology && typeof company.technology === "object" ? company.technology : {};
+  const technologyItems = Object.values(technology).flatMap((value) => Array.isArray(value) ? value : []).slice(0, 8);
+  const project = representativeProject(company);
+  const gaps = Array.isArray(company.research_gaps) ? company.research_gaps : [];
+
+  return (
+    <Layout>
+      <article className="detail-page company-detail">
+        <Link className="back" to="/companies"><ArrowLeft size={17} />목록으로</Link>
+        <div className="badge-row">
+          <span>{getCompanyTypeLabel(company)}</span>
+          <span>{getCompetitiveRoleLabel(company)}</span>
+          <span>{getTierLabel(company)}</span>
+          <span className={`company-status ${getCompanyDataStatus(company)}`}>{getCompanyDataStatusLabel(company)}</span>
+        </div>
+        <h1>{company.company_name}</h1>
+        <dl className="detail-grid">
+          <div><dt>검증 상태</dt><dd>{getReviewStatusLabel(company)}</dd></div>
+          <div><dt>데이터 신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
+          <div><dt>기준일</dt><dd>{formatCompanyDate(getLatestVerifiedAt(company))}</dd></div>
+          <div><dt>영문명</dt><dd>{company.company_name_en || "확인 중"}</dd></div>
+          <div><dt>본사</dt><dd>{company.headquarters || "확인 중"}</dd></div>
+          <div><dt>OpenDART</dt><dd>{isDartIdentityConfirmed(company) ? "OpenDART 법인 식별 완료" : "확인 중"}</dd></div>
+        </dl>
+
+        <section className="summary">
+          <h2>경쟁 포지션</h2>
+          <p>{company.summary || "현재 공개자료를 추가 조사 중입니다."}</p>
+          <div className="company-highlight-grid">
+            <span>{project?.project_name ? `대표 실적: ${project.project_name}` : "대표 실적 확인 중"}</span>
+            <span>{technologyCount(company) > 0 ? `기술·특허 ${technologyCount(company)}건 확인` : "기술 자료 확인 중"}</span>
+            <span>{financials.length ? `재무 ${financials.map((item) => item.year).join(", ")}년 확인` : "재무 공개자료 없음"}</span>
+          </div>
+        </section>
+
+        <section className="summary">
+          <h2>기업 개요</h2>
+          <dl className="detail-grid compact-detail-grid">
+            <div><dt>회사 유형</dt><dd>{getCompanyTypeLabel(company)}</dd></div>
+            <div><dt>경쟁 관계</dt><dd>{getCompetitiveRoleLabel(company)}</dd></div>
+            <div><dt>분석 우선순위</dt><dd>{getTierLabel(company)}</dd></div>
+            <div><dt>모듈러 공법</dt><dd>{(company.modular_methods || []).join(", ") || "확인 중"}</dd></div>
+            <div><dt>목표 시장</dt><dd>{(company.target_markets || []).join(", ") || "확인 중"}</dd></div>
+            <div><dt>웹사이트</dt><dd>{company.website_url ? <a href={company.website_url} target="_blank" rel="noopener noreferrer">공식 사이트 <ExternalLink size={13} /></a> : "확인 중"}</dd></div>
+          </dl>
+        </section>
+
+        <section className="summary">
+          <h2>생산 역량</h2>
+          {production.length ? (
+            <div className="company-section-list">
+              {production.map((item) => (
+                <div key={item.facility_id || item.facility_name}>
+                  <strong>{item.facility_name || "시설명 확인 중"}</strong>
+                  <span>{[item.location, item.ownership_type, item.operating_status].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
+                  {item.capacity_value && item.capacity_unit && <span>생산능력 {item.capacity_value} {item.capacity_unit}</span>}
+                </div>
+              ))}
+            </div>
+          ) : <p>현재 공개자료에서 확인된 생산시설 정보가 없습니다.</p>}
+        </section>
+
+        <section className="summary">
+          <h2>최근 3개년 재무</h2>
+          {financials.length ? (
+            <>
+              <p className="finance-note">회사 전체 재무 · {latestAudit?.reporting_scope === "consolidated" ? "연결" : "별도"} · {latestAudit?.accounting_standard === "general_korean_gaap" ? "일반기업회계기준" : latestAudit?.accounting_standard || "회계기준 확인 중"} · 감사의견 {latestAudit?.audit_opinion === "unmodified" ? "적정" : latestAudit?.audit_opinion || "확인 중"}</p>
+              <div className="company-table-wrap">
+                <table className="company-financial-table">
+                  <thead><tr><th>연도</th><th>매출</th><th>영업이익</th><th>순이익</th><th>영업현금흐름</th></tr></thead>
+                  <tbody>
+                    {financials.map((item) => (
+                      <tr key={item.year}>
+                        <th>{item.year}</th>
+                        <td>{formatKrwReadable(metricSourceValue(item.revenue))}</td>
+                        <td>{formatKrwReadable(metricSourceValue(item.operating_profit))}</td>
+                        <td>{formatKrwReadable(metricSourceValue(item.net_income))}</td>
+                        <td>{formatKrwReadable(metricSourceValue(item.operating_cash_flow))}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="finance-note">모듈러 부문 별도 재무는 공개자료에서 확인되지 않았습니다.</p>
+            </>
+          ) : <p>공개자료에서 확인된 재무정보가 없습니다.</p>}
+        </section>
+
+        <section className="summary">
+          <h2>주요 모듈러 실적</h2>
+          {projects.length ? (
+            <div className="company-section-list">
+              {projects.slice(0, 6).map((item) => (
+                <div key={item.project_id || item.project_name}>
+                  <strong>{item.project_name || "프로젝트명 확인 중"}</strong>
+                  <span>{[item.client, item.company_role, item.project_status].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
+                </div>
+              ))}
+            </div>
+          ) : <p>현재 공개자료를 추가 조사 중입니다.</p>}
+        </section>
+
+        <section className="summary">
+          <h2>기술·특허</h2>
+          {technologyItems.length ? (
+            <div className="company-section-list">
+              {technologyItems.map((item, index) => (
+                <div key={item.technology_id || item.registration_number || `${item.name}-${index}`}>
+                  <strong>{item.name || item.registration_number || "기술명 확인 중"}</strong>
+                  <span>{[item.record_type, item.status, item.technology_area].filter(Boolean).join(" · ") || item.summary || "세부 정보 확인 중"}</span>
+                </div>
+              ))}
+            </div>
+          ) : <p>현재 공개자료를 추가 조사 중입니다.</p>}
+        </section>
+
+        <section className="summary">
+          <h2>최근 동향</h2>
+          {signals.length ? (
+            <div className="company-section-list">
+              {signals.map((item) => (
+                <div key={item.signal_id || item.title}>
+                  <strong>{item.title || "동향 제목 확인 중"}</strong>
+                  <span>{[item.occurred_at, item.signal_type].filter(Boolean).join(" · ")}</span>
+                  {item.summary && <span>{item.summary}</span>}
+                </div>
+              ))}
+            </div>
+          ) : <p>현재 공개자료를 추가 조사 중입니다.</p>}
+        </section>
+
+        <section className="summary">
+          <h2>데이터 검증 정보</h2>
+          <dl className="detail-grid compact-detail-grid">
+            <div><dt>검토 상태</dt><dd>{getReviewStatusLabel(company)}</dd></div>
+            <div><dt>신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
+            <div><dt>DART corp_code</dt><dd>{company.dart_identity?.dart_corp_code || "확인 중"}</dd></div>
+            <div><dt>최근 감사보고서</dt><dd>{latestAudit?.receipt_number || "공개자료 없음"}</dd></div>
+          </dl>
+          {gaps.length > 0 && (
+            <div className="company-section-list">
+              {gaps.slice(0, 4).map((gap) => <div key={`${gap.area}-${gap.status}`}><strong>{gap.area}</strong><span>{gap.description || gap.status}</span></div>)}
+            </div>
+          )}
+        </section>
+
+        <section className="summary">
+          <h2>출처</h2>
+          {sources.length ? (
+            <div className="source-list">
+              {sources.slice(0, 12).map((source) => (
+                <div key={source.source_id || source.source_url}>
+                  <strong>{source.source_name || source.publisher || "출처"}</strong>
+                  <span>{[source.source_type, source.published_at || source.accessed_at, source.confidence].filter(Boolean).join(" · ")}</span>
+                  {source.receipt_number && <span>접수번호 {source.receipt_number}</span>}
+                  {sourceHasUrl(source) && <a href={source.source_url} target="_blank" rel="noopener noreferrer">원문 보기 <ExternalLink size={13} /></a>}
+                </div>
+              ))}
+            </div>
+          ) : <p>공개 출처를 추가 정리 중입니다.</p>}
+        </section>
+      </article>
+    </Layout>
   );
 }
 
@@ -1008,6 +1432,8 @@ export default function App() {
       <Route path="/business/:id" element={<DetailPage type="business" />} />
       <Route path="/news" element={<NewsListingPage />} />
       <Route path="/news/:id" element={<DetailPage type="news" />} />
+      <Route path="/companies" element={<CompanyListingPage />} />
+      <Route path="/companies/:companyId" element={<CompanyDetailPage />} />
       <Route path="*" element={<Layout><div className="state"><Home size={22} />페이지를 찾을 수 없습니다.</div></Layout>} />
     </Routes>
   );
