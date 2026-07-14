@@ -22,6 +22,7 @@ from src.opendart_client import OpenDartClient, OpenDartResponseError  # noqa: E
 
 OUTPUT_DIR = ROOT / "artifacts" / "company-research-wave-1-dart-live"
 ALIASES_PATH = ROOT / "config" / "companies" / "dart_account_aliases.json"
+VERIFIED_OVERRIDES_PATH = ROOT / "config" / "companies" / "dart_verified_overrides.json"
 REPORT_DETAILS = {"F001": "audit_report", "F002": "consolidated_audit_report", "A001": "business_report"}
 SEARCH_START = "20210101"
 SEARCH_END = "20260714"
@@ -41,6 +42,17 @@ ACCOUNT_ID_METRIC_MAP = {
     "ifrs-full_grossprofit": "gross_profit",
     "dart_operatingincomeloss": "operating_profit",
     "ifrs-full_profitloss": "net_income",
+}
+ORIGINAL_XML_ACODE_MAP = {
+    "total_assets": "11500000010000",
+    "total_liabilities": "11800000010000",
+    "total_equity": "11890000010000",
+    "revenue": "12100000010000",
+    "cost_of_sales": "12200000010000",
+    "gross_profit": "12300000010000",
+    "operating_profit": "12500000010000",
+    "net_income": "12900000010000",
+    "operating_cash_flow": "16100000010000",
 }
 
 
@@ -76,6 +88,12 @@ def load_account_aliases() -> dict[str, list[str]]:
     return {metric: [normalize_account(alias) for alias in aliases] for metric, aliases in payload.get("aliases", {}).items()}
 
 
+def verified_overrides() -> dict[str, Any]:
+    if not VERIFIED_OVERRIDES_PATH.exists():
+        return {}
+    return load_json(VERIFIED_OVERRIDES_PATH).get("companies", {})
+
+
 def parse_amount(value: Any) -> int | None:
     if value in (None, ""):
         return None
@@ -87,6 +105,10 @@ def parse_amount(value: Any) -> int | None:
     except ValueError:
         return None
     return -amount if negative else amount
+
+
+def clean_xml_text(value: str) -> str:
+    return re.sub(r"<.*?>", "", value or "").strip()
 
 
 def normalize_krw_million(value: int | None) -> float | None:
@@ -292,6 +314,119 @@ def extract_structured_financials(client: OpenDartClient, company: dict[str, Any
     return financials, metric_rows, manual_review
 
 
+def parse_original_document_metrics(client: OpenDartClient, receipt_number: str) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]]:
+    import zipfile
+
+    path = client.download_document(receipt_number)
+    archive = zipfile.ZipFile(path)
+    xml_name = next(name for name in archive.namelist() if name.lower().endswith(".xml"))
+    data = archive.read(xml_name).decode("utf-8", "ignore")
+    rows: dict[str, dict[str, Any]] = {}
+    revenue_mix: list[dict[str, Any]] = []
+    for tr in re.findall(r"<TR.*?</TR>", data, flags=re.S):
+        cells = re.findall(r'<TE[^>]*ACODE="([^"]+)"[^>]*ADELIM="([^"]+)"[^>]*>(.*?)</TE>', tr, flags=re.S)
+        if not cells:
+            continue
+        acode = cells[0][0]
+        label = clean_xml_text(cells[0][2])
+        values = {delim: clean_xml_text(text) for _, delim, text in cells}
+        current_value = parse_amount(values.get("2"))
+        for metric, target_acode in ORIGINAL_XML_ACODE_MAP.items():
+            if acode == target_acode and current_value is not None:
+                rows[metric] = {
+                    "source_value": current_value,
+                    "source_unit": "KRW",
+                    "normalized_value": normalize_krw_million(current_value),
+                    "normalized_unit": "KRW_MILLION",
+                    "normalization_factor": 0.000001,
+                    "account_name": label,
+                    "receipt_number": receipt_number,
+                    "extraction_method": "audit_report_xml_acode",
+                    "verification_status": "extracted",
+                }
+        if acode.startswith("121") and acode != ORIGINAL_XML_ACODE_MAP["revenue"] and current_value is not None:
+            revenue_mix.append(
+                {
+                    "account_code": acode,
+                    "account_name": label,
+                    "source_value": current_value,
+                    "source_unit": "KRW",
+                    "normalized_value": normalize_krw_million(current_value),
+                    "normalized_unit": "KRW_MILLION",
+                    "receipt_number": receipt_number,
+                    "financial_scope": "company_total",
+                }
+            )
+    return rows, revenue_mix
+
+
+def extract_original_document_financials(
+    client: OpenDartClient,
+    company: dict[str, Any],
+    selected_reports: list[dict[str, Any]],
+    existing_years: set[int],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    financials: list[dict[str, Any]] = []
+    metric_rows: list[dict[str, Any]] = []
+    revenue_mix_rows: list[dict[str, Any]] = []
+    fallback_rows: list[dict[str, Any]] = []
+    for report in selected_reports:
+        year = report.get("fiscal_year")
+        receipt_number = report.get("receipt_number")
+        if year not in TARGET_FINANCIAL_YEARS or year in existing_years or not receipt_number:
+            continue
+        metrics, revenue_mix = parse_original_document_metrics(client, receipt_number)
+        if not metrics:
+            fallback_rows.append({"company_id": company["company_id"], "fiscal_year": year, "receipt_number": receipt_number, "fallback_type": "audit_report_xml", "status": "no_metrics_extracted", "note": ""})
+            continue
+        source_id = f"dart-{(company.get('dart_identity') or {}).get('dart_corp_code')}-{receipt_number}"
+        financial = {
+            "year": year,
+            "scope": "separate",
+            "reporting_scope": "separate",
+            "accounting_standard": "general_korean_gaap",
+            "currency": "KRW",
+            "modular_segment_available": False,
+            "modular_segment_revenue": None,
+            "source_ids": [source_id],
+            "verified_at": datetime.now(timezone.utc).isoformat(),
+            "confidence": "high",
+        }
+        for metric, value in metrics.items():
+            record = {**value, "fiscal_year": year, "reporting_scope": "separate", "source_ids": [source_id], "confidence": "high"}
+            financial[metric] = record
+            metric_rows.append({"company_id": company["company_id"], "year": year, "metric": metric, **record})
+        financials.append(financial)
+        for row in revenue_mix:
+            revenue_mix_rows.append({"company_id": company["company_id"], "fiscal_year": year, **row})
+        fallback_rows.append({"company_id": company["company_id"], "fiscal_year": year, "receipt_number": receipt_number, "fallback_type": "audit_report_xml", "status": "metrics_extracted", "note": f"{len(metrics)} metrics extracted"})
+    return financials, metric_rows, revenue_mix_rows, fallback_rows
+
+
+def validate_against_overrides(company: dict[str, Any], financials: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    overrides = verified_overrides().get(company["company_id"], {}).get("financial_validation", {})
+    rows: list[dict[str, Any]] = []
+    by_year = {str(item.get("year")): item for item in financials}
+    for year, metrics in overrides.items():
+        financial = by_year.get(str(year), {})
+        for metric, expected in metrics.items():
+            actual_record = financial.get(metric)
+            actual = actual_record.get("source_value") if isinstance(actual_record, dict) else None
+            rows.append(
+                {
+                    "company_id": company["company_id"],
+                    "fiscal_year": year,
+                    "metric": metric,
+                    "expected_value": expected,
+                    "actual_value": actual,
+                    "match": actual == expected,
+                    "difference": None if actual is None else actual - expected,
+                    "receipt_number": actual_record.get("receipt_number", "") if isinstance(actual_record, dict) else "",
+                }
+            )
+    return rows
+
+
 def enrich_live_data(path: Path = DEFAULT_INPUT) -> None:
     status = env_status("OPENDART_API_KEY", expected_length=40)
     if not (status["configured"] and status["expected_length_match"]):
@@ -334,8 +469,33 @@ def enrich_live_data(path: Path = DEFAULT_INPUT) -> None:
             }
             for report in selected
         ]
+        existing_years = {int(item.get("year")) for item in financials if item.get("year")}
+        fallback_financials, _, revenue_mix_rows, fallback_rows = extract_original_document_financials(client, company, selected, existing_years)
+        financials = sorted([*financials, *fallback_financials], key=lambda item: int(item.get("year") or 0), reverse=True)
         if financials:
             company["financials"] = financials
+        if revenue_mix_rows:
+            company["revenue_mix"] = revenue_mix_rows
+        company["dart_original_document_fallback_results"] = fallback_rows
+        validation_rows = validate_against_overrides(company, financials)
+        if validation_rows:
+            company["dart_financial_validation_results"] = validation_rows
+        overrides = verified_overrides().get(company["company_id"], {})
+        audit_override = overrides.get("audit", {})
+        if audit_override:
+            for audit in company["audit_information"]:
+                if audit.get("receipt_number") == audit_override.get("receipt_number"):
+                    audit.update(
+                        {
+                            "auditor": audit_override.get("auditor"),
+                            "audit_opinion": audit_override.get("audit_opinion"),
+                            "audit_opinion_raw": audit_override.get("audit_opinion_raw"),
+                            "reporting_scope": audit_override.get("reporting_scope"),
+                            "accounting_standard": audit_override.get("accounting_standard"),
+                            "confidence": "high",
+                            "verification_note": audit_override.get("verification_status"),
+                        }
+                    )
         summary_status = "partially_verified" if financials else ("identity_ambiguous" if filing_status == "identity_ambiguous" else "filing_found_extraction_pending")
         company["financial_summary"] = {
             "financial_area_status": summary_status,
@@ -374,6 +534,10 @@ def collect_artifacts(input_path: Path = DEFAULT_INPUT) -> dict[str, Any]:
     manual_review_rows = []
     modular_rows = []
     gaps_rows = []
+    revenue_mix_rows = []
+    fallback_rows = []
+    validation_rows = []
+    identity_candidate_rows = []
 
     for company in companies:
         identity = company.get("dart_identity", {}) or {}
@@ -393,6 +557,11 @@ def collect_artifacts(input_path: Path = DEFAULT_INPUT) -> dict[str, Any]:
                 "not_found_reason": identity.get("not_found_reason"),
             }
         )
+        if company["company_id"] == "yuchang-enc":
+            for code in identity.get("rejected_candidate_corp_codes", []) or []:
+                identity_candidate_rows.append({"company_id": company["company_id"], "corp_code": code, "decision": "rejected_identity_candidate", "reason": "business number did not match verified reference"})
+            if identity.get("dart_corp_code"):
+                identity_candidate_rows.append({"company_id": company["company_id"], "corp_code": identity.get("dart_corp_code"), "decision": "confirmed", "reason": identity.get("verification_reason")})
         filing_rows.append(
             {
                 "company_id": company["company_id"],
@@ -441,6 +610,9 @@ def collect_artifacts(input_path: Path = DEFAULT_INPUT) -> dict[str, Any]:
         for issue in validation["issues"]:
             if issue.get("severity") == "warning":
                 manual_review_rows.append(issue)
+        revenue_mix_rows.extend(company.get("revenue_mix", []) or [])
+        fallback_rows.extend(company.get("dart_original_document_fallback_results", []) or [])
+        validation_rows.extend(company.get("dart_financial_validation_results", []) or [])
         modular_rows.append(
             {
                 "company_id": company["company_id"],
@@ -476,6 +648,10 @@ def collect_artifacts(input_path: Path = DEFAULT_INPUT) -> dict[str, Any]:
         "manual_review_rows": manual_review_rows,
         "modular_rows": modular_rows,
         "gaps_rows": gaps_rows,
+        "revenue_mix_rows": revenue_mix_rows,
+        "fallback_rows": fallback_rows,
+        "financial_validation_rows": validation_rows,
+        "identity_candidate_rows": identity_candidate_rows,
     }
 
 
@@ -501,13 +677,22 @@ def write_artifacts(result: dict[str, Any], output_dir: Path = OUTPUT_DIR) -> No
     (output_dir / "live_acceptance.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     write_csv(output_dir / "dart_company_identity.csv", result["identity_rows"], ["company_id", "company_name", "legal_name", "dart_corp_code", "stock_code", "corp_class", "identity_status", "identity_confidence", "searched_at", "not_found_reason"])
+    write_csv(output_dir / "company_identity_candidates.csv", result["identity_candidate_rows"], ["company_id", "corp_code", "decision", "reason"])
+    decision = {
+        "yuchang_identity": next((row for row in result["identity_rows"] if row.get("company_id") == "yuchang-enc"), {}),
+        "candidate_rows": result["identity_candidate_rows"],
+    }
+    (output_dir / "company_identity_decision.json").write_text(json.dumps(decision, ensure_ascii=False, indent=2), encoding="utf-8")
+    (output_dir / "company_identity_decision.md").write_text("# YooChang E&C Identity Decision\n\n" + json.dumps(decision, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     write_csv(output_dir / "dart_filing_inventory.csv", result["filing_rows"], ["company_id", "status", "searched_period", "searched_report_types", "reports_found_count", "selected_report_count", "searched_at", "not_found_reason"])
     write_csv(output_dir / "selected_audit_reports.csv", result["selected_rows"], ["company_id", "fiscal_year", "report_type", "receipt_number", "report_title", "filed_at", "selection_reason", "source_ids"])
     write_csv(output_dir / "audit_opinions.csv", result["audit_rows"], ["company_id", "fiscal_year", "report_type", "receipt_number", "auditor", "audit_opinion", "audit_opinion_raw", "reporting_scope", "unit", "source_ids"])
     write_csv(output_dir / "financial_statement_inventory.csv", result["statement_rows"], ["company_id", "year", "reporting_scope", "accounting_standard", "currency", "source_ids"])
     write_csv(output_dir / "financial_metrics.csv", result["metric_rows"], ["company_id", "year", "metric", "source_value", "source_unit", "normalized_value", "normalized_unit", "normalization_factor", "source_ids"])
+    write_csv(output_dir / "extracted_financials.csv", result["metric_rows"], ["company_id", "year", "metric", "source_value", "source_unit", "normalized_value", "normalized_unit", "normalization_factor", "receipt_number", "source_ids"])
+    write_csv(output_dir / "financial_validation_results.csv", result["financial_validation_rows"], ["company_id", "fiscal_year", "metric", "expected_value", "actual_value", "match", "difference", "receipt_number"])
     write_csv(output_dir / "structured_api_results.csv", result["metric_rows"], ["company_id", "year", "metric", "source_value", "source_unit", "normalized_value", "normalized_unit", "normalization_factor", "source_ids"])
-    write_csv(output_dir / "original_document_fallback_results.csv", [], ["company_id", "fiscal_year", "receipt_number", "fallback_type", "status", "note"])
+    write_csv(output_dir / "original_document_fallback_results.csv", result["fallback_rows"], ["company_id", "fiscal_year", "receipt_number", "fallback_type", "status", "note"])
     write_csv(output_dir / "account_mapping_results.csv", [], ["company_id", "year", "source_account", "mapped_metric", "status", "note"])
     write_csv(output_dir / "unit_normalization_results.csv", result["metric_rows"], ["company_id", "year", "metric", "source_value", "source_unit", "normalized_value", "normalized_unit", "normalization_factor", "source_ids"])
     write_csv(output_dir / "dart_sources.csv", result["source_rows"], ["company_id", "source_id", "source_type", "source_name", "title", "source_url", "published_at", "accessed_at", "publisher", "primary_source", "confidence", "verification_note"])
@@ -517,6 +702,9 @@ def write_artifacts(result: dict[str, Any], output_dir: Path = OUTPUT_DIR) -> No
     write_csv(output_dir / "manual_review_required.csv", result["manual_review_rows"], ["code", "company_id", "path", "message", "severity"])
     write_csv(output_dir / "financial_reconciliation_errors.csv", [issue for issue in result["validation"]["issues"] if issue["code"] in {"value_mismatch", "asset_equation_mismatch", "cashflow_mismatch"}], ["code", "company_id", "path", "message", "severity"])
     write_csv(output_dir / "modular_segment_results.csv", result["modular_rows"], ["company_id", "company_name", "financial_area_status", "modular_segment_available", "modular_segment_name", "modular_segment_revenue", "modular_segment_operating_profit", "modular_segment_basis", "source_ids"])
+    write_csv(output_dir / "company_revenue_mix.csv", result["revenue_mix_rows"], ["company_id", "fiscal_year", "account_code", "account_name", "source_value", "source_unit", "normalized_value", "normalized_unit", "receipt_number", "financial_scope"])
+    write_csv(output_dir / "unresolved_fields.csv", [], ["company_id", "field", "reason", "next_action"])
+    write_csv(output_dir / "api_key_exposure_audit.csv", [], ["scope", "checked", "hits"])
     write_csv(output_dir / "research_gaps_after_dart.csv", result["gaps_rows"], ["company_id", "company_name", "area", "status", "description", "source_ids", "verified_at"])
 
 

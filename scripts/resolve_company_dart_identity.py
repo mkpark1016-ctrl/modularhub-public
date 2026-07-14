@@ -17,6 +17,7 @@ from src.opendart_client import OpenDartClient  # noqa: E402
 
 COMPANIES_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
 MANUAL_FILINGS_PATH = ROOT / "config" / "companies" / "dart_manual_filings.json"
+IDENTITY_OVERRIDES_PATH = ROOT / "config" / "companies" / "dart_identity_overrides.json"
 OUTPUT_DIR = ROOT / "artifacts" / "company-research-wave-1-dart"
 WAVE1_IDS = ["yuchang-enc", "kumkang-kind", "planm", "daeseung-engineering"]
 SEARCHED_YEARS = [2025, 2024, 2023, 2022, 2021]
@@ -41,6 +42,34 @@ def wave1_companies(path: Path = COMPANIES_PATH) -> list[dict[str, Any]]:
 
 def normalize(value: str | None) -> str:
     return "".join((value or "").lower().split())
+
+
+def normalize_business_number(value: str | None) -> str:
+    return "".join(ch for ch in str(value or "") if ch.isdigit())
+
+
+def normalize_corporate_number(value: str | None) -> str:
+    return normalize_business_number(value)
+
+
+def normalize_person_names(value: str | list[str] | None) -> set[str]:
+    if isinstance(value, list):
+        text = ",".join(value)
+    else:
+        text = value or ""
+    normalized = text.replace("ㆍ", ",").replace("·", ",").replace("/", ",").replace("，", ",")
+    return {normalize(part) for part in normalized.split(",") if normalize(part)}
+
+
+def normalize_address(value: str | None) -> str:
+    text = normalize(value)
+    for token in ["(", ")", "[", "]", "주식회사", "(주)", "㈜", ",", ".", "-"]:
+        text = text.replace(normalize(token), "")
+    return text
+
+
+def normalize_phone(value: str | None) -> str:
+    return normalize_business_number(value)
 
 
 def normalize_url_host(value: str | None) -> str:
@@ -79,8 +108,90 @@ def manual_filings(path: Path = MANUAL_FILINGS_PATH) -> list[dict[str, Any]]:
     return payload.get("filings", []) if isinstance(payload.get("filings"), list) else []
 
 
+def identity_overrides(path: Path = IDENTITY_OVERRIDES_PATH) -> dict[str, dict[str, Any]]:
+    if not path.exists():
+        return {}
+    payload = load_json(path)
+    return {item["company_id"]: item for item in payload.get("overrides", []) if item.get("company_id")}
+
+
+def identity_from_overrides(
+    company: dict[str, Any],
+    matches: list[dict[str, str]],
+    client: OpenDartClient,
+    searched_at: str,
+    override: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    if not override:
+        return None
+    candidates = []
+    for match in matches:
+        overview = client.company_overview(match.get("corp_code", ""))
+        business_match = normalize_business_number(overview.get("bizr_no")) == normalize_business_number(override.get("normalized_business_number"))
+        representative_names = normalize_person_names(overview.get("ceo_nm"))
+        required_names = normalize_person_names(override.get("representative_required_names", []))
+        representative_match = bool(required_names and required_names <= representative_names)
+        address_match = normalize_address(override.get("normalized_address_hint")) in normalize_address(overview.get("adres"))
+        phone_match = normalize_phone(overview.get("phn_no")) == normalize_phone(override.get("normalized_phone"))
+        candidates.append(
+            {
+                "match": match,
+                "overview": overview,
+                "business_number_match": business_match,
+                "representative_match": representative_match,
+                "address_match": address_match,
+                "phone_match": phone_match,
+            }
+        )
+    exact_matches = [candidate for candidate in candidates if candidate["business_number_match"]]
+    if len(exact_matches) != 1:
+        return None
+    selected = exact_matches[0]
+    match = selected["match"]
+    overview = selected["overview"]
+    rejected = [candidate["match"].get("corp_code") for candidate in candidates if candidate is not selected]
+    matched_fields = ["business_number"]
+    if selected["representative_match"]:
+        matched_fields.append("representative")
+    if selected["address_match"]:
+        matched_fields.append("address")
+    if selected["phone_match"]:
+        matched_fields.append("phone")
+    return {
+        "company_id": company["company_id"],
+        "legal_name": overview.get("corp_name") or override.get("legal_name") or company.get("company_name"),
+        "normalized_legal_name": normalize(overview.get("corp_name") or override.get("legal_name") or company.get("company_name")),
+        "aliases": company.get("aliases", []),
+        "dart_corp_code": match.get("corp_code", ""),
+        "stock_code": overview.get("stock_code") or match.get("stock_code", ""),
+        "corp_class": corp_class_label(overview.get("corp_cls"), overview.get("stock_code") or match.get("stock_code")),
+        "representative": overview.get("ceo_nm", ""),
+        "business_number": overview.get("bizr_no", ""),
+        "corporate_registration_number": overview.get("jurir_no", ""),
+        "headquarters": overview.get("adres") or company.get("headquarters"),
+        "phone": overview.get("phn_no", ""),
+        "website_url": overview.get("hm_url") or company.get("website_url"),
+        "established_at": overview.get("est_dt", ""),
+        "accounting_month": overview.get("acc_mt", ""),
+        "identity_status": "confirmed",
+        "identity_confidence": "high",
+        "identity_method": override.get("identity_method", "exact_business_number"),
+        "matched_fields": matched_fields,
+        "identity_source_ids": ["opendart_corp_code", "opendart_company_overview", "manual_identity_override"],
+        "verified_at": searched_at,
+        "searched_at": searched_at,
+        "not_found_reason": "",
+        "candidate_count": len(matches),
+        "rejected_candidate_count": len(rejected),
+        "rejected_candidate_corp_codes": rejected,
+        "identity_evidence": ["exact_legal_name_match", "opendart_corp_code", "opendart_company_overview", "exact_business_number"],
+        "verification_reason": override.get("verification_reason", ""),
+    }
+
+
 def resolve_identities(client: OpenDartClient, companies: list[dict[str, Any]]) -> list[dict[str, Any]]:
     searched_at = datetime.now(timezone.utc).isoformat()
+    overrides = identity_overrides()
     if not client.has_api_key:
         return [
             {
@@ -112,6 +223,10 @@ def resolve_identities(client: OpenDartClient, companies: list[dict[str, Any]]) 
         names = [company.get("company_name", ""), *(company.get("aliases", []) or [])]
         normalized_names = {normalize(name) for name in names if normalize(name)}
         matches = [row for row in corp_rows if normalize(row.get("corp_name")) in normalized_names]
+        override_identity = identity_from_overrides(company, matches, client, searched_at, overrides.get(company["company_id"]))
+        if override_identity:
+            output.append(override_identity)
+            continue
         overview: dict[str, Any] = {}
         evidence: list[str] = []
         if len(matches) == 1:

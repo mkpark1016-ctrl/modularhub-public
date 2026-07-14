@@ -1,0 +1,19 @@
+{
+  "schema_version": "dart-identity-overrides-v1",
+  "overrides": [
+    {
+      "company_id": "yuchang-enc",
+      "legal_name": "주식회사 유창이앤씨",
+      "corp_code": "00144960",
+      "normalized_business_number": "1348104894",
+      "representative_required_names": ["조우제"],
+      "normalized_address_hint": "경기도시흥시공단1대로321번길45정왕동",
+      "normalized_phone": "0226489600",
+      "identity_status": "confirmed",
+      "identity_method": "exact_business_number",
+      "matched_fields": ["business_number"],
+      "verification_reason": "OpenDART company overview business number exactly matches 134-81-04894. Representative/address are supplementary review fields; DART phone differs from the provided reference and is not used as the decisive match.",
+      "source_reference": "OpenDART company overview"
+    }
+  ]
+}

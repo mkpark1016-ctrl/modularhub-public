@@ -1,0 +1,29 @@
+{
+  "schema_version": "dart-verified-overrides-v1",
+  "companies": {
+    "yuchang-enc": {
+      "audit": {
+        "fiscal_year": 2025,
+        "receipt_number": "20260408002280",
+        "auditor": "신정회계법인",
+        "audit_opinion": "unmodified",
+        "audit_opinion_raw": "적정",
+        "reporting_scope": "separate",
+        "accounting_standard": "일반기업회계기준",
+        "verification_status": "manual_verified_from_audit_report"
+      },
+      "financial_validation": {
+        "2025": {
+          "revenue": 307684467052,
+          "operating_profit": 14867615594,
+          "net_income": 5662989075
+        },
+        "2024": {
+          "revenue": 364024587969,
+          "operating_profit": 9124197103,
+          "net_income": 10850960336
+        }
+      }
+    }
+  }
+}
