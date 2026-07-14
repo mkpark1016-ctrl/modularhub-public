@@ -10,9 +10,12 @@ import {
   getCompanyTypeLabel,
   getCompetitiveRoleLabel,
   getLatestFinancial,
+  getProductionModelLabel,
   getTierLabel,
+  hasConfirmedProductionFacility,
   matchesCompanySearch,
   metricSourceValue,
+  productionFacilities,
   technologyCount,
 } from "../src/companyInsights.js";
 
@@ -26,6 +29,8 @@ const summary = getCompanySummary(companies);
 assert.equal(summary.total, 17);
 assert.equal(summary.directCompetitors, companies.filter((company) => company.competitive_role === "direct_competitor").length);
 assert.equal(summary.verified, 4);
+assert.equal(summary.facilityConfirmed, companies.filter((company) => hasConfirmedProductionFacility(company)).length);
+assert.equal(summary.facilityConfirmed, 2);
 
 const wave1 = ["yuchang-enc", "kumkang-kind", "planm", "daeseung-engineering"].map((id) => companies.find((company) => company.company_id === id));
 assert.equal(wave1.every(Boolean), true);
@@ -48,7 +53,15 @@ assert.ok(manufacturers.length > 0);
 assert.equal(matchesCompanySearch(companies.find((company) => company.company_id === "planm"), "PlanM"), true);
 assert.equal(matchesCompanySearch(companies.find((company) => company.company_id === "kumkang-kind"), "Jang Bogo"), true);
 assert.equal(matchesCompanySearch(companies.find((company) => company.company_id === "kumkang-kind"), "Modular Unit System"), true);
+assert.equal(matchesCompanySearch(companies.find((company) => company.company_id === "kumkang-kind"), "steel_modular_units"), true);
+assert.equal(matchesCompanySearch(companies.find((company) => company.company_id === "yuchang-enc"), "YOOCHANG E&C Factory"), true);
 assert.equal(matchesCompanySearch(companies.find((company) => company.company_id === "sungji-steel"), "not-a-real-company-term"), false);
+
+assert.equal(productionFacilities(companies.find((company) => company.company_id === "yuchang-enc")).length, 1);
+assert.equal(productionFacilities(companies.find((company) => company.company_id === "kumkang-kind")).length, 1);
+assert.equal(hasConfirmedProductionFacility(companies.find((company) => company.company_id === "planm")), false);
+assert.equal(hasConfirmedProductionFacility(companies.find((company) => company.company_id === "daeseung-engineering")), false);
+assert.equal(getProductionModelLabel(companies.find((company) => company.company_id === "planm")), "생산정보 조사 중");
 
 assert.equal(getCompanyTypeLabel(companies.find((company) => company.company_id === "kumkang-kind")), "전문 제작사");
 assert.equal(getCompetitiveRoleLabel(companies.find((company) => company.company_id === "gs-ec")), "내부 기준");

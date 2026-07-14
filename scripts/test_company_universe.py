@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from audit_company_universe import audit, research_required  # noqa: E402
+from validate_company_production import validate as validate_production  # noqa: E402
 from validate_company_universe import load_universe, validate_universe  # noqa: E402
 
 
@@ -53,7 +54,8 @@ def main() -> int:
         all(company["review_status"] == "unresearched" for company in companies if company["company_id"] not in wave1_ids),
         "non-Wave 1 companies should remain unresearched",
     )
-    require(all(not company["production"] for company in companies), "production data must remain empty until facility facts are verified")
+    production_validation = validate_production(payload)
+    require(production_validation["valid"], f"production data must be source-backed once facility facts are verified: {production_validation['issues']}")
     require(
         all(not company["financials"] or all(record.get("source_ids") and record.get("scope") for record in company["financials"]) for company in companies),
         "financial data must be empty or source-backed with scope",

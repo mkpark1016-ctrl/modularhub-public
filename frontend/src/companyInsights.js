@@ -131,6 +131,7 @@ export function companySearchText(company) {
     return [value];
   });
   const production = Array.isArray(company?.production) ? company.production : [];
+  const productionInfo = productionSummary(company);
   const signals = Array.isArray(company?.recent_signals) ? company.recent_signals : [];
   return normalizeCompanyText([
     company?.company_name,
@@ -142,7 +143,20 @@ export function companySearchText(company) {
     ...(Array.isArray(company?.modular_methods) ? company.modular_methods : []),
     ...(Array.isArray(company?.target_markets) ? company.target_markets : []),
     company?.summary,
-    ...production.flatMap((item) => [item.facility_name, item.location, item.capacity_unit]),
+    productionInfo.summary,
+    productionInfo.manufacturing_model,
+    productionInfo.own_facility_status,
+    ...production.flatMap((item) => [
+      item.facility_name,
+      ...(Array.isArray(item.facility_aliases) ? item.facility_aliases : []),
+      item.location,
+      item.region,
+      item.city,
+      item.address,
+      item.capacity_unit,
+      item.capacity_basis,
+      ...(Array.isArray(item.production_scope) ? item.production_scope : []),
+    ]),
     ...projects.flatMap((item) => [item.project_name, item.client, item.location, item.building_use, item.company_role]),
     ...technologyValues.map((item) => {
       if (item && typeof item === "object") return [item.name, item.summary, item.technology_area, item.status].join(" ");
@@ -210,11 +224,59 @@ export function getCompanySummary(companies) {
     total: list.length,
     directCompetitors: list.filter((company) => company.competitive_role === "direct_competitor").length,
     verified: list.filter((company) => getCompanyDataStatus(company) === "verified").length,
-    facilityConfirmed: list.filter((company) => (company.production || []).some((item) => item.operating_status === "facility_confirmed" || item.facility_name)).length,
+    facilityConfirmed: list.filter((company) => hasConfirmedProductionFacility(company)).length,
     roleCounts: optionCounts(list, "company_type", COMPANY_TYPE_LABELS),
     relationshipCounts: optionCounts(list, "competitive_role", COMPETITIVE_ROLE_LABELS),
     statusCounts: statusOptions(list),
   };
+}
+
+export const CONFIRMED_FACILITY_STATUSES = new Set([
+  "confirmed_own_facility",
+  "confirmed_leased_facility",
+  "confirmed_partner_manufacturing",
+]);
+
+export const EXCLUDED_FACILITY_STATUSES = new Set([
+  "not_publicly_confirmed",
+  "research_in_progress",
+  "historical_facility",
+  "planned_facility",
+  "ceased_operation",
+]);
+
+export function productionSummary(company) {
+  return company?.production_summary && typeof company.production_summary === "object" ? company.production_summary : {};
+}
+
+export function productionFacilities(company) {
+  return Array.isArray(company?.production) ? company.production : [];
+}
+
+export function isConfirmedProductionFacility(facility) {
+  if (!facility || typeof facility !== "object") return false;
+  const status = facility.own_facility_status || facility.verification_status || facility.operation_status;
+  if (EXCLUDED_FACILITY_STATUSES.has(status)) return false;
+  if (CONFIRMED_FACILITY_STATUSES.has(status)) return true;
+  return Boolean(facility.facility_name && Array.isArray(facility.source_ids) && facility.source_ids.length);
+}
+
+export function hasConfirmedProductionFacility(company) {
+  const summary = productionSummary(company);
+  if (EXCLUDED_FACILITY_STATUSES.has(summary.own_facility_status)) return false;
+  if (summary.own_facility_status === "confirmed_partner_manufacturing" && !productionFacilities(company).some(isConfirmedProductionFacility)) return false;
+  if (CONFIRMED_FACILITY_STATUSES.has(summary.own_facility_status)) return true;
+  return productionFacilities(company).some(isConfirmedProductionFacility);
+}
+
+export function getProductionModelLabel(company) {
+  const summary = productionSummary(company);
+  const model = summary.manufacturing_model;
+  if (summary.own_facility_status === "confirmed_own_facility" || model === "own_manufacturing") return "자체 공장 확인";
+  if (summary.own_facility_status === "confirmed_leased_facility" || model === "leased_facility") return "임차 생산 확인";
+  if (summary.own_facility_status === "confirmed_partner_manufacturing" || model === "partner_manufacturing") return "협력 제작 확인";
+  if (model === "outsourced_manufacturing") return "위탁 생산 확인";
+  return "생산정보 조사 중";
 }
 
 export function getLatestFinancial(company) {
@@ -263,9 +325,13 @@ export function technologyCount(company) {
 
 export function getCompanyHighlights(company) {
   const highlights = [];
-  const production = Array.isArray(company?.production) ? company.production.find((item) => item.facility_name || item.capacity_value) : null;
+  const production = productionFacilities(company).find((item) => item.facility_name || item.capacity_value);
+  const summary = productionSummary(company);
+  if (hasConfirmedProductionFacility(company)) highlights.push(getProductionModelLabel(company));
   if (production?.facility_name) highlights.push(production.facility_name);
-  if (production?.capacity_value && production?.capacity_unit) highlights.push(`${production.capacity_value} ${production.capacity_unit}`);
+  if (production?.reported_capacity && production?.capacity_unit) highlights.push(`${production.reported_capacity} ${production.capacity_unit}`);
+  else if (production?.capacity_value && production?.capacity_unit) highlights.push(`${production.capacity_value} ${production.capacity_unit}`);
+  else if (summary.reported_capacity_available === false && hasConfirmedProductionFacility(company)) highlights.push("공식 생산능력 미공개");
   const project = representativeProject(company);
   if (project?.project_name) highlights.push(project.project_name);
   const latest = getLatestFinancial(company);
