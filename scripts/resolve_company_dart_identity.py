@@ -43,6 +43,35 @@ def normalize(value: str | None) -> str:
     return "".join((value or "").lower().split())
 
 
+def normalize_url_host(value: str | None) -> str:
+    text = (value or "").strip().lower()
+    text = text.removeprefix("https://").removeprefix("http://").removeprefix("www.")
+    return text.split("/")[0]
+
+
+def corp_class_label(corp_cls: str | None, stock_code: str | None) -> str:
+    if stock_code:
+        return "listed"
+    return {"Y": "kospi", "K": "kosdaq", "N": "konex", "E": "other"}.get(corp_cls or "", "")
+
+
+def confirmation_result(company: dict[str, Any], overview: dict[str, Any], match: dict[str, str]) -> tuple[str, str, list[str]]:
+    evidence = ["exact_legal_name_match", "opendart_corp_code"]
+    if overview.get("status") == "000":
+        evidence.append("opendart_company_overview")
+    website_match = normalize_url_host(company.get("website_url")) and normalize_url_host(company.get("website_url")) == normalize_url_host(overview.get("hm_url"))
+    if website_match:
+        evidence.append("homepage_match")
+    stock_code = overview.get("stock_code") or match.get("stock_code")
+    if stock_code:
+        evidence.append("stock_code_present")
+    if website_match or stock_code:
+        return "confirmed", "high", evidence
+    if overview.get("status") == "000":
+        return "confirmed", "medium", evidence
+    return "probable", "medium", evidence
+
+
 def manual_filings(path: Path = MANUAL_FILINGS_PATH) -> list[dict[str, Any]]:
     if not path.exists():
         return []
@@ -83,14 +112,20 @@ def resolve_identities(client: OpenDartClient, companies: list[dict[str, Any]]) 
         names = [company.get("company_name", ""), *(company.get("aliases", []) or [])]
         normalized_names = {normalize(name) for name in names if normalize(name)}
         matches = [row for row in corp_rows if normalize(row.get("corp_name")) in normalized_names]
+        overview: dict[str, Any] = {}
+        evidence: list[str] = []
         if len(matches) == 1:
             match = matches[0]
-            status = "probable"
-            confidence = "medium"
+            try:
+                overview = client.company_overview(match.get("corp_code", ""))
+            except Exception:
+                overview = {}
+            status, confidence, evidence = confirmation_result(company, overview, match)
         elif len(matches) > 1:
             match = {}
             status = "ambiguous"
             confidence = "review"
+            evidence = [f"candidate:{row.get('corp_code')}" for row in matches]
         else:
             match = {}
             status = "not_found"
@@ -102,19 +137,21 @@ def resolve_identities(client: OpenDartClient, companies: list[dict[str, Any]]) 
                 "normalized_legal_name": normalize(match.get("corp_name") or company.get("company_name")),
                 "aliases": company.get("aliases", []),
                 "dart_corp_code": match.get("corp_code", ""),
-                "stock_code": match.get("stock_code", ""),
-                "corp_class": "listed" if match.get("stock_code") else "",
-                "business_number": "",
-                "corporate_registration_number": "",
-                "headquarters": company.get("headquarters"),
-                "website_url": company.get("website_url"),
+                "stock_code": overview.get("stock_code") or match.get("stock_code", ""),
+                "corp_class": corp_class_label(overview.get("corp_cls"), overview.get("stock_code") or match.get("stock_code")),
+                "representative": overview.get("ceo_nm", ""),
+                "business_number": overview.get("bizr_no", ""),
+                "corporate_registration_number": overview.get("jurir_no", ""),
+                "headquarters": overview.get("adres") or company.get("headquarters"),
+                "website_url": overview.get("hm_url") or company.get("website_url"),
                 "identity_status": status,
                 "identity_confidence": confidence,
-                "identity_source_ids": ["opendart_corp_code"] if match else [],
+                "identity_source_ids": ["opendart_corp_code", "opendart_company_overview"] if match else [],
                 "verified_at": searched_at if match else "",
                 "searched_at": searched_at,
-                "not_found_reason": "" if match else "No exact legal-name match in OpenDART corpCode list.",
+                "not_found_reason": "Multiple exact legal-name matches in OpenDART corpCode list." if len(matches) > 1 else ("" if match else "No exact legal-name match in OpenDART corpCode list."),
                 "candidate_count": len(matches),
+                "identity_evidence": evidence,
             }
         )
     return output

@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree
 
+from src.env_config import load_project_dotenv
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CACHE_DIR = ROOT / ".cache" / "opendart"
@@ -34,6 +36,11 @@ class OpenDartApiKeyRequired(OpenDartError):
 class OpenDartResponseError(OpenDartError):
     """Raised when OpenDART returns a non-success status."""
 
+    def __init__(self, status: str, message: str | None = None) -> None:
+        self.status = status
+        self.message = message or ""
+        super().__init__(f"OpenDART status={status} message={self.message}")
+
 
 @dataclass
 class OpenDartClient:
@@ -44,6 +51,7 @@ class OpenDartClient:
     retry_delay_seconds: float = 1.0
 
     def __post_init__(self) -> None:
+        load_project_dotenv()
         if self.api_key is None:
             self.api_key = os.getenv("OPENDART_API_KEY")
         self.cache_dir = Path(self.cache_dir)
@@ -74,9 +82,11 @@ class OpenDartClient:
                     payload = json.loads(body.decode("utf-8"))
                     status = str(payload.get("status", ""))
                     if status and status != "000":
-                        raise OpenDartResponseError(f"OpenDART status={status} message={payload.get('message')}")
+                        raise OpenDartResponseError(status, str(payload.get("message", "")))
                 return body
             except Exception as exc:  # pragma: no cover - live network retry guard
+                if isinstance(exc, OpenDartResponseError):
+                    raise
                 last_error = exc
                 if attempt < self.retries:
                     time.sleep(self.retry_delay_seconds * (attempt + 1))
@@ -115,19 +125,43 @@ class OpenDartClient:
         corp_code: str,
         start_date: str,
         end_date: str,
+        pblntf_detail_ty: str | None = None,
         page_no: int = 1,
         page_count: int = 100,
     ) -> dict[str, Any]:
         import json
 
+        params: dict[str, Any] = {
+            "corp_code": corp_code,
+            "bgn_de": start_date,
+            "end_de": end_date,
+            "page_no": page_no,
+            "page_count": page_count,
+        }
+        if pblntf_detail_ty:
+            params["pblntf_detail_ty"] = pblntf_detail_ty
         body = self._request_bytes(
             "list.json",
+            params,
+        )
+        return json.loads(body.decode("utf-8"))
+
+    def company_overview(self, corp_code: str) -> dict[str, Any]:
+        import json
+
+        body = self._request_bytes("company.json", {"corp_code": corp_code})
+        return json.loads(body.decode("utf-8"))
+
+    def single_account_all(self, *, corp_code: str, fiscal_year: int, report_code: str = "11011") -> dict[str, Any]:
+        import json
+
+        body = self._request_bytes(
+            "fnlttSinglAcntAll.json",
             {
                 "corp_code": corp_code,
-                "bgn_de": start_date,
-                "end_de": end_date,
-                "page_no": page_no,
-                "page_count": page_count,
+                "bsns_year": str(fiscal_year),
+                "reprt_code": report_code,
+                "fs_div": "OFS",
             },
         )
         return json.loads(body.decode("utf-8"))

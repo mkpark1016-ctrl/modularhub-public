@@ -88,6 +88,13 @@ def validate_financial_value(company_id: str, record: dict[str, Any], path: str,
         add_issue(issues, "unit_missing_or_invalid", company_id, f"{path}.normalization_factor", "normalization_factor is required")
 
 
+def metric_source_value(financial: dict[str, Any], metric: str) -> int | float | None:
+    value = financial.get(metric)
+    if isinstance(value, dict) and isinstance(value.get("source_value"), (int, float)):
+        return value["source_value"]
+    return None
+
+
 def validate_company(company: dict[str, Any]) -> list[dict[str, Any]]:
     issues: list[dict[str, Any]] = []
     company_id = company["company_id"]
@@ -133,6 +140,16 @@ def validate_company(company: dict[str, Any]) -> list[dict[str, Any]]:
                 validate_financial_value(company_id, value, f"{path}.{key}", issues)
         if numeric_values(financial) and not has_source_ids(financial):
             add_issue(issues, "number_without_source", company_id, path, "financial numbers require source_ids")
+        assets = metric_source_value(financial, "total_assets")
+        liabilities = metric_source_value(financial, "total_liabilities")
+        equity = metric_source_value(financial, "total_equity")
+        if assets is not None and liabilities is not None and equity is not None and abs(assets - (liabilities + equity)) > 1:
+            add_issue(issues, "asset_equation_mismatch", company_id, path, f"assets={assets} liabilities+equity={liabilities + equity}")
+        revenue = metric_source_value(financial, "revenue")
+        cost = metric_source_value(financial, "cost_of_sales")
+        gross_profit = metric_source_value(financial, "gross_profit")
+        if revenue is not None and cost is not None and gross_profit is not None and abs((revenue - cost) - gross_profit) > 1:
+            add_issue(issues, "value_mismatch", company_id, path, "gross profit does not equal revenue minus cost of sales")
 
     summary = company.get("financial_summary", {}) or {}
     if summary and summary.get("financial_area_status") not in FINANCIAL_AREA_STATUSES:

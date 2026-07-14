@@ -54,7 +54,10 @@ def main() -> int:
         "non-Wave 1 companies should remain unresearched",
     )
     require(all(not company["production"] for company in companies), "production data must remain empty until facility facts are verified")
-    require(all(not company["financials"] for company in companies), "financial data must remain empty without filing sources")
+    require(
+        all(not company["financials"] or all(record.get("source_ids") and record.get("scope") for record in company["financials"]) for company in companies),
+        "financial data must be empty or source-backed with scope",
+    )
     research = research_required(companies)
     require(sum(1 for row in research if row["analysis_tier"] == "tier_1" and row["research_priority"] == "P0") == 8, "Tier 1 research priority mismatch")
     print("COMPANY UNIVERSE TESTS PASSED")

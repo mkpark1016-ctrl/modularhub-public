@@ -42,14 +42,19 @@ def main() -> int:
     require(len(kumkang["project_portfolio"]) == 3, "Kumkang should have 3 official project records")
     require(result["total_project_count"] == 3, "total project count mismatch")
     require(result["total_technology_record_count"] == 1, "technology record count mismatch")
-    require(result["total_financial_year_count"] == 0, "financials must remain empty without filing source")
+    require(result["total_financial_year_count"] >= 0, "financial count should be reported")
+    if kumkang.get("financials"):
+        require(all(record.get("source_ids") for record in kumkang["financials"]), "Kumkang financials must remain source-backed")
     require(result["total_bidding_record_count"] == 0, "bidding data must remain empty without verified dataset")
 
     for company_id in ["planm", "daeseung-engineering"]:
         company = by_id[company_id]
         require(company["review_status"] == "collecting", f"{company_id} should remain collecting")
         require(company["data_confidence"] == "unknown", f"{company_id} confidence should remain unknown")
-        require(len(company.get("sources", [])) == 0, f"{company_id} should not have unverified sources")
+        require(
+            all(source.get("primary_source") for source in company.get("sources", [])),
+            f"{company_id} should only have primary DART sources until broader research is added",
+        )
         require(company["project_portfolio"] == [], f"{company_id} project portfolio must remain empty")
 
     print("COMPANY RESEARCH TESTS PASSED")

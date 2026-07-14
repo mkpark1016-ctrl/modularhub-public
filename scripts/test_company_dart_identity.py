@@ -34,14 +34,14 @@ def main() -> int:
     old_key = os.environ.pop("OPENDART_API_KEY", None)
     try:
         companies = wave1_companies()
-        rows = resolve_identities(OpenDartClient(api_key=None), companies)
+        rows = resolve_identities(OpenDartClient(api_key=""), companies)
         require(len(rows) == 4, "Wave 1 identity rows must be 4")
         require({row["identity_status"] for row in rows} == {"api_key_required"}, "missing API key must be explicit")
         require(all(not row["dart_corp_code"] for row in rows), "corp codes must not be fabricated without an API key")
 
         fake_rows = resolve_identities(FakeClient(), companies)  # type: ignore[arg-type]
         by_id = {row["company_id"]: row for row in fake_rows}
-        require(by_id["kumkang-kind"]["identity_status"] == "probable", "exact fake DART match should be probable")
+        require(by_id["kumkang-kind"]["identity_status"] in {"probable", "confirmed"}, "exact fake DART match should be probable or confirmed")
         require(by_id["kumkang-kind"]["dart_corp_code"] == "00126380", "fake corp_code should be preserved")
         require(by_id["planm"]["identity_status"] == "not_found", "unmatched companies should remain not_found")
     finally:

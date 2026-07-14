@@ -22,8 +22,8 @@ def require(condition: bool, message: str) -> None:
 def main() -> int:
     old_key = os.environ.pop("OPENDART_API_KEY", None)
     try:
-        client = OpenDartClient(api_key=None, cache_dir=Path(tempfile.mkdtemp()))
-        require(not client.has_api_key, "client should not report an API key when env is unset")
+        client = OpenDartClient(api_key="", cache_dir=Path(tempfile.mkdtemp()))
+        require(not client.has_api_key, "client should not report an API key when explicit key is empty")
         try:
             client.require_api_key()
         except OpenDartApiKeyRequired:
