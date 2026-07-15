@@ -781,6 +781,12 @@ function projectSummaryLabel(projectSummary) {
   return "공개자료 추가 조사 필요";
 }
 
+function projectCandidateStatusLabel(item) {
+  if (item.verification_status === "research_exhausted_no_verified_project") return "관련 기사 근거 존재 · 공식자료에서 실적 확인 불가";
+  if (item.verification_status === "official_source_pending") return "프로젝트 후보 · 검증 필요";
+  return "프로젝트 후보 · 검증 필요";
+}
+
 function CompanyCard({ company }) {
   const highlights = getCompanyHighlights(company);
   const latestFinancial = getLatestFinancial(company);
@@ -1083,9 +1089,9 @@ function CompanyDetailPage() {
               {candidates.map((item) => (
                 <div className="candidate-item" key={item.project_candidate_id || item.candidate_id || item.source_record_id || item.candidate_title}>
                   <strong>{item.canonical_project_name || item.candidate_title || "프로젝트 후보 확인 중"}</strong>
-                  <span>프로젝트 후보 · 검증 필요 · 기사 근거 {Number(item.source_article_count || item.source_article_ids?.length || 0).toLocaleString("ko-KR")}건</span>
+                  <span>{projectCandidateStatusLabel(item)} · 기사 근거 {Number(item.source_article_count || item.source_article_ids?.length || 0).toLocaleString("ko-KR")}건</span>
                   <span>{[
-                    item.verification_status === "official_source_pending" ? "공식 원문 확인 필요" : item.verification_status,
+                    item.verification_status === "official_source_pending" ? "공식 원문 확인 필요" : item.verification_status === "research_exhausted_no_verified_project" ? "검증 프로젝트로 집계하지 않음" : item.verification_status,
                     item.verification_priority_level,
                     item.evidence_level || "candidate",
                   ].filter(Boolean).join(" · ")}</span>

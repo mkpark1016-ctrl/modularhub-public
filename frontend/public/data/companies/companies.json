@@ -775,6 +775,38 @@
           "project_candidate_cluster_count": 1,
           "source_ids": [],
           "verified_at": "2026-07-15"
+        },
+        {
+          "area": "project_candidate_closure_wave_1",
+          "status": "research_exhausted_no_verified_project",
+          "note": "Related articles mention the Samsung AI Modular Home cluster, but official public sources did not confirm YooChang's project role.",
+          "searched_sources": [
+            "Samsung Newsroom Korea",
+            "Samsung Korea",
+            "YooChang official website",
+            "business.json",
+            "OpenDART-backed company records"
+          ],
+          "searched_queries": [
+            "삼성 AI 모듈러 홈 유창이앤씨",
+            "삼성 AI 모듈러 홈 공간제작소",
+            "YooChang Samsung AI Modular Home"
+          ],
+          "access_failures": [],
+          "no_result_sources": [
+            "Samsung Newsroom Korea",
+            "Samsung Korea",
+            "business.json",
+            "OpenDART-backed company records"
+          ],
+          "unresolved_fields": [
+            "company_role",
+            "official_project_record"
+          ],
+          "next_review_trigger": "Company, Samsung, owner, DART, or contract source publishes explicit YooChang role evidence.",
+          "research_closed_at": "2026-07-15",
+          "source_ids": [],
+          "verified_at": "2026-07-15"
         }
       ],
       "unsupported_claims": [],
@@ -1288,18 +1320,23 @@
       },
       "project_research_status": {
         "research_wave": "wave_1",
-        "research_status": "official_source_pending",
+        "research_status": "research_exhausted_no_verified_project",
         "verified_project_count": 0,
-        "candidate_project_count": 1,
+        "candidate_project_count": 0,
         "raw_candidate_article_count": 45,
+        "duplicate_article_count": 43,
+        "unique_article_group_count": 2,
+        "non_project_article_group_count": 1,
         "project_candidate_cluster_count": 1,
+        "pending_project_count": 0,
+        "research_closed_project_count": 1,
         "rejected_candidate_count": 16,
         "official_source_count": 0,
-        "sources_checked_count": 2,
-        "research_gap_count": 0,
+        "sources_checked_count": 5,
+        "research_gap_count": 1,
         "last_project_research_at": "2026-07-15",
-        "snapshot_source": "artifacts/company-project-candidate-verification-wave-1/company_project_coverage.csv",
-        "note": "Raw news articles are clustered into project candidates; article count is not treated as project count."
+        "snapshot_source": "artifacts/company-project-candidate-closure-wave-1/final_candidate_decision.csv",
+        "note": "The remaining project-like candidate is retained as article evidence but closed because no official source confirms YooChang's role."
       },
       "project_candidates": [
         {
@@ -1318,8 +1355,8 @@
           "possible_use_type": "single_family_modular_home",
           "possible_method": "steel_modular_unconfirmed",
           "possible_company_role": "role_unknown",
-          "project_status": "candidate",
-          "verification_status": "official_source_pending",
+          "project_status": "not_verified",
+          "verification_status": "research_exhausted_no_verified_project",
           "source_article_ids": [
             "article-yuchang-enc-news-6170",
             "article-yuchang-enc-news-5887",
@@ -1359,18 +1396,26 @@
           ],
           "source_article_count": 35,
           "official_source_ids": [],
+          "official_source_count": 0,
           "evidence_level": "media_cluster",
-          "confidence": "medium",
-          "manual_review_required": true,
-          "verification_priority_score": 72,
-          "verification_priority_level": "P1",
-          "priority_reasons": [
-            "복수 기사",
-            "참여기관 명시",
-            "제작·출시 문맥",
-            "프로젝트명 고유성"
+          "confidence": "low",
+          "manual_review_required": false,
+          "research_closed_at": "2026-07-15",
+          "final_decision": "research_exhausted_no_verified_project",
+          "unresolved_fields": [
+            "project_realization",
+            "yoochang_participation",
+            "company_role",
+            "official_project_name",
+            "contract_or_delivery_scope"
           ],
-          "verification_note": "Official source confirmation is required before this candidate can become a verified project."
+          "next_review_trigger": [
+            "company project page update",
+            "new DART filing",
+            "owner or Samsung official release",
+            "contract or completion press release"
+          ],
+          "verification_note": "Related article evidence exists, but official public sources checked in this closure review do not confirm YooChang's role. Not counted as a verified project."
         }
       ],
       "dart_original_document_inventory": [

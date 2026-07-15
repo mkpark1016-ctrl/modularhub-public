@@ -470,6 +470,7 @@ export function getCompanyHighlights(company) {
   const projectSummary = getCompanyProjectSummary(company);
   if (projectSummary.verified > 0) highlights.push(`검증 프로젝트 ${projectSummary.verified}건`);
   else if (projectSummary.candidates > 0) highlights.push(`프로젝트 후보 ${projectSummary.candidates}건`);
+  else if (projectSummary.rawArticleCount > 0) highlights.push(`관련 기사 근거 ${projectSummary.rawArticleCount}건`);
   else if (project?.project_name) highlights.push(project.project_name);
   const latest = getLatestFinancial(company);
   const revenue = metricSourceValue(latest?.revenue);

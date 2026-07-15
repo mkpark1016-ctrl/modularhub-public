@@ -54,13 +54,14 @@ assert.deepEqual(
   ["daeseung-engineering", "planm", "sungji-steel", "yuchang-enc"],
 );
 assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).verified, 0), 0);
-assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).candidates, 0), 1);
+assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).candidates, 0), 0);
 assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).rawArticleCount, 0), 50);
 const yuchangCandidates = projectCandidates(byId("yuchang-enc"));
 assert.equal(yuchangCandidates.length, 1);
 assert.equal(yuchangCandidates[0].source_article_count, 35);
 assert.equal(yuchangCandidates[0].possible_company_role, "role_unknown");
-assert.equal(yuchangCandidates[0].verification_status, "official_source_pending");
+assert.equal(yuchangCandidates[0].verification_status, "research_exhausted_no_verified_project");
+assert.equal(getCompanyProjectSummary(byId("yuchang-enc")).researchStatus, "research_exhausted_no_verified_project");
 assert.equal(projectCandidates(byId("planm")).length, 0);
 assert.equal(getCompanyProjectSummary(byId("planm")).rawArticleCount, 5);
 assert.equal(getCompanyProjectSummary(byId("daeseung-engineering")).researchGapCount, 1);
