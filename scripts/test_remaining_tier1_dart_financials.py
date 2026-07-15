@@ -29,7 +29,7 @@ def main() -> int:
     companies = {company["company_id"]: company for company in payload.get("companies", [])}
     targets = select_targets(payload)
     target_ids = {company["company_id"] for company in targets}
-    require(len(targets) == 4, "remaining Tier 1 target set must contain four companies")
+    require(len(targets) == 4, "remaining Tier 1 target selector should keep the non-Wave1 direct competitors")
     require(target_ids == {"sungji-steel", "geogwang-enterprise", "m3-systems", "jinwoo-inc"}, "unexpected remaining Tier 1 target ids")
     for wave_id in WAVE1_IDS:
         require(wave_id not in target_ids, "existing Wave 1 companies must be excluded")
@@ -55,9 +55,10 @@ def main() -> int:
 
     require(len(companies["sungji-steel"].get("financials") or []) == 3, "Sungji Steel should have three years")
     require(len(companies["geogwang-enterprise"].get("financials") or []) == 3, "Geogwang should have three years")
-    require(len(companies["m3-systems"].get("financials") or []) == 1, "M3 Systems should keep one available year")
-    require((companies["jinwoo-inc"].get("dart_identity") or {}).get("identity_status") == "not_found", "Jinwoo should remain not_found until legal identity is verified")
-    require(not companies["jinwoo-inc"].get("financials"), "not_found identity must not receive financials")
+    require(len(companies["m3-systems"].get("financials") or []) == 2, "M3 Systems should have standalone 2025 and comparative 2024 years")
+    require((companies["m3-systems"].get("financials") or [])[1].get("evidence_type") == "comparative_financial_statement", "M3 2024 must be marked as comparative financial statement")
+    require((companies["jinwoo-inc"].get("dart_identity") or {}).get("identity_status") == "manual_review_required", "Jinwoo should require manual legal identity review")
+    require(not companies["jinwoo-inc"].get("financials"), "unresolved identity must not receive financials")
 
     baseline = {company_id: {field: companies[company_id].get(field) for field in ["dart_identity", "financials", "financial_summary", "production"]} for company_id in WAVE1_IDS}
     issues, counts = validate_targets(payload, targets, baseline)
@@ -66,7 +67,7 @@ def main() -> int:
     require(counts.get("source_id_missing", 0) == 0, "source_id missing count must be zero")
     require(counts.get("unit_missing", 0) == 0, "unit missing count must be zero")
     rows = rows_for_artifacts(payload, targets, [], issues)
-    require(len(rows["financial_year_summary"]) == 7, "financial year summary should contain seven rows")
+    require(len(rows["financial_year_summary"]) == 8, "financial year summary should contain the non-Wave1 financial rows")
     print("REMAINING TIER 1 DART FINANCIAL TESTS PASSED")
     return 0
 

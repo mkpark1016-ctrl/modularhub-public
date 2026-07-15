@@ -47,7 +47,7 @@ assert.equal(remainingTier1.every(Boolean), true);
 assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "sungji-steel")), "verified");
 assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "geogwang-enterprise")), "verified");
 assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "m3-systems")), "partial");
-assert.equal(companies.find((company) => company.company_id === "jinwoo-inc").dart_identity.identity_status, "not_found");
+assert.equal(companies.find((company) => company.company_id === "jinwoo-inc").dart_identity.identity_status, "manual_review_required");
 
 const direct = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "direct_competitor", tier: "all", status: "all" }));
 assert.equal(direct.length, summary.directCompetitors);
