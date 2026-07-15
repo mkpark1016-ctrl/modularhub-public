@@ -776,7 +776,8 @@ function projectSummaryLabel(projectSummary) {
   if (projectSummary.verified > 0) {
     return `검증 ${projectSummary.verified}건${projectSummary.latestYear ? ` · 최신 ${projectSummary.latestYear}` : ""}`;
   }
-  if (projectSummary.candidates > 0) return `후보 검토 중 ${projectSummary.candidates}건`;
+  if (projectSummary.candidates > 0) return `프로젝트 후보 ${projectSummary.candidates}건 · 기사 근거 ${projectSummary.rawArticleCount}건`;
+  if (projectSummary.rawArticleCount > 0) return `기사 근거 ${projectSummary.rawArticleCount}건 · 공식자료 추가 조사 필요`;
   return "공개자료 추가 조사 필요";
 }
 
@@ -1080,14 +1081,19 @@ function CompanyDetailPage() {
           {candidates.length > 0 && (
             <div className="company-section-list project-candidate-list">
               {candidates.map((item) => (
-                <div className="candidate-item" key={item.candidate_id || item.source_record_id || item.candidate_title}>
-                  <strong>{item.candidate_title || "프로젝트 후보 확인 중"}</strong>
-                  <span>검토 중 후보 · {item.source_dataset || "internal"} · {item.evidence_level || "candidate"}</span>
+                <div className="candidate-item" key={item.project_candidate_id || item.candidate_id || item.source_record_id || item.candidate_title}>
+                  <strong>{item.canonical_project_name || item.candidate_title || "프로젝트 후보 확인 중"}</strong>
+                  <span>프로젝트 후보 · 검증 필요 · 기사 근거 {Number(item.source_article_count || item.source_article_ids?.length || 0).toLocaleString("ko-KR")}건</span>
+                  <span>{[
+                    item.verification_status === "official_source_pending" ? "공식 원문 확인 필요" : item.verification_status,
+                    item.verification_priority_level,
+                    item.evidence_level || "candidate",
+                  ].filter(Boolean).join(" · ")}</span>
                   <span>{[
                     item.matched_alias ? `매칭: ${item.matched_alias}` : null,
                     item.possible_client,
                     item.possible_location,
-                    item.possible_role,
+                    item.possible_role || item.possible_company_role,
                   ].filter(Boolean).join(" · ") || "공식 출처 확인 전까지 검증 프로젝트로 집계하지 않습니다."}</span>
                   {item.matched_context && <span>{item.matched_context}</span>}
                   {item.source_url && <a href={item.source_url} target="_blank" rel="noopener noreferrer">후보 원문 보기 <ExternalLink size={13} /></a>}

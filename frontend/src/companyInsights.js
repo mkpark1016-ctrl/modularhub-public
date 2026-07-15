@@ -234,11 +234,16 @@ export function companySearchText(company) {
     ]),
     ...candidates.flatMap((item) => [
       item.candidate_title,
+      item.canonical_project_name,
+      ...(Array.isArray(item.aliases) ? item.aliases : []),
       item.matched_alias,
       item.matched_context,
       item.possible_client,
       item.possible_location,
       item.possible_role,
+      item.possible_company_role,
+      item.possible_method,
+      item.verification_status,
       item.source_dataset,
       item.review_status,
     ]),
@@ -409,7 +414,7 @@ export function verifiedCompanyProjects(company) {
 
 export function projectCandidates(company) {
   const candidates = Array.isArray(company?.project_candidates) ? company.project_candidates : [];
-  return candidates.filter((item) => item?.candidate_title && item?.review_status !== "verified");
+  return candidates.filter((item) => (item?.candidate_title || item?.canonical_project_name) && item?.review_status !== "verified" && item?.verification_status !== "verified");
 }
 
 export function getCompanyProjectSummary(company) {
@@ -418,6 +423,9 @@ export function getCompanyProjectSummary(company) {
   const candidates = projectCandidates(company);
   const researchStatus = company?.project_research_status || {};
   const candidateCount = Number(researchStatus.candidate_project_count ?? candidates.length) || 0;
+  const rawArticleCount = Number(researchStatus.raw_candidate_article_count ?? 0) || 0;
+  const rejectedCandidateCount = Number(researchStatus.rejected_candidate_count ?? 0) || 0;
+  const officialSourceCount = Number(researchStatus.official_source_count ?? 0) || 0;
   const researchGapCount = Number(researchStatus.research_gap_count ?? 0) || 0;
   const sectors = [...new Set(verified.map((item) => item.sector || item.building_use).filter(Boolean))].slice(0, 2);
   const roles = [...new Set(verified.map((item) => item.company_role).filter(Boolean))].slice(0, 2);
@@ -432,6 +440,9 @@ export function getCompanyProjectSummary(company) {
     verified: verified.length,
     candidates: candidateCount,
     candidateSamples: candidates.length,
+    rawArticleCount,
+    rejectedCandidateCount,
+    officialSourceCount,
     researchStatus: researchStatus.research_status || "",
     researchGapCount,
     researchWave: researchStatus.research_wave || "",
