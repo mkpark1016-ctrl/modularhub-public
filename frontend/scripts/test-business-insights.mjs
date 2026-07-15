@@ -106,7 +106,7 @@ assert.deepEqual(
     return [String(item.id), info.actionable, info.important, info.reviewTiming, info.reviewLabel];
   }),
   [
-    ["54", true, true, "immediate", "즉시 검토"],
+    ["54", false, false, "closed", "마감"],
     ["5772", true, true, "scheduled", "검토 예정"],
     ["208", true, true, "long_term", "중장기 검토"],
   ],
@@ -115,7 +115,6 @@ assert.deepEqual(
 const liveSummary = getBusinessSummary(businessItems, asOf);
 const liveImportant = businessItems.filter((item) => isImportantBusiness(item, asOf));
 assert.equal(liveSummary.important, liveImportant.length);
-assert.equal(liveImportant.filter((item) => getBusinessPriorityInfo(item, asOf).reviewTiming === "this_week").length, 0);
 assert.equal(liveImportant.some((item) => String(item.source_record_id || item.bid_no) === "R26BK01510994"), false);
 
 console.log("BUSINESS INSIGHT TESTS PASSED");

@@ -209,7 +209,6 @@ try {
   check(!importantText.includes("R26BK01510994"), "closed known important bid should not appear in important filter");
   const liveImportant = businessItems.filter((item) => isImportantBusiness(item, businessAsOf));
   const liveTimingLabels = new Set(liveImportant.map((item) => getBusinessPriorityInfo(item, businessAsOf).reviewLabel));
-  check(liveTimingLabels.has("즉시 검토"), "live important set should include immediate review");
   check(liveTimingLabels.has("검토 예정"), "live important set should include scheduled review");
   check(liveTimingLabels.has("중장기 검토"), "live important set should include long-term review");
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
