@@ -11,9 +11,13 @@ const validValues = {
   tiers: [...new Set(companies.map((company) => company.analysis_tier).filter(Boolean))],
 };
 
-let result = sanitizeCompanySearchParams(new URLSearchParams("role=specialist_manufacturer&relationship=direct_competitor&tier=tier_1&status=verified&sort=name&q=PlanM"), validValues);
+let result = sanitizeCompanySearchParams(new URLSearchParams("role=specialist_manufacturer&relationship=direct_competitor&tier=tier_1&status=core_verified&sort=name&q=PlanM"), validValues);
 assert.equal(result.changed, false);
 assert.equal(result.params.get("q"), "PlanM");
+
+result = sanitizeCompanySearchParams(new URLSearchParams("status=verified&q=PlanM"), validValues);
+assert.equal(result.changed, true);
+assert.equal(result.params.get("status"), "core_verified");
 
 result = sanitizeCompanySearchParams(new URLSearchParams("role=bad&relationship=bad&tier=bad&status=bad&sort=bad&q=PlanM"), validValues);
 assert.equal(result.changed, true);

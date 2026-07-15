@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "corrections": [
+    {
+      "correction_id": "correction-yuchang-samsung-ai-modular-home",
+      "target_type": "event",
+      "target_id": "event-yuchang-enc-samsung-ai-modular-home",
+      "company_id": "yuchang-enc",
+      "action": "reclassify",
+      "reason_code": "mou_not_signed_and_not_a_project",
+      "previous_value": {
+        "event_type": "project",
+        "event_status": "unconfirmed",
+        "project_credit": false
+      },
+      "corrected_value": {
+        "event_type": "partnership",
+        "event_status": "not_signed",
+        "project_credit": false,
+        "verification_status": "not_verified"
+      },
+      "confirmed_at": "2026-07-15",
+      "confirmed_by": "internal_review",
+      "visibility": "public",
+      "source_ids": []
+    }
+  ]
+}

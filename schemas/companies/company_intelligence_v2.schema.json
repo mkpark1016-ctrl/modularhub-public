@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modularhub.local/schemas/company_intelligence_v2.schema.json",
+  "title": "ModularHub Company Intelligence V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "companies", "facts", "events", "evidence", "corrections", "materialized_summaries", "audit_metadata"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "companies": {"type": "array", "items": {"$ref": "#/$defs/company"}},
+    "facts": {"type": "array", "items": {"$ref": "#/$defs/fact"}},
+    "events": {"type": "array", "items": {"$ref": "#/$defs/event"}},
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
+    "corrections": {"type": "array", "items": {"$ref": "#/$defs/correction"}},
+    "materialized_summaries": {"type": "array", "items": {"$ref": "#/$defs/materializedSummary"}},
+    "audit_metadata": {"type": "object"}
+  },
+  "$defs": {
+    "visibility": {"type": "string", "enum": ["public", "internal", "private"]},
+    "verificationStatus": {
+      "type": "string",
+      "enum": ["official_verified", "cross_verified", "company_claimed", "third_party_reported", "internally_confirmed", "partially_verified", "not_verified", "unavailable"]
+    },
+    "company": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["company_id", "company_name", "company_type", "competitive_role", "analysis_tier", "visibility"],
+      "properties": {
+        "company_id": {"type": "string", "minLength": 1},
+        "company_name": {"type": "string", "minLength": 1},
+        "company_type": {"type": "string", "minLength": 1},
+        "competitive_role": {"type": "string", "minLength": 1},
+        "analysis_tier": {"type": "string", "minLength": 1},
+        "visibility": {"$ref": "#/$defs/visibility"}
+      }
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fact_id", "company_id", "domain", "field", "value", "unit", "period", "as_of", "verification_status", "confidence", "source_ids", "visibility", "updated_at"],
+      "properties": {
+        "fact_id": {"type": "string", "minLength": 1},
+        "company_id": {"type": "string", "minLength": 1},
+        "domain": {"type": "string", "enum": ["identity", "financial", "production", "technology", "organization", "market", "strategy"]},
+        "field": {"type": "string", "minLength": 1},
+        "value": {},
+        "unit": {"type": ["string", "null"]},
+        "period": {"type": ["string", "integer", "null"]},
+        "as_of": {"type": ["string", "null"]},
+        "verification_status": {"$ref": "#/$defs/verificationStatus"},
+        "confidence": {"type": "string"},
+        "source_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "visibility": {"$ref": "#/$defs/visibility"},
+        "updated_at": {"type": "string"}
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "company_id", "event_type", "event_status", "title", "counterparties", "client", "project_role", "project_credit", "announced_at", "contracted_at", "started_at", "completed_at", "amount", "amount_unit", "location", "market_segment", "method", "source_ids", "verification_status", "visibility", "updated_at"],
+      "properties": {
+        "event_id": {"type": "string", "minLength": 1},
+        "company_id": {"type": "string", "minLength": 1},
+        "event_type": {"type": "string", "enum": ["project", "partnership", "mou", "acquisition", "facility_investment", "r_and_d", "exhibition", "product_launch", "organization_change", "policy_signal", "business_strategy"]},
+        "event_status": {"type": "string", "enum": ["completed", "in_progress", "contract_signed", "award_confirmed", "preferred_bidder", "bid_participation", "planned", "mou_signed", "partnership_discussion", "r_and_d", "exhibition", "cancelled", "not_signed", "unconfirmed"]},
+        "title": {"type": "string", "minLength": 1},
+        "counterparties": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "client": {"type": ["string", "null"]},
+        "project_role": {"type": ["string", "null"]},
+        "project_credit": {"type": "boolean"},
+        "announced_at": {"type": ["string", "null"]},
+        "contracted_at": {"type": ["string", "null"]},
+        "started_at": {"type": ["string", "null"]},
+        "completed_at": {"type": ["string", "null"]},
+        "amount": {"type": ["number", "null"]},
+        "amount_unit": {"type": ["string", "null"]},
+        "location": {"type": ["string", "null"]},
+        "market_segment": {"type": ["string", "null"]},
+        "method": {"type": ["string", "null"]},
+        "source_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "verification_status": {"$ref": "#/$defs/verificationStatus"},
+        "visibility": {"$ref": "#/$defs/visibility"},
+        "updated_at": {"type": "string"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "source_type", "source_tier", "publisher", "title", "url", "published_at", "retrieved_at", "document_id", "document_hash", "excerpt", "supports", "contradicts", "visibility", "stale_after", "status"],
+      "properties": {
+        "source_id": {"type": "string", "minLength": 1},
+        "source_type": {"type": "string", "minLength": 1},
+        "source_tier": {"type": "string", "enum": ["A", "B", "C", "D"]},
+        "publisher": {"type": ["string", "null"]},
+        "title": {"type": ["string", "null"]},
+        "url": {"type": ["string", "null"]},
+        "published_at": {"type": ["string", "null"]},
+        "retrieved_at": {"type": ["string", "null"]},
+        "document_id": {"type": ["string", "null"]},
+        "document_hash": {"type": ["string", "null"]},
+        "excerpt": {"type": ["string", "null"]},
+        "supports": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "contradicts": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "visibility": {"$ref": "#/$defs/visibility"},
+        "stale_after": {"type": ["string", "null"]},
+        "status": {"type": "string"}
+      }
+    },
+    "correction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["correction_id", "target_type", "target_id", "company_id", "action", "reason_code", "previous_value", "corrected_value", "confirmed_at", "confirmed_by", "visibility", "source_ids"],
+      "properties": {
+        "correction_id": {"type": "string", "minLength": 1},
+        "target_type": {"type": "string", "enum": ["fact", "event", "evidence"]},
+        "target_id": {"type": "string", "minLength": 1},
+        "company_id": {"type": "string", "minLength": 1},
+        "action": {"type": "string", "enum": ["replace", "reclassify", "suppress", "restore"]},
+        "reason_code": {"type": "string", "minLength": 1},
+        "previous_value": {},
+        "corrected_value": {},
+        "confirmed_at": {"type": "string"},
+        "confirmed_by": {"type": ["string", "null"]},
+        "visibility": {"$ref": "#/$defs/visibility"},
+        "source_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "materializedSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["company_id", "overall_data_status", "domain_statuses", "event_counts", "article_evidence_count", "source_group_counts", "updated_at"],
+      "properties": {
+        "company_id": {"type": "string", "minLength": 1},
+        "overall_data_status": {"type": "string", "enum": ["core_verified", "partially_verified", "research_in_progress", "watchlist", "insufficient_public_data"]},
+        "domain_statuses": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["identity_status", "financial_status", "production_status", "project_status", "technology_status", "recent_signal_status"],
+          "properties": {
+            "identity_status": {"$ref": "#/$defs/verificationStatus"},
+            "financial_status": {"$ref": "#/$defs/verificationStatus"},
+            "production_status": {"$ref": "#/$defs/verificationStatus"},
+            "project_status": {"$ref": "#/$defs/verificationStatus"},
+            "technology_status": {"$ref": "#/$defs/verificationStatus"},
+            "recent_signal_status": {"$ref": "#/$defs/verificationStatus"}
+          }
+        },
+        "event_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "article_evidence_count": {"type": "integer", "minimum": 0},
+        "source_group_counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+        "updated_at": {"type": "string"}
+      }
+    }
+  }
+}

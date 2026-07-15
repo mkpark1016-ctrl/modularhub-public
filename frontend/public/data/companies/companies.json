@@ -1492,7 +1492,622 @@
           "parsed_table_rows": 230,
           "extracted_metric_count": 9
         }
-      ]
+      ],
+      "intelligence_v2": {
+        "company_id": "yuchang-enc",
+        "overall_data_status": "partially_verified",
+        "domain_statuses": {
+          "identity_status": "official_verified",
+          "financial_status": "official_verified",
+          "production_status": "partially_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "not_verified"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 1,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 35,
+        "source_group_counts": {
+          "company_official": 1,
+          "dart": 3,
+          "media_and_research": 35
+        },
+        "updated_at": "2026-07-15T00:00:00+09:00",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
+        "events": [
+          {
+            "event_id": "event-yuchang-enc-samsung-ai-modular-home",
+            "company_id": "yuchang-enc",
+            "event_type": "partnership",
+            "event_status": "not_signed",
+            "title": "삼성 AI 모듈러 홈",
+            "counterparties": [
+              "삼성전자"
+            ],
+            "client": "삼성전자",
+            "project_role": null,
+            "project_credit": false,
+            "announced_at": "2026",
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "location": "경기 화성",
+            "market_segment": "single_family_modular_home",
+            "method": "steel_modular_unconfirmed",
+            "source_ids": [
+              "article-yuchang-enc-news-104",
+              "article-yuchang-enc-news-105",
+              "article-yuchang-enc-news-107",
+              "article-yuchang-enc-news-112",
+              "article-yuchang-enc-news-113",
+              "article-yuchang-enc-news-115",
+              "article-yuchang-enc-news-122",
+              "article-yuchang-enc-news-123",
+              "article-yuchang-enc-news-125",
+              "article-yuchang-enc-news-129",
+              "article-yuchang-enc-news-153",
+              "article-yuchang-enc-news-231",
+              "article-yuchang-enc-news-233",
+              "article-yuchang-enc-news-234",
+              "article-yuchang-enc-news-236",
+              "article-yuchang-enc-news-237",
+              "article-yuchang-enc-news-238",
+              "article-yuchang-enc-news-239",
+              "article-yuchang-enc-news-240",
+              "article-yuchang-enc-news-241",
+              "article-yuchang-enc-news-242",
+              "article-yuchang-enc-news-243",
+              "article-yuchang-enc-news-245",
+              "article-yuchang-enc-news-247",
+              "article-yuchang-enc-news-248",
+              "article-yuchang-enc-news-5771",
+              "article-yuchang-enc-news-5775",
+              "article-yuchang-enc-news-5779",
+              "article-yuchang-enc-news-5783",
+              "article-yuchang-enc-news-5784",
+              "article-yuchang-enc-news-5789",
+              "article-yuchang-enc-news-5813",
+              "article-yuchang-enc-news-5816",
+              "article-yuchang-enc-news-5887",
+              "article-yuchang-enc-news-6170"
+            ],
+            "verification_status": "not_verified",
+            "visibility": "public",
+            "updated_at": "2026-07-15"
+          }
+        ],
+        "source_groups": [
+          {
+            "group_type": "company_official",
+            "count": 1,
+            "sources": [
+              {
+                "source_id": "yc_official_home",
+                "source_type": "official_website",
+                "source_tier": "B",
+                "publisher": "YooChang E&C",
+                "title": "YooChang E&C official website Factory section",
+                "url": "https://yoochangenc.com/",
+                "published_at": null,
+                "retrieved_at": "2026-07-15",
+                "document_id": null,
+                "status": "accessible_spa_shell"
+              }
+            ]
+          },
+          {
+            "group_type": "dart",
+            "count": 6,
+            "sources": [
+              {
+                "source_id": "dart-00144960-20210409002785",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2020.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20210409002785",
+                "published_at": "20210409",
+                "retrieved_at": "2026-07-14T06:50:44.681071+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00144960-20220413001002",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2021.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20220413001002",
+                "published_at": "20220413",
+                "retrieved_at": "2026-07-14T06:50:44.681067+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00144960-20230410002814",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2022.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20230410002814",
+                "published_at": "20230410",
+                "retrieved_at": "2026-07-14T06:50:44.681062+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00144960-20240405000501",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2023.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240405000501",
+                "published_at": "20240405",
+                "retrieved_at": "2026-07-14T06:50:44.681057+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00144960-20250404000800",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2024.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250404000800",
+                "published_at": "20250404",
+                "retrieved_at": "2026-07-14T06:50:44.681048+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00144960-20260408002280",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2025.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260408002280",
+                "published_at": "20260408",
+                "retrieved_at": "2026-07-14T06:50:44.681026+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          },
+          {
+            "group_type": "media_and_research",
+            "count": 35,
+            "sources": [
+              {
+                "source_id": "article-yuchang-enc-news-104",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-105",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-107",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-112",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-113",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-115",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-122",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-123",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-125",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-129",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-153",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-231",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-233",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-234",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-236",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-237",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-238",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-239",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-240",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-241",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-242",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-243",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-245",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-247",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-248",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5771",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5775",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5779",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5783",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5784",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5789",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5813",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5816",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-5887",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "article-yuchang-enc-news-6170",
+                "source_type": "media_article",
+                "source_tier": "C",
+                "publisher": null,
+                "title": "관련 기사 근거",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -2888,7 +3503,247 @@
         "reported_capacity_available": false,
         "verified_at": "2026-07-15"
       },
-      "dart_original_document_inventory": []
+      "dart_original_document_inventory": [],
+      "intelligence_v2": {
+        "company_id": "kumkang-kind",
+        "overall_data_status": "core_verified",
+        "domain_statuses": {
+          "identity_status": "official_verified",
+          "financial_status": "official_verified",
+          "production_status": "official_verified",
+          "project_status": "official_verified",
+          "technology_status": "company_claimed",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 1,
+          "project_candidates": 2,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {
+          "company_official": 3,
+          "dart": 3
+        },
+        "updated_at": "2026-07-15T00:00:00+09:00",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 법인·재무 핵심 정보와 주요 사업 근거를 영역별로 확인했습니다.",
+        "events": [
+          {
+            "event_id": "event-kumkang-pyeongchang-2018-office",
+            "company_id": "kumkang-kind",
+            "event_type": "project",
+            "event_status": "unconfirmed",
+            "title": "2018 평창 조직위원회 사무실 모듈러 프로젝트",
+            "counterparties": [],
+            "client": null,
+            "project_role": "modular_manufacturer",
+            "project_credit": false,
+            "announced_at": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "location": "Pyeongchang, Korea",
+            "market_segment": "office",
+            "method": "steel_modular",
+            "source_ids": [
+              "kumkang_official_home"
+            ],
+            "verification_status": "partially_verified",
+            "visibility": "public",
+            "updated_at": "2026-07-15"
+          },
+          {
+            "event_id": "event-kumkang-jangbogo-antarctic-station",
+            "company_id": "kumkang-kind",
+            "event_type": "project",
+            "event_status": "unconfirmed",
+            "title": "장보고 남극기지 모듈러 프로젝트",
+            "counterparties": [],
+            "client": null,
+            "project_role": "modular_manufacturer",
+            "project_credit": false,
+            "announced_at": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "location": "Antarctica",
+            "market_segment": "other",
+            "method": "steel_modular",
+            "source_ids": [
+              "kumkang_official_home"
+            ],
+            "verification_status": "partially_verified",
+            "visibility": "public",
+            "updated_at": "2026-07-15"
+          },
+          {
+            "event_id": "event-kumkang-goryeong-modular-residential-complex",
+            "company_id": "kumkang-kind",
+            "event_type": "project",
+            "event_status": "completed",
+            "title": "고령군 모듈러 주거단지",
+            "counterparties": [],
+            "client": null,
+            "project_role": "modular_manufacturer",
+            "project_credit": true,
+            "announced_at": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "location": "Goryeong, Korea",
+            "market_segment": "public_housing",
+            "method": "steel_modular",
+            "source_ids": [
+              "kumkang_official_home"
+            ],
+            "verification_status": "official_verified",
+            "visibility": "public",
+            "updated_at": "2026-07-15"
+          }
+        ],
+        "source_groups": [
+          {
+            "group_type": "company_official",
+            "count": 3,
+            "sources": [
+              {
+                "source_id": "kumkang_official_domestic_network",
+                "source_type": "official_website",
+                "source_tier": "B",
+                "publisher": "Kumkang Kind",
+                "title": "금강공업 국내 생산공장",
+                "url": "https://www.kumkangkind.com/company/network_internal.asp",
+                "published_at": null,
+                "retrieved_at": "2026-07-15",
+                "document_id": null,
+                "status": "accessible"
+              },
+              {
+                "source_id": "kumkang_official_home",
+                "source_type": "official_website",
+                "source_tier": "B",
+                "publisher": "Kumkang Kind",
+                "title": "Kumkang Kind official website and modular business overview",
+                "url": "https://www.kumkangkind.com/",
+                "published_at": null,
+                "retrieved_at": "2026-07-13",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "kumkang_official_modular",
+                "source_type": "official_website",
+                "source_tier": "B",
+                "publisher": "Kumkang Kind",
+                "title": "금강공업 모듈러건축",
+                "url": "https://www.kumkangkind.com/business/boxunit.asp?mCode=3",
+                "published_at": null,
+                "retrieved_at": "2026-07-15",
+                "document_id": null,
+                "status": "accessible"
+              }
+            ]
+          },
+          {
+            "group_type": "dart",
+            "count": 7,
+            "sources": [
+              {
+                "source_id": "dart-00105299-20210318001269",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "사업보고서 (2020.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20210318001269",
+                "published_at": "20210318",
+                "retrieved_at": "2026-07-14T05:38:39.258925+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00105299-20220317000899",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "사업보고서 (2021.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20220317000899",
+                "published_at": "20220317",
+                "retrieved_at": "2026-07-14T05:38:39.258914+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00105299-20230316000643",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "사업보고서 (2022.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20230316000643",
+                "published_at": "20230316",
+                "retrieved_at": "2026-07-14T05:38:39.258905+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00105299-20240314000999",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "사업보고서 (2023.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240314000999",
+                "published_at": "20240314",
+                "retrieved_at": "2026-07-14T05:38:39.258896+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00105299-20250313001058",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "사업보고서 (2024.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250313001058",
+                "published_at": "20250313",
+                "retrieved_at": "2026-07-14T05:38:39.258885+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00105299-20250319000431",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "[기재정정]사업보고서 (2024.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250319000431",
+                "published_at": "20250319",
+                "retrieved_at": "2026-07-14T05:38:39.258868+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-00105299-20260312000935",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "사업보고서 (2025.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260312000935",
+                "published_at": "20260312",
+                "retrieved_at": "2026-07-14T05:38:39.258816+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -3982,7 +4837,89 @@
         "snapshot_source": "artifacts/company-project-candidate-verification-wave-1/company_project_coverage.csv",
         "note": "Raw news articles are clustered into project candidates; article count is not treated as project count."
       },
-      "project_candidates": []
+      "project_candidates": [],
+      "intelligence_v2": {
+        "company_id": "planm",
+        "overall_data_status": "partially_verified",
+        "domain_statuses": {
+          "identity_status": "official_verified",
+          "financial_status": "official_verified",
+          "production_status": "unavailable",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {
+          "dart": 3
+        },
+        "updated_at": "2026-07-15T00:00:00+09:00",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
+        "events": [],
+        "source_groups": [
+          {
+            "group_type": "dart",
+            "count": 4,
+            "sources": [
+              {
+                "source_id": "dart-01661914-20230411000791",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2022.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20230411000791",
+                "published_at": "20230411",
+                "retrieved_at": "2026-07-14T05:38:39.915816+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01661914-20240415000501",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2023.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240415000501",
+                "published_at": "20240415",
+                "retrieved_at": "2026-07-14T05:38:39.915804+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01661914-20250424000374",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2024.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250424000374",
+                "published_at": "20250424",
+                "retrieved_at": "2026-07-14T05:38:39.915791+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01661914-20260625000241",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2025.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260625000241",
+                "published_at": "20260625",
+                "retrieved_at": "2026-07-14T05:38:39.915762+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -5009,7 +5946,77 @@
         "snapshot_source": "artifacts/company-project-candidate-verification-wave-1/company_project_coverage.csv",
         "note": "Raw news articles are clustered into project candidates; article count is not treated as project count."
       },
-      "project_candidates": []
+      "project_candidates": [],
+      "intelligence_v2": {
+        "company_id": "daeseung-engineering",
+        "overall_data_status": "partially_verified",
+        "domain_statuses": {
+          "identity_status": "official_verified",
+          "financial_status": "official_verified",
+          "production_status": "unavailable",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {
+          "dart": 3
+        },
+        "updated_at": "2026-07-15T00:00:00+09:00",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
+        "events": [],
+        "source_groups": [
+          {
+            "group_type": "dart",
+            "count": 3,
+            "sources": [
+              {
+                "source_id": "dart-01693685-20230919000046",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2023.06)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20230919000046",
+                "published_at": "20230919",
+                "retrieved_at": "2026-07-14T05:38:40.677018+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01693685-20240919000117",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2024.06)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240919000117",
+                "published_at": "20240919",
+                "retrieved_at": "2026-07-14T05:38:40.677007+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01693685-20250917000346",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2025.06)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250917000346",
+                "published_at": "20250917",
+                "retrieved_at": "2026-07-14T05:38:40.676978+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -6090,7 +7097,113 @@
         "snapshot_source": "artifacts/company-project-candidate-verification-wave-1/company_project_coverage.csv",
         "note": "Raw news articles are clustered into project candidates; article count is not treated as project count."
       },
-      "project_candidates": []
+      "project_candidates": [],
+      "intelligence_v2": {
+        "company_id": "sungji-steel",
+        "overall_data_status": "partially_verified",
+        "domain_statuses": {
+          "identity_status": "official_verified",
+          "financial_status": "official_verified",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {
+          "dart": 3
+        },
+        "updated_at": "2026-07-15T01:50:43.808732+00:00",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
+        "events": [],
+        "source_groups": [
+          {
+            "group_type": "dart",
+            "count": 6,
+            "sources": [
+              {
+                "source_id": "dart-01072819-20210405002019",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2020.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20210405002019",
+                "published_at": "20210405",
+                "retrieved_at": "2026-07-15T01:45:41.727314+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01072819-20220404001477",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2021.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20220404001477",
+                "published_at": "20220404",
+                "retrieved_at": "2026-07-15T01:45:41.727301+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01072819-20230322000365",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2022.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20230322000365",
+                "published_at": "20230322",
+                "retrieved_at": "2026-07-15T01:45:41.727287+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01072819-20240403002985",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2023.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240403002985",
+                "published_at": "20240403",
+                "retrieved_at": "2026-07-15T01:45:41.727273+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01072819-20250401001241",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2024.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250401001241",
+                "published_at": "20250401",
+                "retrieved_at": "2026-07-15T01:45:41.727253+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01072819-20260401003674",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2025.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260401003674",
+                "published_at": "20260401",
+                "retrieved_at": "2026-07-15T01:45:41.727204+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -7002,7 +8115,77 @@
           ],
           "verified_at": "2026-07-15T01:50:44.845304+00:00"
         }
-      ]
+      ],
+      "intelligence_v2": {
+        "company_id": "geogwang-enterprise",
+        "overall_data_status": "partially_verified",
+        "domain_statuses": {
+          "identity_status": "official_verified",
+          "financial_status": "official_verified",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {
+          "dart": 3
+        },
+        "updated_at": "2026-07-15T03:34:31.499128+00:00",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
+        "events": [],
+        "source_groups": [
+          {
+            "group_type": "dart",
+            "count": 3,
+            "sources": [
+              {
+                "source_id": "dart-01397921-20240412000604",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2023.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20240412000604",
+                "published_at": "20240412",
+                "retrieved_at": "2026-07-15T01:45:42.793394+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01397921-20250414001463",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2024.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20250414001463",
+                "published_at": "20250414",
+                "retrieved_at": "2026-07-15T01:45:42.793382+00:00",
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "dart-01397921-20260409001984",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2025.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260409001984",
+                "published_at": "20260409",
+                "retrieved_at": "2026-07-15T01:45:42.793344+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -7965,7 +9148,53 @@
       ],
       "_selection_reasons": [
         "financial_years_less_than_3"
-      ]
+      ],
+      "intelligence_v2": {
+        "company_id": "m3-systems",
+        "overall_data_status": "partially_verified",
+        "domain_statuses": {
+          "identity_status": "official_verified",
+          "financial_status": "partially_verified",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {
+          "dart": 1
+        },
+        "updated_at": "2026-07-15T03:41:11.520415+00:00",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
+        "events": [],
+        "source_groups": [
+          {
+            "group_type": "dart",
+            "count": 1,
+            "sources": [
+              {
+                "source_id": "dart-01915408-20260409001882",
+                "source_type": "regulatory_filing",
+                "source_tier": "A",
+                "publisher": "DART",
+                "title": "감사보고서 (2025.12)",
+                "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260409001882",
+                "published_at": "20260409",
+                "retrieved_at": "2026-07-15T01:45:43.798000+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8089,7 +9318,32 @@
           "source_ids": [],
           "verified_at": ""
         }
-      ]
+      ],
+      "intelligence_v2": {
+        "company_id": "jinwoo-inc",
+        "overall_data_status": "research_in_progress",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 공개자료를 영역별로 추가 조사 중입니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8141,7 +9395,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "nrb",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 대체 공법 경쟁사이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8194,7 +9473,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "gs-ec",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 내부 비교 기준이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8246,7 +9550,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "hyundai-engineering",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 전략 벤치마크이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8299,7 +9628,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "hyundai-ec",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 전략 벤치마크이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8352,7 +9706,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "samsung-ct-construction",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 전략 벤치마크이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8405,7 +9784,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "posco-enc",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 전략 벤치마크이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8458,7 +9862,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "haean-architecture",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 설계 영향 기업이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8511,7 +9940,32 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "da-group-engineering",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 설계 영향 기업이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     },
     {
       "schema_version": "company-master-v1",
@@ -8564,10 +10018,41 @@
       },
       "financials": [],
       "recent_signals": [],
-      "sources": []
+      "sources": [],
+      "intelligence_v2": {
+        "company_id": "samoo-architects-engineers",
+        "overall_data_status": "insufficient_public_data",
+        "domain_statuses": {
+          "identity_status": "internally_confirmed",
+          "financial_status": "unavailable",
+          "production_status": "not_verified",
+          "project_status": "unavailable",
+          "technology_status": "unavailable",
+          "recent_signal_status": "unavailable"
+        },
+        "event_counts": {
+          "verified_projects": 0,
+          "project_candidates": 0,
+          "partnerships_mou": 0,
+          "r_and_d_exhibition": 0,
+          "other_events": 0
+        },
+        "article_evidence_count": 0,
+        "source_group_counts": {},
+        "updated_at": "2026-07-15",
+        "summary_ko": "스틸 모듈러 관점의 설계 영향 기업이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
+        "events": [],
+        "source_groups": []
+      }
     }
   ],
   "metadata": {
-    "production_wave_1_standardized_at": "2026-07-15T00:00:00+09:00"
+    "production_wave_1_standardized_at": "2026-07-15T00:00:00+09:00",
+    "company_intelligence_v2": {
+      "schema_version": "2.0.0",
+      "generated_at": "2026-07-15T13:28:45.194500+00:00",
+      "source": "data/companies/company_intelligence_v2.json",
+      "visibility_filter": "public"
+    }
   }
 }

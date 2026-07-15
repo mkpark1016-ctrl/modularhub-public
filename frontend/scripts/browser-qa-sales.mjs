@@ -111,8 +111,8 @@ try {
   check(businessItems.length > 0, "business data is empty");
   check(newsItems.length > 0, "news data is empty");
   check(companyItems.length === 17, "company data should contain 17 companies");
-  check(companySummary.verified === companyItems.filter((item) => getCompanyDataStatus(item) === "verified").length, "company verified count should match resolver");
-  check(companySummary.verified >= 4, "company verified count should include at least Wave 1 companies");
+  check(companySummary.coreVerified === companyItems.filter((item) => getCompanyDataStatus(item) === "core_verified").length, "company core verified count should match resolver");
+  check(companySummary.coreVerified >= 1, "company core verified count should include companies with verified core domains");
 
   await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
   await page.evaluate(() => localStorage.clear());
@@ -152,11 +152,13 @@ try {
   await checkNoBadDisplayText(page, "main", "company list");
   const companyText = await page.locator("main").innerText();
   check(companyText.includes(`전체 ${companySummary.total.toLocaleString("ko-KR")}개사`), "company summary total mismatch");
-  check(companyText.includes(`검증 완료 ${companySummary.verified.toLocaleString("ko-KR")}개사`), "company verified summary mismatch");
+  check(companyText.includes(`핵심 정보 검증 ${companySummary.coreVerified.toLocaleString("ko-KR")}개사`), "company core verified summary mismatch");
   await selectFilter(page, "경쟁 관계", "direct_competitor");
   await waitForCardCount(page, companySummary.directCompetitors, "direct competitor filter mismatch");
-  await selectFilter(page, "데이터 상태", "verified");
-  await waitForCardCount(page, companySummary.verified, "verified company filter mismatch");
+  await selectFilter(page, "데이터 상태", "core_verified");
+  await waitForCardCount(page, companySummary.coreVerified, "core verified company filter mismatch");
+  await page.getByRole("button", { name: "필터 초기화" }).first().click();
+  await waitForCardCount(page, companyItems.length, "company pre-search reset mismatch");
   await page.getByPlaceholder("기업명, 프로젝트, 기술 검색").fill("PlanM");
   await page.keyboard.press("Enter");
   await page.waitForURL(/q=PlanM/);
@@ -175,6 +177,17 @@ try {
   await page.goto(`${baseUrl}/companies?role=bad&status=bad&q=PlanM`, { waitUntil: "networkidle" });
   check(!page.url().includes("role=bad") && !page.url().includes("status=bad"), "invalid company URL params should be removed");
   check(new URL(page.url()).searchParams.get("q") === "PlanM", "company URL cleanup should preserve q");
+
+  await page.goto(`${baseUrl}/companies/yuchang-enc`, { waitUntil: "networkidle" });
+  const yuchangText = await page.locator("main").innerText();
+  check(yuchangText.includes("검증된 모듈러 실적"), "YooChang verified project section missing");
+  check(yuchangText.includes("협력·MOU"), "YooChang partnership section missing");
+  check(yuchangText.includes("삼성 AI 모듈러 홈"), "YooChang Samsung event missing");
+  check(yuchangText.includes("미체결"), "YooChang Samsung event should be marked not signed");
+  check(yuchangText.includes("관련 기사 근거 35건 · 프로젝트 수에 포함하지 않음"), "YooChang article evidence should be excluded from project count");
+  for (const rawCode of ["not_signed", "project_credit", "partially_verified", "role_unknown"]) {
+    check(!yuchangText.includes(rawCode), `YooChang detail exposes raw code ${rawCode}`);
+  }
 
   await page.goto(`${baseUrl}/business`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: "모듈러 사업정보" }).waitFor();
@@ -374,6 +387,12 @@ try {
   await page.getByRole("button", { name: /뉴스 검색조건/ }).click();
   check(await selectForLabel(page, "출처").count() === 0, "mobile source dropdown should not be rendered");
   await page.getByRole("button", { name: /해외/ }).click();
+
+  await page.goto(`${baseUrl}/companies`, { waitUntil: "networkidle" });
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "company list mobile has horizontal overflow");
+  await page.goto(`${baseUrl}/companies/yuchang-enc`, { waitUntil: "networkidle" });
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "YooChang detail mobile has horizontal overflow");
+  check((await page.locator("main").innerText()).includes("협력·MOU"), "YooChang partnership section missing on mobile");
 
   const credentialTokens = [
     "service" + "Key",

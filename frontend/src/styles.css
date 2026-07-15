@@ -196,8 +196,15 @@ code { overflow-wrap: anywhere; }
 .company-status.verified { color: #166534; border-color: #86efac; background: #f0fdf4; }
 .company-status.partial { color: #075985; border-color: #bae6fd; background: #f0f9ff; }
 .company-status.collecting { color: #6b4e16; border-color: #fde68a; background: #fffbeb; }
+.company-status.core_verified { color: #166534; border-color: #86efac; background: #f0fdf4; }
+.company-status.partially_verified { color: #075985; border-color: #bae6fd; background: #f0f9ff; }
+.company-status.research_in_progress { color: #6b4e16; border-color: #fde68a; background: #fffbeb; }
+.company-status.insufficient_public_data, .company-status.watchlist { color: #5b5b56; border-color: #d7d7d2; background: #f7f7f4; }
 .company-highlight-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
 .company-highlight-grid span { padding: 7px 9px; border: 1px solid #d7d7d2; border-radius: 6px; background: #f7f7f4; color: #444; font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
+.company-domain-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 0 0 16px; }
+.company-domain-grid span { display: grid; gap: 3px; min-width: 0; padding: 8px; border: 1px solid #e2e2dd; border-radius: 6px; color: #666; font-size: 11px; }
+.company-domain-grid b { color: #222; font-size: 12px; overflow-wrap: anywhere; }
 .company-detail .summary h2 { margin-bottom: 12px; }
 .compact-detail-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 0; padding-top: 0; }
 .company-section-list, .source-list { display: grid; gap: 10px; }
@@ -208,6 +215,11 @@ code { overflow-wrap: anywhere; }
 .company-section-list .candidate-item { border-style: dashed; background: #fafaf7; }
 .candidate-item strong::after { content: "후보"; display: inline-block; margin-left: 8px; padding: 2px 6px; border: 1px solid #d8d4c8; border-radius: 999px; color: #6b6251; font-size: 11px; font-weight: 800; vertical-align: 1px; }
 .source-list a { width: fit-content; display: inline-flex; align-items: center; gap: 4px; font-weight: 800; font-size: 13px; }
+.source-group-list { display: grid; gap: 10px; }
+.source-group { border: 1px solid #e2e2dd; border-radius: 8px; background: #fff; }
+.source-group > summary { cursor: pointer; padding: 14px; font-weight: 800; }
+.source-group[open] > summary { border-bottom: 1px solid #ecece8; }
+.source-group .source-list { padding: 10px; }
 .company-table-wrap { width: 100%; overflow-x: auto; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
 .company-financial-table { width: 100%; min-width: 640px; border-collapse: collapse; }
 .company-financial-table th, .company-financial-table td { padding: 12px 14px; border-bottom: 1px solid #ecece8; text-align: right; white-space: nowrap; }
@@ -229,4 +241,5 @@ code { overflow-wrap: anywhere; }
   .priority-item, .news-brief-item, .source-health-row { grid-template-columns: 1fr; align-items: start; }
   .priority-actions { justify-content: flex-start; }
   .card-topline, .detail-action-row { flex-direction: column; }
+  .company-domain-grid { grid-template-columns: 1fr 1fr; }
 }

@@ -24,6 +24,7 @@ artifacts/
 
 # API/cache downloads
 .cache/
+config/companies/manual_corrections.private.json
 
 # Debug / temporary exports
 exports/debug/

@@ -5,6 +5,8 @@ import {
   companyMatchesFilters,
   formatKrwReadable,
   getCompanyDataStatus,
+  getCompanyDomainStatuses,
+  getCompanyEvents,
   getCompanyItems,
   getCompanySummary,
   getCompanyTypeLabel,
@@ -30,33 +32,35 @@ assert.equal(companies.length, 17);
 const summary = getCompanySummary(companies);
 assert.equal(summary.total, 17);
 assert.equal(summary.directCompetitors, companies.filter((company) => company.competitive_role === "direct_competitor").length);
-assert.equal(summary.verified, companies.filter((company) => getCompanyDataStatus(company) === "verified").length);
-assert.equal(summary.verified, 6);
+assert.equal(summary.coreVerified, companies.filter((company) => getCompanyDataStatus(company) === "core_verified").length);
+assert.equal(summary.coreVerified, 1);
 assert.equal(summary.facilityConfirmed, companies.filter((company) => hasConfirmedProductionFacility(company)).length);
 assert.equal(summary.facilityConfirmed, 2);
 
 const wave1 = ["yuchang-enc", "kumkang-kind", "planm", "daeseung-engineering"].map((id) => companies.find((company) => company.company_id === id));
 assert.equal(wave1.every(Boolean), true);
 for (const company of wave1) {
-  assert.equal(getCompanyDataStatus(company), "verified");
   assert.equal(company.dart_identity.identity_status, "confirmed");
   assert.equal(company.financials.length, 3);
   assert.ok(metricSourceValue(getLatestFinancial(company).revenue) !== null);
+  assert.equal(getCompanyDomainStatuses(company).financial_status, "official_verified");
 }
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "kumkang-kind")), "core_verified");
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "yuchang-enc")), "partially_verified");
 
 const remainingTier1 = ["sungji-steel", "geogwang-enterprise", "m3-systems", "jinwoo-inc"].map((id) => companies.find((company) => company.company_id === id));
 assert.equal(remainingTier1.every(Boolean), true);
-assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "sungji-steel")), "verified");
-assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "geogwang-enterprise")), "verified");
-assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "m3-systems")), "partial");
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "sungji-steel")), "partially_verified");
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "geogwang-enterprise")), "partially_verified");
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "m3-systems")), "partially_verified");
 assert.equal(companies.find((company) => company.company_id === "jinwoo-inc").dart_identity.identity_status, "manual_review_required");
 
 const direct = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "direct_competitor", tier: "all", status: "all" }));
 assert.equal(direct.length, summary.directCompetitors);
 const tier1 = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "all", tier: "tier_1", status: "all" }));
 assert.equal(tier1.length, 8);
-const verified = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "all", tier: "all", status: "verified" }));
-assert.equal(verified.length, summary.verified);
+const verified = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "all", tier: "all", status: "core_verified" }));
+assert.equal(verified.length, summary.coreVerified);
 const manufacturers = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "specialist_manufacturer", relationship: "all", tier: "all", status: "all" }));
 assert.ok(manufacturers.length > 0);
 
@@ -81,6 +85,10 @@ assert.equal(getCompanyTypeLabel(companies.find((company) => company.company_id 
 assert.equal(getCompetitiveRoleLabel(companies.find((company) => company.company_id === "gs-ec")), "내부 기준");
 assert.equal(getTierLabel(companies.find((company) => company.company_id === "haean-architecture")), "장기 관찰");
 assert.equal(technologyCount(companies.find((company) => company.company_id === "kumkang-kind")) > 0, true);
+const yuchangEvents = getCompanyEvents(companies.find((company) => company.company_id === "yuchang-enc"));
+assert.equal(yuchangEvents.length, 1);
+assert.equal(yuchangEvents[0].event_type, "partnership");
+assert.equal(yuchangEvents[0].project_credit, false);
 assert.equal(formatKrwReadable(null), "확인되지 않음");
 assert.equal(formatKrwReadable(0), "0원");
 assert.match(formatKrwReadable(307_684_467_052), /억원$/);

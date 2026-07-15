@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "corrections": [
+    {
+      "correction_id": "correction-example-private",
+      "target_type": "event",
+      "target_id": "event-example",
+      "company_id": "company-id",
+      "action": "reclassify",
+      "reason_code": "internal_confirmation",
+      "previous_value": null,
+      "corrected_value": null,
+      "confirmed_at": "YYYY-MM-DD",
+      "confirmed_by": "internal_owner",
+      "visibility": "internal",
+      "source_ids": []
+    }
+  ]
+}

@@ -23,31 +23,34 @@ import {
   formatKrwReadable,
   getCompanyDataStatus,
   getCompanyDataStatusLabel,
+  getCompanyDomainStatuses,
+  getCompanyEvents,
   getCompanyHighlights,
   getCompanyItems,
+  getCompanySourceGroups,
   getCompanySummary,
   getCompanyTypeLabel,
   getCompetitiveRoleLabel,
   getConfidenceLabel,
+  getDisplayValue,
+  getDomainStatusLabel,
+  getEventStatusLabel,
+  getEventTypeLabel,
+  getKoreanCompanySummary,
   getCompanyProjectSummary,
   getLatestFinancial,
   getLatestVerifiedAt,
   getProjectRoleLabel,
-  getProjectStatusLabel,
   getProductionCapacityLabel,
   getProductionModelLabel,
-  getReviewStatusLabel,
-  getStructureTypeLabel,
   getTierLabel,
   formatProductionArea,
   isDartIdentityConfirmed,
   metricSourceValue,
   optionCounts,
-  projectCandidates,
   productionFacilities,
   productionSummary,
-  representativeProject,
-  sourceHasUrl,
+  SOURCE_GROUP_LABELS,
   statusOptions,
   technologyCount,
 } from "./companyInsights";
@@ -505,8 +508,8 @@ function HomePage() {
         </Link>
         <Link className="category-panel" to="/companies">
           <Factory size={26} />
-          <div><strong>기업정보</strong><span>분석 대상 {companySummary.total}개사 · 직접 경쟁사 {companySummary.directCompetitors}개사 · 검증 완료 {companySummary.verified}개사</span></div>
-          <b>{companySummary.verified}개사 검증 완료</b>
+          <div><strong>기업정보</strong><span>분석 대상 {companySummary.total}개사 · 직접 경쟁사 {companySummary.directCompetitors}개사 · 핵심 정보 검증 {companySummary.coreVerified}개사</span></div>
+          <b>{companySummary.coreVerified}개사 핵심 검증</b>
         </Link>
       </section>
       <div className="public-data-note">
@@ -774,19 +777,34 @@ function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, ti
   );
 }
 
-function projectSummaryLabel(projectSummary) {
-  if (projectSummary.verified > 0) {
-    return `검증 ${projectSummary.verified}건${projectSummary.latestYear ? ` · 최신 ${projectSummary.latestYear}` : ""}`;
-  }
-  if (projectSummary.candidates > 0) return `프로젝트 후보 ${projectSummary.candidates}건 · 기사 근거 ${projectSummary.rawArticleCount}건`;
-  if (projectSummary.rawArticleCount > 0) return `기사 근거 ${projectSummary.rawArticleCount}건 · 공식자료 추가 조사 필요`;
-  return "공개자료 추가 조사 필요";
-}
-
-function projectCandidateStatusLabel(item) {
-  if (item.verification_status === "research_exhausted_no_verified_project") return "관련 기사 근거 존재 · 공식자료에서 실적 확인 불가";
-  if (item.verification_status === "official_source_pending") return "프로젝트 후보 · 검증 필요";
-  return "프로젝트 후보 · 검증 필요";
+function CompanyEventList({ events, emptyText, candidate = false }) {
+  if (!events.length) return <p>{emptyText}</p>;
+  return (
+    <div className={`company-section-list ${candidate ? "project-candidate-list" : "project-portfolio-list"}`}>
+      {events.map((event) => {
+        const articleCount = (event.source_ids || []).filter((sourceId) => sourceId.startsWith("article-")).length;
+        return (
+          <div className={candidate ? "candidate-item" : undefined} key={event.event_id}>
+            <strong>{event.title}</strong>
+            <span>{[
+              getEventTypeLabel(event),
+              getEventStatusLabel(event),
+              event.project_role ? getProjectRoleLabel({ company_role: event.project_role }) : "수행 역할 미확인",
+            ].filter(Boolean).join(" · ")}</span>
+            <span>{[
+              event.client,
+              event.location,
+              getDisplayValue(event.market_segment, null),
+              getDisplayValue(event.method, null),
+            ].filter(Boolean).join(" · ") || "세부 범위는 공개자료에서 확인되지 않았습니다."}</span>
+            {event.amount !== null && event.amount !== undefined && <span>확인 금액: {formatKrwReadable(event.amount)}</span>}
+            {articleCount > 0 && <span>관련 기사 근거 {articleCount.toLocaleString("ko-KR")}건 · 프로젝트 수에 포함하지 않음</span>}
+            {candidate && <span>공식 근거와 수행 역할이 확인되기 전까지 검증 실적으로 집계하지 않습니다.</span>}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function CompanyCard({ company }) {
@@ -794,6 +812,7 @@ function CompanyCard({ company }) {
   const latestFinancial = getLatestFinancial(company);
   const latestRevenue = metricSourceValue(latestFinancial?.revenue);
   const projectSummary = getCompanyProjectSummary(company);
+  const domainStatuses = getCompanyDomainStatuses(company);
   return (
     <article className="result-card company-card">
       <div className="card-topline">
@@ -805,7 +824,7 @@ function CompanyCard({ company }) {
         </div>
       </div>
       <h2><Link to={`/companies/${company.company_id}`}>{company.company_name}</Link></h2>
-      <p>{company.summary || "현재 공개자료를 추가 조사 중입니다."}</p>
+      <p>{getKoreanCompanySummary(company)}</p>
       {highlights.length > 0 ? (
         <div className="company-highlight-grid">
           {highlights.map((highlight) => <span key={highlight}>{highlight}</span>)}
@@ -813,9 +832,18 @@ function CompanyCard({ company }) {
       ) : (
         <p className="empty-inline">현재 공개자료를 추가 조사 중입니다.</p>
       )}
+      <div className="company-domain-grid" aria-label="영역별 데이터 상태">
+        <span>재무 <b>{getDomainStatusLabel(domainStatuses.financial_status)}</b></span>
+        <span>생산 <b>{getDomainStatusLabel(domainStatuses.production_status)}</b></span>
+        <span>프로젝트 <b>{getDomainStatusLabel(domainStatuses.project_status)}</b></span>
+        <span>기술 <b>{getDomainStatusLabel(domainStatuses.technology_status)}</b></span>
+      </div>
       <dl className="metadata">
         <div><dt>최근 재무</dt><dd>{latestFinancial && latestRevenue !== null ? `${latestFinancial.year}년 ${formatKrwReadable(latestRevenue)}` : "공개자료 없음"}</dd></div>
-        <div><dt>프로젝트</dt><dd>{projectSummaryLabel(projectSummary)}</dd></div>
+        <div><dt>검증 실적</dt><dd>{projectSummary.verified > 0 ? `${projectSummary.verified}건` : "확인된 실적 없음"}</dd></div>
+        <div><dt>사업 후보</dt><dd>{projectSummary.candidates > 0 ? `${projectSummary.candidates}건` : "검토 후보 없음"}</dd></div>
+        <div><dt>협력·MOU</dt><dd>{projectSummary.partnerships > 0 ? `${projectSummary.partnerships}건` : "확인된 사건 없음"}</dd></div>
+        <div><dt>R&D·전시</dt><dd>{projectSummary.researchAndExhibition > 0 ? `${projectSummary.researchAndExhibition}건` : "확인된 사건 없음"}</dd></div>
         <div><dt>기술·특허</dt><dd>{technologyCount(company) > 0 ? `${technologyCount(company)}건` : "확인 중"}</dd></div>
         <div><dt>최신 기준일</dt><dd>{formatCompanyDate(getLatestVerifiedAt(company))}</dd></div>
         <div><dt>신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
@@ -856,7 +884,7 @@ function CompanyListingPage() {
     role: getValidParam(searchParams, "role", ["all", ...validValues.roles], "all"),
     relationship: getValidParam(searchParams, "relationship", ["all", ...validValues.relationships], "all"),
     tier: getValidParam(searchParams, "tier", ["all", ...validValues.tiers], "all"),
-    status: getValidParam(searchParams, "status", ["all", "verified", "partial", "collecting"], "all"),
+    status: getValidParam(searchParams, "status", ["all", "core_verified", "partially_verified", "research_in_progress", "watchlist", "insufficient_public_data"], "all"),
     sort: getValidParam(searchParams, "sort", COMPANY_SORT_VALUES, "tier"),
   }), [searchParams, validValues]);
 
@@ -897,7 +925,7 @@ function CompanyListingPage() {
       <section className="summary-strip company-summary-strip" aria-label="기업정보 요약">
         <SummaryItem label="전체 기업" value={summary.total} suffix="개사" />
         <SummaryItem label="직접 경쟁사" value={summary.directCompetitors} suffix="개사" />
-        <SummaryItem label="검증 완료" value={summary.verified} suffix="개사" />
+        <SummaryItem label="핵심 정보 검증" value={summary.coreVerified} suffix="개사" />
         <SummaryItem label="생산시설 확인 기업" value={summary.facilityConfirmed} suffix="개사" />
       </section>
       <div className="content-layout">
@@ -914,7 +942,7 @@ function CompanyListingPage() {
         />
         <section className="results" aria-live="polite">
           <div className="source-status lifecycle-summary">
-            <p>전체 {summary.total.toLocaleString("ko-KR")}개사 · 직접 경쟁사 {summary.directCompetitors.toLocaleString("ko-KR")}개사 · 검증 완료 {summary.verified.toLocaleString("ko-KR")}개사</p>
+            <p>전체 {summary.total.toLocaleString("ko-KR")}개사 · 직접 경쟁사 {summary.directCompetitors.toLocaleString("ko-KR")}개사 · 핵심 정보 검증 {summary.coreVerified.toLocaleString("ko-KR")}개사</p>
             <div className="mini-bars" aria-label="기업 역할별 분포">
               {summary.roleCounts.slice(0, 5).map((option) => (
                 <div key={option.value}><span>{option.label}</span><b style={{ width: `${Math.max(8, (option.count / Math.max(summary.total, 1)) * 100)}%` }} /> <em>{option.count}</em></div>
@@ -952,16 +980,19 @@ function CompanyDetailPage() {
 
   const financials = [...(Array.isArray(company.financials) ? company.financials : [])].sort((a, b) => Number(b.year || 0) - Number(a.year || 0)).slice(0, 3);
   const latestAudit = [...(Array.isArray(company.audit_information) ? company.audit_information : [])].sort((a, b) => Number(b.fiscal_year || 0) - Number(a.fiscal_year || 0))[0];
-  const projects = Array.isArray(company.project_portfolio) ? company.project_portfolio : [];
-  const candidates = projectCandidates(company);
+  const domainStatuses = getCompanyDomainStatuses(company);
+  const events = getCompanyEvents(company);
+  const verifiedProjects = events.filter((event) => event.event_type === "project" && event.project_credit);
+  const projectCandidatesV2 = events.filter((event) => event.event_type === "project" && !event.project_credit);
+  const partnershipEvents = events.filter((event) => ["partnership", "mou"].includes(event.event_type));
+  const researchEvents = events.filter((event) => ["r_and_d", "exhibition"].includes(event.event_type));
+  const otherEvents = events.filter((event) => !["project", "partnership", "mou", "r_and_d", "exhibition"].includes(event.event_type));
   const projectSummary = getCompanyProjectSummary(company);
   const production = productionFacilities(company);
   const productionInfo = productionSummary(company);
-  const signals = Array.isArray(company.recent_signals) ? company.recent_signals : [];
-  const sources = (Array.isArray(company.sources) ? company.sources : []).filter((source) => !String(source.source_url || "").includes(".cache"));
+  const sourceGroups = getCompanySourceGroups(company);
   const technology = company.technology && typeof company.technology === "object" ? company.technology : {};
   const technologyItems = Object.values(technology).flatMap((value) => Array.isArray(value) ? value : []).slice(0, 8);
-  const project = representativeProject(company);
   const gaps = Array.isArray(company.research_gaps) ? company.research_gaps : [];
 
   return (
@@ -976,7 +1007,7 @@ function CompanyDetailPage() {
         </div>
         <h1>{company.company_name}</h1>
         <dl className="detail-grid">
-          <div><dt>검증 상태</dt><dd>{getReviewStatusLabel(company)}</dd></div>
+          <div><dt>전체 데이터 상태</dt><dd>{getCompanyDataStatusLabel(company)}</dd></div>
           <div><dt>데이터 신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
           <div><dt>기준일</dt><dd>{formatCompanyDate(getLatestVerifiedAt(company))}</dd></div>
           <div><dt>영문명</dt><dd>{company.company_name_en || "확인 중"}</dd></div>
@@ -986,9 +1017,11 @@ function CompanyDetailPage() {
 
         <section className="summary">
           <h2>경쟁 포지션</h2>
-          <p>{company.summary || "현재 공개자료를 추가 조사 중입니다."}</p>
+          <p>{getKoreanCompanySummary(company)}</p>
           <div className="company-highlight-grid">
-            <span>{project?.project_name ? `대표 실적: ${project.project_name}` : "대표 실적 확인 중"}</span>
+            <span>{projectSummary.verified > 0 ? `검증 실적 ${projectSummary.verified}건` : "검증 실적 추가 조사 중"}</span>
+            <span>{projectSummary.candidates > 0 ? `사업 후보 ${projectSummary.candidates}건` : "사업 후보 없음"}</span>
+            <span>{projectSummary.partnerships > 0 ? `협력·MOU ${projectSummary.partnerships}건` : "협력·MOU 확인 중"}</span>
             <span>{technologyCount(company) > 0 ? `기술·특허 ${technologyCount(company)}건 확인` : "기술 자료 확인 중"}</span>
             <span>{financials.length ? `재무 ${financials.map((item) => item.year).join(", ")}년 확인` : "재무 공개자료 없음"}</span>
           </div>
@@ -1017,13 +1050,13 @@ function CompanyDetailPage() {
                 return (
                   <div key={item.facility_id || item.facility_name}>
                     <strong>{item.facility_name || "시설명 확인 중"}</strong>
-                    <span>{[item.region || item.city || item.location, item.ownership_type, item.operation_status].filter(Boolean).join(" · ") || "위치 정보 확인 중"}</span>
-                    {(item.production_scope || []).length > 0 && <span>생산 대상: {item.production_scope.join(", ")}</span>}
-                    {(item.production_processes || []).length > 0 && <span>공정: {item.production_processes.slice(0, 5).join(", ")}</span>}
+                    <span>{[item.region || item.city || item.location, getDisplayValue(item.ownership_type), getDisplayValue(item.operation_status)].filter(Boolean).join(" · ") || "위치 정보 확인 중"}</span>
+                    {(item.production_scope || []).length > 0 && <span>생산 대상: {item.production_scope.map((value) => getDisplayValue(value)).join(", ")}</span>}
+                    {(item.production_processes || []).length > 0 && <span>공정: {item.production_processes.slice(0, 5).map((value) => getDisplayValue(value)).join(", ")}</span>}
                     {siteArea && <span>부지면적 {siteArea}</span>}
                     {buildingArea && <span>건축면적 {buildingArea}</span>}
                     <span>{getProductionCapacityLabel(item)}</span>
-                    <span>검증 상태: {item.data_confidence || item.confidence || productionInfo.data_confidence || "확인 중"}</span>
+                    <span>검증 상태: {getConfidenceLabel({ data_confidence: item.data_confidence || item.confidence || productionInfo.data_confidence })}</span>
                     <span>기준일: {formatCompanyDate(item.verified_at || productionInfo.verified_at)}</span>
                   </div>
                 );
@@ -1042,7 +1075,7 @@ function CompanyDetailPage() {
           <h2>최근 3개년 재무</h2>
           {financials.length ? (
             <>
-              <p className="finance-note">회사 전체 재무 · {latestAudit?.reporting_scope === "consolidated" ? "연결" : "별도"} · {latestAudit?.accounting_standard === "general_korean_gaap" ? "일반기업회계기준" : latestAudit?.accounting_standard || "회계기준 확인 중"} · 감사의견 {latestAudit?.audit_opinion === "unmodified" ? "적정" : latestAudit?.audit_opinion || "확인 중"}</p>
+              <p className="finance-note">회사 전체 재무 · {latestAudit?.reporting_scope === "consolidated" ? "연결" : latestAudit?.reporting_scope === "separate" ? "별도" : "범위 확인 중"} · {latestAudit?.accounting_standard === "general_korean_gaap" ? "일반기업회계기준" : latestAudit?.accounting_standard === "K-IFRS" ? "한국채택국제회계기준" : "회계기준 확인 중"} · 감사의견 {getDisplayValue(latestAudit?.audit_opinion, "확인 중")}</p>
               <div className="company-table-wrap">
                 <table className="company-financial-table">
                   <thead><tr><th>연도</th><th>매출</th><th>영업이익</th><th>순이익</th><th>영업현금흐름</th></tr></thead>
@@ -1065,63 +1098,23 @@ function CompanyDetailPage() {
         </section>
 
         <section className="summary">
-          <h2>주요 모듈러 실적</h2>
-          {projects.length ? (
-            <div className="company-section-list project-portfolio-list">
-              {projects.slice(0, 6).map((item) => (
-                <div key={item.project_id || item.project_name}>
-                  <strong>{item.project_name || "프로젝트명 확인 중"}</strong>
-                  <span>{[
-                    item.client_name || item.client || item.ordering_agency,
-                    item.sector || item.building_use,
-                    getProjectRoleLabel(item),
-                    getProjectStatusLabel(item),
-                  ].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
-                  <span>{[
-                    item.location,
-                    getStructureTypeLabel(item),
-                    item.completion_date ? `준공 ${item.completion_date}` : null,
-                    item.contract_date ? `계약 ${item.contract_date}` : null,
-                  ].filter(Boolean).join(" · ")}</span>
-                  {(item.gross_floor_area || item.module_count || item.contract_amount) && (
-                    <span>{[
-                      item.gross_floor_area ? `연면적 ${Number(item.gross_floor_area).toLocaleString("ko-KR")}${item.gross_floor_area_unit || ""}` : null,
-                      item.module_count ? `모듈 ${Number(item.module_count).toLocaleString("ko-KR")}개` : null,
-                      item.contract_amount ? `계약금액 ${formatKrwReadable(item.contract_amount)}` : null,
-                    ].filter(Boolean).join(" · ")}</span>
-                  )}
-                  {item.project_summary && <span>{item.project_summary}</span>}
-                  <span>검증 상태: {item.evidence_status === "verified" ? "검증 완료" : item.evidence_status === "partially_verified" ? "부분 검증" : "확인 중"}</span>
-                </div>
-              ))}
-            </div>
-          ) : null}
-          {candidates.length > 0 && (
-            <div className="company-section-list project-candidate-list">
-              {candidates.map((item) => (
-                <div className="candidate-item" key={item.project_candidate_id || item.candidate_id || item.source_record_id || item.candidate_title}>
-                  <strong>{item.canonical_project_name || item.candidate_title || "프로젝트 후보 확인 중"}</strong>
-                  <span>{projectCandidateStatusLabel(item)} · 기사 근거 {Number(item.source_article_count || item.source_article_ids?.length || 0).toLocaleString("ko-KR")}건</span>
-                  <span>{[
-                    item.verification_status === "official_source_pending" ? "공식 원문 확인 필요" : item.verification_status === "research_exhausted_no_verified_project" ? "검증 프로젝트로 집계하지 않음" : item.verification_status,
-                    item.verification_priority_level,
-                    item.evidence_level || "candidate",
-                  ].filter(Boolean).join(" · ")}</span>
-                  <span>{[
-                    item.matched_alias ? `매칭: ${item.matched_alias}` : null,
-                    item.possible_client,
-                    item.possible_location,
-                    item.possible_role || item.possible_company_role,
-                  ].filter(Boolean).join(" · ") || "공식 출처 확인 전까지 검증 프로젝트로 집계하지 않습니다."}</span>
-                  {item.matched_context && <span>{item.matched_context}</span>}
-                  {item.source_url && <a href={item.source_url} target="_blank" rel="noopener noreferrer">후보 원문 보기 <ExternalLink size={13} /></a>}
-                </div>
-              ))}
-            </div>
-          )}
-          {!projects.length && !candidates.length && (
-            <p>{projectSummary.researchGapCount > 0 ? "공개자료 추가 조사 필요" : "현재 공개자료를 추가 조사 중입니다."}</p>
-          )}
+          <h2>검증된 모듈러 실적</h2>
+          <CompanyEventList events={verifiedProjects} emptyText="공식 근거와 수행 역할이 모두 확인된 프로젝트 실적이 없습니다." />
+        </section>
+
+        <section className="summary">
+          <h2>진행·수주 후보</h2>
+          <CompanyEventList events={projectCandidatesV2} candidate emptyText="현재 검토 중인 프로젝트 후보가 없습니다." />
+        </section>
+
+        <section className="summary">
+          <h2>협력·MOU</h2>
+          <CompanyEventList events={partnershipEvents} candidate emptyText="공개자료에서 확인된 협력·MOU 사건이 없습니다." />
+        </section>
+
+        <section className="summary">
+          <h2>R&D·전시</h2>
+          <CompanyEventList events={researchEvents} candidate emptyText="공개자료에서 확인된 R&D·전시 사건이 없습니다." />
         </section>
 
         <section className="summary">
@@ -1131,7 +1124,8 @@ function CompanyDetailPage() {
               {technologyItems.map((item, index) => (
                 <div key={item.technology_id || item.registration_number || `${item.name}-${index}`}>
                   <strong>{item.name || item.registration_number || "기술명 확인 중"}</strong>
-                  <span>{[item.record_type, item.status, item.technology_area].filter(Boolean).join(" · ") || item.summary || "세부 정보 확인 중"}</span>
+                  <span>{[getDisplayValue(item.record_type, null), getDisplayValue(item.status, null), getDisplayValue(item.technology_area, null)].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
+                  {item.summary && /[가-힣]/.test(item.summary) && <span>{item.summary}</span>}
                 </div>
               ))}
             </div>
@@ -1140,45 +1134,46 @@ function CompanyDetailPage() {
 
         <section className="summary">
           <h2>최근 동향</h2>
-          {signals.length ? (
-            <div className="company-section-list">
-              {signals.map((item) => (
-                <div key={item.signal_id || item.title}>
-                  <strong>{item.title || "동향 제목 확인 중"}</strong>
-                  <span>{[item.occurred_at, item.signal_type].filter(Boolean).join(" · ")}</span>
-                  {item.summary && <span>{item.summary}</span>}
-                </div>
-              ))}
-            </div>
-          ) : <p>현재 공개자료를 추가 조사 중입니다.</p>}
+          <CompanyEventList events={otherEvents} candidate emptyText="분류된 최근 동향을 추가 조사 중입니다." />
         </section>
 
         <section className="summary">
           <h2>데이터 검증 정보</h2>
           <dl className="detail-grid compact-detail-grid">
-            <div><dt>검토 상태</dt><dd>{getReviewStatusLabel(company)}</dd></div>
-            <div><dt>신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
+            <div><dt>전체 상태</dt><dd>{getCompanyDataStatusLabel(company)}</dd></div>
+            <div><dt>법인 식별</dt><dd>{getDomainStatusLabel(domainStatuses.identity_status)}</dd></div>
+            <div><dt>재무</dt><dd>{getDomainStatusLabel(domainStatuses.financial_status)}</dd></div>
+            <div><dt>생산</dt><dd>{getDomainStatusLabel(domainStatuses.production_status)}</dd></div>
+            <div><dt>프로젝트</dt><dd>{getDomainStatusLabel(domainStatuses.project_status)}</dd></div>
+            <div><dt>기술</dt><dd>{getDomainStatusLabel(domainStatuses.technology_status)}</dd></div>
+            <div><dt>최근 신호</dt><dd>{getDomainStatusLabel(domainStatuses.recent_signal_status)}</dd></div>
             <div><dt>DART corp_code</dt><dd>{company.dart_identity?.dart_corp_code || "확인 중"}</dd></div>
             <div><dt>최근 감사보고서</dt><dd>{latestAudit?.receipt_number || "공개자료 없음"}</dd></div>
           </dl>
           {gaps.length > 0 && (
             <div className="company-section-list">
-              {gaps.slice(0, 4).map((gap) => <div key={`${gap.area}-${gap.status}`}><strong>{gap.area}</strong><span>{gap.description || gap.status}</span></div>)}
+              {gaps.slice(0, 4).map((gap, index) => <div key={`${gap.area}-${index}`}><strong>추가 확인 필요</strong><span>{/[가-힣]/.test(gap.description || gap.note || "") ? gap.description || gap.note : "공개자료를 추가 확인 중입니다."}</span></div>)}
             </div>
           )}
         </section>
 
         <section className="summary">
           <h2>출처</h2>
-          {sources.length ? (
-            <div className="source-list">
-              {sources.slice(0, 12).map((source) => (
-                <div key={source.source_id || source.source_url}>
-                  <strong>{source.source_name || source.publisher || "출처"}</strong>
-                  <span>{[source.source_type, source.published_at || source.accessed_at, source.confidence].filter(Boolean).join(" · ")}</span>
-                  {source.receipt_number && <span>접수번호 {source.receipt_number}</span>}
-                  {sourceHasUrl(source) && <a href={source.source_url} target="_blank" rel="noopener noreferrer">원문 보기 <ExternalLink size={13} /></a>}
-                </div>
+          {sourceGroups.length ? (
+            <div className="source-group-list">
+              {sourceGroups.map((group) => (
+                <details className="source-group" key={group.group_type}>
+                  <summary>{SOURCE_GROUP_LABELS[group.group_type] || "공개자료"} · {group.count.toLocaleString("ko-KR")}건</summary>
+                  <div className="source-list">
+                    {group.sources.map((source) => (
+                      <div key={source.source_id}>
+                        <strong>{source.publisher || SOURCE_GROUP_LABELS[group.group_type] || "출처"}</strong>
+                        <span>{[source.published_at || source.retrieved_at, source.document_id ? `문서번호 ${source.document_id}` : null].filter(Boolean).join(" · ") || "기준일 확인 중"}</span>
+                        {source.url && <a href={source.url} target="_blank" rel="noopener noreferrer">원문 보기 <ExternalLink size={13} /></a>}
+                      </div>
+                    ))}
+                  </div>
+                </details>
               ))}
             </div>
           ) : <p>공개 출처를 추가 정리 중입니다.</p>}

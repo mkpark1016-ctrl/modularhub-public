@@ -35,9 +35,53 @@ export const REVIEW_STATUS_LABELS = {
 };
 
 export const DATA_STATUS_LABELS = {
-  verified: "검증 완료",
-  partial: "부분 검증",
-  collecting: "조사 중",
+  core_verified: "핵심 정보 검증",
+  partially_verified: "부분 검증",
+  research_in_progress: "조사 중",
+  watchlist: "관찰 대상",
+  insufficient_public_data: "공개자료 부족",
+};
+
+export const DOMAIN_STATUS_LABELS = {
+  official_verified: "공식 검증",
+  cross_verified: "교차 검증",
+  company_claimed: "회사 공식자료 확인",
+  third_party_reported: "외부자료 확인",
+  internally_confirmed: "내부 기준 확인",
+  partially_verified: "부분 검증",
+  not_verified: "미확인",
+  unavailable: "공개자료 없음",
+};
+
+export const EVENT_TYPE_LABELS = {
+  project: "프로젝트",
+  partnership: "협력",
+  mou: "MOU",
+  acquisition: "인수",
+  facility_investment: "시설 투자",
+  r_and_d: "R&D",
+  exhibition: "전시",
+  product_launch: "제품 출시",
+  organization_change: "조직 변화",
+  policy_signal: "정책 신호",
+  business_strategy: "사업 전략",
+};
+
+export const EVENT_STATUS_LABELS = {
+  completed: "완료",
+  in_progress: "진행 중",
+  contract_signed: "계약 체결",
+  award_confirmed: "수주 확인",
+  preferred_bidder: "우선협상대상",
+  bid_participation: "입찰 참여",
+  planned: "계획",
+  mou_signed: "MOU 체결",
+  partnership_discussion: "협력 논의",
+  r_and_d: "연구개발",
+  exhibition: "전시",
+  cancelled: "취소",
+  not_signed: "미체결",
+  unconfirmed: "미확인",
 };
 
 export const CONFIDENCE_LABELS = {
@@ -63,7 +107,75 @@ export const PROJECT_ROLE_LABELS = {
   structural_supplier: "구조 공급",
   rental_provider: "임대",
   technology_provider: "기술 제공",
+  modular_installer: "모듈러 설치",
+  structural_engineer: "구조 엔지니어링",
+  material_supplier: "자재 공급",
+  role_unknown: "수행 역할 미확인",
   unknown: "역할 확인 중",
+};
+
+export const SOURCE_GROUP_LABELS = {
+  dart: "DART 감사·사업보고서",
+  company_official: "기업 공식자료",
+  public_official: "발주·공공기관 공식자료",
+  media_and_research: "언론 및 전문자료",
+  other: "기타 공개자료",
+};
+
+export const DISPLAY_VALUE_LABELS = {
+  owned: "자체 소유",
+  subsidiary_owned: "자회사 소유",
+  affiliate_owned: "관계사 소유",
+  leased: "임차",
+  partner_owned: "협력사 소유",
+  contract_manufacturing: "위탁 생산",
+  active: "운영 중",
+  partially_active: "부분 운영",
+  under_expansion: "증설 중",
+  under_construction: "건설 중",
+  planned: "계획",
+  suspended: "중단",
+  closed: "운영 종료",
+  steel_cutting: "철골 절단",
+  steel_frame_fabrication: "철골 프레임 제작",
+  welding: "용접",
+  blasting: "표면 처리",
+  painting: "도장",
+  fireproofing: "내화 처리",
+  floor_assembly: "바닥 조립",
+  wall_assembly: "벽체 조립",
+  ceiling_assembly: "천장 조립",
+  mep_prefabrication: "MEP 사전 제작",
+  interior_fitout: "내부 마감",
+  window_door_installation: "창호 설치",
+  bathroom_pod: "욕실 모듈",
+  final_assembly: "최종 조립",
+  factory_inspection: "공장 검사",
+  packaging: "포장",
+  logistics_loading: "출하 적재",
+  proprietary_system: "자체 시스템",
+  claimed: "회사 주장",
+  steel_modular_units: "스틸 모듈러 유닛",
+  steel_volumetric: "스틸 볼류메트릭",
+  public_housing: "공공주택",
+  private_housing: "민간주택",
+  overseas_research_facility: "해외 연구시설",
+  temporary_office: "임시 업무시설",
+  patent: "특허",
+  patent_application: "특허 출원",
+  construction_new_technology: "건설신기술",
+  certification: "인증",
+  innovative_product: "혁신제품",
+  design_award: "디자인 수상",
+  research_project: "연구과제",
+  registered: "등록",
+  filed: "출원",
+  granted: "등록",
+  expired: "만료",
+  unmodified: "적정",
+  qualified: "한정",
+  adverse: "부적정",
+  disclaimer: "의견거절",
 };
 
 export const PROJECT_STATUS_LABELS = {
@@ -140,6 +252,54 @@ export function getProjectStatusLabel(project) {
   return labelFromMap(PROJECT_STATUS_LABELS, project?.project_status || "unknown");
 }
 
+export function getEventTypeLabel(event) {
+  return labelFromMap(EVENT_TYPE_LABELS, event?.event_type, "사업 사건");
+}
+
+export function getEventStatusLabel(event) {
+  return labelFromMap(EVENT_STATUS_LABELS, event?.event_status, "미확인");
+}
+
+export function getDomainStatusLabel(value) {
+  return labelFromMap(DOMAIN_STATUS_LABELS, value, "미확인");
+}
+
+export function getDisplayValue(value, fallback = "확인 중") {
+  if (!value) return fallback;
+  if (DISPLAY_VALUE_LABELS[value]) return DISPLAY_VALUE_LABELS[value];
+  if (String(value).includes("_")) return fallback;
+  return String(value);
+}
+
+export function hasKoreanText(value) {
+  return /[가-힣]/.test(String(value || ""));
+}
+
+export function getCompanyIntelligence(company) {
+  return company?.intelligence_v2 && typeof company.intelligence_v2 === "object" ? company.intelligence_v2 : {};
+}
+
+export function getCompanyDomainStatuses(company) {
+  return getCompanyIntelligence(company).domain_statuses || {};
+}
+
+export function getCompanyEvents(company, eventTypes = null) {
+  const events = Array.isArray(getCompanyIntelligence(company).events) ? getCompanyIntelligence(company).events : [];
+  if (!eventTypes) return events;
+  const allowed = new Set(Array.isArray(eventTypes) ? eventTypes : [eventTypes]);
+  return events.filter((event) => allowed.has(event.event_type));
+}
+
+export function getCompanySourceGroups(company) {
+  return Array.isArray(getCompanyIntelligence(company).source_groups) ? getCompanyIntelligence(company).source_groups : [];
+}
+
+export function getKoreanCompanySummary(company) {
+  const summary = getCompanyIntelligence(company).summary_ko;
+  if (hasKoreanText(summary)) return summary;
+  return "현재 공개자료를 영역별로 추가 조사 중입니다.";
+}
+
 export function getStructureTypeLabel(project) {
   return labelFromMap(STRUCTURE_TYPE_LABELS, project?.structure_type || project?.modular_method || project?.modular_type || "unknown");
 }
@@ -156,11 +316,12 @@ export function isDartIdentityConfirmed(company) {
 }
 
 export function getCompanyDataStatus(company) {
+  const materialized = getCompanyIntelligence(company).overall_data_status;
+  if (DATA_STATUS_LABELS[materialized]) return materialized;
   const reviewStatus = company?.review_status;
-  if (reviewStatus === "verified") return "verified";
-  if (isDartIdentityConfirmed(company) && financialYears(company).length >= 3) return "verified";
-  if (reviewStatus === "partially_verified" || financialYears(company).length > 0 || (company?.sources || []).length > 0) return "partial";
-  return "collecting";
+  if (reviewStatus === "verified") return "partially_verified";
+  if (isDartIdentityConfirmed(company) || financialYears(company).length > 0 || (company?.sources || []).length > 0) return "partially_verified";
+  return "research_in_progress";
 }
 
 export function getCompanyDataStatusLabel(company) {
@@ -188,6 +349,7 @@ export function companySearchText(company) {
   const production = Array.isArray(company?.production) ? company.production : [];
   const productionInfo = productionSummary(company);
   const signals = Array.isArray(company?.recent_signals) ? company.recent_signals : [];
+  const v2Events = getCompanyEvents(company);
   return normalizeCompanyText([
     company?.company_name,
     company?.company_name_en,
@@ -197,7 +359,7 @@ export function companySearchText(company) {
     getTierLabel(company),
     ...(Array.isArray(company?.modular_methods) ? company.modular_methods : []),
     ...(Array.isArray(company?.target_markets) ? company.target_markets : []),
-    company?.summary,
+    getKoreanCompanySummary(company),
     productionInfo.summary,
     productionInfo.manufacturing_model,
     productionInfo.own_facility_status,
@@ -252,6 +414,7 @@ export function companySearchText(company) {
       return item;
     }),
     ...signals.flatMap((item) => [item.title, item.summary, item.signal_type]),
+    ...v2Events.flatMap((item) => [item.title, item.client, item.location, item.market_segment, item.method, getEventTypeLabel(item), getEventStatusLabel(item), getProjectRoleLabel({ company_role: item.project_role })]),
   ].join(" "));
 }
 
@@ -302,7 +465,7 @@ export function statusOptions(companies) {
     const status = getCompanyDataStatus(company);
     counts.set(status, (counts.get(status) || 0) + 1);
   }
-  return ["verified", "partial", "collecting"]
+  return ["core_verified", "partially_verified", "research_in_progress", "watchlist", "insufficient_public_data"]
     .filter((value) => counts.has(value))
     .map((value) => ({ value, label: DATA_STATUS_LABELS[value], count: counts.get(value) }));
 }
@@ -312,7 +475,7 @@ export function getCompanySummary(companies) {
   return {
     total: list.length,
     directCompetitors: list.filter((company) => company.competitive_role === "direct_competitor").length,
-    verified: list.filter((company) => getCompanyDataStatus(company) === "verified").length,
+    coreVerified: list.filter((company) => getCompanyDataStatus(company) === "core_verified").length,
     facilityConfirmed: list.filter((company) => hasConfirmedProductionFacility(company)).length,
     roleCounts: optionCounts(list, "company_type", COMPANY_TYPE_LABELS),
     relationshipCounts: optionCounts(list, "competitive_role", COMPETITIVE_ROLE_LABELS),
@@ -440,6 +603,32 @@ export function projectCandidates(company) {
 }
 
 export function getCompanyProjectSummary(company) {
+  const materialized = getCompanyIntelligence(company);
+  if (materialized.event_counts) {
+    const eventYears = getCompanyEvents(company, "project")
+      .flatMap((event) => [event.completed_at, event.started_at, event.contracted_at, event.announced_at, event.updated_at])
+      .filter(Boolean)
+      .map((value) => Number(String(value).slice(0, 4)))
+      .filter((year) => Number.isFinite(year))
+      .sort((a, b) => b - a);
+    return {
+      total: Number(materialized.event_counts.verified_projects || 0) + Number(materialized.event_counts.project_candidates || 0),
+      verified: Number(materialized.event_counts.verified_projects || 0),
+      candidates: Number(materialized.event_counts.project_candidates || 0),
+      partnerships: Number(materialized.event_counts.partnerships_mou || 0),
+      researchAndExhibition: Number(materialized.event_counts.r_and_d_exhibition || 0),
+      otherEvents: Number(materialized.event_counts.other_events || 0),
+      rawArticleCount: Number(materialized.article_evidence_count || 0),
+      rejectedCandidateCount: Number(company?.project_research_status?.rejected_candidate_count || 0),
+      officialSourceCount: Number(company?.project_research_status?.official_source_count || 0),
+      researchStatus: company?.project_research_status?.research_status || "",
+      researchGapCount: Number(company?.project_research_status?.research_gap_count || 0),
+      researchWave: company?.project_research_status?.research_wave || "",
+      sectors: [],
+      roles: [],
+      latestYear: eventYears[0] || null,
+    };
+  }
   const projects = Array.isArray(company?.project_portfolio) ? company.project_portfolio : [];
   const verified = verifiedCompanyProjects(company);
   const candidates = projectCandidates(company);
@@ -461,6 +650,9 @@ export function getCompanyProjectSummary(company) {
     total: projects.length,
     verified: verified.length,
     candidates: candidateCount,
+    partnerships: 0,
+    researchAndExhibition: 0,
+    otherEvents: 0,
     candidateSamples: candidates.length,
     rawArticleCount,
     rejectedCandidateCount,
@@ -488,12 +680,10 @@ export function getCompanyHighlights(company) {
   if (production?.reported_capacity && production?.capacity_unit) highlights.push(`${production.reported_capacity} ${production.capacity_unit}`);
   else if (production?.capacity_value && production?.capacity_unit) highlights.push(`${production.capacity_value} ${production.capacity_unit}`);
   else if (summary.reported_capacity_available === false && hasConfirmedProductionFacility(company)) highlights.push("공식 생산능력 미공개");
-  const project = representativeProject(company);
   const projectSummary = getCompanyProjectSummary(company);
   if (projectSummary.verified > 0) highlights.push(`검증 프로젝트 ${projectSummary.verified}건`);
   else if (projectSummary.candidates > 0) highlights.push(`프로젝트 후보 ${projectSummary.candidates}건`);
-  else if (projectSummary.rawArticleCount > 0) highlights.push(`관련 기사 근거 ${projectSummary.rawArticleCount}건`);
-  else if (project?.project_name) highlights.push(project.project_name);
+  else if (projectSummary.partnerships > 0) highlights.push(`협력·MOU ${projectSummary.partnerships}건`);
   const latest = getLatestFinancial(company);
   const revenue = metricSourceValue(latest?.revenue);
   if (latest && revenue !== null) highlights.push(`최근 확인 매출 ${formatKrwReadable(revenue)}`);
