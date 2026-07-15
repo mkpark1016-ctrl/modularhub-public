@@ -7,6 +7,7 @@ import {
   getProjectStatusLabel,
   getStructureTypeLabel,
   matchesCompanySearch,
+  projectCandidates,
   representativeProject,
   verifiedCompanyProjects,
 } from "../src/companyInsights.js";
@@ -23,6 +24,7 @@ assert.ok(kumkang);
 assert.equal(kumkang.project_portfolio.length, 3);
 assert.equal(verifiedCompanyProjects(kumkang).length, 3);
 assert.equal(getCompanyProjectSummary(kumkang).verified, 3);
+assert.equal(getCompanyProjectSummary(kumkang).candidates, 0);
 assert.ok(getCompanyProjectSummary(kumkang).latestYear >= 2026);
 assert.equal(representativeProject(kumkang).project_id, "kumkang-jangbogo-antarctic-station");
 
@@ -44,6 +46,21 @@ const jinwoo = byId("jinwoo-inc");
 assert.ok(jinwoo);
 assert.equal(jinwoo.dart_identity.identity_status, "manual_review_required");
 assert.equal((jinwoo.project_portfolio || []).length, 0);
+
+const wave1Targets = companies.filter((company) => company.project_research_status?.research_wave === "wave_1");
+assert.equal(wave1Targets.length, 4);
+assert.deepEqual(
+  wave1Targets.map((company) => company.company_id).sort(),
+  ["daeseung-engineering", "planm", "sungji-steel", "yuchang-enc"],
+);
+assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).verified, 0), 0);
+assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).candidates, 0), 50);
+const yuchangCandidates = projectCandidates(byId("yuchang-enc"));
+assert.equal(yuchangCandidates.length, 3);
+assert.equal(projectCandidates(byId("planm")).length, 3);
+assert.equal(getCompanyProjectSummary(byId("daeseung-engineering")).researchGapCount, 1);
+assert.equal(getCompanyProjectSummary(byId("sungji-steel")).researchGapCount, 1);
+assert.equal(matchesCompanySearch(byId("yuchang-enc"), yuchangCandidates[0].candidate_title.slice(0, 8)), true);
 
 const projectIds = companies.flatMap((company) => (company.project_portfolio || []).map((project) => project.project_id));
 assert.equal(projectIds.length, new Set(projectIds).size);

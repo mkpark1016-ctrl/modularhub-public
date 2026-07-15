@@ -178,6 +178,7 @@ export function getLatestVerifiedAt(company) {
 
 export function companySearchText(company) {
   const projects = Array.isArray(company?.project_portfolio) ? company.project_portfolio : [];
+  const candidates = projectCandidates(company);
   const technology = company?.technology && typeof company.technology === "object" ? company.technology : {};
   const technologyValues = Object.values(technology).flatMap((value) => {
     if (Array.isArray(value)) return value;
@@ -230,6 +231,16 @@ export function companySearchText(company) {
       item.role_detail,
       item.project_summary,
       item.significance,
+    ]),
+    ...candidates.flatMap((item) => [
+      item.candidate_title,
+      item.matched_alias,
+      item.matched_context,
+      item.possible_client,
+      item.possible_location,
+      item.possible_role,
+      item.source_dataset,
+      item.review_status,
     ]),
     ...technologyValues.map((item) => {
       if (item && typeof item === "object") return [item.name, item.summary, item.technology_area, item.status].join(" ");
@@ -396,9 +407,18 @@ export function verifiedCompanyProjects(company) {
   return projects.filter((item) => item?.project_name && item?.source_ids?.length && ["verified", "partially_verified"].includes(item.evidence_status));
 }
 
+export function projectCandidates(company) {
+  const candidates = Array.isArray(company?.project_candidates) ? company.project_candidates : [];
+  return candidates.filter((item) => item?.candidate_title && item?.review_status !== "verified");
+}
+
 export function getCompanyProjectSummary(company) {
   const projects = Array.isArray(company?.project_portfolio) ? company.project_portfolio : [];
   const verified = verifiedCompanyProjects(company);
+  const candidates = projectCandidates(company);
+  const researchStatus = company?.project_research_status || {};
+  const candidateCount = Number(researchStatus.candidate_project_count ?? candidates.length) || 0;
+  const researchGapCount = Number(researchStatus.research_gap_count ?? 0) || 0;
   const sectors = [...new Set(verified.map((item) => item.sector || item.building_use).filter(Boolean))].slice(0, 2);
   const roles = [...new Set(verified.map((item) => item.company_role).filter(Boolean))].slice(0, 2);
   const years = verified
@@ -410,6 +430,11 @@ export function getCompanyProjectSummary(company) {
   return {
     total: projects.length,
     verified: verified.length,
+    candidates: candidateCount,
+    candidateSamples: candidates.length,
+    researchStatus: researchStatus.research_status || "",
+    researchGapCount,
+    researchWave: researchStatus.research_wave || "",
     sectors,
     roles,
     latestYear: years[0] || null,
@@ -433,6 +458,7 @@ export function getCompanyHighlights(company) {
   const project = representativeProject(company);
   const projectSummary = getCompanyProjectSummary(company);
   if (projectSummary.verified > 0) highlights.push(`검증 프로젝트 ${projectSummary.verified}건`);
+  else if (projectSummary.candidates > 0) highlights.push(`프로젝트 후보 ${projectSummary.candidates}건`);
   else if (project?.project_name) highlights.push(project.project_name);
   const latest = getLatestFinancial(company);
   const revenue = metricSourceValue(latest?.revenue);

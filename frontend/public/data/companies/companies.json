@@ -109,7 +109,7 @@
           "source_ids": [
             "dart-00144960-20260408002280"
           ],
-          "verified_at": "2026-07-14T06:54:16.041613+00:00",
+          "verified_at": "2026-07-15T07:34:46.242040+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 270984904156,
@@ -276,7 +276,7 @@
           "source_ids": [
             "dart-00144960-20250404000800"
           ],
-          "verified_at": "2026-07-14T06:54:16.060429+00:00",
+          "verified_at": "2026-07-15T07:34:46.255058+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 210303317036,
@@ -443,7 +443,7 @@
           "source_ids": [
             "dart-00144960-20240405000501"
           ],
-          "verified_at": "2026-07-14T06:54:16.070526+00:00",
+          "verified_at": "2026-07-15T07:34:46.267168+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 224437469439,
@@ -749,11 +749,23 @@
           "note": "No 2025+ source-backed signal was confirmed in this wave."
         },
         {
-          "area": "dart_financials",
-          "status": "manual_review_required",
-          "description": "Some OpenDART structured financial data was unavailable and requires original-report review.",
+          "area": "project_portfolio_wave_1_r1",
+          "status": "candidate_projects_found",
+          "note": "Internal candidate records were found and are pending official source confirmation.",
+          "candidate_count": 45,
           "source_ids": [],
-          "verified_at": ""
+          "verified_at": "2026-07-15"
+        },
+        {
+          "area": "dart_financials",
+          "status": "partially_verified",
+          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
+          "source_ids": [
+            "dart-00144960-20240405000501",
+            "dart-00144960-20250404000800",
+            "dart-00144960-20260408002280"
+          ],
+          "verified_at": "2026-07-15T07:34:46.273458+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -927,7 +939,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T06:54:16.027026+00:00"
+        "searched_at": "2026-07-15T07:34:46.130626+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -945,7 +957,7 @@
           "source_ids": [
             "dart-00144960-20260408002280"
           ],
-          "verified_at": "2026-07-14T06:54:16.027047+00:00",
+          "verified_at": "2026-07-15T07:34:46.159901+00:00",
           "confidence": "high",
           "verification_note": "manual_verified_from_audit_report"
         },
@@ -954,54 +966,54 @@
           "report_type": "audit_report",
           "receipt_number": "20250404000800",
           "filed_at": "20250404",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "감사회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-00144960-20250404000800"
           ],
-          "verified_at": "2026-07-14T06:54:16.027054+00:00",
+          "verified_at": "2026-07-15T07:34:46.174403+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2023,
           "report_type": "audit_report",
           "receipt_number": "20240405000501",
           "filed_at": "20240405",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "감사회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-00144960-20240405000501"
           ],
-          "verified_at": "2026-07-14T06:54:16.027057+00:00",
+          "verified_at": "2026-07-15T07:34:46.187201+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2022,
           "report_type": "audit_report",
           "receipt_number": "20230410002814",
           "filed_at": "20230410",
-          "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "auditor": "신정회계법인",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
           "reporting_scope": "separate",
-          "accounting_standard": "unknown",
+          "accounting_standard": "general_korean_gaap",
           "unit": "KRW",
           "source_ids": [
             "dart-00144960-20230410002814"
           ],
-          "verified_at": "2026-07-14T06:54:16.027060+00:00",
+          "verified_at": "2026-07-15T07:34:46.201057+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2021,
@@ -1017,9 +1029,9 @@
           "source_ids": [
             "dart-00144960-20220413001002"
           ],
-          "verified_at": "2026-07-14T06:54:16.027062+00:00",
+          "verified_at": "2026-07-15T07:34:46.217686+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2020,
@@ -1035,9 +1047,9 @@
           "source_ids": [
             "dart-00144960-20210409002785"
           ],
-          "verified_at": "2026-07-14T06:54:16.027064+00:00",
+          "verified_at": "2026-07-15T07:34:46.231006+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
       ],
       "financial_summary": {
@@ -1057,7 +1069,7 @@
           "dart-00144960-20250404000800",
           "dart-00144960-20260408002280"
         ],
-        "verified_at": "2026-07-14T06:54:16.076250+00:00"
+        "verified_at": "2026-07-15T07:34:46.273458+00:00"
       },
       "filings": [
         {
@@ -1264,7 +1276,127 @@
         ],
         "verified_at": "2026-07-14",
         "data_confidence": "medium"
-      }
+      },
+      "project_research_status": {
+        "research_wave": "wave_1",
+        "research_status": "candidate_projects_found",
+        "verified_project_count": 0,
+        "candidate_project_count": 45,
+        "official_sources_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "datasets_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "research_gap_count": 0,
+        "last_project_research_at": "2026-07-15",
+        "snapshot_source": "artifacts/company-project-portfolio-wave-1-r1/wave1_target_snapshot.csv",
+        "note": "Wave 1 R1 separates internal candidates from verified projects; candidates require official source confirmation."
+      },
+      "project_candidates": [
+        {
+          "candidate_id": "news-yuchang-enc-6170",
+          "candidate_title": "삼성이 먼저 찾았다…공간제작소·유창이앤씨가 증명한 ‘제조형 스타트...",
+          "candidate_type": "internal_project_candidate",
+          "source_dataset": "news",
+          "source_record_id": "6170",
+          "source_url": "https://www.venturesquare.net/1096738/",
+          "matched_alias": "유창이앤씨",
+          "matched_context": "삼성이 먼저 찾았다…공간제작소·유창이앤씨가 증명한 ‘제조형 스타트... 공간제작소는 목조 모듈러 생산을, 유창이앤씨는 철골 모듈러 생산을 담당하고, 공장 제작 단계에서 SmartThi",
+          "possible_client": null,
+          "possible_location": null,
+          "possible_role": null,
+          "possible_project_status": "candidate",
+          "evidence_level": "media_candidate",
+          "review_status": "verification_pending",
+          "verification_note": "Internal business/news candidate only; official source confirmation is required before promotion to verified project."
+        },
+        {
+          "candidate_id": "news-yuchang-enc-6131",
+          "candidate_title": "[모듈러 주택의 진화] (4) 삼성ㆍLG와 협업하는 모듈러 제작사…업계 ‘...",
+          "candidate_type": "internal_project_candidate",
+          "source_dataset": "news",
+          "source_record_id": "6131",
+          "source_url": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202607061440199840102",
+          "matched_alias": "유창이앤씨",
+          "matched_context": "[모듈러 주택의 진화] (4) 삼성ㆍLG와 협업하는 모듈러 제작사…업계 ‘... 삼성전자는 지난해 또 다른 철골 모듈러 전문기업인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺고 사업을 추진한 바 있다. LG전자는 철골 모듈러 전문기업 스페이스웨이비와 손을 잡았다.",
+          "possible_client": null,
+          "possible_location": null,
+          "possible_role": null,
+          "possible_project_status": "candidate",
+          "evidence_level": "media_candidate",
+          "review_status": "verification_pending",
+          "verification_note": "Internal business/news candidate only; official source confirmation is required before promotion to verified project."
+        },
+        {
+          "candidate_id": "news-yuchang-enc-6057",
+          "candidate_title": "\"AI가전 넘어 건축\"…삼성·LG전자, 모듈러 사업 확대 속도",
+          "candidate_type": "internal_project_candidate",
+          "source_dataset": "news",
+          "source_record_id": "6057",
+          "source_url": "https://daily.hankooki.com/news/articleView.html?idxno=1380303",
+          "matched_alias": "유창이앤씨",
+          "matched_context": "\"AI가전 넘어 건축\"…삼성·LG전자, 모듈러 사업 확대 속도 삼성전자는 작년 2월에도 국내 최대 모듈러 건축물 제작 전문 회사인 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 맺은 바 있다. 작년 IFA에선 삼성물산과 협업해 글로벌 B2B(기업간거래) 대상 모듈러...",
+          "possible_client": null,
+          "possible_location": null,
+          "possible_role": null,
+          "possible_project_status": "candidate",
+          "evidence_level": "media_candidate",
+          "review_status": "verification_pending",
+          "verification_note": "Internal business/news candidate only; official source confirmation is required before promotion to verified project."
+        }
+      ],
+      "dart_original_document_inventory": [
+        {
+          "company_id": "yuchang-enc",
+          "fiscal_year": 2025,
+          "receipt_number": "20260408002280",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20260408002280.zip",
+          "document_name": "20260408002280_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 233,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "yuchang-enc",
+          "fiscal_year": 2024,
+          "receipt_number": "20250404000800",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20250404000800.zip",
+          "document_name": "20250404000800_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 234,
+          "extracted_metric_count": 9
+        },
+        {
+          "company_id": "yuchang-enc",
+          "fiscal_year": 2023,
+          "receipt_number": "20240405000501",
+          "document_path": "D:\\backup01\\Documents\\New project 2\\.cache\\opendart\\documents\\20240405000501.zip",
+          "document_name": "20240405000501_00760.xml",
+          "document_format": "xml",
+          "parser": "audit_report_xml_acode",
+          "statement_type": "separate",
+          "source_unit": "KRW",
+          "normalized_unit": "KRW_MILLION",
+          "conversion_multiplier": 1,
+          "parsed_table_rows": 230,
+          "extracted_metric_count": 9
+        }
+      ]
     },
     {
       "schema_version": "company-master-v1",
@@ -1405,7 +1537,11 @@
           "evidence_type": "official_website_reference",
           "source_count": 1,
           "primary_source_count": 1,
-          "research_notes": "No unsupported scale or amount values were inferred."
+          "research_notes": "No unsupported scale or amount values were inferred.",
+          "research_wave": "baseline",
+          "enrichment_status": "preexisting_verified",
+          "first_verified_at": "2026-07-15",
+          "verification_origin": "baseline_project_standardization"
         },
         {
           "project_id": "kumkang-pyeongchang-2018-office",
@@ -1457,7 +1593,11 @@
           "evidence_type": "official_website_reference",
           "source_count": 1,
           "primary_source_count": 1,
-          "research_notes": "No unsupported scale or amount values were inferred."
+          "research_notes": "No unsupported scale or amount values were inferred.",
+          "research_wave": "baseline",
+          "enrichment_status": "preexisting_verified",
+          "first_verified_at": "2026-07-15",
+          "verification_origin": "baseline_project_standardization"
         },
         {
           "project_id": "kumkang-goryeong-modular-residential-complex",
@@ -1509,7 +1649,11 @@
           "evidence_type": "official_website_reference",
           "source_count": 1,
           "primary_source_count": 1,
-          "research_notes": "No unsupported scale or amount values were inferred."
+          "research_notes": "No unsupported scale or amount values were inferred.",
+          "research_wave": "baseline",
+          "enrichment_status": "preexisting_verified",
+          "first_verified_at": "2026-07-15",
+          "verification_origin": "baseline_project_standardization"
         }
       ],
       "bidding_performance": [],
@@ -1557,7 +1701,7 @@
           "source_ids": [
             "dart-00105299-20260312000935"
           ],
-          "verified_at": "2026-07-14T06:54:16.485931+00:00",
+          "verified_at": "2026-07-15T07:34:46.750857+00:00",
           "confidence": "high",
           "revenue": {
             "source_value": 290112635592,
@@ -1691,7 +1835,7 @@
           "source_ids": [
             "dart-00105299-20250319000431"
           ],
-          "verified_at": "2026-07-14T06:54:16.619257+00:00",
+          "verified_at": "2026-07-15T07:34:46.899639+00:00",
           "confidence": "high",
           "revenue": {
             "source_value": 293931258757,
@@ -1825,7 +1969,7 @@
           "source_ids": [
             "dart-00105299-20240314000999"
           ],
-          "verified_at": "2026-07-14T06:54:16.732330+00:00",
+          "verified_at": "2026-07-15T07:34:47.036785+00:00",
           "confidence": "high",
           "revenue": {
             "source_value": 361333475844,
@@ -2170,13 +2314,13 @@
         {
           "area": "dart_financials",
           "status": "partially_verified",
-          "description": "Structured OpenDART financial data extracted for available years; auditor/opinion text remains manual review.",
+          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
           "source_ids": [
             "dart-00105299-20240314000999",
             "dart-00105299-20250319000431",
             "dart-00105299-20260312000935"
           ],
-          "verified_at": "2026-07-14T06:54:16.735645+00:00"
+          "verified_at": "2026-07-15T07:34:47.336660+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -2336,7 +2480,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T06:54:16.732413+00:00"
+        "searched_at": "2026-07-15T07:34:47.036972+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -2346,17 +2490,17 @@
           "receipt_number": "20260312000935",
           "filed_at": "20260312",
           "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
-          "reporting_scope": "separate",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
+          "reporting_scope": "consolidated",
           "accounting_standard": "unknown",
           "unit": "KRW",
           "source_ids": [
             "dart-00105299-20260312000935"
           ],
-          "verified_at": "2026-07-14T06:54:16.732422+00:00",
+          "verified_at": "2026-07-15T07:34:47.077448+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2024,
@@ -2364,17 +2508,17 @@
           "receipt_number": "20250313001058",
           "filed_at": "20250313",
           "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "적정",
           "reporting_scope": "separate",
           "accounting_standard": "unknown",
           "unit": "KRW",
           "source_ids": [
             "dart-00105299-20250313001058"
           ],
-          "verified_at": "2026-07-14T06:54:16.732427+00:00",
+          "verified_at": "2026-07-15T07:34:47.100162+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2023,
@@ -2382,24 +2526,24 @@
           "receipt_number": "20240314000999",
           "filed_at": "20240314",
           "auditor": null,
-          "audit_opinion": "unknown",
-          "audit_opinion_raw": null,
-          "reporting_scope": "separate",
+          "audit_opinion": "unmodified",
+          "audit_opinion_raw": "공정하게 표시",
+          "reporting_scope": "consolidated",
           "accounting_standard": "unknown",
           "unit": "KRW",
           "source_ids": [
             "dart-00105299-20240314000999"
           ],
-          "verified_at": "2026-07-14T06:54:16.732429+00:00",
+          "verified_at": "2026-07-15T07:34:47.127653+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2022,
           "report_type": "business_report",
           "receipt_number": "20230316000643",
           "filed_at": "20230316",
-          "auditor": null,
+          "auditor": "태성회계법인",
           "audit_opinion": "unknown",
           "audit_opinion_raw": null,
           "reporting_scope": "separate",
@@ -2408,9 +2552,9 @@
           "source_ids": [
             "dart-00105299-20230316000643"
           ],
-          "verified_at": "2026-07-14T06:54:16.732432+00:00",
+          "verified_at": "2026-07-15T07:34:47.206959+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2021,
@@ -2426,9 +2570,9 @@
           "source_ids": [
             "dart-00105299-20220317000899"
           ],
-          "verified_at": "2026-07-14T06:54:16.732434+00:00",
+          "verified_at": "2026-07-15T07:34:47.244444+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
         {
           "fiscal_year": 2020,
@@ -2444,9 +2588,9 @@
           "source_ids": [
             "dart-00105299-20210318001269"
           ],
-          "verified_at": "2026-07-14T06:54:16.732437+00:00",
+          "verified_at": "2026-07-15T07:34:47.329976+00:00",
           "confidence": "medium",
-          "verification_note": "Filing identified; auditor and opinion require original report text review."
+          "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
       ],
       "financial_summary": {
@@ -2466,7 +2610,7 @@
           "dart-00105299-20250319000431",
           "dart-00105299-20260312000935"
         ],
-        "verified_at": "2026-07-14T06:54:16.735645+00:00"
+        "verified_at": "2026-07-15T07:34:47.336660+00:00"
       },
       "filings": [
         {
@@ -2604,7 +2748,8 @@
         ],
         "verified_at": "2026-07-14",
         "data_confidence": "high"
-      }
+      },
+      "dart_original_document_inventory": []
     },
     {
       "schema_version": "company-master-v1",
@@ -2674,7 +2819,7 @@
           "source_ids": [
             "dart-01661914-20260625000241"
           ],
-          "verified_at": "2026-07-14T07:38:46.658772+00:00",
+          "verified_at": "2026-07-15T07:34:48.328974+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 272444816577,
@@ -2841,7 +2986,7 @@
           "source_ids": [
             "dart-01661914-20250424000374"
           ],
-          "verified_at": "2026-07-14T07:38:46.673911+00:00",
+          "verified_at": "2026-07-15T07:34:48.342245+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 233816842234,
@@ -3008,7 +3153,7 @@
           "source_ids": [
             "dart-01661914-20240415000501"
           ],
-          "verified_at": "2026-07-14T07:38:46.684981+00:00",
+          "verified_at": "2026-07-15T07:34:48.351920+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 250915477340,
@@ -3264,6 +3409,14 @@
           "note": "No 2025+ source-backed signal was confirmed in this wave."
         },
         {
+          "area": "project_portfolio_wave_1_r1",
+          "status": "candidate_projects_found",
+          "note": "Internal candidate records were found and are pending official source confirmation.",
+          "candidate_count": 5,
+          "source_ids": [],
+          "verified_at": "2026-07-15"
+        },
+        {
           "area": "dart_financials",
           "status": "partially_verified",
           "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
@@ -3272,7 +3425,7 @@
             "dart-01661914-20250424000374",
             "dart-01661914-20260625000241"
           ],
-          "verified_at": "2026-07-14T07:38:46.692569+00:00"
+          "verified_at": "2026-07-15T07:34:48.357113+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -3396,7 +3549,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T07:38:46.592348+00:00"
+        "searched_at": "2026-07-15T07:34:48.260245+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -3414,7 +3567,7 @@
           "source_ids": [
             "dart-01661914-20260625000241"
           ],
-          "verified_at": "2026-07-14T07:38:46.605613+00:00",
+          "verified_at": "2026-07-15T07:34:48.276948+00:00",
           "confidence": "medium",
           "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
@@ -3432,7 +3585,7 @@
           "source_ids": [
             "dart-01661914-20250424000374"
           ],
-          "verified_at": "2026-07-14T07:38:46.618228+00:00",
+          "verified_at": "2026-07-15T07:34:48.293732+00:00",
           "confidence": "medium",
           "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
@@ -3450,7 +3603,7 @@
           "source_ids": [
             "dart-01661914-20240415000501"
           ],
-          "verified_at": "2026-07-14T07:38:46.629946+00:00",
+          "verified_at": "2026-07-15T07:34:48.306215+00:00",
           "confidence": "medium",
           "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
@@ -3468,7 +3621,7 @@
           "source_ids": [
             "dart-01661914-20230411000791"
           ],
-          "verified_at": "2026-07-14T07:38:46.642421+00:00",
+          "verified_at": "2026-07-15T07:34:48.317668+00:00",
           "confidence": "medium",
           "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
@@ -3490,7 +3643,7 @@
           "dart-01661914-20250424000374",
           "dart-01661914-20260625000241"
         ],
-        "verified_at": "2026-07-14T07:38:46.692569+00:00"
+        "verified_at": "2026-07-15T07:34:48.357113+00:00"
       },
       "filings": [
         {
@@ -3650,7 +3803,80 @@
         ],
         "verified_at": "2026-07-14",
         "data_confidence": "unknown"
-      }
+      },
+      "project_research_status": {
+        "research_wave": "wave_1",
+        "research_status": "candidate_projects_found",
+        "verified_project_count": 0,
+        "candidate_project_count": 5,
+        "official_sources_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "datasets_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "research_gap_count": 0,
+        "last_project_research_at": "2026-07-15",
+        "snapshot_source": "artifacts/company-project-portfolio-wave-1-r1/wave1_target_snapshot.csv",
+        "note": "Wave 1 R1 separates internal candidates from verified projects; candidates require official source confirmation."
+      },
+      "project_candidates": [
+        {
+          "candidate_id": "news-planm-5873",
+          "candidate_title": "중동 리스크 길어지자…정부, 해외수주 다변화 지원",
+          "candidate_type": "internal_project_candidate",
+          "source_dataset": "news",
+          "source_record_id": "5873",
+          "source_url": "https://www.ajunews.com/view/20260623111542907",
+          "matched_alias": "플랜엠",
+          "matched_context": "분야의 LG CNS, 공항 운영 분야의 인천국제공항공사, 철도 분야의 우진산전, 지능형교통체계(ITS) 전문기업 에스트래픽, 모듈러 건축 기업 플랜엠 등이 참석했다. 참석 기업들은 글로벌 수주... 모듈러 건축, 플랜엠 모듈러 ajunews.com ajunews.com",
+          "possible_client": null,
+          "possible_location": null,
+          "possible_role": null,
+          "possible_project_status": "candidate",
+          "evidence_level": "media_candidate",
+          "review_status": "verification_pending",
+          "verification_note": "Internal business/news candidate only; official source confirmation is required before promotion to verified project."
+        },
+        {
+          "candidate_id": "news-planm-5872",
+          "candidate_title": "수주 다변화 나선 정부…중동 넘어 데이터센터·공항·철도 공략",
+          "candidate_type": "internal_project_candidate",
+          "source_dataset": "news",
+          "source_record_id": "5872",
+          "source_url": "https://biz.heraldcorp.com/article/10784994?ref=naver",
+          "matched_alias": "플랜엠",
+          "matched_context": "데이터센터·공항·철도 공략 이날 간담회에는 LG CNS(데이터센터), 인천국제공항공사(공항), 우진산전(철도), 에스트래픽(지능형교통체계), 플랜엠(모듈러 건축) 등 5개 기업이 참석했다. 기업들은 글로벌 수주 동향과 경쟁력을 공유하는 한편 타당성... 모듈러 건축, 플랜엠 모듈러 biz.",
+          "possible_client": null,
+          "possible_location": null,
+          "possible_role": null,
+          "possible_project_status": "candidate",
+          "evidence_level": "media_candidate",
+          "review_status": "verification_pending",
+          "verification_note": "Internal business/news candidate only; official source confirmation is required before promotion to verified project."
+        },
+        {
+          "candidate_id": "news-planm-5871",
+          "candidate_title": "중동 수주 불안에 신시장 찾는다...정부, 친환경·디지털 해외수주 논의",
+          "candidate_type": "internal_project_candidate",
+          "source_dataset": "news",
+          "source_record_id": "5871",
+          "source_url": "https://www.newspim.com/news/view/20260623000452",
+          "matched_alias": "플랜엠",
+          "matched_context": "중동 수주 불안에 신시장 찾는다...정부, 친환경·디지털 해외수주 논의 간담회에는 LG CNS, 인천공항공사, 우진산전, 에스트래픽, 플랜엠 등 5개 기업이 참석했다. 이들은 데이터센터, 공항, 철도, 지능형교통체계, 모듈러 건축 등 분야별 글로벌 수주 동향과 핵심 경쟁력을 공유했다",
+          "possible_client": null,
+          "possible_location": null,
+          "possible_role": null,
+          "possible_project_status": "candidate",
+          "evidence_level": "media_candidate",
+          "review_status": "verification_pending",
+          "verification_note": "Internal business/news candidate only; official source confirmation is required before promotion to verified project."
+        }
+      ]
     },
     {
       "schema_version": "company-master-v1",
@@ -3719,7 +3945,7 @@
           "source_ids": [
             "dart-01693685-20250917000346"
           ],
-          "verified_at": "2026-07-14T07:38:47.390806+00:00",
+          "verified_at": "2026-07-15T07:34:49.031616+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 82695337438,
@@ -3886,7 +4112,7 @@
           "source_ids": [
             "dart-01693685-20240919000117"
           ],
-          "verified_at": "2026-07-14T07:38:47.408628+00:00",
+          "verified_at": "2026-07-15T07:34:49.042440+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 81271797933,
@@ -4053,7 +4279,7 @@
           "source_ids": [
             "dart-01693685-20230919000046"
           ],
-          "verified_at": "2026-07-14T07:38:47.426648+00:00",
+          "verified_at": "2026-07-15T07:34:49.053609+00:00",
           "confidence": "high",
           "total_assets": {
             "source_value": 81604451252,
@@ -4296,6 +4522,14 @@
           "note": "No 2025+ source-backed signal was confirmed in this wave."
         },
         {
+          "area": "project_portfolio_wave_1_r1",
+          "status": "research_gap",
+          "note": "Internal business/news search found no promotable project candidate in this wave.",
+          "candidate_count": 0,
+          "source_ids": [],
+          "verified_at": "2026-07-15"
+        },
+        {
           "area": "dart_financials",
           "status": "partially_verified",
           "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
@@ -4304,7 +4538,7 @@
             "dart-01693685-20240919000117",
             "dart-01693685-20250917000346"
           ],
-          "verified_at": "2026-07-14T07:38:47.433935+00:00"
+          "verified_at": "2026-07-15T07:34:49.059753+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -4410,7 +4644,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-14T07:38:47.319621+00:00"
+        "searched_at": "2026-07-15T07:34:48.968607+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -4428,7 +4662,7 @@
           "source_ids": [
             "dart-01693685-20250917000346"
           ],
-          "verified_at": "2026-07-14T07:38:47.339815+00:00",
+          "verified_at": "2026-07-15T07:34:48.991255+00:00",
           "confidence": "medium",
           "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
@@ -4446,7 +4680,7 @@
           "source_ids": [
             "dart-01693685-20240919000117"
           ],
-          "verified_at": "2026-07-14T07:38:47.358646+00:00",
+          "verified_at": "2026-07-15T07:34:49.005842+00:00",
           "confidence": "medium",
           "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         },
@@ -4464,7 +4698,7 @@
           "source_ids": [
             "dart-01693685-20230919000046"
           ],
-          "verified_at": "2026-07-14T07:38:47.373705+00:00",
+          "verified_at": "2026-07-15T07:34:49.018419+00:00",
           "confidence": "medium",
           "verification_note": "Auditor and opinion extracted from original DART audit-report XML text."
         }
@@ -4486,7 +4720,7 @@
           "dart-01693685-20240919000117",
           "dart-01693685-20250917000346"
         ],
-        "verified_at": "2026-07-14T07:38:47.433935+00:00"
+        "verified_at": "2026-07-15T07:34:49.059753+00:00"
       },
       "filings": [
         {
@@ -4629,7 +4863,28 @@
         ],
         "verified_at": "2026-07-14",
         "data_confidence": "unknown"
-      }
+      },
+      "project_research_status": {
+        "research_wave": "wave_1",
+        "research_status": "research_gap",
+        "verified_project_count": 0,
+        "candidate_project_count": 0,
+        "official_sources_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "datasets_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "research_gap_count": 1,
+        "last_project_research_at": "2026-07-15",
+        "snapshot_source": "artifacts/company-project-portfolio-wave-1-r1/wave1_target_snapshot.csv",
+        "note": "Wave 1 R1 separates internal candidates from verified projects; candidates require official source confirmation."
+      },
+      "project_candidates": []
     },
     {
       "schema_version": "company-master-v1",
@@ -5676,8 +5931,37 @@
             "dart-01072819-20260401003674"
           ],
           "verified_at": "2026-07-15T01:50:43.808732+00:00"
+        },
+        {
+          "area": "project_portfolio_wave_1_r1",
+          "status": "research_gap",
+          "note": "Internal business/news search found no promotable project candidate in this wave.",
+          "candidate_count": 0,
+          "source_ids": [],
+          "verified_at": "2026-07-15"
         }
-      ]
+      ],
+      "project_research_status": {
+        "research_wave": "wave_1",
+        "research_status": "research_gap",
+        "verified_project_count": 0,
+        "candidate_project_count": 0,
+        "official_sources_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "datasets_checked": [
+          "business.json",
+          "news.json",
+          "companies.json"
+        ],
+        "research_gap_count": 1,
+        "last_project_research_at": "2026-07-15",
+        "snapshot_source": "artifacts/company-project-portfolio-wave-1-r1/wave1_target_snapshot.csv",
+        "note": "Wave 1 R1 separates internal candidates from verified projects; candidates require official source confirmation."
+      },
+      "project_candidates": []
     },
     {
       "schema_version": "company-master-v1",

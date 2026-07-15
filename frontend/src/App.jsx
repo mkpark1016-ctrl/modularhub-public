@@ -41,6 +41,7 @@ import {
   isDartIdentityConfirmed,
   metricSourceValue,
   optionCounts,
+  projectCandidates,
   productionFacilities,
   productionSummary,
   representativeProject,
@@ -771,6 +772,14 @@ function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, ti
   );
 }
 
+function projectSummaryLabel(projectSummary) {
+  if (projectSummary.verified > 0) {
+    return `검증 ${projectSummary.verified}건${projectSummary.latestYear ? ` · 최신 ${projectSummary.latestYear}` : ""}`;
+  }
+  if (projectSummary.candidates > 0) return `후보 검토 중 ${projectSummary.candidates}건`;
+  return "공개자료 추가 조사 필요";
+}
+
 function CompanyCard({ company }) {
   const highlights = getCompanyHighlights(company);
   const latestFinancial = getLatestFinancial(company);
@@ -797,7 +806,7 @@ function CompanyCard({ company }) {
       )}
       <dl className="metadata">
         <div><dt>최근 재무</dt><dd>{latestFinancial && latestRevenue !== null ? `${latestFinancial.year}년 ${formatKrwReadable(latestRevenue)}` : "공개자료 없음"}</dd></div>
-        <div><dt>프로젝트</dt><dd>{projectSummary.verified > 0 ? `검증 ${projectSummary.verified}건${projectSummary.latestYear ? ` · 최신 ${projectSummary.latestYear}` : ""}` : "프로젝트 검증 중"}</dd></div>
+        <div><dt>프로젝트</dt><dd>{projectSummaryLabel(projectSummary)}</dd></div>
         <div><dt>기술·특허</dt><dd>{technologyCount(company) > 0 ? `${technologyCount(company)}건` : "확인 중"}</dd></div>
         <div><dt>최신 기준일</dt><dd>{formatCompanyDate(getLatestVerifiedAt(company))}</dd></div>
         <div><dt>신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
@@ -935,6 +944,8 @@ function CompanyDetailPage() {
   const financials = [...(Array.isArray(company.financials) ? company.financials : [])].sort((a, b) => Number(b.year || 0) - Number(a.year || 0)).slice(0, 3);
   const latestAudit = [...(Array.isArray(company.audit_information) ? company.audit_information : [])].sort((a, b) => Number(b.fiscal_year || 0) - Number(a.fiscal_year || 0))[0];
   const projects = Array.isArray(company.project_portfolio) ? company.project_portfolio : [];
+  const candidates = projectCandidates(company);
+  const projectSummary = getCompanyProjectSummary(company);
   const production = productionFacilities(company);
   const productionInfo = productionSummary(company);
   const signals = Array.isArray(company.recent_signals) ? company.recent_signals : [];
@@ -1065,7 +1076,28 @@ function CompanyDetailPage() {
                 </div>
               ))}
             </div>
-          ) : <p>현재 공개자료를 추가 조사 중입니다.</p>}
+          ) : null}
+          {candidates.length > 0 && (
+            <div className="company-section-list project-candidate-list">
+              {candidates.map((item) => (
+                <div className="candidate-item" key={item.candidate_id || item.source_record_id || item.candidate_title}>
+                  <strong>{item.candidate_title || "프로젝트 후보 확인 중"}</strong>
+                  <span>검토 중 후보 · {item.source_dataset || "internal"} · {item.evidence_level || "candidate"}</span>
+                  <span>{[
+                    item.matched_alias ? `매칭: ${item.matched_alias}` : null,
+                    item.possible_client,
+                    item.possible_location,
+                    item.possible_role,
+                  ].filter(Boolean).join(" · ") || "공식 출처 확인 전까지 검증 프로젝트로 집계하지 않습니다."}</span>
+                  {item.matched_context && <span>{item.matched_context}</span>}
+                  {item.source_url && <a href={item.source_url} target="_blank" rel="noopener noreferrer">후보 원문 보기 <ExternalLink size={13} /></a>}
+                </div>
+              ))}
+            </div>
+          )}
+          {!projects.length && !candidates.length && (
+            <p>{projectSummary.researchGapCount > 0 ? "공개자료 추가 조사 필요" : "현재 공개자료를 추가 조사 중입니다."}</p>
+          )}
         </section>
 
         <section className="summary">

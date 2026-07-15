@@ -204,6 +204,9 @@ code { overflow-wrap: anywhere; }
 .company-section-list div, .source-list div { display: grid; gap: 5px; padding: 14px; border: 1px solid #e2e2dd; border-radius: 8px; background: #fff; }
 .company-section-list strong, .source-list strong { line-height: 1.45; }
 .company-section-list span, .source-list span { color: #666; font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.project-candidate-list { margin-top: 10px; }
+.company-section-list .candidate-item { border-style: dashed; background: #fafaf7; }
+.candidate-item strong::after { content: "후보"; display: inline-block; margin-left: 8px; padding: 2px 6px; border: 1px solid #d8d4c8; border-radius: 999px; color: #6b6251; font-size: 11px; font-weight: 800; vertical-align: 1px; }
 .source-list a { width: fit-content; display: inline-flex; align-items: center; gap: 4px; font-weight: 800; font-size: 13px; }
 .company-table-wrap { width: 100%; overflow-x: auto; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
 .company-financial-table { width: 100%; min-width: 640px; border-collapse: collapse; }
