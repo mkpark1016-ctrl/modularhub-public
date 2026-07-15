@@ -10,11 +10,13 @@ import {
   getCompanyTypeLabel,
   getCompetitiveRoleLabel,
   getLatestFinancial,
+  getProductionCapacityLabel,
   getProductionModelLabel,
   getTierLabel,
   hasConfirmedProductionFacility,
   matchesCompanySearch,
   metricSourceValue,
+  formatProductionArea,
   productionFacilities,
   technologyCount,
 } from "../src/companyInsights.js";
@@ -69,7 +71,11 @@ assert.equal(productionFacilities(companies.find((company) => company.company_id
 assert.equal(productionFacilities(companies.find((company) => company.company_id === "kumkang-kind")).length, 1);
 assert.equal(hasConfirmedProductionFacility(companies.find((company) => company.company_id === "planm")), false);
 assert.equal(hasConfirmedProductionFacility(companies.find((company) => company.company_id === "daeseung-engineering")), false);
-assert.equal(getProductionModelLabel(companies.find((company) => company.company_id === "planm")), "생산정보 조사 중");
+assert.equal(getProductionModelLabel(companies.find((company) => company.company_id === "planm")), "공개자료상 생산시설 미확인");
+assert.equal(getProductionModelLabel(companies.find((company) => company.company_id === "kumkang-kind")), "자체 생산 확인");
+assert.equal(getProductionCapacityLabel(productionFacilities(companies.find((company) => company.company_id === "kumkang-kind"))[0]), "공개자료에서 공식 생산능력 수치가 확인되지 않았습니다.");
+assert.equal(formatProductionArea(productionFacilities(companies.find((company) => company.company_id === "yuchang-enc"))[0].site_area, "m2"), "60,427.8 m2");
+assert.equal(productionFacilities(companies.find((company) => company.company_id === "yuchang-enc"))[0].capacity_value, null);
 
 assert.equal(getCompanyTypeLabel(companies.find((company) => company.company_id === "kumkang-kind")), "전문 제작사");
 assert.equal(getCompetitiveRoleLabel(companies.find((company) => company.company_id === "gs-ec")), "내부 기준");

@@ -141,6 +141,90 @@ links must not be stored as verified data.
 
 Capacity values must not be converted across units unless the source provides the conversion.
 
+### Production Facility Standardization
+
+Production records distinguish facility existence, ownership or operating
+relationship, modular system type, and production capacity. Missing production
+data is not equivalent to a confirmed absence of facilities.
+
+Company-level `production_summary` should use:
+
+- `research_status`
+- `verification_status`
+- `manufacturing_model`
+- `own_facility_status`
+- `facility_count`
+- `own_facility_count`
+- `official_capacity_available`
+- `summary`
+- `source_ids`
+- `verified_at`
+- `data_confidence`
+
+Each production facility should support:
+
+- `facility_id`
+- `facility_name`
+- `company_id`
+- `facility_type`
+- `modular_system_type`
+- `ownership_type`
+- `operator_name`
+- `operation_status`
+- `address`, `region`, and `city`
+- `site_area` plus `site_area_unit`
+- `building_area` plus `building_area_unit`
+- `production_scope`
+- `production_processes`
+- `line_count`
+- `automation_level`
+- `major_equipment`
+- `capacity_value`
+- `capacity_unit`
+- `capacity_period`
+- `capacity_scope`
+- `capacity_basis`
+- `capacity_status`
+- `source_ids`
+- `verified_at`
+- `data_confidence`
+- `notes`
+
+Allowed production facility meanings:
+
+- `facility_type`: `modular_factory`, `steel_fabrication_factory`,
+  `pc_factory`, `timber_modular_factory`, `interior_assembly_factory`,
+  `general_material_factory`, `research_facility`, `unknown`
+- `modular_system_type`: `steel_volumetric`, `steel_panelized`,
+  `pc_modular`, `timber_modular`, `hybrid`, `multiple`, `unknown`
+- `ownership_type`: `owned`, `subsidiary_owned`, `affiliate_owned`,
+  `leased`, `partner_owned`, `contract_manufacturing`, `planned`, `unknown`
+- `operation_status`: `active`, `partially_active`, `under_expansion`,
+  `under_construction`, `planned`, `suspended`, `closed`, `unknown`
+- `capacity_status`: `official_confirmed`, `company_claimed`,
+  `third_party_reported`, `derived`, `unavailable`, `not_applicable`,
+  `unknown`
+
+Capacity values may only be stored when the source provides a value, a unit,
+a period, and the scope of the capacity. Annual module count and annual
+square-meter output are different units and must not be converted into one
+another. General steel fabrication capacity must not be recast as modular unit
+production capacity. Planned expansion targets are separate from current
+capacity.
+
+If a facility is confirmed but capacity is not publicly disclosed:
+
+- `capacity_value` is `null`
+- `capacity_status` is `unavailable`
+- `capacity_basis` is `not_publicly_disclosed`
+
+If no source-backed facility is confirmed:
+
+- `production` remains an empty array
+- `facility_count` remains `null` when the count is unknown
+- the research gap explains the reviewed source range
+- the UI must not render this as `0` facilities or `0` capacity
+
 `project_portfolio` records verified project examples:
 
 - project name

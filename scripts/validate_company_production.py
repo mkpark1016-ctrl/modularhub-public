@@ -14,9 +14,14 @@ DEFAULT_INPUT = ROOT / "frontend" / "public" / "data" / "companies" / "companies
 WAVE1_IDS = ["yuchang-enc", "kumkang-kind", "planm", "daeseung-engineering"]
 CONFIRMED_STATUSES = {"confirmed_own_facility", "confirmed_leased_facility", "confirmed_partner_manufacturing"}
 EXCLUDED_STATUSES = {"not_publicly_confirmed", "research_in_progress", "historical_facility", "planned_facility", "ceased_operation"}
-NUMERIC_FIELDS = {"site_area_m2", "building_area_m2", "line_count", "reported_capacity", "capacity_value"}
+NUMERIC_FIELDS = {"site_area_m2", "building_area_m2", "site_area", "building_area", "line_count", "reported_capacity", "capacity_value"}
 CAPACITY_FIELDS = {"reported_capacity", "capacity_value"}
-SUPPORTED_CLAIM_FIELDS = {"facility_name", "location", "ownership_type", "operation_status", "site_area_m2", "building_area_m2", "production_scope", "reported_capacity", "capacity_value"}
+SUPPORTED_CLAIM_FIELDS = {"facility_name", "location", "ownership_type", "operation_status", "site_area_m2", "building_area_m2", "site_area", "building_area", "production_scope", "production_processes", "reported_capacity", "capacity_value"}
+FACILITY_TYPES = {"modular_factory", "steel_fabrication_factory", "pc_factory", "timber_modular_factory", "interior_assembly_factory", "general_material_factory", "research_facility", "unknown"}
+MODULAR_SYSTEM_TYPES = {"steel_volumetric", "steel_panelized", "pc_modular", "timber_modular", "hybrid", "multiple", "unknown"}
+OWNERSHIP_TYPES = {"owned", "subsidiary_owned", "affiliate_owned", "leased", "partner_owned", "contract_manufacturing", "planned", "unknown"}
+OPERATION_STATUSES = {"active", "partially_active", "under_expansion", "under_construction", "planned", "suspended", "closed", "unknown", "current_operation_unconfirmed", "active_on_official_site"}
+CAPACITY_STATUSES = {"official_confirmed", "company_claimed", "third_party_reported", "derived", "unavailable", "not_applicable", "unknown"}
 
 
 def load_payload(path: Path = DEFAULT_INPUT) -> dict[str, Any]:
@@ -83,16 +88,39 @@ def validate_facility(company: dict[str, Any], facility: dict[str, Any], index: 
             add_issue(issues, "capacity_unit_missing", company["company_id"], path, "reported capacity requires capacity_unit")
         if not facility.get("capacity_period"):
             add_issue(issues, "capacity_period_missing", company["company_id"], path, "reported capacity requires capacity_period")
+        if not facility.get("capacity_scope"):
+            add_issue(issues, "capacity_scope_missing", company["company_id"], path, "reported capacity requires capacity_scope")
     if facility.get("capacity_unit") and facility.get("capacity_period") not in {None, "year", "month", "day", "project", "not_publicly_disclosed"}:
         add_issue(issues, "invalid_capacity_period", company["company_id"], path, str(facility.get("capacity_period")))
     if facility.get("site_area_m2") is not None and facility.get("building_area_m2") is not None:
         if float(facility["building_area_m2"]) > float(facility["site_area_m2"]):
             add_issue(issues, "area_inconsistency", company["company_id"], path, "building_area_m2 exceeds site_area_m2")
+    if facility.get("site_area") is not None and not facility.get("site_area_unit"):
+        add_issue(issues, "site_area_unit_missing", company["company_id"], path, "site_area requires site_area_unit")
+    if facility.get("building_area") is not None and not facility.get("building_area_unit"):
+        add_issue(issues, "building_area_unit_missing", company["company_id"], path, "building_area requires building_area_unit")
+    if facility.get("site_area") is not None and facility.get("building_area") is not None:
+        if float(facility["building_area"]) > float(facility["site_area"]):
+            add_issue(issues, "area_inconsistency", company["company_id"], path, "building_area exceeds site_area")
+    if facility.get("facility_type") and facility["facility_type"] not in FACILITY_TYPES:
+        add_issue(issues, "invalid_facility_type", company["company_id"], path, facility["facility_type"])
+    if facility.get("modular_system_type") and facility["modular_system_type"] not in MODULAR_SYSTEM_TYPES:
+        add_issue(issues, "invalid_modular_system_type", company["company_id"], path, facility["modular_system_type"])
+    if facility.get("ownership_type") and facility["ownership_type"] not in OWNERSHIP_TYPES:
+        add_issue(issues, "invalid_ownership_type", company["company_id"], path, facility["ownership_type"])
+    if facility.get("operation_status") and facility["operation_status"] not in OPERATION_STATUSES:
+        add_issue(issues, "invalid_operation_status", company["company_id"], path, facility["operation_status"])
+    if facility.get("capacity_status") and facility["capacity_status"] not in CAPACITY_STATUSES:
+        add_issue(issues, "invalid_capacity_status", company["company_id"], path, facility["capacity_status"])
     claims = source_claims(company, facility.get("source_ids") or [])
     for field in SUPPORTED_CLAIM_FIELDS:
         value = facility.get(field)
         if value not in (None, "", [], {}):
             equivalent = "location" if field in {"region", "city", "address"} else field
+            if equivalent == "site_area" and "site_area_m2" in claims:
+                continue
+            if equivalent == "building_area" and "building_area_m2" in claims:
+                continue
             if equivalent not in claims and field not in {"operation_status"}:
                 add_issue(issues, "unsupported_claim", company["company_id"], f"{path}.{field}", f"no source supported_claims entry for {field}", "warning")
 

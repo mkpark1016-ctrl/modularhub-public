@@ -25,7 +25,7 @@
       "listed_market": null,
       "ticker": null,
       "summary": "Official website identity and URL are confirmed; source-backed modular production, project, bidding, technology, and financial details remain under research.",
-      "last_verified_at": "2026-07-14T00:00:00+09:00",
+      "last_verified_at": "2026-07-15T00:00:00+09:00",
       "data_confidence": "low",
       "review_status": "collecting",
       "company_profile": {
@@ -49,13 +49,16 @@
         {
           "facility_id": "yuchang-enc-yoochang-factory",
           "facility_name": "YOOCHANG E&C Factory",
+          "company_id": "yuchang-enc",
           "facility_aliases": [
             "유창이앤씨 Factory"
           ],
           "facility_type": "modular_factory",
+          "modular_system_type": "steel_volumetric",
           "own_facility_status": "confirmed_own_facility",
-          "ownership_type": "company_operated_factory_claimed_by_official_site",
-          "operation_status": "current_operation_unconfirmed",
+          "ownership_type": "owned",
+          "operator_name": "유창이앤씨",
+          "operation_status": "unknown",
           "country": "KR",
           "region": null,
           "city": null,
@@ -68,20 +71,29 @@
           "structural_systems": [
             "steel_modular"
           ],
-          "main_equipment": [],
+          "production_processes": [],
           "line_count": null,
           "reported_capacity": null,
           "capacity_value": null,
           "capacity_unit": null,
           "capacity_period": null,
+          "capacity_scope": null,
           "capacity_basis": "not_publicly_disclosed",
+          "capacity_status": "unavailable",
           "capacity_as_of": null,
           "source_ids": [
             "yc_official_home"
           ],
-          "verified_at": "2026-07-14",
+          "verified_at": "2026-07-15",
           "confidence": "medium",
-          "verification_note": "Facility name and site/building areas are taken from the official website Factory section; current operating status and capacity are not independently disclosed."
+          "data_confidence": "medium",
+          "notes": "Factory existence and scale metrics are retained from the official website. Official modular production capacity, process details, address, and current operation state remain undisclosed.",
+          "site_area": 60427.8,
+          "site_area_unit": "m2",
+          "building_area": 25832,
+          "building_area_unit": "m2",
+          "automation_level": null,
+          "major_equipment": []
         }
       ],
       "project_portfolio": [],
@@ -605,23 +617,26 @@
         {
           "source_id": "yc_official_home",
           "source_type": "official_website",
-          "source_name": "YooChang official website",
-          "title": "YooChang official website Factory section",
+          "source_name": "YooChang E&C official website",
+          "title": "YooChang E&C official website Factory section",
           "source_url": "https://yoochangenc.com/",
           "published_at": null,
-          "accessed_at": "2026-07-14",
+          "accessed_at": "2026-07-15",
           "publisher": "YooChang E&C",
           "primary_source": true,
           "confidence": "medium",
-          "verification_note": "Official SPA exposes a YOOCHANG E&C Factory section with factory scale metrics in the bundled site content.",
-          "page_or_section": "YOOCHANG E&C Factory",
+          "verification_note": "Official site exposes a Factory section in the public site experience; official capacity, address, and current operation details are not disclosed in a stable text page.",
+          "page_or_section": "Factory",
           "supported_claims": [
             "facility_name",
             "ownership_type",
             "site_area_m2",
             "building_area_m2",
             "production_scope"
-          ]
+          ],
+          "company_id": "yuchang-enc",
+          "document_number": null,
+          "source_status": "accessible_spa_shell"
         },
         {
           "source_id": "dart-00144960-20260408002280",
@@ -715,6 +730,16 @@
       },
       "research_gaps": [
         {
+          "gap_id": "production_capacity_public_disclosure",
+          "area": "production",
+          "status": "capacity_unavailable",
+          "note": "Official capacity, line count, process details, exact address, and current operation status were not confirmed in public official material.",
+          "source_ids": [
+            "yc_official_home"
+          ],
+          "verified_at": "2026-07-15"
+        },
+        {
           "area": "production",
           "status": "partially_verified",
           "note": "Official website confirms a Factory section and scale metrics, but location, current operation, and official capacity remain incomplete.",
@@ -757,17 +782,6 @@
           "verified_at": "2026-07-15"
         },
         {
-          "area": "dart_financials",
-          "status": "partially_verified",
-          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
-          "source_ids": [
-            "dart-00144960-20240405000501",
-            "dart-00144960-20250404000800",
-            "dart-00144960-20260408002280"
-          ],
-          "verified_at": "2026-07-15T07:34:46.273458+00:00"
-        },
-        {
           "area": "project_candidate_verification_wave_1",
           "status": "official_source_pending",
           "note": "Project candidates are clustered from internal news articles. Verified promotion is blocked until official source and company role are confirmed.",
@@ -807,6 +821,17 @@
           "research_closed_at": "2026-07-15",
           "source_ids": [],
           "verified_at": "2026-07-15"
+        },
+        {
+          "area": "dart_financials",
+          "status": "partially_verified",
+          "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
+          "source_ids": [
+            "dart-00144960-20240405000501",
+            "dart-00144960-20250404000800",
+            "dart-00144960-20260408002280"
+          ],
+          "verified_at": "2026-07-15T10:55:39.012680+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -980,7 +1005,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-15T07:34:46.130626+00:00"
+        "searched_at": "2026-07-15T10:55:38.768717+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -1306,17 +1331,20 @@
       ],
       "production_summary": {
         "research_status": "partially_verified",
-        "verification_status": "verified_facility_without_capacity",
-        "summary": "공식 홈페이지 Factory 섹션에서 생산시설 존재와 부지·공장 규모는 확인되나 공식 생산능력 수치는 공개자료에서 확인되지 않았습니다.",
+        "verification_status": "partially_verified",
+        "data_confidence": "medium",
+        "facility_count": 1,
+        "own_facility_count": 1,
+        "official_capacity_available": false,
+        "summary": "Official company materials support a YooChang E&C Factory record and factory scale metrics, but official production capacity and current operation details are not publicly disclosed.",
+        "source_ids": [
+          "yc_official_home"
+        ],
         "own_facility_status": "confirmed_own_facility",
         "manufacturing_model": "own_manufacturing",
         "confirmed_facility_count": 1,
         "reported_capacity_available": false,
-        "source_ids": [
-          "yc_official_home"
-        ],
-        "verified_at": "2026-07-14",
-        "data_confidence": "medium"
+        "verified_at": "2026-07-15"
       },
       "project_research_status": {
         "research_wave": "wave_1",
@@ -1493,7 +1521,7 @@
       "listed_market": null,
       "ticker": null,
       "summary": "Official website lists modular architecture as a business area and describes its Modular Unit System as a steel-frame unit system using dry panels and slabs; representative official examples include Jang Bogo Antarctic Station and the 2018 Pyeongchang organizing committee office.",
-      "last_verified_at": "2026-07-15",
+      "last_verified_at": "2026-07-15T00:00:00+09:00",
       "data_confidence": "medium",
       "review_status": "collecting",
       "company_profile": {
@@ -1517,18 +1545,21 @@
         {
           "facility_id": "kumkang-kind-boeun-factory",
           "facility_name": "보은공장",
+          "company_id": "kumkang-kind",
           "facility_aliases": [
             "보은1공장",
             "보은2공장"
           ],
           "facility_type": "modular_factory",
+          "modular_system_type": "steel_volumetric",
           "own_facility_status": "confirmed_own_facility",
-          "ownership_type": "company_production_factory",
-          "operation_status": "active_on_official_site",
+          "ownership_type": "owned",
+          "operator_name": "금강공업",
+          "operation_status": "active",
           "country": "KR",
           "region": "충청북도",
           "city": "보은군",
-          "address": null,
+          "address": "충청북도 보은군 삼승면 남부로 3749-11 / 3749-6",
           "site_area_m2": null,
           "building_area_m2": null,
           "production_scope": [
@@ -1537,21 +1568,40 @@
           "structural_systems": [
             "steel_volumetric"
           ],
-          "main_equipment": [],
+          "production_processes": [
+            "steel_frame_fabrication",
+            "floor_assembly",
+            "wall_assembly",
+            "ceiling_assembly",
+            "window_door_installation",
+            "mep_prefabrication",
+            "interior_fitout",
+            "final_assembly",
+            "logistics_loading"
+          ],
           "line_count": null,
           "reported_capacity": null,
           "capacity_value": null,
           "capacity_unit": null,
           "capacity_period": null,
+          "capacity_scope": null,
           "capacity_basis": "not_publicly_disclosed",
+          "capacity_status": "unavailable",
           "capacity_as_of": null,
           "source_ids": [
             "kumkang_official_modular",
             "kumkang_official_domestic_network"
           ],
-          "verified_at": "2026-07-14",
+          "verified_at": "2026-07-15",
           "confidence": "high",
-          "verification_note": "Official modular page links modular unit production to Boeun factory; network page identifies Boeun production factories. Official capacity is not disclosed."
+          "data_confidence": "high",
+          "notes": "Official modular page confirms factory-made modular units and names Boeun factory; official network page provides Boeun 1 and 2 factory locations. Official capacity is not disclosed.",
+          "site_area": null,
+          "site_area_unit": null,
+          "building_area": null,
+          "building_area_unit": null,
+          "automation_level": null,
+          "major_equipment": []
         }
       ],
       "project_portfolio": [
@@ -2296,18 +2346,22 @@
           "title": "금강공업 모듈러건축",
           "source_url": "https://www.kumkangkind.com/business/boxunit.asp?mCode=3",
           "published_at": null,
-          "accessed_at": "2026-07-14",
+          "accessed_at": "2026-07-15",
           "publisher": "Kumkang Kind",
           "primary_source": true,
           "confidence": "high",
-          "verification_note": "Official modular architecture page states that modular units are produced at the factory and identifies Boeun factory in the modular system content.",
+          "verification_note": "Official modular page states that modular units are made in factories and identifies Boeun factory as producing modular units.",
           "page_or_section": "사업분야 > 모듈러건축",
           "supported_claims": [
             "production_scope",
             "facility_name",
             "manufacturing_model",
-            "ownership_type"
-          ]
+            "ownership_type",
+            "production_processes"
+          ],
+          "company_id": "kumkang-kind",
+          "document_number": null,
+          "source_status": "accessible"
         },
         {
           "source_id": "kumkang_official_domestic_network",
@@ -2316,18 +2370,21 @@
           "title": "금강공업 국내 생산공장",
           "source_url": "https://www.kumkangkind.com/company/network_internal.asp",
           "published_at": null,
-          "accessed_at": "2026-07-14",
+          "accessed_at": "2026-07-15",
           "publisher": "Kumkang Kind",
           "primary_source": true,
           "confidence": "high",
-          "verification_note": "Official domestic network page lists production factories including Boeun factories under the construction business division.",
+          "verification_note": "Official network page lists Boeun 1 and Boeun 2 factories under the construction business division with addresses.",
           "page_or_section": "회사소개 > 국내 생산공장",
           "supported_claims": [
             "facility_name",
             "location",
             "ownership_type",
             "operation_status"
-          ]
+          ],
+          "company_id": "kumkang-kind",
+          "document_number": null,
+          "source_status": "accessible"
         }
       ],
       "field_sources": {
@@ -2354,6 +2411,17 @@
         ]
       },
       "research_gaps": [
+        {
+          "gap_id": "production_capacity_public_disclosure",
+          "area": "production",
+          "status": "capacity_unavailable",
+          "note": "Official capacity, line count, site area, and building area were not confirmed in public official material.",
+          "source_ids": [
+            "kumkang_official_modular",
+            "kumkang_official_domestic_network"
+          ],
+          "verified_at": "2026-07-15"
+        },
         {
           "area": "production",
           "status": "partially_verified",
@@ -2388,7 +2456,7 @@
             "dart-00105299-20250319000431",
             "dart-00105299-20260312000935"
           ],
-          "verified_at": "2026-07-15T07:34:47.336660+00:00"
+          "verified_at": "2026-07-15T10:55:40.166224+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -2548,7 +2616,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-15T07:34:47.036972+00:00"
+        "searched_at": "2026-07-15T10:55:39.786663+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -2803,19 +2871,22 @@
       ],
       "dart_original_document_fallback_results": [],
       "production_summary": {
-        "research_status": "partially_verified",
-        "verification_status": "verified_facility_without_capacity",
-        "summary": "공식 홈페이지에서 보은공장 기반 모듈러 유닛 생산은 확인되나 공식 생산능력 수치는 공개자료에서 확인되지 않았습니다.",
-        "own_facility_status": "confirmed_own_facility",
-        "manufacturing_model": "own_manufacturing",
-        "confirmed_facility_count": 1,
-        "reported_capacity_available": false,
+        "research_status": "verified",
+        "verification_status": "verified",
+        "data_confidence": "high",
+        "facility_count": 1,
+        "own_facility_count": 1,
+        "official_capacity_available": false,
+        "summary": "Official pages confirm Boeun factory as the modular-unit production base and identify the domestic Boeun factory locations. Official production capacity is not publicly disclosed.",
         "source_ids": [
           "kumkang_official_modular",
           "kumkang_official_domestic_network"
         ],
-        "verified_at": "2026-07-14",
-        "data_confidence": "high"
+        "own_facility_status": "confirmed_own_facility",
+        "manufacturing_model": "own_manufacturing",
+        "confirmed_facility_count": 1,
+        "reported_capacity_available": false,
+        "verified_at": "2026-07-15"
       },
       "dart_original_document_inventory": []
     },
@@ -2841,7 +2912,7 @@
       "listed_market": null,
       "ticker": null,
       "summary": null,
-      "last_verified_at": "2026-07-14T00:00:00+09:00",
+      "last_verified_at": "2026-07-15T00:00:00+09:00",
       "data_confidence": "unknown",
       "review_status": "collecting",
       "company_profile": {
@@ -3436,6 +3507,18 @@
       "field_sources": {},
       "research_gaps": [
         {
+          "gap_id": "production_facility_public_confirmation",
+          "area": "production",
+          "status": "research_exhausted",
+          "note": "No official public source-backed modular production facility, operating model, or production capacity was confirmed; values remain null rather than zero.",
+          "source_ids": [
+            "dart-01661914-20260625000241",
+            "dart-01661914-20250424000374",
+            "dart-01661914-20240415000501"
+          ],
+          "verified_at": "2026-07-15"
+        },
+        {
           "area": "production",
           "status": "not_publicly_confirmed",
           "note": "No source-backed production facility or official capacity record was confirmed in OpenDART filings and available public-source review for this step.",
@@ -3485,6 +3568,15 @@
           "verified_at": "2026-07-15"
         },
         {
+          "area": "project_candidate_verification_wave_1",
+          "status": "research_exhausted_no_verified_project",
+          "note": "Project candidates are clustered from internal news articles. Verified promotion is blocked until official source and company role are confirmed.",
+          "raw_candidate_article_count": 5,
+          "project_candidate_cluster_count": 0,
+          "source_ids": [],
+          "verified_at": "2026-07-15"
+        },
+        {
           "area": "dart_financials",
           "status": "partially_verified",
           "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
@@ -3493,16 +3585,7 @@
             "dart-01661914-20250424000374",
             "dart-01661914-20260625000241"
           ],
-          "verified_at": "2026-07-15T07:34:48.357113+00:00"
-        },
-        {
-          "area": "project_candidate_verification_wave_1",
-          "status": "research_exhausted_no_verified_project",
-          "note": "Project candidates are clustered from internal news articles. Verified promotion is blocked until official source and company role are confirmed.",
-          "raw_candidate_article_count": 5,
-          "project_candidate_cluster_count": 0,
-          "source_ids": [],
-          "verified_at": "2026-07-15"
+          "verified_at": "2026-07-15T10:55:40.960873+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -3626,7 +3709,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-15T07:34:48.260245+00:00"
+        "searched_at": "2026-07-15T10:55:40.783483+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -3866,20 +3949,23 @@
         }
       ],
       "production_summary": {
-        "research_status": "searched_not_confirmed",
-        "verification_status": "not_publicly_confirmed",
-        "summary": "OpenDART 감사보고서와 기존 공개 출처 범위에서 검증된 생산시설 또는 공식 생산능력 수치를 확인하지 못했습니다.",
-        "own_facility_status": "not_publicly_confirmed",
-        "manufacturing_model": "not_publicly_confirmed",
-        "confirmed_facility_count": 0,
-        "reported_capacity_available": false,
+        "research_status": "research_exhausted",
+        "verification_status": "research_exhausted",
+        "data_confidence": "unknown",
+        "facility_count": null,
+        "own_facility_count": null,
+        "official_capacity_available": false,
+        "summary": "Public official materials reviewed for this step did not confirm a source-backed modular production facility or official production capacity.",
         "source_ids": [
           "dart-01661914-20260625000241",
           "dart-01661914-20250424000374",
           "dart-01661914-20240415000501"
         ],
-        "verified_at": "2026-07-14",
-        "data_confidence": "unknown"
+        "own_facility_status": "not_publicly_confirmed",
+        "manufacturing_model": "not_publicly_confirmed",
+        "confirmed_facility_count": 0,
+        "reported_capacity_available": false,
+        "verified_at": "2026-07-15"
       },
       "project_research_status": {
         "research_wave": "wave_1",
@@ -3919,7 +4005,7 @@
       "listed_market": null,
       "ticker": null,
       "summary": null,
-      "last_verified_at": "2026-07-14T00:00:00+09:00",
+      "last_verified_at": "2026-07-15T00:00:00+09:00",
       "data_confidence": "unknown",
       "review_status": "collecting",
       "company_profile": {
@@ -4501,6 +4587,18 @@
       "field_sources": {},
       "research_gaps": [
         {
+          "gap_id": "production_facility_public_confirmation",
+          "area": "production",
+          "status": "research_exhausted",
+          "note": "No official public source-backed modular production facility, operating model, or production capacity was confirmed; values remain null rather than zero.",
+          "source_ids": [
+            "dart-01693685-20250917000346",
+            "dart-01693685-20240919000117",
+            "dart-01693685-20230919000046"
+          ],
+          "verified_at": "2026-07-15"
+        },
+        {
           "area": "production",
           "status": "not_publicly_confirmed",
           "note": "No source-backed production facility or official capacity record was confirmed in OpenDART filings and available public-source review for this step.",
@@ -4550,6 +4648,15 @@
           "verified_at": "2026-07-15"
         },
         {
+          "area": "project_candidate_verification_wave_1",
+          "status": "research_exhausted_no_verified_project",
+          "note": "Project candidates are clustered from internal news articles. Verified promotion is blocked until official source and company role are confirmed.",
+          "raw_candidate_article_count": 0,
+          "project_candidate_cluster_count": 0,
+          "source_ids": [],
+          "verified_at": "2026-07-15"
+        },
+        {
           "area": "dart_financials",
           "status": "partially_verified",
           "description": "OpenDART structured data or original audit-report XML data extracted for available years.",
@@ -4558,16 +4665,7 @@
             "dart-01693685-20240919000117",
             "dart-01693685-20250917000346"
           ],
-          "verified_at": "2026-07-15T07:34:49.059753+00:00"
-        },
-        {
-          "area": "project_candidate_verification_wave_1",
-          "status": "research_exhausted_no_verified_project",
-          "note": "Project candidates are clustered from internal news articles. Verified promotion is blocked until official source and company role are confirmed.",
-          "raw_candidate_article_count": 0,
-          "project_candidate_cluster_count": 0,
-          "source_ids": [],
-          "verified_at": "2026-07-15"
+          "verified_at": "2026-07-15T10:55:41.691717+00:00"
         }
       ],
       "unsupported_claims": [],
@@ -4673,7 +4771,7 @@
           }
         ],
         "not_found_reason": "",
-        "searched_at": "2026-07-15T07:34:48.968607+00:00"
+        "searched_at": "2026-07-15T10:55:41.537164+00:00"
       },
       "dart_filings": [],
       "audit_information": [
@@ -4878,20 +4976,23 @@
         }
       ],
       "production_summary": {
-        "research_status": "searched_not_confirmed",
-        "verification_status": "not_publicly_confirmed",
-        "summary": "OpenDART 감사보고서와 기존 공개 출처 범위에서 검증된 생산시설 또는 공식 생산능력 수치를 확인하지 못했습니다.",
-        "own_facility_status": "not_publicly_confirmed",
-        "manufacturing_model": "not_publicly_confirmed",
-        "confirmed_facility_count": 0,
-        "reported_capacity_available": false,
+        "research_status": "research_exhausted",
+        "verification_status": "research_exhausted",
+        "data_confidence": "unknown",
+        "facility_count": null,
+        "own_facility_count": null,
+        "official_capacity_available": false,
+        "summary": "Public official materials reviewed for this step did not confirm a source-backed modular production facility or official production capacity.",
         "source_ids": [
           "dart-01693685-20250917000346",
           "dart-01693685-20240919000117",
           "dart-01693685-20230919000046"
         ],
-        "verified_at": "2026-07-14",
-        "data_confidence": "unknown"
+        "own_facility_status": "not_publicly_confirmed",
+        "manufacturing_model": "not_publicly_confirmed",
+        "confirmed_facility_count": 0,
+        "reported_capacity_available": false,
+        "verified_at": "2026-07-15"
       },
       "project_research_status": {
         "research_wave": "wave_1",
@@ -8465,5 +8566,8 @@
       "recent_signals": [],
       "sources": []
     }
-  ]
+  ],
+  "metadata": {
+    "production_wave_1_standardized_at": "2026-07-15T00:00:00+09:00"
+  }
 }

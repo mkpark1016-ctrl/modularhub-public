@@ -1,0 +1,15 @@
+{
+  "scope_id": "production_wave_1",
+  "selection_rule": [
+    "competitive_role=direct_competitor",
+    "analysis_tier=tier_1",
+    "previous_production_research_scope=true"
+  ],
+  "company_ids": [
+    "yuchang-enc",
+    "kumkang-kind",
+    "planm",
+    "daeseung-engineering"
+  ],
+  "notes": "Company IDs preserve the prior Wave 1 production research scope without relying on display-name matching."
+}

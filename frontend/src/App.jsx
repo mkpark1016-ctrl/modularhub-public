@@ -34,10 +34,12 @@ import {
   getLatestVerifiedAt,
   getProjectRoleLabel,
   getProjectStatusLabel,
+  getProductionCapacityLabel,
   getProductionModelLabel,
   getReviewStatusLabel,
   getStructureTypeLabel,
   getTierLabel,
+  formatProductionArea,
   isDartIdentityConfirmed,
   metricSourceValue,
   optionCounts,
@@ -1009,21 +1011,31 @@ function CompanyDetailPage() {
           <p className="finance-note">생산 운영 방식: {getProductionModelLabel(company)}</p>
           {production.length ? (
             <div className="company-section-list">
-              {production.map((item) => (
-                <div key={item.facility_id || item.facility_name}>
-                  <strong>{item.facility_name || "시설명 확인 중"}</strong>
-                  <span>{[item.city || item.region || item.location, item.ownership_type, item.operation_status].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
-                  {(item.production_scope || []).length > 0 && <span>생산 대상: {item.production_scope.join(", ")}</span>}
-                  {item.site_area_m2 && <span>부지면적 {Number(item.site_area_m2).toLocaleString("ko-KR")}㎡</span>}
-                  {item.building_area_m2 && <span>건축면적 {Number(item.building_area_m2).toLocaleString("ko-KR")}㎡</span>}
-                  {item.reported_capacity && item.capacity_unit
-                    ? <span>공식 생산능력 {item.reported_capacity} {item.capacity_unit}</span>
-                    : <span>공개자료에서 공식 생산능력 수치가 확인되지 않았습니다.</span>}
-                  <span>기준일: {formatCompanyDate(item.verified_at || productionInfo.verified_at)}</span>
-                </div>
-              ))}
+              {production.map((item) => {
+                const siteArea = formatProductionArea(item.site_area ?? item.site_area_m2, item.site_area_unit || "m2");
+                const buildingArea = formatProductionArea(item.building_area ?? item.building_area_m2, item.building_area_unit || "m2");
+                return (
+                  <div key={item.facility_id || item.facility_name}>
+                    <strong>{item.facility_name || "시설명 확인 중"}</strong>
+                    <span>{[item.region || item.city || item.location, item.ownership_type, item.operation_status].filter(Boolean).join(" · ") || "위치 정보 확인 중"}</span>
+                    {(item.production_scope || []).length > 0 && <span>생산 대상: {item.production_scope.join(", ")}</span>}
+                    {(item.production_processes || []).length > 0 && <span>공정: {item.production_processes.slice(0, 5).join(", ")}</span>}
+                    {siteArea && <span>부지면적 {siteArea}</span>}
+                    {buildingArea && <span>건축면적 {buildingArea}</span>}
+                    <span>{getProductionCapacityLabel(item)}</span>
+                    <span>검증 상태: {item.data_confidence || item.confidence || productionInfo.data_confidence || "확인 중"}</span>
+                    <span>기준일: {formatCompanyDate(item.verified_at || productionInfo.verified_at)}</span>
+                  </div>
+                );
+              })}
             </div>
-          ) : <p>{productionInfo.own_facility_status === "not_publicly_confirmed" ? "현재 공개자료에서 검증된 생산시설 정보를 확인하지 못했습니다." : "검증된 생산시설 정보를 추가 조사 중입니다."}</p>}
+          ) : (
+            <p>
+              {productionInfo.verification_status === "not_applicable"
+                ? "이 기업은 생산시설 비교 대상이 아닙니다."
+                : "현재 공개자료에서 검증된 생산시설 정보를 확인하지 못했습니다."}
+            </p>
+          )}
         </section>
 
         <section className="summary">

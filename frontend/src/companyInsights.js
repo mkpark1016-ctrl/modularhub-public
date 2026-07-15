@@ -361,11 +361,33 @@ export function hasConfirmedProductionFacility(company) {
 export function getProductionModelLabel(company) {
   const summary = productionSummary(company);
   const model = summary.manufacturing_model;
-  if (summary.own_facility_status === "confirmed_own_facility" || model === "own_manufacturing") return "자체 공장 확인";
+  if (summary.own_facility_status === "confirmed_own_facility" || model === "own_manufacturing") return "자체 생산 확인";
   if (summary.own_facility_status === "confirmed_leased_facility" || model === "leased_facility") return "임차 생산 확인";
   if (summary.own_facility_status === "confirmed_partner_manufacturing" || model === "partner_manufacturing") return "협력 제작 확인";
   if (model === "outsourced_manufacturing") return "위탁 생산 확인";
+  if (summary.verification_status === "not_applicable") return "생산시설 비대상";
+  if (summary.verification_status === "research_exhausted") return "공개자료상 생산시설 미확인";
   return "생산정보 조사 중";
+}
+
+export function getProductionCapacityLabel(facility) {
+  if (!facility || typeof facility !== "object") return "공개자료에서 공식 생산능력 수치가 확인되지 않았습니다.";
+  const value = facility.reported_capacity ?? facility.capacity_value;
+  if (value === null || value === undefined || value === "") {
+    if (facility.capacity_status === "not_applicable") return "생산능력 비대상";
+    return "공개자료에서 공식 생산능력 수치가 확인되지 않았습니다.";
+  }
+  const unit = facility.capacity_unit || "";
+  const period = facility.capacity_period ? `/${facility.capacity_period}` : "";
+  const scope = facility.capacity_scope ? ` · ${facility.capacity_scope}` : "";
+  return `공식 생산능력 ${Number(value).toLocaleString("ko-KR")} ${unit}${period}${scope}`.trim();
+}
+
+export function formatProductionArea(value, unit = "m2") {
+  if (value === null || value === undefined || value === "") return null;
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return null;
+  return `${numeric.toLocaleString("ko-KR")} ${unit || "m2"}`;
 }
 
 export function getLatestFinancial(company) {
