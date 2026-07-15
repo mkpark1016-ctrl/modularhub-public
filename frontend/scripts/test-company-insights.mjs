@@ -28,7 +28,8 @@ assert.equal(companies.length, 17);
 const summary = getCompanySummary(companies);
 assert.equal(summary.total, 17);
 assert.equal(summary.directCompetitors, companies.filter((company) => company.competitive_role === "direct_competitor").length);
-assert.equal(summary.verified, 4);
+assert.equal(summary.verified, companies.filter((company) => getCompanyDataStatus(company) === "verified").length);
+assert.equal(summary.verified, 6);
 assert.equal(summary.facilityConfirmed, companies.filter((company) => hasConfirmedProductionFacility(company)).length);
 assert.equal(summary.facilityConfirmed, 2);
 
@@ -41,12 +42,19 @@ for (const company of wave1) {
   assert.ok(metricSourceValue(getLatestFinancial(company).revenue) !== null);
 }
 
+const remainingTier1 = ["sungji-steel", "geogwang-enterprise", "m3-systems", "jinwoo-inc"].map((id) => companies.find((company) => company.company_id === id));
+assert.equal(remainingTier1.every(Boolean), true);
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "sungji-steel")), "verified");
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "geogwang-enterprise")), "verified");
+assert.equal(getCompanyDataStatus(companies.find((company) => company.company_id === "m3-systems")), "partial");
+assert.equal(companies.find((company) => company.company_id === "jinwoo-inc").dart_identity.identity_status, "not_found");
+
 const direct = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "direct_competitor", tier: "all", status: "all" }));
 assert.equal(direct.length, summary.directCompetitors);
 const tier1 = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "all", tier: "tier_1", status: "all" }));
 assert.equal(tier1.length, 8);
 const verified = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "all", tier: "all", status: "verified" }));
-assert.equal(verified.length, 4);
+assert.equal(verified.length, summary.verified);
 const manufacturers = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "specialist_manufacturer", relationship: "all", tier: "all", status: "all" }));
 assert.ok(manufacturers.length > 0);
 

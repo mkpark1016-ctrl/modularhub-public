@@ -45,14 +45,13 @@ def main() -> int:
     require(validation["unverified_numeric_count"] == 0, "unverified numeric count must be zero")
     require(validation["production_capacity_without_unit_count"] == 0, "production capacity without unit count must be zero")
     require(validation["financial_scope_missing_count"] == 0, "financial scope missing count must be zero")
-    wave1_ids = {"yuchang-enc", "kumkang-kind", "planm", "daeseung-engineering"}
     require(
-        all(company["review_status"] in {"unresearched", "collecting", "partially_verified"} for company in companies),
+        all(company["review_status"] in {"unresearched", "collecting", "partially_verified", "verified", "update_required"} for company in companies),
         "company review statuses must follow the research lifecycle",
     )
     require(
-        all(company["review_status"] == "unresearched" for company in companies if company["company_id"] not in wave1_ids),
-        "non-Wave 1 companies should remain unresearched",
+        all(company.get("sources") or company.get("financials") or company.get("production") or company["review_status"] == "unresearched" for company in companies),
+        "researched companies must contain source-backed data",
     )
     production_validation = validate_production(payload)
     require(production_validation["valid"], f"production data must be source-backed once facility facts are verified: {production_validation['issues']}")

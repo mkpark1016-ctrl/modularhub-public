@@ -5,7 +5,7 @@ import { getBusinessPriorityInfo, getBusinessSummary, isImportantBusiness, parse
 import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
-import { getCompanyItems, getCompanySummary } from "../src/companyInsights.js";
+import { getCompanyDataStatus, getCompanyItems, getCompanySummary } from "../src/companyInsights.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -111,7 +111,8 @@ try {
   check(businessItems.length > 0, "business data is empty");
   check(newsItems.length > 0, "news data is empty");
   check(companyItems.length === 17, "company data should contain 17 companies");
-  check(companySummary.verified === 4, "company verified count should be 4");
+  check(companySummary.verified === companyItems.filter((item) => getCompanyDataStatus(item) === "verified").length, "company verified count should match resolver");
+  check(companySummary.verified >= 4, "company verified count should include at least Wave 1 companies");
 
   await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
   await page.evaluate(() => localStorage.clear());
