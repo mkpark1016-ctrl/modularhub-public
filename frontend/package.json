@@ -10,6 +10,7 @@
     "lint": "eslint src --max-warnings=0",
     "test:business": "node scripts/test-business-insights.mjs",
     "test:companies": "node scripts/test-company-insights.mjs",
+    "test:companies-projects": "node scripts/test-company-projects.mjs",
     "test:companies-url": "node scripts/test-company-url.mjs",
     "test:news": "node scripts/test-news-region-filters.mjs",
     "test:news-ime": "node scripts/test-news-search-ime.mjs",

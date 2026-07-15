@@ -63,6 +63,11 @@ PROJECT_STATUSES = {
     "unknown",
 }
 COMPANY_ROLES = {
+    "modular_manufacturer",
+    "specialist_contractor",
+    "engineering",
+    "supplier",
+    "developer",
     "designer",
     "manufacturer",
     "general_contractor",
