@@ -143,15 +143,32 @@ jobs:
       - name: Confirm generated data and UI are committed and drift-free
         shell: bash
         run: |
-          git diff --exit-code -- \
+          set +e
+          git diff -- \
             frontend/src/App.jsx \
             frontend/public/data/companies/companies.json \
-            frontend/public/data/companies/company_intelligence_v2.json
+            frontend/public/data/companies/company_intelligence_v2.json \
+            > /tmp/kumkang-drift.diff
+          diff_status=$?
+          git status --short > /tmp/kumkang-status.txt
 
-          if [ -n "$(git status --porcelain)" ]; then
-            echo 'Unexpected working tree changes remain:' >&2
-            git status --short >&2
+          cat /tmp/kumkang-drift.diff
+          cat /tmp/kumkang-status.txt
+
+          if [ "$diff_status" -ne 0 ] || [ -s /tmp/kumkang-drift.diff ] || [ -s /tmp/kumkang-status.txt ]; then
+            echo 'Committed company outputs are not idempotent or the working tree contains unexpected changes.' >&2
             exit 1
           fi
 
           echo 'PASS: legacy importer is validation-only, QA-R1A is idempotent, and committed outputs are drift-free.'
+
+      - name: Upload drift diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumkang-drift-diagnostics
+          path: |
+            /tmp/kumkang-drift.diff
+            /tmp/kumkang-status.txt
+          if-no-files-found: warn
+          retention-days: 7
