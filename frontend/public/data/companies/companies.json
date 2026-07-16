@@ -1,6 +1,6 @@
 {
   "schema_version": "company-universe-v1",
-  "generated_at": "2026-07-13T00:00:00+09:00",
+  "generated_at": "2026-07-16T21:30:00+09:00",
   "description": "Seed universe for ModularHub steel modular competitor analysis. Unverified metrics are intentionally null or empty.",
   "companies": [
     {
@@ -11,23 +11,32 @@
       "aliases": [
         "유창이앤씨",
         "유창E&C",
-        "Yuchang E&C"
+        "Yuchang E&C",
+        "YooChang E&C"
       ],
       "country_code": "KR",
       "company_type": "specialist_manufacturer",
       "competitive_role": "direct_competitor",
       "analysis_tier": "tier_1",
-      "business_status": null,
-      "modular_methods": [],
-      "target_markets": [],
+      "business_status": "active",
+      "modular_methods": [
+        "steel_volumetric"
+      ],
+      "target_markets": [
+        "public_housing",
+        "school",
+        "dormitory",
+        "military",
+        "office"
+      ],
       "headquarters": null,
       "website_url": "https://yoochangenc.com/",
       "listed_market": null,
       "ticker": null,
-      "summary": "Official website identity and URL are confirmed; source-backed modular production, project, bidding, technology, and financial details remain under research.",
-      "last_verified_at": "2026-07-15T00:00:00+09:00",
-      "data_confidence": "low",
-      "review_status": "collecting",
+      "summary": "공공주택·학교·기숙사 등 공공시장 중심의 스틸 모듈러 제작 경험과 자체 생산 기반을 보유한 직접 경쟁사입니다. DART 재무와 공식 공장 정보는 우선 보존하고, 프로젝트·사업 인수·협력 정보는 공식 원문 여부에 따라 실적과 전략 신호를 분리합니다.",
+      "last_verified_at": "2026-07-16T21:30:00+09:00",
+      "data_confidence": "medium",
+      "review_status": "partially_verified",
       "company_profile": {
         "modular_business_started_year": null,
         "business_status": null,
@@ -43,7 +52,9 @@
           "maintenance": "not_confirmed",
           "rental": "not_confirmed",
           "operation": "not_confirmed"
-        }
+        },
+        "established_at": "1984-11-16",
+        "representative": "조우제·조용재"
       },
       "production": [
         {
@@ -51,7 +62,9 @@
           "facility_name": "YOOCHANG E&C Factory",
           "company_id": "yuchang-enc",
           "facility_aliases": [
-            "유창이앤씨 Factory"
+            "유창이앤씨 Factory",
+            "유창이앤씨 모듈러 공장",
+            "YOOCHANG E&C Factory"
           ],
           "facility_type": "modular_factory",
           "modular_system_type": "steel_volumetric",
@@ -82,7 +95,8 @@
           "capacity_status": "unavailable",
           "capacity_as_of": null,
           "source_ids": [
-            "yc_official_home"
+            "yc_official_home",
+            "internal-research-yuchang-20260716"
           ],
           "verified_at": "2026-07-15",
           "confidence": "medium",
@@ -93,10 +107,52 @@
           "building_area": 25832,
           "building_area_unit": "m2",
           "automation_level": null,
-          "major_equipment": []
+          "major_equipment": [],
+          "verification_status": "partially_verified",
+          "internal_research_notes": [
+            "공장 존재와 면적은 기존 공식자료를 우선한다. 정확한 주소, 공정별 설비와 공식 생산능력은 공개자료에서 확인되지 않아 null로 유지한다."
+          ],
+          "source_count": 2
         }
       ],
-      "project_portfolio": [],
+      "project_portfolio": [
+        {
+          "project_id": "yuchang-seongnam-hadaewon-happy-housing",
+          "project_name": "성남 하대원 경기행복주택",
+          "client": "경기주택도시공사",
+          "ordering_agency": "경기주택도시공사",
+          "location": "경기도 성남시",
+          "building_use": "public_housing",
+          "market_segment": "public_housing",
+          "modular_method": "steel_volumetric",
+          "company_role": "modular_manufacturer",
+          "project_status": "completed",
+          "completion_date": "2019",
+          "project_credit": true,
+          "verification_status": "internally_confirmed",
+          "confidence": "medium",
+          "summary": "공공주택형 스틸 모듈러 적용 사례로 내부 조사 기준에 포함한다. 공식 발주·계약·준공 원문은 후속 검증 대상으로 유지한다.",
+          "company_id": "yuchang-enc",
+          "aliases": [],
+          "country_code": "KR",
+          "sector": "public_housing",
+          "structure_type": "steel_volumetric",
+          "modular_type": "steel_volumetric",
+          "evidence_status": "internally_confirmed",
+          "data_confidence": "medium",
+          "source_ids": [
+            "internal-research-yuchang-20260716"
+          ],
+          "verified_at": "2026-07-16",
+          "client_name": "경기주택도시공사",
+          "role_detail": "공공주택형 스틸 모듈러 적용 사례로 내부 조사 기준에 포함한다. 공식 발주·계약·준공 원문은 후속 검증 대상으로 유지한다.",
+          "project_summary": "공공주택형 스틸 모듈러 적용 사례로 내부 조사 기준에 포함한다. 공식 발주·계약·준공 원문은 후속 검증 대상으로 유지한다.",
+          "source_count": 1,
+          "primary_source_count": 0,
+          "research_wave": "curated_baseline_pilot",
+          "enrichment_status": "curated_internal_baseline"
+        }
+      ],
       "bidding_performance": [],
       "technology": {
         "structural_systems": [],
@@ -612,7 +668,21 @@
           }
         }
       ],
-      "recent_signals": [],
+      "recent_signals": [
+        {
+          "signal_id": "event-yuchang-poscoac-modular-business-transfer",
+          "signal_type": "acquisition",
+          "title": "포스코A&C 모듈러 사업·자산 인수 관련 확장",
+          "occurred_at": "2025",
+          "summary": "생산 기반과 공공 모듈러 사업 확장을 위한 사업·자산 인수 관련 내부 조사 신호이며, 프로젝트 수주 실적으로 집계하지 않는다.",
+          "significance": "생산 기반과 공공 모듈러 사업 확장을 위한 사업·자산 인수 관련 내부 조사 신호이며, 프로젝트 수주 실적으로 집계하지 않는다.",
+          "source_ids": [
+            "internal-research-yuchang-20260716"
+          ],
+          "verified_at": "2026-07-16",
+          "confidence": "medium"
+        }
+      ],
       "sources": [
         {
           "source_id": "yc_official_home",
@@ -715,6 +785,32 @@
           "primary_source": true,
           "confidence": "high",
           "verification_note": "OpenDART filing inventory result."
+        },
+        {
+          "source_id": "internal-research-yuchang-20260716",
+          "source_type": "internal_research",
+          "source_name": "유창이앤씨 동종사 조사 구조화 기준선",
+          "title": "유창이앤씨 동종사 조사 구조화 기준선",
+          "source_url": null,
+          "published_at": null,
+          "accessed_at": "2026-07-16T21:30:00+09:00",
+          "publisher": "Internal competitor research",
+          "primary_source": false,
+          "confidence": "medium",
+          "verification_note": "기존 동종사 조사와 사용자 확인사항을 구조화한 내부 검토 기준선이다. DART와 회사 공식자료를 우선하며, 공식 원문이 연결되지 않은 프로젝트·전략 신호는 내부 기준 또는 부분 검증으로만 관리한다. 삼성 AI 모듈러 홈 관련 항목은 미체결 협력 논의로 유지하고 프로젝트 실적에 포함하지 않는다.",
+          "supported_claims": [
+            "facility_name",
+            "location",
+            "ownership_type",
+            "operation_status",
+            "site_area_m2",
+            "building_area_m2",
+            "production_scope",
+            "production_processes",
+            "reported_capacity",
+            "capacity_value"
+          ],
+          "visibility": "internal"
         }
       ],
       "field_sources": {
@@ -1338,7 +1434,8 @@
         "official_capacity_available": false,
         "summary": "Official company materials support a YooChang E&C Factory record and factory scale metrics, but official production capacity and current operation details are not publicly disclosed.",
         "source_ids": [
-          "yc_official_home"
+          "yc_official_home",
+          "internal-research-yuchang-20260716"
         ],
         "own_facility_status": "confirmed_own_facility",
         "manufacturing_model": "own_manufacturing",
@@ -1500,25 +1597,25 @@
           "identity_status": "official_verified",
           "financial_status": "official_verified",
           "production_status": "partially_verified",
-          "project_status": "unavailable",
+          "project_status": "internally_confirmed",
           "technology_status": "unavailable",
-          "recent_signal_status": "not_verified"
+          "recent_signal_status": "internally_confirmed"
         },
         "event_counts": {
-          "verified_projects": 0,
+          "verified_projects": 1,
           "project_candidates": 0,
           "partnerships_mou": 1,
           "r_and_d_exhibition": 0,
-          "other_events": 0
+          "other_events": 1
         },
         "article_evidence_count": 35,
         "source_group_counts": {
           "company_official": 1,
-          "dart": 3,
-          "media_and_research": 35
+          "dart": 6,
+          "media_and_research": 36
         },
-        "updated_at": "2026-07-15T00:00:00+09:00",
-        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
+        "updated_at": "2026-07-16T21:30:00+09:00",
+        "summary_ko": "공공주택·학교·기숙사 등 공공시장 중심의 스틸 모듈러 제작 경험과 자체 생산 기반을 보유한 직접 경쟁사입니다. DART 재무와 공식 공장 정보는 우선 보존하고, 프로젝트·사업 인수·협력 정보는 공식 원문 여부에 따라 실적과 전략 신호를 분리합니다.",
         "events": [
           {
             "event_id": "event-yuchang-enc-samsung-ai-modular-home",
@@ -1581,6 +1678,60 @@
             "verification_status": "not_verified",
             "visibility": "public",
             "updated_at": "2026-07-15"
+          },
+          {
+            "event_id": "event-yuchang-seongnam-hadaewon-happy-housing",
+            "company_id": "yuchang-enc",
+            "event_type": "project",
+            "event_status": "completed",
+            "title": "성남 하대원 경기행복주택",
+            "counterparties": [
+              "경기주택도시공사"
+            ],
+            "client": "경기주택도시공사",
+            "project_role": "modular_manufacturer",
+            "project_credit": true,
+            "announced_at": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": "2019",
+            "amount": null,
+            "amount_unit": null,
+            "location": "경기도 성남시",
+            "market_segment": "public_housing",
+            "method": "steel_volumetric",
+            "source_ids": [
+              "internal-research-yuchang-20260716"
+            ],
+            "verification_status": "internally_confirmed",
+            "visibility": "public",
+            "updated_at": "2026-07-16T21:30:00+09:00"
+          },
+          {
+            "event_id": "event-yuchang-poscoac-modular-business-transfer",
+            "event_type": "acquisition",
+            "event_status": "unconfirmed",
+            "title": "포스코A&C 모듈러 사업·자산 인수 관련 확장",
+            "announced_at": "2025",
+            "location": "대한민국",
+            "method": "steel_volumetric",
+            "project_credit": false,
+            "verification_status": "internally_confirmed",
+            "company_id": "yuchang-enc",
+            "counterparties": [],
+            "client": null,
+            "project_role": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "market_segment": null,
+            "source_ids": [
+              "internal-research-yuchang-20260716"
+            ],
+            "visibility": "public",
+            "updated_at": "2026-07-16T21:30:00+09:00"
           }
         ],
         "source_groups": [
@@ -1682,7 +1833,7 @@
           },
           {
             "group_type": "media_and_research",
-            "count": 35,
+            "count": 36,
             "sources": [
               {
                 "source_id": "article-yuchang-enc-news-104",
@@ -2101,6 +2252,18 @@
                 "url": null,
                 "published_at": null,
                 "retrieved_at": null,
+                "document_id": null,
+                "status": "active"
+              },
+              {
+                "source_id": "internal-research-yuchang-20260716",
+                "source_type": "internal_research",
+                "source_tier": "D",
+                "publisher": "Internal competitor research",
+                "title": "유창이앤씨 동종사 조사 구조화 기준선",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": "2026-07-16T21:30:00+09:00",
                 "document_id": null,
                 "status": "active"
               }
@@ -4286,7 +4449,7 @@
       "schema_version": "company-master-v1",
       "company_id": "planm",
       "company_name": "플랜엠",
-      "company_name_en": null,
+      "company_name_en": "PlanM",
       "aliases": [
         "플랜엠",
         "Plan M",
@@ -4296,17 +4459,26 @@
       "company_type": "modular_integrator",
       "competitive_role": "direct_competitor",
       "analysis_tier": "tier_1",
-      "business_status": null,
-      "modular_methods": [],
-      "target_markets": [],
+      "business_status": "active",
+      "modular_methods": [
+        "steel_volumetric"
+      ],
+      "target_markets": [
+        "military",
+        "school",
+        "dormitory",
+        "public_housing",
+        "data_center",
+        "overseas"
+      ],
       "headquarters": null,
       "website_url": null,
       "listed_market": null,
       "ticker": null,
-      "summary": null,
-      "last_verified_at": "2026-07-15T00:00:00+09:00",
-      "data_confidence": "unknown",
-      "review_status": "collecting",
+      "summary": "군숙소·학교·기숙사 등 공공시장 기반에서 해외·고층화·데이터센터로 확장을 추진하는 스틸 모듈러 통합기업입니다. DART 재무는 공식값을 유지하고, 자체 생산시설과 개별 프로젝트는 공개 원문이 확인되기 전까지 검증 실적으로 집계하지 않습니다.",
+      "last_verified_at": "2026-07-16T21:30:00+09:00",
+      "data_confidence": "medium",
+      "review_status": "partially_verified",
       "company_profile": {
         "modular_business_started_year": null,
         "business_status": null,
@@ -4841,7 +5013,34 @@
           }
         }
       ],
-      "recent_signals": [],
+      "recent_signals": [
+        {
+          "signal_id": "event-planm-capital-and-growth-strategy",
+          "signal_type": "business_strategy",
+          "title": "대규모 자금조달과 사업 확장 전략",
+          "occurred_at": "2026",
+          "summary": "생산·기술·해외사업 확대를 위한 대규모 자금조달 신호로 관리하며, 확정 투자금액이나 집행 결과는 공식 원문 확인 전 수치화하지 않는다.",
+          "significance": "생산·기술·해외사업 확대를 위한 대규모 자금조달 신호로 관리하며, 확정 투자금액이나 집행 결과는 공식 원문 확인 전 수치화하지 않는다.",
+          "source_ids": [
+            "internal-research-planm-20260716"
+          ],
+          "verified_at": "2026-07-16",
+          "confidence": "medium"
+        },
+        {
+          "signal_id": "event-planm-overseas-highrise-datacenter-strategy",
+          "signal_type": "business_strategy",
+          "title": "해외·고층화·모듈러 데이터센터 확장 전략",
+          "occurred_at": "2026",
+          "summary": "기존 군숙소·학교·기숙사 중심 시장에서 해외, 고층 모듈러, 데이터센터 적용으로 확장하려는 경쟁 신호다. 실제 계약·수주는 별도 공식 근거가 있을 때만 프로젝트로 승격한다.",
+          "significance": "기존 군숙소·학교·기숙사 중심 시장에서 해외, 고층 모듈러, 데이터센터 적용으로 확장하려는 경쟁 신호다. 실제 계약·수주는 별도 공식 근거가 있을 때만 프로젝트로 승격한다.",
+          "source_ids": [
+            "internal-research-planm-20260716"
+          ],
+          "verified_at": "2026-07-16",
+          "confidence": "medium"
+        }
+      ],
       "sources": [
         {
           "source_id": "dart-01661914-20260625000241",
@@ -4894,6 +5093,32 @@
           "primary_source": true,
           "confidence": "high",
           "verification_note": "OpenDART filing inventory result."
+        },
+        {
+          "source_id": "internal-research-planm-20260716",
+          "source_type": "internal_research",
+          "source_name": "플랜엠 동종사 조사 구조화 기준선",
+          "title": "플랜엠 동종사 조사 구조화 기준선",
+          "source_url": null,
+          "published_at": null,
+          "accessed_at": "2026-07-16T21:30:00+09:00",
+          "publisher": "Internal competitor research",
+          "primary_source": false,
+          "confidence": "medium",
+          "verification_note": "기존 경쟁사 조사에서 확인한 시장 포지션과 사업 확장 방향을 구조화한 내부 검토 기준선이다. DART 재무는 우선 보존하고, 자체 생산시설·프로젝트·자금조달·해외·고층화·데이터센터 관련 정보는 공식 원문 여부에 따라 전략 신호와 조사 공백으로 분리한다.",
+          "supported_claims": [
+            "facility_name",
+            "location",
+            "ownership_type",
+            "operation_status",
+            "site_area_m2",
+            "building_area_m2",
+            "production_scope",
+            "production_processes",
+            "reported_capacity",
+            "capacity_value"
+          ],
+          "visibility": "internal"
         }
       ],
       "field_sources": {},
@@ -5384,22 +5609,76 @@
           "production_status": "unavailable",
           "project_status": "unavailable",
           "technology_status": "unavailable",
-          "recent_signal_status": "unavailable"
+          "recent_signal_status": "internally_confirmed"
         },
         "event_counts": {
           "verified_projects": 0,
           "project_candidates": 0,
           "partnerships_mou": 0,
           "r_and_d_exhibition": 0,
-          "other_events": 0
+          "other_events": 2
         },
         "article_evidence_count": 0,
         "source_group_counts": {
-          "dart": 3
+          "dart": 4,
+          "media_and_research": 1
         },
-        "updated_at": "2026-07-15T00:00:00+09:00",
-        "summary_ko": "스틸 모듈러 관점의 직접 경쟁사로, 확인된 공개자료와 추가 조사가 필요한 영역을 구분해 관리합니다.",
-        "events": [],
+        "updated_at": "2026-07-16T21:30:00+09:00",
+        "summary_ko": "군숙소·학교·기숙사 등 공공시장 기반에서 해외·고층화·데이터센터로 확장을 추진하는 스틸 모듈러 통합기업입니다. DART 재무는 공식값을 유지하고, 자체 생산시설과 개별 프로젝트는 공개 원문이 확인되기 전까지 검증 실적으로 집계하지 않습니다.",
+        "events": [
+          {
+            "event_id": "event-planm-capital-and-growth-strategy",
+            "event_type": "business_strategy",
+            "event_status": "planned",
+            "title": "대규모 자금조달과 사업 확장 전략",
+            "announced_at": "2026",
+            "location": "대한민국",
+            "method": "steel_volumetric",
+            "project_credit": false,
+            "verification_status": "internally_confirmed",
+            "company_id": "planm",
+            "counterparties": [],
+            "client": null,
+            "project_role": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "market_segment": null,
+            "source_ids": [
+              "internal-research-planm-20260716"
+            ],
+            "visibility": "public",
+            "updated_at": "2026-07-16T21:30:00+09:00"
+          },
+          {
+            "event_id": "event-planm-overseas-highrise-datacenter-strategy",
+            "event_type": "business_strategy",
+            "event_status": "planned",
+            "title": "해외·고층화·모듈러 데이터센터 확장 전략",
+            "announced_at": "2026",
+            "location": "국내외",
+            "method": "steel_volumetric",
+            "project_credit": false,
+            "verification_status": "internally_confirmed",
+            "company_id": "planm",
+            "counterparties": [],
+            "client": null,
+            "project_role": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "market_segment": null,
+            "source_ids": [
+              "internal-research-planm-20260716"
+            ],
+            "visibility": "public",
+            "updated_at": "2026-07-16T21:30:00+09:00"
+          }
+        ],
         "source_groups": [
           {
             "group_type": "dart",
@@ -5450,6 +5729,24 @@
                 "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260625000241",
                 "published_at": "20260625",
                 "retrieved_at": "2026-07-14T05:38:39.915762+00:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          },
+          {
+            "group_type": "media_and_research",
+            "count": 1,
+            "sources": [
+              {
+                "source_id": "internal-research-planm-20260716",
+                "source_type": "internal_research",
+                "source_tier": "D",
+                "publisher": "Internal competitor research",
+                "title": "플랜엠 동종사 조사 구조화 기준선",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": "2026-07-16T21:30:00+09:00",
                 "document_id": null,
                 "status": "active"
               }
@@ -9886,26 +10183,34 @@
       "schema_version": "company-master-v1",
       "company_id": "nrb",
       "company_name": "엔알비",
-      "company_name_en": null,
+      "company_name_en": "NRB",
       "aliases": [
         "엔알비",
-        "NRB"
+        "NRB",
+        "N.R.B"
       ],
       "country_code": "KR",
       "company_type": "modular_integrator",
       "competitive_role": "substitute_competitor",
       "analysis_tier": "tier_1b",
-      "business_status": null,
-      "modular_methods": [],
-      "target_markets": [],
+      "business_status": "active",
+      "modular_methods": [
+        "steel_volumetric"
+      ],
+      "target_markets": [
+        "public_housing",
+        "military",
+        "school",
+        "dormitory"
+      ],
       "headquarters": null,
       "website_url": null,
       "listed_market": null,
       "ticker": null,
-      "summary": null,
-      "last_verified_at": null,
-      "data_confidence": "unknown",
-      "review_status": "unresearched",
+      "summary": "자동화 생산체계, 고층화 기술, 생산거점 확장에 적극적인 스틸 모듈러 통합기업으로 분류합니다. 공개 공식자료로 확인되지 않은 공장·생산능력·프로젝트 수치는 추정하지 않고 전략 신호와 조사 공백으로 분리합니다.",
+      "last_verified_at": "2026-07-16T21:30:00+09:00",
+      "data_confidence": "medium",
+      "review_status": "partially_verified",
       "company_profile": {
         "modular_business_started_year": null,
         "business_status": null,
@@ -9931,33 +10236,162 @@
         "factory_completion_rate": null
       },
       "financials": [],
-      "recent_signals": [],
-      "sources": [],
+      "recent_signals": [
+        {
+          "signal_id": "event-nrb-automation-factory-expansion-strategy",
+          "signal_type": "facility_investment",
+          "title": "자동화 생산체계 및 생산거점 확장 전략",
+          "occurred_at": "2026",
+          "summary": "자동화·증축·공장 인수 가능성을 포함한 생산기반 확대 신호로 관리하며, 공식 시설이 확인되기 전에는 자체 공장 수나 생산능력으로 표시하지 않는다.",
+          "significance": "자동화·증축·공장 인수 가능성을 포함한 생산기반 확대 신호로 관리하며, 공식 시설이 확인되기 전에는 자체 공장 수나 생산능력으로 표시하지 않는다.",
+          "source_ids": [
+            "internal-research-nrb-20260716"
+          ],
+          "verified_at": "2026-07-16",
+          "confidence": "medium"
+        },
+        {
+          "signal_id": "event-nrb-highrise-modular-strategy",
+          "signal_type": "business_strategy",
+          "title": "고층 스틸 모듈러 사업 확대 전략",
+          "occurred_at": "2026",
+          "summary": "공공주택·군숙소·학교·기숙사 시장에서 고층화와 생산 자동화를 경쟁요소로 추적한다.",
+          "significance": "공공주택·군숙소·학교·기숙사 시장에서 고층화와 생산 자동화를 경쟁요소로 추적한다.",
+          "source_ids": [
+            "internal-research-nrb-20260716"
+          ],
+          "verified_at": "2026-07-16",
+          "confidence": "medium"
+        }
+      ],
+      "sources": [
+        {
+          "source_id": "internal-research-nrb-20260716",
+          "source_type": "internal_research",
+          "source_name": "엔알비 동종사 조사 구조화 기준선",
+          "title": "엔알비 동종사 조사 구조화 기준선",
+          "source_url": null,
+          "published_at": null,
+          "accessed_at": "2026-07-16T21:30:00+09:00",
+          "publisher": "Internal competitor research",
+          "primary_source": false,
+          "confidence": "medium",
+          "verification_note": "기존 경쟁사 조사에서 확인한 사업방향과 시장 포지션을 구조화한 내부 검토 기준선이다. 공식 생산시설·생산능력·프로젝트 원문이 연결되지 않은 항목은 실적이나 공식 검증값으로 승격하지 않는다.",
+          "supported_claims": [
+            "facility_name",
+            "location",
+            "ownership_type",
+            "operation_status",
+            "site_area_m2",
+            "building_area_m2",
+            "production_scope",
+            "production_processes",
+            "reported_capacity",
+            "capacity_value"
+          ],
+          "visibility": "internal"
+        }
+      ],
       "intelligence_v2": {
         "company_id": "nrb",
-        "overall_data_status": "insufficient_public_data",
+        "overall_data_status": "partially_verified",
         "domain_statuses": {
           "identity_status": "internally_confirmed",
           "financial_status": "unavailable",
           "production_status": "not_verified",
           "project_status": "unavailable",
           "technology_status": "unavailable",
-          "recent_signal_status": "unavailable"
+          "recent_signal_status": "internally_confirmed"
         },
         "event_counts": {
           "verified_projects": 0,
           "project_candidates": 0,
           "partnerships_mou": 0,
           "r_and_d_exhibition": 0,
-          "other_events": 0
+          "other_events": 2
         },
         "article_evidence_count": 0,
-        "source_group_counts": {},
-        "updated_at": "2026-07-15",
-        "summary_ko": "스틸 모듈러 관점의 대체 공법 경쟁사이며, 현재 공개자료가 부족해 추가 확인이 필요합니다.",
-        "events": [],
-        "source_groups": []
-      }
+        "source_group_counts": {
+          "media_and_research": 1
+        },
+        "updated_at": "2026-07-16T21:30:00+09:00",
+        "summary_ko": "자동화 생산체계, 고층화 기술, 생산거점 확장에 적극적인 스틸 모듈러 통합기업으로 분류합니다. 공개 공식자료로 확인되지 않은 공장·생산능력·프로젝트 수치는 추정하지 않고 전략 신호와 조사 공백으로 분리합니다.",
+        "events": [
+          {
+            "event_id": "event-nrb-automation-factory-expansion-strategy",
+            "event_type": "facility_investment",
+            "event_status": "planned",
+            "title": "자동화 생산체계 및 생산거점 확장 전략",
+            "announced_at": "2026",
+            "location": "대한민국",
+            "method": "steel_volumetric",
+            "project_credit": false,
+            "verification_status": "internally_confirmed",
+            "company_id": "nrb",
+            "counterparties": [],
+            "client": null,
+            "project_role": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "market_segment": null,
+            "source_ids": [
+              "internal-research-nrb-20260716"
+            ],
+            "visibility": "public",
+            "updated_at": "2026-07-16T21:30:00+09:00"
+          },
+          {
+            "event_id": "event-nrb-highrise-modular-strategy",
+            "event_type": "business_strategy",
+            "event_status": "planned",
+            "title": "고층 스틸 모듈러 사업 확대 전략",
+            "announced_at": "2026",
+            "location": "대한민국",
+            "method": "steel_volumetric",
+            "project_credit": false,
+            "verification_status": "internally_confirmed",
+            "company_id": "nrb",
+            "counterparties": [],
+            "client": null,
+            "project_role": null,
+            "contracted_at": null,
+            "started_at": null,
+            "completed_at": null,
+            "amount": null,
+            "amount_unit": null,
+            "market_segment": null,
+            "source_ids": [
+              "internal-research-nrb-20260716"
+            ],
+            "visibility": "public",
+            "updated_at": "2026-07-16T21:30:00+09:00"
+          }
+        ],
+        "source_groups": [
+          {
+            "group_type": "media_and_research",
+            "count": 1,
+            "sources": [
+              {
+                "source_id": "internal-research-nrb-20260716",
+                "source_type": "internal_research",
+                "source_tier": "D",
+                "publisher": "Internal competitor research",
+                "title": "엔알비 동종사 조사 구조화 기준선",
+                "url": null,
+                "published_at": null,
+                "retrieved_at": "2026-07-16T21:30:00+09:00",
+                "document_id": null,
+                "status": "active"
+              }
+            ]
+          }
+        ]
+      },
+      "production_summary": {}
     },
     {
       "schema_version": "company-master-v1",
