@@ -54,82 +54,86 @@ jobs:
           path = Path('scripts/import_curated_company_baseline.py')
           text = path.read_text(encoding='utf-8')
 
-          source_old = '''        "confidence": source["confidence"],
-              "verification_note": source["note"],
-          }
-          '''.replace('          ', '')
-          source_new = '''        "confidence": source["confidence"],
-              "verification_note": source["note"],
-              "supported_claims": [
-                  "facility_name",
-                  "location",
-                  "ownership_type",
-                  "operation_status",
-                  "site_area_m2",
-                  "building_area_m2",
-                  "production_scope",
-                  "production_processes",
-                  "reported_capacity",
-                  "capacity_value",
-              ],
-              "visibility": source.get("visibility", "internal"),
-          }
-          '''.replace('          ', '')
           if '"supported_claims": [' not in text:
-              if source_old not in text:
+              old = '''        "confidence": source["confidence"],
+                  "verification_note": source["note"],
+              }
+          '''
+              old = old.replace('              ', '')
+              new = '''        "confidence": source["confidence"],
+                  "verification_note": source["note"],
+                  "supported_claims": [
+                      "facility_name",
+                      "location",
+                      "ownership_type",
+                      "operation_status",
+                      "site_area_m2",
+                      "building_area_m2",
+                      "production_scope",
+                      "production_processes",
+                      "reported_capacity",
+                      "capacity_value",
+                  ],
+                  "visibility": source.get("visibility", "internal"),
+              }
+          '''
+              new = new.replace('              ', '')
+              if old not in text:
                   raise SystemExit('source_record anchor not found')
-              text = text.replace(source_old, source_new, 1)
+              text = text.replace(old, new, 1)
 
-          summary_anchor = '''    intelligence["updated_at"] = reviewed_at
-
-              return data
-          '''.replace('          ', '')
-          summary_block = '''    intelligence["updated_at"] = reviewed_at
-
-              confirmed_statuses = {
-                  "confirmed_own_facility",
-                  "confirmed_leased_facility",
-                  "confirmed_partner_manufacturing",
-              }
-              excluded_statuses = {
-                  "not_publicly_confirmed",
-                  "research_in_progress",
-                  "historical_facility",
-                  "planned_facility",
-                  "ceased_operation",
-              }
-              confirmed_count = 0
-              for facility in production:
-                  status = (
-                      facility.get("own_facility_status")
-                      or facility.get("verification_status")
-                      or facility.get("operation_status")
-                  )
-                  if status in excluded_statuses:
-                      continue
-                  if status in confirmed_statuses or (
-                      facility.get("facility_name") and facility.get("source_ids")
-                  ):
-                      confirmed_count += 1
-
-              production_summary = company.setdefault("production_summary", {})
-              production_summary["confirmed_facility_count"] = confirmed_count
-              production_summary["source_ids"] = merge_unique(
-                  production_summary.get("source_ids"),
-                  [source_id],
-              )
-              production_summary["reported_capacity_available"] = any(
-                  facility.get("reported_capacity") is not None
-                  or facility.get("capacity_value") is not None
-                  for facility in production
-              )
-
-              return data
-          '''.replace('          ', '')
           if 'production_summary["confirmed_facility_count"]' not in text:
-              if summary_anchor not in text:
+              old = '''    intelligence["updated_at"] = reviewed_at
+
+                  return data
+          '''
+              old = old.replace('              ', '')
+              new = '''    intelligence["updated_at"] = reviewed_at
+
+                  confirmed_statuses = {
+                      "confirmed_own_facility",
+                      "confirmed_leased_facility",
+                      "confirmed_partner_manufacturing",
+                  }
+                  excluded_statuses = {
+                      "not_publicly_confirmed",
+                      "research_in_progress",
+                      "historical_facility",
+                      "planned_facility",
+                      "ceased_operation",
+                  }
+                  confirmed_count = 0
+                  for facility in production:
+                      status = (
+                          facility.get("own_facility_status")
+                          or facility.get("verification_status")
+                          or facility.get("operation_status")
+                      )
+                      if status in excluded_statuses:
+                          continue
+                      if status in confirmed_statuses or (
+                          facility.get("facility_name") and facility.get("source_ids")
+                      ):
+                          confirmed_count += 1
+
+                  production_summary = company.setdefault("production_summary", {})
+                  production_summary["confirmed_facility_count"] = confirmed_count
+                  production_summary["source_ids"] = merge_unique(
+                      production_summary.get("source_ids"),
+                      [source_id],
+                  )
+                  production_summary["reported_capacity_available"] = any(
+                      facility.get("reported_capacity") is not None
+                      or facility.get("capacity_value") is not None
+                      for facility in production
+                  )
+
+                  return data
+          '''
+              new = new.replace('              ', '')
+              if old not in text:
                   raise SystemExit('merge_v1 summary anchor not found')
-              text = text.replace(summary_anchor, summary_block, 1)
+              text = text.replace(old, new, 1)
 
           path.write_text(text, encoding='utf-8')
           print('Production evidence contract synchronized.')
@@ -169,41 +173,11 @@ jobs:
           PY
 
       - name: Run company and public-data validation
-        id: backend_tests
-        continue-on-error: true
         shell: bash
         run: |
-          set +e
-          overall=0
-          : > /tmp/kumkang-authority-backend.log
-          for command in \
-            "python scripts/test_company_universe.py" \
-            "python scripts/validate_company_universe.py" \
-            "python scripts/test_public_json_export.py"
-          do
-            echo "===== $command =====" | tee -a /tmp/kumkang-authority-backend.log
-            bash -lc "$command" 2>&1 | tee -a /tmp/kumkang-authority-backend.log
-            status=${PIPESTATUS[0]}
-            echo "exit_status=$status" | tee -a /tmp/kumkang-authority-backend.log
-            if [ "$status" -ne 0 ]; then
-              overall=1
-            fi
-          done
-          echo "status=$overall" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload backend validation failure report
-        if: steps.backend_tests.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-authority-backend-validation
-          path: /tmp/kumkang-authority-backend.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after backend validation failure
-        if: steps.backend_tests.outputs.status != '0'
-        run: exit 1
+          python scripts/test_company_universe.py
+          python scripts/validate_company_universe.py
+          python scripts/test_public_json_export.py
 
       - name: Verify protected public JSON files are unchanged
         shell: bash
@@ -226,43 +200,13 @@ jobs:
         run: npm ci
 
       - name: Run company frontend tests
-        id: frontend_tests
-        continue-on-error: true
         working-directory: frontend
         shell: bash
         run: |
-          set +e
-          overall=0
-          : > /tmp/kumkang-authority-frontend.log
-          for command in \
-            "npm run test:companies" \
-            "npm run test:companies-v2" \
-            "npm run test:companies-projects" \
-            "npm run test:companies-url"
-          do
-            echo "===== $command =====" | tee -a /tmp/kumkang-authority-frontend.log
-            bash -lc "$command" 2>&1 | tee -a /tmp/kumkang-authority-frontend.log
-            status=${PIPESTATUS[0]}
-            echo "exit_status=$status" | tee -a /tmp/kumkang-authority-frontend.log
-            if [ "$status" -ne 0 ]; then
-              overall=1
-            fi
-          done
-          echo "status=$overall" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload frontend validation failure report
-        if: steps.frontend_tests.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-authority-frontend-validation
-          path: /tmp/kumkang-authority-frontend.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after frontend validation failure
-        if: steps.frontend_tests.outputs.status != '0'
-        run: exit 1
+          npm run test:companies
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:companies-url
 
       - name: Run lint and production build
         working-directory: frontend
