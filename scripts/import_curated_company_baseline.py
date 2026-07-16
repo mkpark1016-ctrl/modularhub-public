@@ -132,9 +132,21 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
     for project in curated.get("projects", []):
         upsert(projects, "project_id", normalize_project(project, company_id, source_id, reviewed_at))
 
-    technology = company.setdefault("technology", {})
+    technology = company.get("technology")
+    if technology is None:
+        technology = {}
+        company["technology"] = technology
+    elif not isinstance(technology, dict):
+        raise RuntimeError("V1 company technology must be an object")
     patents = technology.setdefault("patents", [])
-    for patent in curated.get("technology", {}).get("patents", []):
+    curated_technology = curated.get("technology", [])
+    if isinstance(curated_technology, dict):
+        technology_records = curated_technology.get("patents", [])
+    elif isinstance(curated_technology, list):
+        technology_records = curated_technology
+    else:
+        raise RuntimeError("Curated technology must be a list or object")
+    for patent in technology_records:
         normalized = copy.deepcopy(patent)
         normalized.setdefault("source_ids", [source_id])
         normalized.setdefault("verified_at", reviewed_at[:10])
