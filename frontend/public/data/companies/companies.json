@@ -2130,12 +2130,12 @@
         "pc_volumetric"
       ],
       "target_markets": [
+        "temporary_building",
+        "overseas",
         "public_housing",
         "dormitory",
         "military",
-        "hotel",
-        "temporary_building",
-        "overseas"
+        "hotel"
       ],
       "headquarters": "60 Gwacheondaero 7da-gil, Gwacheon-si, Gyeonggi-do, Korea",
       "website_url": "https://www.kumkangkind.com/",
@@ -2170,11 +2170,13 @@
       "production": [
         {
           "facility_id": "kumkang-kind-boeun-factory",
-          "facility_name": "보은 제1공장",
+          "facility_name": "보은공장",
           "company_id": "kumkang-kind",
           "facility_aliases": [
-            "보은공장",
-            "보은1공장"
+            "보은1공장",
+            "보은2공장",
+            "보은 제1공장",
+            "보은공장"
           ],
           "facility_type": "modular_factory",
           "modular_system_type": "steel_volumetric",
@@ -2185,7 +2187,7 @@
           "country": "KR",
           "region": "충청북도",
           "city": "보은군",
-          "address": "충청북도 보은군 삼승면 남부로 3749-11",
+          "address": "충청북도 보은군 삼승면 남부로 3749-11 / 3749-6",
           "site_area_m2": 27107,
           "building_area_m2": null,
           "production_scope": [
@@ -2215,12 +2217,14 @@
           "capacity_status": "unavailable",
           "capacity_as_of": null,
           "source_ids": [
+            "kumkang_official_modular",
+            "kumkang_official_domestic_network",
             "internal-research-kumkang-20260716"
           ],
-          "verified_at": "2026-07-16",
-          "confidence": "medium",
-          "data_confidence": "medium",
-          "notes": "공식 생산 네트워크에서 보은공장 존재와 위치를 확인했으며 부지면적은 내부 조사 기준이다.",
+          "verified_at": "2026-07-15",
+          "confidence": "high",
+          "data_confidence": "high",
+          "notes": "Official modular page confirms factory-made modular units and names Boeun factory; official network page provides Boeun 1 and 2 factory locations. Official capacity is not disclosed.",
           "site_area": null,
           "site_area_unit": null,
           "building_area": null,
@@ -2228,7 +2232,11 @@
           "automation_level": null,
           "major_equipment": [],
           "claimed_capacity_note": "내부 조사자료에는 연 1,000모듈 생산 목표가 기재되어 있으나 공식 원문 확인 전 수치 필드에는 반영하지 않는다.",
-          "verification_status": "partially_verified"
+          "verification_status": "partially_verified",
+          "internal_research_notes": [
+            "공식 생산 네트워크에서 보은공장 존재와 위치를 확인했으며 부지면적은 내부 조사 기준이다."
+          ],
+          "source_count": 3
         },
         {
           "facility_id": "kumkang-kind-jincheon-factory",
@@ -2315,9 +2323,9 @@
       "project_portfolio": [
         {
           "project_id": "kumkang-jangbogo-antarctic-station",
-          "project_name": "남극 장보고과학기지",
+          "project_name": "장보고 남극기지 모듈러 프로젝트",
           "client": "해양수산부·극지연구소",
-          "location": "남극",
+          "location": "Antarctica",
           "building_use": "overseas_research_facility",
           "modular_method": "steel_volumetric",
           "company_role": "modular_manufacturer",
@@ -2332,21 +2340,25 @@
           "contract_amount": null,
           "amount_scope": null,
           "source_ids": [
+            "kumkang_official_home",
             "internal-research-kumkang-20260716"
           ],
-          "verified_at": "2026-07-16",
+          "verified_at": "2026-07-15",
           "confidence": "medium",
-          "aliases": [],
-          "country_code": "KR",
-          "sector": "overseas_research_facility",
-          "structure_type": "steel_volumetric",
+          "aliases": [
+            "Jang Bogo Antarctic Station modular project",
+            "남극 장보고과학기지"
+          ],
+          "country_code": "AQ",
+          "sector": "other",
+          "structure_type": "steel_modular",
           "modular_type": "steel_volumetric",
           "evidence_status": "partially_verified",
           "data_confidence": "medium",
           "client_name": "해양수산부·극지연구소",
           "ordering_agency": "해양수산부·극지연구소",
           "company_id": "kumkang-kind",
-          "role_detail": "극한환경 연구기지용 모듈러 제작·공급 사례. 공식 홈페이지의 대표 실적과 내부 조사값을 분리해 관리한다.",
+          "role_detail": "Official Kumkang Kind website identifies the record as a representative modular architecture project; detailed contract scope is not separately disclosed.",
           "delivery_model": null,
           "construction_start_date": null,
           "contract_amount_unit": null,
@@ -2356,26 +2368,29 @@
           "room_count": null,
           "gross_floor_area_unit": null,
           "production_factory": null,
-          "project_summary": "극한환경 연구기지용 모듈러 제작·공급 사례. 공식 홈페이지의 대표 실적과 내부 조사값을 분리해 관리한다.",
+          "project_summary": "Official website names this as a representative Kumkang modular architecture project; client, scale, and contract amount are not disclosed in the referenced page.",
           "significance": "Representative modular architecture reference listed by Kumkang Kind.",
           "evidence_type": "official_website_reference",
-          "source_count": 1,
-          "primary_source_count": 0,
+          "source_count": 2,
+          "primary_source_count": 1,
           "research_notes": "No unsupported scale or amount values were inferred.",
-          "research_wave": "curated_baseline_pilot",
-          "enrichment_status": "curated_internal_baseline",
+          "research_wave": "baseline",
+          "enrichment_status": "preexisting_verified",
           "first_verified_at": "2026-07-15",
           "verification_origin": "baseline_project_standardization",
           "market_segment": "overseas_research_facility",
           "project_credit": true,
           "verification_status": "partially_verified",
-          "summary": "극한환경 연구기지용 모듈러 제작·공급 사례. 공식 홈페이지의 대표 실적과 내부 조사값을 분리해 관리한다."
+          "summary": "극한환경 연구기지용 모듈러 제작·공급 사례. 공식 홈페이지의 대표 실적과 내부 조사값을 분리해 관리한다.",
+          "internal_research_notes": [
+            "극한환경 연구기지용 모듈러 제작·공급 사례. 공식 홈페이지의 대표 실적과 내부 조사값을 분리해 관리한다."
+          ]
         },
         {
           "project_id": "kumkang-pyeongchang-2018-office",
-          "project_name": "2018 평창동계올림픽 조직위원회 사무소",
+          "project_name": "2018 평창 조직위원회 사무실 모듈러 프로젝트",
           "client": "평창동계올림픽대회 조직위원회",
-          "location": "강원도 평창",
+          "location": "Pyeongchang, Korea",
           "building_use": "temporary_office",
           "modular_method": "steel_volumetric",
           "company_role": "modular_manufacturer",
@@ -2390,21 +2405,25 @@
           "contract_amount": null,
           "amount_scope": null,
           "source_ids": [
+            "kumkang_official_home",
             "internal-research-kumkang-20260716"
           ],
-          "verified_at": "2026-07-16",
+          "verified_at": "2026-07-15",
           "confidence": "medium",
-          "aliases": [],
+          "aliases": [
+            "2018 Pyeongchang organizing committee office modular project",
+            "2018 평창동계올림픽 조직위원회 사무소"
+          ],
           "country_code": "KR",
-          "sector": "temporary_office",
-          "structure_type": "steel_volumetric",
+          "sector": "office",
+          "structure_type": "steel_modular",
           "modular_type": "steel_volumetric",
           "evidence_status": "partially_verified",
           "data_confidence": "medium",
           "client_name": "평창동계올림픽대회 조직위원회",
           "ordering_agency": "평창동계올림픽대회 조직위원회",
           "company_id": "kumkang-kind",
-          "role_detail": "해체·이전이 가능한 대규모 임시 업무시설 사례.",
+          "role_detail": "Official Kumkang Kind website identifies the record as a representative modular architecture project; detailed contract scope is not separately disclosed.",
           "delivery_model": null,
           "construction_start_date": null,
           "contract_amount_unit": null,
@@ -2414,27 +2433,30 @@
           "room_count": null,
           "gross_floor_area_unit": null,
           "production_factory": null,
-          "project_summary": "해체·이전이 가능한 대규모 임시 업무시설 사례.",
+          "project_summary": "Official website names this as a representative Kumkang modular architecture project; client, scale, and contract amount are not disclosed in the referenced page.",
           "significance": "Representative modular architecture reference listed by Kumkang Kind.",
           "evidence_type": "official_website_reference",
-          "source_count": 1,
-          "primary_source_count": 0,
+          "source_count": 2,
+          "primary_source_count": 1,
           "research_notes": "No unsupported scale or amount values were inferred.",
-          "research_wave": "curated_baseline_pilot",
-          "enrichment_status": "curated_internal_baseline",
+          "research_wave": "baseline",
+          "enrichment_status": "preexisting_verified",
           "first_verified_at": "2026-07-15",
           "verification_origin": "baseline_project_standardization",
           "market_segment": "temporary_office",
           "project_credit": true,
           "verification_status": "partially_verified",
-          "summary": "해체·이전이 가능한 대규모 임시 업무시설 사례."
+          "summary": "해체·이전이 가능한 대규모 임시 업무시설 사례.",
+          "internal_research_notes": [
+            "해체·이전이 가능한 대규모 임시 업무시설 사례."
+          ]
         },
         {
           "project_id": "kumkang-goryeong-modular-residential-complex",
-          "project_name": "고령군 작은정원 클라인가르텐",
+          "project_name": "고령군 모듈러 주거단지",
           "client": "경상북도 고령군",
-          "location": "경상북도 고령군",
-          "building_use": "private_housing",
+          "location": "Goryeong, Korea",
+          "building_use": "housing",
           "modular_method": "steel_volumetric",
           "company_role": "modular_manufacturer",
           "project_status": "completed",
@@ -2448,21 +2470,25 @@
           "contract_amount": null,
           "amount_scope": null,
           "source_ids": [
+            "kumkang_official_home",
             "internal-research-kumkang-20260716"
           ],
-          "verified_at": "2026-07-16",
+          "verified_at": "2026-07-15",
           "confidence": "medium",
-          "aliases": [],
+          "aliases": [
+            "Goryeong modular residential complex",
+            "고령군 작은정원 클라인가르텐"
+          ],
           "country_code": "KR",
-          "sector": "rural_residential",
-          "structure_type": "steel_volumetric",
+          "sector": "public_housing",
+          "structure_type": "steel_modular",
           "modular_type": "steel_volumetric",
           "evidence_status": "partially_verified",
           "data_confidence": "medium",
           "client_name": "경상북도 고령군",
           "ordering_agency": "경상북도 고령군",
           "company_id": "kumkang-kind",
-          "role_detail": "단독형 모듈러 16동과 커뮤니티센터 1동으로 구성된 지역 체류형 주거 사례.",
+          "role_detail": "Official Kumkang Kind website identifies the record as a representative modular architecture project; detailed contract scope is not separately disclosed.",
           "delivery_model": null,
           "construction_start_date": null,
           "contract_amount_unit": null,
@@ -2472,20 +2498,23 @@
           "room_count": null,
           "gross_floor_area_unit": null,
           "production_factory": null,
-          "project_summary": "단독형 모듈러 16동과 커뮤니티센터 1동으로 구성된 지역 체류형 주거 사례.",
+          "project_summary": "Official website names this as a representative Kumkang modular architecture project; client, scale, and contract amount are not disclosed in the referenced page.",
           "significance": "Representative modular architecture reference listed by Kumkang Kind.",
           "evidence_type": "official_website_reference",
-          "source_count": 1,
-          "primary_source_count": 0,
+          "source_count": 2,
+          "primary_source_count": 1,
           "research_notes": "No unsupported scale or amount values were inferred.",
-          "research_wave": "curated_baseline_pilot",
-          "enrichment_status": "curated_internal_baseline",
+          "research_wave": "baseline",
+          "enrichment_status": "preexisting_verified",
           "first_verified_at": "2026-07-15",
           "verification_origin": "baseline_project_standardization",
           "market_segment": "rural_residential",
           "project_credit": true,
           "verification_status": "partially_verified",
-          "summary": "단독형 모듈러 16동과 커뮤니티센터 1동으로 구성된 지역 체류형 주거 사례."
+          "summary": "단독형 모듈러 16동과 커뮤니티센터 1동으로 구성된 지역 체류형 주거 사례.",
+          "internal_research_notes": [
+            "단독형 모듈러 16동과 커뮤니티센터 1동으로 구성된 지역 체류형 주거 사례."
+          ]
         },
         {
           "project_id": "kumkang-ongjin-health-centers",
@@ -3466,7 +3495,20 @@
           "publisher": "Internal competitor research",
           "primary_source": false,
           "confidence": "medium",
-          "verification_note": "사용자가 제공한 동종사 조사자료를 구조화한 내부 검토 기준선이다. 원본 PDF는 저장소에 업로드하지 않으며, 공식 원문이 연결되지 않은 값은 official_verified 또는 high confidence로 승격하지 않는다."
+          "verification_note": "사용자가 제공한 동종사 조사자료를 구조화한 내부 검토 기준선이다. 원본 PDF는 저장소에 업로드하지 않으며, 공식 원문이 연결되지 않은 값은 official_verified 또는 high confidence로 승격하지 않는다.",
+          "supported_claims": [
+            "facility_name",
+            "location",
+            "ownership_type",
+            "operation_status",
+            "site_area_m2",
+            "building_area_m2",
+            "production_scope",
+            "production_processes",
+            "reported_capacity",
+            "capacity_value"
+          ],
+          "visibility": "internal"
         }
       ],
       "field_sources": {
@@ -3962,23 +4004,24 @@
         "summary": "Official pages confirm Boeun factory as the modular-unit production base and identify the domestic Boeun factory locations. Official production capacity is not publicly disclosed.",
         "source_ids": [
           "kumkang_official_modular",
-          "kumkang_official_domestic_network"
+          "kumkang_official_domestic_network",
+          "internal-research-kumkang-20260716"
         ],
         "own_facility_status": "confirmed_own_facility",
         "manufacturing_model": "own_manufacturing",
-        "confirmed_facility_count": 1,
+        "confirmed_facility_count": 2,
         "reported_capacity_available": false,
         "verified_at": "2026-07-15"
       },
       "dart_original_document_inventory": [],
       "intelligence_v2": {
         "company_id": "kumkang-kind",
-        "overall_data_status": "partially_verified",
+        "overall_data_status": "core_verified",
         "domain_statuses": {
           "identity_status": "official_verified",
           "financial_status": "official_verified",
-          "production_status": "partially_verified",
-          "project_status": "internally_confirmed",
+          "production_status": "official_verified",
+          "project_status": "official_verified",
           "technology_status": "internally_confirmed",
           "recent_signal_status": "internally_confirmed"
         },

@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0.0",
-  "generated_at": "2026-07-16T03:44:27.812387+00:00",
+  "generated_at": "2026-07-16T04:20:11.181274+00:00",
   "companies": [
     {
       "company_id": "yuchang-enc",
@@ -5658,7 +5658,7 @@
       "company_id": "kumkang-kind",
       "event_type": "project",
       "event_status": "completed",
-      "title": "남극 장보고과학기지",
+      "title": "장보고 남극기지 모듈러 프로젝트",
       "counterparties": [
         "해양수산부·극지연구소"
       ],
@@ -5671,22 +5671,27 @@
       "completed_at": "2014-02",
       "amount": null,
       "amount_unit": null,
-      "location": "남극",
-      "market_segment": "overseas_research_facility",
-      "method": "steel_volumetric",
+      "location": "Antarctica",
+      "market_segment": "other",
+      "method": "steel_modular",
       "source_ids": [
+        "kumkang_official_home",
         "internal-research-kumkang-20260716"
       ],
       "verification_status": "partially_verified",
       "visibility": "public",
-      "updated_at": "2026-07-16T10:30:00+09:00"
+      "updated_at": "2026-07-15",
+      "aliases": [
+        "남극 장보고과학기지"
+      ],
+      "source_count": 2
     },
     {
       "event_id": "event-kumkang-pyeongchang-2018-office",
       "company_id": "kumkang-kind",
       "event_type": "project",
       "event_status": "completed",
-      "title": "2018 평창동계올림픽 조직위원회 사무소",
+      "title": "2018 평창 조직위원회 사무실 모듈러 프로젝트",
       "counterparties": [
         "평창동계올림픽대회 조직위원회"
       ],
@@ -5699,22 +5704,27 @@
       "completed_at": "2018",
       "amount": null,
       "amount_unit": null,
-      "location": "강원도 평창",
-      "market_segment": "temporary_office",
-      "method": "steel_volumetric",
+      "location": "Pyeongchang, Korea",
+      "market_segment": "office",
+      "method": "steel_modular",
       "source_ids": [
+        "kumkang_official_home",
         "internal-research-kumkang-20260716"
       ],
       "verification_status": "partially_verified",
       "visibility": "public",
-      "updated_at": "2026-07-16T10:30:00+09:00"
+      "updated_at": "2026-07-15",
+      "aliases": [
+        "2018 평창동계올림픽 조직위원회 사무소"
+      ],
+      "source_count": 2
     },
     {
       "event_id": "event-kumkang-goryeong-modular-residential-complex",
       "company_id": "kumkang-kind",
       "event_type": "project",
       "event_status": "completed",
-      "title": "고령군 작은정원 클라인가르텐",
+      "title": "고령군 모듈러 주거단지",
       "counterparties": [
         "경상북도 고령군"
       ],
@@ -5727,15 +5737,20 @@
       "completed_at": "2026-04",
       "amount": null,
       "amount_unit": null,
-      "location": "경상북도 고령군",
-      "market_segment": "rural_residential",
-      "method": "steel_volumetric",
+      "location": "Goryeong, Korea",
+      "market_segment": "public_housing",
+      "method": "steel_modular",
       "source_ids": [
+        "kumkang_official_home",
         "internal-research-kumkang-20260716"
       ],
-      "verification_status": "partially_verified",
+      "verification_status": "official_verified",
       "visibility": "public",
-      "updated_at": "2026-07-16T10:30:00+09:00"
+      "updated_at": "2026-07-15",
+      "aliases": [
+        "고령군 작은정원 클라인가르텐"
+      ],
+      "source_count": 2
     },
     {
       "event_id": "event-kumkang-ongjin-health-centers",
@@ -7659,7 +7674,7 @@
         "event-kumkang-kumho-resort-asan-phase-2"
       ],
       "contradicts": [],
-      "visibility": "internal",
+      "visibility": "public",
       "stale_after": null,
       "status": "active"
     }
@@ -7718,12 +7733,12 @@
     },
     {
       "company_id": "kumkang-kind",
-      "overall_data_status": "partially_verified",
+      "overall_data_status": "core_verified",
       "domain_statuses": {
         "identity_status": "official_verified",
         "financial_status": "official_verified",
-        "production_status": "partially_verified",
-        "project_status": "internally_confirmed",
+        "production_status": "official_verified",
+        "project_status": "official_verified",
         "technology_status": "internally_confirmed",
         "recent_signal_status": "internally_confirmed"
       },
@@ -7732,7 +7747,7 @@
         "project_candidates": 1,
         "partnerships_mou": 0,
         "r_and_d_exhibition": 0,
-        "other_events": 0
+        "other_events": 2
       },
       "article_evidence_count": 0,
       "source_group_counts": {

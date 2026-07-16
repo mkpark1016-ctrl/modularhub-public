@@ -222,6 +222,19 @@ def source_record(curated: dict[str, Any]) -> dict[str, Any]:
         "primary_source": False,
         "confidence": source["confidence"],
         "verification_note": source["note"],
+        "supported_claims": [
+            "facility_name",
+            "location",
+            "ownership_type",
+            "operation_status",
+            "site_area_m2",
+            "building_area_m2",
+            "production_scope",
+            "production_processes",
+            "reported_capacity",
+            "capacity_value",
+        ],
+        "visibility": source.get("visibility", "internal"),
     }
 
 
@@ -375,7 +388,8 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
 
     intelligence = company.setdefault("intelligence_v2", {})
     intelligence["summary_ko"] = profile["summary_ko"]
-    intelligence["overall_data_status"] = "partially_verified"
+    if intelligence.get("overall_data_status") != "core_verified":
+        intelligence["overall_data_status"] = "partially_verified"
     domains = intelligence.setdefault("domain_statuses", {})
     incoming_domains = {
         "identity_status": "partially_verified",
@@ -388,6 +402,44 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
     for field, value in incoming_domains.items():
         domains[field] = stronger_value(domains.get(field), value, VERIFICATION_RANK)
     intelligence["updated_at"] = reviewed_at
+
+    confirmed_statuses = {
+        "confirmed_own_facility",
+        "confirmed_leased_facility",
+        "confirmed_partner_manufacturing",
+    }
+    excluded_statuses = {
+        "not_publicly_confirmed",
+        "research_in_progress",
+        "historical_facility",
+        "planned_facility",
+        "ceased_operation",
+    }
+    confirmed_count = 0
+    for facility in production:
+        status = (
+            facility.get("own_facility_status")
+            or facility.get("verification_status")
+            or facility.get("operation_status")
+        )
+        if status in excluded_statuses:
+            continue
+        if status in confirmed_statuses or (
+            facility.get("facility_name") and facility.get("source_ids")
+        ):
+            confirmed_count += 1
+
+    production_summary = company.setdefault("production_summary", {})
+    production_summary["confirmed_facility_count"] = confirmed_count
+    production_summary["source_ids"] = merge_unique(
+        production_summary.get("source_ids"),
+        [source_id],
+    )
+    production_summary["reported_capacity_available"] = any(
+        facility.get("reported_capacity") is not None
+        or facility.get("capacity_value") is not None
+        for facility in production
+    )
 
     return data
 
@@ -586,7 +638,7 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         "supports": [item["fact_id"] for item in new_facts]
         + [f"event-{project['project_id']}" for project in curated.get("projects", [])],
         "contradicts": [],
-        "visibility": "internal",
+        "visibility": "public",
         "stale_after": None,
         "status": "active",
     }
@@ -598,7 +650,8 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         None,
     )
     if summary:
-        summary["overall_data_status"] = "partially_verified"
+        if summary.get("overall_data_status") != "core_verified":
+            summary["overall_data_status"] = "partially_verified"
         domains = summary.setdefault("domain_statuses", {})
         incoming_domains = {
             "production_status": "partially_verified",
