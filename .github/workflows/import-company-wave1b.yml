@@ -14,6 +14,7 @@ on:
       - scripts/import_curated_company_baseline.py
       - frontend/scripts/test-company-insights.mjs
       - frontend/scripts/test-company-intelligence-v2.mjs
+      - frontend/scripts/test-company-projects.mjs
   pull_request:
     branches:
       - main
@@ -28,6 +29,7 @@ on:
       - scripts/import_curated_company_baseline.py
       - frontend/scripts/test-company-insights.mjs
       - frontend/scripts/test-company-intelligence-v2.mjs
+      - frontend/scripts/test-company-projects.mjs
       - frontend/public/data/companies/companies.json
       - frontend/public/data/companies/company_intelligence_v2.json
   workflow_dispatch:
