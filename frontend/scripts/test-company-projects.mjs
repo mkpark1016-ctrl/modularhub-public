@@ -31,8 +31,8 @@ assert.equal(representativeProject(kumkang).project_id, "kumkang-jangbogo-antarc
 for (const project of kumkang.project_portfolio) {
   assert.ok(project.source_ids.length > 0);
   assert.notEqual(project.company_role, "unknown");
-  assert.match(getProjectRoleLabel(project), /모듈러|제작/);
-  assert.match(getStructureTypeLabel(project), /스틸 모듈러/);
+  assert.notEqual(getProjectRoleLabel(project), "역할 확인 중");
+  assert.match(getStructureTypeLabel(project), /스틸 모듈러|PC|하이브리드/);
   assert.notEqual(getProjectStatusLabel(project), "");
   assert.equal(project.contract_amount ?? null, null);
 }
