@@ -1,4 +1,4 @@
-name: Import company Wave 1B baselines
+name: Import verified competitor baselines
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - data/company-baseline-wave1b
     paths:
       - .github/workflows/import-company-wave1b.yml
-      - config/companies/curated/yuchang-enc.json
-      - config/companies/curated/nrb.json
-      - config/companies/curated/planm.json
-      - scripts/import_company_wave1b.py
-      - scripts/test_company_wave1b.py
-      - scripts/import_curated_company_baseline.py
+      - scripts/verified_companies/**
+      - scripts/verified_import_helpers.py
+      - scripts/verified_company_source.py
+      - scripts/verified_company_apply.py
+      - scripts/import_verified_company_baseline.py
+      - scripts/test_verified_company_baseline.py
       - frontend/scripts/test-company-insights.mjs
       - frontend/scripts/test-company-intelligence-v2.mjs
       - frontend/scripts/test-company-projects.mjs
@@ -21,12 +21,14 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - .github/workflows/import-company-wave1b.yml
-      - config/companies/curated/yuchang-enc.json
-      - config/companies/curated/nrb.json
-      - config/companies/curated/planm.json
-      - scripts/import_company_wave1b.py
-      - scripts/test_company_wave1b.py
-      - scripts/import_curated_company_baseline.py
+      - scripts/verified_companies/**
+      - scripts/verified_import_helpers.py
+      - scripts/verified_company_source.py
+      - scripts/verified_company_apply.py
+      - scripts/import_verified_company_baseline.py
+      - scripts/test_verified_company_baseline.py
+      - scripts/validate_company_universe.py
+      - scripts/test_company_universe.py
       - frontend/scripts/test-company-insights.mjs
       - frontend/scripts/test-company-intelligence-v2.mjs
       - frontend/scripts/test-company-projects.mjs
@@ -38,7 +40,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: import-company-wave1b-${{ github.event.pull_request.number || github.ref }}
+  group: import-verified-companies-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -47,7 +49,7 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Checkout Wave 1B branch
+      - name: Checkout verified baseline branch
         uses: actions/checkout@v4
         with:
           ref: data/company-baseline-wave1b
@@ -56,36 +58,35 @@ jobs:
       - name: Record protected public JSON hashes
         shell: bash
         run: |
-          sha256sum frontend/public/data/business.json frontend/public/data/news.json frontend/public/data/meta.json > /tmp/protected-before.sha256
+          sha256sum \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json \
+            > /tmp/protected-before.sha256
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Validate curated JSON and dry-run import
+      - name: Validate manually verified source modules
         shell: bash
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          for path in (
-              Path('config/companies/curated/yuchang-enc.json'),
-              Path('config/companies/curated/nrb.json'),
-              Path('config/companies/curated/planm.json'),
-          ):
-              json.loads(path.read_text(encoding='utf-8'))
-              print(f'VALID JSON: {path}')
-          PY
-          python scripts/import_company_wave1b.py --check
+          python -m compileall \
+            scripts/verified_companies \
+            scripts/verified_import_helpers.py \
+            scripts/verified_company_source.py \
+            scripts/verified_company_apply.py \
+            scripts/import_verified_company_baseline.py
+          python scripts/import_verified_company_baseline.py --check
 
-      - name: Generate Wave 1B outputs
-        run: python scripts/import_company_wave1b.py
+      - name: Generate verified V1 and V2 outputs
+        run: python scripts/import_verified_company_baseline.py
 
-      - name: Run Python regression tests
+      - name: Run Python regression and contract tests
         shell: bash
         run: |
-          python scripts/test_company_wave1b.py
+          python scripts/test_verified_company_baseline.py
           python scripts/test_company_universe.py
           python scripts/validate_company_universe.py
           python scripts/test_public_json_export.py
@@ -101,7 +102,7 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Run company tests, lint and build
+      - name: Run company tests, lint and production build
         working-directory: frontend
         shell: bash
         run: |
@@ -113,43 +114,57 @@ jobs:
             npm run test:companies-url
             npm run lint
             npm run build
-          } 2>&1 | tee /tmp/company-wave1b-frontend.log
+          } 2>&1 | tee /tmp/verified-company-frontend.log
 
-      - name: Upload frontend diagnostics
+      - name: Upload diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: company-wave1b-frontend-diagnostics
-          path: /tmp/company-wave1b-frontend.log
+          name: verified-company-diagnostics
+          path: /tmp/verified-company-frontend.log
           if-no-files-found: warn
           retention-days: 7
 
-      - name: Verify protected datasets
+      - name: Verify protected datasets and repository safety
         shell: bash
         run: |
           sha256sum -c /tmp/protected-before.sha256
-          git diff --exit-code -- frontend/public/data/business.json frontend/public/data/news.json frontend/public/data/meta.json
+          git diff --exit-code -- \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json
           git diff --check
+          if git ls-files | grep -E '\.pdf$'; then
+            echo 'Raw PDF files must not be committed by this workflow.' >&2
+            exit 1
+          fi
 
       - name: Commit validated generated outputs
-        if: success() && github.actor != 'github-actions[bot]'
+        if: success() && github.event_name == 'push' && github.actor != 'github-actions[bot]'
         shell: bash
         run: |
-          if git diff --quiet -- frontend/public/data/companies/companies.json frontend/public/data/companies/company_intelligence_v2.json; then
-            echo 'Generated outputs already match committed files.'
+          paths=(
+            frontend/public/data/companies/companies.json
+            frontend/public/data/companies/company_intelligence_v2.json
+            scripts/validate_company_universe.py
+            scripts/test_company_universe.py
+          )
+          if git diff --quiet -- "${paths[@]}"; then
+            echo 'Generated outputs and company count contracts already match.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add frontend/public/data/companies/companies.json frontend/public/data/companies/company_intelligence_v2.json
-          git commit -m 'Import YooChang, NRB and PlanM curated baselines'
+          git add "${paths[@]}"
+          git commit -m 'Import manually verified competitor company baselines'
+          git pull --rebase origin data/company-baseline-wave1b
           git push origin HEAD:data/company-baseline-wave1b
 
       - name: Upload generated company outputs
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: company-wave1b-generated-json
+          name: verified-company-generated-json
           path: |
             frontend/public/data/companies/companies.json
             frontend/public/data/companies/company_intelligence_v2.json
