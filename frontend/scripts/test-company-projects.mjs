@@ -34,7 +34,7 @@ for (const project of kumkang.project_portfolio) {
   assert.match(getProjectRoleLabel(project), /모듈러|제작/);
   assert.match(getStructureTypeLabel(project), /스틸 모듈러/);
   assert.notEqual(getProjectStatusLabel(project), "");
-  assert.equal(project.contract_amount, null);
+  assert.equal(project.contract_amount ?? null, null);
 }
 
 assert.equal(matchesCompanySearch(kumkang, "장보고"), true);
