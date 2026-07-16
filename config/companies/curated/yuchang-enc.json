@@ -1,0 +1,98 @@
+{
+  "schema_version": "curated-company-baseline-v1",
+  "company_id": "yuchang-enc",
+  "reviewed_at": "2026-07-16T21:30:00+09:00",
+  "source": {
+    "source_id": "internal-research-yuchang-20260716",
+    "source_type": "internal_research",
+    "source_tier": "D",
+    "verification_status": "internally_confirmed",
+    "confidence": "medium",
+    "visibility": "internal",
+    "title": "유창이앤씨 동종사 조사 구조화 기준선",
+    "note": "기존 동종사 조사와 사용자 확인사항을 구조화한 내부 검토 기준선이다. DART와 회사 공식자료를 우선하며, 공식 원문이 연결되지 않은 프로젝트·전략 신호는 내부 기준 또는 부분 검증으로만 관리한다. 삼성 AI 모듈러 홈 관련 항목은 미체결 협력 논의로 유지하고 프로젝트 실적에 포함하지 않는다."
+  },
+  "company": {
+    "company_name": "유창이앤씨",
+    "company_name_en": "YooChang E&C",
+    "aliases": ["유창이앤씨", "유창E&C", "Yuchang E&C", "YooChang E&C"],
+    "company_type": "specialist_manufacturer",
+    "competitive_role": "direct_competitor",
+    "analysis_tier": "tier_1",
+    "business_status": "active",
+    "modular_methods": ["steel_volumetric"],
+    "target_markets": ["public_housing", "school", "dormitory", "military", "office"],
+    "summary_ko": "공공주택·학교·기숙사 등 공공시장 중심의 스틸 모듈러 제작 경험과 자체 생산 기반을 보유한 직접 경쟁사입니다. DART 재무와 공식 공장 정보는 우선 보존하고, 프로젝트·사업 인수·협력 정보는 공식 원문 여부에 따라 실적과 전략 신호를 분리합니다.",
+    "established_at": "1984-11-16",
+    "listed_at": null,
+    "representative": "조우제·조용재",
+    "employee_count_research_value": null,
+    "employee_count_as_of": null
+  },
+  "modular_revenue_research": [],
+  "production": [
+    {
+      "facility_id": "yuchang-enc-yoochang-factory",
+      "facility_name": "유창이앤씨 모듈러 공장",
+      "facility_aliases": ["YOOCHANG E&C Factory", "유창이앤씨 Factory"],
+      "facility_type": "modular_factory",
+      "modular_system_type": "steel_volumetric",
+      "own_facility_status": "confirmed_own_facility",
+      "ownership_type": "owned",
+      "operator_name": "유창이앤씨",
+      "operation_status": "unknown",
+      "country": "KR",
+      "region": null,
+      "city": null,
+      "address": null,
+      "site_area_m2": 60427.8,
+      "building_area_m2": 25832,
+      "production_scope": ["steel_modular_factory"],
+      "structural_systems": ["steel_modular"],
+      "production_processes": [],
+      "reported_capacity": null,
+      "capacity_unit": null,
+      "capacity_period": null,
+      "capacity_basis": "not_publicly_disclosed",
+      "capacity_status": "unavailable",
+      "verification_status": "partially_verified",
+      "confidence": "medium",
+      "notes": "공장 존재와 면적은 기존 공식자료를 우선한다. 정확한 주소, 공정별 설비와 공식 생산능력은 공개자료에서 확인되지 않아 null로 유지한다."
+    }
+  ],
+  "projects": [
+    {
+      "project_id": "yuchang-seongnam-hadaewon-happy-housing",
+      "project_name": "성남 하대원 경기행복주택",
+      "client": "경기주택도시공사",
+      "ordering_agency": "경기주택도시공사",
+      "location": "경기도 성남시",
+      "building_use": "public_housing",
+      "market_segment": "public_housing",
+      "modular_method": "steel_volumetric",
+      "company_role": "modular_manufacturer",
+      "project_status": "completed",
+      "completion_date": "2019",
+      "project_credit": true,
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "summary": "공공주택형 스틸 모듈러 적용 사례로 내부 조사 기준에 포함한다. 공식 발주·계약·준공 원문은 후속 검증 대상으로 유지한다."
+    }
+  ],
+  "technology": [],
+  "strategy_events": [
+    {
+      "event_id": "event-yuchang-poscoac-modular-business-transfer",
+      "event_type": "acquisition",
+      "event_status": "unconfirmed",
+      "title": "포스코A&C 모듈러 사업·자산 인수 관련 확장",
+      "announced_at": "2025",
+      "location": "대한민국",
+      "method": "steel_volumetric",
+      "project_credit": false,
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "summary": "생산 기반과 공공 모듈러 사업 확장을 위한 사업·자산 인수 관련 내부 조사 신호이며, 프로젝트 수주 실적으로 집계하지 않는다."
+    }
+  ]
+}
