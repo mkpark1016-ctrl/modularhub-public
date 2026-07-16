@@ -1,0 +1,64 @@
+{
+  "schema_version": "curated-company-baseline-v1",
+  "company_id": "planm",
+  "reviewed_at": "2026-07-16T21:30:00+09:00",
+  "source": {
+    "source_id": "internal-research-planm-20260716",
+    "source_type": "internal_research",
+    "source_tier": "D",
+    "verification_status": "internally_confirmed",
+    "confidence": "medium",
+    "visibility": "internal",
+    "title": "플랜엠 동종사 조사 구조화 기준선",
+    "note": "기존 경쟁사 조사에서 확인한 시장 포지션과 사업 확장 방향을 구조화한 내부 검토 기준선이다. DART 재무는 우선 보존하고, 자체 생산시설·프로젝트·자금조달·해외·고층화·데이터센터 관련 정보는 공식 원문 여부에 따라 전략 신호와 조사 공백으로 분리한다."
+  },
+  "company": {
+    "company_name": "플랜엠",
+    "company_name_en": "PlanM",
+    "aliases": ["플랜엠", "Plan M", "PlanM"],
+    "company_type": "modular_integrator",
+    "competitive_role": "direct_competitor",
+    "analysis_tier": "tier_1",
+    "business_status": "active",
+    "modular_methods": ["steel_volumetric"],
+    "target_markets": ["military", "school", "dormitory", "public_housing", "data_center", "overseas"],
+    "summary_ko": "군숙소·학교·기숙사 등 공공시장 기반에서 해외·고층화·데이터센터로 확장을 추진하는 스틸 모듈러 통합기업입니다. DART 재무는 공식값을 유지하고, 자체 생산시설과 개별 프로젝트는 공개 원문이 확인되기 전까지 검증 실적으로 집계하지 않습니다.",
+    "established_at": null,
+    "listed_at": null,
+    "representative": null,
+    "employee_count_research_value": null,
+    "employee_count_as_of": null
+  },
+  "modular_revenue_research": [],
+  "production": [],
+  "projects": [],
+  "technology": [],
+  "strategy_events": [
+    {
+      "event_id": "event-planm-capital-and-growth-strategy",
+      "event_type": "business_strategy",
+      "event_status": "planned",
+      "title": "대규모 자금조달과 사업 확장 전략",
+      "announced_at": "2026",
+      "location": "대한민국",
+      "method": "steel_volumetric",
+      "project_credit": false,
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "summary": "생산·기술·해외사업 확대를 위한 대규모 자금조달 신호로 관리하며, 확정 투자금액이나 집행 결과는 공식 원문 확인 전 수치화하지 않는다."
+    },
+    {
+      "event_id": "event-planm-overseas-highrise-datacenter-strategy",
+      "event_type": "business_strategy",
+      "event_status": "planned",
+      "title": "해외·고층화·모듈러 데이터센터 확장 전략",
+      "announced_at": "2026",
+      "location": "국내외",
+      "method": "steel_volumetric",
+      "project_credit": false,
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "summary": "기존 군숙소·학교·기숙사 중심 시장에서 해외, 고층 모듈러, 데이터센터 적용으로 확장하려는 경쟁 신호다. 실제 계약·수주는 별도 공식 근거가 있을 때만 프로젝트로 승격한다."
+    }
+  ]
+}
