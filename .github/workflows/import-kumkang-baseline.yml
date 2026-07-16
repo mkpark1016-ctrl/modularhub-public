@@ -79,11 +79,41 @@ jobs:
           PY
 
       - name: Run company and public-data validation
+        id: backend_tests
+        continue-on-error: true
         shell: bash
         run: |
-          python scripts/test_company_universe.py
-          python scripts/validate_company_universe.py
-          python scripts/test_public_json_export.py
+          set +e
+          overall=0
+          : > /tmp/kumkang-authority-backend.log
+          for command in \
+            "python scripts/test_company_universe.py" \
+            "python scripts/validate_company_universe.py" \
+            "python scripts/test_public_json_export.py"
+          do
+            echo "===== $command =====" | tee -a /tmp/kumkang-authority-backend.log
+            bash -lc "$command" 2>&1 | tee -a /tmp/kumkang-authority-backend.log
+            status=${PIPESTATUS[0]}
+            echo "exit_status=$status" | tee -a /tmp/kumkang-authority-backend.log
+            if [ "$status" -ne 0 ]; then
+              overall=1
+            fi
+          done
+          echo "status=$overall" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload backend validation failure report
+        if: steps.backend_tests.outputs.status != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumkang-authority-backend-validation
+          path: /tmp/kumkang-authority-backend.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Stop after backend validation failure
+        if: steps.backend_tests.outputs.status != '0'
+        run: exit 1
 
       - name: Verify protected public JSON files are unchanged
         shell: bash
@@ -112,15 +142,23 @@ jobs:
         shell: bash
         run: |
           set +e
-          {
-            npm run test:companies
-            npm run test:companies-v2
-            npm run test:companies-projects
-            npm run test:companies-url
-          } > /tmp/kumkang-authority-frontend.log 2>&1
-          status=$?
-          cat /tmp/kumkang-authority-frontend.log
-          echo "status=$status" >> "$GITHUB_OUTPUT"
+          overall=0
+          : > /tmp/kumkang-authority-frontend.log
+          for command in \
+            "npm run test:companies" \
+            "npm run test:companies-v2" \
+            "npm run test:companies-projects" \
+            "npm run test:companies-url"
+          do
+            echo "===== $command =====" | tee -a /tmp/kumkang-authority-frontend.log
+            bash -lc "$command" 2>&1 | tee -a /tmp/kumkang-authority-frontend.log
+            status=${PIPESTATUS[0]}
+            echo "exit_status=$status" | tee -a /tmp/kumkang-authority-frontend.log
+            if [ "$status" -ne 0 ]; then
+              overall=1
+            fi
+          done
+          echo "status=$overall" >> "$GITHUB_OUTPUT"
           exit 0
 
       - name: Upload frontend validation failure report
