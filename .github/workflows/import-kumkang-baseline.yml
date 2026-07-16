@@ -212,13 +212,43 @@ jobs:
         run: npm ci
 
       - name: Run company frontend tests
+        id: company_frontend_tests
+        continue-on-error: true
         working-directory: frontend
         shell: bash
         run: |
-          npm run test:companies
-          npm run test:companies-v2
-          npm run test:companies-projects
-          npm run test:companies-url
+          set +e
+          overall=0
+          : > /tmp/kumkang-company-frontend-tests.log
+          for command in \
+            "npm run test:companies" \
+            "npm run test:companies-v2" \
+            "npm run test:companies-projects" \
+            "npm run test:companies-url"
+          do
+            echo "===== $command =====" | tee -a /tmp/kumkang-company-frontend-tests.log
+            bash -lc "$command" 2>&1 | tee -a /tmp/kumkang-company-frontend-tests.log
+            status=${PIPESTATUS[0]}
+            echo "exit_status=$status" | tee -a /tmp/kumkang-company-frontend-tests.log
+            if [ "$status" -ne 0 ]; then
+              overall=1
+            fi
+          done
+          echo "status=$overall" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload company frontend diagnostics
+        if: steps.company_frontend_tests.outputs.status != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumkang-company-frontend-tests
+          path: /tmp/kumkang-company-frontend-tests.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Stop after company frontend test failure
+        if: steps.company_frontend_tests.outputs.status != '0'
+        run: exit 1
 
       - name: Run lint and production build
         working-directory: frontend
