@@ -9,18 +9,30 @@ on:
       - config/companies/curated/kumkang-kind.json
       - scripts/import_curated_company_baseline.py
       - scripts/test_curated_company_import.py
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - .github/workflows/import-kumkang-baseline.yml
+      - config/companies/curated/kumkang-kind.json
+      - scripts/import_curated_company_baseline.py
+      - scripts/test_curated_company_import.py
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: import-kumkang-baseline-${{ github.ref }}
+  group: import-kumkang-baseline-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
   import-and-validate:
-    if: github.ref == 'refs/heads/data/company-baseline-pilot-kumkang'
+    if: github.event_name != 'pull_request' || github.head_ref == 'data/company-baseline-pilot-kumkang'
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
