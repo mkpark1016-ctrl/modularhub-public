@@ -45,158 +45,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Apply authority-aware importer compatibility
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          path = Path('scripts/import_curated_company_baseline.py')
-          text = path.read_text(encoding='utf-8')
-
-          technology_old = '''    technology = company.setdefault("technology", {})
-              patents = technology.setdefault("patents", [])
-              for patent in curated.get("technology", {}).get("patents", []):
-          '''.replace('              ', '    ')
-          technology_new = '''    technology = company.get("technology")
-              if technology is None:
-                  technology = {}
-                  company["technology"] = technology
-              elif not isinstance(technology, dict):
-                  raise RuntimeError("V1 company technology must be an object")
-              patents = technology.setdefault("patents", [])
-              curated_technology = curated.get("technology", [])
-              if isinstance(curated_technology, dict):
-                  technology_records = curated_technology.get("patents", [])
-              elif isinstance(curated_technology, list):
-                  technology_records = curated_technology
-              else:
-                  raise RuntimeError("Curated technology must be a list or object")
-              for patent in technology_records:
-          '''.replace('              ', '    ')
-          if technology_old in text:
-              text = text.replace(technology_old, technology_new, 1)
-
-          if 'def authority_upsert(' not in text:
-              anchor = '''def upsert(items: list[dict[str, Any]], key: str, value: dict[str, Any]) -> None:
-              target = value.get(key)
-              for index, item in enumerate(items):
-                  if item.get(key) == target:
-                      merged = copy.deepcopy(item)
-                      merged.update(copy.deepcopy(value))
-                      items[index] = merged
-                      return
-              items.append(copy.deepcopy(value))
-          '''.replace('              ', '    ')
-              helpers = '''
-
-          CONFIDENCE_RANK = {"unknown": 0, "low": 1, "medium": 2, "high": 3}
-          VERIFICATION_RANK = {
-              "unknown": 0,
-              "not_confirmed": 0,
-              "unverified": 1,
-              "internally_confirmed": 2,
-              "partially_verified": 3,
-              "verified": 4,
-              "official_verified": 5,
-          }
-          LIST_MERGE_FIELDS = {
-              "source_ids", "aliases", "facility_aliases", "counterparties",
-              "production_scope", "structural_systems", "target_markets", "modular_methods",
-          }
-          MISSING_TEXT = {"", "unknown", "unconfirmed", "not_confirmed", "collecting", "research_in_progress"}
-
-
-          def is_missing(value: Any) -> bool:
-              if value is None or value == [] or value == {}:
-                  return True
-              return isinstance(value, str) and value.strip().lower() in MISSING_TEXT
-
-
-          def merge_unique(existing: Any, incoming: Any) -> list[Any]:
-              result: list[Any] = []
-              for collection in (existing, incoming):
-                  if collection is None:
-                      continue
-                  values = collection if isinstance(collection, list) else [collection]
-                  for value in values:
-                      if value not in result:
-                          result.append(copy.deepcopy(value))
-              return result
-
-
-          def stronger_value(existing: Any, incoming: Any, ranking: dict[str, int]) -> Any:
-              existing_key = str(existing or "unknown").lower()
-              incoming_key = str(incoming or "unknown").lower()
-              return incoming if ranking.get(incoming_key, 0) > ranking.get(existing_key, 0) else existing
-
-
-          def has_authoritative_source(item: dict[str, Any]) -> bool:
-              source_ids = [str(value).lower() for value in item.get("source_ids", [])]
-              return (
-                  int(item.get("primary_source_count") or 0) > 0
-                  or any("official" in value for value in source_ids)
-                  or str(item.get("evidence_type") or "").lower().startswith("official")
-                  or str(item.get("verification_status") or "").lower() == "official_verified"
-              )
-
-
-          def authority_merge(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
-              result = copy.deepcopy(existing)
-              authoritative = has_authoritative_source(existing)
-              for field, value in incoming.items():
-                  current = result.get(field)
-                  if field in LIST_MERGE_FIELDS:
-                      result[field] = merge_unique(current, value)
-                  elif field in {"confidence", "data_confidence"}:
-                      result[field] = stronger_value(current, value, CONFIDENCE_RANK)
-                  elif field in {"verification_status", "evidence_status"}:
-                      result[field] = stronger_value(current, value, VERIFICATION_RANK)
-                  elif field in {"source_count", "primary_source_count"}:
-                      result[field] = max(int(current or 0), int(value or 0))
-                  elif field == "project_credit":
-                      result[field] = bool(current) or bool(value)
-                  elif is_missing(current) and not is_missing(value):
-                      result[field] = copy.deepcopy(value)
-                  elif not authoritative and not is_missing(value):
-                      result[field] = copy.deepcopy(value)
-                  elif authoritative and field in {"project_name", "facility_name"} and value != current:
-                      alias_field = "aliases" if field == "project_name" else "facility_aliases"
-                      result[alias_field] = merge_unique(result.get(alias_field), [value])
-                  elif authoritative and field in {"summary", "notes", "project_summary", "role_detail"} and not is_missing(value):
-                      result.setdefault("internal_research_note", value)
-
-              result["source_ids"] = merge_unique(existing.get("source_ids"), incoming.get("source_ids"))
-              if "source_count" in result or result.get("source_ids"):
-                  result["source_count"] = max(int(result.get("source_count") or 0), len(result.get("source_ids", [])))
-              return result
-
-
-          def authority_upsert(items: list[dict[str, Any]], key: str, value: dict[str, Any]) -> None:
-              target = value.get(key)
-              for index, item in enumerate(items):
-                  if item.get(key) == target:
-                      items[index] = authority_merge(item, value)
-                      return
-              items.append(copy.deepcopy(value))
-          '''.replace('          ', '')
-              if anchor not in text:
-                  raise SystemExit('Generic upsert anchor not found; refusing unsafe authority patch.')
-              text = text.replace(anchor, anchor + helpers, 1)
-
-          replacements = {
-              'upsert(production, "facility_id", normalized)': 'authority_upsert(production, "facility_id", normalized)',
-              'upsert(projects, "project_id", normalize_project(project, company_id, source_id, reviewed_at))': 'authority_upsert(projects, "project_id", normalize_project(project, company_id, source_id, reviewed_at))',
-              'upsert(patents, "technology_id", normalized)': 'authority_upsert(patents, "technology_id", normalized)',
-              'upsert(events, "event_id", event)': 'authority_upsert(events, "event_id", event)',
-          }
-          for old, new in replacements.items():
-              text = text.replace(old, new)
-
-          path.write_text(text, encoding='utf-8')
-          print('Authority-aware curated importer is ready.')
-          PY
-
       - name: Record protected public JSON hashes
         shell: bash
         run: |
@@ -279,7 +127,6 @@ jobs:
           python - <<'PY'
           import subprocess
           allowed = {
-              'scripts/import_curated_company_baseline.py',
               'frontend/public/data/companies/companies.json',
               'frontend/public/data/companies/company_intelligence_v2.json',
           }
@@ -298,13 +145,12 @@ jobs:
           print('Changed files:', changed)
           PY
 
-      - name: Commit corrected importer and company JSON files
+      - name: Commit corrected company JSON files
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
-            scripts/import_curated_company_baseline.py \
             frontend/public/data/companies/companies.json \
             frontend/public/data/companies/company_intelligence_v2.json
           if git diff --cached --quiet; then
