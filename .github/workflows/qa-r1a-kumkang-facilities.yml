@@ -1,0 +1,181 @@
+name: QA-R1A Kumkang facility identity
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+    paths:
+      - .github/workflows/qa-r1a-kumkang-facilities.yml
+      - config/companies/curated/kumkang-kind-qa-r1a.json
+      - scripts/apply_kumkang_facility_qa_r1a.py
+      - frontend/scripts/test-company-facility-qa-r1a.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qa-r1a-kumkang-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  normalize-test-and-commit:
+    if: github.event_name != 'pull_request' || github.head_ref == 'data/company-baseline-pilot-kumkang'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout pilot branch
+        uses: actions/checkout@v4
+        with:
+          ref: data/company-baseline-pilot-kumkang
+          fetch-depth: 0
+
+      - name: Record protected JSON hashes
+        shell: bash
+        run: |
+          sha256sum \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json \
+            > /tmp/qa-r1a-protected-before.sha256
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Apply QA-R1A facility normalization
+        run: python scripts/apply_kumkang_facility_qa_r1a.py
+
+      - name: Validate JSON syntax and company contracts
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in (
+              Path('frontend/public/data/companies/companies.json'),
+              Path('frontend/public/data/companies/company_intelligence_v2.json'),
+              Path('config/companies/curated/kumkang-kind-qa-r1a.json'),
+          ):
+              with path.open(encoding='utf-8') as handle:
+                  json.load(handle)
+              print(f'VALID JSON: {path}')
+          PY
+          python scripts/test_company_universe.py
+          python scripts/validate_company_universe.py
+          python scripts/test_public_json_export.py
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run QA-R1A and existing company tests
+        id: frontend_tests
+        continue-on-error: true
+        working-directory: frontend
+        shell: bash
+        run: |
+          set +e
+          overall=0
+          : > /tmp/qa-r1a-tests.log
+          for command in \
+            "node scripts/test-company-facility-qa-r1a.mjs" \
+            "npm run test:companies" \
+            "npm run test:companies-v2" \
+            "npm run test:companies-projects" \
+            "npm run test:companies-url" \
+            "npm run lint" \
+            "npm run build"
+          do
+            echo "===== $command =====" | tee -a /tmp/qa-r1a-tests.log
+            bash -lc "$command" 2>&1 | tee -a /tmp/qa-r1a-tests.log
+            status=${PIPESTATUS[0]}
+            echo "exit_status=$status" | tee -a /tmp/qa-r1a-tests.log
+            if [ "$status" -ne 0 ]; then
+              overall=1
+            fi
+          done
+          echo "status=$overall" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload QA-R1A diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-r1a-diagnostics
+          path: /tmp/qa-r1a-tests.log
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Stop after frontend test failure
+        if: steps.frontend_tests.outputs.status != '0'
+        run: exit 1
+
+      - name: Verify protected datasets and secret safety
+        shell: bash
+        run: |
+          sha256sum -c /tmp/qa-r1a-protected-before.sha256
+          git diff --exit-code -- \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json
+          if grep -R -n -E '(OPEN_DART_API_KEY|OPENDART_API_KEY|DART_API_KEY|NAVER_CLIENT_SECRET|DATA_GO_KR_SERVICE_KEY)=' \
+            config/companies/curated/kumkang-kind-qa-r1a.json \
+            scripts/apply_kumkang_facility_qa_r1a.py \
+            frontend/src/App.jsx \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json; then
+            echo 'Secret-like assignment found.' >&2
+            exit 1
+          fi
+
+      - name: Ensure only intended files changed
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+          allowed = {
+              'frontend/src/App.jsx',
+              'frontend/public/data/companies/companies.json',
+              'frontend/public/data/companies/company_intelligence_v2.json',
+          }
+          output = subprocess.check_output(['git', 'status', '--porcelain'], text=True)
+          changed = []
+          for line in output.splitlines():
+              if not line.strip():
+                  continue
+              path = line[3:]
+              if ' -> ' in path:
+                  path = path.split(' -> ', 1)[1]
+              changed.append(path)
+          unexpected = sorted(set(changed) - allowed)
+          if unexpected:
+              raise SystemExit(f'Unexpected changed files: {unexpected}')
+          print('Intended changed files:', changed)
+          PY
+
+      - name: Commit and push QA-R1A results
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            frontend/src/App.jsx \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json
+          if git diff --cached --quiet; then
+            echo 'QA-R1A output already normalized; no commit required.'
+          else
+            git commit -m 'Fix Kumkang facility identity and evidence labels'
+            git push origin HEAD:data/company-baseline-pilot-kumkang
+          fi

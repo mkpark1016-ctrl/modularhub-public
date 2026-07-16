@@ -1,0 +1,47 @@
+{
+  "schema_version": "kumkang-facility-qa-r1a-v1",
+  "company_id": "kumkang-kind",
+  "reviewed_at": "2026-07-16T20:00:00+09:00",
+  "purpose": "금강공업 생산시설의 표시명·별칭·주소·근거 수준을 분리해 보은 제1공장과 제2공장의 중복 인식을 방지한다.",
+  "facilities": [
+    {
+      "facility_id": "kumkang-kind-jincheon-factory",
+      "display_name": "진천공장",
+      "facility_aliases": [
+        "금강공업 진천공장"
+      ],
+      "address": null,
+      "verification_status": "internally_confirmed",
+      "data_confidence": "low",
+      "verification_basis_label": "내부 조사 기준",
+      "identity_note": "시설 존재와 부지면적은 내부 조사자료 기준이며, 공식 주소와 생산능력은 추가 확인이 필요합니다."
+    },
+    {
+      "facility_id": "kumkang-kind-boeun-factory",
+      "display_name": "보은 제1공장",
+      "facility_aliases": [
+        "보은공장",
+        "보은1공장",
+        "보은 제1공장"
+      ],
+      "address": "충청북도 보은군 삼승면 남부로 3749-11",
+      "verification_status": "partially_verified",
+      "data_confidence": "medium",
+      "verification_basis_label": "공식 위치 확인 · 부지면적 내부 조사",
+      "identity_note": "공식 사이트의 ‘보은공장’과 동일 시설이며, 보은 제2공장과는 별도 주소입니다."
+    },
+    {
+      "facility_id": "kumkang-kind-boeun-2-factory",
+      "display_name": "보은 제2공장",
+      "facility_aliases": [
+        "보은2공장",
+        "보은 제2공장"
+      ],
+      "address": "충청북도 보은군 삼승면 남부로 3749-6",
+      "verification_status": "partially_verified",
+      "data_confidence": "medium",
+      "verification_basis_label": "공식 위치 확인 · 부지면적·확장계획 내부 조사",
+      "identity_note": "보은 제1공장과 별도 주소의 시설입니다. 생산능력 수치는 공개자료에서 확인되지 않았습니다."
+    }
+  ]
+}

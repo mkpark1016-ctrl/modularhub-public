@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0.0",
-  "generated_at": "2026-07-15T13:28:45.194500+00:00",
+  "generated_at": "2026-07-16T04:20:11.181274+00:00",
   "companies": [
     {
       "company_id": "yuchang-enc",
@@ -5400,6 +5400,222 @@
       "source_ids": [],
       "visibility": "public",
       "updated_at": "2026-07-15"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-organization-established_at-current",
+      "company_id": "kumkang-kind",
+      "domain": "organization",
+      "field": "established_at",
+      "value": "1979-08-08",
+      "unit": null,
+      "period": null,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-organization-listed_at-current",
+      "company_id": "kumkang-kind",
+      "domain": "organization",
+      "field": "listed_at",
+      "value": "1988-09-10",
+      "unit": null,
+      "period": null,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-organization-representative-current",
+      "company_id": "kumkang-kind",
+      "domain": "organization",
+      "field": "representative",
+      "value": "전호준",
+      "unit": null,
+      "period": null,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-organization-employee_count-2025",
+      "company_id": "kumkang-kind",
+      "domain": "organization",
+      "field": "employee_count",
+      "value": 365,
+      "unit": "person",
+      "period": 2025,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-financial-modular_revenue_research-2023",
+      "company_id": "kumkang-kind",
+      "domain": "financial",
+      "field": "modular_revenue_research",
+      "value": 8800000000,
+      "unit": "KRW",
+      "period": 2023,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-financial-modular_revenue_research-2024",
+      "company_id": "kumkang-kind",
+      "domain": "financial",
+      "field": "modular_revenue_research",
+      "value": 7500000000,
+      "unit": "KRW",
+      "period": 2024,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-financial-modular_revenue_research-2025",
+      "company_id": "kumkang-kind",
+      "domain": "financial",
+      "field": "modular_revenue_research",
+      "value": 13800000000,
+      "unit": "KRW",
+      "period": 2025,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-production-facility_kumkang-kind-jincheon-factory-current",
+      "company_id": "kumkang-kind",
+      "domain": "production",
+      "field": "facility_kumkang-kind-jincheon-factory",
+      "value": {
+        "facility_name": "진천공장",
+        "site_area_m2": 61680,
+        "capacity_value": null,
+        "capacity_status": "unavailable",
+        "operation_status": "active",
+        "display_name": "진천공장",
+        "facility_aliases": [
+          "금강공업 진천공장",
+          "진천공장"
+        ],
+        "address": null,
+        "verification_basis_label": "내부 조사 기준",
+        "identity_note": "시설 존재와 부지면적은 내부 조사자료 기준이며, 공식 주소와 생산능력은 추가 확인이 필요합니다.",
+        "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
+      },
+      "unit": null,
+      "period": null,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "internally_confirmed",
+      "confidence": "low",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T20:00:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-production-facility_kumkang-kind-boeun-factory-current",
+      "company_id": "kumkang-kind",
+      "domain": "production",
+      "field": "facility_kumkang-kind-boeun-factory",
+      "value": {
+        "facility_name": "보은 제1공장",
+        "site_area_m2": 27107,
+        "capacity_value": null,
+        "capacity_status": "unavailable",
+        "operation_status": "active",
+        "display_name": "보은 제1공장",
+        "facility_aliases": [
+          "보은공장",
+          "보은1공장",
+          "보은 제1공장"
+        ],
+        "address": "충청북도 보은군 삼승면 남부로 3749-11",
+        "verification_basis_label": "공식 위치 확인 · 부지면적 내부 조사",
+        "identity_note": "공식 사이트의 ‘보은공장’과 동일 시설이며, 보은 제2공장과는 별도 주소입니다.",
+        "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
+      },
+      "unit": null,
+      "period": null,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "partially_verified",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T20:00:00+09:00"
+    },
+    {
+      "fact_id": "fact-kumkang-kind-production-facility_kumkang-kind-boeun-2-factory-current",
+      "company_id": "kumkang-kind",
+      "domain": "production",
+      "field": "facility_kumkang-kind-boeun-2-factory",
+      "value": {
+        "facility_name": "보은 제2공장",
+        "site_area_m2": 71405,
+        "capacity_value": null,
+        "capacity_status": "unavailable",
+        "operation_status": "under_expansion",
+        "display_name": "보은 제2공장",
+        "facility_aliases": [
+          "보은2공장",
+          "보은 제2공장"
+        ],
+        "address": "충청북도 보은군 삼승면 남부로 3749-6",
+        "verification_basis_label": "공식 위치 확인 · 부지면적·확장계획 내부 조사",
+        "identity_note": "보은 제1공장과 별도 주소의 시설입니다. 생산능력 수치는 공개자료에서 확인되지 않았습니다.",
+        "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
+      },
+      "unit": null,
+      "period": null,
+      "as_of": "2026-07-16T10:30:00+09:00",
+      "verification_status": "partially_verified",
+      "confidence": "medium",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T20:00:00+09:00"
     }
   ],
   "events": [
@@ -5469,53 +5685,67 @@
       "event_id": "event-kumkang-jangbogo-antarctic-station",
       "company_id": "kumkang-kind",
       "event_type": "project",
-      "event_status": "unconfirmed",
+      "event_status": "completed",
       "title": "장보고 남극기지 모듈러 프로젝트",
-      "counterparties": [],
-      "client": null,
+      "counterparties": [
+        "해양수산부·극지연구소"
+      ],
+      "client": "해양수산부·극지연구소",
       "project_role": "modular_manufacturer",
-      "project_credit": false,
+      "project_credit": true,
       "announced_at": null,
       "contracted_at": null,
       "started_at": null,
-      "completed_at": null,
+      "completed_at": "2014-02",
       "amount": null,
       "amount_unit": null,
       "location": "Antarctica",
       "market_segment": "other",
       "method": "steel_modular",
       "source_ids": [
-        "kumkang_official_home"
+        "kumkang_official_home",
+        "internal-research-kumkang-20260716"
       ],
       "verification_status": "partially_verified",
       "visibility": "public",
-      "updated_at": "2026-07-15"
+      "updated_at": "2026-07-15",
+      "aliases": [
+        "남극 장보고과학기지"
+      ],
+      "source_count": 2
     },
     {
       "event_id": "event-kumkang-pyeongchang-2018-office",
       "company_id": "kumkang-kind",
       "event_type": "project",
-      "event_status": "unconfirmed",
+      "event_status": "completed",
       "title": "2018 평창 조직위원회 사무실 모듈러 프로젝트",
-      "counterparties": [],
-      "client": null,
+      "counterparties": [
+        "평창동계올림픽대회 조직위원회"
+      ],
+      "client": "평창동계올림픽대회 조직위원회",
       "project_role": "modular_manufacturer",
-      "project_credit": false,
+      "project_credit": true,
       "announced_at": null,
       "contracted_at": null,
       "started_at": null,
-      "completed_at": null,
+      "completed_at": "2018",
       "amount": null,
       "amount_unit": null,
       "location": "Pyeongchang, Korea",
       "market_segment": "office",
       "method": "steel_modular",
       "source_ids": [
-        "kumkang_official_home"
+        "kumkang_official_home",
+        "internal-research-kumkang-20260716"
       ],
       "verification_status": "partially_verified",
       "visibility": "public",
-      "updated_at": "2026-07-15"
+      "updated_at": "2026-07-15",
+      "aliases": [
+        "2018 평창동계올림픽 조직위원회 사무소"
+      ],
+      "source_count": 2
     },
     {
       "event_id": "event-kumkang-goryeong-modular-residential-complex",
@@ -5523,25 +5753,280 @@
       "event_type": "project",
       "event_status": "completed",
       "title": "고령군 모듈러 주거단지",
-      "counterparties": [],
-      "client": null,
+      "counterparties": [
+        "경상북도 고령군"
+      ],
+      "client": "경상북도 고령군",
       "project_role": "modular_manufacturer",
       "project_credit": true,
       "announced_at": null,
       "contracted_at": null,
       "started_at": null,
-      "completed_at": null,
+      "completed_at": "2026-04",
       "amount": null,
       "amount_unit": null,
       "location": "Goryeong, Korea",
       "market_segment": "public_housing",
       "method": "steel_modular",
       "source_ids": [
-        "kumkang_official_home"
+        "kumkang_official_home",
+        "internal-research-kumkang-20260716"
       ],
       "verification_status": "official_verified",
       "visibility": "public",
-      "updated_at": "2026-07-15"
+      "updated_at": "2026-07-15",
+      "aliases": [
+        "고령군 작은정원 클라인가르텐"
+      ],
+      "source_count": 2
+    },
+    {
+      "event_id": "event-kumkang-ongjin-health-centers",
+      "company_id": "kumkang-kind",
+      "event_type": "project",
+      "event_status": "completed",
+      "title": "인천 옹진군 북도·자월도 보건지소",
+      "counterparties": [
+        "인천광역시 옹진군"
+      ],
+      "client": "인천광역시 옹진군",
+      "project_role": "modular_manufacturer",
+      "project_credit": true,
+      "announced_at": null,
+      "contracted_at": null,
+      "started_at": "2019-10",
+      "completed_at": "2020-05",
+      "amount": null,
+      "amount_unit": null,
+      "location": "인천광역시 옹진군",
+      "market_segment": "public_healthcare",
+      "method": "steel_volumetric",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "verification_status": "internally_confirmed",
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-cheonan-dujeong-happy-housing",
+      "company_id": "kumkang-kind",
+      "event_type": "project",
+      "event_status": "completed",
+      "title": "천안 두정 행복주택",
+      "counterparties": [
+        "LH·국토교통부 R&D"
+      ],
+      "client": "LH·국토교통부 R&D",
+      "project_role": "modular_manufacturer",
+      "project_credit": true,
+      "announced_at": null,
+      "contracted_at": null,
+      "started_at": null,
+      "completed_at": "2019-08",
+      "amount": null,
+      "amount_unit": null,
+      "location": "충청남도 천안시",
+      "market_segment": "public_housing",
+      "method": "steel_volumetric",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "verification_status": "internally_confirmed",
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-yongin-yeongdeok-happy-housing",
+      "company_id": "kumkang-kind",
+      "event_type": "project",
+      "event_status": "completed",
+      "title": "용인 영덕 경기행복주택",
+      "counterparties": [
+        "경기주택도시공사"
+      ],
+      "client": "경기주택도시공사",
+      "project_role": "modular_manufacturer",
+      "project_credit": true,
+      "announced_at": "2021-05",
+      "contracted_at": null,
+      "started_at": null,
+      "completed_at": "2023-05",
+      "amount": null,
+      "amount_unit": null,
+      "location": "경기도 용인시",
+      "market_segment": "public_housing",
+      "method": "steel_volumetric",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "verification_status": "internally_confirmed",
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-seomyeon-mok-rooftop",
+      "company_id": "kumkang-kind",
+      "event_type": "project",
+      "event_status": "unconfirmed",
+      "title": "서면 동원시티비스타 옥탑 모듈러",
+      "counterparties": [
+        "동원개발"
+      ],
+      "client": "동원개발",
+      "project_role": "technology_provider",
+      "project_credit": false,
+      "announced_at": "2023",
+      "contracted_at": null,
+      "started_at": null,
+      "completed_at": null,
+      "amount": null,
+      "amount_unit": null,
+      "location": "부산광역시 서면",
+      "market_segment": "rooftop_structure",
+      "method": "hybrid",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "verification_status": "internally_confirmed",
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-gimhwa-technical-high-dormitory",
+      "company_id": "kumkang-kind",
+      "event_type": "project",
+      "event_status": "contract_signed",
+      "title": "김화공업고등학교 생활관",
+      "counterparties": [
+        "강원특별자치도교육청"
+      ],
+      "client": "강원특별자치도교육청",
+      "project_role": "modular_manufacturer",
+      "project_credit": true,
+      "announced_at": null,
+      "contracted_at": "2025-05",
+      "started_at": null,
+      "completed_at": null,
+      "amount": null,
+      "amount_unit": null,
+      "location": "강원특별자치도",
+      "market_segment": "school_dormitory",
+      "method": "steel_volumetric",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "verification_status": "internally_confirmed",
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-military-officer-housing-2025",
+      "company_id": "kumkang-kind",
+      "event_type": "project",
+      "event_status": "contract_signed",
+      "title": "군부대 모듈러 간부숙소",
+      "counterparties": [
+        "국방시설본부"
+      ],
+      "client": "국방시설본부",
+      "project_role": "modular_manufacturer",
+      "project_credit": true,
+      "announced_at": null,
+      "contracted_at": "2025-06",
+      "started_at": null,
+      "completed_at": null,
+      "amount": null,
+      "amount_unit": null,
+      "location": null,
+      "market_segment": "military_housing",
+      "method": "steel_volumetric",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "verification_status": "internally_confirmed",
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-kumho-resort-asan-phase-2",
+      "company_id": "kumkang-kind",
+      "event_type": "project",
+      "event_status": "contract_signed",
+      "title": "금호리조트 아산 2차 개발사업",
+      "counterparties": [
+        "금호리조트"
+      ],
+      "client": "금호리조트",
+      "project_role": "modular_manufacturer",
+      "project_credit": true,
+      "announced_at": null,
+      "contracted_at": "2026-01",
+      "started_at": null,
+      "completed_at": null,
+      "amount": null,
+      "amount_unit": null,
+      "location": "충청남도 아산시",
+      "market_segment": "private_hotel_resort",
+      "method": "steel_volumetric",
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "verification_status": "internally_confirmed",
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-boeun-1-acquisition-2025",
+      "event_type": "facility_investment",
+      "event_status": "completed",
+      "title": "보은 제1공장 생산거점 확대",
+      "announced_at": "2025-07",
+      "location": "충청북도 보은군",
+      "method": "steel_volumetric",
+      "verification_status": "internally_confirmed",
+      "company_id": "kumkang-kind",
+      "counterparties": [],
+      "client": null,
+      "project_role": null,
+      "project_credit": false,
+      "contracted_at": null,
+      "started_at": null,
+      "completed_at": null,
+      "amount": null,
+      "amount_unit": null,
+      "market_segment": null,
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
+    },
+    {
+      "event_id": "event-kumkang-boeun-2-acquisition-2026",
+      "event_type": "facility_investment",
+      "event_status": "completed",
+      "title": "보은 제2공장 취득 및 스틸·PC·하이브리드 클러스터 추진",
+      "announced_at": "2026-03",
+      "location": "충청북도 보은군",
+      "method": "hybrid",
+      "verification_status": "internally_confirmed",
+      "company_id": "kumkang-kind",
+      "counterparties": [],
+      "client": null,
+      "project_role": null,
+      "project_credit": false,
+      "contracted_at": null,
+      "started_at": null,
+      "completed_at": null,
+      "amount": null,
+      "amount_unit": null,
+      "market_segment": null,
+      "source_ids": [
+        "internal-research-kumkang-20260716"
+      ],
+      "visibility": "public",
+      "updated_at": "2026-07-16T10:30:00+09:00"
     }
   ],
   "evidence": [
@@ -7181,6 +7666,45 @@
       "visibility": "public",
       "stale_after": null,
       "status": "accessible_spa_shell"
+    },
+    {
+      "source_id": "internal-research-kumkang-20260716",
+      "source_type": "internal_research",
+      "source_tier": "D",
+      "publisher": "Internal competitor research",
+      "title": "금강공업 동종사 조사 구조화 기준선",
+      "url": null,
+      "published_at": null,
+      "retrieved_at": "2026-07-16T10:30:00+09:00",
+      "document_id": null,
+      "document_hash": null,
+      "excerpt": "사용자가 제공한 동종사 조사자료를 구조화한 내부 검토 기준선이다. 원본 PDF는 저장소에 업로드하지 않으며, 공식 원문이 연결되지 않은 값은 official_verified 또는 high confidence로 승격하지 않는다.",
+      "supports": [
+        "fact-kumkang-kind-organization-established_at-current",
+        "fact-kumkang-kind-organization-listed_at-current",
+        "fact-kumkang-kind-organization-representative-current",
+        "fact-kumkang-kind-organization-employee_count-2025",
+        "fact-kumkang-kind-financial-modular_revenue_research-2023",
+        "fact-kumkang-kind-financial-modular_revenue_research-2024",
+        "fact-kumkang-kind-financial-modular_revenue_research-2025",
+        "fact-kumkang-kind-production-facility_kumkang-kind-jincheon-factory-current",
+        "fact-kumkang-kind-production-facility_kumkang-kind-boeun-factory-current",
+        "fact-kumkang-kind-production-facility_kumkang-kind-boeun-2-factory-current",
+        "event-kumkang-jangbogo-antarctic-station",
+        "event-kumkang-pyeongchang-2018-office",
+        "event-kumkang-ongjin-health-centers",
+        "event-kumkang-cheonan-dujeong-happy-housing",
+        "event-kumkang-yongin-yeongdeok-happy-housing",
+        "event-kumkang-seomyeon-mok-rooftop",
+        "event-kumkang-gimhwa-technical-high-dormitory",
+        "event-kumkang-military-officer-housing-2025",
+        "event-kumkang-goryeong-modular-residential-complex",
+        "event-kumkang-kumho-resort-asan-phase-2"
+      ],
+      "contradicts": [],
+      "visibility": "public",
+      "stale_after": null,
+      "status": "active"
     }
   ],
   "corrections": [
@@ -7243,22 +7767,22 @@
         "financial_status": "official_verified",
         "production_status": "official_verified",
         "project_status": "official_verified",
-        "technology_status": "company_claimed",
-        "recent_signal_status": "unavailable"
+        "technology_status": "internally_confirmed",
+        "recent_signal_status": "internally_confirmed"
       },
       "event_counts": {
-        "verified_projects": 1,
-        "project_candidates": 2,
+        "verified_projects": 9,
+        "project_candidates": 1,
         "partnerships_mou": 0,
         "r_and_d_exhibition": 0,
-        "other_events": 0
+        "other_events": 2
       },
       "article_evidence_count": 0,
       "source_group_counts": {
         "company_official": 3,
         "dart": 3
       },
-      "updated_at": "2026-07-15T00:00:00+09:00"
+      "updated_at": "2026-07-16T10:30:00+09:00"
     },
     {
       "company_id": "planm",
