@@ -48,6 +48,40 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Validate curated merge without writing
+        id: precheck
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          python scripts/import_curated_company_baseline.py --check > /tmp/kumkang-precheck.log 2>&1
+          status=$?
+          cat /tmp/kumkang-precheck.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Persist precheck failure report
+        if: steps.precheck.outputs.status != '0'
+        shell: bash
+        run: |
+          mkdir -p artifacts/github-actions-kumkang
+          {
+            echo "workflow_run_id=${GITHUB_RUN_ID}"
+            echo "commit=${GITHUB_SHA}"
+            echo "status=${{ steps.precheck.outputs.status }}"
+            echo
+            cat /tmp/kumkang-precheck.log
+          } > artifacts/github-actions-kumkang/precheck-failure.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add artifacts/github-actions-kumkang/precheck-failure.txt
+          git commit -m "Record Kumkang import precheck failure"
+          git push origin HEAD:data/company-baseline-pilot-kumkang
+
+      - name: Stop after precheck failure
+        if: steps.precheck.outputs.status != '0'
+        run: exit 1
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -63,9 +97,6 @@ jobs:
             frontend/public/data/news.json \
             frontend/public/data/meta.json \
             > /tmp/protected-before.sha256
-
-      - name: Validate curated merge without writing
-        run: python scripts/import_curated_company_baseline.py --check
 
       - name: Run curated importer regression test
         run: python scripts/test_curated_company_import.py
