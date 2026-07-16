@@ -90,7 +90,12 @@ def source_record(curated):
         'published_at': None, 'accessed_at': curated['reviewed_at'],
         'publisher': 'Manual verified competitor research', 'primary_source': False,
         'confidence': 'high', 'verification_note': source['note'],
-        'supported_claims': ['identity', 'financials', 'production', 'projects', 'technology', 'strategy'],
+        'supported_claims': [
+            'identity', 'financials', 'production', 'projects', 'technology', 'strategy',
+            'facility_name', 'location', 'ownership_type', 'operation_status',
+            'site_area_m2', 'building_area_m2', 'site_area', 'building_area',
+            'production_scope', 'production_processes', 'reported_capacity', 'capacity_value',
+        ],
         'visibility': 'internal',
     }
 
@@ -121,21 +126,37 @@ def archive_financials(company):
 
 def normalize_facility(facility, company_id, source_id):
     result = copy.deepcopy(facility)
+    system_map = {
+        'pc_ramen': 'pc_modular', 'pc_volumetric': 'pc_modular',
+        'wood_volumetric': 'timber_modular', 'wood_panelized': 'timber_modular',
+    }
+    result['modular_system_type'] = system_map.get(
+        result.get('modular_system_type'), result.get('modular_system_type')
+    )
     result.update(company_id=company_id, source_ids=[source_id], source_count=1,
                   verified_at=FIXED_GENERATED_AT[:10], data_confidence='high', confidence='high',
                   verification_status='cross_verified', site_area=result.get('site_area_m2'),
                   site_area_unit='m2', verification_basis_label='ChatGPT 보조 검토 및 사람 직접 검증 기준')
     if result.get('reported_capacity') is not None:
         result['capacity_value'] = result['reported_capacity']
+        result['capacity_scope'] = result.get('capacity_scope') or ', '.join(result.get('production_scope') or []) or 'facility_total'
+        result['capacity_status'] = 'third_party_reported'
+    else:
+        result['capacity_status'] = result.get('capacity_status') or 'unavailable'
     return result
 
 
 def normalize_project(project, company_id, source_id):
     result = copy.deepcopy(project)
+    structure_map = {
+        'pc_ramen': 'precast_concrete_modular', 'pc_volumetric': 'precast_concrete_modular',
+        'steel_panelized': 'steel_frame_panelized',
+        'wood_volumetric': 'timber_modular', 'wood_panelized': 'timber_modular',
+    }
+    structure_type = structure_map.get(result.get('modular_method'), result.get('modular_method') or 'unknown')
     result.update(company_id=company_id, aliases=unique(result.get('aliases', [])), country_code='KR',
                   sector=result.get('market_segment') or result.get('building_use') or 'other',
-                  structure_type=result.get('modular_method') or 'unknown',
-                  modular_type=result.get('modular_method') or 'unknown', evidence_status='verified',
+                  structure_type=structure_type, modular_type=structure_type, evidence_status='verified',
                   data_confidence='high', source_ids=[source_id], source_count=1, primary_source_count=0,
                   verified_at=FIXED_GENERATED_AT[:10], client_name=result.get('client'),
                   role_detail=result.get('summary'), project_summary=result.get('summary'),
