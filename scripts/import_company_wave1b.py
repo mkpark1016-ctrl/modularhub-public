@@ -3,8 +3,8 @@
 
 The wrapper reuses the conservative single-company importer, applies three files in
 one deterministic transaction, preserves domain statuses when a curated file has no
-records for that domain, removes null internal-only facts, and keeps the output stable
-across repeated runs.
+records for that domain, removes null internal-only facts, synchronizes V2 materialized
+summaries back to the V1 UI contract, and keeps the output stable across repeated runs.
 """
 from __future__ import annotations
 
@@ -121,6 +121,73 @@ def link_strategy_events_to_evidence(v2: dict[str, Any], curated_files: list[dic
         evidence["supports"] = supports
 
 
+def public_safe_internal_source(curated: dict[str, Any]) -> dict[str, Any]:
+    source = curated["source"]
+    return {
+        "source_id": source["source_id"],
+        "source_type": source["source_type"],
+        "source_tier": source["source_tier"],
+        "publisher": "Internal competitor research",
+        "title": source["title"],
+        "url": None,
+        "published_at": None,
+        "retrieved_at": curated["reviewed_at"],
+        "document_id": None,
+        "status": "active",
+    }
+
+
+def sync_source_group(intelligence: dict[str, Any], curated: dict[str, Any]) -> None:
+    groups = intelligence.setdefault("source_groups", [])
+    source = public_safe_internal_source(curated)
+    group = next((item for item in groups if item.get("group_type") == "media_and_research"), None)
+    if group is None:
+        group = {"group_type": "media_and_research", "count": 0, "sources": []}
+        groups.append(group)
+    sources = group.setdefault("sources", [])
+    existing = next((item for item in sources if item.get("source_id") == source["source_id"]), None)
+    if existing is None:
+        sources.append(source)
+    else:
+        existing.update(source)
+    group["count"] = len(sources)
+    intelligence["source_group_counts"] = {
+        item.get("group_type", "other"): int(item.get("count") or len(item.get("sources", [])))
+        for item in groups
+    }
+
+
+def sync_v1_intelligence(
+    v1: dict[str, Any],
+    v2: dict[str, Any],
+    curated_files: list[dict[str, Any]],
+) -> None:
+    events = v2.get("events", [])
+    for curated in curated_files:
+        company_id = curated["company_id"]
+        company = company_by_id(v1, company_id)
+        summary = summary_by_id(v2, company_id)
+        if summary is None:
+            raise RuntimeError(f"Missing V2 materialized summary: {company_id}")
+
+        summary["summary_ko"] = curated["company"]["summary_ko"]
+        intelligence = company.setdefault("intelligence_v2", {})
+        for field in (
+            "overall_data_status",
+            "domain_statuses",
+            "event_counts",
+            "article_evidence_count",
+            "updated_at",
+        ):
+            if field in summary:
+                intelligence[field] = copy.deepcopy(summary[field])
+        intelligence["summary_ko"] = curated["company"]["summary_ko"]
+        intelligence["events"] = copy.deepcopy(
+            [item for item in events if item.get("company_id") == company_id]
+        )
+        sync_source_group(intelligence, curated)
+
+
 def validate(v1: dict[str, Any], v2: dict[str, Any], original_company_count: int) -> None:
     companies = v1.get("companies", [])
     if len(companies) != original_company_count:
@@ -139,9 +206,13 @@ def validate(v1: dict[str, Any], v2: dict[str, Any], original_company_count: int
             raise RuntimeError(f"Duplicate {key} detected")
 
     for company_id in ("yuchang-enc", "nrb", "planm"):
-        company_by_id(v1, company_id)
+        company = company_by_id(v1, company_id)
         if not any(item.get("company_id") == company_id for item in v2.get("companies", [])):
             raise RuntimeError(f"Missing V2 company: {company_id}")
+        v1_event_ids = {item.get("event_id") for item in company.get("intelligence_v2", {}).get("events", [])}
+        v2_event_ids = {item.get("event_id") for item in v2.get("events", []) if item.get("company_id") == company_id}
+        if v1_event_ids != v2_event_ids:
+            raise RuntimeError(f"V1/V2 event synchronization failed: {company_id}")
 
     samsung_event = next(
         item
@@ -181,6 +252,7 @@ def main() -> int:
     source_ids = {item["source"]["source_id"] for item in curated_files}
     removed_null_facts = prune_null_internal_facts(v2, source_ids)
     link_strategy_events_to_evidence(v2, curated_files)
+    sync_v1_intelligence(v1, v2, curated_files)
 
     v1["generated_at"] = FIXED_GENERATED_AT
     v2["generated_at"] = FIXED_GENERATED_AT
