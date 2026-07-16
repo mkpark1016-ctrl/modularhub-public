@@ -7,6 +7,7 @@ change financials, or touch protected business/news/meta datasets.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -36,7 +37,7 @@ def merge_unique(*collections: Any) -> list[Any]:
             continue
         values = collection if isinstance(collection, list) else [collection]
         for value in values:
-            if value not in result:
+            if value is not None and value not in result:
                 result.append(value)
     return result
 
@@ -57,27 +58,38 @@ def normalize_v1(payload: dict[str, Any], overlay: dict[str, Any]) -> None:
     if not isinstance(production, list):
         raise SystemExit("Kumkang production must be a list")
 
-    by_id = {item.get("facility_id"): item for item in production}
-    if len(by_id) != len(production):
-        raise SystemExit("Duplicate facility_id found before QA-R1A normalization")
+    target_ids = {item["facility_id"] for item in overlay["facilities"]}
+    by_id: dict[str, dict[str, Any]] = {}
+    for item in production:
+        facility_id = item.get("facility_id")
+        if facility_id not in target_ids:
+            continue
+        if facility_id in by_id:
+            raise SystemExit(f"Duplicate target facility_id: {facility_id}")
+        by_id[facility_id] = item
+
+    print("V1 target facilities:", sorted(by_id))
+    missing = sorted(target_ids - set(by_id))
+    if missing:
+        raise SystemExit(f"Facilities missing from companies.json: {missing}")
 
     for correction in overlay["facilities"]:
         facility_id = correction["facility_id"]
-        facility = by_id.get(facility_id)
-        if facility is None:
-            raise SystemExit(f"Facility missing from companies.json: {facility_id}")
-
+        facility = by_id[facility_id]
         original_name = facility.get("facility_name")
+        original_aliases = list(facility.get("facility_aliases") or [])
         display_name = correction["display_name"]
+
         if original_name and original_name != display_name:
             facility.setdefault("official_name", original_name)
+        if original_aliases:
+            facility["legacy_aliases_reviewed"] = original_aliases
 
         facility["facility_name"] = display_name
         facility["display_name"] = display_name
         facility["facility_aliases"] = merge_unique(
-            facility.get("facility_aliases"),
             correction.get("facility_aliases"),
-            [original_name] if original_name else [],
+            [display_name],
         )
         facility["address"] = correction.get("address")
         facility["verification_status"] = correction["verification_status"]
@@ -91,14 +103,39 @@ def normalize_v1(payload: dict[str, Any], overlay: dict[str, Any]) -> None:
 
     boeun_1 = by_id["kumkang-kind-boeun-factory"]
     boeun_2 = by_id["kumkang-kind-boeun-2-factory"]
-    if boeun_1.get("address") == boeun_2.get("address"):
+    if not boeun_1.get("address") or not boeun_2.get("address"):
+        raise SystemExit("Both Boeun facilities require explicit addresses")
+    if boeun_1["address"] == boeun_2["address"]:
         raise SystemExit("Boeun 1 and Boeun 2 must not share the same address")
 
     alias_1 = set(boeun_1.get("facility_aliases") or [])
     alias_2 = set(boeun_2.get("facility_aliases") or [])
     overlap = alias_1 & alias_2
     if overlap:
-        raise SystemExit(f"Boeun facility alias collision: {sorted(overlap)}")
+        raise SystemExit(f"Boeun facility alias collision after correction: {sorted(overlap)}")
+
+
+def build_v2_fact(
+    correction: dict[str, Any],
+    company_id: str,
+    reviewed_at: str,
+) -> dict[str, Any]:
+    field = f"facility_{correction['facility_id']}"
+    return {
+        "fact_id": f"fact-{company_id}-production-{field}-current",
+        "company_id": company_id,
+        "domain": "production",
+        "field": field,
+        "value": {},
+        "unit": None,
+        "period": None,
+        "as_of": reviewed_at,
+        "verification_status": correction["verification_status"],
+        "confidence": correction["data_confidence"],
+        "source_ids": [],
+        "visibility": "public",
+        "updated_at": reviewed_at,
+    }
 
 
 def normalize_v2(payload: dict[str, Any], overlay: dict[str, Any]) -> None:
@@ -112,23 +149,33 @@ def normalize_v2(payload: dict[str, Any], overlay: dict[str, Any]) -> None:
         if fact.get("company_id") == overlay["company_id"]
         and fact.get("domain") == "production"
     }
+    print("V2 production fields:", sorted(str(key) for key in fact_by_field))
 
     for correction in overlay["facilities"]:
         field = f"facility_{correction['facility_id']}"
         fact = fact_by_field.get(field)
         if fact is None:
-            raise SystemExit(f"V2 facility fact missing: {field}")
+            fact = build_v2_fact(
+                correction,
+                overlay["company_id"],
+                overlay["reviewed_at"],
+            )
+            facts.append(fact)
+            fact_by_field[field] = fact
+
         value = fact.get("value")
         if not isinstance(value, dict):
-            raise SystemExit(f"V2 facility fact value must be an object: {field}")
+            value = {}
+            fact["value"] = value
 
         original_name = value.get("facility_name")
+        if original_name and original_name != correction["display_name"]:
+            value.setdefault("official_name", original_name)
         value["facility_name"] = correction["display_name"]
         value["display_name"] = correction["display_name"]
         value["facility_aliases"] = merge_unique(
-            value.get("facility_aliases"),
             correction.get("facility_aliases"),
-            [original_name] if original_name else [],
+            [correction["display_name"]],
         )
         value["address"] = correction.get("address")
         value["verification_basis_label"] = correction[
@@ -151,26 +198,41 @@ def patch_app(path: Path) -> None:
     elif new_title not in text:
         raise SystemExit("Production facility title marker not found in App.jsx")
 
-    location_line = '                    <span>{[item.region || item.city || item.location, getDisplayValue(item.ownership_type), getDisplayValue(item.operation_status)].filter(Boolean).join(" · ") || "위치 정보 확인 중"}</span>\n'
-    evidence_lines = (
-        location_line
-        + '                    {item.address && <span>주소: {item.address}</span>}\n'
-        + '                    {item.identity_note && <span>{item.identity_note}</span>}\n'
-    )
-    if "{item.address && <span>주소: {item.address}</span>}" not in text:
-        if location_line not in text:
+    address_markup = '{item.address && <span>주소: {item.address}</span>}'
+    if address_markup not in text:
+        pattern = re.compile(
+            r'(?P<indent>\s*)<span>\{\[item\.region \|\| item\.city \|\| item\.location, '
+            r'getDisplayValue\(item\.ownership_type\), getDisplayValue\(item\.operation_status\)\]'
+            r'\.filter\(Boolean\)\.join\(" · "\) \|\| "위치 정보 확인 중"\}</span>'
+        )
+        match = pattern.search(text)
+        if not match:
             raise SystemExit("Production facility location marker not found in App.jsx")
-        text = text.replace(location_line, evidence_lines, 1)
+        indent = match.group("indent")
+        replacement = (
+            match.group(0)
+            + f"\n{indent}{address_markup}"
+            + f"\n{indent}{{item.identity_note && <span>{{item.identity_note}}</span>}}"
+        )
+        text = text[: match.start()] + replacement + text[match.end() :]
 
-    confidence_line = '                    <span>검증 상태: {getConfidenceLabel({ data_confidence: item.data_confidence || item.confidence || productionInfo.data_confidence })}</span>\n'
-    normalized_confidence_lines = (
-        '                    {item.verification_basis_label && <span>근거 기준: {item.verification_basis_label}</span>}\n'
-        + '                    <span>신뢰도: {getConfidenceLabel({ data_confidence: item.data_confidence || item.confidence || productionInfo.data_confidence })}</span>\n'
-    )
-    if "근거 기준: {item.verification_basis_label}" not in text:
-        if confidence_line not in text:
+    evidence_markup = "근거 기준: {item.verification_basis_label}"
+    if evidence_markup not in text:
+        pattern = re.compile(
+            r'(?P<indent>\s*)<span>검증 상태: \{getConfidenceLabel\(\{ data_confidence: '
+            r'item\.data_confidence \|\| item\.confidence \|\| productionInfo\.data_confidence \}\)\}</span>'
+        )
+        match = pattern.search(text)
+        if not match:
             raise SystemExit("Production confidence marker not found in App.jsx")
-        text = text.replace(confidence_line, normalized_confidence_lines, 1)
+        indent = match.group("indent")
+        replacement = (
+            f"{indent}{{item.verification_basis_label && <span>근거 기준: "
+            f"{{item.verification_basis_label}}</span>}}\n"
+            f"{indent}<span>신뢰도: {{getConfidenceLabel({{ data_confidence: "
+            f"item.data_confidence || item.confidence || productionInfo.data_confidence }})}}</span>"
+        )
+        text = text[: match.start()] + replacement + text[match.end() :]
 
     path.write_text(text, encoding="utf-8")
 
