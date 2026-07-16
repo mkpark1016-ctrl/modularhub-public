@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Merge a curated company baseline into ModularHub V1 and V2 company datasets.
 
-The importer is intentionally conservative: existing DART/financial records are preserved,
-unsupported capacity values remain null, and project credit is stored separately from MOU,
-planned, preferred-bidder, and unconfirmed events.
+The importer is intentionally conservative: existing official/DART/financial records are
+preserved, curated research fills gaps, unsupported capacity values remain null, and
+project credit is stored separately from MOU, planned, preferred-bidder, and unconfirmed
+events.
 """
 from __future__ import annotations
 
@@ -31,6 +32,28 @@ STATUS_TO_EVENT = {
     "unknown": "unconfirmed",
 }
 
+CONFIDENCE_RANK = {"unknown": 0, "low": 1, "medium": 2, "high": 3}
+VERIFICATION_RANK = {
+    "unknown": 0,
+    "not_confirmed": 0,
+    "unverified": 1,
+    "internally_confirmed": 2,
+    "partially_verified": 3,
+    "verified": 4,
+    "official_verified": 5,
+}
+LIST_MERGE_FIELDS = {
+    "source_ids",
+    "aliases",
+    "facility_aliases",
+    "counterparties",
+    "production_scope",
+    "structural_systems",
+    "target_markets",
+    "modular_methods",
+}
+MISSING_TEXT = {"", "unknown", "unconfirmed", "not_confirmed", "collecting"}
+
 
 def load(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as fh:
@@ -38,16 +61,149 @@ def load(path: Path) -> dict[str, Any]:
 
 
 def dump(path: Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def upsert(items: list[dict[str, Any]], key: str, value: dict[str, Any]) -> None:
+    """Simple replacement merge for records that cannot carry stronger prior evidence."""
     target = value.get(key)
     for index, item in enumerate(items):
         if item.get(key) == target:
             merged = copy.deepcopy(item)
             merged.update(copy.deepcopy(value))
             items[index] = merged
+            return
+    items.append(copy.deepcopy(value))
+
+
+def as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
+def merge_unique(existing: Any, incoming: Any) -> list[Any]:
+    result: list[Any] = []
+    for collection in (as_list(existing), as_list(incoming)):
+        for value in collection:
+            if value not in result:
+                result.append(copy.deepcopy(value))
+    return result
+
+
+def is_missing(value: Any) -> bool:
+    if value is None or value == [] or value == {}:
+        return True
+    return isinstance(value, str) and value.strip().lower() in MISSING_TEXT
+
+
+def stronger_value(existing: Any, incoming: Any, ranking: dict[str, int]) -> Any:
+    existing_key = str(existing or "unknown").lower()
+    incoming_key = str(incoming or "unknown").lower()
+    if ranking.get(incoming_key, 0) > ranking.get(existing_key, 0):
+        return copy.deepcopy(incoming)
+    return copy.deepcopy(existing)
+
+
+def has_authoritative_source(item: dict[str, Any]) -> bool:
+    source_ids = [str(value).lower() for value in as_list(item.get("source_ids"))]
+    return (
+        int(item.get("primary_source_count") or 0) > 0
+        or bool(item.get("primary_source"))
+        or any("official" in value for value in source_ids)
+        or str(item.get("evidence_type") or "").lower().startswith("official")
+        or str(item.get("verification_status") or "").lower()
+        == "official_verified"
+    )
+
+
+def authority_merge(
+    existing: dict[str, Any],
+    incoming: dict[str, Any],
+) -> dict[str, Any]:
+    """Merge curated data without replacing stronger official evidence."""
+    result = copy.deepcopy(existing)
+    authoritative = has_authoritative_source(existing)
+
+    for field, value in incoming.items():
+        current = result.get(field)
+
+        if field in LIST_MERGE_FIELDS:
+            result[field] = merge_unique(current, value)
+            continue
+
+        if field in {"confidence", "data_confidence"}:
+            result[field] = stronger_value(current, value, CONFIDENCE_RANK)
+            continue
+
+        if field in {"verification_status", "evidence_status"}:
+            result[field] = stronger_value(current, value, VERIFICATION_RANK)
+            continue
+
+        if field in {"source_count", "primary_source_count"}:
+            result[field] = max(int(current or 0), int(value or 0))
+            continue
+
+        if field == "project_credit":
+            result[field] = bool(current) or bool(value)
+            continue
+
+        if is_missing(current) and not is_missing(value):
+            result[field] = copy.deepcopy(value)
+            continue
+
+        if not authoritative and not is_missing(value):
+            result[field] = copy.deepcopy(value)
+            continue
+
+        if (
+            authoritative
+            and field in {"project_name", "title", "facility_name"}
+            and value != current
+        ):
+            alias_field = "facility_aliases" if field == "facility_name" else "aliases"
+            result[alias_field] = merge_unique(result.get(alias_field), [value])
+            continue
+
+        if (
+            authoritative
+            and field in {"summary", "notes", "project_summary", "role_detail"}
+            and not is_missing(value)
+            and value != current
+        ):
+            notes = result.setdefault("internal_research_notes", [])
+            if not isinstance(notes, list):
+                notes = [notes]
+                result["internal_research_notes"] = notes
+            if value not in notes:
+                notes.append(copy.deepcopy(value))
+
+    result["source_ids"] = merge_unique(
+        existing.get("source_ids"),
+        incoming.get("source_ids"),
+    )
+    if result.get("source_ids") or "source_count" in result:
+        result["source_count"] = max(
+            int(result.get("source_count") or 0),
+            len(result.get("source_ids", [])),
+        )
+    return result
+
+
+def authority_upsert(
+    items: list[dict[str, Any]],
+    key: str,
+    value: dict[str, Any],
+) -> None:
+    target = value.get(key)
+    for index, item in enumerate(items):
+        if item.get(key) == target:
+            items[index] = authority_merge(item, value)
             return
     items.append(copy.deepcopy(value))
 
@@ -69,15 +225,26 @@ def source_record(curated: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def normalize_project(project: dict[str, Any], company_id: str, source_id: str, reviewed_at: str) -> dict[str, Any]:
+def normalize_project(
+    project: dict[str, Any],
+    company_id: str,
+    source_id: str,
+    reviewed_at: str,
+) -> dict[str, Any]:
     result = copy.deepcopy(project)
     result["company_id"] = company_id
     result.setdefault("aliases", [])
     result.setdefault("country_code", "KR")
-    result.setdefault("sector", result.get("market_segment") or result.get("building_use") or "other")
+    result.setdefault(
+        "sector",
+        result.get("market_segment") or result.get("building_use") or "other",
+    )
     result.setdefault("structure_type", result.get("modular_method") or "unknown")
     result.setdefault("modular_type", result.get("modular_method") or "unknown")
-    result.setdefault("evidence_status", result.get("verification_status", "internally_confirmed"))
+    result.setdefault(
+        "evidence_status",
+        result.get("verification_status", "internally_confirmed"),
+    )
     result.setdefault("data_confidence", result.get("confidence", "medium"))
     result.setdefault("source_ids", [source_id])
     result.setdefault("verified_at", reviewed_at[:10])
@@ -94,7 +261,10 @@ def normalize_project(project: dict[str, Any], company_id: str, source_id: str, 
 def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
     company_id = curated["company_id"]
     companies = data.get("companies", [])
-    company = next((item for item in companies if item.get("company_id") == company_id), None)
+    company = next(
+        (item for item in companies if item.get("company_id") == company_id),
+        None,
+    )
     if company is None:
         raise RuntimeError(f"Company not found in V1 dataset: {company_id}")
 
@@ -102,22 +272,46 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
     source_id = curated["source"]["source_id"]
     profile = curated["company"]
 
-    for field in ("company_name", "company_name_en", "aliases", "company_type", "competitive_role", "analysis_tier", "business_status", "modular_methods", "target_markets"):
-        if field in profile:
+    for field in (
+        "company_name",
+        "company_name_en",
+        "company_type",
+        "competitive_role",
+        "analysis_tier",
+        "business_status",
+    ):
+        if is_missing(company.get(field)) and not is_missing(profile.get(field)):
             company[field] = copy.deepcopy(profile[field])
 
+    company["aliases"] = merge_unique(company.get("aliases"), profile.get("aliases"))
+    company["modular_methods"] = merge_unique(
+        company.get("modular_methods"),
+        profile.get("modular_methods"),
+    )
+    company["target_markets"] = merge_unique(
+        company.get("target_markets"),
+        profile.get("target_markets"),
+    )
     company["summary"] = profile["summary_ko"]
     company["last_verified_at"] = reviewed_at
-    company["data_confidence"] = "medium"
+    company["data_confidence"] = stronger_value(
+        company.get("data_confidence"),
+        "medium",
+        CONFIDENCE_RANK,
+    )
     company["review_status"] = "partially_verified"
-    company.setdefault("company_profile", {})
-    company["company_profile"].update({
+
+    company_profile = company.setdefault("company_profile", {})
+    profile_values = {
         "established_at": profile.get("established_at"),
         "listed_at": profile.get("listed_at"),
         "representative": profile.get("representative"),
         "employee_count": profile.get("employee_count_research_value"),
         "employee_count_as_of": profile.get("employee_count_as_of"),
-    })
+    }
+    for field, value in profile_values.items():
+        if is_missing(company_profile.get(field)) and not is_missing(value):
+            company_profile[field] = copy.deepcopy(value)
 
     production = company.setdefault("production", [])
     for facility in curated.get("production", []):
@@ -125,12 +319,19 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         normalized["company_id"] = company_id
         normalized.setdefault("source_ids", [source_id])
         normalized.setdefault("verified_at", reviewed_at[:10])
-        normalized.setdefault("data_confidence", normalized.get("confidence", "medium"))
-        upsert(production, "facility_id", normalized)
+        normalized.setdefault(
+            "data_confidence",
+            normalized.get("confidence", "medium"),
+        )
+        authority_upsert(production, "facility_id", normalized)
 
     projects = company.setdefault("project_portfolio", [])
     for project in curated.get("projects", []):
-        upsert(projects, "project_id", normalize_project(project, company_id, source_id, reviewed_at))
+        authority_upsert(
+            projects,
+            "project_id",
+            normalize_project(project, company_id, source_id, reviewed_at),
+        )
 
     technology = company.get("technology")
     if technology is None:
@@ -138,6 +339,7 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         company["technology"] = technology
     elif not isinstance(technology, dict):
         raise RuntimeError("V1 company technology must be an object")
+
     patents = technology.setdefault("patents", [])
     curated_technology = curated.get("technology", [])
     if isinstance(curated_technology, dict):
@@ -146,11 +348,12 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         technology_records = curated_technology
     else:
         raise RuntimeError("Curated technology must be a list or object")
+
     for patent in technology_records:
         normalized = copy.deepcopy(patent)
         normalized.setdefault("source_ids", [source_id])
         normalized.setdefault("verified_at", reviewed_at[:10])
-        upsert(patents, "technology_id", normalized)
+        authority_upsert(patents, "technology_id", normalized)
 
     signals = company.setdefault("recent_signals", [])
     for event in curated.get("strategy_events", []):
@@ -165,7 +368,7 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
             "verified_at": reviewed_at[:10],
             "confidence": event.get("confidence", "medium"),
         }
-        upsert(signals, "signal_id", signal)
+        authority_upsert(signals, "signal_id", signal)
 
     sources = company.setdefault("sources", [])
     upsert(sources, "source_id", source_record(curated))
@@ -174,20 +377,31 @@ def merge_v1(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
     intelligence["summary_ko"] = profile["summary_ko"]
     intelligence["overall_data_status"] = "partially_verified"
     domains = intelligence.setdefault("domain_statuses", {})
-    domains.update({
-        "identity_status": domains.get("identity_status", "partially_verified"),
-        "financial_status": domains.get("financial_status", "partially_verified"),
+    incoming_domains = {
+        "identity_status": "partially_verified",
+        "financial_status": "partially_verified",
         "production_status": "partially_verified",
         "project_status": "internally_confirmed",
         "technology_status": "internally_confirmed",
         "recent_signal_status": "internally_confirmed",
-    })
+    }
+    for field, value in incoming_domains.items():
+        domains[field] = stronger_value(domains.get(field), value, VERIFICATION_RANK)
     intelligence["updated_at"] = reviewed_at
 
     return data
 
 
-def fact(company_id: str, domain: str, field: str, value: Any, unit: str | None, period: str | int | None, source_id: str, reviewed_at: str) -> dict[str, Any]:
+def fact(
+    company_id: str,
+    domain: str,
+    field: str,
+    value: Any,
+    unit: str | None,
+    period: str | int | None,
+    source_id: str,
+    reviewed_at: str,
+) -> dict[str, Any]:
     suffix = str(period) if period is not None else "current"
     return {
         "fact_id": f"fact-{company_id}-{domain}-{field}-{suffix}",
@@ -219,23 +433,81 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
     facts = data.setdefault("facts", [])
     profile = curated["company"]
     new_facts = [
-        fact(company_id, "organization", "established_at", profile.get("established_at"), None, None, source_id, reviewed_at),
-        fact(company_id, "organization", "listed_at", profile.get("listed_at"), None, None, source_id, reviewed_at),
-        fact(company_id, "organization", "representative", profile.get("representative"), None, None, source_id, reviewed_at),
-        fact(company_id, "organization", "employee_count", profile.get("employee_count_research_value"), "person", profile.get("employee_count_as_of"), source_id, reviewed_at),
+        fact(
+            company_id,
+            "organization",
+            "established_at",
+            profile.get("established_at"),
+            None,
+            None,
+            source_id,
+            reviewed_at,
+        ),
+        fact(
+            company_id,
+            "organization",
+            "listed_at",
+            profile.get("listed_at"),
+            None,
+            None,
+            source_id,
+            reviewed_at,
+        ),
+        fact(
+            company_id,
+            "organization",
+            "representative",
+            profile.get("representative"),
+            None,
+            None,
+            source_id,
+            reviewed_at,
+        ),
+        fact(
+            company_id,
+            "organization",
+            "employee_count",
+            profile.get("employee_count_research_value"),
+            "person",
+            profile.get("employee_count_as_of"),
+            source_id,
+            reviewed_at,
+        ),
     ]
     for item in curated.get("modular_revenue_research", []):
-        new_facts.append(fact(company_id, "financial", "modular_revenue_research", item["value"], item["unit"], item["year"], source_id, reviewed_at))
+        new_facts.append(
+            fact(
+                company_id,
+                "financial",
+                "modular_revenue_research",
+                item["value"],
+                item["unit"],
+                item["year"],
+                source_id,
+                reviewed_at,
+            )
+        )
     for facility in curated.get("production", []):
-        new_facts.append(fact(company_id, "production", f"facility_{facility['facility_id']}", {
-            "facility_name": facility.get("facility_name"),
-            "site_area_m2": facility.get("site_area_m2"),
-            "capacity_value": facility.get("reported_capacity"),
-            "capacity_status": facility.get("capacity_status"),
-            "operation_status": facility.get("operation_status"),
-        }, None, None, source_id, reviewed_at))
+        new_facts.append(
+            fact(
+                company_id,
+                "production",
+                f"facility_{facility['facility_id']}",
+                {
+                    "facility_name": facility.get("facility_name"),
+                    "site_area_m2": facility.get("site_area_m2"),
+                    "capacity_value": facility.get("reported_capacity"),
+                    "capacity_status": facility.get("capacity_status"),
+                    "operation_status": facility.get("operation_status"),
+                },
+                None,
+                None,
+                source_id,
+                reviewed_at,
+            )
+        )
     for item in new_facts:
-        upsert(facts, "fact_id", item)
+        authority_upsert(facts, "fact_id", item)
 
     events = data.setdefault("events", [])
     for project in curated.get("projects", []):
@@ -243,7 +515,10 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
             "event_id": f"event-{project['project_id']}",
             "company_id": company_id,
             "event_type": "project",
-            "event_status": STATUS_TO_EVENT.get(project.get("project_status"), "unconfirmed"),
+            "event_status": STATUS_TO_EVENT.get(
+                project.get("project_status"),
+                "unconfirmed",
+            ),
             "title": project["project_name"],
             "counterparties": [value for value in [project.get("client")] if value],
             "client": project.get("client"),
@@ -259,11 +534,15 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
             "market_segment": project.get("market_segment"),
             "method": project.get("modular_method"),
             "source_ids": [source_id],
-            "verification_status": project.get("verification_status", "internally_confirmed"),
+            "verification_status": project.get(
+                "verification_status",
+                "internally_confirmed",
+            ),
             "visibility": "public",
             "updated_at": reviewed_at,
         }
-        upsert(events, "event_id", event)
+        authority_upsert(events, "event_id", event)
+
     for item in curated.get("strategy_events", []):
         event = copy.deepcopy(item)
         event.setdefault("company_id", company_id)
@@ -271,7 +550,17 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         event.setdefault("client", None)
         event.setdefault("project_role", None)
         event.setdefault("project_credit", False)
-        for field in ("announced_at", "contracted_at", "started_at", "completed_at", "amount", "amount_unit", "location", "market_segment", "method"):
+        for field in (
+            "announced_at",
+            "contracted_at",
+            "started_at",
+            "completed_at",
+            "amount",
+            "amount_unit",
+            "location",
+            "market_segment",
+            "method",
+        ):
             event.setdefault(field, None)
         event.setdefault("source_ids", [source_id])
         event.setdefault("verification_status", "internally_confirmed")
@@ -279,7 +568,7 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         event.setdefault("updated_at", reviewed_at)
         event.pop("confidence", None)
         event.pop("summary", None)
-        upsert(events, "event_id", event)
+        authority_upsert(events, "event_id", event)
 
     evidence = data.setdefault("evidence", [])
     evidence_item = {
@@ -294,7 +583,8 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
         "document_id": None,
         "document_hash": None,
         "excerpt": source["note"],
-        "supports": [item["fact_id"] for item in new_facts] + [f"event-{p['project_id']}" for p in curated.get("projects", [])],
+        "supports": [item["fact_id"] for item in new_facts]
+        + [f"event-{project['project_id']}" for project in curated.get("projects", [])],
         "contradicts": [],
         "visibility": "internal",
         "stale_after": None,
@@ -303,21 +593,57 @@ def merge_v2(data: dict[str, Any], curated: dict[str, Any]) -> dict[str, Any]:
     upsert(evidence, "source_id", evidence_item)
 
     summaries = data.setdefault("materialized_summaries", [])
-    summary = next((item for item in summaries if item.get("company_id") == company_id), None)
+    summary = next(
+        (item for item in summaries if item.get("company_id") == company_id),
+        None,
+    )
     if summary:
         summary["overall_data_status"] = "partially_verified"
-        summary.setdefault("domain_statuses", {}).update({
+        domains = summary.setdefault("domain_statuses", {})
+        incoming_domains = {
             "production_status": "partially_verified",
             "project_status": "internally_confirmed",
             "technology_status": "internally_confirmed",
             "recent_signal_status": "internally_confirmed",
-        })
+        }
+        for field, value in incoming_domains.items():
+            domains[field] = stronger_value(domains.get(field), value, VERIFICATION_RANK)
+
+        company_events = [item for item in events if item.get("company_id") == company_id]
         summary["event_counts"] = {
-            "verified_projects": sum(1 for item in curated.get("projects", []) if item.get("project_credit")),
-            "project_candidates": sum(1 for item in curated.get("projects", []) if not item.get("project_credit")),
-            "partnerships_mou": sum(1 for item in curated.get("strategy_events", []) if item.get("event_type") in {"partnership", "mou"}),
-            "r_and_d_exhibition": sum(1 for item in curated.get("strategy_events", []) if item.get("event_type") in {"r_and_d", "exhibition"}),
-            "other_events": 0,
+            "verified_projects": sum(
+                1
+                for item in company_events
+                if item.get("event_type") == "project" and item.get("project_credit")
+            ),
+            "project_candidates": sum(
+                1
+                for item in company_events
+                if item.get("event_type") == "project"
+                and not item.get("project_credit")
+            ),
+            "partnerships_mou": sum(
+                1
+                for item in company_events
+                if item.get("event_type") in {"partnership", "mou"}
+            ),
+            "r_and_d_exhibition": sum(
+                1
+                for item in company_events
+                if item.get("event_type") in {"r_and_d", "exhibition"}
+            ),
+            "other_events": sum(
+                1
+                for item in company_events
+                if item.get("event_type")
+                not in {
+                    "project",
+                    "partnership",
+                    "mou",
+                    "r_and_d",
+                    "exhibition",
+                }
+            ),
         }
         summary["updated_at"] = reviewed_at
 
@@ -330,7 +656,11 @@ def main() -> int:
     parser.add_argument("--curated", type=Path, default=DEFAULT_CURATED)
     parser.add_argument("--v1", type=Path, default=DEFAULT_V1)
     parser.add_argument("--v2", type=Path, default=DEFAULT_V2)
-    parser.add_argument("--check", action="store_true", help="Validate merge without writing files")
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Validate merge without writing files",
+    )
     args = parser.parse_args()
 
     curated = load(args.curated)
@@ -341,9 +671,15 @@ def main() -> int:
 
     if len(v1.get("companies", [])) != len(v1_original.get("companies", [])):
         raise RuntimeError("Company count changed unexpectedly")
-    if len({item.get("company_id") for item in v1.get("companies", [])}) != len(v1.get("companies", [])):
+    if len({item.get("company_id") for item in v1.get("companies", [])}) != len(
+        v1.get("companies", [])
+    ):
         raise RuntimeError("Duplicate V1 company_id detected")
-    for collection, key in ((v2.get("facts", []), "fact_id"), (v2.get("events", []), "event_id"), (v2.get("evidence", []), "source_id")):
+    for collection, key in (
+        (v2.get("facts", []), "fact_id"),
+        (v2.get("events", []), "event_id"),
+        (v2.get("evidence", []), "source_id"),
+    ):
         values = [item.get(key) for item in collection]
         if len(values) != len(set(values)):
             raise RuntimeError(f"Duplicate {key} detected")
@@ -351,14 +687,23 @@ def main() -> int:
     if not args.check:
         dump(args.v1, v1)
         dump(args.v2, v2)
-    print(json.dumps({
-        "company_id": curated["company_id"],
-        "company_count": len(v1["companies"]),
-        "facts": len(v2.get("facts", [])) - len(v2_original.get("facts", [])),
-        "events": len(v2.get("events", [])) - len(v2_original.get("events", [])),
-        "evidence": len(v2.get("evidence", [])) - len(v2_original.get("evidence", [])),
-        "mode": "check" if args.check else "write",
-    }, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "company_id": curated["company_id"],
+                "company_count": len(v1["companies"]),
+                "facts": len(v2.get("facts", []))
+                - len(v2_original.get("facts", [])),
+                "events": len(v2.get("events", []))
+                - len(v2_original.get("events", [])),
+                "evidence": len(v2.get("evidence", []))
+                - len(v2_original.get("evidence", [])),
+                "mode": "check" if args.check else "write",
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
     return 0
 
 
