@@ -186,20 +186,64 @@ jobs:
         run: npm ci
 
       - name: Run company frontend tests
+        id: frontend_tests
+        continue-on-error: true
         working-directory: frontend
         shell: bash
         run: |
-          npm run test:companies
-          npm run test:companies-v2
-          npm run test:companies-projects
-          npm run test:companies-url
+          set +e
+          {
+            npm run test:companies
+            npm run test:companies-v2
+            npm run test:companies-projects
+            npm run test:companies-url
+          } > /tmp/kumkang-frontend-tests.log 2>&1
+          status=$?
+          cat /tmp/kumkang-frontend-tests.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload frontend test failure report
+        if: steps.frontend_tests.outputs.status != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumkang-frontend-tests-failure
+          path: /tmp/kumkang-frontend-tests.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Stop after frontend test failure
+        if: steps.frontend_tests.outputs.status != '0'
+        run: exit 1
 
       - name: Run lint and production build
+        id: lint_build
+        continue-on-error: true
         working-directory: frontend
         shell: bash
         run: |
-          npm run lint
-          npm run build
+          set +e
+          {
+            npm run lint
+            npm run build
+          } > /tmp/kumkang-lint-build.log 2>&1
+          status=$?
+          cat /tmp/kumkang-lint-build.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload lint and build failure report
+        if: steps.lint_build.outputs.status != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumkang-lint-build-failure
+          path: /tmp/kumkang-lint-build.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Stop after lint or build failure
+        if: steps.lint_build.outputs.status != '0'
+        run: exit 1
 
       - name: Ensure only intended generated files changed
         shell: bash
