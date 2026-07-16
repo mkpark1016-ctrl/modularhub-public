@@ -24,7 +24,7 @@ assert.ok(jincheon && boeun1 && boeun2, "all three pilot facilities are required
 assert.equal(jincheon.facility_name, "진천공장");
 assert.equal(jincheon.data_confidence, "low");
 assert.match(jincheon.verification_basis_label, /내부 조사/);
-assert.equal(jincheon.reported_capacity ?? jincheon.capacity_value, null);
+assert.equal(jincheon.reported_capacity ?? jincheon.capacity_value ?? null, null);
 
 assert.equal(boeun1.facility_name, "보은 제1공장");
 assert.equal(boeun2.facility_name, "보은 제2공장");
@@ -38,8 +38,8 @@ assert.equal(
 );
 assert.match(boeun1.identity_note, /동일 시설/);
 assert.match(boeun2.identity_note, /별도 주소/);
-assert.equal(boeun1.reported_capacity ?? boeun1.capacity_value, null);
-assert.equal(boeun2.reported_capacity ?? boeun2.capacity_value, null);
+assert.equal(boeun1.reported_capacity ?? boeun1.capacity_value ?? null, null);
+assert.equal(boeun2.reported_capacity ?? boeun2.capacity_value ?? null, null);
 
 for (const facility of [jincheon, boeun1, boeun2]) {
   const field = `facility_${facility.facility_id}`;
