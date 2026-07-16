@@ -1,0 +1,155 @@
+name: Import Kumkang curated baseline
+
+on:
+  push:
+    branches:
+      - data/company-baseline-pilot-kumkang
+    paths:
+      - .github/workflows/import-kumkang-baseline.yml
+      - config/companies/curated/kumkang-kind.json
+      - scripts/import_curated_company_baseline.py
+      - scripts/test_curated_company_import.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-kumkang-baseline-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  import-and-validate:
+    if: github.ref == 'refs/heads/data/company-baseline-pilot-kumkang'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout working branch
+        uses: actions/checkout@v4
+        with:
+          ref: data/company-baseline-pilot-kumkang
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Record protected public JSON hashes
+        shell: bash
+        run: |
+          sha256sum \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json \
+            > /tmp/protected-before.sha256
+
+      - name: Validate curated merge without writing
+        run: python scripts/import_curated_company_baseline.py --check
+
+      - name: Run curated importer regression test
+        run: python scripts/test_curated_company_import.py
+
+      - name: Generate company JSON outputs
+        run: python scripts/import_curated_company_baseline.py
+
+      - name: Validate generated JSON syntax
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          paths = [
+              Path('frontend/public/data/companies/companies.json'),
+              Path('frontend/public/data/companies/company_intelligence_v2.json'),
+          ]
+          for path in paths:
+              with path.open(encoding='utf-8') as handle:
+                  json.load(handle)
+              print(f'VALID JSON: {path}')
+          PY
+
+      - name: Run company and public-data validation
+        shell: bash
+        run: |
+          python scripts/test_company_universe.py
+          python scripts/validate_company_universe.py
+          python scripts/test_public_json_export.py
+
+      - name: Verify protected public JSON files are unchanged
+        shell: bash
+        run: |
+          sha256sum -c /tmp/protected-before.sha256
+          git diff --exit-code -- \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run company frontend tests
+        working-directory: frontend
+        shell: bash
+        run: |
+          npm run test:companies
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:companies-url
+
+      - name: Run lint and production build
+        working-directory: frontend
+        shell: bash
+        run: |
+          npm run lint
+          npm run build
+
+      - name: Ensure only intended generated files changed
+        shell: bash
+        run: |
+          python - <<'PY'
+          import subprocess
+
+          allowed = {
+              'frontend/public/data/companies/companies.json',
+              'frontend/public/data/companies/company_intelligence_v2.json',
+          }
+          output = subprocess.check_output(['git', 'status', '--porcelain'], text=True)
+          changed = []
+          for line in output.splitlines():
+              if not line.strip():
+                  continue
+              path = line[3:]
+              if ' -> ' in path:
+                  path = path.split(' -> ', 1)[1]
+              changed.append(path)
+          unexpected = sorted(set(changed) - allowed)
+          if unexpected:
+              raise SystemExit(f'Unexpected changed files: {unexpected}')
+          print('Changed files:', changed)
+          PY
+
+      - name: Commit generated company JSON files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json
+          if git diff --cached --quiet; then
+            echo "No generated JSON changes to commit."
+          else
+            git commit -m "Import Kumkang Kind curated company baseline"
+            git push origin HEAD:data/company-baseline-pilot-kumkang
+          fi
