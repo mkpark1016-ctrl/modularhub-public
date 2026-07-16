@@ -86,9 +86,14 @@ assert.equal(getCompetitiveRoleLabel(companies.find((company) => company.company
 assert.equal(getTierLabel(companies.find((company) => company.company_id === "haean-architecture")), "장기 관찰");
 assert.equal(technologyCount(companies.find((company) => company.company_id === "kumkang-kind")) > 0, true);
 const yuchangEvents = getCompanyEvents(companies.find((company) => company.company_id === "yuchang-enc"));
-assert.equal(yuchangEvents.length, 1);
-assert.equal(yuchangEvents[0].event_type, "partnership");
-assert.equal(yuchangEvents[0].project_credit, false);
+assert.ok(yuchangEvents.length >= 3);
+const samsungEvent = yuchangEvents.find((event) => event.event_id === "event-yuchang-enc-samsung-ai-modular-home");
+assert.ok(samsungEvent);
+assert.equal(samsungEvent.event_type, "partnership");
+assert.equal(samsungEvent.event_status, "not_signed");
+assert.equal(samsungEvent.project_credit, false);
+assert.ok(yuchangEvents.some((event) => event.event_type === "project" && event.project_credit === true));
+assert.ok(yuchangEvents.some((event) => event.event_type === "acquisition" && event.project_credit === false));
 assert.equal(formatKrwReadable(null), "확인되지 않음");
 assert.equal(formatKrwReadable(0), "0원");
 assert.match(formatKrwReadable(307_684_467_052), /억원$/);
