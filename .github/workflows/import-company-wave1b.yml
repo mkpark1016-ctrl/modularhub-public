@@ -72,24 +72,33 @@ jobs:
       - name: Validate manually verified source modules
         shell: bash
         run: |
-          python -m compileall \
-            scripts/verified_companies \
-            scripts/verified_import_helpers.py \
-            scripts/verified_company_source.py \
-            scripts/verified_company_apply.py \
-            scripts/import_verified_company_baseline.py
-          python scripts/import_verified_company_baseline.py --check
+          set -o pipefail
+          {
+            python -m compileall \
+              scripts/verified_companies \
+              scripts/verified_import_helpers.py \
+              scripts/verified_company_source.py \
+              scripts/verified_company_apply.py \
+              scripts/import_verified_company_baseline.py
+            python scripts/import_verified_company_baseline.py --check
+          } 2>&1 | tee /tmp/verified-python.log
 
       - name: Generate verified V1 and V2 outputs
-        run: python scripts/import_verified_company_baseline.py
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/import_verified_company_baseline.py 2>&1 | tee -a /tmp/verified-python.log
 
       - name: Run Python regression and contract tests
         shell: bash
         run: |
-          python scripts/test_verified_company_baseline.py
-          python scripts/test_company_universe.py
-          python scripts/validate_company_universe.py
-          python scripts/test_public_json_export.py
+          set -o pipefail
+          {
+            python scripts/test_verified_company_baseline.py
+            python scripts/test_company_universe.py
+            python scripts/validate_company_universe.py
+            python scripts/test_public_json_export.py
+          } 2>&1 | tee -a /tmp/verified-python.log
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -121,7 +130,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: verified-company-diagnostics
-          path: /tmp/verified-company-frontend.log
+          path: |
+            /tmp/verified-python.log
+            /tmp/verified-company-frontend.log
           if-no-files-found: warn
           retention-days: 7
 
