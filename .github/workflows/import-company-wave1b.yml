@@ -12,6 +12,7 @@ on:
       - scripts/import_company_wave1b.py
       - scripts/test_company_wave1b.py
       - scripts/import_curated_company_baseline.py
+      - frontend/scripts/test-company-insights.mjs
       - frontend/scripts/test-company-intelligence-v2.mjs
   pull_request:
     branches:
@@ -25,6 +26,7 @@ on:
       - scripts/import_company_wave1b.py
       - scripts/test_company_wave1b.py
       - scripts/import_curated_company_baseline.py
+      - frontend/scripts/test-company-insights.mjs
       - frontend/scripts/test-company-intelligence-v2.mjs
       - frontend/public/data/companies/companies.json
       - frontend/public/data/companies/company_intelligence_v2.json
