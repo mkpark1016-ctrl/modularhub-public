@@ -45,6 +45,96 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Synchronize production evidence contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/import_curated_company_baseline.py')
+          text = path.read_text(encoding='utf-8')
+
+          source_old = '''        "confidence": source["confidence"],
+              "verification_note": source["note"],
+          }
+          '''.replace('          ', '')
+          source_new = '''        "confidence": source["confidence"],
+              "verification_note": source["note"],
+              "supported_claims": [
+                  "facility_name",
+                  "location",
+                  "ownership_type",
+                  "operation_status",
+                  "site_area_m2",
+                  "building_area_m2",
+                  "production_scope",
+                  "production_processes",
+                  "reported_capacity",
+                  "capacity_value",
+              ],
+              "visibility": source.get("visibility", "internal"),
+          }
+          '''.replace('          ', '')
+          if '"supported_claims": [' not in text:
+              if source_old not in text:
+                  raise SystemExit('source_record anchor not found')
+              text = text.replace(source_old, source_new, 1)
+
+          summary_anchor = '''    intelligence["updated_at"] = reviewed_at
+
+              return data
+          '''.replace('          ', '')
+          summary_block = '''    intelligence["updated_at"] = reviewed_at
+
+              confirmed_statuses = {
+                  "confirmed_own_facility",
+                  "confirmed_leased_facility",
+                  "confirmed_partner_manufacturing",
+              }
+              excluded_statuses = {
+                  "not_publicly_confirmed",
+                  "research_in_progress",
+                  "historical_facility",
+                  "planned_facility",
+                  "ceased_operation",
+              }
+              confirmed_count = 0
+              for facility in production:
+                  status = (
+                      facility.get("own_facility_status")
+                      or facility.get("verification_status")
+                      or facility.get("operation_status")
+                  )
+                  if status in excluded_statuses:
+                      continue
+                  if status in confirmed_statuses or (
+                      facility.get("facility_name") and facility.get("source_ids")
+                  ):
+                      confirmed_count += 1
+
+              production_summary = company.setdefault("production_summary", {})
+              production_summary["confirmed_facility_count"] = confirmed_count
+              production_summary["source_ids"] = merge_unique(
+                  production_summary.get("source_ids"),
+                  [source_id],
+              )
+              production_summary["reported_capacity_available"] = any(
+                  facility.get("reported_capacity") is not None
+                  or facility.get("capacity_value") is not None
+                  for facility in production
+              )
+
+              return data
+          '''.replace('          ', '')
+          if 'production_summary["confirmed_facility_count"]' not in text:
+              if summary_anchor not in text:
+                  raise SystemExit('merge_v1 summary anchor not found')
+              text = text.replace(summary_anchor, summary_block, 1)
+
+          path.write_text(text, encoding='utf-8')
+          print('Production evidence contract synchronized.')
+          PY
+
       - name: Record protected public JSON hashes
         shell: bash
         run: |
@@ -187,6 +277,7 @@ jobs:
           python - <<'PY'
           import subprocess
           allowed = {
+              'scripts/import_curated_company_baseline.py',
               'frontend/public/data/companies/companies.json',
               'frontend/public/data/companies/company_intelligence_v2.json',
           }
@@ -205,17 +296,18 @@ jobs:
           print('Changed files:', changed)
           PY
 
-      - name: Commit corrected company JSON files
+      - name: Commit corrected importer and company JSON files
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
+            scripts/import_curated_company_baseline.py \
             frontend/public/data/companies/companies.json \
             frontend/public/data/companies/company_intelligence_v2.json
           if git diff --cached --quiet; then
             echo 'No corrected generated changes to commit.'
           else
-            git commit -m 'Preserve official evidence in Kumkang baseline import'
+            git commit -m 'Complete source-backed Kumkang baseline import'
             git push origin HEAD:data/company-baseline-pilot-kumkang
           fi
