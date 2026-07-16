@@ -1,14 +1,6 @@
 name: Import Kumkang curated baseline
 
 on:
-  push:
-    branches:
-      - data/company-baseline-pilot-kumkang
-    paths:
-      - .github/workflows/import-kumkang-baseline.yml
-      - config/companies/curated/kumkang-kind.json
-      - scripts/import_curated_company_baseline.py
-      - scripts/test_curated_company_import.py
   pull_request:
     branches:
       - main
@@ -60,23 +52,14 @@ jobs:
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Persist precheck failure report
+      - name: Upload precheck failure report
         if: steps.precheck.outputs.status != '0'
-        shell: bash
-        run: |
-          mkdir -p artifacts/github-actions-kumkang
-          {
-            echo "workflow_run_id=${GITHUB_RUN_ID}"
-            echo "commit=${GITHUB_SHA}"
-            echo "status=${{ steps.precheck.outputs.status }}"
-            echo
-            cat /tmp/kumkang-precheck.log
-          } > artifacts/github-actions-kumkang/precheck-failure.txt
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add artifacts/github-actions-kumkang/precheck-failure.txt
-          git commit -m "Record Kumkang import precheck failure"
-          git push origin HEAD:data/company-baseline-pilot-kumkang
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumkang-precheck-failure
+          path: /tmp/kumkang-precheck.log
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Stop after precheck failure
         if: steps.precheck.outputs.status != '0'
