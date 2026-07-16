@@ -99,12 +99,24 @@ jobs:
         working-directory: frontend
         shell: bash
         run: |
-          npm run test:companies
-          npm run test:companies-v2
-          npm run test:companies-projects
-          npm run test:companies-url
-          npm run lint
-          npm run build
+          set -o pipefail
+          {
+            npm run test:companies
+            npm run test:companies-v2
+            npm run test:companies-projects
+            npm run test:companies-url
+            npm run lint
+            npm run build
+          } 2>&1 | tee /tmp/company-wave1b-frontend.log
+
+      - name: Upload frontend diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-wave1b-frontend-diagnostics
+          path: /tmp/company-wave1b-frontend.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Verify protected datasets
         shell: bash
@@ -114,6 +126,7 @@ jobs:
           git diff --check
 
       - name: Upload generated company outputs
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: company-wave1b-generated-json
