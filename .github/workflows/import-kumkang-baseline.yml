@@ -4,10 +4,7 @@ on:
   pull_request:
     branches:
       - main
-    types:
-      - opened
-      - synchronize
-      - reopened
+    types: [opened, synchronize, reopened]
     paths:
       - .github/workflows/import-kumkang-baseline.yml
       - config/companies/curated/kumkang-kind.json
@@ -35,12 +32,20 @@ jobs:
           ref: data/company-baseline-pilot-kumkang
           fetch-depth: 0
 
+      - name: Restore clean company baselines from main
+        shell: bash
+        run: |
+          git fetch origin main
+          git checkout origin/main -- \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Normalize curated technology collection compatibility
+      - name: Apply authority-aware importer compatibility
         shell: bash
         run: |
           python - <<'PY'
@@ -48,12 +53,12 @@ jobs:
 
           path = Path('scripts/import_curated_company_baseline.py')
           text = path.read_text(encoding='utf-8')
-          old = '''    technology = company.setdefault("technology", {})
+
+          technology_old = '''    technology = company.setdefault("technology", {})
               patents = technology.setdefault("patents", [])
               for patent in curated.get("technology", {}).get("patents", []):
-          '''
-          old = old.replace('              ', '    ')
-          new = '''    technology = company.get("technology")
+          '''.replace('              ', '    ')
+          technology_new = '''    technology = company.get("technology")
               if technology is None:
                   technology = {}
                   company["technology"] = technology
@@ -68,48 +73,129 @@ jobs:
               else:
                   raise RuntimeError("Curated technology must be a list or object")
               for patent in technology_records:
-          '''
-          new = new.replace('              ', '    ')
-          if old in text:
-              path.write_text(text.replace(old, new, 1), encoding='utf-8')
-              print('Updated importer to support list/object technology collections.')
-          elif 'for patent in technology_records:' in text:
-              print('Importer compatibility fix already present.')
-          else:
-              raise SystemExit('Expected technology import block was not found; refusing unsafe patch.')
+          '''.replace('              ', '    ')
+          if technology_old in text:
+              text = text.replace(technology_old, technology_new, 1)
+
+          if 'def authority_upsert(' not in text:
+              anchor = '''def upsert(items: list[dict[str, Any]], key: str, value: dict[str, Any]) -> None:
+              target = value.get(key)
+              for index, item in enumerate(items):
+                  if item.get(key) == target:
+                      merged = copy.deepcopy(item)
+                      merged.update(copy.deepcopy(value))
+                      items[index] = merged
+                      return
+              items.append(copy.deepcopy(value))
+          '''.replace('              ', '    ')
+              helpers = '''
+
+          CONFIDENCE_RANK = {"unknown": 0, "low": 1, "medium": 2, "high": 3}
+          VERIFICATION_RANK = {
+              "unknown": 0,
+              "not_confirmed": 0,
+              "unverified": 1,
+              "internally_confirmed": 2,
+              "partially_verified": 3,
+              "verified": 4,
+              "official_verified": 5,
+          }
+          LIST_MERGE_FIELDS = {
+              "source_ids", "aliases", "facility_aliases", "counterparties",
+              "production_scope", "structural_systems", "target_markets", "modular_methods",
+          }
+          MISSING_TEXT = {"", "unknown", "unconfirmed", "not_confirmed", "collecting", "research_in_progress"}
+
+
+          def is_missing(value: Any) -> bool:
+              if value is None or value == [] or value == {}:
+                  return True
+              return isinstance(value, str) and value.strip().lower() in MISSING_TEXT
+
+
+          def merge_unique(existing: Any, incoming: Any) -> list[Any]:
+              result: list[Any] = []
+              for collection in (existing, incoming):
+                  if collection is None:
+                      continue
+                  values = collection if isinstance(collection, list) else [collection]
+                  for value in values:
+                      if value not in result:
+                          result.append(copy.deepcopy(value))
+              return result
+
+
+          def stronger_value(existing: Any, incoming: Any, ranking: dict[str, int]) -> Any:
+              existing_key = str(existing or "unknown").lower()
+              incoming_key = str(incoming or "unknown").lower()
+              return incoming if ranking.get(incoming_key, 0) > ranking.get(existing_key, 0) else existing
+
+
+          def has_authoritative_source(item: dict[str, Any]) -> bool:
+              source_ids = [str(value).lower() for value in item.get("source_ids", [])]
+              return (
+                  int(item.get("primary_source_count") or 0) > 0
+                  or any("official" in value for value in source_ids)
+                  or str(item.get("evidence_type") or "").lower().startswith("official")
+                  or str(item.get("verification_status") or "").lower() == "official_verified"
+              )
+
+
+          def authority_merge(existing: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
+              result = copy.deepcopy(existing)
+              authoritative = has_authoritative_source(existing)
+              for field, value in incoming.items():
+                  current = result.get(field)
+                  if field in LIST_MERGE_FIELDS:
+                      result[field] = merge_unique(current, value)
+                  elif field in {"confidence", "data_confidence"}:
+                      result[field] = stronger_value(current, value, CONFIDENCE_RANK)
+                  elif field in {"verification_status", "evidence_status"}:
+                      result[field] = stronger_value(current, value, VERIFICATION_RANK)
+                  elif field in {"source_count", "primary_source_count"}:
+                      result[field] = max(int(current or 0), int(value or 0))
+                  elif field == "project_credit":
+                      result[field] = bool(current) or bool(value)
+                  elif is_missing(current) and not is_missing(value):
+                      result[field] = copy.deepcopy(value)
+                  elif not authoritative and not is_missing(value):
+                      result[field] = copy.deepcopy(value)
+                  elif authoritative and field in {"project_name", "facility_name"} and value != current:
+                      alias_field = "aliases" if field == "project_name" else "facility_aliases"
+                      result[alias_field] = merge_unique(result.get(alias_field), [value])
+                  elif authoritative and field in {"summary", "notes", "project_summary", "role_detail"} and not is_missing(value):
+                      result.setdefault("internal_research_note", value)
+
+              result["source_ids"] = merge_unique(existing.get("source_ids"), incoming.get("source_ids"))
+              if "source_count" in result or result.get("source_ids"):
+                  result["source_count"] = max(int(result.get("source_count") or 0), len(result.get("source_ids", [])))
+              return result
+
+
+          def authority_upsert(items: list[dict[str, Any]], key: str, value: dict[str, Any]) -> None:
+              target = value.get(key)
+              for index, item in enumerate(items):
+                  if item.get(key) == target:
+                      items[index] = authority_merge(item, value)
+                      return
+              items.append(copy.deepcopy(value))
+          '''.replace('          ', '')
+              if anchor not in text:
+                  raise SystemExit('Generic upsert anchor not found; refusing unsafe authority patch.')
+              text = text.replace(anchor, anchor + helpers, 1)
+
+          replacements = {
+              'upsert(production, "facility_id", normalized)': 'authority_upsert(production, "facility_id", normalized)',
+              'upsert(projects, "project_id", normalize_project(project, company_id, source_id, reviewed_at))': 'authority_upsert(projects, "project_id", normalize_project(project, company_id, source_id, reviewed_at))',
+              'upsert(patents, "technology_id", normalized)': 'authority_upsert(patents, "technology_id", normalized)',
+              'upsert(events, "event_id", event)': 'authority_upsert(events, "event_id", event)',
+          }
+          for old, new in replacements.items():
+              text = text.replace(old, new)
+
+          path.write_text(text, encoding='utf-8')
+          print('Authority-aware curated importer is ready.')
           PY
-
-      - name: Validate curated merge without writing
-        id: precheck
-        continue-on-error: true
-        shell: bash
-        run: |
-          set +e
-          python scripts/import_curated_company_baseline.py --check > /tmp/kumkang-precheck.log 2>&1
-          status=$?
-          cat /tmp/kumkang-precheck.log
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload precheck failure report
-        if: steps.precheck.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-precheck-failure
-          path: /tmp/kumkang-precheck.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after precheck failure
-        if: steps.precheck.outputs.status != '0'
-        run: exit 1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
 
       - name: Record protected public JSON hashes
         shell: bash
@@ -119,6 +205,9 @@ jobs:
             frontend/public/data/news.json \
             frontend/public/data/meta.json \
             > /tmp/protected-before.sha256
+
+      - name: Validate curated merge without writing
+        run: python scripts/import_curated_company_baseline.py --check
 
       - name: Run curated importer regression test
         run: python scripts/test_curated_company_import.py
@@ -132,45 +221,21 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-
-          paths = [
+          for path in (
               Path('frontend/public/data/companies/companies.json'),
               Path('frontend/public/data/companies/company_intelligence_v2.json'),
-          ]
-          for path in paths:
+          ):
               with path.open(encoding='utf-8') as handle:
                   json.load(handle)
               print(f'VALID JSON: {path}')
           PY
 
       - name: Run company and public-data validation
-        id: backend_validation
-        continue-on-error: true
         shell: bash
         run: |
-          set +e
-          {
-            python scripts/test_company_universe.py
-            python scripts/validate_company_universe.py
-            python scripts/test_public_json_export.py
-          } > /tmp/kumkang-backend-validation.log 2>&1
-          status=$?
-          cat /tmp/kumkang-backend-validation.log
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload backend validation failure report
-        if: steps.backend_validation.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-backend-validation-failure
-          path: /tmp/kumkang-backend-validation.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after backend validation failure
-        if: steps.backend_validation.outputs.status != '0'
-        run: exit 1
+          python scripts/test_company_universe.py
+          python scripts/validate_company_universe.py
+          python scripts/test_public_json_export.py
 
       - name: Verify protected public JSON files are unchanged
         shell: bash
@@ -181,76 +246,38 @@ jobs:
             frontend/public/data/news.json \
             frontend/public/data/meta.json
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
 
       - name: Run company frontend tests
-        id: frontend_tests
-        continue-on-error: true
         working-directory: frontend
         shell: bash
         run: |
-          set +e
-          {
-            npm run test:companies
-            npm run test:companies-v2
-            npm run test:companies-projects
-            npm run test:companies-url
-          } > /tmp/kumkang-frontend-tests.log 2>&1
-          status=$?
-          cat /tmp/kumkang-frontend-tests.log
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload frontend test failure report
-        if: steps.frontend_tests.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-frontend-tests-failure
-          path: /tmp/kumkang-frontend-tests.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after frontend test failure
-        if: steps.frontend_tests.outputs.status != '0'
-        run: exit 1
+          npm run test:companies
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:companies-url
 
       - name: Run lint and production build
-        id: lint_build
-        continue-on-error: true
         working-directory: frontend
         shell: bash
         run: |
-          set +e
-          {
-            npm run lint
-            npm run build
-          } > /tmp/kumkang-lint-build.log 2>&1
-          status=$?
-          cat /tmp/kumkang-lint-build.log
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload lint and build failure report
-        if: steps.lint_build.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-lint-build-failure
-          path: /tmp/kumkang-lint-build.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after lint or build failure
-        if: steps.lint_build.outputs.status != '0'
-        run: exit 1
+          npm run lint
+          npm run build
 
       - name: Ensure only intended generated files changed
         shell: bash
         run: |
           python - <<'PY'
           import subprocess
-
           allowed = {
               'scripts/import_curated_company_baseline.py',
               'frontend/public/data/companies/companies.json',
@@ -271,7 +298,7 @@ jobs:
           print('Changed files:', changed)
           PY
 
-      - name: Commit importer fix and generated company JSON files
+      - name: Commit corrected importer and company JSON files
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
@@ -281,8 +308,8 @@ jobs:
             frontend/public/data/companies/companies.json \
             frontend/public/data/companies/company_intelligence_v2.json
           if git diff --cached --quiet; then
-            echo "No generated changes to commit."
+            echo 'No corrected generated changes to commit.'
           else
-            git commit -m "Import Kumkang Kind curated company baseline"
+            git commit -m 'Preserve official evidence in Kumkang baseline import'
             git push origin HEAD:data/company-baseline-pilot-kumkang
           fi
