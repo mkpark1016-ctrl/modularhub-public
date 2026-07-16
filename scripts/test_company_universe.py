@@ -27,10 +27,10 @@ def main() -> int:
     by_id = {company["company_id"]: company for company in companies}
 
     require(validation["valid"], f"company universe validation failed: {validation['errors']}")
-    require(len(companies) == 17, "company universe must contain 17 companies")
+    require(len(companies) == 18, "company universe must contain 18 companies")
     require(result["tier_counts"].get("tier_1") == 8, "Tier 1 direct competitor count mismatch")
     require(result["tier_counts"].get("tier_1b") == 1, "Tier 1-B benchmark count mismatch")
-    require(result["tier_counts"].get("tier_2") == 5, "Tier 2 strategic contractor count mismatch")
+    require(result["tier_counts"].get("tier_2") == 6, "Tier 2 strategic contractor count mismatch")
     require(result["tier_counts"].get("tier_3") == 3, "Tier 3 design influencer count mismatch")
     require(result["role_counts"].get("direct_competitor") == 8, "direct competitor role count mismatch")
     require(result["role_counts"].get("substitute_competitor") == 1, "substitute competitor role count mismatch")

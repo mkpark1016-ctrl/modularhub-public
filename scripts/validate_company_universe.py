@@ -96,13 +96,13 @@ REQUIRED_COMPANY_FIELDS = {
 EXPECTED_TIER_COUNTS = {
     "tier_1": 8,
     "tier_1b": 1,
-    "tier_2": 5,
+    "tier_2": 6,
     "tier_3": 3,
 }
 EXPECTED_ROLE_COUNTS = {
     "direct_competitor": 8,
     "substitute_competitor": 1,
-    "strategic_benchmark": 4,
+    "strategic_benchmark": 5,
     "design_influencer": 3,
     "internal_baseline": 1,
 }
@@ -132,8 +132,8 @@ def validate_universe(payload: dict[str, Any]) -> dict[str, Any]:
 
     if payload.get("schema_version") != "company-universe-v1":
         add_error(errors, "invalid_schema_version", "", "schema_version", "top-level schema_version must be company-universe-v1")
-    if len(rows) != 17:
-        add_error(errors, "invalid_company_count", "", "companies", f"expected 17 companies, got {len(rows)}")
+    if len(rows) != 18:
+        add_error(errors, "invalid_company_count", "", "companies", f"expected 18 companies, got {len(rows)}")
 
     ids = [str(row.get("company_id", "")) for row in rows]
     id_counts = Counter(ids)
