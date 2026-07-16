@@ -53,23 +53,31 @@ assert.deepEqual(
   wave1Targets.map((company) => company.company_id).sort(),
   ["daeseung-engineering", "planm", "sungji-steel", "yuchang-enc"],
 );
-assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).verified, 0), 0);
+assert.ok(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).verified, 0) >= 1);
 assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).candidates, 0), 0);
 assert.equal(wave1Targets.reduce((sum, company) => sum + getCompanyProjectSummary(company).rawArticleCount, 0), 35);
-const yuchangCandidates = projectCandidates(byId("yuchang-enc"));
+
+const yuchang = byId("yuchang-enc");
+const yuchangCandidates = projectCandidates(yuchang);
 assert.equal(yuchangCandidates.length, 1);
 assert.equal(yuchangCandidates[0].source_article_count, 35);
 assert.equal(yuchangCandidates[0].possible_company_role, "role_unknown");
 assert.equal(yuchangCandidates[0].verification_status, "research_exhausted_no_verified_project");
-assert.equal(getCompanyProjectSummary(byId("yuchang-enc")).researchStatus, "research_exhausted_no_verified_project");
-assert.equal(getCompanyProjectSummary(byId("yuchang-enc")).verified, 0);
-assert.equal(getCompanyProjectSummary(byId("yuchang-enc")).partnerships, 1);
+assert.equal(getCompanyProjectSummary(yuchang).researchStatus, "research_exhausted_no_verified_project");
+assert.ok(getCompanyProjectSummary(yuchang).verified >= 1);
+assert.equal(getCompanyProjectSummary(yuchang).partnerships, 1);
+const hadaewon = yuchang.project_portfolio.find((project) => project.project_id === "yuchang-seongnam-hadaewon-happy-housing");
+assert.ok(hadaewon);
+assert.equal(hadaewon.project_status, "completed");
+assert.equal(hadaewon.project_credit, true);
+assert.equal(hadaewon.verification_status, "internally_confirmed");
+
 assert.equal(projectCandidates(byId("planm")).length, 0);
 assert.equal(getCompanyProjectSummary(byId("planm")).rawArticleCount, 0);
 assert.equal(byId("planm").project_research_status.raw_candidate_article_count, 5);
 assert.equal(getCompanyProjectSummary(byId("daeseung-engineering")).researchGapCount, 1);
 assert.equal(getCompanyProjectSummary(byId("sungji-steel")).researchGapCount, 1);
-assert.equal(matchesCompanySearch(byId("yuchang-enc"), yuchangCandidates[0].canonical_project_name), true);
+assert.equal(matchesCompanySearch(yuchang, yuchangCandidates[0].canonical_project_name), true);
 
 const projectIds = companies.flatMap((company) => (company.project_portfolio || []).map((project) => project.project_id));
 assert.equal(projectIds.length, new Set(projectIds).size);
