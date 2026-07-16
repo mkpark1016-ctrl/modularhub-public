@@ -1049,14 +1049,20 @@ function CompanyDetailPage() {
                 const buildingArea = formatProductionArea(item.building_area ?? item.building_area_m2, item.building_area_unit || "m2");
                 return (
                   <div key={item.facility_id || item.facility_name}>
-                    <strong>{item.facility_name || "시설명 확인 중"}</strong>
+                    <strong>{item.display_name || item.facility_name || "시설명 확인 중"}</strong>
                     <span>{[item.region || item.city || item.location, getDisplayValue(item.ownership_type), getDisplayValue(item.operation_status)].filter(Boolean).join(" · ") || "위치 정보 확인 중"}</span>
+
+                    {item.address && <span>주소: {item.address}</span>}
+
+                    {item.identity_note && <span>{item.identity_note}</span>}
                     {(item.production_scope || []).length > 0 && <span>생산 대상: {item.production_scope.map((value) => getDisplayValue(value)).join(", ")}</span>}
                     {(item.production_processes || []).length > 0 && <span>공정: {item.production_processes.slice(0, 5).map((value) => getDisplayValue(value)).join(", ")}</span>}
                     {siteArea && <span>부지면적 {siteArea}</span>}
                     {buildingArea && <span>건축면적 {buildingArea}</span>}
                     <span>{getProductionCapacityLabel(item)}</span>
-                    <span>검증 상태: {getConfidenceLabel({ data_confidence: item.data_confidence || item.confidence || productionInfo.data_confidence })}</span>
+                    {item.verification_basis_label && <span>근거 기준: {item.verification_basis_label}</span>}
+
+                    <span>신뢰도: {getConfidenceLabel({ data_confidence: item.data_confidence || item.confidence || productionInfo.data_confidence })}</span>
                     <span>기준일: {formatCompanyDate(item.verified_at || productionInfo.verified_at)}</span>
                   </div>
                 );

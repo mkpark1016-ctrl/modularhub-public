@@ -5530,18 +5530,27 @@
         "site_area_m2": 61680,
         "capacity_value": null,
         "capacity_status": "unavailable",
-        "operation_status": "active"
+        "operation_status": "active",
+        "display_name": "진천공장",
+        "facility_aliases": [
+          "금강공업 진천공장",
+          "진천공장"
+        ],
+        "address": null,
+        "verification_basis_label": "내부 조사 기준",
+        "identity_note": "시설 존재와 부지면적은 내부 조사자료 기준이며, 공식 주소와 생산능력은 추가 확인이 필요합니다.",
+        "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
       },
       "unit": null,
       "period": null,
       "as_of": "2026-07-16T10:30:00+09:00",
       "verification_status": "internally_confirmed",
-      "confidence": "medium",
+      "confidence": "low",
       "source_ids": [
         "internal-research-kumkang-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T10:30:00+09:00"
+      "updated_at": "2026-07-16T20:00:00+09:00"
     },
     {
       "fact_id": "fact-kumkang-kind-production-facility_kumkang-kind-boeun-factory-current",
@@ -5553,18 +5562,28 @@
         "site_area_m2": 27107,
         "capacity_value": null,
         "capacity_status": "unavailable",
-        "operation_status": "active"
+        "operation_status": "active",
+        "display_name": "보은 제1공장",
+        "facility_aliases": [
+          "보은공장",
+          "보은1공장",
+          "보은 제1공장"
+        ],
+        "address": "충청북도 보은군 삼승면 남부로 3749-11",
+        "verification_basis_label": "공식 위치 확인 · 부지면적 내부 조사",
+        "identity_note": "공식 사이트의 ‘보은공장’과 동일 시설이며, 보은 제2공장과는 별도 주소입니다.",
+        "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
       },
       "unit": null,
       "period": null,
       "as_of": "2026-07-16T10:30:00+09:00",
-      "verification_status": "internally_confirmed",
+      "verification_status": "partially_verified",
       "confidence": "medium",
       "source_ids": [
         "internal-research-kumkang-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T10:30:00+09:00"
+      "updated_at": "2026-07-16T20:00:00+09:00"
     },
     {
       "fact_id": "fact-kumkang-kind-production-facility_kumkang-kind-boeun-2-factory-current",
@@ -5576,18 +5595,27 @@
         "site_area_m2": 71405,
         "capacity_value": null,
         "capacity_status": "unavailable",
-        "operation_status": "under_expansion"
+        "operation_status": "under_expansion",
+        "display_name": "보은 제2공장",
+        "facility_aliases": [
+          "보은2공장",
+          "보은 제2공장"
+        ],
+        "address": "충청북도 보은군 삼승면 남부로 3749-6",
+        "verification_basis_label": "공식 위치 확인 · 부지면적·확장계획 내부 조사",
+        "identity_note": "보은 제1공장과 별도 주소의 시설입니다. 생산능력 수치는 공개자료에서 확인되지 않았습니다.",
+        "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
       },
       "unit": null,
       "period": null,
       "as_of": "2026-07-16T10:30:00+09:00",
-      "verification_status": "internally_confirmed",
+      "verification_status": "partially_verified",
       "confidence": "medium",
       "source_ids": [
         "internal-research-kumkang-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T10:30:00+09:00"
+      "updated_at": "2026-07-16T20:00:00+09:00"
     }
   ],
   "events": [

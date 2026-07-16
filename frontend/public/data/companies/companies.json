@@ -2170,13 +2170,12 @@
       "production": [
         {
           "facility_id": "kumkang-kind-boeun-factory",
-          "facility_name": "보은공장",
+          "facility_name": "보은 제1공장",
           "company_id": "kumkang-kind",
           "facility_aliases": [
+            "보은공장",
             "보은1공장",
-            "보은2공장",
-            "보은 제1공장",
-            "보은공장"
+            "보은 제1공장"
           ],
           "facility_type": "modular_factory",
           "modular_system_type": "steel_volumetric",
@@ -2187,7 +2186,7 @@
           "country": "KR",
           "region": "충청북도",
           "city": "보은군",
-          "address": "충청북도 보은군 삼승면 남부로 3749-11 / 3749-6",
+          "address": "충청북도 보은군 삼승면 남부로 3749-11",
           "site_area_m2": 27107,
           "building_area_m2": null,
           "production_scope": [
@@ -2222,8 +2221,8 @@
             "internal-research-kumkang-20260716"
           ],
           "verified_at": "2026-07-15",
-          "confidence": "high",
-          "data_confidence": "high",
+          "confidence": "medium",
+          "data_confidence": "medium",
           "notes": "Official modular page confirms factory-made modular units and names Boeun factory; official network page provides Boeun 1 and 2 factory locations. Official capacity is not disclosed.",
           "site_area": null,
           "site_area_unit": null,
@@ -2236,13 +2235,25 @@
           "internal_research_notes": [
             "공식 생산 네트워크에서 보은공장 존재와 위치를 확인했으며 부지면적은 내부 조사 기준이다."
           ],
-          "source_count": 3
+          "source_count": 3,
+          "official_name": "보은공장",
+          "legacy_aliases_reviewed": [
+            "보은1공장",
+            "보은2공장",
+            "보은 제1공장",
+            "보은공장"
+          ],
+          "display_name": "보은 제1공장",
+          "verification_basis_label": "공식 위치 확인 · 부지면적 내부 조사",
+          "identity_note": "공식 사이트의 ‘보은공장’과 동일 시설이며, 보은 제2공장과는 별도 주소입니다.",
+          "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
         },
         {
           "facility_id": "kumkang-kind-jincheon-factory",
           "facility_name": "진천공장",
           "facility_aliases": [
-            "금강공업 진천공장"
+            "금강공업 진천공장",
+            "진천공장"
           ],
           "facility_type": "modular_factory",
           "modular_system_type": "steel_volumetric",
@@ -2268,20 +2279,28 @@
           "capacity_status": "unavailable",
           "claimed_capacity_note": "내부 조사자료에는 연 8,000모듈 생산 목표가 기재되어 있으나 공식 원문 확인 전 수치 필드에는 반영하지 않는다.",
           "verification_status": "internally_confirmed",
-          "confidence": "medium",
+          "confidence": "low",
           "notes": "공장 존재·규모·용도는 내부 조사 기준이다. 공식 원문 연결 전 생산능력은 null로 유지한다.",
           "company_id": "kumkang-kind",
           "source_ids": [
             "internal-research-kumkang-20260716"
           ],
           "verified_at": "2026-07-16",
-          "data_confidence": "medium"
+          "data_confidence": "low",
+          "legacy_aliases_reviewed": [
+            "금강공업 진천공장"
+          ],
+          "display_name": "진천공장",
+          "verification_basis_label": "내부 조사 기준",
+          "identity_note": "시설 존재와 부지면적은 내부 조사자료 기준이며, 공식 주소와 생산능력은 추가 확인이 필요합니다.",
+          "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
         },
         {
           "facility_id": "kumkang-kind-boeun-2-factory",
           "facility_name": "보은 제2공장",
           "facility_aliases": [
-            "보은2공장"
+            "보은2공장",
+            "보은 제2공장"
           ],
           "facility_type": "modular_factory",
           "modular_system_type": "hybrid",
@@ -2317,7 +2336,14 @@
             "internal-research-kumkang-20260716"
           ],
           "verified_at": "2026-07-16",
-          "data_confidence": "medium"
+          "data_confidence": "medium",
+          "legacy_aliases_reviewed": [
+            "보은2공장"
+          ],
+          "display_name": "보은 제2공장",
+          "verification_basis_label": "공식 위치 확인 · 부지면적·확장계획 내부 조사",
+          "identity_note": "보은 제1공장과 별도 주소의 시설입니다. 생산능력 수치는 공개자료에서 확인되지 않았습니다.",
+          "qa_reviewed_at": "2026-07-16T20:00:00+09:00"
         }
       ],
       "project_portfolio": [
