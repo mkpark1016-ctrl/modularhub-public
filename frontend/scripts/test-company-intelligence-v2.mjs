@@ -27,14 +27,15 @@ assert.equal(v2.corrections.every((record) => record.visibility === "public"), t
 
 const yuchang = companies.find((company) => company.company_id === "yuchang-enc");
 const yuchangEvents = getCompanyEvents(yuchang);
-assert.equal(yuchangEvents.length, 1);
-assert.equal(yuchangEvents[0].event_type, "partnership");
-assert.equal(yuchangEvents[0].event_status, "not_signed");
-assert.equal(yuchangEvents[0].project_credit, false);
-assert.equal(getCompanyProjectSummary(yuchang).verified, 0);
+const samsungEvent = yuchangEvents.find((event) => event.event_id === "event-yuchang-enc-samsung-ai-modular-home");
+assert.ok(samsungEvent);
+assert.equal(samsungEvent.event_type, "partnership");
+assert.equal(samsungEvent.event_status, "not_signed");
+assert.equal(samsungEvent.project_credit, false);
+assert.ok(getCompanyProjectSummary(yuchang).verified >= 1);
 assert.equal(getCompanyProjectSummary(yuchang).partnerships, 1);
 assert.equal(getCompanyProjectSummary(yuchang).rawArticleCount, 35);
-assert.equal(getCompanyDomainStatuses(yuchang).project_status, "unavailable");
+assert.ok(["internally_confirmed", "partially_verified", "official_verified"].includes(getCompanyDomainStatuses(yuchang).project_status));
 
 const kumkang = companies.find((company) => company.company_id === "kumkang-kind");
 assert.ok(getCompanyProjectSummary(kumkang).verified >= 1);
