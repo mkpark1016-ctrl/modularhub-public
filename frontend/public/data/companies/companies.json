@@ -680,7 +680,8 @@
             "internal-research-yuchang-20260716"
           ],
           "verified_at": "2026-07-16",
-          "confidence": "medium"
+          "confidence": "medium",
+          "source_count": 1
         }
       ],
       "sources": [
@@ -1705,7 +1706,8 @@
             ],
             "verification_status": "internally_confirmed",
             "visibility": "public",
-            "updated_at": "2026-07-16T21:30:00+09:00"
+            "updated_at": "2026-07-16T21:30:00+09:00",
+            "source_count": 1
           },
           {
             "event_id": "event-yuchang-poscoac-modular-business-transfer",
@@ -1731,7 +1733,8 @@
               "internal-research-yuchang-20260716"
             ],
             "visibility": "public",
-            "updated_at": "2026-07-16T21:30:00+09:00"
+            "updated_at": "2026-07-16T21:30:00+09:00",
+            "source_count": 1
           }
         ],
         "source_groups": [
@@ -5025,7 +5028,8 @@
             "internal-research-planm-20260716"
           ],
           "verified_at": "2026-07-16",
-          "confidence": "medium"
+          "confidence": "medium",
+          "source_count": 1
         },
         {
           "signal_id": "event-planm-overseas-highrise-datacenter-strategy",
@@ -5038,7 +5042,8 @@
             "internal-research-planm-20260716"
           ],
           "verified_at": "2026-07-16",
-          "confidence": "medium"
+          "confidence": "medium",
+          "source_count": 1
         }
       ],
       "sources": [
@@ -5650,7 +5655,8 @@
               "internal-research-planm-20260716"
             ],
             "visibility": "public",
-            "updated_at": "2026-07-16T21:30:00+09:00"
+            "updated_at": "2026-07-16T21:30:00+09:00",
+            "source_count": 1
           },
           {
             "event_id": "event-planm-overseas-highrise-datacenter-strategy",
@@ -5676,7 +5682,8 @@
               "internal-research-planm-20260716"
             ],
             "visibility": "public",
-            "updated_at": "2026-07-16T21:30:00+09:00"
+            "updated_at": "2026-07-16T21:30:00+09:00",
+            "source_count": 1
           }
         ],
         "source_groups": [
@@ -10248,7 +10255,8 @@
             "internal-research-nrb-20260716"
           ],
           "verified_at": "2026-07-16",
-          "confidence": "medium"
+          "confidence": "medium",
+          "source_count": 1
         },
         {
           "signal_id": "event-nrb-highrise-modular-strategy",
@@ -10261,7 +10269,8 @@
             "internal-research-nrb-20260716"
           ],
           "verified_at": "2026-07-16",
-          "confidence": "medium"
+          "confidence": "medium",
+          "source_count": 1
         }
       ],
       "sources": [
@@ -10341,7 +10350,8 @@
               "internal-research-nrb-20260716"
             ],
             "visibility": "public",
-            "updated_at": "2026-07-16T21:30:00+09:00"
+            "updated_at": "2026-07-16T21:30:00+09:00",
+            "source_count": 1
           },
           {
             "event_id": "event-nrb-highrise-modular-strategy",
@@ -10367,7 +10377,8 @@
               "internal-research-nrb-20260716"
             ],
             "visibility": "public",
-            "updated_at": "2026-07-16T21:30:00+09:00"
+            "updated_at": "2026-07-16T21:30:00+09:00",
+            "source_count": 1
           }
         ],
         "source_groups": [

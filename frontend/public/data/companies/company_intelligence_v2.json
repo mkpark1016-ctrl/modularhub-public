@@ -5632,7 +5632,8 @@
         "internal-research-yuchang-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     },
     {
       "fact_id": "fact-yuchang-enc-organization-representative-current",
@@ -5649,7 +5650,8 @@
         "internal-research-yuchang-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     },
     {
       "fact_id": "fact-yuchang-enc-production-facility_yuchang-enc-yoochang-factory-current",
@@ -5672,7 +5674,8 @@
         "internal-research-yuchang-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     }
   ],
   "events": [
@@ -6111,7 +6114,8 @@
       ],
       "verification_status": "internally_confirmed",
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     },
     {
       "event_id": "event-yuchang-poscoac-modular-business-transfer",
@@ -6137,7 +6141,8 @@
         "internal-research-yuchang-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     },
     {
       "event_id": "event-nrb-automation-factory-expansion-strategy",
@@ -6163,7 +6168,8 @@
         "internal-research-nrb-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     },
     {
       "event_id": "event-nrb-highrise-modular-strategy",
@@ -6189,7 +6195,8 @@
         "internal-research-nrb-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     },
     {
       "event_id": "event-planm-capital-and-growth-strategy",
@@ -6215,7 +6222,8 @@
         "internal-research-planm-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     },
     {
       "event_id": "event-planm-overseas-highrise-datacenter-strategy",
@@ -6241,7 +6249,8 @@
         "internal-research-planm-20260716"
       ],
       "visibility": "public",
-      "updated_at": "2026-07-16T21:30:00+09:00"
+      "updated_at": "2026-07-16T21:30:00+09:00",
+      "source_count": 1
     }
   ],
   "evidence": [
