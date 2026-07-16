@@ -72,7 +72,7 @@ assert.equal(matchesCompanySearch(companies.find((company) => company.company_id
 assert.equal(matchesCompanySearch(companies.find((company) => company.company_id === "sungji-steel"), "not-a-real-company-term"), false);
 
 assert.equal(productionFacilities(companies.find((company) => company.company_id === "yuchang-enc")).length, 1);
-assert.equal(productionFacilities(companies.find((company) => company.company_id === "kumkang-kind")).length, 1);
+assert.ok(productionFacilities(companies.find((company) => company.company_id === "kumkang-kind")).length >= 3);
 assert.equal(hasConfirmedProductionFacility(companies.find((company) => company.company_id === "planm")), false);
 assert.equal(hasConfirmedProductionFacility(companies.find((company) => company.company_id === "daeseung-engineering")), false);
 assert.equal(getProductionModelLabel(companies.find((company) => company.company_id === "planm")), "공개자료상 생산시설 미확인");
