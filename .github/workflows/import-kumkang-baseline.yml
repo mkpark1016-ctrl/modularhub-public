@@ -40,6 +40,45 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Normalize curated technology collection compatibility
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/import_curated_company_baseline.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''    technology = company.setdefault("technology", {})
+              patents = technology.setdefault("patents", [])
+              for patent in curated.get("technology", {}).get("patents", []):
+          '''
+          old = old.replace('              ', '    ')
+          new = '''    technology = company.get("technology")
+              if technology is None:
+                  technology = {}
+                  company["technology"] = technology
+              elif not isinstance(technology, dict):
+                  raise RuntimeError("V1 company technology must be an object")
+              patents = technology.setdefault("patents", [])
+              curated_technology = curated.get("technology", [])
+              if isinstance(curated_technology, dict):
+                  technology_records = curated_technology.get("patents", [])
+              elif isinstance(curated_technology, list):
+                  technology_records = curated_technology
+              else:
+                  raise RuntimeError("Curated technology must be a list or object")
+              for patent in technology_records:
+          '''
+          new = new.replace('              ', '    ')
+          if old in text:
+              path.write_text(text.replace(old, new, 1), encoding='utf-8')
+              print('Updated importer to support list/object technology collections.')
+          elif 'for patent in technology_records:' in text:
+              print('Importer compatibility fix already present.')
+          else:
+              raise SystemExit('Expected technology import block was not found; refusing unsafe patch.')
+          PY
+
       - name: Validate curated merge without writing
         id: precheck
         continue-on-error: true
@@ -147,6 +186,7 @@ jobs:
           import subprocess
 
           allowed = {
+              'scripts/import_curated_company_baseline.py',
               'frontend/public/data/companies/companies.json',
               'frontend/public/data/companies/company_intelligence_v2.json',
           }
@@ -165,16 +205,17 @@ jobs:
           print('Changed files:', changed)
           PY
 
-      - name: Commit generated company JSON files
+      - name: Commit importer fix and generated company JSON files
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add \
+            scripts/import_curated_company_baseline.py \
             frontend/public/data/companies/companies.json \
             frontend/public/data/companies/company_intelligence_v2.json
           if git diff --cached --quiet; then
-            echo "No generated JSON changes to commit."
+            echo "No generated changes to commit."
           else
             git commit -m "Import Kumkang Kind curated company baseline"
             git push origin HEAD:data/company-baseline-pilot-kumkang
