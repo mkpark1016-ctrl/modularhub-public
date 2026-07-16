@@ -2238,10 +2238,9 @@
           "source_count": 3,
           "official_name": "보은공장",
           "legacy_aliases_reviewed": [
+            "보은공장",
             "보은1공장",
-            "보은2공장",
-            "보은 제1공장",
-            "보은공장"
+            "보은 제1공장"
           ],
           "display_name": "보은 제1공장",
           "verification_basis_label": "공식 위치 확인 · 부지면적 내부 조사",
@@ -2288,7 +2287,8 @@
           "verified_at": "2026-07-16",
           "data_confidence": "low",
           "legacy_aliases_reviewed": [
-            "금강공업 진천공장"
+            "금강공업 진천공장",
+            "진천공장"
           ],
           "display_name": "진천공장",
           "verification_basis_label": "내부 조사 기준",
@@ -2338,7 +2338,8 @@
           "verified_at": "2026-07-16",
           "data_confidence": "medium",
           "legacy_aliases_reviewed": [
-            "보은2공장"
+            "보은2공장",
+            "보은 제2공장"
           ],
           "display_name": "보은 제2공장",
           "verification_basis_label": "공식 위치 확인 · 부지면적·확장계획 내부 조사",
