@@ -1,0 +1,109 @@
+name: Import company Wave 1B baselines
+
+on:
+  push:
+    branches:
+      - data/company-baseline-wave1b
+    paths:
+      - .github/workflows/import-company-wave1b.yml
+      - config/companies/curated/yuchang-enc.json
+      - config/companies/curated/nrb.json
+      - config/companies/curated/planm.json
+      - scripts/import_company_wave1b.py
+      - scripts/test_company_wave1b.py
+      - scripts/import_curated_company_baseline.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: import-company-wave1b-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  import-and-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout Wave 1B branch
+        uses: actions/checkout@v4
+        with:
+          ref: data/company-baseline-wave1b
+          fetch-depth: 0
+
+      - name: Record protected public JSON hashes
+        shell: bash
+        run: |
+          sha256sum frontend/public/data/business.json frontend/public/data/news.json frontend/public/data/meta.json > /tmp/protected-before.sha256
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate curated JSON and dry-run import
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in (
+              Path('config/companies/curated/yuchang-enc.json'),
+              Path('config/companies/curated/nrb.json'),
+              Path('config/companies/curated/planm.json'),
+          ):
+              json.loads(path.read_text(encoding='utf-8'))
+              print(f'VALID JSON: {path}')
+          PY
+          python scripts/import_company_wave1b.py --check
+
+      - name: Generate Wave 1B outputs
+        run: python scripts/import_company_wave1b.py
+
+      - name: Run Python regression tests
+        shell: bash
+        run: |
+          python scripts/test_company_wave1b.py
+          python scripts/test_company_universe.py
+          python scripts/validate_company_universe.py
+          python scripts/test_public_json_export.py
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run company tests, lint and build
+        working-directory: frontend
+        shell: bash
+        run: |
+          npm run test:companies
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:companies-url
+          npm run lint
+          npm run build
+
+      - name: Verify protected datasets
+        shell: bash
+        run: |
+          sha256sum -c /tmp/protected-before.sha256
+          git diff --exit-code -- frontend/public/data/business.json frontend/public/data/news.json frontend/public/data/meta.json
+          git diff --check
+
+      - name: Upload generated company outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-wave1b-generated-json
+          path: |
+            frontend/public/data/companies/companies.json
+            frontend/public/data/companies/company_intelligence_v2.json
+          retention-days: 7
