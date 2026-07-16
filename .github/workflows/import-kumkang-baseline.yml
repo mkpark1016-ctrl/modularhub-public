@@ -7,16 +7,23 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - .github/workflows/import-kumkang-baseline.yml
+      - .github/workflows/qa-r1a-kumkang-facilities.yml
       - config/companies/curated/kumkang-kind.json
+      - config/companies/curated/kumkang-kind-qa-r1a.json
       - scripts/import_curated_company_baseline.py
+      - scripts/apply_kumkang_facility_qa_r1a.py
       - scripts/test_curated_company_import.py
+      - frontend/src/App.jsx
       - frontend/scripts/test-company-insights.mjs
       - frontend/scripts/test-company-intelligence-v2.mjs
       - frontend/scripts/test-company-projects.mjs
+      - frontend/scripts/test-company-facility-qa-r1a.mjs
+      - frontend/public/data/companies/companies.json
+      - frontend/public/data/companies/company_intelligence_v2.json
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: import-kumkang-baseline-${{ github.event.pull_request.number || github.ref }}
@@ -29,127 +36,11 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Checkout working branch
+      - name: Checkout pilot branch
         uses: actions/checkout@v4
         with:
           ref: data/company-baseline-pilot-kumkang
           fetch-depth: 0
-
-      - name: Restore clean company baselines from main
-        shell: bash
-        run: |
-          git fetch origin main
-          git checkout origin/main -- \
-            frontend/public/data/companies/companies.json \
-            frontend/public/data/companies/company_intelligence_v2.json
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Synchronize production and authority contracts
-        shell: bash
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          path = Path('scripts/import_curated_company_baseline.py')
-          text = path.read_text(encoding='utf-8')
-
-          if '"supported_claims": [' not in text:
-              marker = '        "verification_note": source["note"],\n'
-              lines = [
-                  '        "supported_claims": [',
-                  '            "facility_name",',
-                  '            "location",',
-                  '            "ownership_type",',
-                  '            "operation_status",',
-                  '            "site_area_m2",',
-                  '            "building_area_m2",',
-                  '            "production_scope",',
-                  '            "production_processes",',
-                  '            "reported_capacity",',
-                  '            "capacity_value",',
-                  '        ],',
-                  '        "visibility": source.get("visibility", "internal"),',
-              ]
-              addition = '\n'.join(lines) + '\n'
-              if marker not in text:
-                  raise SystemExit('source_record marker not found')
-              text = text.replace(marker, marker + addition, 1)
-
-          if 'production_summary["confirmed_facility_count"]' not in text:
-              marker = '    intelligence["updated_at"] = reviewed_at\n\n    return data\n'
-              lines = [
-                  '    intelligence["updated_at"] = reviewed_at',
-                  '',
-                  '    confirmed_statuses = {',
-                  '        "confirmed_own_facility",',
-                  '        "confirmed_leased_facility",',
-                  '        "confirmed_partner_manufacturing",',
-                  '    }',
-                  '    excluded_statuses = {',
-                  '        "not_publicly_confirmed",',
-                  '        "research_in_progress",',
-                  '        "historical_facility",',
-                  '        "planned_facility",',
-                  '        "ceased_operation",',
-                  '    }',
-                  '    confirmed_count = 0',
-                  '    for facility in production:',
-                  '        status = (',
-                  '            facility.get("own_facility_status")',
-                  '            or facility.get("verification_status")',
-                  '            or facility.get("operation_status")',
-                  '        )',
-                  '        if status in excluded_statuses:',
-                  '            continue',
-                  '        if status in confirmed_statuses or (',
-                  '            facility.get("facility_name") and facility.get("source_ids")',
-                  '        ):',
-                  '            confirmed_count += 1',
-                  '',
-                  '    production_summary = company.setdefault("production_summary", {})',
-                  '    production_summary["confirmed_facility_count"] = confirmed_count',
-                  '    production_summary["source_ids"] = merge_unique(',
-                  '        production_summary.get("source_ids"),',
-                  '        [source_id],',
-                  '    )',
-                  '    production_summary["reported_capacity_available"] = any(',
-                  '        facility.get("reported_capacity") is not None',
-                  '        or facility.get("capacity_value") is not None',
-                  '        for facility in production',
-                  '    )',
-                  '',
-                  '    return data',
-              ]
-              addition = '\n'.join(lines) + '\n'
-              if marker not in text:
-                  raise SystemExit('merge_v1 return marker not found')
-              text = text.replace(marker, addition, 1)
-
-          text = text.replace(
-              '    intelligence["overall_data_status"] = "partially_verified"\n',
-              '    if intelligence.get("overall_data_status") != "core_verified":\n'
-              '        intelligence["overall_data_status"] = "partially_verified"\n',
-              1,
-          )
-          text = text.replace(
-              '        summary["overall_data_status"] = "partially_verified"\n',
-              '        if summary.get("overall_data_status") != "core_verified":\n'
-              '            summary["overall_data_status"] = "partially_verified"\n',
-              1,
-          )
-          text = text.replace(
-              '        "visibility": "internal",\n        "stale_after": None,\n',
-              '        "visibility": "public",\n        "stale_after": None,\n',
-              1,
-          )
-
-          path.write_text(text, encoding='utf-8')
-          print('Production and authority contracts synchronized.')
-          PY
 
       - name: Record protected public JSON hashes
         shell: bash
@@ -160,45 +51,50 @@ jobs:
             frontend/public/data/meta.json \
             > /tmp/protected-before.sha256
 
-      - name: Validate curated merge without writing
-        run: python scripts/import_curated_company_baseline.py --check
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-      - name: Run curated importer regression test
-        run: python scripts/test_curated_company_import.py
+      - name: Validate curated importer without rewriting committed outputs
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/import_curated_company_baseline.py --check 2>&1 | tee /tmp/kumkang-legacy-import-check.log
+          python scripts/test_curated_company_import.py 2>&1 | tee -a /tmp/kumkang-legacy-import-check.log
 
-      - name: Generate company JSON outputs
-        run: python scripts/import_curated_company_baseline.py
+      - name: Upload importer diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kumkang-legacy-import-diagnostics
+          path: /tmp/kumkang-legacy-import-check.log
+          if-no-files-found: warn
+          retention-days: 7
 
-      - name: Validate generated JSON syntax
+      - name: Reapply QA-R1A overlay as an idempotence check
+        run: python scripts/apply_kumkang_facility_qa_r1a.py
+
+      - name: Validate JSON syntax and company contracts
         shell: bash
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
+
           for path in (
               Path('frontend/public/data/companies/companies.json'),
               Path('frontend/public/data/companies/company_intelligence_v2.json'),
+              Path('config/companies/curated/kumkang-kind.json'),
+              Path('config/companies/curated/kumkang-kind-qa-r1a.json'),
           ):
               with path.open(encoding='utf-8') as handle:
                   json.load(handle)
               print(f'VALID JSON: {path}')
           PY
-
-      - name: Run company and public-data validation
-        shell: bash
-        run: |
           python scripts/test_company_universe.py
           python scripts/validate_company_universe.py
           python scripts/test_public_json_export.py
-
-      - name: Verify protected public JSON files are unchanged
-        shell: bash
-        run: |
-          sha256sum -c /tmp/protected-before.sha256
-          git diff --exit-code -- \
-            frontend/public/data/business.json \
-            frontend/public/data/news.json \
-            frontend/public/data/meta.json
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -211,89 +107,51 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Run company frontend tests
-        id: company_frontend_tests
-        continue-on-error: true
+      - name: Run company regression, QA, lint and build
         working-directory: frontend
         shell: bash
         run: |
-          set +e
-          overall=0
-          : > /tmp/kumkang-company-frontend-tests.log
-          for command in \
-            "npm run test:companies" \
-            "npm run test:companies-v2" \
-            "npm run test:companies-projects" \
-            "npm run test:companies-url"
-          do
-            echo "===== $command =====" | tee -a /tmp/kumkang-company-frontend-tests.log
-            bash -lc "$command" 2>&1 | tee -a /tmp/kumkang-company-frontend-tests.log
-            status=${PIPESTATUS[0]}
-            echo "exit_status=$status" | tee -a /tmp/kumkang-company-frontend-tests.log
-            if [ "$status" -ne 0 ]; then
-              overall=1
-            fi
-          done
-          echo "status=$overall" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload company frontend diagnostics
-        if: steps.company_frontend_tests.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-company-frontend-tests
-          path: /tmp/kumkang-company-frontend-tests.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after company frontend test failure
-        if: steps.company_frontend_tests.outputs.status != '0'
-        run: exit 1
-
-      - name: Run lint and production build
-        working-directory: frontend
-        shell: bash
-        run: |
+          node scripts/test-company-facility-qa-r1a.mjs
+          npm run test:companies
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:companies-url
           npm run lint
           npm run build
 
-      - name: Ensure only intended generated files changed
+      - name: Verify protected datasets and secret safety
         shell: bash
         run: |
-          python - <<'PY'
-          import subprocess
-          allowed = {
-              'scripts/import_curated_company_baseline.py',
-              'frontend/public/data/companies/companies.json',
-              'frontend/public/data/companies/company_intelligence_v2.json',
-          }
-          output = subprocess.check_output(['git', 'status', '--porcelain'], text=True)
-          changed = []
-          for line in output.splitlines():
-              if not line.strip():
-                  continue
-              path = line[3:]
-              if ' -> ' in path:
-                  path = path.split(' -> ', 1)[1]
-              changed.append(path)
-          unexpected = sorted(set(changed) - allowed)
-          if unexpected:
-              raise SystemExit(f'Unexpected changed files: {unexpected}')
-          print('Changed files:', changed)
-          PY
+          sha256sum -c /tmp/protected-before.sha256
+          git diff --exit-code -- \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json
 
-      - name: Commit corrected importer and company JSON files
+          if grep -R -n -E '(OPEN_DART_API_KEY|OPENDART_API_KEY|DART_API_KEY|NAVER_CLIENT_SECRET|DATA_GO_KR_SERVICE_KEY)=' \
+            config/companies/curated/kumkang-kind.json \
+            config/companies/curated/kumkang-kind-qa-r1a.json \
+            scripts/import_curated_company_baseline.py \
+            scripts/apply_kumkang_facility_qa_r1a.py \
+            frontend/src/App.jsx \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json; then
+            echo 'Secret-like assignment found.' >&2
+            exit 1
+          fi
+
+      - name: Confirm generated data and UI are committed and drift-free
         shell: bash
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            scripts/import_curated_company_baseline.py \
+          git diff --exit-code -- \
+            frontend/src/App.jsx \
             frontend/public/data/companies/companies.json \
             frontend/public/data/companies/company_intelligence_v2.json
-          if git diff --cached --quiet; then
-            echo 'No corrected generated changes to commit.'
-          else
-            git commit -m 'Complete source-backed Kumkang baseline import'
-            git push origin HEAD:data/company-baseline-pilot-kumkang
+
+          if [ -n "$(git status --porcelain)" ]; then
+            echo 'Unexpected working tree changes remain:' >&2
+            git status --short >&2
+            exit 1
           fi
+
+          echo 'PASS: legacy importer is validation-only, QA-R1A is idempotent, and committed outputs are drift-free.'
