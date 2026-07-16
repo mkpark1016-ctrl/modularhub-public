@@ -1,0 +1,64 @@
+{
+  "schema_version": "curated-company-baseline-v1",
+  "company_id": "nrb",
+  "reviewed_at": "2026-07-16T21:30:00+09:00",
+  "source": {
+    "source_id": "internal-research-nrb-20260716",
+    "source_type": "internal_research",
+    "source_tier": "D",
+    "verification_status": "internally_confirmed",
+    "confidence": "medium",
+    "visibility": "internal",
+    "title": "엔알비 동종사 조사 구조화 기준선",
+    "note": "기존 경쟁사 조사에서 확인한 사업방향과 시장 포지션을 구조화한 내부 검토 기준선이다. 공식 생산시설·생산능력·프로젝트 원문이 연결되지 않은 항목은 실적이나 공식 검증값으로 승격하지 않는다."
+  },
+  "company": {
+    "company_name": "엔알비",
+    "company_name_en": "NRB",
+    "aliases": ["엔알비", "NRB", "N.R.B"],
+    "company_type": "modular_integrator",
+    "competitive_role": "substitute_competitor",
+    "analysis_tier": "tier_1b",
+    "business_status": "active",
+    "modular_methods": ["steel_volumetric"],
+    "target_markets": ["public_housing", "military", "school", "dormitory"],
+    "summary_ko": "자동화 생산체계, 고층화 기술, 생산거점 확장에 적극적인 스틸 모듈러 통합기업으로 분류합니다. 공개 공식자료로 확인되지 않은 공장·생산능력·프로젝트 수치는 추정하지 않고 전략 신호와 조사 공백으로 분리합니다.",
+    "established_at": null,
+    "listed_at": null,
+    "representative": null,
+    "employee_count_research_value": null,
+    "employee_count_as_of": null
+  },
+  "modular_revenue_research": [],
+  "production": [],
+  "projects": [],
+  "technology": [],
+  "strategy_events": [
+    {
+      "event_id": "event-nrb-automation-factory-expansion-strategy",
+      "event_type": "facility_investment",
+      "event_status": "planned",
+      "title": "자동화 생산체계 및 생산거점 확장 전략",
+      "announced_at": "2026",
+      "location": "대한민국",
+      "method": "steel_volumetric",
+      "project_credit": false,
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "summary": "자동화·증축·공장 인수 가능성을 포함한 생산기반 확대 신호로 관리하며, 공식 시설이 확인되기 전에는 자체 공장 수나 생산능력으로 표시하지 않는다."
+    },
+    {
+      "event_id": "event-nrb-highrise-modular-strategy",
+      "event_type": "business_strategy",
+      "event_status": "planned",
+      "title": "고층 스틸 모듈러 사업 확대 전략",
+      "announced_at": "2026",
+      "location": "대한민국",
+      "method": "steel_volumetric",
+      "project_credit": false,
+      "verification_status": "internally_confirmed",
+      "confidence": "medium",
+      "summary": "공공주택·군숙소·학교·기숙사 시장에서 고층화와 생산 자동화를 경쟁요소로 추적한다."
+    }
+  ]
+}
