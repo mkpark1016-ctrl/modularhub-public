@@ -12,13 +12,27 @@ on:
       - scripts/import_company_wave1b.py
       - scripts/test_company_wave1b.py
       - scripts/import_curated_company_baseline.py
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+    paths:
+      - .github/workflows/import-company-wave1b.yml
+      - config/companies/curated/yuchang-enc.json
+      - config/companies/curated/nrb.json
+      - config/companies/curated/planm.json
+      - scripts/import_company_wave1b.py
+      - scripts/test_company_wave1b.py
+      - scripts/import_curated_company_baseline.py
+      - frontend/public/data/companies/companies.json
+      - frontend/public/data/companies/company_intelligence_v2.json
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: import-company-wave1b-${{ github.ref }}
+  group: import-company-wave1b-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
