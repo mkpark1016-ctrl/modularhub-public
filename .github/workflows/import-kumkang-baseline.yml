@@ -10,6 +10,9 @@ on:
       - config/companies/curated/kumkang-kind.json
       - scripts/import_curated_company_baseline.py
       - scripts/test_curated_company_import.py
+      - frontend/scripts/test-company-insights.mjs
+      - frontend/scripts/test-company-intelligence-v2.mjs
+      - frontend/scripts/test-company-projects.mjs
   workflow_dispatch:
 
 permissions:
@@ -17,7 +20,7 @@ permissions:
 
 concurrency:
   group: import-kumkang-baseline-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   import-and-validate:
@@ -45,7 +48,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Synchronize production evidence contract
+      - name: Synchronize production and authority contracts
         shell: bash
         run: |
           python - <<'PY'
@@ -126,8 +129,26 @@ jobs:
                   raise SystemExit('merge_v1 return marker not found')
               text = text.replace(marker, addition, 1)
 
+          text = text.replace(
+              '    intelligence["overall_data_status"] = "partially_verified"\n',
+              '    if intelligence.get("overall_data_status") != "core_verified":\n'
+              '        intelligence["overall_data_status"] = "partially_verified"\n',
+              1,
+          )
+          text = text.replace(
+              '        summary["overall_data_status"] = "partially_verified"\n',
+              '        if summary.get("overall_data_status") != "core_verified":\n'
+              '            summary["overall_data_status"] = "partially_verified"\n',
+              1,
+          )
+          text = text.replace(
+              '        "visibility": "internal",\n        "stale_after": None,\n',
+              '        "visibility": "public",\n        "stale_after": None,\n',
+              1,
+          )
+
           path.write_text(text, encoding='utf-8')
-          print('Production evidence contract synchronized.')
+          print('Production and authority contracts synchronized.')
           PY
 
       - name: Record protected public JSON hashes
@@ -191,43 +212,13 @@ jobs:
         run: npm ci
 
       - name: Run company frontend tests
-        id: frontend_tests
-        continue-on-error: true
         working-directory: frontend
         shell: bash
         run: |
-          set +e
-          overall=0
-          : > /tmp/kumkang-frontend-final.log
-          for command in \
-            "npm run test:companies" \
-            "npm run test:companies-v2" \
-            "npm run test:companies-projects" \
-            "npm run test:companies-url"
-          do
-            echo "===== $command =====" | tee -a /tmp/kumkang-frontend-final.log
-            bash -lc "$command" 2>&1 | tee -a /tmp/kumkang-frontend-final.log
-            status=${PIPESTATUS[0]}
-            echo "exit_status=$status" | tee -a /tmp/kumkang-frontend-final.log
-            if [ "$status" -ne 0 ]; then
-              overall=1
-            fi
-          done
-          echo "status=$overall" >> "$GITHUB_OUTPUT"
-          exit 0
-
-      - name: Upload frontend compatibility report
-        if: steps.frontend_tests.outputs.status != '0'
-        uses: actions/upload-artifact@v4
-        with:
-          name: kumkang-frontend-final-diagnostics
-          path: /tmp/kumkang-frontend-final.log
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Stop after frontend validation failure
-        if: steps.frontend_tests.outputs.status != '0'
-        run: exit 1
+          npm run test:companies
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:companies-url
 
       - name: Run lint and production build
         working-directory: frontend
