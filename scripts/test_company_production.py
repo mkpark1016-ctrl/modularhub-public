@@ -23,14 +23,15 @@ def main() -> None:
     result = validate(payload)
     assert result["valid"], result
     companies = {company["company_id"]: company for company in payload["companies"]}
-    assert len(companies["yuchang-enc"]["production"]) == 1
-    assert len(companies["kumkang-kind"]["production"]) == 1
-    assert companies["planm"]["production_summary"]["own_facility_status"] == "not_publicly_confirmed"
-    assert companies["planm"]["production"] == []
-    assert companies["daeseung-engineering"]["production"] == []
+    assert len(companies["yuchang-enc"]["production"]) == 4
+    assert len(companies["kumkang-kind"]["production"]) == 3
+    assert len(companies["planm"]["production"]) == 1
+    assert len(companies["sungji-steel"]["production"]) == 3
+    assert companies["dl-enc"]["production_summary"]["own_facility_status"] == "not_publicly_confirmed"
+    assert companies["dl-enc"]["production"] == []
     assert companies["yuchang-enc"]["production"][0]["site_area_m2"] != 0
-    assert companies["yuchang-enc"]["production"][0]["reported_capacity"] is None
-    assert companies["kumkang-kind"]["production"][0]["capacity_basis"] == "not_publicly_disclosed"
+    assert companies["yuchang-enc"]["production"][0]["reported_capacity"] == 30
+    assert companies["kumkang-kind"]["production"][0]["capacity_basis"] == "target_manual_verified"
 
     broken = copy.deepcopy(payload)
     broken_company = next(company for company in broken["companies"] if company["company_id"] == "yuchang-enc")
@@ -46,10 +47,11 @@ def main() -> None:
     broken = copy.deepcopy(payload)
     broken_company = next(company for company in broken["companies"] if company["company_id"] == "kumkang-kind")
     broken_company["production"][0]["reported_capacity"] = 100
+    broken_company["production"][0]["capacity_unit"] = None
     assert_issue(broken, "capacity_unit_missing")
 
     broken = copy.deepcopy(payload)
-    broken_company = next(company for company in broken["companies"] if company["company_id"] == "planm")
+    broken_company = next(company for company in broken["companies"] if company["company_id"] == "dl-enc")
     broken_company["production_summary"]["own_facility_status"] = "not_publicly_confirmed"
     broken_company["production_summary"]["confirmed_facility_count"] = 0
     broken_company["production"].append({

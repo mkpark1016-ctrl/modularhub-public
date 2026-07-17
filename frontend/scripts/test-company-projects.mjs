@@ -15,18 +15,18 @@ const payload = JSON.parse(readFileSync(new URL("../public/data/companies/compan
 const companies = getCompanyItems(payload);
 const byId = (id) => companies.find((company) => company.company_id === id);
 
-assert.equal(companies.length, 18);
-assert.equal(companies.filter((company) => company.competitive_role === "direct_competitor").length, 8);
+assert.equal(companies.length, 10);
+assert.equal(companies.filter((company) => company.competitive_role === "direct_competitor").length, 5);
 
 const expected = {
   "gs-ec": [3, 0],
   "hyundai-engineering": [3, 0],
   "samsung-ct-construction": [1, 0],
   "dl-enc": [1, 1],
-  "yuchang-enc": [10, 0],
+  "yuchang-enc": [9, 1],
   "kumkang-kind": [9, 1],
   "nrb": [7, 0],
-  "planm": [13, 4],
+  "planm": [10, 7],
   "geogwang-enterprise": [1, 0],
   "sungji-steel": [1, 0],
 };

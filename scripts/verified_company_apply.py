@@ -66,15 +66,18 @@ def apply_company(v1, v2, curated):
     company['project_candidates'] = []
     company['project_research_status'] = {
         'research_status': 'manual_verified_baseline', 'research_wave': 'verified_20260716',
-        'verified_project_count': sum(1 for item in curated.get('projects', []) if item.get('project_credit')),
-        'candidate_project_count': sum(1 for item in curated.get('projects', []) if not item.get('project_credit')),
+        'verified_project_count': sum(1 for item in company['project_portfolio'] if item.get('project_credit')),
+        'candidate_project_count': sum(1 for item in company['project_portfolio'] if not item.get('project_credit')),
         'raw_candidate_article_count': 0, 'rejected_candidate_count': 0, 'official_source_count': 0,
         'research_gap_count': 0, 'verified_at': FIXED_GENERATED_AT[:10],
     }
 
     technology = company.get('technology') if isinstance(company.get('technology'), dict) else {}
+    for bucket, value in list(technology.items()):
+        if isinstance(value, list):
+            technology[bucket] = []
     for bucket in ('patents', 'new_construction_technologies', 'seismic_technologies'):
-        technology[bucket] = []
+        technology.setdefault(bucket, [])
     for item in curated.get('technology', []):
         technology[technology_bucket(item.get('record_type', 'patent'))].append(normalize_technology(item, source_id))
     company['technology'] = technology
@@ -85,8 +88,18 @@ def apply_company(v1, v2, curated):
         'significance': item.get('summary'), 'source_ids': [source_id], 'source_count': 1,
         'verified_at': FIXED_GENERATED_AT[:10], 'confidence': 'high',
     } for item in curated.get('strategy_events', [])]
-    upsert(company.setdefault('sources', []), 'source_id', source_record(curated))
+    company['sources'] = [source_record(curated)]
     company['research_gaps'] = []
+    for collection_name in ('financials', 'production', 'project_portfolio', 'recent_signals'):
+        for item in company.get(collection_name, []) or []:
+            if isinstance(item, dict):
+                item['source_ids'] = [source_id]
+    technology_values = company.get('technology') if isinstance(company.get('technology'), dict) else {}
+    for values in technology_values.values():
+        if isinstance(values, list):
+            for item in values:
+                if isinstance(item, dict):
+                    item['source_ids'] = [source_id]
 
     facts = []
     identity_fields = [

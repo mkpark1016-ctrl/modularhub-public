@@ -20,9 +20,9 @@ const verifiedIds = new Set([
 ]);
 
 assert.equal(v2.schema_version, "2.0.0");
-assert.equal(companies.length, 18);
-assert.equal(v2.companies.length, 18);
-assert.equal(v2.materialized_summaries.length, 18);
+assert.equal(companies.length, 10);
+assert.equal(v2.companies.length, 10);
+assert.equal(v2.materialized_summaries.length, 10);
 assert.equal(companies.every((company) => company.intelligence_v2?.domain_statuses), true);
 assert.equal(companies.every((company) => /[가-힣]/.test(getKoreanCompanySummary(company))), true);
 assert.equal(companies.every((company) => !getCompanyDataStatusLabel(company).includes("_")), true);
@@ -42,14 +42,14 @@ const legacySamsung = getCompanyEvents(yuchang).find((event) => event.event_id =
 assert.equal(legacySamsung.event_type, "partnership");
 assert.equal(legacySamsung.event_status, "not_signed");
 assert.equal(legacySamsung.project_credit, false);
-assert.equal(getCompanyProjectSummary(yuchang).verified, 10);
+assert.equal(getCompanyProjectSummary(yuchang).verified, 9);
 assert.equal(getCompanyProjectSummary(yuchang).partnerships, 1);
 
 const planmEvents = getCompanyEvents(byId("planm"));
 assert.equal(planmEvents.find((event) => event.event_id === "event-planm-jindo-baseball-precon").project_credit, false);
 assert.equal(planmEvents.find((event) => event.event_id === "event-planm-indiana-l7-precon").project_credit, false);
-assert.equal(getCompanyProjectSummary(byId("planm")).verified, 13);
-assert.equal(getCompanyProjectSummary(byId("planm")).candidates, 4);
+assert.equal(getCompanyProjectSummary(byId("planm")).verified, 10);
+assert.equal(getCompanyProjectSummary(byId("planm")).candidates, 7);
 
 const credited = v2.events.filter((event) => event.project_credit);
 assert.ok(credited.length >= 40);

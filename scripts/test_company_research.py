@@ -24,8 +24,8 @@ def main() -> int:
     validation = validate_research()
     result = audit()
 
-    require(len(companies) == 4, "Wave 1 must contain 4 companies")
-    require([company["company_id"] for company in companies] == WAVE1_IDS, "Wave 1 order or membership changed")
+    require(len(companies) == 10, "Verified public baseline must contain 10 companies")
+    require([company["company_id"] for company in companies] == WAVE1_IDS, "Verified public baseline order or membership changed")
     require(validation["valid"], f"research validation failed: {validation['issues']}")
     require(validation["issue_counts"]["fact_without_source"] == 0, "facts without sources must be zero")
     require(validation["issue_counts"]["number_without_source"] == 0, "numbers without sources must be zero")
@@ -38,24 +38,27 @@ def main() -> int:
     require(result["audit_status"] == "passed", "Wave 1 audit must pass")
 
     kumkang = by_id["kumkang-kind"]
-    require(kumkang["data_confidence"] == "medium", "Kumkang confidence should reflect official-source partial verification")
-    require(len(kumkang["project_portfolio"]) == 3, "Kumkang should have 3 official project records")
-    require(result["total_project_count"] == 3, "total project count mismatch")
-    require(result["total_technology_record_count"] == 1, "technology record count mismatch")
-    require(result["total_financial_year_count"] >= 0, "financial count should be reported")
-    if kumkang.get("financials"):
-        require(all(record.get("source_ids") for record in kumkang["financials"]), "Kumkang financials must remain source-backed")
+    require(kumkang["data_confidence"] == "high", "Kumkang confidence should reflect manual verified baseline")
+    require(len(kumkang["project_portfolio"]) == 10, "Kumkang should have 10 verified baseline project records")
+    require(result["total_project_count"] == sum(len(company.get("project_portfolio", [])) for company in companies), "total project count mismatch")
+    require(result["total_technology_record_count"] == sum(
+        len(value)
+        for company in companies
+        for value in (company.get("technology", {}) or {}).values()
+        if isinstance(value, list)
+    ), "technology record count mismatch")
+    require(result["total_financial_year_count"] == 30, "financial count should preserve three years for 10 companies")
+    require(all(record.get("source_ids") for record in kumkang["financials"]), "Kumkang financials must remain source-backed")
     require(result["total_bidding_record_count"] == 0, "bidding data must remain empty without verified dataset")
 
-    for company_id in ["planm", "daeseung-engineering"]:
+    for company_id in WAVE1_IDS:
         company = by_id[company_id]
-        require(company["review_status"] == "collecting", f"{company_id} should remain collecting")
-        require(company["data_confidence"] == "unknown", f"{company_id} confidence should remain unknown")
+        require(company["review_status"] == "verified", f"{company_id} should be verified")
+        require(company["data_confidence"] == "high", f"{company_id} confidence should be high")
         require(
-            all(source.get("primary_source") for source in company.get("sources", [])),
-            f"{company_id} should only have primary DART sources until broader research is added",
+            any(source.get("source_type") == "manual_verified_research" for source in company.get("sources", [])),
+            f"{company_id} should include manual verified research source",
         )
-        require(company["project_portfolio"] == [], f"{company_id} project portfolio must remain empty")
 
     print("COMPANY RESEARCH TESTS PASSED")
     return 0

@@ -22,7 +22,7 @@ def by_id(rows: list[dict], company_id: str) -> dict:
 def main() -> int:
     companies = load_companies()
     direct = [company for company in companies if company.get("competitive_role") == "direct_competitor"]
-    require(len(direct) == 8, "direct competitor count must remain 8")
+    require(len(direct) == 5, "public direct competitor count must be 5")
 
     targets = select_wave_targets(companies)
     require(1 <= len(targets) <= 4, "Wave 1 target selection must return at most 4 direct competitors")
@@ -31,10 +31,10 @@ def main() -> int:
 
     kumkang = by_id(companies, "kumkang-kind")
     projects = kumkang.get("project_portfolio") or []
-    require(len(projects) == 3, "Kumkang should keep 3 official project records")
+    require(len(projects) == 10, "Kumkang should keep 10 verified baseline project records")
     require(all(project.get("source_ids") for project in projects), "Kumkang projects require source_ids")
     require(all(project.get("company_role") != "unknown" for project in projects), "Kumkang project roles should be explicit")
-    require(all(project.get("structure_type") in {"steel_modular", "steel_volumetric"} for project in projects), "Kumkang projects must be steel modular")
+    require(all(project.get("structure_type") in {"steel_modular", "steel_volumetric", "hybrid"} for project in projects), "Kumkang projects must be steel modular or explicitly hybrid")
     require(any("Goryeong" in " ".join(project.get("aliases", [])) or "고령군" in project.get("project_name", "") for project in projects), "Goryeong modular project should remain searchable")
 
     ids = [project.get("project_id") for company in companies for project in (company.get("project_portfolio") or [])]
@@ -48,8 +48,8 @@ def main() -> int:
     require(validation["issue_counts"]["manual_review_company_verified_project"] == 0, "manual review companies must not have verified projects")
 
     coverage = {company["company_id"]: project_coverage(company) for company in direct}
-    require(coverage["kumkang-kind"]["source_backed_project_count"] == 3, "Kumkang source-backed project count should be 3")
-    require(coverage["jinwoo-inc"]["project_count"] == 0, "Jinwoo must not receive unresolved project linkage")
+    require(coverage["kumkang-kind"]["source_backed_project_count"] == 10, "Kumkang source-backed project count should be 10")
+    require("jinwoo-inc" not in coverage, "Jinwoo must not be included in public verified baseline")
 
     print("COMPANY PROJECT TESTS PASSED")
     return 0
