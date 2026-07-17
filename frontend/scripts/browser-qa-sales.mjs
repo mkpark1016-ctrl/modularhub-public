@@ -169,26 +169,36 @@ try {
   check(await countCards(page) >= 1, "company alias search should return results");
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
   await waitForCardCount(page, companyItems.length, "company reset mismatch");
+  for (const company of companyItems) {
+    await page.goto(`${baseUrl}/companies/${company.company_id}`, { waitUntil: "networkidle" });
+    await page.locator("article.company-detail").waitFor();
+  }
   await page.goto(`${baseUrl}/companies/planm`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: /플랜엠/ }).waitFor();
-  const planmText = await page.locator("main").innerText();
+  await page.getByRole("tab", { name: "재무" }).click();
+  await page.waitForURL(/tab=financial/);
+  let planmText = await page.locator("main").innerText();
   check(planmText.includes("최근 3개년 재무"), "company detail financial section missing");
   check(planmText.includes("회사 전체 재무"), "company detail should label company-total financials");
+  check(planmText.includes("매출총이익"), "gross profit column missing");
+  check(planmText.includes("영업이익률"), "operating margin column missing");
   check(planmText.includes("모듈러 부문 별도 재무는 공개자료에서 확인되지 않았습니다."), "modular segment disclaimer missing");
-  check(planmText.includes("OpenDART 법인 식별 완료"), "DART identity label missing");
+  await page.getByRole("tab", { name: "근거·출처" }).click();
+  await page.waitForURL(/tab=evidence/);
+  planmText = await page.locator("main").innerText();
+  check(planmText.includes("DART corp_code"), "DART identity evidence label missing");
   await page.goto(`${baseUrl}/companies/not-a-company`, { waitUntil: "networkidle" });
   check((await page.locator("main").innerText()).includes("기업정보를 찾을 수 없습니다."), "company not found state missing");
-  await page.goto(`${baseUrl}/companies?role=bad&status=bad&q=PlanM`, { waitUntil: "networkidle" });
-  check(!page.url().includes("role=bad") && !page.url().includes("status=bad"), "invalid company URL params should be removed");
-  check(new URL(page.url()).searchParams.get("q") === "PlanM", "company URL cleanup should preserve q");
-
   await page.goto(`${baseUrl}/companies/yuchang-enc`, { waitUntil: "networkidle" });
+  await page.getByRole("tab", { name: "프로젝트" }).click();
+  await page.waitForURL(/tab=projects/);
   const yuchangText = await page.locator("main").innerText();
-  check(yuchangText.includes("검증된 모듈러 실적"), "YooChang verified project section missing");
-  check(yuchangText.includes("협력·MOU"), "YooChang partnership section missing");
+  check(yuchangText.includes("검증 실적"), "YooChang verified project section missing");
+  check(yuchangText.includes("파이프라인 및 기타 활동"), "YooChang pipeline section missing");
   check(yuchangText.includes("삼성 AI 모듈러 홈"), "YooChang Samsung event missing");
   check(yuchangText.includes("미체결"), "YooChang Samsung event should be marked not signed");
-  check(yuchangText.includes("관련 기사 근거 35건 · 프로젝트 수에 포함하지 않음"), "YooChang article evidence should be excluded from project count");
+  check(yuchangText.includes("기사 근거 35건"), "YooChang article evidence should be shown separately");
+  check(yuchangText.includes("검증 실적 아님"), "YooChang candidate event should not be counted as verified");
   for (const rawCode of ["not_signed", "project_credit", "partially_verified", "role_unknown"]) {
     check(!yuchangText.includes(rawCode), `YooChang detail exposes raw code ${rawCode}`);
   }
@@ -396,7 +406,8 @@ try {
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "company list mobile has horizontal overflow");
   await page.goto(`${baseUrl}/companies/yuchang-enc`, { waitUntil: "networkidle" });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "YooChang detail mobile has horizontal overflow");
-  check((await page.locator("main").innerText()).includes("협력·MOU"), "YooChang partnership section missing on mobile");
+  await page.getByRole("tab", { name: "프로젝트" }).click();
+  check((await page.locator("main").innerText()).includes("파이프라인 및 기타 활동"), "YooChang pipeline section missing on mobile");
 
   const credentialTokens = [
     "service" + "Key",

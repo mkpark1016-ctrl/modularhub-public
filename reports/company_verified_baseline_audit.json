@@ -45,12 +45,12 @@
     "meta_json": "f1db1f4a4d3f645d26b98520c9b2ce84db13f6c39cde634cbad5b45beee58970"
   },
   "ui_capabilities": {
-    "technology_slice_limit": 8,
-    "renders_gross_profit": false,
-    "renders_established_at": false,
-    "renders_representative": false,
-    "renders_employee_count": false,
-    "renders_major_businesses": false
+    "technology_slice_limit": null,
+    "renders_gross_profit": true,
+    "renders_established_at": true,
+    "renders_representative": true,
+    "renders_employee_count": true,
+    "renders_major_businesses": true
   },
   "duplicate_checks": {
     "company_id_duplicates": 0,
@@ -58,13 +58,8 @@
     "event_id_duplicates": 0,
     "evidence_id_duplicates": 0
   },
-  "issue_counts": {
-    "UI_NOT_RENDERED": 70,
-    "UI_TRUNCATED": 4
-  },
-  "severity_counts": {
-    "warning": 74
-  },
+  "issue_counts": {},
+  "severity_counts": {},
   "companies": [
     {
       "company_id": "gs-ec",
@@ -99,20 +94,12 @@
       "ui": {
         "technology_display_count": 3,
         "technology_hidden_count": 0,
-        "gross_profit_rendered": false
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "hyundai-engineering",
@@ -145,23 +132,14 @@
         "technology_fact_count": 14
       },
       "ui": {
-        "technology_display_count": 8,
-        "technology_hidden_count": 6,
-        "gross_profit_rendered": false
+        "technology_display_count": 14,
+        "technology_hidden_count": 0,
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023",
-        "technology:6"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "samsung-ct-construction",
@@ -196,20 +174,12 @@
       "ui": {
         "technology_display_count": 7,
         "technology_hidden_count": 0,
-        "gross_profit_rendered": false
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "dl-enc",
@@ -242,23 +212,14 @@
         "technology_fact_count": 21
       },
       "ui": {
-        "technology_display_count": 8,
-        "technology_hidden_count": 13,
-        "gross_profit_rendered": false
+        "technology_display_count": 21,
+        "technology_hidden_count": 0,
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023",
-        "technology:13"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "yuchang-enc",
@@ -293,20 +254,12 @@
       "ui": {
         "technology_display_count": 7,
         "technology_hidden_count": 0,
-        "gross_profit_rendered": false
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "kumkang-kind",
@@ -341,20 +294,12 @@
       "ui": {
         "technology_display_count": 4,
         "technology_hidden_count": 0,
-        "gross_profit_rendered": false
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "nrb",
@@ -387,23 +332,14 @@
         "technology_fact_count": 16
       },
       "ui": {
-        "technology_display_count": 8,
-        "technology_hidden_count": 8,
-        "gross_profit_rendered": false
+        "technology_display_count": 16,
+        "technology_hidden_count": 0,
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023",
-        "technology:8"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "planm",
@@ -436,23 +372,14 @@
         "technology_fact_count": 10
       },
       "ui": {
-        "technology_display_count": 8,
-        "technology_hidden_count": 2,
-        "gross_profit_rendered": false
+        "technology_display_count": 10,
+        "technology_hidden_count": 0,
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023",
-        "technology:2"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "geogwang-enterprise",
@@ -487,20 +414,12 @@
       "ui": {
         "technology_display_count": 0,
         "technology_hidden_count": 0,
-        "gross_profit_rendered": false
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     },
     {
       "company_id": "sungji-steel",
@@ -535,542 +454,15 @@
       "ui": {
         "technology_display_count": 2,
         "technology_hidden_count": 0,
-        "gross_profit_rendered": false
+        "gross_profit_rendered": true
       },
       "missing_fields": [],
-      "hidden_fields": [
-        "established_at",
-        "representative",
-        "employee_count",
-        "major_businesses",
-        "gross_profit:2025",
-        "gross_profit:2024",
-        "gross_profit:2023"
-      ],
+      "hidden_fields": [],
       "classification_errors": [],
-      "severity": "warning"
+      "severity": "ok"
     }
   ],
-  "issues": [
-    {
-      "company_id": "gs-ec",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "gs-ec",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "gs-ec",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "gs-ec",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "gs-ec",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "gs-ec",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "gs-ec",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "hyundai-engineering",
-      "code": "UI_TRUNCATED",
-      "field": "technology",
-      "detail": "6 technology records are hidden by slice(0, 8)",
-      "severity": "warning"
-    },
-    {
-      "company_id": "samsung-ct-construction",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "samsung-ct-construction",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "samsung-ct-construction",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "samsung-ct-construction",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "samsung-ct-construction",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "samsung-ct-construction",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "samsung-ct-construction",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "dl-enc",
-      "code": "UI_TRUNCATED",
-      "field": "technology",
-      "detail": "13 technology records are hidden by slice(0, 8)",
-      "severity": "warning"
-    },
-    {
-      "company_id": "yuchang-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "yuchang-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "yuchang-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "yuchang-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "yuchang-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "yuchang-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "yuchang-enc",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "kumkang-kind",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "kumkang-kind",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "kumkang-kind",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "kumkang-kind",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "kumkang-kind",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "kumkang-kind",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "kumkang-kind",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "nrb",
-      "code": "UI_TRUNCATED",
-      "field": "technology",
-      "detail": "8 technology records are hidden by slice(0, 8)",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "planm",
-      "code": "UI_TRUNCATED",
-      "field": "technology",
-      "detail": "2 technology records are hidden by slice(0, 8)",
-      "severity": "warning"
-    },
-    {
-      "company_id": "geogwang-enterprise",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "geogwang-enterprise",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "geogwang-enterprise",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "geogwang-enterprise",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "geogwang-enterprise",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "geogwang-enterprise",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "geogwang-enterprise",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "sungji-steel",
-      "code": "UI_NOT_RENDERED",
-      "field": "established_at",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "sungji-steel",
-      "code": "UI_NOT_RENDERED",
-      "field": "representative",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "sungji-steel",
-      "code": "UI_NOT_RENDERED",
-      "field": "employee_count",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "sungji-steel",
-      "code": "UI_NOT_RENDERED",
-      "field": "major_businesses",
-      "detail": "Field exists in companies.json but App.jsx does not render it",
-      "severity": "warning"
-    },
-    {
-      "company_id": "sungji-steel",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2025 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "sungji-steel",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2024 exists but is not rendered",
-      "severity": "warning"
-    },
-    {
-      "company_id": "sungji-steel",
-      "code": "UI_NOT_RENDERED",
-      "field": "financials.gross_profit",
-      "detail": "Gross profit for 2023 exists but is not rendered",
-      "severity": "warning"
-    }
-  ],
+  "issues": [],
   "recommendations": [
     "Remove the technology detail slice limit or add pagination so all source technology records are reachable.",
     "Add profile rows for establishment date, representative, employee count, and major businesses.",
