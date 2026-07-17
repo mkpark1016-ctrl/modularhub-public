@@ -17,6 +17,7 @@ from verified_company_source import load_verified_companies  # noqa: E402
 V1_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
 V2_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "company_intelligence_v2.json"
 APP_PATH = ROOT / "frontend" / "src" / "App.jsx"
+COMPANY_COMPONENT_ROOT = ROOT / "frontend" / "src" / "components" / "company"
 BUSINESS_PATH = ROOT / "frontend" / "public" / "data" / "business.json"
 NEWS_PATH = ROOT / "frontend" / "public" / "data" / "news.json"
 META_PATH = ROOT / "frontend" / "public" / "data" / "meta.json"
@@ -99,8 +100,15 @@ def count_v2_events(v2: dict[str, Any], company_id: str, event_type: str | None 
     return len(events)
 
 
+def ui_source_text() -> str:
+    paths = [APP_PATH]
+    if COMPANY_COMPONENT_ROOT.exists():
+        paths.extend(sorted(path for path in COMPANY_COMPONENT_ROOT.rglob("*") if path.suffix in {".js", ".jsx"}))
+    return "\n".join(path.read_text(encoding="utf-8") for path in paths)
+
+
 def ui_capabilities() -> dict[str, Any]:
-    text = APP_PATH.read_text(encoding="utf-8")
+    text = ui_source_text()
     return {
         "technology_slice_limit": 8 if ".slice(0, 8)" in text and "technologyItems" in text else None,
         "renders_gross_profit": "gross_profit" in text,

@@ -24,33 +24,20 @@ import {
   getCompanyDataStatus,
   getCompanyDataStatusLabel,
   getCompanyDomainStatuses,
-  getCompanyEvents,
   getCompanyHighlights,
   getCompanyItems,
-  getCompanySourceGroups,
   getCompanySummary,
   getCompanyTypeLabel,
   getCompetitiveRoleLabel,
   getConfidenceLabel,
-  getDisplayValue,
   getDomainStatusLabel,
-  getEventStatusLabel,
-  getEventTypeLabel,
   getKoreanCompanySummary,
   getCompanyProjectSummary,
   getLatestFinancial,
   getLatestVerifiedAt,
-  getProjectRoleLabel,
-  getProductionCapacityLabel,
-  getProductionModelLabel,
   getTierLabel,
-  formatProductionArea,
-  isDartIdentityConfirmed,
   metricSourceValue,
   optionCounts,
-  productionFacilities,
-  productionSummary,
-  SOURCE_GROUP_LABELS,
   statusOptions,
   technologyCount,
 } from "./companyInsights";
@@ -107,6 +94,8 @@ import {
 import { NEWS_REGION_VALUES, sanitizeNewsSearchParams } from "./newsUrlParams";
 import { normalizeSearchCommitValue } from "./searchInput";
 import ActiveFilterChips from "./components/ActiveFilterChips";
+import CompanyDetailView from "./components/company/CompanyDetailView";
+import { normalizeCompanyTab } from "./components/company/companyDetailHelpers";
 import DashboardSummary from "./components/DashboardSummary";
 import FavoriteButton from "./components/FavoriteButton";
 import PriorityBusinessList from "./components/PriorityBusinessList";
@@ -777,36 +766,6 @@ function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, ti
   );
 }
 
-function CompanyEventList({ events, emptyText, candidate = false }) {
-  if (!events.length) return <p>{emptyText}</p>;
-  return (
-    <div className={`company-section-list ${candidate ? "project-candidate-list" : "project-portfolio-list"}`}>
-      {events.map((event) => {
-        const articleCount = (event.source_ids || []).filter((sourceId) => sourceId.startsWith("article-")).length;
-        return (
-          <div className={candidate ? "candidate-item" : undefined} key={event.event_id}>
-            <strong>{event.title}</strong>
-            <span>{[
-              getEventTypeLabel(event),
-              getEventStatusLabel(event),
-              event.project_role ? getProjectRoleLabel({ company_role: event.project_role }) : "수행 역할 미확인",
-            ].filter(Boolean).join(" · ")}</span>
-            <span>{[
-              event.client,
-              event.location,
-              getDisplayValue(event.market_segment, null),
-              getDisplayValue(event.method, null),
-            ].filter(Boolean).join(" · ") || "세부 범위는 공개자료에서 확인되지 않았습니다."}</span>
-            {event.amount !== null && event.amount !== undefined && <span>확인 금액: {formatKrwReadable(event.amount)}</span>}
-            {articleCount > 0 && <span>관련 기사 근거 {articleCount.toLocaleString("ko-KR")}건 · 프로젝트 수에 포함하지 않음</span>}
-            {candidate && <span>공식 근거와 수행 역할이 확인되기 전까지 검증 실적으로 집계하지 않습니다.</span>}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 function CompanyCard({ company }) {
   const highlights = getCompanyHighlights(company);
   const latestFinancial = getLatestFinancial(company);
@@ -962,8 +921,28 @@ function CompanyListingPage() {
 
 function CompanyDetailPage() {
   const { companyId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { loading, error, data } = useDataset("companies/companies");
   const company = getCompanyItems(data).find((item) => item.company_id === companyId);
+  const activeTab = normalizeCompanyTab(searchParams.get("tab") || "overview");
+
+  useEffect(() => {
+    const rawTab = searchParams.get("tab");
+    if (rawTab && rawTab !== activeTab) {
+      const next = new URLSearchParams(searchParams);
+      if (activeTab === "overview") next.delete("tab");
+      else next.set("tab", activeTab);
+      setSearchParams(next, { replace: true });
+    }
+  }, [activeTab, searchParams, setSearchParams]);
+
+  const setCompanyTab = useCallback((tab) => {
+    const nextTab = normalizeCompanyTab(tab);
+    const next = new URLSearchParams(searchParams);
+    if (nextTab === "overview") next.delete("tab");
+    else next.set("tab", nextTab);
+    setSearchParams(next, { replace: false });
+  }, [searchParams, setSearchParams]);
 
   if (loading) return <Layout><div className="state">기업정보를 불러오는 중입니다.</div></Layout>;
   if (error) return <Layout><div className="state error">기업정보 데이터를 불러오지 못했습니다.</div></Layout>;
@@ -978,213 +957,9 @@ function CompanyDetailPage() {
     );
   }
 
-  const financials = [...(Array.isArray(company.financials) ? company.financials : [])].sort((a, b) => Number(b.year || 0) - Number(a.year || 0)).slice(0, 3);
-  const latestAudit = [...(Array.isArray(company.audit_information) ? company.audit_information : [])].sort((a, b) => Number(b.fiscal_year || 0) - Number(a.fiscal_year || 0))[0];
-  const domainStatuses = getCompanyDomainStatuses(company);
-  const events = getCompanyEvents(company);
-  const verifiedProjects = events.filter((event) => event.event_type === "project" && event.project_credit);
-  const projectCandidatesV2 = events.filter((event) => event.event_type === "project" && !event.project_credit);
-  const partnershipEvents = events.filter((event) => ["partnership", "mou"].includes(event.event_type));
-  const researchEvents = events.filter((event) => ["r_and_d", "exhibition"].includes(event.event_type));
-  const otherEvents = events.filter((event) => !["project", "partnership", "mou", "r_and_d", "exhibition"].includes(event.event_type));
-  const projectSummary = getCompanyProjectSummary(company);
-  const production = productionFacilities(company);
-  const productionInfo = productionSummary(company);
-  const sourceGroups = getCompanySourceGroups(company);
-  const technology = company.technology && typeof company.technology === "object" ? company.technology : {};
-  const technologyItems = Object.values(technology).flatMap((value) => Array.isArray(value) ? value : []).slice(0, 8);
-  const gaps = Array.isArray(company.research_gaps) ? company.research_gaps : [];
-
   return (
     <Layout>
-      <article className="detail-page company-detail">
-        <Link className="back" to="/companies"><ArrowLeft size={17} />목록으로</Link>
-        <div className="badge-row">
-          <span>{getCompanyTypeLabel(company)}</span>
-          <span>{getCompetitiveRoleLabel(company)}</span>
-          <span>{getTierLabel(company)}</span>
-          <span className={`company-status ${getCompanyDataStatus(company)}`}>{getCompanyDataStatusLabel(company)}</span>
-        </div>
-        <h1>{company.company_name}</h1>
-        <dl className="detail-grid">
-          <div><dt>전체 데이터 상태</dt><dd>{getCompanyDataStatusLabel(company)}</dd></div>
-          <div><dt>데이터 신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
-          <div><dt>기준일</dt><dd>{formatCompanyDate(getLatestVerifiedAt(company))}</dd></div>
-          <div><dt>영문명</dt><dd>{company.company_name_en || "확인 중"}</dd></div>
-          <div><dt>본사</dt><dd>{company.headquarters || "확인 중"}</dd></div>
-          <div><dt>OpenDART</dt><dd>{isDartIdentityConfirmed(company) ? "OpenDART 법인 식별 완료" : "확인 중"}</dd></div>
-        </dl>
-
-        <section className="summary">
-          <h2>경쟁 포지션</h2>
-          <p>{getKoreanCompanySummary(company)}</p>
-          <div className="company-highlight-grid">
-            <span>{projectSummary.verified > 0 ? `검증 실적 ${projectSummary.verified}건` : "검증 실적 추가 조사 중"}</span>
-            <span>{projectSummary.candidates > 0 ? `사업 후보 ${projectSummary.candidates}건` : "사업 후보 없음"}</span>
-            <span>{projectSummary.partnerships > 0 ? `협력·MOU ${projectSummary.partnerships}건` : "협력·MOU 확인 중"}</span>
-            <span>{technologyCount(company) > 0 ? `기술·특허 ${technologyCount(company)}건 확인` : "기술 자료 확인 중"}</span>
-            <span>{financials.length ? `재무 ${financials.map((item) => item.year).join(", ")}년 확인` : "재무 공개자료 없음"}</span>
-          </div>
-        </section>
-
-        <section className="summary">
-          <h2>기업 개요</h2>
-          <dl className="detail-grid compact-detail-grid">
-            <div><dt>회사 유형</dt><dd>{getCompanyTypeLabel(company)}</dd></div>
-            <div><dt>경쟁 관계</dt><dd>{getCompetitiveRoleLabel(company)}</dd></div>
-            <div><dt>분석 우선순위</dt><dd>{getTierLabel(company)}</dd></div>
-            <div><dt>모듈러 공법</dt><dd>{(company.modular_methods || []).join(", ") || "확인 중"}</dd></div>
-            <div><dt>목표 시장</dt><dd>{(company.target_markets || []).join(", ") || "확인 중"}</dd></div>
-            <div><dt>웹사이트</dt><dd>{company.website_url ? <a href={company.website_url} target="_blank" rel="noopener noreferrer">공식 사이트 <ExternalLink size={13} /></a> : "확인 중"}</dd></div>
-          </dl>
-        </section>
-
-        <section className="summary">
-          <h2>생산 역량</h2>
-          <p className="finance-note">생산 운영 방식: {getProductionModelLabel(company)}</p>
-          {production.length ? (
-            <div className="company-section-list">
-              {production.map((item) => {
-                const siteArea = formatProductionArea(item.site_area ?? item.site_area_m2, item.site_area_unit || "m2");
-                const buildingArea = formatProductionArea(item.building_area ?? item.building_area_m2, item.building_area_unit || "m2");
-                return (
-                  <div key={item.facility_id || item.facility_name}>
-                    <strong>{item.display_name || item.facility_name || "시설명 확인 중"}</strong>
-                    <span>{[item.region || item.city || item.location, getDisplayValue(item.ownership_type), getDisplayValue(item.operation_status)].filter(Boolean).join(" · ") || "위치 정보 확인 중"}</span>
-
-                    {item.address && <span>주소: {item.address}</span>}
-
-                    {item.identity_note && <span>{item.identity_note}</span>}
-                    {(item.production_scope || []).length > 0 && <span>생산 대상: {item.production_scope.map((value) => getDisplayValue(value)).join(", ")}</span>}
-                    {(item.production_processes || []).length > 0 && <span>공정: {item.production_processes.slice(0, 5).map((value) => getDisplayValue(value)).join(", ")}</span>}
-                    {siteArea && <span>부지면적 {siteArea}</span>}
-                    {buildingArea && <span>건축면적 {buildingArea}</span>}
-                    <span>{getProductionCapacityLabel(item)}</span>
-                    {item.verification_basis_label && <span>근거 기준: {item.verification_basis_label}</span>}
-
-                    <span>신뢰도: {getConfidenceLabel({ data_confidence: item.data_confidence || item.confidence || productionInfo.data_confidence })}</span>
-                    <span>기준일: {formatCompanyDate(item.verified_at || productionInfo.verified_at)}</span>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p>
-              {productionInfo.verification_status === "not_applicable"
-                ? "이 기업은 생산시설 비교 대상이 아닙니다."
-                : "현재 공개자료에서 검증된 생산시설 정보를 확인하지 못했습니다."}
-            </p>
-          )}
-        </section>
-
-        <section className="summary">
-          <h2>최근 3개년 재무</h2>
-          {financials.length ? (
-            <>
-              <p className="finance-note">회사 전체 재무 · {latestAudit?.reporting_scope === "consolidated" ? "연결" : latestAudit?.reporting_scope === "separate" ? "별도" : "범위 확인 중"} · {latestAudit?.accounting_standard === "general_korean_gaap" ? "일반기업회계기준" : latestAudit?.accounting_standard === "K-IFRS" ? "한국채택국제회계기준" : "회계기준 확인 중"} · 감사의견 {getDisplayValue(latestAudit?.audit_opinion, "확인 중")}</p>
-              <div className="company-table-wrap">
-                <table className="company-financial-table">
-                  <thead><tr><th>연도</th><th>매출</th><th>영업이익</th><th>순이익</th><th>영업현금흐름</th></tr></thead>
-                  <tbody>
-                    {financials.map((item) => (
-                      <tr key={item.year}>
-                        <th>{item.year}</th>
-                        <td>{formatKrwReadable(metricSourceValue(item.revenue))}</td>
-                        <td>{formatKrwReadable(metricSourceValue(item.operating_profit))}</td>
-                        <td>{formatKrwReadable(metricSourceValue(item.net_income))}</td>
-                        <td>{formatKrwReadable(metricSourceValue(item.operating_cash_flow))}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <p className="finance-note">모듈러 부문 별도 재무는 공개자료에서 확인되지 않았습니다.</p>
-            </>
-          ) : <p>공개자료에서 확인된 재무정보가 없습니다.</p>}
-        </section>
-
-        <section className="summary">
-          <h2>검증된 모듈러 실적</h2>
-          <CompanyEventList events={verifiedProjects} emptyText="공식 근거와 수행 역할이 모두 확인된 프로젝트 실적이 없습니다." />
-        </section>
-
-        <section className="summary">
-          <h2>진행·수주 후보</h2>
-          <CompanyEventList events={projectCandidatesV2} candidate emptyText="현재 검토 중인 프로젝트 후보가 없습니다." />
-        </section>
-
-        <section className="summary">
-          <h2>협력·MOU</h2>
-          <CompanyEventList events={partnershipEvents} candidate emptyText="공개자료에서 확인된 협력·MOU 사건이 없습니다." />
-        </section>
-
-        <section className="summary">
-          <h2>R&D·전시</h2>
-          <CompanyEventList events={researchEvents} candidate emptyText="공개자료에서 확인된 R&D·전시 사건이 없습니다." />
-        </section>
-
-        <section className="summary">
-          <h2>기술·특허</h2>
-          {technologyItems.length ? (
-            <div className="company-section-list">
-              {technologyItems.map((item, index) => (
-                <div key={item.technology_id || item.registration_number || `${item.name}-${index}`}>
-                  <strong>{item.name || item.registration_number || "기술명 확인 중"}</strong>
-                  <span>{[getDisplayValue(item.record_type, null), getDisplayValue(item.status, null), getDisplayValue(item.technology_area, null)].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
-                  {item.summary && /[가-힣]/.test(item.summary) && <span>{item.summary}</span>}
-                </div>
-              ))}
-            </div>
-          ) : <p>현재 공개자료를 추가 조사 중입니다.</p>}
-        </section>
-
-        <section className="summary">
-          <h2>최근 동향</h2>
-          <CompanyEventList events={otherEvents} candidate emptyText="분류된 최근 동향을 추가 조사 중입니다." />
-        </section>
-
-        <section className="summary">
-          <h2>데이터 검증 정보</h2>
-          <dl className="detail-grid compact-detail-grid">
-            <div><dt>전체 상태</dt><dd>{getCompanyDataStatusLabel(company)}</dd></div>
-            <div><dt>법인 식별</dt><dd>{getDomainStatusLabel(domainStatuses.identity_status)}</dd></div>
-            <div><dt>재무</dt><dd>{getDomainStatusLabel(domainStatuses.financial_status)}</dd></div>
-            <div><dt>생산</dt><dd>{getDomainStatusLabel(domainStatuses.production_status)}</dd></div>
-            <div><dt>프로젝트</dt><dd>{getDomainStatusLabel(domainStatuses.project_status)}</dd></div>
-            <div><dt>기술</dt><dd>{getDomainStatusLabel(domainStatuses.technology_status)}</dd></div>
-            <div><dt>최근 신호</dt><dd>{getDomainStatusLabel(domainStatuses.recent_signal_status)}</dd></div>
-            <div><dt>DART corp_code</dt><dd>{company.dart_identity?.dart_corp_code || "확인 중"}</dd></div>
-            <div><dt>최근 감사보고서</dt><dd>{latestAudit?.receipt_number || "공개자료 없음"}</dd></div>
-          </dl>
-          {gaps.length > 0 && (
-            <div className="company-section-list">
-              {gaps.slice(0, 4).map((gap, index) => <div key={`${gap.area}-${index}`}><strong>추가 확인 필요</strong><span>{/[가-힣]/.test(gap.description || gap.note || "") ? gap.description || gap.note : "공개자료를 추가 확인 중입니다."}</span></div>)}
-            </div>
-          )}
-        </section>
-
-        <section className="summary">
-          <h2>출처</h2>
-          {sourceGroups.length ? (
-            <div className="source-group-list">
-              {sourceGroups.map((group) => (
-                <details className="source-group" key={group.group_type}>
-                  <summary>{SOURCE_GROUP_LABELS[group.group_type] || "공개자료"} · {group.count.toLocaleString("ko-KR")}건</summary>
-                  <div className="source-list">
-                    {group.sources.map((source) => (
-                      <div key={source.source_id}>
-                        <strong>{source.publisher || SOURCE_GROUP_LABELS[group.group_type] || "출처"}</strong>
-                        <span>{[source.published_at || source.retrieved_at, source.document_id ? `문서번호 ${source.document_id}` : null].filter(Boolean).join(" · ") || "기준일 확인 중"}</span>
-                        {source.url && <a href={source.url} target="_blank" rel="noopener noreferrer">원문 보기 <ExternalLink size={13} /></a>}
-                      </div>
-                    ))}
-                  </div>
-                </details>
-              ))}
-            </div>
-          ) : <p>공개 출처를 추가 정리 중입니다.</p>}
-        </section>
-      </article>
+      <CompanyDetailView company={company} activeTab={activeTab} onTabChange={setCompanyTab} />
     </Layout>
   );
 }

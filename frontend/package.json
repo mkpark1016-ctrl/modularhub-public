@@ -10,6 +10,7 @@
     "lint": "eslint src --max-warnings=0",
     "test:business": "node scripts/test-business-insights.mjs",
     "test:companies": "node scripts/test-company-insights.mjs",
+    "test:companies-detail": "node scripts/test-company-detail-ui.mjs",
     "test:companies-projects": "node scripts/test-company-projects.mjs",
     "test:companies-v2": "node scripts/test-company-intelligence-v2.mjs",
     "test:companies-url": "node scripts/test-company-url.mjs",
