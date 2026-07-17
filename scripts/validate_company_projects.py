@@ -26,6 +26,7 @@ PROJECT_STATUSES = {
     "completed",
     "suspended",
     "cancelled",
+    "unconfirmed",
     "unknown",
 }
 COMPANY_ROLES = {
@@ -42,6 +43,7 @@ COMPANY_ROLES = {
     "structural_supplier",
     "rental_provider",
     "technology_provider",
+    "modular_integrator",
     "unknown",
 }
 STRUCTURE_TYPES = {
@@ -121,14 +123,19 @@ def has_source_ids(project: dict[str, Any]) -> bool:
     return isinstance(project.get("source_ids"), list) and any(project.get("source_ids"))
 
 
-def validate_date(value: Any) -> bool:
+def parse_project_date(value: Any) -> date | None:
     if not value:
-        return True
+        return None
+    raw = str(value)
     try:
-        parsed = date.fromisoformat(str(value)[:10])
+        if re.fullmatch(r"\d{4}", raw):
+            return date(int(raw), 1, 1)
+        if re.fullmatch(r"\d{4}-\d{2}", raw):
+            year, month = [int(part) for part in raw.split("-")]
+            return date(year, month, 1)
+        return date.fromisoformat(raw[:10])
     except ValueError:
-        return False
-    return parsed <= date.today()
+        return None
 
 
 def validate_project(
@@ -169,7 +176,15 @@ def validate_project(
         add_issue(issues, "invalid_structure_type", company_id, path + ".structure_type", str(structure_type))
 
     for field in ("contract_date", "construction_start_date", "completion_date", "verified_at"):
-        if not validate_date(project.get(field)):
+        value = project.get(field)
+        if not value:
+            continue
+        parsed = parse_project_date(value)
+        if parsed is None:
+            add_issue(issues, "invalid_or_future_date", company_id, path + f".{field}", str(project.get(field)))
+        elif field == "completion_date" and status == "completed" and parsed > date.today():
+            add_issue(issues, "invalid_or_future_date", company_id, path + f".{field}", str(project.get(field)))
+        elif field == "verified_at" and parsed > date.today():
             add_issue(issues, "invalid_or_future_date", company_id, path + f".{field}", str(project.get(field)))
 
     for field in NUMBER_FIELDS:

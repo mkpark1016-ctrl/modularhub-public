@@ -31,10 +31,10 @@ const verifiedIds = [
   "yuchang-enc", "kumkang-kind", "nrb", "planm", "geogwang-enterprise", "sungji-steel",
 ];
 
-assert.equal(companies.length, 18);
+assert.equal(companies.length, 10);
 const summary = getCompanySummary(companies);
-assert.equal(summary.total, 18);
-assert.equal(summary.directCompetitors, 8);
+assert.equal(summary.total, 10);
+assert.equal(summary.directCompetitors, 5);
 assert.equal(summary.coreVerified, 10);
 assert.equal(summary.facilityConfirmed, 8);
 
@@ -81,7 +81,7 @@ assert.equal(legacySamsung.project_credit, false);
 assert.ok(yuchangEvents.some((event) => event.event_id === "event-yuchang-poscoac-acquisition"));
 
 const direct = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "direct_competitor", tier: "all", status: "all" }));
-assert.equal(direct.length, 8);
+assert.equal(direct.length, 5);
 const verified = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "all", tier: "all", status: "core_verified" }));
 assert.equal(verified.length, 10);
 assert.equal(formatKrwReadable(null), "확인되지 않음");

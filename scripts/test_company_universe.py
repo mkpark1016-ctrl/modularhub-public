@@ -27,12 +27,11 @@ def main() -> int:
     by_id = {company["company_id"]: company for company in companies}
 
     require(validation["valid"], f"company universe validation failed: {validation['errors']}")
-    require(len(companies) == 18, "company universe must contain 18 companies")
-    require(result["tier_counts"].get("tier_1") == 8, "Tier 1 direct competitor count mismatch")
+    require(len(companies) == 10, "company universe must contain 10 public verified companies")
+    require(result["tier_counts"].get("tier_1") == 5, "Tier 1 public competitor count mismatch")
     require(result["tier_counts"].get("tier_1b") == 1, "Tier 1-B benchmark count mismatch")
-    require(result["tier_counts"].get("tier_2") == 6, "Tier 2 strategic contractor count mismatch")
-    require(result["tier_counts"].get("tier_3") == 3, "Tier 3 design influencer count mismatch")
-    require(result["role_counts"].get("direct_competitor") == 8, "direct competitor role count mismatch")
+    require(result["tier_counts"].get("tier_2") == 4, "Tier 2 strategic contractor count mismatch")
+    require(result["role_counts"].get("direct_competitor") == 5, "direct competitor role count mismatch")
     require(result["role_counts"].get("substitute_competitor") == 1, "substitute competitor role count mismatch")
     require(result["role_counts"].get("internal_baseline") == 1, "internal baseline count mismatch")
     require(by_id["gs-ec"]["competitive_role"] == "internal_baseline", "GS E&C must be internal baseline")
@@ -60,7 +59,7 @@ def main() -> int:
         "financial data must be empty or source-backed with scope",
     )
     research = research_required(companies)
-    require(sum(1 for row in research if row["analysis_tier"] == "tier_1" and row["research_priority"] == "P0") == 8, "Tier 1 research priority mismatch")
+    require(sum(1 for row in research if row["analysis_tier"] == "tier_1" and row["research_priority"] == "P0") == 5, "Tier 1 research priority mismatch")
     print("COMPANY UNIVERSE TESTS PASSED")
     return 0
 

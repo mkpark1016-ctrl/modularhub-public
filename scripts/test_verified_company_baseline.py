@@ -38,11 +38,11 @@ def main() -> int:
     v1 = load(V1)
     v2 = load(V2)
 
-    assert len(v1['companies']) == 18
-    assert len(v2['companies']) == 18
-    assert len(v2['materialized_summaries']) == 18
-    assert len({item['company_id'] for item in v1['companies']}) == 18
-    assert TARGETS.issubset({item['company_id'] for item in v1['companies']})
+    assert len(v1['companies']) == 10
+    assert len(v2['companies']) == 10
+    assert len(v2['materialized_summaries']) == 10
+    assert len({item['company_id'] for item in v1['companies']}) == 10
+    assert TARGETS == {item['company_id'] for item in v1['companies']}
 
     for company_id, (facility_count, project_count, technology_minimum) in EXPECTED.items():
         company = by_id(v1, company_id)

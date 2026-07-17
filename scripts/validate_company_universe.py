@@ -11,6 +11,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+from company_publication import load_public_company_ids
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
 
@@ -94,16 +96,14 @@ REQUIRED_COMPANY_FIELDS = {
 }
 
 EXPECTED_TIER_COUNTS = {
-    "tier_1": 8,
+    "tier_1": 5,
     "tier_1b": 1,
-    "tier_2": 6,
-    "tier_3": 3,
+    "tier_2": 4,
 }
 EXPECTED_ROLE_COUNTS = {
-    "direct_competitor": 8,
+    "direct_competitor": 5,
     "substitute_competitor": 1,
-    "strategic_benchmark": 5,
-    "design_influencer": 3,
+    "strategic_benchmark": 3,
     "internal_baseline": 1,
 }
 
@@ -132,10 +132,13 @@ def validate_universe(payload: dict[str, Any]) -> dict[str, Any]:
 
     if payload.get("schema_version") != "company-universe-v1":
         add_error(errors, "invalid_schema_version", "", "schema_version", "top-level schema_version must be company-universe-v1")
-    if len(rows) != 18:
-        add_error(errors, "invalid_company_count", "", "companies", f"expected 18 companies, got {len(rows)}")
+    public_ids = set(load_public_company_ids())
+    if len(rows) != len(public_ids):
+        add_error(errors, "invalid_company_count", "", "companies", f"expected {len(public_ids)} companies, got {len(rows)}")
 
     ids = [str(row.get("company_id", "")) for row in rows]
+    if set(ids) != public_ids:
+        add_error(errors, "public_allowlist_mismatch", "", "companies", f"public ids differ from allowlist: {sorted(set(ids) ^ public_ids)}")
     id_counts = Counter(ids)
     for company_id, count in id_counts.items():
         if not company_id or count > 1:

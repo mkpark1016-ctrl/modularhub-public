@@ -5,6 +5,7 @@ import argparse
 import json
 from pathlib import Path
 
+from company_publication import filter_public_payloads, load_public_company_ids
 from verified_company_apply import apply_company
 from verified_company_source import load_verified_companies
 from verified_import_helpers import FIXED_GENERATED_AT, clean_old_manual_v2, dump, load
@@ -26,10 +27,10 @@ def validate(v1, v2, targets):
     v2_ids = [item.get('company_id') for item in v2.get('companies', [])]
     summary_ids = [item.get('company_id') for item in v2.get('materialized_summaries', [])]
     for label, values in [('V1', company_ids), ('V2', v2_ids), ('summaries', summary_ids)]:
-        if len(values) != 18 or len(set(values)) != 18:
-            raise RuntimeError(f'{label} must contain 18 unique companies')
+        if len(values) != 10 or len(set(values)) != 10:
+            raise RuntimeError(f'{label} must contain 10 unique public verified companies')
     target_ids = {item['company_id'] for item in targets}
-    if set(EXPECTED) != target_ids or 'dl-enc' not in company_ids:
+    if set(EXPECTED) != target_ids or set(company_ids) != target_ids or set(v2_ids) != target_ids:
         raise RuntimeError('Verified company target set mismatch')
     by_id = {item['company_id']: item for item in v1['companies']}
     for company_id, (facility_count, project_count, technology_count) in EXPECTED.items():
@@ -54,36 +55,30 @@ def validate(v1, v2, targets):
     legacy = next(item for item in v2['events'] if item['event_id'] == 'event-yuchang-enc-samsung-ai-modular-home')
     if legacy.get('event_type') != 'partnership' or legacy.get('project_credit'):
         raise RuntimeError('YooChang-Samsung legacy item must remain a non-project partnership')
+    public_ids = set(company_ids)
+    for collection_name in ('facts', 'events', 'corrections', 'materialized_summaries'):
+        for item in v2.get(collection_name, []):
+            if item.get('company_id') not in public_ids:
+                raise RuntimeError(f'{collection_name} contains non-public company_id {item.get("company_id")}')
+    record_ids = {item['fact_id'] for item in v2.get('facts', [])} | {item['event_id'] for item in v2.get('events', [])}
+    for source in v2.get('evidence', []):
+        for target in source.get('supports', []) + source.get('contradicts', []):
+            if target not in record_ids:
+                raise RuntimeError(f'Orphan evidence support target: {target}')
     if any(str(item.get('source_id', '')).lower().endswith('.pdf') for item in v2.get('evidence', [])):
         raise RuntimeError('Raw PDF reference must not be committed')
     return {
-        'company_count': 18, 'verified_targets': len(targets),
+        'company_count': len(company_ids), 'verified_targets': len(targets),
         'facts': len(v2.get('facts', [])), 'events': len(v2.get('events', [])),
         'evidence': len(v2.get('evidence', [])),
     }
 
 
 def patch_contract_files():
-    replacements = {
-        ROOT / 'scripts/validate_company_universe.py': [
-            ('"tier_2": 5,', '"tier_2": 6,'),
-            ('"strategic_benchmark": 4,', '"strategic_benchmark": 5,'),
-            ('if len(rows) != 17:', 'if len(rows) != 18:'),
-            ('expected 17 companies', 'expected 18 companies'),
-        ],
-        ROOT / 'scripts/test_company_universe.py': [
-            ('len(companies) == 17', 'len(companies) == 18'),
-            ('contain 17 companies', 'contain 18 companies'),
-            ('get("tier_2") == 5', 'get("tier_2") == 6'),
-        ],
-    }
-    for path, pairs in replacements.items():
-        text = path.read_text(encoding='utf-8')
-        for old, new in pairs:
-            if old not in text and new not in text:
-                raise RuntimeError(f'Expected contract text missing in {path}: {old}')
-            text = text.replace(old, new)
-        path.write_text(text, encoding='utf-8')
+    # Historical import steps patched the public universe from 17 to 18 companies.
+    # Publication is now controlled by config/companies/public_verified_company_ids.json,
+    # so the import command must not rewrite validator contracts.
+    return None
 
 
 def main():
@@ -93,6 +88,9 @@ def main():
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     targets = load_verified_companies()
+    allowed_ids = set(load_public_company_ids())
+    if allowed_ids != {item['company_id'] for item in targets}:
+        raise RuntimeError('Publication allowlist must match verified company modules')
     v1, v2 = load(args.v1), load(args.v2)
     clean_old_manual_v2(v2, {item['company_id'] for item in targets})
     for curated in targets:
@@ -102,6 +100,7 @@ def main():
     v2.setdefault('audit_metadata', {})['manual_verified_baseline'] = {
         'reviewed_at': FIXED_GENERATED_AT, 'company_count': 10, 'raw_pdf_committed': False,
     }
+    v1, v2 = filter_public_payloads(v1, v2, allowed_ids)
     result = validate(v1, v2, targets)
     if not args.check:
         dump(args.v1, v1)

@@ -110,7 +110,7 @@ try {
   check(newsItems.length === metaData.news_count, "news count does not match meta");
   check(businessItems.length > 0, "business data is empty");
   check(newsItems.length > 0, "news data is empty");
-  check(companyItems.length === 17, "company data should contain 17 companies");
+  check(companyItems.length === 10, "company data should contain 10 public verified companies");
   check(companySummary.coreVerified === companyItems.filter((item) => getCompanyDataStatus(item) === "core_verified").length, "company core verified count should match resolver");
   check(companySummary.coreVerified >= 1, "company core verified count should include companies with verified core domains");
 
@@ -156,7 +156,11 @@ try {
   await selectFilter(page, "경쟁 관계", "direct_competitor");
   await waitForCardCount(page, companySummary.directCompetitors, "direct competitor filter mismatch");
   await selectFilter(page, "데이터 상태", "core_verified");
-  await waitForCardCount(page, companySummary.coreVerified, "core verified company filter mismatch");
+  await waitForCardCount(
+    page,
+    companyItems.filter((item) => item.competitive_role === "direct_competitor" && getCompanyDataStatus(item) === "core_verified").length,
+    "direct competitor + core verified company filter mismatch",
+  );
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
   await waitForCardCount(page, companyItems.length, "company pre-search reset mismatch");
   await page.getByPlaceholder("기업명, 프로젝트, 기술 검색").fill("PlanM");

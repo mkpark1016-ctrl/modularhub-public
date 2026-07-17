@@ -12,6 +12,7 @@ STATUS_TO_EVENT = {
     'preferred_bidder': 'preferred_bidder', 'planned': 'planned',
     'cancelled': 'cancelled', 'unconfirmed': 'unconfirmed', 'unknown': 'unconfirmed',
 }
+PROJECT_CREDIT_STATUSES = {'completed', 'under_construction', 'contracted', 'awarded'}
 
 
 def load(path: Path) -> dict[str, Any]:
@@ -161,6 +162,7 @@ def normalize_project(project, company_id, source_id):
                   verified_at=FIXED_GENERATED_AT[:10], client_name=result.get('client'),
                   role_detail=result.get('summary'), project_summary=result.get('summary'),
                   research_wave='manual_verified_baseline', enrichment_status='manual_verified')
+    result['project_credit'] = bool(result.get('project_credit')) and result.get('project_status') in PROJECT_CREDIT_STATUSES
     return result
 
 
@@ -199,11 +201,11 @@ def source_groups(sources):
 
 
 def clean_old_manual_v2(v2, company_ids):
-    def old(item):
+    def old_manual(item):
         return item.get('company_id') in company_ids and any(
             str(source).startswith(('internal-research-', 'manual-verified-')) for source in item.get('source_ids', []))
-    v2['facts'] = [item for item in v2.get('facts', []) if not old(item)]
-    v2['events'] = [item for item in v2.get('events', []) if not old(item)]
+    v2['facts'] = [item for item in v2.get('facts', []) if item.get('company_id') not in company_ids]
+    v2['events'] = [item for item in v2.get('events', []) if not old_manual(item)]
     v2['evidence'] = [item for item in v2.get('evidence', []) if not str(item.get('source_id', '')).startswith(('internal-research-', 'manual-verified-'))]
 
 
@@ -217,11 +219,12 @@ def v2_fact(company_id, domain, field, value, unit, period, source_id):
 
 
 def v2_project_event(project, company_id, source_id):
+    project_credit = bool(project.get('project_credit')) and project.get('project_status') in PROJECT_CREDIT_STATUSES
     return {'event_id': f"event-{project['project_id']}", 'company_id': company_id,
             'event_type': 'project', 'event_status': STATUS_TO_EVENT.get(project.get('project_status'), 'unconfirmed'),
             'title': project['project_name'], 'counterparties': unique([project.get('client')] if project.get('client') else []),
             'client': project.get('client'), 'project_role': project.get('company_role'),
-            'project_credit': bool(project.get('project_credit')), 'announced_at': project.get('announced_at'),
+            'project_credit': project_credit, 'announced_at': project.get('announced_at'),
             'contracted_at': project.get('contract_date'), 'started_at': project.get('start_date'),
             'completed_at': project.get('completion_date'), 'amount': project.get('contract_amount'),
             'amount_unit': project.get('contract_amount_unit'), 'location': project.get('location'),

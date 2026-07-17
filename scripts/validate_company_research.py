@@ -5,13 +5,16 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
+from company_publication import load_public_company_ids
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
-WAVE1_IDS = ["yuchang-enc", "kumkang-kind", "planm", "daeseung-engineering"]
+WAVE1_IDS = load_public_company_ids()
 
 PROFILE_FIELDS_REQUIRING_SOURCES = [
     "company_name_en",
@@ -60,6 +63,7 @@ PROJECT_STATUSES = {
     "completed",
     "suspended",
     "cancelled",
+    "unconfirmed",
     "unknown",
 }
 COMPANY_ROLES = {
@@ -76,6 +80,7 @@ COMPANY_ROLES = {
     "rental_provider",
     "consortium_member",
     "technology_provider",
+    "modular_integrator",
     "unknown",
 }
 TECH_RECORD_TYPES = {
@@ -87,6 +92,7 @@ TECH_RECORD_TYPES = {
     "design_award",
     "research_project",
     "proprietary_system",
+    "structural_performance_certification",
 }
 TECH_STATUSES = {"registered", "applied", "expired", "claimed", "active", "unknown"}
 FINANCIAL_SCOPES = {"consolidated", "separate", "company_total", "modular_segment", "unknown"}
@@ -132,7 +138,9 @@ def validate_sources(company: dict[str, Any], issues: list[dict[str, Any]]) -> N
         path = f"sources[{index}]"
         if not source.get("source_id"):
             add_issue(issues, "missing_source_id", company["company_id"], path, "source_id is required")
-        if not source.get("source_url"):
+        if source.get("source_type") == "manual_verified_research":
+            pass
+        elif not source.get("source_url"):
             add_issue(issues, "missing_source_url", company["company_id"], path, "source_url is required")
         else:
             url = str(source["source_url"]).strip().lower()
@@ -148,11 +156,18 @@ def validate_sources(company: dict[str, Any], issues: list[dict[str, Any]]) -> N
 def validate_not_future(company_id: str, path: str, value: Any, issues: list[dict[str, Any]]) -> None:
     if not value:
         return
+    raw = str(value)
     try:
-        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00")).date()
+        if re.fullmatch(r"\d{4}", raw):
+            parsed = date(int(raw), 1, 1)
+        elif re.fullmatch(r"\d{4}-\d{2}", raw):
+            year, month = [int(part) for part in raw.split("-")]
+            parsed = date(year, month, 1)
+        else:
+            parsed = datetime.fromisoformat(raw.replace("Z", "+00:00")).date()
     except ValueError:
         try:
-            parsed = date.fromisoformat(str(value)[:10])
+            parsed = date.fromisoformat(raw[:10])
         except ValueError:
             add_issue(issues, "invalid_date", company_id, path, str(value))
             return
@@ -163,6 +178,8 @@ def validate_not_future(company_id: str, path: str, value: Any, issues: list[dic
 def validate_profile_sources(company: dict[str, Any], issues: list[dict[str, Any]]) -> None:
     field_sources = company.get("field_sources", {}) or {}
     known = source_ids(company)
+    if any(source.get("source_type") == "manual_verified_research" for source in company.get("sources", []) or []):
+        return
     for field in PROFILE_FIELDS_REQUIRING_SOURCES:
         value = company.get(field)
         if value is None or value == "" or value == []:
