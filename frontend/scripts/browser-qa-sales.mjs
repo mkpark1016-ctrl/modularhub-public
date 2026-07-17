@@ -169,6 +169,10 @@ try {
   check(await countCards(page) >= 1, "company alias search should return results");
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
   await waitForCardCount(page, companyItems.length, "company reset mismatch");
+  for (const company of companyItems) {
+    await page.goto(`${baseUrl}/companies/${company.company_id}`, { waitUntil: "networkidle" });
+    await page.locator("article.company-detail").waitFor();
+  }
   await page.goto(`${baseUrl}/companies/planm`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: /플랜엠/ }).waitFor();
   await page.getByRole("tab", { name: "재무" }).click();
