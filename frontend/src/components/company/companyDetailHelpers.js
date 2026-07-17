@@ -131,6 +131,7 @@ const VALUE_LABELS = {
   hotel: "호텔",
   hospital: "의료시설",
   temporary_facility: "임시시설",
+  temporary_building: "임시건축물",
   industrial_support: "산업 지원시설",
   data_center: "데이터센터",
   other: "기타",
