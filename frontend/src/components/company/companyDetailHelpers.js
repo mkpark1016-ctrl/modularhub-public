@@ -121,6 +121,8 @@ const VALUE_LABELS = {
   technology_provider: "기술 제공",
   structural_engineer: "구조 엔지니어링",
   role_unknown: "수행 역할 미확인",
+  military_modular: "군 모듈러",
+  large_scale_modular: "대형 모듈러",
   school: "학교",
   military: "군 시설",
   office: "업무시설",
@@ -131,6 +133,7 @@ const VALUE_LABELS = {
   hotel: "호텔",
   hospital: "의료시설",
   temporary_facility: "임시시설",
+  temporary_building: "임시건축물",
   industrial_support: "산업 지원시설",
   data_center: "데이터센터",
   other: "기타",
@@ -190,6 +193,9 @@ const VALUE_LABELS = {
 export function labelValue(value, fallback = "확인되지 않음") {
   if (value === null || value === undefined || value === "") return fallback;
   const text = String(value);
+  if (text.includes(",")) {
+    return text.split(",").map((item) => labelValue(item.trim(), item.trim())).join(", ");
+  }
   return VALUE_LABELS[text] || (text.includes("_") ? fallback : text);
 }
 
