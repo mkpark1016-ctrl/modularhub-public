@@ -40,9 +40,9 @@
     "sungji-steel"
   ],
   "protected_hashes": {
-    "business_json": "73b6bc42b3892fbeda4b601e2ca91a72a058eacc4118602559eea9a1f1d63854",
-    "news_json": "1553ad26b3cf87edbff90263c5073173b59cad8aaf987784f05f6a5b45146ab1",
-    "meta_json": "f1db1f4a4d3f645d26b98520c9b2ce84db13f6c39cde634cbad5b45beee58970"
+    "business_json": "2ce38a2e8b9b003142bd33ad8d38f2ddcce05aa9f09791ce130550ecf29e0bfe",
+    "news_json": "8d98477856e1fa130fa36d4e4f4d2ee81445125a1947e81b2e89a5ec2bfbf663",
+    "meta_json": "ad115b046786959445959c6a3803de99facce5f66f7e2283212b2a9cf8b95318"
   },
   "ui_capabilities": {
     "technology_slice_limit": null,

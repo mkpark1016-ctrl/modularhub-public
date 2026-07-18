@@ -19,28 +19,20 @@ import {
   TIER_LABELS,
   compareCompanies,
   companyMatchesFilters,
-  formatCompanyDate,
-  formatKrwReadable,
-  getCompanyDataStatus,
-  getCompanyDataStatusLabel,
-  getCompanyDomainStatuses,
-  getCompanyHighlights,
   getCompanyItems,
   getCompanySummary,
-  getCompanyTypeLabel,
-  getCompetitiveRoleLabel,
-  getConfidenceLabel,
-  getDomainStatusLabel,
-  getKoreanCompanySummary,
-  getCompanyProjectSummary,
-  getLatestFinancial,
-  getLatestVerifiedAt,
-  getTierLabel,
-  metricSourceValue,
   optionCounts,
   statusOptions,
-  technologyCount,
 } from "./companyInsights";
+import {
+  COMPANY_COMPARISON_SORT_OPTIONS,
+  MAX_COMPARISON_COMPANIES,
+  PRODUCER_GROUP_ROLE,
+  compareCompaniesForMvp,
+  normalizeComparisonSelection,
+  parseCompareParam,
+  serializeCompareSelection,
+} from "./companyComparison";
 import { COMPANY_SORT_VALUES, sanitizeCompanySearchParams } from "./companyUrlParams";
 import {
   compareBusinessByPriority,
@@ -94,6 +86,12 @@ import {
 import { NEWS_REGION_VALUES, sanitizeNewsSearchParams } from "./newsUrlParams";
 import { normalizeSearchCommitValue } from "./searchInput";
 import ActiveFilterChips from "./components/ActiveFilterChips";
+import {
+  CompanyCardGrid,
+  CompanyComparisonBar,
+  CompanyComparisonPanel,
+  CompanyQuickFilters,
+} from "./components/company/CompanyComparisonMvp";
 import CompanyDetailView from "./components/company/CompanyDetailView";
 import { normalizeCompanyTab } from "./components/company/companyDetailHelpers";
 import DashboardSummary from "./components/DashboardSummary";
@@ -160,9 +158,7 @@ const NEWS_RELEVANCE_FILTERS = [
 ];
 
 const COMPANY_SORT_OPTIONS = [
-  { value: "tier", label: "분석 우선순위" },
-  { value: "verified", label: "최신 검증순" },
-  { value: "name", label: "기업명순" },
+  ...COMPANY_COMPARISON_SORT_OPTIONS,
 ];
 
 function useDataset(name) {
@@ -766,63 +762,22 @@ function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, ti
   );
 }
 
-function CompanyCard({ company }) {
-  const highlights = getCompanyHighlights(company);
-  const latestFinancial = getLatestFinancial(company);
-  const latestRevenue = metricSourceValue(latestFinancial?.revenue);
-  const projectSummary = getCompanyProjectSummary(company);
-  const domainStatuses = getCompanyDomainStatuses(company);
-  return (
-    <article className="result-card company-card">
-      <div className="card-topline">
-        <div className="badge-row">
-          <span>{getCompanyTypeLabel(company)}</span>
-          <span>{getCompetitiveRoleLabel(company)}</span>
-          <span>{getTierLabel(company)}</span>
-          <span className={`company-status ${getCompanyDataStatus(company)}`}>{getCompanyDataStatusLabel(company)}</span>
-        </div>
-      </div>
-      <h2><Link to={`/companies/${company.company_id}`}>{company.company_name}</Link></h2>
-      <p>{getKoreanCompanySummary(company)}</p>
-      {highlights.length > 0 ? (
-        <div className="company-highlight-grid">
-          {highlights.map((highlight) => <span key={highlight}>{highlight}</span>)}
-        </div>
-      ) : (
-        <p className="empty-inline">현재 공개자료를 추가 조사 중입니다.</p>
-      )}
-      <div className="company-domain-grid" aria-label="영역별 데이터 상태">
-        <span>재무 <b>{getDomainStatusLabel(domainStatuses.financial_status)}</b></span>
-        <span>생산 <b>{getDomainStatusLabel(domainStatuses.production_status)}</b></span>
-        <span>프로젝트 <b>{getDomainStatusLabel(domainStatuses.project_status)}</b></span>
-        <span>기술 <b>{getDomainStatusLabel(domainStatuses.technology_status)}</b></span>
-      </div>
-      <dl className="metadata">
-        <div><dt>최근 재무</dt><dd>{latestFinancial && latestRevenue !== null ? `${latestFinancial.year}년 ${formatKrwReadable(latestRevenue)}` : "공개자료 없음"}</dd></div>
-        <div><dt>검증 실적</dt><dd>{projectSummary.verified > 0 ? `${projectSummary.verified}건` : "확인된 실적 없음"}</dd></div>
-        <div><dt>사업 후보</dt><dd>{projectSummary.candidates > 0 ? `${projectSummary.candidates}건` : "검토 후보 없음"}</dd></div>
-        <div><dt>협력·MOU</dt><dd>{projectSummary.partnerships > 0 ? `${projectSummary.partnerships}건` : "확인된 사건 없음"}</dd></div>
-        <div><dt>R&D·전시</dt><dd>{projectSummary.researchAndExhibition > 0 ? `${projectSummary.researchAndExhibition}건` : "확인된 사건 없음"}</dd></div>
-        <div><dt>기술·특허</dt><dd>{technologyCount(company) > 0 ? `${technologyCount(company)}건` : "확인 중"}</dd></div>
-        <div><dt>최신 기준일</dt><dd>{formatCompanyDate(getLatestVerifiedAt(company))}</dd></div>
-        <div><dt>신뢰도</dt><dd>{getConfidenceLabel(company)}</dd></div>
-      </dl>
-      <div className="card-footer">
-        <span>{company.company_name_en || (company.aliases || [])[0] || "별칭 확인 중"}</span>
-        <div className="card-actions">
-          <Link to={`/companies/${company.company_id}`}>상세보기</Link>
-        </div>
-      </div>
-    </article>
-  );
-}
-
 function CompanyListingPage() {
   const { loading, error, data } = useDataset("companies/companies");
   const [searchParams, setSearchParams] = useSearchParams();
+  const [comparisonOpen, setComparisonOpen] = useState(false);
+  const compareButtonRef = useRef(null);
   const items = getCompanyItems(data);
   const summary = useMemo(() => getCompanySummary(items), [items]);
-  const roleOptions = useMemo(() => optionCounts(items, "company_type", COMPANY_TYPE_LABELS), [items]);
+  const baseRoleOptions = useMemo(() => optionCounts(items, "company_type", COMPANY_TYPE_LABELS), [items]);
+  const roleOptions = useMemo(() => [
+    ...baseRoleOptions,
+    {
+      value: PRODUCER_GROUP_ROLE,
+      label: COMPANY_TYPE_LABELS[PRODUCER_GROUP_ROLE],
+      count: items.filter((company) => ["specialist_manufacturer", "modular_integrator"].includes(company.company_type)).length,
+    },
+  ], [baseRoleOptions, items]);
   const relationshipOptions = useMemo(() => optionCounts(items, "competitive_role", COMPETITIVE_ROLE_LABELS), [items]);
   const tierOptions = useMemo(() => optionCounts(items, "analysis_tier", TIER_LABELS), [items]);
   const statusFilterOptions = useMemo(() => statusOptions(items), [items]);
@@ -830,7 +785,8 @@ function CompanyListingPage() {
     roles: roleOptions.map((option) => option.value),
     relationships: relationshipOptions.map((option) => option.value),
     tiers: tierOptions.map((option) => option.value),
-  }), [relationshipOptions, roleOptions, tierOptions]);
+    companyIds: items.map((company) => company.company_id),
+  }), [items, relationshipOptions, roleOptions, tierOptions]);
 
   useEffect(() => {
     if (!items.length) return;
@@ -856,6 +812,29 @@ function CompanyListingPage() {
     setSearchParams(next, { replace: true });
   }, [searchParams, setSearchParams]);
 
+  const setComparisonSelection = useCallback((ids) => {
+    const normalized = normalizeComparisonSelection(ids, items);
+    const next = new URLSearchParams(searchParams);
+    if (normalized.length) next.set("compare", serializeCompareSelection(normalized));
+    else next.delete("compare");
+    setSearchParams(next);
+    if (normalized.length < 2) setComparisonOpen(false);
+  }, [items, searchParams, setSearchParams]);
+
+  const selectedIds = useMemo(() => normalizeComparisonSelection(parseCompareParam(searchParams.get("compare")), items), [items, searchParams]);
+  const selectedCompanies = useMemo(() => selectedIds
+    .map((id) => items.find((company) => company.company_id === id))
+    .filter(Boolean), [items, selectedIds]);
+
+  const toggleCompare = useCallback((companyId) => {
+    if (selectedIds.includes(companyId)) {
+      setComparisonSelection(selectedIds.filter((id) => id !== companyId));
+      return;
+    }
+    if (selectedIds.length >= MAX_COMPARISON_COMPANIES) return;
+    setComparisonSelection([...selectedIds, companyId]);
+  }, [selectedIds, setComparisonSelection]);
+
   const reset = () => {
     const next = new URLSearchParams(searchParams);
     ["q", "role", "relationship", "tier", "status", "sort"].forEach((key) => next.delete(key));
@@ -864,7 +843,7 @@ function CompanyListingPage() {
 
   const filtered = useMemo(() => items
     .filter((company) => companyMatchesFilters(company, values))
-    .sort((a, b) => compareCompanies(a, b, values.sort)), [items, values]);
+    .sort((a, b) => compareCompaniesForMvp(a, b, values.sort, compareCompanies)), [items, values]);
 
   const chips = [
     { key: "q", active: Boolean(values.q), label: `검색어: ${values.q}`, onRemove: () => setParam("q", "") },
@@ -883,10 +862,11 @@ function CompanyListingPage() {
       </section>
       <section className="summary-strip company-summary-strip" aria-label="기업정보 요약">
         <SummaryItem label="전체 기업" value={summary.total} suffix="개사" />
-        <SummaryItem label="직접 경쟁사" value={summary.directCompetitors} suffix="개사" />
-        <SummaryItem label="핵심 정보 검증" value={summary.coreVerified} suffix="개사" />
+        <SummaryItem label="건설사" value={items.filter((company) => company.company_type === "general_contractor").length} suffix="개사" />
+        <SummaryItem label="전문 제작·통합사" value={items.filter((company) => ["specialist_manufacturer", "modular_integrator"].includes(company.company_type)).length} suffix="개사" />
         <SummaryItem label="생산시설 확인 기업" value={summary.facilityConfirmed} suffix="개사" />
       </section>
+      <CompanyQuickFilters companies={items} activeRole={values.role} onRoleChange={(role) => setParam("role", role)} />
       <div className="content-layout">
         <CompanyFilters
           values={values}
@@ -912,9 +892,25 @@ function CompanyListingPage() {
           {error && <div className="state error">기업정보 데이터를 불러오지 못했습니다.</div>}
           {!loading && !error && items.length === 0 && <div className="state">등록된 기업정보가 없습니다.</div>}
           {!loading && !error && items.length > 0 && filtered.length === 0 && <div className="state">현재 검색조건에 맞는 기업정보가 없습니다.</div>}
-          {filtered.map((company) => <CompanyCard key={company.company_id} company={company} />)}
+          <CompanyCardGrid companies={filtered} selectedIds={selectedIds} onToggleCompare={toggleCompare} />
         </section>
       </div>
+      <CompanyComparisonPanel
+        open={comparisonOpen}
+        companies={selectedCompanies}
+        onClose={() => {
+          setComparisonOpen(false);
+          compareButtonRef.current?.focus();
+        }}
+        triggerRef={compareButtonRef}
+      />
+      <CompanyComparisonBar
+        selectedCompanies={selectedCompanies}
+        onRemove={(companyId) => setComparisonSelection(selectedIds.filter((id) => id !== companyId))}
+        onClear={() => setComparisonSelection([])}
+        onOpen={() => setComparisonOpen(true)}
+        compareButtonRef={compareButtonRef}
+      />
     </Layout>
   );
 }
