@@ -1,28 +1,24 @@
 {
-  "generated_at": "2026-07-18T04:59:19Z",
-  "candidate_total": 0,
-  "pending_count": 0,
-  "duplicate_count": 0,
+  "generated_at": "2026-07-18T08:03:11Z",
+  "candidate_total": 694,
+  "pending_count": 345,
+  "duplicate_count": 349,
   "conflict_count": 0,
-  "rejected_raw_count": 0,
-  "source_counts": {},
-  "domain_counts": {},
-  "company_counts": {},
-  "source_errors": [
-    {
-      "source_type": "naver_search",
-      "company_id": "yuchang-enc",
-      "status": "error",
-      "error_type": "HTTP Error 401: Unauthorized",
-      "fetched_at": "2026-07-18T04:58:35Z"
-    },
-    {
-      "source_type": "naver_search",
-      "company_id": "kumkang-kind",
-      "status": "error",
-      "error_type": "HTTP Error 401: Unauthorized",
-      "fetched_at": "2026-07-18T04:58:39Z"
-    }
-  ],
+  "rejected_raw_count": 124,
+  "source_counts": {
+    "naver_search": 694
+  },
+  "domain_counts": {
+    "market": 136,
+    "production": 145,
+    "project": 141,
+    "strategy": 209,
+    "technology": 63
+  },
+  "company_counts": {
+    "kumkang-kind": 308,
+    "yuchang-enc": 386
+  },
+  "source_errors": [],
   "high_confidence_candidates": []
 }

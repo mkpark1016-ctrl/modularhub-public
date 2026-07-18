@@ -35,15 +35,29 @@ environment variables:
 - `DART_API_KEY`
 - `NAVER_API_HUB_CLIENT_ID`
 - `NAVER_API_HUB_CLIENT_SECRET`
+- `NAVER_API_HUB_NEWS_ENDPOINT` optional, defaults to
+  `https://naverapihub.apigw.ntruss.com/search/v1/news`
 
 Collectors only report whether required secrets are configured. They never
 print raw values, partial values, or secret lengths. Do not commit `.env`
 files.
 
+The company monitoring NAVER adapter uses the NAVER API HUB contract only:
+
+- Host: `naverapihub.apigw.ntruss.com`
+- Path: `/search/v1/news`
+- Client ID header: `X-NCP-APIGW-API-KEY-ID`
+- Client secret header: `X-NCP-APIGW-API-KEY`
+
+It does not fall back to `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`, or
+`openapi.naver.com`; those legacy settings may still be used by other
+collectors.
+
 ## Local Execution
 
 ```bash
 python scripts/company_monitoring/collect_dart.py --companies kumkang-kind,yuchang-enc --days 30 --live --acknowledge-live
+python scripts/company_monitoring/collect_naver_search.py --preflight --live --acknowledge-live
 python scripts/company_monitoring/collect_naver_search.py --companies kumkang-kind,yuchang-enc --days 30 --live --acknowledge-live
 python scripts/company_monitoring/build_review_queue.py
 python scripts/company_monitoring/validate_review_queue.py

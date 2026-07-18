@@ -1,18 +1,23 @@
 # Company Intelligence Monitoring Digest
 
-- Generated at: `2026-07-18T04:59:19Z`
-- Pending candidates: 0
-- Duplicate candidates: 0
+- Generated at: `2026-07-18T08:03:11Z`
+- Pending candidates: 345
+- Duplicate candidates: 349
 - Conflict candidates: 0
-- Rejected raw records: 0
+- Rejected raw records: 124
 
 ## Source Counts
+- naver_search: 694
 
 ## Domain Counts
+- market: 136
+- production: 145
+- project: 141
+- strategy: 209
+- technology: 63
 
 ## Source Errors
-- naver_search / yuchang-enc: HTTP Error 401: Unauthorized
-- naver_search / kumkang-kind: HTTP Error 401: Unauthorized
+- none
 
 ## High Confidence Candidates
 - none

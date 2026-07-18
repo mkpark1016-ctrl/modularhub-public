@@ -9,6 +9,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from scripts.company_monitoring.build_review_queue import build_review_queue  # noqa: E402
 from scripts.company_monitoring.common import DATA_DIR, RAW_DIR, REPORT_DIR, iso_now, read_json, write_json  # noqa: E402
 
 LIVE_REPORT_DIR = ROOT / "artifacts" / "company-intelligence-live-pilot"
@@ -30,7 +31,9 @@ def categorize_error(source: str, error_type: str | None) -> str | None:
         return "configuration_error"
     if "live_opt_in_required" in value:
         return "live_opt_in_required"
-    if "auth" in value or "unauthorized" in value or "forbidden" in value or "status_010" in value or "status_011" in value:
+    if "forbidden_or_subscription" in value or "forbidden" in value or "http error 403" in value or "http_403" in value:
+        return "forbidden_or_subscription_error"
+    if "auth" in value or "unauthorized" in value or "http error 401" in value or "http_401" in value or "status_010" in value or "status_011" in value:
         return "auth_error"
     if "429" in value or "rate" in value or "too many" in value:
         return "rate_limited"
@@ -89,21 +92,31 @@ def source_summary(raw_dir: Path) -> list[dict[str, Any]]:
     return rows
 
 
-def merge_digest_counts(rows: list[dict[str, Any]], digest_path: Path) -> None:
-    if not digest_path.exists():
-        return
-    digest = read_json(digest_path)
-    pending_by_company = digest.get("company_counts") or {}
-    duplicate_total = int(digest.get("duplicate_count") or 0)
-    conflict_total = int(digest.get("conflict_count") or 0)
-    pending_total = int(digest.get("pending_count") or 0)
+def merge_dedupe_counts(rows: list[dict[str, Any]], raw_dir: Path) -> None:
+    payload = build_review_queue(raw_dir)
+    all_candidates = payload.get("all_candidates") or []
     for row in rows:
         company_id = row.get("company_id")
-        row["pending_count"] = int(pending_by_company.get(company_id, 0) or 0)
+        source = row.get("source")
+        matching = [candidate for candidate in all_candidates if candidate.get("company_id") == company_id and candidate.get("source_type") == source]
+        row["pending_count"] = sum(1 for candidate in matching if candidate.get("review_status") == "pending")
+        row["duplicate_count"] = sum(1 for candidate in matching if candidate.get("review_status") == "duplicate")
+        row["conflict_count"] = sum(
+            1
+            for candidate in matching
+            if any("conflict" in blocker for blocker in candidate.get("promotion_blockers", []))
+        )
+    totals = {
+        "pending_total": sum(1 for candidate in all_candidates if candidate.get("review_status") == "pending"),
+        "duplicate_total": sum(1 for candidate in all_candidates if candidate.get("review_status") == "duplicate"),
+        "conflict_total": sum(
+            1
+            for candidate in all_candidates
+            if any("conflict" in blocker for blocker in candidate.get("promotion_blockers", []))
+        ),
+    }
     if rows:
-        rows[0]["duplicate_count"] = duplicate_total
-        rows[0]["conflict_count"] = conflict_total
-        rows[0]["pending_total"] = pending_total
+        rows[0].update(totals)
 
 
 def write_markdown(path: Path, summary: dict[str, Any]) -> None:
@@ -135,7 +148,7 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
 
 def build_summary(raw_dir: Path, queue_path: Path, digest_path: Path, output_dir: Path) -> dict[str, Any]:
     rows = source_summary(raw_dir)
-    merge_digest_counts(rows, digest_path)
+    merge_dedupe_counts(rows, raw_dir)
     live_opt_in = any(row.get("live_opt_in") for row in rows)
     run_mode = "live" if live_opt_in else "blocked"
     summary = {

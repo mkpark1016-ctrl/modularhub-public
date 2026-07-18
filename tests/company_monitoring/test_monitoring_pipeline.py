@@ -1,10 +1,19 @@
 from __future__ import annotations
 
 import json
+import urllib.parse
 from pathlib import Path
 
 from scripts.company_monitoring.build_review_queue import build_review_queue
 from scripts.company_monitoring.classify_candidate import classify_text
+from scripts.company_monitoring.collect_naver_search import (
+    NAVER_API_HUB_HOST,
+    NAVER_API_HUB_ID_HEADER,
+    NAVER_API_HUB_PATH,
+    NAVER_API_HUB_SECRET_HEADER,
+    build_naver_request,
+    naver_contract_report,
+)
 from scripts.company_monitoring.common import canonical_url, live_opt_in_enabled, load_monitor_companies, masked_config_status, read_json, write_json
 from scripts.company_monitoring.dedupe_candidates import dedupe_candidates
 from scripts.company_monitoring.normalize_candidate import entity_match_score, make_candidate, parse_date, relevance_score
@@ -39,6 +48,34 @@ def test_live_opt_in_requires_both_flags() -> None:
     assert live_opt_in_enabled(Args()) is False
     Args.acknowledge_live = True
     assert live_opt_in_enabled(Args()) is True
+
+
+def test_naver_api_hub_contract_uses_official_endpoint_and_headers(monkeypatch) -> None:
+    monkeypatch.setenv("NAVER_API_HUB_CLIENT_ID", "dummy-client-id")
+    monkeypatch.setenv("NAVER_API_HUB_CLIENT_SECRET", "dummy-client-secret")
+    monkeypatch.delenv("NAVER_API_HUB_NEWS_ENDPOINT", raising=False)
+    request = build_naver_request("모듈러", display=1, start=1)
+    parsed = urllib.parse.urlsplit(request.full_url)
+    assert parsed.netloc == NAVER_API_HUB_HOST
+    assert parsed.path == NAVER_API_HUB_PATH
+    headers = {key.lower() for key, _ in request.header_items()}
+    assert NAVER_API_HUB_ID_HEADER.lower() in headers
+    assert NAVER_API_HUB_SECRET_HEADER.lower() in headers
+    assert "x-naver-client-id" not in headers
+    assert "x-naver-client-secret" not in headers
+    assert "openapi.naver.com" not in request.full_url
+
+
+def test_naver_contract_report_is_sanitized(monkeypatch) -> None:
+    monkeypatch.setenv("NAVER_API_HUB_CLIENT_ID", "dummy-client-id")
+    monkeypatch.setenv("NAVER_API_HUB_CLIENT_SECRET", "dummy-client-secret")
+    report = naver_contract_report()
+    assert report["contract_match"] is True
+    assert report["legacy_env_fallback_enabled"] is False
+    assert report["legacy_header_names_used"] is False
+    serialized = json.dumps(report, ensure_ascii=False)
+    assert "dummy-client-id" not in serialized
+    assert "dummy-client-secret" not in serialized
 
 
 def test_date_conversion_handles_naver_and_dart_formats() -> None:

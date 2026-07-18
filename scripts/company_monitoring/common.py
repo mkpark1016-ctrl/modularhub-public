@@ -243,6 +243,8 @@ def safe_error_message(exc: Exception, fallback: str) -> str:
     message = str(exc) or fallback
     message = re.sub(r"(crtfc_key=)[^&\s]+", r"\1***", message, flags=re.I)
     message = re.sub(r"(X-Naver-Client-Secret[:=]\s*)\S+", r"\1***", message, flags=re.I)
+    message = re.sub(r"(X-NCP-APIGW-API-KEY-ID[:=]\s*)\S+", r"\1***", message, flags=re.I)
+    message = re.sub(r"(X-NCP-APIGW-API-KEY[:=]\s*)\S+", r"\1***", message, flags=re.I)
     if len(message) > 180:
         message = message[:177] + "..."
     return message
