@@ -2,6 +2,7 @@ export const COMPANY_TYPE_LABELS = {
   general_contractor: "건설사",
   specialist_manufacturer: "전문 제작사",
   modular_integrator: "모듈러 통합사",
+  producer_group: "전문 제작·통합사",
   design_firm: "설계사",
   engineering_firm: "엔지니어링사",
   material_supplier: "자재 공급사",
@@ -426,7 +427,8 @@ export function matchesCompanySearch(company, query) {
 }
 
 export function companyMatchesFilters(company, values) {
-  if (values.role !== "all" && company.company_type !== values.role) return false;
+  if (values.role === "producer_group" && !["specialist_manufacturer", "modular_integrator"].includes(company.company_type)) return false;
+  if (values.role !== "all" && values.role !== "producer_group" && company.company_type !== values.role) return false;
   if (values.relationship !== "all" && company.competitive_role !== values.relationship) return false;
   if (values.tier !== "all" && company.analysis_tier !== values.tier) return false;
   if (values.status !== "all" && getCompanyDataStatus(company) !== values.status) return false;

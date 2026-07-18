@@ -1,4 +1,4 @@
-export const COMPANY_SORT_VALUES = ["tier", "verified", "name"];
+export const COMPANY_SORT_VALUES = ["tier", "verified", "name", "revenue", "operating_margin", "production", "verified_projects", "technology"];
 export const COMPANY_STATUS_VALUES = ["all", "core_verified", "partially_verified", "research_in_progress", "watchlist", "insufficient_public_data"];
 const LEGACY_STATUS_ALIASES = {
   verified: "core_verified",
@@ -28,6 +28,20 @@ export function sanitizeCompanySearchParams(searchParams, validValues) {
       next.delete(key);
       changed = true;
     }
+  }
+  const compare = next.get("compare");
+  if (compare && Array.isArray(validValues.companyIds)) {
+    const allowed = new Set(validValues.companyIds);
+    const normalized = [];
+    for (const id of compare.split(",").map((item) => item.trim()).filter(Boolean)) {
+      if (!allowed.has(id) || normalized.includes(id)) continue;
+      normalized.push(id);
+      if (normalized.length === 4) break;
+    }
+    const serialized = normalized.join(",");
+    if (!serialized) next.delete("compare");
+    else next.set("compare", serialized);
+    if (serialized !== compare) changed = true;
   }
   return { params: next, changed };
 }
