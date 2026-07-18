@@ -16,9 +16,12 @@ from scripts.company_monitoring.classify_candidate import classify_text  # noqa:
 from scripts.company_monitoring.common import (  # noqa: E402
     fail_source,
     iso_now,
+    live_opt_in_enabled,
+    live_opt_in_error,
+    load_monitoring_environment,
     load_monitor_companies,
     load_query_keywords,
-    mask_secret,
+    masked_config_status,
     parse_common_args,
     parse_company_arg,
     safe_error_message,
@@ -32,6 +35,7 @@ NAVER_NEWS_ENDPOINT = "https://openapi.naver.com/v1/search/news.json"
 
 
 def naver_credentials() -> tuple[str | None, str | None]:
+    load_monitoring_environment()
     return os.getenv("NAVER_API_HUB_CLIENT_ID") or os.getenv("NAVER_CLIENT_ID"), os.getenv("NAVER_API_HUB_CLIENT_SECRET") or os.getenv("NAVER_CLIENT_SECRET")
 
 
@@ -147,15 +151,19 @@ def main() -> int:
     output: dict[str, Any] = {
         "source_type": "naver_search",
         "fetched_at": fetched_at,
+        "run_mode": "fixture" if args.fixture else "live" if live_opt_in_enabled(args) else "blocked",
+        "live_opt_in": live_opt_in_enabled(args),
         "env": {
-            "NAVER_API_HUB_CLIENT_ID": mask_secret(client_id),
-            "NAVER_API_HUB_CLIENT_SECRET": mask_secret(client_secret),
+            "NAVER_API_HUB_CLIENT_ID": masked_config_status(client_id),
+            "NAVER_API_HUB_CLIENT_SECRET": masked_config_status(client_secret),
         },
         "results": [],
     }
     if args.fixture:
         fixture = json.loads(args.fixture.read_text(encoding="utf-8"))
         output["results"] = fixture.get("results", [])
+    elif not live_opt_in_enabled(args):
+        output["results"] = live_opt_in_error("naver_search", companies, fetched_at)
     else:
         for company in companies:
             if "naver_search" not in company.enabled_sources:

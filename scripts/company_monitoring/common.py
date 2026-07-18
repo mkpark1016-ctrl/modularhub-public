@@ -13,6 +13,8 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 CONFIG_DIR = ROOT / "config" / "company_monitoring"
 RAW_DIR = ROOT / "artifacts" / "company_monitoring" / "raw"
 DATA_DIR = ROOT / "data" / "company_monitoring"
@@ -70,6 +72,8 @@ def parse_common_args(description: str) -> argparse.ArgumentParser:
     parser.add_argument("--days", type=int, default=30)
     parser.add_argument("--fixture", type=Path, default=None, help="Optional fixture payload for tests/offline runs.")
     parser.add_argument("--output-dir", type=Path, default=RAW_DIR)
+    parser.add_argument("--live", action="store_true", help="Allow real external API requests.")
+    parser.add_argument("--acknowledge-live", action="store_true", help="Acknowledge that this run may call external APIs.")
     return parser
 
 
@@ -187,14 +191,42 @@ def source_id(source_type: str, company_id: str, document_id: str | None, url: s
     return f"{source_type}-{company_id}-{digest}"
 
 
-def mask_secret(value: str | None) -> str:
+def load_monitoring_environment() -> bool:
+    """Load repository-root .env through the central env loader."""
+
+    from src.env_config import load_project_dotenv
+
+    return load_project_dotenv()
+
+
+def masked_config_status(value: str | None) -> str:
     if not value:
         return "missing"
-    return f"configured(length={len(value)})"
+    return "configured"
 
 
 def env_flag(name: str) -> bool:
+    load_monitoring_environment()
     return bool(os.getenv(name))
+
+
+def live_opt_in_enabled(args: argparse.Namespace) -> bool:
+    return bool(getattr(args, "live", False) and getattr(args, "acknowledge_live", False))
+
+
+def live_opt_in_error(source_type: str, companies: list[MonitorCompany], fetched_at: str) -> list[dict[str, Any]]:
+    return [
+        {
+            "source_type": source_type,
+            "company_id": company.company_id,
+            "status": "error",
+            "error_type": "LIVE_OPT_IN_REQUIRED",
+            "fetched_at": fetched_at,
+            "records": [],
+            "candidates": [],
+        }
+        for company in companies
+    ]
 
 
 def fail_source(source_type: str, message: str, *, company_id: str | None = None) -> dict[str, Any]:

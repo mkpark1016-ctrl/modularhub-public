@@ -5,7 +5,7 @@ from pathlib import Path
 
 from scripts.company_monitoring.build_review_queue import build_review_queue
 from scripts.company_monitoring.classify_candidate import classify_text
-from scripts.company_monitoring.common import canonical_url, load_monitor_companies, read_json, write_json
+from scripts.company_monitoring.common import canonical_url, live_opt_in_enabled, load_monitor_companies, masked_config_status, read_json, write_json
 from scripts.company_monitoring.dedupe_candidates import dedupe_candidates
 from scripts.company_monitoring.normalize_candidate import entity_match_score, make_candidate, parse_date, relevance_score
 from scripts.company_monitoring.validate_review_queue import validate_queue
@@ -24,6 +24,21 @@ def test_alias_mapping_scores_exact_company_match() -> None:
 def test_url_normalization_removes_tracking() -> None:
     url = canonical_url("HTTPS://Example.COM/news/123/?utm_source=x&b=2#g")
     assert url == "https://example.com/news/123?b=2"
+
+
+def test_secret_status_does_not_include_length() -> None:
+    assert masked_config_status("not-a-real-secret") == "configured"
+    assert masked_config_status("") == "missing"
+
+
+def test_live_opt_in_requires_both_flags() -> None:
+    class Args:
+        live = True
+        acknowledge_live = False
+
+    assert live_opt_in_enabled(Args()) is False
+    Args.acknowledge_live = True
+    assert live_opt_in_enabled(Args()) is True
 
 
 def test_date_conversion_handles_naver_and_dart_formats() -> None:

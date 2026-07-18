@@ -42,11 +42,11 @@ jobs:
 
       - name: Collect OpenDART candidates
         run: |
-          python scripts/company_monitoring/collect_dart.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS"
+          python scripts/company_monitoring/collect_dart.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS" --live --acknowledge-live
 
       - name: Collect NAVER Search candidates
         run: |
-          python scripts/company_monitoring/collect_naver_search.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS"
+          python scripts/company_monitoring/collect_naver_search.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS" --live --acknowledge-live
 
       - name: Build review queue
         run: |
@@ -55,6 +55,10 @@ jobs:
       - name: Validate review queue
         run: |
           python scripts/company_monitoring/validate_review_queue.py
+
+      - name: Summarize live pilot
+        run: |
+          python scripts/company_monitoring/summarize_live_pilot.py
 
       - name: Run monitoring tests
         run: |
@@ -81,6 +85,8 @@ jobs:
           path: |
             reports/company_monitoring/latest_digest.md
             reports/company_monitoring/latest_digest.json
+            artifacts/company-intelligence-live-pilot/live-pilot-summary.json
+            artifacts/company-intelligence-live-pilot/live-pilot-report.md
           if-no-files-found: error
 
       - name: Write job summary

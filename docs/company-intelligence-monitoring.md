@@ -36,21 +36,24 @@ environment variables:
 - `NAVER_API_HUB_CLIENT_ID`
 - `NAVER_API_HUB_CLIENT_SECRET`
 
-Collectors mask configured secrets by length only and never print raw values.
-Do not commit `.env` files.
+Collectors only report whether required secrets are configured. They never
+print raw values, partial values, or secret lengths. Do not commit `.env`
+files.
 
 ## Local Execution
 
 ```bash
-python scripts/company_monitoring/collect_dart.py --companies kumkang-kind,yuchang-enc --days 30
-python scripts/company_monitoring/collect_naver_search.py --companies kumkang-kind,yuchang-enc --days 30
+python scripts/company_monitoring/collect_dart.py --companies kumkang-kind,yuchang-enc --days 30 --live --acknowledge-live
+python scripts/company_monitoring/collect_naver_search.py --companies kumkang-kind,yuchang-enc --days 30 --live --acknowledge-live
 python scripts/company_monitoring/build_review_queue.py
 python scripts/company_monitoring/validate_review_queue.py
+python scripts/company_monitoring/summarize_live_pilot.py
 python -m pytest tests/company_monitoring
 ```
 
-Without secrets, collectors record source-level errors and continue. Fixture
-tests do not call live APIs.
+Without `--live --acknowledge-live`, collectors do not call external APIs.
+Without secrets, live collectors record source-level errors and continue.
+Fixture tests do not call live APIs.
 
 ## GitHub Actions
 
@@ -67,7 +70,9 @@ Artifacts:
 - `company-intelligence-review-queue`
 - `company-intelligence-digest`
 
-Raw source responses are uploaded as artifacts only and are not committed.
+Raw source responses are uploaded as artifacts only and are not committed. The
+digest artifact also includes `live-pilot-summary.json` and
+`live-pilot-report.md`.
 
 ## Candidate Review
 

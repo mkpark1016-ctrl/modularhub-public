@@ -15,8 +15,11 @@ sys.path.insert(0, str(ROOT))
 from scripts.company_monitoring.common import (  # noqa: E402
     fail_source,
     iso_now,
+    live_opt_in_enabled,
+    live_opt_in_error,
+    load_monitoring_environment,
     load_monitor_companies,
-    mask_secret,
+    masked_config_status,
     parse_common_args,
     parse_company_arg,
     write_json,
@@ -39,6 +42,7 @@ IMPORTANT_TITLE_TERMS = ("사업보고서", "감사보고서", "반기보고서"
 
 
 def dart_api_key() -> str | None:
+    load_monitoring_environment()
     return os.getenv("DART_API_KEY") or os.getenv("OPENDART_API_KEY")
 
 
@@ -166,12 +170,16 @@ def main() -> int:
     output: dict[str, Any] = {
         "source_type": "dart",
         "fetched_at": fetched_at,
-        "env": {"DART_API_KEY": mask_secret(dart_api_key())},
+        "run_mode": "fixture" if args.fixture else "live" if live_opt_in_enabled(args) else "blocked",
+        "live_opt_in": live_opt_in_enabled(args),
+        "env": {"DART_API_KEY": masked_config_status(dart_api_key())},
         "results": [],
     }
     if args.fixture:
         fixture = json.loads(args.fixture.read_text(encoding="utf-8"))
         output["results"] = fixture.get("results", [])
+    elif not live_opt_in_enabled(args):
+        output["results"] = live_opt_in_error("dart", companies, fetched_at)
     else:
         for company in companies:
             if "dart" not in company.enabled_sources:
