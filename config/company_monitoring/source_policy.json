@@ -1,0 +1,39 @@
+{
+  "schema_version": "2026-07-18",
+  "source_tiers": {
+    "dart": "A",
+    "naver_search": "C",
+    "official_company": "B",
+    "public_agency": "A",
+    "patent": "A",
+    "technology_certification": "A"
+  },
+  "enabled_sources": {
+    "dart": {
+      "display_name": "OpenDART",
+      "raw_storage": "artifact_only",
+      "stores_full_text": false,
+      "allowed_fields": ["receipt_number", "report_name", "filed_at", "corp_code", "corp_name", "viewer_url"]
+    },
+    "naver_search": {
+      "display_name": "NAVER API HUB Search API",
+      "raw_storage": "artifact_only",
+      "stores_full_text": false,
+      "allowed_fields": ["title", "original_link", "naver_link", "description", "publisher", "pub_date", "query"]
+    }
+  },
+  "project_credit_allowed_statuses": ["completed", "under_construction", "contracted", "awarded"],
+  "project_credit_blocked_statuses": [
+    "preferred_bidder",
+    "planned",
+    "unconfirmed",
+    "cancelled",
+    "mou_signed",
+    "partnership_discussion",
+    "r_and_d",
+    "exhibition",
+    "pre_con",
+    "not_signed"
+  ],
+  "secret_names": ["DART_API_KEY", "NAVER_API_HUB_CLIENT_ID", "NAVER_API_HUB_CLIENT_SECRET"]
+}

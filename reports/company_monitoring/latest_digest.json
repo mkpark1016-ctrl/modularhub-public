@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-07-18T04:06:58Z",
+  "candidate_total": 0,
+  "pending_count": 0,
+  "duplicate_count": 0,
+  "conflict_count": 0,
+  "rejected_raw_count": 0,
+  "source_counts": {},
+  "domain_counts": {},
+  "company_counts": {},
+  "source_errors": [
+    {
+      "source_type": "dart",
+      "company_id": "yuchang-enc",
+      "status": "error",
+      "error_type": "DART_API_KEY_NOT_CONFIGURED",
+      "fetched_at": "2026-07-18T04:06:17Z"
+    },
+    {
+      "source_type": "dart",
+      "company_id": "kumkang-kind",
+      "status": "error",
+      "error_type": "DART_API_KEY_NOT_CONFIGURED",
+      "fetched_at": "2026-07-18T04:06:17Z"
+    },
+    {
+      "source_type": "naver_search",
+      "company_id": "yuchang-enc",
+      "status": "error",
+      "error_type": "NAVER_API_HUB_CREDENTIALS_NOT_CONFIGURED",
+      "fetched_at": "2026-07-18T04:06:39Z"
+    },
+    {
+      "source_type": "naver_search",
+      "company_id": "kumkang-kind",
+      "status": "error",
+      "error_type": "NAVER_API_HUB_CREDENTIALS_NOT_CONFIGURED",
+      "fetched_at": "2026-07-18T04:06:39Z"
+    }
+  ],
+  "high_confidence_candidates": []
+}

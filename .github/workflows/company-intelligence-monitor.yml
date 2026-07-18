@@ -1,0 +1,116 @@
+name: Company Intelligence Monitor
+
+on:
+  workflow_dispatch:
+    inputs:
+      companies:
+        description: "Comma-separated company IDs"
+        required: false
+        default: "kumkang-kind,yuchang-enc"
+      days:
+        description: "Lookback days"
+        required: false
+        default: "30"
+  schedule:
+    # 00:00 UTC is 09:00 KST. GitHub schedules use UTC.
+    - cron: "0 0 * * 1-5"
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    env:
+      DART_API_KEY: ${{ secrets.DART_API_KEY }}
+      NAVER_API_HUB_CLIENT_ID: ${{ secrets.NAVER_API_HUB_CLIENT_ID }}
+      NAVER_API_HUB_CLIENT_SECRET: ${{ secrets.NAVER_API_HUB_CLIENT_SECRET }}
+      MONITOR_COMPANIES: ${{ github.event.inputs.companies || 'kumkang-kind,yuchang-enc' }}
+      MONITOR_DAYS: ${{ github.event.inputs.days || '30' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Collect OpenDART candidates
+        run: |
+          python scripts/company_monitoring/collect_dart.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS"
+
+      - name: Collect NAVER Search candidates
+        run: |
+          python scripts/company_monitoring/collect_naver_search.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS"
+
+      - name: Build review queue
+        run: |
+          python scripts/company_monitoring/build_review_queue.py
+
+      - name: Validate review queue
+        run: |
+          python scripts/company_monitoring/validate_review_queue.py
+
+      - name: Run monitoring tests
+        run: |
+          python -m pytest tests/company_monitoring
+
+      - name: Upload raw source artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-raw
+          path: artifacts/company_monitoring/raw/
+          if-no-files-found: warn
+
+      - name: Upload review queue artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-review-queue
+          path: data/company_monitoring/review_queue.json
+          if-no-files-found: error
+
+      - name: Upload digest artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-digest
+          path: |
+            reports/company_monitoring/latest_digest.md
+            reports/company_monitoring/latest_digest.json
+          if-no-files-found: error
+
+      - name: Write job summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          digest = json.loads(Path("reports/company_monitoring/latest_digest.json").read_text(encoding="utf-8"))
+          lines = [
+              "## Company Intelligence Monitor",
+              "",
+              f"- Companies: `{__import__('os').environ.get('MONITOR_COMPANIES')}`",
+              f"- Lookback days: `{__import__('os').environ.get('MONITOR_DAYS')}`",
+              f"- Pending: {digest.get('pending_count', 0)}",
+              f"- Duplicate: {digest.get('duplicate_count', 0)}",
+              f"- Conflict: {digest.get('conflict_count', 0)}",
+              f"- Rejected raw: {digest.get('rejected_raw_count', 0)}",
+              "",
+              "### Source counts",
+          ]
+          for key, value in digest.get("source_counts", {}).items():
+              lines.append(f"- {key}: {value}")
+          lines.extend(["", "### Domain counts"])
+          for key, value in digest.get("domain_counts", {}).items():
+              lines.append(f"- {key}: {value}")
+          lines.extend(["", "### Source errors"])
+          if digest.get("source_errors"):
+              for error in digest["source_errors"]:
+                  lines.append(f"- {error.get('source_type')} / {error.get('company_id')}: {error.get('error_type')}")
+          else:
+              lines.append("- none")
+          Path(__import__('os').environ["GITHUB_STEP_SUMMARY"]).write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
