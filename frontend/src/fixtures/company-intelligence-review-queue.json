@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "company-intelligence-review-queue.public.v1",
+  "generatedAt": "2026-07-18T09:00:00Z",
+  "items": [
+    {
+      "candidateId": "fixture-pending-yuchang",
+      "companyId": "yuchang-enc",
+      "companyName": "유창이앤씨",
+      "source": "naver_search",
+      "status": "pending",
+      "title": "유창이앤씨 모듈러 관련 신규 기사 후보",
+      "originalUrl": "https://news.example.com/yuchang",
+      "publishedAt": "2026-07-18",
+      "collectedAt": "2026-07-18T09:00:00Z",
+      "matchedKeyword": "유창이앤씨 모듈러",
+      "matchedAlias": "유창이앤씨",
+      "matchReason": "news_search_candidate_requires_review",
+      "duplicateType": "",
+      "duplicateOf": "",
+      "rejectionReason": ""
+    },
+    {
+      "candidateId": "fixture-duplicate-kumkang",
+      "companyId": "kumkang-kind",
+      "companyName": "금강공업",
+      "source": "naver_search",
+      "status": "duplicate",
+      "title": "금강공업 모듈러 중복 기사 후보",
+      "originalUrl": "https://news.example.com/kumkang",
+      "publishedAt": "2026-07-17",
+      "collectedAt": "2026-07-18T09:00:00Z",
+      "matchedKeyword": "금강공업 모듈러",
+      "matchedAlias": "금강공업",
+      "matchReason": "same_url_duplicate",
+      "duplicateType": "same_url_duplicate",
+      "duplicateOf": "fixture-pending-yuchang",
+      "rejectionReason": ""
+    },
+    {
+      "candidateId": "fixture-dart-empty",
+      "companyId": "kumkang-kind",
+      "companyName": "금강공업",
+      "source": "dart",
+      "status": "pending",
+      "title": "DART 공시 검토 후보 예시",
+      "originalUrl": "",
+      "publishedAt": "2026-07-16",
+      "collectedAt": "2026-07-18T09:00:00Z",
+      "matchedKeyword": "사업보고서",
+      "matchedAlias": "금강공업",
+      "matchReason": "dart_disclosure_candidate_requires_review",
+      "duplicateType": "",
+      "duplicateOf": "",
+      "rejectionReason": ""
+    }
+  ]
+}
