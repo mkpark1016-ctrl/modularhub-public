@@ -39,6 +39,7 @@ jobs:
       MONITOR_DAYS: ${{ github.event.inputs.lookback_days || '30' }}
       ACKNOWLEDGE_LIVE: ${{ github.event.inputs.acknowledge_live || 'false' }}
       PUBLISH: ${{ github.event.inputs.publish || 'false' }}
+      ALLOWED_LIVE_BRANCH: main
     steps:
       - uses: actions/checkout@v4
 
@@ -56,8 +57,9 @@ jobs:
           days = os.environ["MONITOR_DAYS"]
           acknowledge = os.environ["ACKNOWLEDGE_LIVE"].strip().lower()
           publish = os.environ["PUBLISH"].strip().lower()
-          if os.environ.get("GITHUB_REF_NAME") != "feature/company-intelligence-monitoring-foundation":
-              raise SystemExit("This live acceptance workflow must run on feature/company-intelligence-monitoring-foundation")
+          allowed_branch = os.environ["ALLOWED_LIVE_BRANCH"]
+          if os.environ.get("GITHUB_REF_NAME") != allowed_branch:
+              raise SystemExit(f"This live acceptance workflow must run on {allowed_branch}")
           if companies != "kumkang-kind,yuchang-enc":
               raise SystemExit("Only kumkang-kind,yuchang-enc are allowed for this acceptance run")
           if set(item.strip() for item in sources.split(",") if item.strip()) != {"dart", "naver"}:
@@ -150,12 +152,17 @@ jobs:
           total = counts.get("pending", 0) + counts.get("duplicate", 0) + counts.get("rejected", 0) + counts.get("conflict", 0) + counts.get("accepted", 0)
           if total != audit["normalized_unique_count"]:
               raise SystemExit("metric conservation failed")
+          raw_total = audit.get("raw_candidate_record_count", 0) + audit.get("raw_rejected_record_count", 0) + audit.get("non_candidate_control_record_count", 0)
+          if raw_total != audit.get("raw_source_record_count", 0):
+              raise SystemExit("raw source record conservation failed")
           integrity = audit["duplicate_integrity"]
           for key in ["missing_duplicate_of_count", "self_duplicate_of_count", "duplicate_cycle_count", "cross_company_duplicate_count"]:
               if integrity.get(key, 0) != 0:
                   raise SystemExit(f"duplicate integrity failed: {key}")
           if audit.get("multi_status_candidate_count", 0) != 0:
               raise SystemExit("multi-status candidates detected")
+          if audit.get("orphan_candidate_count", 0) != 0:
+              raise SystemExit("orphan candidate refs detected")
           protected = [
               "frontend/public/data/business.json",
               "frontend/public/data/news.json",
