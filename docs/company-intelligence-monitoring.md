@@ -74,19 +74,73 @@ Fixture tests do not call live APIs.
 Run `Company Intelligence Monitor` manually with:
 
 - `companies`: comma-separated company IDs, default `kumkang-kind,yuchang-enc`
-- `days`: lookback window, default `30`
+- `sources`: comma-separated source IDs, default `dart,naver`
+- `lookback_days`: lookback window, default `30`
+- `acknowledge_live`: must be `true` for external API calls
+- `publish`: must remain `false`
 
-The workflow also runs once per weekday at 09:00 KST.
+The workflow is `workflow_dispatch` only. It has no schedule, push, or
+pull_request trigger. The live acceptance workflow is guarded to run only from
+the repository default branch.
 
 Artifacts:
 
 - `company-intelligence-raw`
 - `company-intelligence-review-queue`
 - `company-intelligence-digest`
+- `company-intelligence-live-pilot`
+- `company-intelligence-audit`
 
 Raw source responses are uploaded as artifacts only and are not committed. The
 digest artifact also includes `live-pilot-summary.json` and
 `live-pilot-report.md`.
+
+## Read-Only Review Queue Dashboard
+
+The dashboard route is `/company-intelligence` and appears in the main
+navigation as `기업 모니터링`. It is read-only: candidates can be searched,
+filtered, sorted, paginated, and inspected, but the UI does not accept,
+reject, mutate, or publish candidates.
+
+The public dashboard data is a sanitized projection of the internal review
+queue:
+
+- `frontend/public/data/company-intelligence/review-queue.json`
+- `frontend/public/data/company-intelligence/manifest.json`
+
+Export command:
+
+```powershell
+python scripts\company_monitoring\export_review_queue_public.py --input data\company_monitoring\review_queue.json --output frontend\public\data\company-intelligence\review-queue.json --manifest-output frontend\public\data\company-intelligence\manifest.json
+```
+
+The same command in POSIX-style shells:
+
+```bash
+python scripts/company_monitoring/export_review_queue_public.py \
+  --input data/company_monitoring/review_queue.json \
+  --output frontend/public/data/company-intelligence/review-queue.json \
+  --manifest-output frontend/public/data/company-intelligence/manifest.json
+```
+
+The dashboard loads data from `VITE_COMPANY_INTELLIGENCE_DATA_URL` when that
+public URL is configured. Otherwise it loads
+`/data/company-intelligence/review-queue.json`. This environment variable must
+only contain a public JSON URL; do not put DART, NAVER, GitHub, or other
+secrets into any `VITE_` variable.
+
+Development and tests may use
+`frontend/src/fixtures/company-intelligence-review-queue.json` when the public
+JSON is missing. Production does not silently fall back to the fixture; it
+shows `데이터가 아직 게시되지 않았습니다. 최신 수집 결과를 확인해주세요.`
+instead.
+
+The public contract intentionally excludes raw responses, auth headers,
+environment variables, local paths, stack traces, evidence hashes, source IDs,
+and internal review metadata that is not needed for the dashboard.
+
+Next step: add authenticated review actions and state persistence after the
+read-only dashboard is accepted.
 
 ## Candidate Review
 

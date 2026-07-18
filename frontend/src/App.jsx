@@ -92,6 +92,7 @@ import {
   CompanyComparisonPanel,
   CompanyQuickFilters,
 } from "./components/company/CompanyComparisonMvp";
+import CompanyIntelligenceReviewQueuePage from "./components/company/CompanyIntelligenceReviewQueuePage";
 import CompanyDetailView from "./components/company/CompanyDetailView";
 import { normalizeCompanyTab } from "./components/company/companyDetailHelpers";
 import DashboardSummary from "./components/DashboardSummary";
@@ -299,6 +300,7 @@ function Layout({ children }) {
           <NavLink to="/business"><Building2 size={17} />사업정보</NavLink>
           <NavLink to="/news"><Newspaper size={17} />뉴스정보</NavLink>
           <NavLink to="/companies"><Factory size={17} />기업정보</NavLink>
+          <NavLink to="/company-intelligence"><FileText size={17} />기업 모니터링</NavLink>
         </nav>
       </header>
       <main>{children}</main>
@@ -1299,6 +1301,7 @@ export default function App() {
       <Route path="/news/:id" element={<DetailPage type="news" />} />
       <Route path="/companies" element={<CompanyListingPage />} />
       <Route path="/companies/:companyId" element={<CompanyDetailPage />} />
+      <Route path="/company-intelligence" element={<Layout><CompanyIntelligenceReviewQueuePage /></Layout>} />
       <Route path="*" element={<Layout><div className="state"><Home size={22} />페이지를 찾을 수 없습니다.</div></Layout>} />
     </Routes>
   );

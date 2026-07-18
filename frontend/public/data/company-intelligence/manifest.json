@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "company-intelligence-review-queue.public.v1",
+  "generatedAt": "2026-07-18T08:58:52Z",
+  "sourceRunCommit": "",
+  "lookbackDays": 30,
+  "companies": [
+    {
+      "companyId": "kumkang-kind",
+      "companyName": "금강공업"
+    },
+    {
+      "companyId": "yuchang-enc",
+      "companyName": "유창이앤씨"
+    }
+  ],
+  "sources": [
+    "dart",
+    "naver_search"
+  ],
+  "counts": {
+    "rawSourceRecords": 0,
+    "rawCandidateRecords": 694,
+    "rawRejectedRecords": 124,
+    "nonCandidateControlRecords": 0,
+    "normalizedUniqueCandidates": 694,
+    "pending": 357,
+    "duplicate": 337,
+    "rejected": 0,
+    "conflict": 0,
+    "accepted": 0,
+    "qualityRejected": 124,
+    "sourceCounts": {
+      "naver_search": 694,
+      "dart": 0
+    }
+  },
+  "itemCount": 357
+}
