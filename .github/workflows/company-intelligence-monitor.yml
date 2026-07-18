@@ -1,0 +1,308 @@
+name: Company Intelligence Monitor
+
+on:
+  workflow_dispatch:
+    inputs:
+      companies:
+        description: "Comma-separated company IDs"
+        required: false
+        default: "kumkang-kind,yuchang-enc"
+      sources:
+        description: "Comma-separated sources: dart,naver"
+        required: false
+        default: "dart,naver"
+      lookback_days:
+        description: "Lookback days"
+        required: false
+        default: "30"
+      acknowledge_live:
+        description: "Must be true to call external APIs"
+        required: true
+        default: "false"
+      publish:
+        description: "Must remain false; monitor never publishes public data"
+        required: true
+        default: "false"
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    env:
+      DART_API_KEY: ${{ secrets.DART_API_KEY }}
+      NAVER_API_HUB_CLIENT_ID: ${{ secrets.NAVER_API_HUB_CLIENT_ID }}
+      NAVER_API_HUB_CLIENT_SECRET: ${{ secrets.NAVER_API_HUB_CLIENT_SECRET }}
+      MONITOR_COMPANIES: ${{ github.event.inputs.companies || 'kumkang-kind,yuchang-enc' }}
+      MONITOR_SOURCES: ${{ github.event.inputs.sources || 'dart,naver' }}
+      MONITOR_DAYS: ${{ github.event.inputs.lookback_days || '30' }}
+      ACKNOWLEDGE_LIVE: ${{ github.event.inputs.acknowledge_live || 'false' }}
+      PUBLISH: ${{ github.event.inputs.publish || 'false' }}
+      ALLOWED_LIVE_BRANCH: main
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate dispatch inputs
+        run: |
+          python - <<'PY'
+          import os
+          import sys
+          companies = os.environ["MONITOR_COMPANIES"]
+          sources = os.environ["MONITOR_SOURCES"]
+          days = os.environ["MONITOR_DAYS"]
+          acknowledge = os.environ["ACKNOWLEDGE_LIVE"].strip().lower()
+          publish = os.environ["PUBLISH"].strip().lower()
+          allowed_branch = os.environ["ALLOWED_LIVE_BRANCH"]
+          if os.environ.get("GITHUB_REF_NAME") != allowed_branch:
+              raise SystemExit(f"This live acceptance workflow must run on {allowed_branch}")
+          if companies != "kumkang-kind,yuchang-enc":
+              raise SystemExit("Only kumkang-kind,yuchang-enc are allowed for this acceptance run")
+          if set(item.strip() for item in sources.split(",") if item.strip()) != {"dart", "naver"}:
+              raise SystemExit("Only dart,naver sources are allowed for this acceptance run")
+          if days != "30":
+              raise SystemExit("Lookback days must be 30 for this acceptance run")
+          if acknowledge != "true":
+              raise SystemExit("acknowledge_live must be true before external API calls")
+          if publish != "false":
+              raise SystemExit("publish must remain false")
+          print("dispatch_inputs_valid: true")
+          PY
+
+      - name: Check secret configuration
+        run: |
+          python - <<'PY'
+          import os
+          required = ["DART_API_KEY", "NAVER_API_HUB_CLIENT_ID", "NAVER_API_HUB_CLIENT_SECRET"]
+          missing = []
+          for name in required:
+              configured = bool(os.environ.get(name))
+              print(f"{name} configured: {str(configured).lower()}")
+              if not configured:
+                  missing.append(name)
+          if missing:
+              raise SystemExit("required secrets are not configured")
+          PY
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run monitoring unit tests
+        run: |
+          python -m compileall scripts src
+          python -m pytest tests/company_monitoring -q
+
+      - name: Collect OpenDART candidates
+        if: contains(env.MONITOR_SOURCES, 'dart')
+        run: |
+          python scripts/company_monitoring/collect_dart.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS" --live --acknowledge-live
+
+      - name: Preflight NAVER API HUB
+        if: contains(env.MONITOR_SOURCES, 'naver')
+        run: |
+          python scripts/company_monitoring/collect_naver_search.py --preflight --live --acknowledge-live
+
+      - name: Collect NAVER Search candidates
+        if: contains(env.MONITOR_SOURCES, 'naver')
+        run: |
+          python scripts/company_monitoring/collect_naver_search.py --companies "$MONITOR_COMPANIES" --days "$MONITOR_DAYS" --live --acknowledge-live
+
+      - name: Build review queue
+        run: |
+          python scripts/company_monitoring/build_review_queue.py
+
+      - name: Validate review queue
+        run: |
+          python scripts/company_monitoring/validate_review_queue.py
+
+      - name: Summarize live pilot
+        run: |
+          python scripts/company_monitoring/summarize_live_pilot.py
+
+      - name: Audit live pilot artifacts
+        run: |
+          python scripts/company_monitoring/audit_live_pilot_artifacts.py
+
+      - name: Verify artifact files
+        run: |
+          test -d artifacts/company_monitoring/raw
+          test -f data/company_monitoring/review_queue.json
+          test -f reports/company_monitoring/latest_digest.json
+          test -f reports/company_monitoring/latest_digest.md
+          test -f artifacts/company-intelligence-live-pilot/live-pilot-summary.json
+          test -f artifacts/company-intelligence-live-pilot/live-pilot-report.md
+          test -f artifacts/company-intelligence-live-pilot/audit-summary.json
+          test -f artifacts/company-intelligence-live-pilot/audit-report.md
+
+      - name: Verify metric conservation and protected data
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          from pathlib import Path
+          audit = json.loads(Path("artifacts/company-intelligence-live-pilot/audit-summary.json").read_text(encoding="utf-8"))
+          counts = audit["final_status_counts"]
+          total = counts.get("pending", 0) + counts.get("duplicate", 0) + counts.get("rejected", 0) + counts.get("conflict", 0) + counts.get("accepted", 0)
+          if total != audit["normalized_unique_count"]:
+              raise SystemExit("metric conservation failed")
+          raw_total = audit.get("raw_candidate_record_count", 0) + audit.get("raw_rejected_record_count", 0) + audit.get("non_candidate_control_record_count", 0)
+          if raw_total != audit.get("raw_source_record_count", 0):
+              raise SystemExit("raw source record conservation failed")
+          integrity = audit["duplicate_integrity"]
+          for key in ["missing_duplicate_of_count", "self_duplicate_of_count", "duplicate_cycle_count", "cross_company_duplicate_count"]:
+              if integrity.get(key, 0) != 0:
+                  raise SystemExit(f"duplicate integrity failed: {key}")
+          if audit.get("multi_status_candidate_count", 0) != 0:
+              raise SystemExit("multi-status candidates detected")
+          if audit.get("orphan_candidate_count", 0) != 0:
+              raise SystemExit("orphan candidate refs detected")
+          protected = [
+              "frontend/public/data/business.json",
+              "frontend/public/data/news.json",
+              "frontend/public/data/meta.json",
+              "frontend/public/data/companies/companies.json",
+              "frontend/public/data/companies/company_intelligence_v2.json",
+              "scripts/verified_companies",
+          ]
+          result = subprocess.run(["git", "diff", "--exit-code", "--", *protected], text=True)
+          if result.returncode != 0:
+              raise SystemExit("protected data changed")
+          print("metric_conservation_passed: true")
+          print("protected_data_changed: false")
+          PY
+
+      - name: Secret exposure scan
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          paths = [
+              Path("data/company_monitoring"),
+              Path("reports/company_monitoring"),
+              Path("artifacts/company_monitoring"),
+              Path("artifacts/company-intelligence-live-pilot"),
+          ]
+          patterns = [
+              re.compile(r"configured\(length=", re.I),
+              re.compile(r"BEGIN (?:RSA|OPENSSH|PRIVATE) KEY", re.I),
+              re.compile(r"password\s*=", re.I),
+              re.compile(r"token\s*=", re.I),
+              re.compile(r"X-NCP-APIGW-API-KEY-ID\s*[:=]\s*\S+", re.I),
+              re.compile(r"X-NCP-APIGW-API-KEY\s*[:=]\s*\S+", re.I),
+              re.compile(r"crtfc_key\s*=\s*\S+", re.I),
+          ]
+          detected = False
+          for root in paths:
+              if not root.exists():
+                  continue
+              for path in root.rglob("*"):
+                  if not path.is_file():
+                      continue
+                  text = path.read_text(encoding="utf-8", errors="ignore")
+                  if any(pattern.search(text) for pattern in patterns):
+                      detected = True
+          print(f"secret_exposure_detected: {str(detected).lower()}")
+          if detected:
+              raise SystemExit("secret exposure pattern detected")
+          PY
+
+      - name: Write job summary
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          audit = json.loads(Path("artifacts/company-intelligence-live-pilot/audit-summary.json").read_text(encoding="utf-8"))
+          digest = json.loads(Path("reports/company_monitoring/latest_digest.json").read_text(encoding="utf-8"))
+          counts = audit["final_status_counts"]
+          lines = [
+              "## Company Intelligence Monitor Acceptance",
+              "",
+              f"- Branch: `{os.environ.get('GITHUB_REF_NAME')}`",
+              f"- Commit: `{os.environ.get('GITHUB_SHA')}`",
+              f"- Companies: `{os.environ.get('MONITOR_COMPANIES')}`",
+              f"- Sources: `{os.environ.get('MONITOR_SOURCES')}`",
+              f"- Lookback days: `{os.environ.get('MONITOR_DAYS')}`",
+              f"- raw_source_records: {audit.get('raw_source_record_count')}",
+              f"- raw_candidate_records: {audit.get('raw_candidate_record_count')}",
+              f"- raw_rejected_records: {audit.get('raw_rejected_record_count')}",
+              f"- non_candidate_control_records: {audit.get('non_candidate_control_record_count')}",
+              f"- normalized_unique_candidates: {audit.get('normalized_unique_count')}",
+              f"- pending: {counts.get('pending', 0)}",
+              f"- duplicate: {counts.get('duplicate', 0)}",
+              f"- rejected: {counts.get('rejected', 0)}",
+              f"- conflict: {counts.get('conflict', 0)}",
+              f"- accepted: {counts.get('accepted', 0)}",
+              f"- multi_status_candidates: {audit.get('multi_status_candidate_count')}",
+              f"- orphan_candidate_refs: {audit.get('orphan_candidate_count')}",
+              f"- duplicate_reference_errors: {sum(audit.get('duplicate_integrity', {}).get(key, 0) for key in ['missing_duplicate_of_count', 'self_duplicate_of_count', 'duplicate_cycle_count', 'cross_company_duplicate_count'])}",
+              f"- protected_data_changed: false",
+              f"- secret_exposure_detected: false",
+              "",
+              "### Source Counts",
+          ]
+          for key, value in sorted((digest.get("source_counts") or {}).items()):
+              lines.append(f"- {key}: {value}")
+          lines.extend(["", "### Artifact Names"])
+          for name in [
+              "company-intelligence-raw",
+              "company-intelligence-review-queue",
+              "company-intelligence-digest",
+              "company-intelligence-live-pilot",
+              "company-intelligence-audit",
+          ]:
+              lines.append(f"- {name}")
+          Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+
+      - name: Upload raw source artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-raw
+          path: artifacts/company_monitoring/raw/
+          if-no-files-found: error
+
+      - name: Upload review queue artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-review-queue
+          path: data/company_monitoring/review_queue.json
+          if-no-files-found: error
+
+      - name: Upload digest artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-digest
+          path: |
+            reports/company_monitoring/latest_digest.md
+            reports/company_monitoring/latest_digest.json
+          if-no-files-found: error
+
+      - name: Upload live pilot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-live-pilot
+          path: |
+            artifacts/company-intelligence-live-pilot/live-pilot-summary.json
+            artifacts/company-intelligence-live-pilot/live-pilot-report.md
+          if-no-files-found: error
+
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-intelligence-audit
+          path: |
+            artifacts/company-intelligence-live-pilot/audit-summary.json
+            artifacts/company-intelligence-live-pilot/audit-report.md
+            artifacts/company-intelligence-live-pilot/audit-anomalies.json
+            artifacts/company-intelligence-live-pilot/review-sample.json
+            artifacts/company-intelligence-live-pilot/review-sample.md
+            artifacts/company-intelligence-live-pilot/query-tuning-proposal.md
+          if-no-files-found: error
