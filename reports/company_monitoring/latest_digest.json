@@ -1,10 +1,26 @@
 {
-  "generated_at": "2026-07-18T08:03:11Z",
+  "generated_at": "2026-07-18T08:58:52Z",
   "candidate_total": 694,
-  "pending_count": 345,
-  "duplicate_count": 349,
+  "raw_candidate_count": 694,
+  "raw_rejected_record_count": 124,
+  "pending_count": 357,
+  "duplicate_count": 337,
   "conflict_count": 0,
   "rejected_raw_count": 124,
+  "final_status_counts": {
+    "pending": 357,
+    "duplicate": 337,
+    "rejected": 0,
+    "conflict": 0,
+    "accepted": 0
+  },
+  "quality_flag_counts": {
+    "raw_rejected": 124,
+    "rejected_reason_counts": {
+      "entity_not_matched": 71,
+      "negative_keyword_context": 53
+    }
+  },
   "source_counts": {
     "naver_search": 694
   },

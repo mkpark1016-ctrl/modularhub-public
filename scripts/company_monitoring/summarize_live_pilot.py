@@ -84,7 +84,8 @@ def source_summary(raw_dir: Path) -> list[dict[str, Any]]:
                     "pending_count": 0,
                     "duplicate_count": 0,
                     "conflict_count": 0,
-                    "rejected_count": len(rejected),
+                    "final_rejected_count": 0,
+                    "rejected_raw_count": len(rejected),
                     "error_category": None if status.startswith("success_") else status,
                     "collected_at": result.get("fetched_at") or payload.get("fetched_at"),
                 }
@@ -130,12 +131,12 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
         "",
         "## Source Results",
         "",
-        "| company_id | source | configured | response_status | candidates | pending | duplicate | conflict | rejected |",
+        "| company_id | source | configured | response_status | candidates | pending | duplicate | conflict | rejected_raw |",
         "|---|---|---:|---|---:|---:|---:|---:|---:|",
     ]
     for row in summary["results"]:
         lines.append(
-            "| {company_id} | {source} | {configured} | {response_status} | {candidate_count} | {pending_count} | {duplicate_count} | {conflict_count} | {rejected_count} |".format(
+            "| {company_id} | {source} | {configured} | {response_status} | {candidate_count} | {pending_count} | {duplicate_count} | {conflict_count} | {rejected_raw_count} |".format(
                 **row
             )
         )

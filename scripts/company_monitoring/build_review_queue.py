@@ -52,6 +52,14 @@ def build_review_queue(raw_dir: Path = RAW_DIR) -> dict[str, Any]:
     pending = [candidate for candidate in deduped if candidate.get("review_status") == "pending"]
     fetched_at = iso_now()
     status_counts = counts_by_status(deduped)
+    final_status_counts = {
+        "pending": status_counts.get("pending", 0),
+        "duplicate": status_counts.get("duplicate", 0),
+        "rejected": status_counts.get("rejected", 0),
+        "conflict": status_counts.get("conflict", 0),
+        "accepted": status_counts.get("accepted", 0),
+    }
+    rejected_reason_counts = Counter(row.get("rejection_reason") or "other" for row in rejected)
     source_counts = Counter(candidate.get("source_type", "unknown") for candidate in deduped)
     domain_counts = Counter(candidate.get("domain", "unknown") for candidate in deduped)
     company_counts = Counter(candidate.get("company_id", "unknown") for candidate in deduped)
@@ -59,10 +67,17 @@ def build_review_queue(raw_dir: Path = RAW_DIR) -> dict[str, Any]:
     digest = {
         "generated_at": fetched_at,
         "candidate_total": len(deduped),
+        "raw_candidate_count": len(raw_candidates),
+        "raw_rejected_record_count": len(rejected),
         "pending_count": len(pending),
         "duplicate_count": status_counts.get("duplicate", 0),
         "conflict_count": conflict_count,
         "rejected_raw_count": len(rejected),
+        "final_status_counts": final_status_counts,
+        "quality_flag_counts": {
+            "raw_rejected": len(rejected),
+            "rejected_reason_counts": dict(sorted(rejected_reason_counts.items())),
+        },
         "source_counts": dict(sorted(source_counts.items())),
         "domain_counts": dict(sorted(domain_counts.items())),
         "company_counts": dict(sorted(company_counts.items())),
@@ -97,7 +112,8 @@ def write_digest_markdown(path: Path, digest: dict[str, Any]) -> None:
         f"- Pending candidates: {digest['pending_count']}",
         f"- Duplicate candidates: {digest['duplicate_count']}",
         f"- Conflict candidates: {digest['conflict_count']}",
-        f"- Rejected raw records: {digest['rejected_raw_count']}",
+        f"- Rejected raw records (quality flag, not final status): {digest['rejected_raw_count']}",
+        f"- Final status counts: `{json.dumps(digest.get('final_status_counts', {}), ensure_ascii=False)}`",
         "",
         "## Source Counts",
     ]

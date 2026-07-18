@@ -1,10 +1,11 @@
 # Company Intelligence Monitoring Digest
 
-- Generated at: `2026-07-18T08:03:11Z`
-- Pending candidates: 345
-- Duplicate candidates: 349
+- Generated at: `2026-07-18T08:58:52Z`
+- Pending candidates: 357
+- Duplicate candidates: 337
 - Conflict candidates: 0
-- Rejected raw records: 124
+- Rejected raw records (quality flag, not final status): 124
+- Final status counts: `{"pending": 357, "duplicate": 337, "rejected": 0, "conflict": 0, "accepted": 0}`
 
 ## Source Counts
 - naver_search: 694

@@ -14,6 +14,7 @@ from scripts.company_monitoring.collect_naver_search import (
     build_naver_request,
     naver_contract_report,
 )
+from scripts.company_monitoring.audit_live_pilot_artifacts import audit
 from scripts.company_monitoring.common import canonical_url, live_opt_in_enabled, load_monitor_companies, masked_config_status, read_json, write_json
 from scripts.company_monitoring.dedupe_candidates import dedupe_candidates
 from scripts.company_monitoring.normalize_candidate import entity_match_score, make_candidate, parse_date, relevance_score
@@ -125,6 +126,37 @@ def test_dedupe_marks_same_url_duplicate() -> None:
     assert deduped[0]["review_status"] == "pending"
     assert deduped[1]["review_status"] == "duplicate"
     assert deduped[1]["duplicate_of"] == deduped[0]["candidate_id"]
+    assert deduped[1]["candidate_id"] != deduped[0]["candidate_id"]
+
+
+def test_dedupe_does_not_link_same_url_across_companies() -> None:
+    first_company = company("kumkang-kind")
+    second_company = company("yuchang-enc")
+    first = make_candidate(
+        company=first_company,
+        candidate_kind="event",
+        domain="project",
+        title="모듈러 공동 기사",
+        summary="금강공업과 유창이앤씨가 언급된 기사",
+        source_type="naver_search",
+        source_tier="C",
+        publisher="NAVER Search",
+        source_url="https://news.example.com/shared",
+    )
+    second = make_candidate(
+        company=second_company,
+        candidate_kind="event",
+        domain="project",
+        title="모듈러 공동 기사",
+        summary="금강공업과 유창이앤씨가 언급된 기사",
+        source_type="naver_search",
+        source_tier="C",
+        publisher="NAVER Search",
+        source_url="https://news.example.com/shared",
+    )
+    deduped = dedupe_candidates([first, second])
+    assert [row["review_status"] for row in deduped] == ["pending", "pending"]
+    assert deduped[1]["duplicate_of"] is None
 
 
 def test_build_review_queue_outputs_only_pending(tmp_path: Path) -> None:
@@ -159,6 +191,64 @@ def test_build_review_queue_outputs_only_pending(tmp_path: Path) -> None:
     assert payload["digest"]["pending_count"] == 1
     assert payload["review_queue"][0]["review_status"] == "pending"
     assert payload["review_queue"][0]["project_credit"] is False
+    assert payload["digest"]["final_status_counts"]["pending"] == 1
+    assert payload["digest"]["quality_flag_counts"]["raw_rejected"] == 0
+
+
+def test_live_artifact_audit_preserves_status_counts_and_rejected_flags(tmp_path: Path) -> None:
+    c = company()
+    first = make_candidate(
+        company=c,
+        candidate_kind="event",
+        domain="project",
+        title="금강공업 모듈러 수주",
+        summary="공식 확인 전 후보",
+        source_type="naver_search",
+        source_tier="C",
+        publisher="NAVER Search",
+        source_url="https://news.example.com/project?utm_source=x",
+        event_status="contracted",
+        project_credit=False,
+    )
+    second = {**first, "candidate_id": "candidate-second", "source_url": "https://news.example.com/project"}
+    raw = {
+        "source_type": "naver_search",
+        "results": [
+            {
+                "source_type": "naver_search",
+                "company_id": c.company_id,
+                "status": "ok",
+                "records": [
+                    {"title": first["title"], "original_link": first["source_url"], "query": "금강공업 모듈러"},
+                    {"title": second["title"], "original_link": second["source_url"], "query": "금강공업 모듈러"},
+                    {"title": "다른 회사", "original_link": "https://news.example.com/other", "query": "금강공업 모듈러"},
+                ],
+                "rejected": [
+                    {
+                        "title": "다른 회사",
+                        "original_link": "https://news.example.com/other",
+                        "query": "금강공업 모듈러",
+                        "rejection_reason": "entity_not_matched",
+                    }
+                ],
+                "candidates": [first, second],
+            }
+        ],
+    }
+    write_json(tmp_path / "naver_search_raw.json", raw)
+    write_json(tmp_path / "dart_raw.json", {"source_type": "dart", "results": []})
+    output_dir = tmp_path / "audit"
+    summary = audit(raw_dir=tmp_path, queue_path=tmp_path / "review_queue.json", digest_path=tmp_path / "digest.json", output_dir=output_dir)
+    assert summary["normalized_unique_count"] == 2
+    assert summary["final_status_counts"]["pending"] == 1
+    assert summary["final_status_counts"]["duplicate"] == 1
+    assert summary["quality_flag_counts"]["raw_rejected_quality_flag"] == 1
+    assert summary["final_status_counts"]["rejected"] == 0
+    assert summary["status_conservation"]["valid"] is True
+    assert summary["duplicate_integrity"]["missing_duplicate_of_count"] == 0
+    assert summary["metric_excess_cause"] == "rejected_flag_double_count"
+    assert (output_dir / "audit-summary.json").exists()
+    assert (output_dir / "review-sample.json").exists()
 
 
 def test_validate_queue_rejects_secret_literal(tmp_path: Path) -> None:
