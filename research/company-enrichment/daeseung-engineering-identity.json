@@ -1,0 +1,42 @@
+{
+  "targetMatched": true,
+  "legalName": "주식회사 대승엔지니어링",
+  "displayName": "대승엔지니어링",
+  "representative": "채윤석",
+  "foundedDate": "2009-04-09",
+  "headquarters": "경북 김천시 혁신8로 5, 210호 (율곡동, 율곡테크노밸리)",
+  "officialWebsite": null,
+  "industry": [
+    "구조용 금속 판제품 및 공작물 제조",
+    "상업용·산업용 조립식 구조물",
+    "모듈러 스쿨 공사",
+    "토목·건축공사"
+  ],
+  "modularEvidence": [
+    "용산초 그린스마트스쿨 임시교사 임대용역",
+    "서광초 교사 증개축 공사 임시교사(모듈러) 임차용역(2차)",
+    "군산 공장정보 DB의 모듈러교실·모듈러주택 생산품 표기"
+  ],
+  "patentEvidence": [
+    {
+      "publicationNumber": "KR102761128B1",
+      "title": "모듈러 건축물의 접합부 결합 고정방법",
+      "applicationDate": "2024-01-04",
+      "registrationDate": "2025-02-03",
+      "assignees": ["(주)대승엔지니어링", "채윤석", "채플린"]
+    }
+  ],
+  "excludedSameNameCompanies": [
+    "최병천 대표의 김해 수처리·제진기 업체",
+    "자동차 부품 관련 대승·대승그룹",
+    "이승대 대표의 경산 토목시설물 업체"
+  ],
+  "confidence": "medium",
+  "unresolvedFields": [
+    "공식 홈페이지",
+    "군산 생산시설 주소 통합과 소유 관계",
+    "공식 생산능력",
+    "2025년 감사보고서 원문 재무 대조"
+  ],
+  "verifiedAt": "2026-07-19"
+}
