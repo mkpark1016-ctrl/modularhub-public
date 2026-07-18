@@ -8,10 +8,12 @@ import {
   filterReviewItems,
   formatReviewDate,
   getReviewFilterOptions,
+  getReviewQueueMetadata,
   getReviewQueueKpis,
   getReviewSourceLabel,
   getReviewStatusLabel,
   isValidHttpUrl,
+  isReviewQueueStale,
   normalizeReviewQueuePayload,
   paginateReviewItems,
   sortReviewItems,
@@ -51,6 +53,10 @@ function useReviewQueueData() {
           fetchJson(DATA_URL),
           fetchJson(DEFAULT_MANIFEST_URL).catch(() => null),
         ]);
+        if (!manifestPayload) {
+          if (active) setState({ loading: false, error: "manifest_missing", notPublished: false, invalid: true, data: null });
+          return;
+        }
         const normalized = normalizeReviewQueuePayload(queuePayload, manifestPayload);
         if (!normalized.valid) {
           if (active) setState({ loading: false, error: normalized.reason, notPublished: false, invalid: true, data: null });
@@ -113,6 +119,22 @@ function SourceCounts({ kpis }) {
         ))}
       </div>
     </div>
+  );
+}
+
+function DataProvenance({ manifest }) {
+  const metadata = getReviewQueueMetadata(manifest);
+  const stale = isReviewQueueStale(metadata.generatedAt);
+  const shortCommit = metadata.sourceCommit ? metadata.sourceCommit.slice(0, 12) : "확인되지 않음";
+  return (
+    <section className="monitor-data-provenance" aria-label="기업 모니터링 데이터 기준">
+      {stale && <div className="monitor-stale-warning">최신 수집 데이터가 7일 이상 경과했습니다.</div>}
+      <dl>
+        <div><dt>Source Workflow Run</dt><dd>{metadata.sourceRunId || "확인되지 않음"}</dd></div>
+        <div><dt>데이터 기준 Commit</dt><dd>{shortCommit}</dd></div>
+        <div><dt>Lookback</dt><dd>{metadata.lookbackDays ? `${metadata.lookbackDays}일` : "확인되지 않음"}</dd></div>
+      </dl>
+    </section>
   );
 }
 
@@ -335,6 +357,7 @@ export default function CompanyIntelligenceReviewQueuePage() {
             <KpiCard label="마지막 생성" textValue={formatReviewDate(kpis.generatedAt)} />
           </section>
           <SourceCounts kpis={kpis} />
+          <DataProvenance manifest={data.manifest} />
           <ReviewFilters values={filters} options={options} setParam={setParam} reset={reset} />
           {items.length === 0 && <div className="state">검토 후보가 없습니다.</div>}
           {items.length > 0 && filtered.length === 0 && <div className="state">현재 필터에 맞는 후보가 없습니다.</div>}

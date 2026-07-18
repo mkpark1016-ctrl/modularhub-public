@@ -299,6 +299,12 @@ code { overflow-wrap: anywhere; }
 .monitor-source-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .monitor-source-status div { display: flex; gap: 8px; flex-wrap: wrap; }
 .monitor-source-status span { padding: 5px 9px; border: 1px solid #d7d7d2; border-radius: 999px; background: #fff; color: #333; font-size: 12px; font-weight: 800; }
+.monitor-data-provenance { display: grid; gap: 10px; padding: 14px 16px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.monitor-data-provenance dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.monitor-data-provenance div { min-width: 0; }
+.monitor-data-provenance dt { color: #666; font-size: 12px; font-weight: 800; }
+.monitor-data-provenance dd { margin: 4px 0 0; color: #222; font-size: 13px; font-weight: 700; overflow-wrap: anywhere; }
+.monitor-stale-warning { padding: 10px 12px; border: 1px solid #e4b250; border-radius: 6px; background: #fff8e5; color: #634400; font-size: 13px; font-weight: 800; }
 .monitor-controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 16px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
 .monitor-controls label { display: grid; gap: 6px; min-width: 0; color: #555; font-size: 12px; font-weight: 800; }
 .monitor-controls input, .monitor-controls select { width: 100%; min-width: 0; height: 40px; padding: 0 10px; border: 1px solid #cacac5; border-radius: 6px; background: #fff; }
@@ -343,7 +349,7 @@ code { overflow-wrap: anywhere; }
   .company-card-grid { grid-template-columns: 1fr; }
   .company-domain-grid { grid-template-columns: 1fr 1fr; }
   .company-kpi-grid, .company-toolbar { grid-template-columns: 1fr 1fr; }
-  .monitor-kpi-grid, .monitor-controls { grid-template-columns: 1fr 1fr; }
+  .monitor-kpi-grid, .monitor-controls, .monitor-data-provenance dl { grid-template-columns: 1fr 1fr; }
   .company-tabs { position: static; }
   .company-comparison-bar { bottom: 10px; flex-direction: column; align-items: stretch; width: calc(100vw - 24px); }
   .comparison-bar-actions { justify-content: space-between; }
@@ -352,7 +358,7 @@ code { overflow-wrap: anywhere; }
 
 @media (max-width: 520px) {
   .company-kpi-grid, .company-toolbar, .company-row-detail dl { grid-template-columns: 1fr; }
-  .monitor-kpi-grid, .monitor-controls, .monitor-card dl { grid-template-columns: 1fr; }
+  .monitor-kpi-grid, .monitor-controls, .monitor-card dl, .monitor-data-provenance dl { grid-template-columns: 1fr; }
   .monitor-table-wrap { display: none; }
   .monitor-card-list { display: grid; }
   .monitor-pagination { justify-content: stretch; }

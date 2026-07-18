@@ -1,0 +1,350 @@
+name: Publish Company Intelligence Data
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: "Successful Company Intelligence Monitor run ID"
+        required: true
+        type: string
+      acknowledge_publish:
+        description: "Confirm creation of a public data update PR"
+        required: true
+        default: false
+        type: boolean
+      target_branch:
+        description: "Base branch for the generated data PR"
+        required: true
+        default: "main"
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+      TARGET_BRANCH: ${{ inputs.target_branch }}
+      ACKNOWLEDGE_PUBLISH: ${{ inputs.acknowledge_publish }}
+      DATA_BRANCH: data/company-intelligence-run-${{ inputs.source_run_id }}
+      PUBLIC_QUEUE_PATH: frontend/public/data/company-intelligence/review-queue.json
+      PUBLIC_MANIFEST_PATH: frontend/public/data/company-intelligence/manifest.json
+    steps:
+      - name: Validate dispatch inputs
+        run: |
+          python - <<'PY'
+          import os
+          run_id = os.environ["SOURCE_RUN_ID"].strip()
+          target_branch = os.environ["TARGET_BRANCH"].strip()
+          acknowledge = os.environ["ACKNOWLEDGE_PUBLISH"].strip().lower()
+          if not run_id.isdigit():
+              raise SystemExit("source_run_id must be numeric")
+          if target_branch != "main":
+              raise SystemExit("target_branch must be main")
+          if acknowledge != "true":
+              raise SystemExit("acknowledge_publish must be true before artifact download or data changes")
+          print("dispatch_inputs_valid: true")
+          PY
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_branch }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Fetch and validate source run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from pathlib import Path
+
+          from scripts.company_monitoring.publish_review_queue_public import validate_source_run_metadata
+
+          api = os.environ.get("GITHUB_API_URL", "https://api.github.com")
+          repo = os.environ["GITHUB_REPOSITORY"]
+          run_id = os.environ["SOURCE_RUN_ID"]
+          token = os.environ["GITHUB_TOKEN"]
+          request = urllib.request.Request(
+              f"{api}/repos/{repo}/actions/runs/{run_id}",
+              headers={
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": f"Bearer {token}",
+                  "User-Agent": "company-intelligence-publish",
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              payload = json.load(response)
+          validation = validate_source_run_metadata(payload)
+          safe_payload = {
+              "id": payload.get("id"),
+              "name": payload.get("name"),
+              "path": payload.get("path"),
+              "status": payload.get("status"),
+              "conclusion": payload.get("conclusion"),
+              "head_branch": payload.get("head_branch"),
+              "head_sha": payload.get("head_sha"),
+              "event": payload.get("event"),
+              "created_at": payload.get("created_at"),
+              "updated_at": payload.get("updated_at"),
+              "html_url": payload.get("html_url"),
+          }
+          out_dir = Path("artifacts/company-intelligence-publish")
+          out_dir.mkdir(parents=True, exist_ok=True)
+          (out_dir / "source-run.json").write_text(json.dumps(safe_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
+              handle.write(f"source_commit={validation['source_commit']}\n")
+              handle.write(f"source_branch={validation['source_branch']}\n")
+          print("source_run_valid: true")
+          print(f"source_run_id: {run_id}")
+          print(f"source_workflow: {validation['source_workflow']}")
+          print(f"source_branch: {validation['source_branch']}")
+          print(f"source_commit: {validation['source_commit']}")
+          PY
+
+      - name: Prepare deterministic data branch
+        run: |
+          git fetch origin main
+          if git ls-remote --exit-code --heads origin "$DATA_BRANCH" >/dev/null 2>&1; then
+            git fetch origin "$DATA_BRANCH"
+            git switch -C "$DATA_BRANCH" "origin/$DATA_BRANCH"
+          else
+            git switch -c "$DATA_BRANCH"
+          fi
+
+      - name: Download review queue artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: company-intelligence-review-queue
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          path: downloaded-artifacts/company-intelligence-review-queue
+
+      - name: Download digest artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: company-intelligence-digest
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          path: downloaded-artifacts/company-intelligence-digest
+
+      - name: Download live pilot artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: company-intelligence-live-pilot
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          path: downloaded-artifacts/company-intelligence-live-pilot
+
+      - name: Download audit artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: company-intelligence-audit
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          path: downloaded-artifacts/company-intelligence-audit
+
+      - name: Export sanitized public data
+        run: |
+          python scripts/company_monitoring/publish_review_queue_public.py \
+            --artifact-root downloaded-artifacts \
+            --source-run-metadata artifacts/company-intelligence-publish/source-run.json \
+            --output "$PUBLIC_QUEUE_PATH" \
+            --manifest-output "$PUBLIC_MANIFEST_PATH" \
+            --lookback-days 30
+
+      - name: Validate public data files
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          queue_path = Path("frontend/public/data/company-intelligence/review-queue.json")
+          manifest_path = Path("frontend/public/data/company-intelligence/manifest.json")
+          queue = json.loads(queue_path.read_text(encoding="utf-8"))
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          if manifest.get("itemCount") != len(queue.get("items", [])):
+              raise SystemExit("manifest itemCount does not match public queue items")
+          counts = manifest.get("counts", {})
+          status_total = sum(int(counts.get(key, 0) or 0) for key in ["pending", "duplicate", "rejected", "conflict", "accepted"])
+          if status_total != int(counts.get("normalizedUniqueCandidates", status_total) or 0):
+              raise SystemExit("public manifest status conservation failed")
+          source_counts = manifest.get("sourceCounts") or {}
+          if "dart" not in source_counts or "naver" not in source_counts:
+              raise SystemExit("public manifest must retain dart and naver source counts")
+          forbidden = [
+              "DART_API_KEY",
+              "NAVER_API_HUB_CLIENT_ID",
+              "NAVER_API_HUB_CLIENT_SECRET",
+              "Authorization",
+              "X-NCP-APIGW-API-KEY-ID",
+              "X-NCP-APIGW-API-KEY",
+              "request_headers",
+              "raw_response",
+              "traceback",
+          ]
+          combined = queue_path.read_text(encoding="utf-8", errors="ignore") + manifest_path.read_text(encoding="utf-8", errors="ignore")
+          leaked = [key for key in forbidden if key.lower() in combined.lower()]
+          if leaked:
+              raise SystemExit("sensitive key name detected in public data")
+          print("public_data_valid: true")
+          print(f"item_count: {manifest.get('itemCount')}")
+          print(f"source_counts: {source_counts}")
+          PY
+
+      - name: Detect public data changes
+        id: data_diff
+        run: |
+          if git diff --quiet -- "$PUBLIC_QUEUE_PATH" "$PUBLIC_MANIFEST_PATH"; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "NO_PUBLIC_DATA_CHANGE" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit public data changes
+        if: steps.data_diff.outputs.has_changes == 'true'
+        run: |
+          changed="$(git diff --name-only)"
+          allowed="$PUBLIC_QUEUE_PATH
+          $PUBLIC_MANIFEST_PATH"
+          unexpected="$(printf '%s\n' "$changed" | grep -vxF "$PUBLIC_QUEUE_PATH" | grep -vxF "$PUBLIC_MANIFEST_PATH" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "$unexpected"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$PUBLIC_QUEUE_PATH" "$PUBLIC_MANIFEST_PATH"
+          git commit -m "Update company intelligence public data from run $SOURCE_RUN_ID"
+          git push --set-upstream origin "$DATA_BRANCH"
+
+      - name: Create or reuse draft data PR
+        if: steps.data_diff.outputs.has_changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+          from pathlib import Path
+
+          api = os.environ.get("GITHUB_API_URL", "https://api.github.com")
+          repo = os.environ["GITHUB_REPOSITORY"]
+          owner = repo.split("/", 1)[0]
+          branch = os.environ["DATA_BRANCH"]
+          run_id = os.environ["SOURCE_RUN_ID"]
+          token = os.environ["GITHUB_TOKEN"]
+          manifest = json.loads(Path("frontend/public/data/company-intelligence/manifest.json").read_text(encoding="utf-8"))
+          counts = manifest.get("counts", {})
+          source_counts = manifest.get("sourceCounts") or {}
+
+          def request(method, url, payload=None):
+              data = None if payload is None else json.dumps(payload).encode("utf-8")
+              req = urllib.request.Request(
+                  url,
+                  data=data,
+                  method=method,
+                  headers={
+                      "Accept": "application/vnd.github+json",
+                      "Authorization": f"Bearer {token}",
+                      "User-Agent": "company-intelligence-publish",
+                  },
+              )
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.load(response)
+
+          query = urllib.parse.urlencode({"state": "open", "head": f"{owner}:{branch}", "base": "main"})
+          existing = request("GET", f"{api}/repos/{repo}/pulls?{query}")
+          title = f"Update company intelligence public data from run #{run_id}"
+          body = "\n".join([
+              "## Source",
+              f"- Source Workflow Run ID: `{run_id}`",
+              f"- Source Commit: `{manifest.get('sourceCommit')}`",
+              f"- Source Branch: `{manifest.get('sourceBranch')}`",
+              f"- Generated At: `{manifest.get('generatedAt')}`",
+              "",
+              "## Public Data",
+              f"- Companies: {', '.join(company.get('companyId', '') for company in manifest.get('companies', []))}",
+              f"- Configured Sources: {', '.join(manifest.get('configuredSources') or [])}",
+              f"- Source Counts: dart {source_counts.get('dart', 0)}, naver {source_counts.get('naver', 0)}",
+              f"- 전체 후보: {counts.get('normalizedUniqueCandidates', 0)}",
+              f"- Pending: {counts.get('pending', 0)}",
+              f"- Duplicate: {counts.get('duplicate', 0)}",
+              f"- Quality rejected: {counts.get('qualityRejected', 0)}",
+              "",
+              "## Audit",
+              "- Metric conservation: passed",
+              "- Duplicate reference integrity: passed",
+              "- Protected data changed: false",
+              "- Secret exposure detected: false",
+              "",
+              "## Changed Files",
+              "- `frontend/public/data/company-intelligence/review-queue.json`",
+              "- `frontend/public/data/company-intelligence/manifest.json`",
+              "",
+              "Merging this PR updates the read-only company intelligence dashboard public data.",
+          ])
+          if existing:
+              pr = existing[0]
+              print(f"data_pr_exists: {pr['html_url']}")
+          else:
+              pr = request("POST", f"{api}/repos/{repo}/pulls", {
+                  "title": title,
+                  "head": branch,
+                  "base": "main",
+                  "body": body,
+                  "draft": True,
+              })
+              print(f"data_pr_created: {pr['html_url']}")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as handle:
+              handle.write("\n## Public Data PR\n")
+              handle.write(f"- PR: {pr['html_url']}\n")
+              handle.write(f"- Source Run: {run_id}\n")
+              handle.write(f"- Source Commit: {manifest.get('sourceCommit')}\n")
+              handle.write(f"- Item Count: {manifest.get('itemCount')}\n")
+          PY
+
+      - name: Write summary
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          manifest = json.loads(Path("frontend/public/data/company-intelligence/manifest.json").read_text(encoding="utf-8"))
+          counts = manifest.get("counts", {})
+          source_counts = manifest.get("sourceCounts") or {}
+          lines = [
+              "## Publish Company Intelligence Data",
+              "",
+              f"- source_run_id: `{os.environ['SOURCE_RUN_ID']}`",
+              f"- data_branch: `{os.environ['DATA_BRANCH']}`",
+              f"- source_commit: `{manifest.get('sourceCommit')}`",
+              f"- source_branch: `{manifest.get('sourceBranch')}`",
+              f"- item_count: {manifest.get('itemCount')}",
+              f"- pending: {counts.get('pending', 0)}",
+              f"- duplicate: {counts.get('duplicate', 0)}",
+              f"- quality_rejected: {counts.get('qualityRejected', 0)}",
+              f"- source_counts.dart: {source_counts.get('dart', 0)}",
+              f"- source_counts.naver: {source_counts.get('naver', 0)}",
+              "- protected_data_changed: false",
+              "- secret_exposure_detected: false",
+          ]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as handle:
+              handle.write("\n".join(lines) + "\n")
+          PY

@@ -70,6 +70,7 @@ def source_counts(items: list[dict[str, Any]], digest: dict[str, Any]) -> dict[s
         source = item.get("source") or "unknown"
         counts[source] = counts.get(source, 0) + 0
     counts.setdefault("dart", 0)
+    counts.setdefault("naver", counts.get("naver_search", 0))
     counts.setdefault("naver_search", 0)
     return counts
 
@@ -80,7 +81,10 @@ def build_manifest(
     digest: dict[str, Any],
     names: dict[str, str],
     lookback_days: int,
+    source_run_id: str | None,
     source_run_commit: str | None,
+    source_workflow: str | None,
+    source_branch: str | None,
 ) -> dict[str, Any]:
     final_status_counts = digest.get("final_status_counts") or {}
     quality_flag_counts = digest.get("quality_flag_counts") or {}
@@ -99,12 +103,22 @@ def build_manifest(
         "sourceCounts": source_counts(items, digest),
     }
     company_ids = sorted({item["companyId"] for item in items if item.get("companyId")})
+    manifest_source_counts = {
+        "dart": int(counts["sourceCounts"].get("dart", 0)),
+        "naver": int(counts["sourceCounts"].get("naver", counts["sourceCounts"].get("naver_search", 0))),
+    }
     return {
         "schemaVersion": "company-intelligence-review-queue.public.v1",
         "generatedAt": digest.get("generated_at") or "",
+        "sourceRunId": safe_text(source_run_id),
+        "sourceCommit": safe_text(source_run_commit or os.getenv("GITHUB_SHA") or ""),
+        "sourceWorkflow": safe_text(source_workflow or "Company Intelligence Monitor"),
+        "sourceBranch": safe_text(source_branch or ""),
         "sourceRunCommit": source_run_commit or os.getenv("GITHUB_SHA") or "",
         "lookbackDays": lookback_days,
         "companies": [{"companyId": company_id, "companyName": names.get(company_id, company_id)} for company_id in company_ids],
+        "configuredSources": ["dart", "naver"],
+        "sourceCounts": manifest_source_counts,
         "sources": ["dart", "naver_search"],
         "counts": counts,
         "itemCount": len(items),
@@ -125,7 +139,10 @@ def export_public_review_queue(
     output_path: Path,
     manifest_output_path: Path,
     lookback_days: int = 30,
+    source_run_id: str | None = None,
     source_run_commit: str | None = None,
+    source_workflow: str | None = None,
+    source_branch: str | None = None,
 ) -> dict[str, Any]:
     payload = read_json(input_path)
     if not isinstance(payload.get("review_queue"), list):
@@ -144,7 +161,10 @@ def export_public_review_queue(
         digest=digest,
         names=names,
         lookback_days=lookback_days,
+        source_run_id=source_run_id,
         source_run_commit=source_run_commit,
+        source_workflow=source_workflow,
+        source_branch=source_branch,
     )
     assert_no_secret(public_payload)
     assert_no_secret(manifest)
@@ -160,7 +180,10 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--manifest-output", type=Path, default=DEFAULT_MANIFEST_OUTPUT)
     parser.add_argument("--lookback-days", type=int, default=30)
+    parser.add_argument("--source-run-id", default="")
     parser.add_argument("--source-run-commit", default="")
+    parser.add_argument("--source-workflow", default="Company Intelligence Monitor")
+    parser.add_argument("--source-branch", default="")
     args = parser.parse_args()
     result = export_public_review_queue(
         input_path=args.input,
@@ -168,7 +191,10 @@ def main() -> int:
         output_path=args.output,
         manifest_output_path=args.manifest_output,
         lookback_days=args.lookback_days,
+        source_run_id=args.source_run_id,
         source_run_commit=args.source_run_commit,
+        source_workflow=args.source_workflow,
+        source_branch=args.source_branch,
     )
     print(json.dumps(result, ensure_ascii=False))
     return 0

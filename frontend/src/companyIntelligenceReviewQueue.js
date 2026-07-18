@@ -23,6 +23,7 @@ export const REVIEW_SORT_OPTIONS = [
 ];
 
 export const REVIEW_PAGE_SIZES = [20, 50, 100];
+export const REVIEW_STALE_DAYS = 7;
 
 const REQUIRED_ITEM_FIELDS = [
   "candidateId",
@@ -75,7 +76,7 @@ export function formatReviewDate(value) {
   return new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
 }
 
-export function validateReviewQueuePayload(payload) {
+export function validateReviewQueuePayload(payload, manifest = null) {
   if (!payload || typeof payload !== "object") return { valid: false, reason: "payload_missing" };
   if (payload.schemaVersion !== REVIEW_QUEUE_SCHEMA_VERSION) return { valid: false, reason: "schema_version_mismatch" };
   if (!Array.isArray(payload.items)) return { valid: false, reason: "items_missing" };
@@ -83,11 +84,14 @@ export function validateReviewQueuePayload(payload) {
     const missing = REQUIRED_ITEM_FIELDS.filter((field) => !(field in item));
     if (missing.length) return { valid: false, reason: "required_field_missing", missing, candidateId: item.candidateId };
   }
+  if (manifest && Number.isFinite(Number(manifest.itemCount)) && Number(manifest.itemCount) !== payload.items.length) {
+    return { valid: false, reason: "manifest_item_count_mismatch" };
+  }
   return { valid: true, reason: "" };
 }
 
 export function normalizeReviewQueuePayload(payload, manifest = null) {
-  const validation = validateReviewQueuePayload(payload);
+  const validation = validateReviewQueuePayload(payload, manifest);
   if (!validation.valid) {
     return { valid: false, reason: validation.reason, items: [], manifest: null };
   }
@@ -121,6 +125,24 @@ export function normalizeReviewQueuePayload(payload, manifest = null) {
       sources: [],
     },
   };
+}
+
+export function getReviewQueueMetadata(manifest = {}) {
+  return {
+    generatedAt: manifest?.generatedAt || "",
+    sourceRunId: manifest?.sourceRunId || "",
+    sourceCommit: manifest?.sourceCommit || manifest?.sourceRunCommit || "",
+    sourceWorkflow: manifest?.sourceWorkflow || "",
+    sourceBranch: manifest?.sourceBranch || "",
+    lookbackDays: Number(manifest?.lookbackDays || 0),
+  };
+}
+
+export function isReviewQueueStale(generatedAt, now = new Date(), staleDays = REVIEW_STALE_DAYS) {
+  const generated = Date.parse(generatedAt || "");
+  const current = now instanceof Date ? now.getTime() : Date.parse(now || "");
+  if (!Number.isFinite(generated) || !Number.isFinite(current)) return false;
+  return current - generated > staleDays * 24 * 60 * 60 * 1000;
 }
 
 export function getReviewQueueKpis(items, manifest) {

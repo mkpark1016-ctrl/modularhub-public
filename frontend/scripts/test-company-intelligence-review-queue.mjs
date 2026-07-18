@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   filterReviewItems,
+  getReviewQueueMetadata,
   getReviewFilterOptions,
   getReviewQueueKpis,
+  isReviewQueueStale,
   isValidHttpUrl,
   normalizeReviewQueuePayload,
   paginateReviewItems,
@@ -36,6 +38,22 @@ assert.equal(kpis.duplicate, 337);
 assert.equal(kpis.qualityRejected, 124);
 assert.equal(kpis.sourceCounts.dart, 0);
 assert.equal(kpis.sourceCounts.naver_search, 694);
+assert.equal(manifest.sourceRunId, "local-live-pilot");
+assert.equal(manifest.sourceWorkflow, "Company Intelligence Monitor");
+assert.equal(manifest.sourceBranch, "main");
+assert.equal(manifest.lookbackDays, 30);
+assert.equal(manifest.sourceCounts.dart, 0);
+assert.equal(manifest.sourceCounts.naver, 694);
+assert.equal(manifest.itemCount, queue.items.length);
+
+const metadata = getReviewQueueMetadata(manifest);
+assert.equal(metadata.sourceRunId, "local-live-pilot");
+assert.equal(metadata.lookbackDays, 30);
+assert.equal(isReviewQueueStale("2026-07-01T00:00:00Z", new Date("2026-07-18T00:00:00Z")), true);
+assert.equal(isReviewQueueStale("2026-07-17T00:00:00Z", new Date("2026-07-18T00:00:00Z")), false);
+const mismatch = normalizeReviewQueuePayload(queue, { ...manifest, itemCount: queue.items.length + 1 });
+assert.equal(mismatch.valid, false);
+assert.equal(mismatch.reason, "manifest_item_count_mismatch");
 
 const options = getReviewFilterOptions(items, manifest);
 assert.ok(options.companies.some((option) => option.value === "kumkang-kind"));
@@ -75,6 +93,9 @@ assert.equal(isValidHttpUrl(""), false);
 assert.ok(componentSource.includes("VITE_COMPANY_INTELLIGENCE_DATA_URL"));
 assert.ok(componentSource.includes("import.meta.env.DEV || import.meta.env.MODE === \"test\""));
 assert.equal(componentSource.includes("import.meta.env.PROD &&"), false);
+assert.ok(componentSource.includes("manifest_missing"));
+assert.ok(componentSource.includes("DataProvenance"));
+assert.ok(componentSource.includes("최신 수집 데이터가 7일 이상 경과했습니다."));
 assert.ok(appSource.includes("/company-intelligence"));
 assert.ok(appSource.includes("기업 모니터링"));
 

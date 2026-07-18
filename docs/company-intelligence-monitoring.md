@@ -139,8 +139,90 @@ The public contract intentionally excludes raw responses, auth headers,
 environment variables, local paths, stack traces, evidence hashes, source IDs,
 and internal review metadata that is not needed for the dashboard.
 
-Next step: add authenticated review actions and state persistence after the
-read-only dashboard is accepted.
+The manifest also carries publication provenance:
+
+- `sourceRunId`
+- `sourceCommit`
+- `sourceWorkflow`
+- `sourceBranch`
+- `generatedAt`
+- `lookbackDays`
+- `configuredSources`
+- `sourceCounts`
+
+The dashboard shows the source run, source commit, lookback window, and last
+generated time. If `generatedAt` is more than seven days old in the browser, it
+shows a non-blocking stale-data warning while still allowing review queue
+inspection.
+
+## Public Data Publication Workflow
+
+Collection and publication are deliberately separate.
+
+- `Company Intelligence Monitor`
+  - Calls DART and NAVER API HUB.
+  - Produces internal review queue, digest, live-pilot, and audit artifacts.
+  - Never publishes public frontend data.
+- `Publish Company Intelligence Data`
+  - Does not call DART or NAVER.
+  - Downloads artifacts from one user-provided successful monitor run.
+  - Re-validates the review queue and audit summary offline.
+  - Regenerates only the sanitized public review queue and manifest.
+  - Opens a data-only Draft PR.
+
+Run `Publish Company Intelligence Data` manually from GitHub Actions with:
+
+- `source_run_id`: a successful `Company Intelligence Monitor` run ID.
+- `acknowledge_publish`: must be `true`.
+- `target_branch`: must be `main`.
+
+The publish workflow accepts only monitor runs that satisfy all of:
+
+- Workflow path is `.github/workflows/company-intelligence-monitor.yml`.
+- Workflow name is `Company Intelligence Monitor`.
+- Run status is `completed`.
+- Run conclusion is `success`.
+- Run branch is `main`.
+- Run event is `workflow_dispatch`.
+
+The workflow downloads these artifacts:
+
+- `company-intelligence-review-queue`
+- `company-intelligence-digest`
+- `company-intelligence-live-pilot`
+- `company-intelligence-audit`
+
+It does not download the raw artifact for publication. Raw API responses remain
+artifact-only and are not copied into public JSON.
+
+The workflow creates or updates a deterministic branch:
+
+```text
+data/company-intelligence-run-<source_run_id>
+```
+
+If the generated public JSON and manifest are unchanged, it exits without
+creating an empty PR. If a PR for the same source run already exists, the
+existing branch/PR is reused instead of creating a duplicate.
+
+The generated Draft PR title is:
+
+```text
+Update company intelligence public data from run #<source_run_id>
+```
+
+Review the changed files in that PR, then mark it ready and merge it when the
+dashboard data should be updated. After merge, confirm the production
+deployment and visit `/company-intelligence`.
+
+Only these files should be changed by an operational data PR:
+
+- `frontend/public/data/company-intelligence/review-queue.json`
+- `frontend/public/data/company-intelligence/manifest.json`
+
+Do not push these files directly to `main`; the PR review step is the safety
+gate. Authenticated review actions and state persistence are still a later
+phase.
 
 ## Candidate Review
 

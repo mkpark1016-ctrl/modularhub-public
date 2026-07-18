@@ -1,7 +1,11 @@
 {
   "schemaVersion": "company-intelligence-review-queue.public.v1",
   "generatedAt": "2026-07-18T08:58:52Z",
-  "sourceRunCommit": "",
+  "sourceRunId": "local-live-pilot",
+  "sourceCommit": "7c59e855bdb880df40ecd38cc2afaa775e5519c1",
+  "sourceWorkflow": "Company Intelligence Monitor",
+  "sourceBranch": "main",
+  "sourceRunCommit": "7c59e855bdb880df40ecd38cc2afaa775e5519c1",
   "lookbackDays": 30,
   "companies": [
     {
@@ -13,6 +17,14 @@
       "companyName": "유창이앤씨"
     }
   ],
+  "configuredSources": [
+    "dart",
+    "naver"
+  ],
+  "sourceCounts": {
+    "dart": 0,
+    "naver": 694
+  },
   "sources": [
     "dart",
     "naver_search"
@@ -31,7 +43,8 @@
     "qualityRejected": 124,
     "sourceCounts": {
       "naver_search": 694,
-      "dart": 0
+      "dart": 0,
+      "naver": 694
     }
   },
   "itemCount": 357
