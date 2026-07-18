@@ -422,7 +422,7 @@ def audit(raw_dir: Path = RAW_DIR, queue_path: Path = DEFAULT_QUEUE_PATH, digest
     normalized_unique_count = len(set(ids))
     raw_candidate_record_count = len(raw_candidates)
     raw_source_count = raw_record_count(raw_dir)
-    excess = raw_candidate_record_count + len(rejected_raw) - raw_candidate_record_count
+    non_candidate_control_record_count = max(0, raw_source_count - raw_candidate_record_count - len(rejected_raw))
     metric_excess_cause = "rejected_flag_double_count" if len(rejected_raw) and final_counts.get("rejected", 0) == 0 else "unknown"
     summary = {
         "generated_at": iso_now(),
@@ -434,6 +434,8 @@ def audit(raw_dir: Path = RAW_DIR, queue_path: Path = DEFAULT_QUEUE_PATH, digest
         "artifact_hashes": before_hashes,
         "raw_source_record_count": raw_source_count,
         "raw_candidate_record_count": raw_candidate_record_count,
+        "raw_rejected_record_count": len(rejected_raw),
+        "non_candidate_control_record_count": non_candidate_control_record_count,
         "raw_unique_candidate_count": len(set(candidate_ids(raw_candidates))),
         "normalized_unique_count": normalized_unique_count,
         "pending_unique_count": final_counts.get("pending", 0),
