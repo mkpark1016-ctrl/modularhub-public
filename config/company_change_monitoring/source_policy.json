@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "company-change-source-policy-v1",
+  "timezone": "Asia/Seoul",
+  "modes": {
+    "daily_signals": ["dart", "naver_api_hub", "public_news"],
+    "weekly_research": ["official_website", "public_procurement", "patent"],
+    "full_audit": ["dart", "naver_api_hub", "public_news", "official_website", "public_procurement", "patent"]
+  },
+  "sources": [
+    {
+      "sourceId": "dart",
+      "enabled": true,
+      "configured": "env:DART_API_KEY",
+      "frequency": "daily",
+      "lookbackDays": 30,
+      "maxRequests": 33,
+      "timeoutSeconds": 20,
+      "retryPolicy": {"maxAttempts": 2, "backoffSeconds": 5},
+      "sourceTier": "tier_1",
+      "supportedChangeTypes": ["financial_filing", "executive_change", "headquarters_change", "investment", "organizational"],
+      "requiresSecret": true
+    },
+    {
+      "sourceId": "naver_api_hub",
+      "enabled": true,
+      "configured": "env:NAVER_API_HUB_CLIENT_ID,NAVER_API_HUB_CLIENT_SECRET",
+      "frequency": "daily",
+      "lookbackDays": 30,
+      "maxRequests": 66,
+      "timeoutSeconds": 15,
+      "retryPolicy": {"maxAttempts": 2, "backoffSeconds": 5},
+      "sourceTier": "tier_2",
+      "supportedChangeTypes": ["news_signal", "project_announced", "contract_awarded", "facility_planned", "partnership", "modular_strategy"],
+      "requiresSecret": true
+    },
+    {
+      "sourceId": "public_news",
+      "enabled": true,
+      "configured": true,
+      "frequency": "daily",
+      "lookbackDays": 30,
+      "maxRequests": 0,
+      "timeoutSeconds": 0,
+      "retryPolicy": {"maxAttempts": 0, "backoffSeconds": 0},
+      "sourceTier": "tier_2",
+      "supportedChangeTypes": ["news_signal", "project_announced", "contract_awarded", "facility_planned", "partnership", "modular_strategy"],
+      "requiresSecret": false
+    },
+    {
+      "sourceId": "official_website",
+      "enabled": false,
+      "configured": false,
+      "frequency": "weekly",
+      "lookbackDays": 90,
+      "maxRequests": 11,
+      "timeoutSeconds": 20,
+      "retryPolicy": {"maxAttempts": 1, "backoffSeconds": 0},
+      "sourceTier": "tier_1",
+      "supportedChangeTypes": ["identity_change", "facility_opened", "facility_expanded", "modular_strategy"],
+      "requiresSecret": false
+    },
+    {
+      "sourceId": "public_procurement",
+      "enabled": false,
+      "configured": false,
+      "frequency": "weekly",
+      "lookbackDays": 90,
+      "maxRequests": 33,
+      "timeoutSeconds": 20,
+      "retryPolicy": {"maxAttempts": 1, "backoffSeconds": 0},
+      "sourceTier": "tier_1",
+      "supportedChangeTypes": ["bid_announced", "contract_awarded", "project_completed", "project_cancelled"],
+      "requiresSecret": false
+    },
+    {
+      "sourceId": "patent",
+      "enabled": false,
+      "configured": false,
+      "frequency": "weekly",
+      "lookbackDays": 180,
+      "maxRequests": 22,
+      "timeoutSeconds": 20,
+      "retryPolicy": {"maxAttempts": 1, "backoffSeconds": 0},
+      "sourceTier": "tier_1",
+      "supportedChangeTypes": ["patent_filed", "patent_published", "patent_registered", "patent_status_changed"],
+      "requiresSecret": false
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "candidateCount": 0,
+  "candidates": [],
+  "companies": [
+    "gs-ec",
+    "hyundai-engineering",
+    "samsung-ct-construction",
+    "dl-enc",
+    "yuchang-enc",
+    "kumkang-kind",
+    "nrb",
+    "planm",
+    "geogwang-enterprise",
+    "sungji-steel",
+    "daeseung-engineering"
+  ],
+  "conflict": 0,
+  "duplicate": 0,
+  "generatedAt": "2026-07-22T07:02:31Z",
+  "highPriority": 0,
+  "insufficientEvidence": 0,
+  "pending": 0,
+  "researchGapSummary": {
+    "daeseung-engineering": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 4,
+      "newGapCount": 0,
+      "remainingGapCount": 4,
+      "resolvedCandidateCount": 0
+    },
+    "dl-enc": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "geogwang-enterprise": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "gs-ec": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "hyundai-engineering": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "kumkang-kind": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "nrb": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "planm": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "samsung-ct-construction": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "sungji-steel": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "yuchang-enc": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    }
+  },
+  "runId": "company-change-1c3108974d46",
+  "schemaVersion": "company-change-review-queue-v1",
+  "sourceStatuses": [
+    {
+      "configured": true,
+      "identityRejected": 0,
+      "latestPublishedAt": "2026-07-22",
+      "normalizedCount": 0,
+      "rawCount": 0,
+      "safeErrorCategory": "none",
+      "sourceId": "public_news",
+      "state": "success"
+    }
+  ]
+}

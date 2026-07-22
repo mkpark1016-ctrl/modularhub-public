@@ -1,0 +1,105 @@
+{
+  "byCompany": {},
+  "bySource": {},
+  "candidateCount": 0,
+  "confidenceCounts": {},
+  "generatedAt": "2026-07-22T07:02:31Z",
+  "highPriority": [],
+  "publicDataChanged": false,
+  "researchGapSummary": {
+    "daeseung-engineering": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 4,
+      "newGapCount": 0,
+      "remainingGapCount": 4,
+      "resolvedCandidateCount": 0
+    },
+    "dl-enc": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "geogwang-enterprise": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "gs-ec": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "hyundai-engineering": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "kumkang-kind": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "nrb": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "planm": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "samsung-ct-construction": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "sungji-steel": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    },
+    "yuchang-enc": {
+      "conflictingGapCount": 0,
+      "existingGapCount": 0,
+      "newGapCount": 0,
+      "remainingGapCount": 0,
+      "resolvedCandidateCount": 0
+    }
+  },
+  "riskCounts": {},
+  "runId": "company-change-1c3108974d46",
+  "schemaVersion": "company-change-digest-v1",
+  "secretExposureDetected": false,
+  "sourceStatuses": [
+    {
+      "configured": true,
+      "identityRejected": 0,
+      "latestPublishedAt": "2026-07-22",
+      "normalizedCount": 0,
+      "rawCount": 0,
+      "safeErrorCategory": "none",
+      "sourceId": "public_news",
+      "state": "success"
+    }
+  ],
+  "statusCounts": {}
+}
