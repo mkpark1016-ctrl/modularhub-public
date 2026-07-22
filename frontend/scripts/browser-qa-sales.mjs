@@ -423,6 +423,7 @@ try {
   await page.goto(`${baseUrl}/companies/yuchang-enc`, { waitUntil: "networkidle" });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), "YooChang detail mobile has horizontal overflow");
   await page.getByRole("tab", { name: "프로젝트" }).click();
+  await page.locator("#company-tab-panel-projects").waitFor();
   check((await page.locator("main").innerText()).includes("파이프라인 및 기타 활동"), "YooChang pipeline section missing on mobile");
 
   const credentialTokens = [
