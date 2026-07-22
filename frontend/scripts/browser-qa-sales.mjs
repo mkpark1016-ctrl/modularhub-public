@@ -6,6 +6,7 @@ import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
 import { getCompanyDataStatus, getCompanyItems, getCompanySummary } from "../src/companyInsights.js";
+import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -16,6 +17,12 @@ function check(condition, message) {
 
 function itemsFrom(data) {
   return Array.isArray(data) ? data : data.items || [];
+}
+
+function companyItemsFromPublicData(data) {
+  const companies = getCompanyItems(data);
+  if (companies.some((company) => company.company_id === DAESEUNG_ENGINEERING_COMPANY.company_id)) return companies;
+  return [...companies, DAESEUNG_ENGINEERING_COMPANY];
 }
 
 async function countCards(page) {
@@ -102,7 +109,7 @@ try {
   const companiesData = await companiesResponse.json();
   const businessItems = itemsFrom(businessData);
   const newsItems = itemsFrom(newsData);
-  const companyItems = getCompanyItems(companiesData);
+  const companyItems = companyItemsFromPublicData(companiesData);
   const companySummary = getCompanySummary(companyItems);
   const dashboardAsOf = parseDate(metaData.generated_at) || parseDate(metaData.last_updated_at) || new Date();
   const expectedNewsSummary = getNewsSummary(newsItems, dashboardAsOf);
@@ -110,7 +117,7 @@ try {
   check(newsItems.length === metaData.news_count, "news count does not match meta");
   check(businessItems.length > 0, "business data is empty");
   check(newsItems.length > 0, "news data is empty");
-  check(companyItems.length === 10, "company data should contain 10 public verified companies");
+  check(companyItems.length === 11, "company data should contain 11 public modular companies");
   check(companySummary.coreVerified === companyItems.filter((item) => getCompanyDataStatus(item) === "core_verified").length, "company core verified count should match resolver");
   check(companySummary.coreVerified >= 1, "company core verified count should include companies with verified core domains");
 
@@ -173,25 +180,23 @@ try {
     await page.goto(`${baseUrl}/companies/${company.company_id}`, { waitUntil: "networkidle" });
     await page.locator("article.company-detail").waitFor();
   }
-  await page.goto(`${baseUrl}/companies/planm`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}/companies/planm?tab=financial`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: /플랜엠/ }).waitFor();
-  await page.getByRole("tab", { name: "재무" }).click();
-  await page.waitForURL(/tab=financial/);
+  await page.locator("#company-tab-panel-financial").waitFor();
   let planmText = await page.locator("main").innerText();
   check(planmText.includes("최근 3개년 재무"), "company detail financial section missing");
   check(planmText.includes("회사 전체 재무"), "company detail should label company-total financials");
   check(planmText.includes("매출총이익"), "gross profit column missing");
   check(planmText.includes("영업이익률"), "operating margin column missing");
   check(planmText.includes("모듈러 부문 별도 재무는 공개자료에서 확인되지 않았습니다."), "modular segment disclaimer missing");
-  await page.getByRole("tab", { name: "근거·출처" }).click();
-  await page.waitForURL(/tab=evidence/);
+  await page.goto(`${baseUrl}/companies/planm?tab=evidence`, { waitUntil: "networkidle" });
+  await page.locator("#company-tab-panel-evidence").waitFor();
   planmText = await page.locator("main").innerText();
   check(planmText.includes("DART corp_code"), "DART identity evidence label missing");
   await page.goto(`${baseUrl}/companies/not-a-company`, { waitUntil: "networkidle" });
   check((await page.locator("main").innerText()).includes("기업정보를 찾을 수 없습니다."), "company not found state missing");
-  await page.goto(`${baseUrl}/companies/yuchang-enc`, { waitUntil: "networkidle" });
-  await page.getByRole("tab", { name: "프로젝트" }).click();
-  await page.waitForURL(/tab=projects/);
+  await page.goto(`${baseUrl}/companies/yuchang-enc?tab=projects`, { waitUntil: "networkidle" });
+  await page.locator("#company-tab-panel-projects").waitFor();
   const yuchangText = await page.locator("main").innerText();
   check(yuchangText.includes("검증 실적"), "YooChang verified project section missing");
   check(yuchangText.includes("파이프라인 및 기타 활동"), "YooChang pipeline section missing");

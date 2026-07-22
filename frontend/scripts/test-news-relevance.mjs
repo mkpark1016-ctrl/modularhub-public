@@ -72,6 +72,18 @@ assert.ok(home.every((entry) => ["direct", "adjacent"].includes(getNewsRelevance
 assert.ok(!home.some((entry) => ["reference", "excluded"].includes(getNewsRelevance(entry))));
 assert.equal([...pool].sort(compareNewsByRelevance)[0].title, "Modular building project starts");
 
+const homeFreshnessFixtures = [
+  item("A older direct high score", "", { published_at: "2026-07-16T00:00:00+09:00", relevance_level: "direct", relevance_score: 100 }),
+  item("B newer adjacent fills slot", "", { published_at: "2026-07-20T00:00:00+09:00", relevance_level: "adjacent", relevance_score: 70 }),
+  item("C newer direct", "", { published_at: "2026-07-21T00:00:00+09:00", relevance_level: "direct", relevance_score: 80 }),
+  item("D newest direct", "", { published_at: "2026-07-22T00:00:00+09:00", relevance_level: "direct", relevance_score: 75 }),
+];
+assert.deepEqual(
+  selectHomeBriefingNews(homeFreshnessFixtures, 4).map((entry) => entry.title),
+  ["D newest direct", "C newer direct", "A older direct high score", "B newer adjacent fills slot"],
+  "home briefing must prioritize latest direct news, then fill with latest adjacent news",
+);
+
 const relevanceSorted = [
   item("Adjacent high score", "", { relevance_level: "adjacent", relevance_score: 80, published_at: "2026-07-06T00:00:00+09:00" }),
   item("Direct lower score", "", { relevance_level: "direct", relevance_score: 60, published_at: "2026-07-01T00:00:00+09:00" }),

@@ -42,6 +42,37 @@ assert.equal(summary.limitedCount, 1);
 assert.equal(summary.notCollectedCount, 1);
 assert.equal(summary.workflow.label, "일부 제한");
 
+const newsSourceMeta = {
+  ...meta,
+  news_source_statuses: [
+    {
+      id: "naver_api_hub",
+      name: "NAVER API HUB",
+      state: "success",
+      latest_item_published_at: "2026-07-22T10:00:00+09:00",
+      fetched_count: 12,
+      accepted_count: 4,
+      duplicate_count: 8,
+    },
+    {
+      id: "overseas_rss",
+      name: "해외 RSS",
+      state: "success_no_public_match",
+      fetched_count: 0,
+      accepted_count: 0,
+      duplicate_count: 0,
+    },
+  ],
+};
+const dynamicSources = getSourceHealth(newsSourceMeta);
+const naver = dynamicSources.find((source) => source.id === "naver_api_hub");
+const overseasRss = dynamicSources.find((source) => source.id === "overseas_rss");
+assert.equal(naver.name, "NAVER API HUB");
+assert.equal(naver.severity, "success");
+assert.match(naver.description, /최신 기사 2026-07-22/);
+assert.match(naver.description, /공개 반영 4건/);
+assert.equal(overseasRss.label, "정상·현재 대상 없음");
+
 const appSource = readFileSync(new URL("../src/components/SourceHealthPanel.jsx", import.meta.url), "utf8");
 assert.match(appSource, /aria-expanded/);
 assert.match(appSource, /상세 보기/);

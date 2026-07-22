@@ -11,10 +11,10 @@ import requests
 
 from src.collectors.base import BaseCollector
 from src.config import (
-    NAVER_CLIENT_ID,
-    NAVER_CLIENT_SECRET,
+    NAVER_API_HUB_CLIENT_ID,
+    NAVER_API_HUB_CLIENT_SECRET,
+    NAVER_API_HUB_NEWS_ENDPOINT,
     NAVER_NEWS_DISPLAY,
-    NAVER_NEWS_ENDPOINT,
     NAVER_NEWS_LOOKBACK_DAYS,
     NAVER_NEWS_SORT,
 )
@@ -28,15 +28,25 @@ from src.keywords import (
 from src.news_scoring import apply_unified_news_score
 
 
-DEFAULT_NAVER_NEWS_ENDPOINT = "https://openapi.naver.com/v1/search/news.json"
+DEFAULT_NAVER_API_HUB_NEWS_ENDPOINT = "https://naverapihub.apigw.ntruss.com/search/v1/news"
+NAVER_API_HUB_ID_HEADER = "X-NCP-APIGW-API-KEY-ID"
+NAVER_API_HUB_SECRET_HEADER = "X-NCP-APIGW-API-KEY"
 MAX_NAVER_NEWS_DISPLAY = 50
 
 
 class NaverNewsCollector(BaseCollector):
-    def __init__(self) -> None:
-        self.client_id = NAVER_CLIENT_ID
-        self.client_secret = NAVER_CLIENT_SECRET
-        self.endpoint = NAVER_NEWS_ENDPOINT or DEFAULT_NAVER_NEWS_ENDPOINT
+    def __init__(
+        self,
+        *,
+        client_id: str | None = None,
+        client_secret: str | None = None,
+        endpoint: str | None = None,
+        request_get: Any | None = None,
+    ) -> None:
+        self.client_id = NAVER_API_HUB_CLIENT_ID if client_id is None else client_id
+        self.client_secret = NAVER_API_HUB_CLIENT_SECRET if client_secret is None else client_secret
+        self.endpoint = endpoint or NAVER_API_HUB_NEWS_ENDPOINT or DEFAULT_NAVER_API_HUB_NEWS_ENDPOINT
+        self._request_get = request_get or requests.get
         self.display = max(1, min(int(NAVER_NEWS_DISPLAY or 50), MAX_NAVER_NEWS_DISPLAY))
         self.sort = NAVER_NEWS_SORT or "date"
         self.lookback_days = int(NAVER_NEWS_LOOKBACK_DAYS or 14)
@@ -49,7 +59,7 @@ class NaverNewsCollector(BaseCollector):
 
     def collect(self) -> list[dict]:
         if not self.client_id or not self.client_secret:
-            raise RuntimeError(".env에 NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET을 설정하세요.")
+            raise RuntimeError("NAVER_API_HUB_CLIENT_ID and NAVER_API_HUB_CLIENT_SECRET are not configured.")
 
         collected: list[dict] = []
         seen_urls: set[str] = set()
@@ -80,8 +90,8 @@ class NaverNewsCollector(BaseCollector):
 
     def _request(self, query: str) -> dict:
         headers = {
-            "X-Naver-Client-Id": self.client_id,
-            "X-Naver-Client-Secret": self.client_secret,
+            NAVER_API_HUB_ID_HEADER: self.client_id,
+            NAVER_API_HUB_SECRET_HEADER: self.client_secret,
         }
         params = {
             "query": query,
@@ -89,9 +99,9 @@ class NaverNewsCollector(BaseCollector):
             "start": 1,
             "sort": self.sort,
         }
-        response = requests.get(self.endpoint, headers=headers, params=params, timeout=20)
+        response = self._request_get(self.endpoint, headers=headers, params=params, timeout=20)
         if response.status_code in (401, 403):
-            raise RuntimeError("네이버 뉴스 API 인증 오류입니다. NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET을 확인하세요.")
+            raise RuntimeError("NAVER API HUB authentication or subscription error.")
         response.raise_for_status()
         try:
             payload = response.json()

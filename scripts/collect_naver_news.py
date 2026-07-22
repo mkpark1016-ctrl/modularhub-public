@@ -9,12 +9,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.collector_runner import run_collector
 from src.collectors import NaverNewsCollector
-from src.config import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
+from src.config import NAVER_API_HUB_CLIENT_ID, NAVER_API_HUB_CLIENT_SECRET
 
 
 def main() -> int:
-    if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
-        print(".env에 NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET을 설정하세요.")
+    if not NAVER_API_HUB_CLIENT_ID or not NAVER_API_HUB_CLIENT_SECRET:
+        print("NAVER_API_HUB_CLIENT_ID configured: false")
+        print("NAVER_API_HUB_CLIENT_SECRET configured: false")
     result = run_collector(NaverNewsCollector())
     print(
         f"{result.collector_name}: status={result.status}, "

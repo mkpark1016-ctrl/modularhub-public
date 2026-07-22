@@ -6,7 +6,7 @@ import re
 import sqlite3
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -425,6 +425,99 @@ def latest_log(logs: Any, collector_name: str, source_type: str | None = None) -
     return matches.iloc[0].to_dict()
 
 
+def parse_public_datetime(value: Any) -> datetime | None:
+    text = clean_text(value)
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed
+    except ValueError:
+        pass
+    for fmt in ("%Y-%m-%d", "%Y%m%d"):
+        try:
+            return datetime.strptime(text[:10], fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+
+def latest_news_published_at(
+    items: list[dict[str, Any]],
+    *,
+    source: str | None = None,
+    relevance_level: str | None = None,
+) -> str:
+    latest: datetime | None = None
+    for item in items:
+        if source and clean_text(item.get("source")) != source:
+            continue
+        if relevance_level and clean_text(item.get("relevance_level")) != relevance_level:
+            continue
+        parsed = parse_public_datetime(item.get("published_at"))
+        if parsed and (latest is None or parsed > latest):
+            latest = parsed
+    return latest.isoformat() if latest else ""
+
+
+def safe_http_status(error_message: str) -> str:
+    match = re.search(r"\bHTTP\s+(\d{3})\b", error_message, flags=re.IGNORECASE)
+    return match.group(1) if match else ""
+
+
+def news_source_status_row(
+    logs: Any,
+    final_news: list[dict[str, Any]],
+    *,
+    source_id: str,
+    source_name: str,
+    display_name: str,
+    collector_name: str,
+    source_type: str = "news",
+) -> dict[str, Any]:
+    log = latest_log(logs, collector_name, source_type)
+    source_items = [item for item in final_news if clean_text(item.get("source")) == source_name]
+    status = clean_text((log or {}).get("status")) or ("success" if source_items else "not_collected")
+    inserted = int((log or {}).get("inserted_count") or 0)
+    updated = int((log or {}).get("updated_count") or 0)
+    skipped = int((log or {}).get("skipped_count") or 0)
+    fetched = inserted + updated + skipped
+    error = sanitize_string(clean_text((log or {}).get("error_message")))
+    if status == "success" and not source_items:
+        status = "success_no_public_match"
+    return {
+        "id": source_id,
+        "name": display_name,
+        "source_name": source_name,
+        "source_type": source_type,
+        "last_attempted_at": clean_text((log or {}).get("started_at")),
+        "last_successful_at": clean_text((log or {}).get("finished_at")) if clean_text(status) in {"success", "success_no_public_match"} else "",
+        "latest_item_published_at": latest_news_published_at(source_items),
+        "fetched_count": fetched,
+        "accepted_count": len(source_items),
+        "rejected_count": 0,
+        "duplicate_count": skipped,
+        "http_status": safe_http_status(error),
+        "state": status,
+        "safe_error_category": "none" if status in {"success", "success_no_public_match"} else ("auth_or_permission" if "auth" in error.lower() or "401" in error or "403" in error else "collector_error"),
+    }
+
+
+def news_freshness_state(generated_at: str, latest_published_at: str) -> str:
+    generated = parse_public_datetime(generated_at)
+    latest = parse_public_datetime(latest_published_at)
+    if not generated or not latest:
+        return "unknown"
+    age = generated - latest
+    if age >= timedelta(hours=72):
+        return "stale"
+    if age >= timedelta(hours=48):
+        return "warning"
+    return "fresh"
+
+
 def collector_public_status(
     logs: Any,
     *,
@@ -685,6 +778,29 @@ def main() -> int:
         d2b_status = "disabled_stopped"
         d2b_message = "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
 
+    latest_public_news_published_at = latest_news_published_at(news)
+    latest_direct_news_published_at = latest_news_published_at(news, relevance_level="direct")
+    latest_adjacent_news_published_at = latest_news_published_at(news, relevance_level="adjacent")
+    public_news_freshness_state = news_freshness_state(generated_at, latest_public_news_published_at)
+    news_source_statuses = [
+        news_source_status_row(
+            logs,
+            news,
+            source_id="naver_api_hub",
+            source_name="네이버뉴스",
+            display_name="NAVER API HUB",
+            collector_name="네이버뉴스",
+        ),
+        news_source_status_row(
+            logs,
+            news,
+            source_id="overseas_rss",
+            source_name="해외 모듈러 RSS",
+            display_name="해외 RSS",
+            collector_name="OverseasRSSNewsCollector",
+        ),
+    ]
+
     guard_status, guard_message = guard_result(
         previous_business=len(baseline_business),
         merged_business=len(business),
@@ -709,6 +825,8 @@ def main() -> int:
         warnings.append(f"SH 민간사업자 공모: {sh_contest_meta.get('sh_contest_message')}")
     if guard_status in {"blocked", "warning", "override"}:
         warnings.append(f"공개 데이터 보호: {guard_message}")
+    if public_news_freshness_state in {"warning", "stale"}:
+        warnings.append("뉴스 데이터 최신성 확인 필요")
     workflow_status = "warning" if warnings else "success"
     common_status = {
         "g2b_order_plan_status": g2b_status,
@@ -749,6 +867,11 @@ def main() -> int:
         "news_excluded_removed_count": news_excluded_removed_count,
         "news_policy_removed_count": news_policy_removed_count,
         "news_policy_version": PUBLIC_NEWS_POLICY_VERSION,
+        "latest_public_news_published_at": latest_public_news_published_at,
+        "latest_direct_news_published_at": latest_direct_news_published_at,
+        "latest_adjacent_news_published_at": latest_adjacent_news_published_at,
+        "public_news_freshness_state": public_news_freshness_state,
+        "news_source_statuses": news_source_statuses,
         "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
         "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
         "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,
@@ -797,6 +920,11 @@ def main() -> int:
             "news_excluded_removed_count": news_excluded_removed_count,
             "news_policy_removed_count": news_policy_removed_count,
             "news_policy_version": PUBLIC_NEWS_POLICY_VERSION,
+            "latest_public_news_published_at": latest_public_news_published_at,
+            "latest_direct_news_published_at": latest_direct_news_published_at,
+            "latest_adjacent_news_published_at": latest_adjacent_news_published_at,
+            "public_news_freshness_state": public_news_freshness_state,
+            "news_source_statuses": news_source_statuses,
             "overseas_rss_before_dedup_count": overseas_rss_before_dedup_count,
             "overseas_rss_after_dedup_count": overseas_rss_after_dedup_count,
             "overseas_rss_duplicate_removed_count": overseas_rss_duplicate_removed_count,

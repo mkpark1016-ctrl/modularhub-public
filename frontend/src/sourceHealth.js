@@ -20,7 +20,7 @@ function normalizeStatus(status) {
   const normalized = String(status || "").toLowerCase();
   if (!normalized) return "unknown";
   if (normalized === "success") return "success";
-  if (normalized === "success_no_matches") return "success_no_matches";
+  if (normalized === "success_no_matches" || normalized === "success_no_public_match") return "success_no_matches";
   if (normalized === "not_collected") return "not_collected";
   if (normalized.includes("disabled") || normalized.includes("stopped")) return "disabled_stopped";
   if (normalized.includes("failed") || normalized.includes("error")) return "failed";
@@ -46,6 +46,32 @@ export function mapSourceStatus(status, { description = "" } = {}) {
     return { status: normalized, label: SOURCE_STATUS_LABELS.failed, severity: "error", description };
   }
   return { status: normalized, label: SOURCE_STATUS_LABELS.warning, severity: "warning", description };
+}
+
+function newsSourceDescription(source = {}) {
+  const parts = [];
+  if (source.latest_item_published_at) parts.push(`최신 기사 ${source.latest_item_published_at}`);
+  if (Number.isFinite(Number(source.fetched_count))) parts.push(`수집 ${Number(source.fetched_count).toLocaleString("ko-KR")}건`);
+  if (Number.isFinite(Number(source.accepted_count))) parts.push(`공개 반영 ${Number(source.accepted_count).toLocaleString("ko-KR")}건`);
+  if (Number(source.duplicate_count || 0) > 0) parts.push(`중복 ${Number(source.duplicate_count).toLocaleString("ko-KR")}건`);
+  if (source.http_status) parts.push(`HTTP ${source.http_status}`);
+  if (source.safe_error_category && source.safe_error_category !== "none") parts.push(source.safe_error_category);
+  return parts.join(" · ");
+}
+
+function dynamicNewsSources(meta = {}) {
+  if (!Array.isArray(meta.news_source_statuses)) return [];
+  return meta.news_source_statuses.map((source) => ({
+    id: source.id || source.source_name,
+    name: source.name || source.source_name || "뉴스 수집원",
+    ...mapSourceStatus(source.state, {
+      description: newsSourceDescription(source),
+    }),
+    latestItemPublishedAt: source.latest_item_published_at || "",
+    fetchedCount: Number(source.fetched_count || 0),
+    acceptedCount: Number(source.accepted_count || 0),
+    duplicateCount: Number(source.duplicate_count || 0),
+  }));
 }
 
 function activeCollectorFailed(meta = {}) {
@@ -78,6 +104,7 @@ function workflowStatus(meta = {}) {
 }
 
 export function getSourceHealth(meta = {}) {
+  const newsSources = dynamicNewsSources(meta);
   const d2b = mapSourceStatus(meta.d2b_status || meta.d2b_legacy_status || "disabled_stopped", {
     description: meta.d2b_gw_migration_required ? "GW API 전환 필요" : (meta.d2b_message || "비활성화"),
   });
@@ -98,11 +125,13 @@ export function getSourceHealth(meta = {}) {
     { id: "gh", name: "GH", ...mapSourceStatus(meta.gh_contest_status, { description: meta.gh_contest_message || "" }) },
     { id: "ih", name: "iH", ...mapSourceStatus(meta.ih_contest_status, { description: meta.ih_contest_message || "" }) },
     { id: "sh", name: "SH", ...sh },
-    {
-      id: "rss",
-      name: "해외 RSS",
-      ...mapSourceStatus("success", { description: "해외 모듈러 RSS 수집 정상" }),
-    },
+    ...(newsSources.length
+      ? newsSources
+      : [{
+        id: "rss",
+        name: "해외 RSS",
+        ...mapSourceStatus("success", { description: "해외 모듈러 RSS 수집 정상" }),
+      }]),
     {
       id: "workflow",
       name: "전체 Workflow",
