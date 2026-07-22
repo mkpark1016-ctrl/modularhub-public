@@ -171,6 +171,7 @@ try {
   await selectFilter(page, "경쟁 관계", "direct_competitor");
   await waitForCardCount(page, companySummary.directCompetitors, "direct competitor filter mismatch");
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
+  await waitForCardCount(page, companyItems.length, "company reset after competitor filter failed");
   await selectFilter(page, "역할", "modular_specialist");
   await waitForCardCount(page, companyItems.filter(isModularSpecialistCompany).length, "modular specialist role filter mismatch");
   await selectFilter(page, "데이터 상태", "core_verified");
