@@ -1,7 +1,6 @@
 import { DAESEUNG_ENGINEERING_COMPANY } from "./data/daeseungEngineeringCompany";
 
 const COMPANY_DATA_PATH = "/data/companies/companies.json";
-const HIDDEN_PUBLIC_ROUTE = "/company-intelligence";
 
 function requestUrl(input) {
   if (typeof input === "string") return input;
@@ -36,10 +35,6 @@ function appendDaeseungCompany(payload) {
 }
 
 if (typeof window !== "undefined") {
-  if (window.location.pathname === HIDDEN_PUBLIC_ROUTE || window.location.pathname.startsWith(`${HIDDEN_PUBLIC_ROUTE}/`)) {
-    window.history.replaceState({}, "", "/not-found");
-  }
-
   const originalFetch = window.fetch.bind(window);
   window.fetch = async (input, init) => {
     const response = await originalFetch(input, init);

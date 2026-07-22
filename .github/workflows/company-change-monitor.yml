@@ -1,0 +1,183 @@
+name: Company Change Monitor
+
+on:
+  schedule:
+    # 05:45 KST, after public data freshness jobs and before business hours.
+    - cron: "45 20 * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode"
+        required: true
+        default: "daily_signals"
+        type: choice
+        options:
+          - daily_signals
+          - weekly_research
+          - full_audit
+      companies:
+        description: "Comma-separated company IDs; blank means all 11"
+        required: false
+        default: ""
+        type: string
+      sources:
+        description: "Comma-separated source IDs"
+        required: true
+        default: "public_news,naver_api_hub,dart"
+        type: string
+      lookback_days:
+        description: "Signal lookback window"
+        required: true
+        default: "30"
+        type: string
+      publish:
+        description: "Must remain false; this workflow never updates public company data"
+        required: true
+        default: false
+        type: boolean
+      create_proposal:
+        description: "Create proposal metadata only when acknowledge_proposal is also true"
+        required: true
+        default: false
+        type: boolean
+      acknowledge_proposal:
+        description: "Explicitly acknowledge proposal generation"
+        required: true
+        default: false
+        type: boolean
+      acknowledge_live:
+        description: "Acknowledge configured source checks and live-capable source isolation"
+        required: true
+        default: false
+        type: boolean
+
+concurrency:
+  group: company-change-monitor-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DART_API_KEY: ${{ secrets.DART_API_KEY }}
+      NAVER_API_HUB_CLIENT_ID: ${{ secrets.NAVER_API_HUB_CLIENT_ID }}
+      NAVER_API_HUB_CLIENT_SECRET: ${{ secrets.NAVER_API_HUB_CLIENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Guard inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.publish }}" == "true" ]]; then
+            echo "publish=true is not allowed for Company Change Monitor" >&2
+            exit 2
+          fi
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.create_proposal }}" == "true" && "${{ inputs.acknowledge_proposal }}" != "true" ]]; then
+            echo "create_proposal requires acknowledge_proposal=true" >&2
+            exit 2
+          fi
+          echo "DART_API_KEY configured: $([[ -n "${DART_API_KEY:-}" ]] && echo true || echo false)"
+          echo "NAVER_API_HUB_CLIENT_ID configured: $([[ -n "${NAVER_API_HUB_CLIENT_ID:-}" ]] && echo true || echo false)"
+          echo "NAVER_API_HUB_CLIENT_SECRET configured: $([[ -n "${NAVER_API_HUB_CLIENT_SECRET:-}" ]] && echo true || echo false)"
+
+      - name: Compile and unit test
+        run: |
+          python -m compileall scripts src
+          python -m pytest tests/test_company_change_monitoring.py tests/test_company_data_quality.py -q
+
+      - name: Build company change review queue
+        id: build
+        shell: bash
+        run: |
+          MODE="${{ inputs.mode || 'daily_signals' }}"
+          COMPANIES="${{ inputs.companies || '' }}"
+          SOURCES="${{ inputs.sources || 'public_news,naver_api_hub,dart' }}"
+          LOOKBACK="${{ inputs.lookback_days || '30' }}"
+          ACK_LIVE="${{ inputs.acknowledge_live || 'true' }}"
+          python scripts/company_change_monitoring/build_change_review_queue.py \
+            --mode "$MODE" \
+            --companies "$COMPANIES" \
+            --sources "$SOURCES" \
+            --lookback-days "$LOOKBACK" \
+            --live \
+            $([[ "$ACK_LIVE" == "true" ]] && echo "--acknowledge-live")
+
+      - name: Audit candidates
+        run: python scripts/audit_company_change_candidates.py
+
+      - name: Protected public data unchanged
+        run: |
+          git diff --exit-code -- frontend/public/data/news.json frontend/public/data/business.json frontend/public/data/meta.json frontend/public/data/companies/companies.json frontend/public/data/companies/company_intelligence_v2.json
+
+      - name: Secret exposure scan
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          blocked = ["DART_API_KEY=", "NAVER_API_HUB_CLIENT_SECRET=", "Authorization:", "request_headers", "raw_response"]
+          paths = [*Path("reports/company_change_monitoring").glob("*"), *Path("artifacts/company-change-monitor").glob("*")]
+          text = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in paths if path.is_file())
+          hits = [item for item in blocked if item in text]
+          if hits:
+              raise SystemExit(f"secret_exposure_detected: true")
+          print("secret_exposure_detected: false")
+          PY
+
+      - name: Write summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          queue = json.loads(Path("data/company_change_monitoring/review_queue.json").read_text(encoding="utf-8"))
+          audit = json.loads(Path("artifacts/company-change-monitor/audit-summary.json").read_text(encoding="utf-8"))
+          print("## Company Change Monitor")
+          print(f"- Run ID: `{queue['runId']}`")
+          print(f"- Companies: `{len(queue['companies'])}`")
+          print(f"- Candidates: `{queue['candidateCount']}`")
+          print(f"- Pending: `{queue['pending']}`")
+          print(f"- Duplicate: `{queue['duplicate']}`")
+          print(f"- Conflict: `{queue['conflict']}`")
+          print(f"- Insufficient evidence: `{queue['insufficientEvidence']}`")
+          print(f"- High priority: `{queue['highPriority']}`")
+          print(f"- Audit valid: `{audit['valid']}`")
+          print(f"- Secret exposure: `{audit['secretExposureDetected']}`")
+          print(f"- Public data changed: `{audit['publicDataChanged']}`")
+          print("### Sources")
+          for source in queue["sourceStatuses"]:
+              print(f"- `{source['sourceId']}`: {source['state']} / configured={source['configured']} / raw={source['rawCount']} / normalized={source['normalizedCount']}")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: company-change-raw-summary
+          path: artifacts/company-change-monitor/raw-summary.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: company-change-normalized
+          path: artifacts/company-change-monitor/normalized-signals.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: company-change-review-queue
+          path: data/company_change_monitoring/review_queue.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: company-change-digest
+          path: reports/company_change_monitoring/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: company-change-audit
+          path: artifacts/company-change-monitor/audit-*
