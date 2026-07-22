@@ -69,6 +69,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
 
       - name: Guard inputs
         shell: bash
@@ -95,9 +99,19 @@ jobs:
           echo "NAVER_API_HUB_CLIENT_ID configured: $([[ -n "${NAVER_API_HUB_CLIENT_ID:-}" ]] && echo true || echo false)"
           echo "NAVER_API_HUB_CLIENT_SECRET configured: $([[ -n "${NAVER_API_HUB_CLIENT_SECRET:-}" ]] && echo true || echo false)"
 
-      - name: Compile and unit test
+      - name: Install Python dependencies
+        shell: bash
         run: |
-          python -m compileall scripts src
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+          python -m pip show pytest
+
+      - name: Compile Python sources
+        run: python -m compileall scripts src
+
+      - name: Run company change monitoring tests
+        run: |
           python -m pytest tests/test_company_change_monitoring.py tests/test_company_data_quality.py -q
 
       - name: Build company change review queue

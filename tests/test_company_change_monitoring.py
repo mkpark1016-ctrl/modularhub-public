@@ -111,6 +111,24 @@ def test_company_change_workflow_summary_prints_safe_flags_only() -> None:
     assert "env |" not in text
 
 
+def test_company_change_workflow_installs_python_test_dependencies_before_pytest() -> None:
+    text = workflow_text()
+    assert "cache: pip" in text
+    assert "requirements-dev.txt" in text
+    assert "Install Python dependencies" in text
+    assert "python -m pip install -r requirements-dev.txt" in text
+    assert "python -m pip show pytest" in text
+    assert "Run company change monitoring tests" in text
+    assert text.index("Install Python dependencies") < text.index("Run company change monitoring tests")
+    assert text.index("python -m pip show pytest") < text.index("python -m pytest")
+
+
+def test_dev_requirements_include_runtime_requirements_and_pytest() -> None:
+    text = Path("requirements-dev.txt").read_text(encoding="utf-8")
+    assert "-r requirements.txt" in text
+    assert "pytest" in text
+
+
 def test_source_configured_never_uses_secret_values(monkeypatch) -> None:
     monkeypatch.setenv("NAVER_API_HUB_CLIENT_ID", "dummy")
     monkeypatch.setenv("NAVER_API_HUB_CLIENT_SECRET", "dummy")
