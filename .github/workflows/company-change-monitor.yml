@@ -114,7 +114,7 @@ jobs:
         run: |
           python -m pytest tests/test_company_change_monitoring.py tests/test_company_data_quality.py -q
 
-      - name: Build company change review queue
+      - name: Collect live company change sources and build review queue
         id: build
         shell: bash
         run: |
@@ -173,7 +173,7 @@ jobs:
           print(f"- Public data changed: `{audit['publicDataChanged']}`")
           print("### Sources")
           for source in queue["sourceStatuses"]:
-              print(f"- `{source['sourceId']}`: {source['state']} / configured={source['configured']} / raw={source['rawCount']} / normalized={source['normalizedCount']}")
+              print(f"- `{source['sourceId']}`: {source['state']} / configured={source['configured']} / attempted={source.get('attempted')} / raw={source['rawCount']} / normalized={source['normalizedCount']} / error={source.get('safeErrorCategory')}")
           PY
 
       - uses: actions/upload-artifact@v4

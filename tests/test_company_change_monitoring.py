@@ -25,6 +25,7 @@ from src.company_change_monitoring import (
     valid_project_transition,
 )
 from src.company_data_quality import load_public_company_universe
+import src.company_change_monitoring as change_monitoring
 
 
 def policy(company_id: str):
@@ -123,6 +124,13 @@ def test_company_change_workflow_installs_python_test_dependencies_before_pytest
     assert text.index("python -m pip show pytest") < text.index("python -m pytest")
 
 
+def test_company_change_workflow_names_live_collection_step() -> None:
+    text = workflow_text()
+    assert "Collect live company change sources and build review queue" in text
+    assert "attempted=" in text
+    assert "safeErrorCategory" in text
+
+
 def test_dev_requirements_include_runtime_requirements_and_pytest() -> None:
     text = Path("requirements-dev.txt").read_text(encoding="utf-8")
     assert "-r requirements.txt" in text
@@ -156,6 +164,78 @@ def test_public_news_run_builds_private_candidates_without_publication() -> None
         assert candidate["riskLevel"] in RISK_LEVELS
         assert candidate["requiresHumanReview"] is True
         assert candidate["sourceIds"]
+
+
+def test_live_configured_sources_are_attempted_instead_of_deferred(monkeypatch) -> None:
+    def fake_naver(policies, *, fetched_at=None):
+        return {
+            "sourceId": "naver_api_hub",
+            "configured": True,
+            "attempted": True,
+            "state": "success_empty",
+            "raw": [],
+            "normalized": [],
+            "rejected": [],
+            "latestPublishedAt": None,
+            "safeErrorCategory": "none",
+            "companyResults": [{"companyId": policy.company_id, "attempted": True, "state": "success_empty"} for policy in policies],
+        }
+
+    def fake_dart(policies, *, lookback_days=30, fetched_at=None):
+        return {
+            "sourceId": "dart",
+            "configured": True,
+            "attempted": True,
+            "state": "success_empty",
+            "raw": [],
+            "normalized": [],
+            "rejected": [],
+            "latestPublishedAt": None,
+            "safeErrorCategory": "none",
+            "companyResults": [{"companyId": policy.company_id, "attempted": True, "state": "success_empty"} for policy in policies],
+        }
+
+    monkeypatch.setenv("NAVER_API_HUB_CLIENT_ID", "configured")
+    monkeypatch.setenv("NAVER_API_HUB_CLIENT_SECRET", "configured")
+    monkeypatch.setenv("DART_API_KEY", "configured")
+    monkeypatch.setattr(change_monitoring, "collect_naver_api_hub_signals", fake_naver)
+    monkeypatch.setattr(change_monitoring, "collect_dart_signals", fake_dart)
+
+    run = build_change_monitor_run(
+        companies=["gs-ec", "yuchang-enc", "daeseung-engineering"],
+        sources=["public_news", "naver_api_hub", "dart"],
+        lookback_days=30,
+        live=True,
+        acknowledge_live=True,
+    )
+    statuses = {source["sourceId"]: source for source in run["sourceStatuses"]}
+    assert statuses["naver_api_hub"]["attempted"] is True
+    assert statuses["dart"]["attempted"] is True
+    assert statuses["naver_api_hub"]["state"] != "configured_deferred_to_source_adapter"
+    assert statuses["dart"]["state"] != "configured_deferred_to_source_adapter"
+    assert audit_change_run(run)["valid"] is True
+
+
+def test_audit_rejects_deferred_configured_source_status() -> None:
+    run = build_change_monitor_run(companies=["kumkang-kind"], sources=["public_news"], lookback_days=30)
+    run["sources"] = ["naver_api_hub"]
+    run["sourceStatuses"] = [
+        {
+            "sourceId": "naver_api_hub",
+            "configured": True,
+            "attempted": False,
+            "state": "configured_deferred_to_source_adapter",
+            "rawCount": 0,
+            "normalizedCount": 0,
+            "identityRejected": 0,
+            "latestPublishedAt": None,
+            "safeErrorCategory": "none",
+        }
+    ]
+    summary = audit_change_run(run)
+    assert summary["deferredSourceStatusCount"] == 1
+    assert summary["unattemptedConfiguredSourceCount"] == 1
+    assert summary["valid"] is False
 
 
 def test_review_queue_payload_keeps_candidates_internal() -> None:

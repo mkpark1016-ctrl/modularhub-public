@@ -53,6 +53,8 @@ def main() -> int:
             publish=args.publish,
             create_proposal=args.create_proposal,
             acknowledge_proposal=args.acknowledge_proposal,
+            live=args.live,
+            acknowledge_live=args.acknowledge_live,
         )
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

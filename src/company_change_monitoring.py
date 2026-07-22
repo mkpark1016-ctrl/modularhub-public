@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from src.company_data_quality import load_public_company_universe, source_registry
+from scripts.company_monitoring.common import MonitorCompany, safe_error_message
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_DIR = ROOT / "config" / "company_change_monitoring"
@@ -198,6 +199,31 @@ def source_configured(source_id: str) -> bool:
     return False
 
 
+def source_tier(source_id: str, root: Path = ROOT) -> str:
+    policy = load_source_policy(root)
+    for row in policy.get("sources", []):
+        if row.get("sourceId") == source_id:
+            return row.get("sourceTier") or "tier_2"
+    return "tier_2"
+
+
+def identity_policy_as_monitor_company(policy: IdentityPolicy, *, source_id: str) -> MonitorCompany:
+    enabled_source = "naver_search" if source_id == "naver_api_hub" else source_id
+    return MonitorCompany(
+        company_id=policy.company_id,
+        canonical_name=policy.display_name,
+        aliases=policy.aliases,
+        english_names=policy.english_names,
+        dart_corp_code=policy.corp_code,
+        stock_code=None,
+        official_domains=policy.official_domains,
+        positive_keywords=(*policy.positive_keywords, *policy.modular_keywords),
+        negative_keywords=(*policy.negative_keywords, *policy.excluded_entities),
+        enabled_sources=(enabled_source,),
+        enabled=True,
+    )
+
+
 def company_index(root: Path = ROOT) -> dict[str, dict[str, Any]]:
     return {row["company_id"]: row for row in load_public_company_universe(root)}
 
@@ -299,8 +325,35 @@ def raw_signal_from_news(news: dict[str, Any], policy: IdentityPolicy, match: di
     }
 
 
+def raw_signal_from_monitor_candidate(candidate: dict[str, Any], policy: IdentityPolicy, source_id: str, fetched_at: str) -> dict[str, Any]:
+    title = candidate.get("title") or ""
+    summary = candidate.get("summary") or title
+    url = candidate.get("source_url") or ""
+    published_at = parse_date(candidate.get("published_at"))
+    raw_id = f"raw-{stable_hash(policy.company_id, source_id, candidate.get('source_id'), title, url)}"
+    return {
+        "rawId": raw_id,
+        "sourceId": source_id,
+        "companyId": policy.company_id,
+        "query": candidate.get("query") or source_id,
+        "fetchedAt": fetched_at,
+        "publishedAt": published_at,
+        "title": title,
+        "url": url,
+        "originalPayloadRef": f"{source_id}:{candidate.get('source_id') or candidate.get('document_id') or raw_id}",
+        "identityEvidence": {
+            "score": round(float(candidate.get("entity_match_score") or 0.0), 2),
+            "matchedAlias": [],
+            "matchedKeyword": [],
+            "matchReason": "source_adapter_candidate",
+        },
+        "rawHash": stable_hash(policy.company_id, source_id, candidate.get("evidence_hash"), title, url, length=32),
+        "summary": summary,
+    }
+
+
 def normalize_signal(raw: dict[str, Any], source_tier: str = "tier_2") -> dict[str, Any]:
-    classified = classify_signal(raw.get("title", ""), "")
+    classified = classify_signal(raw.get("title", ""), raw.get("summary", ""))
     signal_id = f"signal-{stable_hash(raw['companyId'], raw['sourceId'], raw['rawHash'])}"
     return {
         "signalId": signal_id,
@@ -376,12 +429,236 @@ def collect_public_news_signals(
     return {
         "sourceId": "public_news",
         "configured": True,
-        "state": "success",
+        "attempted": True,
+        "state": "success_with_candidates" if normalized else "success_empty",
         "raw": raw,
         "normalized": normalized,
         "rejected": rejected,
         "latestPublishedAt": latest,
         "fetchedAt": fetched_at,
+    }
+
+
+def naver_safe_error_category(exc: Exception) -> str:
+    from scripts.company_monitoring.collect_naver_search import naver_error_category
+
+    return naver_error_category(exc)
+
+
+def dart_safe_error_category(exc: Exception) -> str:
+    text = str(exc).lower()
+    if "api_key" in text or "crtfc_key" in text or "opendart_status_010" in text:
+        return "auth_error"
+    if "opendart_status_013" in text:
+        return "success_empty"
+    if "429" in text or "rate" in text:
+        return "rate_limited"
+    if "json" in text or "parse" in text:
+        return "response_parse_error"
+    return "transport_error"
+
+
+def collect_naver_api_hub_signals(
+    policies: list[IdentityPolicy],
+    *,
+    fetched_at: str | None = None,
+) -> dict[str, Any]:
+    from scripts.company_monitoring.collect_naver_search import collect_for_company
+
+    fetched_at = fetched_at or iso_now()
+    configured = source_configured("naver_api_hub")
+    raw: list[dict[str, Any]] = []
+    normalized: list[dict[str, Any]] = []
+    rejected: list[dict[str, Any]] = []
+    company_results: list[dict[str, Any]] = []
+    error_categories: Counter[str] = Counter()
+    latest: str | None = None
+
+    if not configured:
+        return {
+            "sourceId": "naver_api_hub",
+            "configured": False,
+            "attempted": False,
+            "state": "source_not_configured",
+            "raw": raw,
+            "normalized": normalized,
+            "rejected": rejected,
+            "latestPublishedAt": None,
+            "safeErrorCategory": "missing_secret_or_adapter",
+            "companyResults": company_results,
+        }
+
+    tier = source_tier("naver_api_hub")
+    for policy in policies:
+        try:
+            monitor_company = identity_policy_as_monitor_company(policy, source_id="naver_api_hub")
+            result = collect_for_company(monitor_company, fetched_at)
+            candidates = result.get("candidates") or []
+            rejected_items = result.get("rejected") or []
+            for candidate in candidates:
+                raw_signal = raw_signal_from_monitor_candidate(candidate, policy, "naver_api_hub", fetched_at)
+                raw.append(raw_signal)
+                normalized.append(normalize_signal(raw_signal, source_tier=tier))
+                if raw_signal.get("publishedAt") and (latest is None or raw_signal["publishedAt"] > latest):
+                    latest = raw_signal["publishedAt"]
+            rejected.extend({"companyId": policy.company_id, **item} for item in rejected_items)
+            company_results.append(
+                {
+                    "companyId": policy.company_id,
+                    "attempted": True,
+                    "state": "success_with_candidates" if candidates else "success_empty",
+                    "rawRecordCount": len(result.get("records") or []),
+                    "candidateCount": len(candidates),
+                    "rejectedCount": len(rejected_items),
+                    "safeErrorCategory": "none",
+                }
+            )
+        except Exception as exc:  # source-level failure isolation
+            category = naver_safe_error_category(exc)
+            error_categories[category] += 1
+            company_results.append(
+                {
+                    "companyId": policy.company_id,
+                    "attempted": True,
+                    "state": category,
+                    "rawRecordCount": 0,
+                    "candidateCount": 0,
+                    "rejectedCount": 0,
+                    "safeErrorCategory": category,
+                    "safeErrorMessage": safe_error_message(exc, "naver_api_hub_error"),
+                }
+            )
+
+    if normalized:
+        state = "success_with_candidates"
+    elif error_categories and len(error_categories) == len(policies):
+        state = next(iter(error_categories))
+    elif error_categories:
+        state = "partial_success_with_source_warning"
+    else:
+        state = "success_empty"
+
+    return {
+        "sourceId": "naver_api_hub",
+        "configured": True,
+        "attempted": True,
+        "state": state,
+        "raw": raw,
+        "normalized": normalized,
+        "rejected": rejected,
+        "latestPublishedAt": latest,
+        "safeErrorCategory": "none" if not error_categories else ",".join(sorted(error_categories)),
+        "companyResults": company_results,
+    }
+
+
+def collect_dart_signals(
+    policies: list[IdentityPolicy],
+    *,
+    lookback_days: int = 30,
+    fetched_at: str | None = None,
+) -> dict[str, Any]:
+    from scripts.company_monitoring.collect_dart import collect_for_company
+
+    fetched_at = fetched_at or iso_now()
+    configured = source_configured("dart")
+    raw: list[dict[str, Any]] = []
+    normalized: list[dict[str, Any]] = []
+    rejected: list[dict[str, Any]] = []
+    company_results: list[dict[str, Any]] = []
+    error_categories: Counter[str] = Counter()
+    latest: str | None = None
+
+    if not configured:
+        return {
+            "sourceId": "dart",
+            "configured": False,
+            "attempted": False,
+            "state": "source_not_configured",
+            "raw": raw,
+            "normalized": normalized,
+            "rejected": rejected,
+            "latestPublishedAt": None,
+            "safeErrorCategory": "missing_secret_or_adapter",
+            "companyResults": company_results,
+        }
+
+    tier = source_tier("dart")
+    for policy in policies:
+        if not policy.corp_code:
+            company_results.append(
+                {
+                    "companyId": policy.company_id,
+                    "attempted": False,
+                    "state": "identity_mapping_missing",
+                    "rawRecordCount": 0,
+                    "candidateCount": 0,
+                    "rejectedCount": 0,
+                    "safeErrorCategory": "identity_mapping_missing",
+                }
+            )
+            continue
+        try:
+            monitor_company = identity_policy_as_monitor_company(policy, source_id="dart")
+            result = collect_for_company(monitor_company, lookback_days, fetched_at)
+            candidates = result.get("candidates") or []
+            for candidate in candidates:
+                raw_signal = raw_signal_from_monitor_candidate(candidate, policy, "dart", fetched_at)
+                raw.append(raw_signal)
+                normalized.append(normalize_signal(raw_signal, source_tier=tier))
+                if raw_signal.get("publishedAt") and (latest is None or raw_signal["publishedAt"] > latest):
+                    latest = raw_signal["publishedAt"]
+            company_results.append(
+                {
+                    "companyId": policy.company_id,
+                    "attempted": True,
+                    "state": "success_with_candidates" if candidates else "success_empty",
+                    "rawRecordCount": len(result.get("records") or []),
+                    "candidateCount": len(candidates),
+                    "rejectedCount": 0,
+                    "safeErrorCategory": "none",
+                }
+            )
+        except Exception as exc:  # source-level failure isolation
+            category = dart_safe_error_category(exc)
+            error_categories[category] += 1
+            company_results.append(
+                {
+                    "companyId": policy.company_id,
+                    "attempted": True,
+                    "state": category,
+                    "rawRecordCount": 0,
+                    "candidateCount": 0,
+                    "rejectedCount": 0,
+                    "safeErrorCategory": category,
+                    "safeErrorMessage": safe_error_message(exc, "dart_error"),
+                }
+            )
+
+    attempted = any(row["attempted"] for row in company_results)
+    identity_missing_count = sum(1 for row in company_results if row["state"] == "identity_mapping_missing")
+    if normalized:
+        state = "success_with_candidates"
+    elif error_categories and sum(error_categories.values()) == len([row for row in company_results if row["attempted"]]):
+        state = next(iter(error_categories))
+    elif error_categories:
+        state = "partial_success_with_source_warning"
+    elif identity_missing_count == len(company_results):
+        state = "identity_mapping_missing"
+    else:
+        state = "success_empty"
+
+    return {
+        "sourceId": "dart",
+        "configured": True,
+        "attempted": attempted,
+        "state": state,
+        "raw": raw,
+        "normalized": normalized,
+        "rejected": rejected,
+        "latestPublishedAt": latest,
+        "safeErrorCategory": "identity_mapping_missing" if state == "identity_mapping_missing" else "none" if not error_categories else ",".join(sorted(error_categories)),
+        "companyResults": company_results,
     }
 
 
@@ -569,6 +846,8 @@ def build_change_monitor_run(
     publish: bool = False,
     create_proposal: bool = False,
     acknowledge_proposal: bool = False,
+    live: bool = False,
+    acknowledge_live: bool = False,
     fetched_at: str | None = None,
 ) -> dict[str, Any]:
     if publish:
@@ -596,35 +875,70 @@ def build_change_monitor_run(
     for source_id in source_ids:
         if source_id == "public_news":
             result = collect_public_news_signals(policies, root=root, lookback_days=lookback_days, fetched_at=fetched_at, max_per_company=20)
-            raw.extend(result["raw"])
-            normalized.extend(result["normalized"])
-            identity_rejected += len(result["rejected"])
-            source_statuses.append(
-                {
+        elif source_id == "naver_api_hub":
+            if live and acknowledge_live:
+                result = collect_naver_api_hub_signals(policies, fetched_at=fetched_at)
+            else:
+                result = {
                     "sourceId": source_id,
-                    "configured": True,
-                    "state": result["state"],
-                    "rawCount": len(result["raw"]),
-                    "normalizedCount": len(result["normalized"]),
-                    "identityRejected": len(result["rejected"]),
-                    "latestPublishedAt": result["latestPublishedAt"],
-                    "safeErrorCategory": "none",
+                    "configured": source_configured(source_id),
+                    "attempted": False,
+                    "state": "live_opt_in_required",
+                    "raw": [],
+                    "normalized": [],
+                    "rejected": [],
+                    "latestPublishedAt": None,
+                    "safeErrorCategory": "live_opt_in_required",
+                    "companyResults": [],
                 }
-            )
+        elif source_id == "dart":
+            if live and acknowledge_live:
+                result = collect_dart_signals(policies, lookback_days=lookback_days, fetched_at=fetched_at)
+            else:
+                result = {
+                    "sourceId": source_id,
+                    "configured": source_configured(source_id),
+                    "attempted": False,
+                    "state": "live_opt_in_required",
+                    "raw": [],
+                    "normalized": [],
+                    "rejected": [],
+                    "latestPublishedAt": None,
+                    "safeErrorCategory": "live_opt_in_required",
+                    "companyResults": [],
+                }
         else:
             configured = source_configured(source_id)
-            source_statuses.append(
-                {
-                    "sourceId": source_id,
-                    "configured": configured,
-                    "state": "configured_deferred_to_source_adapter" if configured else "source_not_configured",
-                    "rawCount": 0,
-                    "normalizedCount": 0,
-                    "identityRejected": 0,
-                    "latestPublishedAt": None,
-                    "safeErrorCategory": "none" if configured else "missing_secret_or_adapter",
-                }
-            )
+            result = {
+                "sourceId": source_id,
+                "configured": configured,
+                "attempted": False,
+                "state": "unsupported_source",
+                "raw": [],
+                "normalized": [],
+                "rejected": [],
+                "latestPublishedAt": None,
+                "safeErrorCategory": "unsupported_source",
+                "companyResults": [],
+            }
+
+        raw.extend(result["raw"])
+        normalized.extend(result["normalized"])
+        identity_rejected += len(result["rejected"])
+        source_statuses.append(
+            {
+                "sourceId": source_id,
+                "configured": result["configured"],
+                "attempted": result.get("attempted", False),
+                "state": result["state"],
+                "rawCount": len(result["raw"]),
+                "normalizedCount": len(result["normalized"]),
+                "identityRejected": len(result["rejected"]),
+                "latestPublishedAt": result["latestPublishedAt"],
+                "safeErrorCategory": result.get("safeErrorCategory", "none"),
+                "companyResults": result.get("companyResults", []),
+            }
+        )
 
     candidates = [candidate_from_signal(company_map[signal["companyId"]], signal) for signal in normalized]
     candidates = dedupe_and_conflict(candidates)
@@ -777,6 +1091,22 @@ def audit_change_run(run: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any
         fingerprints.append(candidate.get("fingerprint"))
     duplicate_fingerprint_errors = len(fingerprints) - len(set(fingerprints)) - run.get("duplicate", 0)
     duplicate_fingerprint_errors = max(0, duplicate_fingerprint_errors)
+    selected_sources = set(run.get("sources") or [])
+    source_statuses = run.get("sourceStatuses") or []
+    deferred_source_statuses = [
+        source
+        for source in source_statuses
+        if source.get("state") == "configured_deferred_to_source_adapter"
+    ]
+    unattempted_configured_sources = [
+        source
+        for source in source_statuses
+        if source.get("sourceId") in {"naver_api_hub", "dart"}
+        and source.get("sourceId") in selected_sources
+        and source.get("configured") is True
+        and not source.get("attempted")
+        and source.get("state") not in {"identity_mapping_missing"}
+    ]
     summary = {
         "schemaVersion": "company-change-audit-v1",
         "generatedAt": iso_now(),
@@ -786,6 +1116,8 @@ def audit_change_run(run: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any
         "invalidCandidateCount": len(set(invalid_candidates)),
         "missingDuplicateOfCount": len([target for target in duplicate_targets if target not in set(candidate_ids)]),
         "duplicateFingerprintErrors": duplicate_fingerprint_errors,
+        "deferredSourceStatusCount": len(deferred_source_statuses),
+        "unattemptedConfiguredSourceCount": len(unattempted_configured_sources),
         "publicReviewQueueExposureCount": len([path for path in public_paths if "company-change" in path or "review_queue" in path]),
         "secretExposureDetected": any(pattern in serialized for pattern in secret_patterns),
         "publicDataChanged": bool(run.get("publicDataChanged")),
@@ -805,6 +1137,8 @@ def audit_change_run(run: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any
             summary["invalidCandidateCount"] == 0,
             summary["missingDuplicateOfCount"] == 0,
             summary["duplicateFingerprintErrors"] == 0,
+            summary["deferredSourceStatusCount"] == 0,
+            summary["unattemptedConfiguredSourceCount"] == 0,
             summary["publicReviewQueueExposureCount"] == 0,
             not summary["secretExposureDetected"],
             not summary["publicDataChanged"],
@@ -826,6 +1160,8 @@ def write_audit_outputs(summary: dict[str, Any], *, root: Path = ROOT) -> dict[s
         f"- Invalid candidates: `{summary['invalidCandidateCount']}`",
         f"- Missing duplicate refs: `{summary['missingDuplicateOfCount']}`",
         f"- Duplicate fingerprint errors: `{summary['duplicateFingerprintErrors']}`",
+        f"- Deferred source statuses: `{summary['deferredSourceStatusCount']}`",
+        f"- Unattempted configured sources: `{summary['unattemptedConfiguredSourceCount']}`",
         f"- Public review queue exposure: `{summary['publicReviewQueueExposureCount']}`",
         f"- Secret exposure: `{summary['secretExposureDetected']}`",
         f"- Daeseung contamination: `{summary['daeseungContaminationCount']}`",
