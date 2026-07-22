@@ -15,15 +15,17 @@ import {
   getVerifiedProjectCount,
   normalizeComparisonSelection,
 } from "../src/companyComparison.js";
-import { compareCompanies, companyMatchesFilters, getCompanyItems, getCompanyProjectSummary } from "../src/companyInsights.js";
+import { compareCompanies, companyMatchesFilters, getCompanyItems, getCompanyProjectSummary, getCompanyTypeLabel, isModularSpecialistCompany } from "../src/companyInsights.js";
+import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
-const companies = getCompanyItems(payload);
+const companies = [...getCompanyItems(payload), DAESEUNG_ENGINEERING_COMPANY];
 const byId = (id) => companies.find((company) => company.company_id === id);
 
-assert.equal(companies.length, 10);
+assert.equal(companies.length, 11);
 assert.equal(companies.filter((company) => company.company_type === "general_contractor").length, 4);
-assert.equal(companies.filter((company) => ["specialist_manufacturer", "modular_integrator"].includes(company.company_type)).length, 6);
+assert.equal(companies.filter(isModularSpecialistCompany).length, 7);
+assert.equal(getCompanyTypeLabel(byId("nrb")), "모듈러 제작 전문 업체");
 
 const gs = byId("gs-ec");
 assert.equal(getLatestFinancialYear(gs), 2025);
@@ -49,8 +51,9 @@ assert.equal(yuchangMetric.technologyCount, getTechnologyCount(yuchang));
 assert.equal(getVerifiedProjectCount(yuchang), getCompanyProjectSummary(yuchang).verified);
 assert.ok(getPipelineProjectCount(yuchang) > 0);
 
-const producerGroup = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "producer_group", relationship: "all", tier: "all", status: "all" }));
-assert.equal(producerGroup.length, 6);
+const producerGroup = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "modular_specialist", relationship: "all", tier: "all", status: "all" }));
+assert.equal(producerGroup.length, 7);
+assert.equal(companies.filter((company) => companyMatchesFilters(company, { q: "", role: "producer_group", relationship: "all", tier: "all", status: "all" })).length, 7);
 
 const normalized = normalizeComparisonSelection(["gs-ec", "bad-id", "gs-ec", "yuchang-enc", "nrb", "planm", "dl-enc"], companies);
 assert.deepEqual(normalized, ["gs-ec", "yuchang-enc", "nrb", "planm"]);

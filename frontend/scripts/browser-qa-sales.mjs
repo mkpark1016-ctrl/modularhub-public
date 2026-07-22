@@ -5,7 +5,7 @@ import { getBusinessPriorityInfo, getBusinessSummary, isImportantBusiness, parse
 import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
-import { getCompanyDataStatus, getCompanyItems, getCompanySummary } from "../src/companyInsights.js";
+import { getCompanyDataStatus, getCompanyItems, getCompanySummary, isModularSpecialistCompany } from "../src/companyInsights.js";
 import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
@@ -160,13 +160,24 @@ try {
   const companyText = await page.locator("main").innerText();
   check(companyText.includes(`전체 ${companySummary.total.toLocaleString("ko-KR")}개사`), "company summary total mismatch");
   check(companyText.includes(`핵심 정보 검증 ${companySummary.coreVerified.toLocaleString("ko-KR")}개사`), "company core verified summary mismatch");
+  check(await page.locator(".company-quick-filters").count() === 0, "company role quick filter row should not render");
+  const roleSelect = selectForLabel(page, "역할");
+  const roleOptions = await roleSelect.locator("option").evaluateAll((options) => options.map((option) => ({ value: option.value, text: option.textContent })));
+  check(roleOptions.length === 3, "role dropdown should contain all + two public role groups");
+  check(roleOptions.some((option) => option.value === "general_contractor" && option.text.includes("건설사")), "general contractor role option missing");
+  check(roleOptions.some((option) => option.value === "modular_specialist" && option.text.includes("모듈러 제작 전문 업체")), "modular specialist role option missing");
+  check(!roleOptions.some((option) => option.text.includes("전문 제작·통합사") || option.text.includes("모듈러 통합사")), "legacy role option should not be visible");
+  check(companyText.includes("모듈러 제작 전문 업체"), "canonical modular specialist label missing");
   await selectFilter(page, "경쟁 관계", "direct_competitor");
   await waitForCardCount(page, companySummary.directCompetitors, "direct competitor filter mismatch");
+  await page.getByRole("button", { name: "필터 초기화" }).first().click();
+  await selectFilter(page, "역할", "modular_specialist");
+  await waitForCardCount(page, companyItems.filter(isModularSpecialistCompany).length, "modular specialist role filter mismatch");
   await selectFilter(page, "데이터 상태", "core_verified");
   await waitForCardCount(
     page,
-    companyItems.filter((item) => item.competitive_role === "direct_competitor" && getCompanyDataStatus(item) === "core_verified").length,
-    "direct competitor + core verified company filter mismatch",
+    companyItems.filter((item) => isModularSpecialistCompany(item) && getCompanyDataStatus(item) === "core_verified").length,
+    "modular specialist + core verified company filter mismatch",
   );
   await page.getByRole("button", { name: "필터 초기화" }).first().click();
   await waitForCardCount(page, companyItems.length, "company pre-search reset mismatch");

@@ -5,6 +5,11 @@ const LEGACY_STATUS_ALIASES = {
   partial: "partially_verified",
   collecting: "research_in_progress",
 };
+const LEGACY_ROLE_ALIASES = {
+  specialist_manufacturer: "modular_specialist",
+  modular_integrator: "modular_specialist",
+  producer_group: "modular_specialist",
+};
 
 export function sanitizeCompanySearchParams(searchParams, validValues) {
   const next = new URLSearchParams(searchParams);
@@ -12,6 +17,11 @@ export function sanitizeCompanySearchParams(searchParams, validValues) {
   const legacyStatus = next.get("status");
   if (LEGACY_STATUS_ALIASES[legacyStatus]) {
     next.set("status", LEGACY_STATUS_ALIASES[legacyStatus]);
+    changed = true;
+  }
+  const legacyRole = next.get("role");
+  if (LEGACY_ROLE_ALIASES[legacyRole]) {
+    next.set("role", LEGACY_ROLE_ALIASES[legacyRole]);
     changed = true;
   }
   const rules = {

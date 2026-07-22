@@ -38,8 +38,10 @@ export function normalizeCompanyTab(value) {
 }
 
 const VALUE_LABELS = {
-  specialist_manufacturer: "전문 제작사",
-  modular_integrator: "모듈러 통합사",
+  specialist_manufacturer: "모듈러 제작 전문 업체",
+  modular_integrator: "모듈러 제작 전문 업체",
+  modular_specialist: "모듈러 제작 전문 업체",
+  producer_group: "모듈러 제작 전문 업체",
   design_firm: "설계사",
   engineering_firm: "엔지니어링사",
   material_supplier: "자재 공급사",

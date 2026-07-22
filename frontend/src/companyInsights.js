@@ -1,13 +1,20 @@
 export const COMPANY_TYPE_LABELS = {
   general_contractor: "건설사",
-  specialist_manufacturer: "전문 제작사",
-  modular_integrator: "모듈러 통합사",
-  producer_group: "전문 제작·통합사",
+  specialist_manufacturer: "모듈러 제작 전문 업체",
+  modular_integrator: "모듈러 제작 전문 업체",
+  modular_specialist: "모듈러 제작 전문 업체",
+  producer_group: "모듈러 제작 전문 업체",
   design_firm: "설계사",
   engineering_firm: "엔지니어링사",
   material_supplier: "자재 공급사",
   solution_provider: "솔루션 기업",
 };
+
+export const MODULAR_SPECIALIST_ROLE = "modular_specialist";
+export const LEGACY_PRODUCER_GROUP_ROLE = "producer_group";
+export const CANONICAL_COMPANY_ROLE_VALUES = ["general_contractor", MODULAR_SPECIALIST_ROLE];
+export const MODULAR_SPECIALIST_COMPANY_TYPES = new Set(["specialist_manufacturer", "modular_integrator", MODULAR_SPECIALIST_ROLE, LEGACY_PRODUCER_GROUP_ROLE]);
+export const LEGACY_MODULAR_SPECIALIST_SEARCH_LABELS = ["전문 제작사", "모듈러 통합사", "전문 제작·통합사", "전문 제작·통합업체"];
 
 export const COMPETITIVE_ROLE_LABELS = {
   direct_competitor: "직접 경쟁사",
@@ -225,8 +232,24 @@ export function labelFromMap(map, value, fallback = "확인 중") {
   return map[value] || fallback;
 }
 
+export function getCanonicalCompanyRole(company) {
+  const type = typeof company === "string" ? company : company?.company_type;
+  if (type === "general_contractor") return "general_contractor";
+  if (MODULAR_SPECIALIST_COMPANY_TYPES.has(type)) return MODULAR_SPECIALIST_ROLE;
+  return type || "unknown";
+}
+
+export function getCanonicalCompanyRoleLabel(companyOrRole) {
+  const role = getCanonicalCompanyRole(companyOrRole);
+  return labelFromMap(COMPANY_TYPE_LABELS, role);
+}
+
+export function isModularSpecialistCompany(company) {
+  return getCanonicalCompanyRole(company) === MODULAR_SPECIALIST_ROLE;
+}
+
 export function getCompanyTypeLabel(company) {
-  return labelFromMap(COMPANY_TYPE_LABELS, company?.company_type);
+  return getCanonicalCompanyRoleLabel(company);
 }
 
 export function getCompetitiveRoleLabel(company) {
@@ -356,6 +379,7 @@ export function companySearchText(company) {
     company?.company_name_en,
     ...(Array.isArray(company?.aliases) ? company.aliases : []),
     getCompanyTypeLabel(company),
+    ...(isModularSpecialistCompany(company) ? LEGACY_MODULAR_SPECIALIST_SEARCH_LABELS : []),
     getCompetitiveRoleLabel(company),
     getTierLabel(company),
     ...(Array.isArray(company?.modular_methods) ? company.modular_methods : []),
@@ -427,8 +451,8 @@ export function matchesCompanySearch(company, query) {
 }
 
 export function companyMatchesFilters(company, values) {
-  if (values.role === "producer_group" && !["specialist_manufacturer", "modular_integrator"].includes(company.company_type)) return false;
-  if (values.role !== "all" && values.role !== "producer_group" && company.company_type !== values.role) return false;
+  if ([MODULAR_SPECIALIST_ROLE, LEGACY_PRODUCER_GROUP_ROLE].includes(values.role) && !isModularSpecialistCompany(company)) return false;
+  if (values.role !== "all" && ![MODULAR_SPECIALIST_ROLE, LEGACY_PRODUCER_GROUP_ROLE].includes(values.role) && getCanonicalCompanyRole(company) !== values.role) return false;
   if (values.relationship !== "all" && company.competitive_role !== values.relationship) return false;
   if (values.tier !== "all" && company.analysis_tier !== values.tier) return false;
   if (values.status !== "all" && getCompanyDataStatus(company) !== values.status) return false;
@@ -461,6 +485,17 @@ export function optionCounts(companies, field, labelMap) {
     .map(([value, count]) => ({ value, label: labelMap[value] || value, count }));
 }
 
+export function companyRoleOptions(companies) {
+  const list = Array.isArray(companies) ? companies : [];
+  return CANONICAL_COMPANY_ROLE_VALUES
+    .map((value) => ({
+      value,
+      label: COMPANY_TYPE_LABELS[value],
+      count: list.filter((company) => getCanonicalCompanyRole(company) === value).length,
+    }))
+    .filter((option) => option.count > 0);
+}
+
 export function statusOptions(companies) {
   const counts = new Map();
   for (const company of companies) {
@@ -479,7 +514,7 @@ export function getCompanySummary(companies) {
     directCompetitors: list.filter((company) => company.competitive_role === "direct_competitor").length,
     coreVerified: list.filter((company) => getCompanyDataStatus(company) === "core_verified").length,
     facilityConfirmed: list.filter((company) => hasConfirmedProductionFacility(company)).length,
-    roleCounts: optionCounts(list, "company_type", COMPANY_TYPE_LABELS),
+    roleCounts: companyRoleOptions(list),
     relationshipCounts: optionCounts(list, "competitive_role", COMPETITIVE_ROLE_LABELS),
     statusCounts: statusOptions(list),
   };

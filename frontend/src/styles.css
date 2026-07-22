@@ -192,10 +192,6 @@ code { overflow-wrap: anywhere; }
 .ratio-bar b { background: #6b7280; }
 .empty-inline { margin: 0; color: #666; }
 .company-summary-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.company-quick-filters { display: flex; flex-wrap: wrap; gap: 8px; max-width: 1180px; margin: -8px auto 20px; padding: 0 22px; }
-.company-quick-filters button { min-height: 38px; padding: 0 12px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; color: #444; cursor: pointer; font-weight: 800; }
-.company-quick-filters button.active { border-color: #171717; background: #171717; color: #fff; }
-.company-quick-filters b { margin-left: 4px; }
 .company-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .company-summary-card { min-width: 0; }
 .company-card-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
