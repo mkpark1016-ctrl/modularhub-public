@@ -33,6 +33,9 @@ assert.ok(componentFiles.includes("normalizeCompanyTab(searchParams.get(\"tab\")
 assert.ok(componentFiles.includes("role=\"tablist\""));
 assert.ok(componentFiles.includes("role=\"tab\""));
 assert.ok(componentFiles.includes("ArrowRight"));
+assert.ok(componentFiles.includes("검증 수준"), "company detail should render verification level");
+assert.ok(componentFiles.includes("감사보고서 근거 확인"), "financial tab should distinguish audit evidence");
+assert.ok(componentFiles.includes("단위"), "financial tab should show source unit/currency");
 
 for (const required of ["established_at", "representative", "employee_count", "major_businesses", "gross_profit"]) {
   assert.ok(componentFiles.includes(required), `${required} must be rendered by company detail components`);

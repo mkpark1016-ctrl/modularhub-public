@@ -101,6 +101,24 @@ export const CONFIDENCE_LABELS = {
   verified_manual: "수동 검증",
 };
 
+export const VERIFICATION_LEVEL_LABELS = {
+  verified_primary: "공식자료 검증",
+  verified_cross_source: "교차 검증",
+  official_verified: "공식자료 검증",
+  cross_verified: "교차 검증",
+  partially_verified: "부분 검증",
+  secondary_only: "2차 자료 기준",
+  third_party_reported: "2차 자료 기준",
+  conflicting: "자료 상충",
+  stale: "최신성 확인 필요",
+  unverified: "미확인",
+  research_required: "추가 확인 필요",
+  not_publicly_available: "공식자료 없음",
+  not_applicable: "해당 없음",
+  core_verified: "교차 검증",
+  verified: "교차 검증",
+};
+
 export const PROJECT_ROLE_LABELS = {
   modular_manufacturer: "모듈러 제작",
   general_contractor: "종합 시공",
@@ -266,6 +284,22 @@ export function getReviewStatusLabel(company) {
 
 export function getConfidenceLabel(company) {
   return labelFromMap(CONFIDENCE_LABELS, company?.data_confidence || "unknown");
+}
+
+export function getVerificationLevelLabel(value) {
+  return labelFromMap(VERIFICATION_LEVEL_LABELS, value || "research_required", "추가 확인 필요");
+}
+
+export function getCompanyVerificationLevel(company) {
+  const status = getCompanyIntelligence(company).overall_data_status || company?.review_status;
+  if (status === "core_verified") return "verified_cross_source";
+  if (status === "verified" && company?.data_confidence === "high") return "verified_cross_source";
+  if (status === "verified") return "partially_verified";
+  return status || "research_required";
+}
+
+export function getCompanyResearchGapCount(company) {
+  return Array.isArray(company?.research_gaps) ? company.research_gaps.length : 0;
 }
 
 export function getProjectRoleLabel(project) {

@@ -201,6 +201,7 @@ code { overflow-wrap: anywhere; }
 .compare-check:has(input:checked) { border-color: #171717; background: #171717; color: #fff; }
 .compare-check input { width: 16px; height: 16px; accent-color: #171717; }
 .company-card-summary { display: -webkit-box; min-height: 42px; overflow: hidden; margin: 10px 0 12px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.55; }
+.company-card-meta { margin: 8px 0 0; color: #666; font-size: 12.5px; line-height: 1.55; }
 .company-kpi-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0 0 12px; }
 .company-kpi-list div { min-width: 0; padding: 9px; border: 1px solid #e2e2dd; border-radius: 6px; background: #fafaf7; }
 .company-kpi-list dt { color: #666; font-size: 11px; font-weight: 800; }

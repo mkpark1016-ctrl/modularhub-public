@@ -12,6 +12,10 @@ export default function CompanyFinancialTab({ company }) {
   const { financials, latestAudit } = model;
   const extraRows = financials.filter((item) => metricValue(item.net_income) !== null || metricValue(item.operating_cash_flow) !== null);
   const modularRows = financials.filter((item) => item.modular_segment_available && metricValue(item.modular_segment_revenue) !== null);
+  const financialUnit = financials[0]?.revenue?.source_unit || financials[0]?.currency || "KRW";
+  const auditedLabel = latestAudit?.receipt_number || financials.some((item) => item.audited === true)
+    ? "감사보고서 근거 확인"
+    : "감사보고서 원문 확인 중";
 
   return (
     <section className="summary company-tab-panel" id="company-tab-panel-financial" role="tabpanel" aria-labelledby="company-tab-financial">
@@ -22,8 +26,11 @@ export default function CompanyFinancialTab({ company }) {
             회사 전체 재무 · {labelValue(latestAudit?.reporting_scope || financials[0]?.reporting_scope || financials[0]?.scope)}
             {" · "}
             {labelValue(latestAudit?.accounting_standard || financials[0]?.accounting_standard)}
-            {" · 감사의견 "}
-            {labelValue(latestAudit?.audit_opinion)}
+            {" · 단위 "}
+            {labelValue(financialUnit, financialUnit)}
+            {" · "}
+            {auditedLabel}
+            {latestAudit?.audit_opinion && <> · 감사의견 {labelValue(latestAudit.audit_opinion)}</>}
           </p>
           <div className="company-table-wrap">
             <table className="company-financial-table">
