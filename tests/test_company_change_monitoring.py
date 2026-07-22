@@ -35,6 +35,10 @@ def company_map() -> dict[str, dict]:
     return {item["company_id"]: item for item in load_public_company_universe()}
 
 
+def workflow_text() -> str:
+    return Path(".github/workflows/company-change-monitor.yml").read_text(encoding="utf-8")
+
+
 def test_identity_policy_covers_current_11_companies() -> None:
     companies = company_map()
     identities = {item.company_id for item in load_identity_policies()}
@@ -69,6 +73,42 @@ def test_source_policy_defines_required_groups_and_schedule() -> None:
     source_ids = {row["sourceId"] for row in payload["sources"]}
     assert {"dart", "naver_api_hub", "public_news", "public_procurement", "patent"}.issubset(source_ids)
     assert payload["modes"]["daily_signals"] == ["dart", "naver_api_hub", "public_news"]
+
+
+def test_company_change_workflow_is_permanently_read_only() -> None:
+    text = workflow_text()
+    dispatch_block = text.split("concurrency:", 1)[0]
+    assert "\n      publish:" not in dispatch_block
+    assert "inputs.publish" not in text
+    assert 'PUBLISH="false"' in text
+    assert "--publish" not in text
+    assert "frontend/public/data/company-intelligence" not in text
+
+
+def test_company_change_workflow_uses_explicit_boolean_guards() -> None:
+    text = workflow_text()
+    assert 'ACKNOWLEDGE_LIVE="${{ inputs.acknowledge_live }}"' in text
+    assert 'CREATE_PROPOSAL="${{ inputs.create_proposal }}"' in text
+    assert 'ACKNOWLEDGE_PROPOSAL="${{ inputs.acknowledge_proposal }}"' in text
+    assert '"$CREATE_PROPOSAL" == "true"' in text
+    assert '"$ACKNOWLEDGE_PROPOSAL" != "true"' in text
+    assert '"$ACKNOWLEDGE_LIVE" != "true"' in text
+    assert '[ "$ACKNOWLEDGE_LIVE" ]' not in text
+    assert '[ "$CREATE_PROPOSAL" ]' not in text
+    assert '[ "$ACKNOWLEDGE_PROPOSAL" ]' not in text
+
+
+def test_company_change_workflow_summary_prints_safe_flags_only() -> None:
+    text = workflow_text()
+    assert "acknowledge_live:" in text
+    assert "publish: $PUBLISH" in text
+    assert "create_proposal:" in text
+    assert "acknowledge_proposal:" in text
+    assert "DART_API_KEY configured:" in text
+    assert "NAVER_API_HUB_CLIENT_ID configured:" in text
+    assert "NAVER_API_HUB_CLIENT_SECRET configured:" in text
+    assert "printenv" not in text
+    assert "env |" not in text
 
 
 def test_source_configured_never_uses_secret_values(monkeypatch) -> None:

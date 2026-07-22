@@ -30,11 +30,6 @@ on:
         required: true
         default: "30"
         type: string
-      publish:
-        description: "Must remain false; this workflow never updates public company data"
-        required: true
-        default: false
-        type: boolean
       create_proposal:
         description: "Create proposal metadata only when acknowledge_proposal is also true"
         required: true
@@ -79,18 +74,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.publish }}" == "true" ]]; then
-            echo "publish=true is not allowed for Company Change Monitor" >&2
-            exit 2
-          fi
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.create_proposal }}" == "true" && "${{ inputs.acknowledge_proposal }}" != "true" ]]; then
+          EVENT_NAME="${{ github.event_name }}"
+          ACKNOWLEDGE_LIVE="${{ inputs.acknowledge_live }}"
+          CREATE_PROPOSAL="${{ inputs.create_proposal }}"
+          ACKNOWLEDGE_PROPOSAL="${{ inputs.acknowledge_proposal }}"
+          PUBLISH="false"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && "$CREATE_PROPOSAL" == "true" && "$ACKNOWLEDGE_PROPOSAL" != "true" ]]; then
             echo "create_proposal requires acknowledge_proposal=true" >&2
             exit 2
           fi
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.acknowledge_live }}" != "true" ]]; then
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && "$ACKNOWLEDGE_LIVE" != "true" ]]; then
             echo "acknowledge_live=true is required before live-capable source checks" >&2
             exit 2
           fi
+          echo "acknowledge_live: ${ACKNOWLEDGE_LIVE:-false}"
+          echo "publish: $PUBLISH"
+          echo "create_proposal: ${CREATE_PROPOSAL:-false}"
+          echo "acknowledge_proposal: ${ACKNOWLEDGE_PROPOSAL:-false}"
           echo "DART_API_KEY configured: $([[ -n "${DART_API_KEY:-}" ]] && echo true || echo false)"
           echo "NAVER_API_HUB_CLIENT_ID configured: $([[ -n "${NAVER_API_HUB_CLIENT_ID:-}" ]] && echo true || echo false)"
           echo "NAVER_API_HUB_CLIENT_SECRET configured: $([[ -n "${NAVER_API_HUB_CLIENT_SECRET:-}" ]] && echo true || echo false)"
@@ -109,6 +109,7 @@ jobs:
           SOURCES="${{ inputs.sources || 'public_news,naver_api_hub,dart' }}"
           LOOKBACK="${{ inputs.lookback_days || '30' }}"
           ACK_LIVE="${{ github.event_name == 'workflow_dispatch' && inputs.acknowledge_live || 'true' }}"
+          PUBLISH="false"
           python scripts/company_change_monitoring/build_change_review_queue.py \
             --mode "$MODE" \
             --companies "$COMPANIES" \
