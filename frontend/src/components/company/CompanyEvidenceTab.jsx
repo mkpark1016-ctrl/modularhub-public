@@ -7,7 +7,18 @@ import {
 } from "./companyDetailHelpers";
 
 function sourceLabel(groupType) {
-  return labelValue(groupType, "기타 공개자료");
+  const labels = {
+    dart: "공식·공시",
+    company_official: "공식·공시",
+    public_official: "공공기관",
+    public_procurement: "공공기관",
+    project: "프로젝트",
+    patent: "특허",
+    media_and_research: "언론",
+    media: "언론",
+    other: "기타",
+  };
+  return labels[groupType] || labelValue(groupType, "기타");
 }
 
 export default function CompanyEvidenceTab({ company }) {
@@ -59,7 +70,7 @@ export default function CompanyEvidenceTab({ company }) {
                   {group.sources.map((source) => (
                     <div key={source.source_id}>
                       <strong>{source.title || source.publisher || sourceLabel(group.group_type)}</strong>
-                      <span>{[source.publisher, source.published_at || source.retrieved_at, source.document_id ? `문서번호 ${source.document_id}` : null].filter(Boolean).join(" · ") || "기준일 확인 중"}</span>
+                      <span>{[source.publisher, labelValue(source.source_type || group.group_type, sourceLabel(group.group_type)), source.published_at || source.retrieved_at, source.document_id ? `문서번호 ${source.document_id}` : null].filter(Boolean).join(" · ") || "기준일 확인 중"}</span>
                       {(source.url || source.source_url) && <a href={source.url || source.source_url} target="_blank" rel="noopener noreferrer">원문 보기 <ExternalLink size={13} /></a>}
                     </div>
                   ))}

@@ -33,7 +33,9 @@ export default function CompanyDetailHeader({ company }) {
           <dd>{model.kpis.latestRevenueYear ? `${model.kpis.latestRevenueYear}년 ${formatKrw(model.kpis.latestRevenue)}` : "확인되지 않음"}</dd>
         </div>
       </dl>
-      <p className="finance-note">최신 검증일 {formatDate(model.header.latestVerifiedAt)} · 데이터 신뢰도 {model.header.confidenceLabel}</p>
+      <p className="finance-note">
+        검증 수준 {model.header.verificationLevelLabel} · 최신 검증일 {formatDate(model.header.latestVerifiedAt)} · 데이터 신뢰도 {model.header.confidenceLabel}
+      </p>
     </header>
   );
 }

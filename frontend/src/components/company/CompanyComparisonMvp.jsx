@@ -6,7 +6,13 @@ import {
   getComparisonMetric,
   serializeCompareSelection,
 } from "../../companyComparison";
-import { formatKrw, formatNumber, formatPercent, labelValue } from "./companyDetailHelpers";
+import {
+  getCompanyResearchGapCount,
+  getCompanyVerificationLevel,
+  getLatestVerifiedAt,
+  getVerificationLevelLabel,
+} from "../../companyInsights";
+import { formatDate, formatKrw, formatNumber, formatPercent, labelValue } from "./companyDetailHelpers";
 
 function joinLabels(values, emptyText = "확인되지 않음") {
   const labels = (Array.isArray(values) ? values : []).map((value) => labelValue(value, "")).filter(Boolean);
@@ -35,6 +41,9 @@ function projectText(metric) {
 
 export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare }) {
   const metric = getComparisonMetric(company);
+  const gapCount = getCompanyResearchGapCount(company);
+  const verificationLevel = getVerificationLevelLabel(getCompanyVerificationLevel(company));
+  const latestVerifiedAt = formatDate(getLatestVerifiedAt(company));
   return (
     <article className="result-card company-card company-summary-card">
       <div className="card-topline">
@@ -73,6 +82,9 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
         <span>{joinLabels(metric.targetMarkets.slice(0, 3))}</span>
         <span>{joinLabels(metric.modularMethods.slice(0, 2))}</span>
       </div>
+      <p className="company-card-meta">
+        데이터 검증 수준 {verificationLevel} · 최신 검증일 {latestVerifiedAt} · {gapCount > 0 ? `조사 공백 ${formatNumber(gapCount, "건")}` : "핵심 공백 없음"}
+      </p>
       <div className="card-footer">
         <span>{metric.comparisonStatus}</span>
         <div className="card-actions">

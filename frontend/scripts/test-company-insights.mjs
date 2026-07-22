@@ -10,13 +10,16 @@ import {
   getCompanyDomainStatuses,
   getCompanyEvents,
   getCompanyItems,
+  getCompanyResearchGapCount,
   getCompanySummary,
   getCompanyTypeLabel,
+  getCompanyVerificationLevel,
   getCompetitiveRoleLabel,
   getLatestFinancial,
   getProductionCapacityLabel,
   getProductionModelLabel,
   getTierLabel,
+  getVerificationLevelLabel,
   hasConfirmedProductionFacility,
   isModularSpecialistCompany,
   matchesCompanySearch,
@@ -63,6 +66,9 @@ for (const id of verifiedIds) {
 assert.equal(getCompanyTypeLabel(byId("dl-enc")), "건설사");
 assert.equal(getCompanyTypeLabel(byId("planm")), "모듈러 제작 전문 업체");
 assert.equal(getCompanyTypeLabel(byId("daeseung-engineering")), "모듈러 제작 전문 업체");
+assert.equal(getVerificationLevelLabel(getCompanyVerificationLevel(byId("yuchang-enc"))), "교차 검증");
+assert.equal(getVerificationLevelLabel(getCompanyVerificationLevel(byId("daeseung-engineering"))), "부분 검증");
+assert.ok(getCompanyResearchGapCount(byId("daeseung-engineering")) > 0);
 assert.equal(getCompetitiveRoleLabel(byId("gs-ec")), "내부 기준");
 assert.equal(getTierLabel(byId("nrb")), "우선 분석");
 assert.equal(matchesCompanySearch(byId("planm"), "인디애나 L7 호텔"), true);
