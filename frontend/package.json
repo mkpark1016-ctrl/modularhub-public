@@ -22,7 +22,8 @@
     "test:news-country": "node scripts/test-news-country.mjs",
     "test:relevance": "node scripts/test-news-relevance.mjs",
     "test:source-health": "node scripts/test-source-health.mjs",
-    "qa:browser": "node scripts/browser-qa-runner.mjs"
+    "qa:browser": "node scripts/browser-qa-runner.mjs",
+    "qa:production": "node scripts/production-smoke-test.mjs"
   },
   "dependencies": {
     "lucide-react": "latest",

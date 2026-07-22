@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "timezone": {
+    "storage": "UTC",
+    "display": "Asia/Seoul"
+  },
+  "datasets": {
+    "news": {
+      "warningHours": 48,
+      "criticalHours": 72,
+      "countDropCriticalPercent": 20
+    },
+    "business": {
+      "warningHours": 24,
+      "criticalHours": 48,
+      "countDropCriticalPercent": 15
+    },
+    "companies": {
+      "warningDays": 30,
+      "criticalDays": 90,
+      "minimumPublicCount": 11,
+      "countDropCritical": 1
+    }
+  },
+  "sourceOverrides": {
+    "naver_api_hub": {
+      "warningHours": 48,
+      "criticalHours": 72
+    },
+    "overseas_rss": {
+      "warningHours": 72,
+      "criticalHours": 120
+    },
+    "g2b": {
+      "warningHours": 24,
+      "criticalHours": 48
+    },
+    "lh": {
+      "warningHours": 72,
+      "criticalHours": 168
+    },
+    "gh": {
+      "warningHours": 72,
+      "criticalHours": 168
+    },
+    "ih": {
+      "warningHours": 72,
+      "criticalHours": 168
+    }
+  },
+  "sourceStateAliases": {
+    "success": "healthy",
+    "fresh": "healthy",
+    "failed": "source_unavailable",
+    "auth_failed": "auth_error",
+    "permission_failed": "permission_error",
+    "disabled_stopped": "disabled",
+    "not_collected": "no_new_items"
+  },
+  "secretIndicators": [
+    "DART_API_KEY",
+    "NAVER_API_HUB_CLIENT_ID",
+    "NAVER_API_HUB_CLIENT_SECRET",
+    "X-NCP-APIGW-API-KEY",
+    "X-NCP-APIGW-API-KEY-ID",
+    "Authorization",
+    "request_headers",
+    "raw_response",
+    "traceback"
+  ]
+}

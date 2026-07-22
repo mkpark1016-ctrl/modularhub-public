@@ -8,15 +8,17 @@ on:
 
 permissions:
   contents: write
+  actions: read
+  issues: write
 
 concurrency:
-  group: update-public-data
+  group: update-public-data-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   collect-export-publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     env:
       TZ: Asia/Seoul
 
@@ -41,6 +43,9 @@ jobs:
           NAVER_API_HUB_CLIENT_ID: ${{ secrets.NAVER_API_HUB_CLIENT_ID }}
           NAVER_API_HUB_CLIENT_SECRET: ${{ secrets.NAVER_API_HUB_CLIENT_SECRET }}
         run: |
+          if [ -n "${DATA_GO_KR_SERVICE_KEY}" ]; then echo "DATA_GO_KR_SERVICE_KEY configured: true"; else echo "DATA_GO_KR_SERVICE_KEY configured: false"; fi
+          if [ -n "${NAVER_API_HUB_CLIENT_ID}" ]; then echo "NAVER_API_HUB_CLIENT_ID configured: true"; else echo "NAVER_API_HUB_CLIENT_ID configured: false"; fi
+          if [ -n "${NAVER_API_HUB_CLIENT_SECRET}" ]; then echo "NAVER_API_HUB_CLIENT_SECRET configured: true"; else echo "NAVER_API_HUB_CLIENT_SECRET configured: false"; fi
           printf '%s\n' \
             "DATA_GO_KR_SERVICE_KEY=${DATA_GO_KR_SERVICE_KEY}" \
             "NAVER_API_HUB_CLIENT_ID=${NAVER_API_HUB_CLIENT_ID}" \
@@ -320,6 +325,40 @@ jobs:
         with:
           name: business-collection-impact-audit-${{ github.run_number }}-${{ github.run_attempt }}
           path: artifacts/business-collection-impact-audit/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Audit operations freshness and safeguards
+        if: always()
+        run: |
+          set +e
+          python scripts/audit_public_data_freshness.py \
+            --output-dir artifacts/operations \
+            --strict-critical
+          code=$?
+          if [ -f artifacts/operations/freshness-report.md ]; then
+            cat artifacts/operations/freshness-report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+
+      - name: Publish operations alert issue
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/operations_issue_alert.py \
+            --summary artifacts/operations/freshness-summary.json \
+            --repo "${{ github.repository }}" \
+            --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Upload operations audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: operations-freshness-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/operations/
           if-no-files-found: ignore
           retention-days: 14
 

@@ -13,8 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.public_data_policy import load_removal_allowlist  # noqa: E402
+from src.operations_public_data import load_policy, public_company_count  # noqa: E402
 
 DATA_DIR = ROOT / "frontend" / "public" / "data"
+COMPANY_DATA_DIR = DATA_DIR / "companies"
 
 
 def load(name: str) -> dict[str, Any]:
@@ -112,6 +114,7 @@ def main() -> int:
     business = load("business").get("items", [])
     news = load("news").get("items", [])
     meta = load("meta")
+    policy = load_policy()
     head_business = (load_git_head("business") or {}).get("items", [])
     head_news = (load_git_head("news") or {}).get("items", [])
     baseline_business = largest_items("business", head_business)
@@ -158,15 +161,31 @@ def main() -> int:
         )
         return 1
 
-    business_limit = int(previous_business * 0.80)
-    news_limit = int(previous_news * 0.70)
+    business_drop_percent = float(policy["datasets"]["business"].get("countDropCriticalPercent", 15))
+    news_drop_percent = float(policy["datasets"]["news"].get("countDropCriticalPercent", 20))
+    business_limit = int(previous_business * (1 - business_drop_percent / 100))
+    news_limit = int(previous_news * (1 - news_drop_percent / 100))
     suspicious = merged_business < business_limit or effective_merged_news < news_limit
     if suspicious and not allow:
         print(
             "Public data shrink detected. "
             f"business {previous_business} -> {merged_business}, "
             f"news {previous_news} -> {merged_news}, "
-            f"policy_removed={approved_news_policy_removals}. Refusing commit."
+            f"policy_removed={approved_news_policy_removals}, "
+            f"limits=business>={business_limit},news>={news_limit}. Refusing commit."
+        )
+        return 1
+    try:
+        companies_payload = json.loads((COMPANY_DATA_DIR / "companies.json").read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"Public company data could not be read. Refusing commit. error={type(exc).__name__}")
+        return 1
+    runtime_company_count = public_company_count(companies_payload, ROOT / "frontend/src/data/daeseungEngineeringCompany.js")
+    minimum_companies = int(policy["datasets"]["companies"].get("minimumPublicCount", 11))
+    if runtime_company_count < minimum_companies:
+        print(
+            "Public company count guard failed. "
+            f"runtime_count={runtime_company_count}, minimum={minimum_companies}. Refusing commit."
         )
         return 1
     previous_source_types = count_by(baseline_business, "source_type")
