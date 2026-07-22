@@ -14,20 +14,21 @@ import {
 import { Link, NavLink, Route, Routes, useParams, useSearchParams } from "react-router-dom";
 import { matchesBusinessFilters } from "./businessFilters";
 import {
-  COMPANY_TYPE_LABELS,
   COMPETITIVE_ROLE_LABELS,
   TIER_LABELS,
   compareCompanies,
   companyMatchesFilters,
+  companyRoleOptions,
   getCompanyItems,
   getCompanySummary,
+  getCanonicalCompanyRoleLabel,
+  isModularSpecialistCompany,
   optionCounts,
   statusOptions,
 } from "./companyInsights";
 import {
   COMPANY_COMPARISON_SORT_OPTIONS,
   MAX_COMPARISON_COMPANIES,
-  PRODUCER_GROUP_ROLE,
   compareCompaniesForMvp,
   normalizeComparisonSelection,
   parseCompareParam,
@@ -90,7 +91,6 @@ import {
   CompanyCardGrid,
   CompanyComparisonBar,
   CompanyComparisonPanel,
-  CompanyQuickFilters,
 } from "./components/company/CompanyComparisonMvp";
 import CompanyIntelligenceReviewQueuePage from "./components/company/CompanyIntelligenceReviewQueuePage";
 import CompanyDetailView from "./components/company/CompanyDetailView";
@@ -771,15 +771,7 @@ function CompanyListingPage() {
   const compareButtonRef = useRef(null);
   const items = getCompanyItems(data);
   const summary = useMemo(() => getCompanySummary(items), [items]);
-  const baseRoleOptions = useMemo(() => optionCounts(items, "company_type", COMPANY_TYPE_LABELS), [items]);
-  const roleOptions = useMemo(() => [
-    ...baseRoleOptions,
-    {
-      value: PRODUCER_GROUP_ROLE,
-      label: COMPANY_TYPE_LABELS[PRODUCER_GROUP_ROLE],
-      count: items.filter((company) => ["specialist_manufacturer", "modular_integrator"].includes(company.company_type)).length,
-    },
-  ], [baseRoleOptions, items]);
+  const roleOptions = useMemo(() => companyRoleOptions(items), [items]);
   const relationshipOptions = useMemo(() => optionCounts(items, "competitive_role", COMPETITIVE_ROLE_LABELS), [items]);
   const tierOptions = useMemo(() => optionCounts(items, "analysis_tier", TIER_LABELS), [items]);
   const statusFilterOptions = useMemo(() => statusOptions(items), [items]);
@@ -849,7 +841,7 @@ function CompanyListingPage() {
 
   const chips = [
     { key: "q", active: Boolean(values.q), label: `검색어: ${values.q}`, onRemove: () => setParam("q", "") },
-    { key: "role", active: values.role !== "all", label: COMPANY_TYPE_LABELS[values.role], onRemove: () => setParam("role", "all") },
+    { key: "role", active: values.role !== "all", label: getCanonicalCompanyRoleLabel(values.role), onRemove: () => setParam("role", "all") },
     { key: "relationship", active: values.relationship !== "all", label: COMPETITIVE_ROLE_LABELS[values.relationship], onRemove: () => setParam("relationship", "all") },
     { key: "tier", active: values.tier !== "all", label: TIER_LABELS[values.tier], onRemove: () => setParam("tier", "all") },
     { key: "status", active: values.status !== "all", label: statusFilterOptions.find((option) => option.value === values.status)?.label, onRemove: () => setParam("status", "all") },
@@ -860,15 +852,14 @@ function CompanyListingPage() {
       <section className="page-heading">
         <p className="eyebrow">COMPANY</p>
         <h1>스틸 모듈러 기업정보</h1>
-        <p>건설사, 모듈러 전문 제작사, 설계사의 사업 역량과 경쟁 현황을 확인합니다.</p>
+        <p>건설사와 모듈러 제작 전문 업체의 사업 역량과 경쟁 현황을 확인합니다.</p>
       </section>
       <section className="summary-strip company-summary-strip" aria-label="기업정보 요약">
         <SummaryItem label="전체 기업" value={summary.total} suffix="개사" />
         <SummaryItem label="건설사" value={items.filter((company) => company.company_type === "general_contractor").length} suffix="개사" />
-        <SummaryItem label="전문 제작·통합사" value={items.filter((company) => ["specialist_manufacturer", "modular_integrator"].includes(company.company_type)).length} suffix="개사" />
+        <SummaryItem label="모듈러 제작 전문 업체" value={items.filter(isModularSpecialistCompany).length} suffix="개사" />
         <SummaryItem label="생산시설 확인 기업" value={summary.facilityConfirmed} suffix="개사" />
       </section>
-      <CompanyQuickFilters companies={items} activeRole={values.role} onRoleChange={(role) => setParam("role", role)} />
       <div className="content-layout">
         <CompanyFilters
           values={values}

@@ -33,36 +33,6 @@ function projectText(metric) {
   return parts.join(" · ");
 }
 
-export function CompanyQuickFilters({ companies, activeRole, onRoleChange }) {
-  const counts = useMemo(() => {
-    const list = Array.isArray(companies) ? companies : [];
-    return {
-      all: list.length,
-      general: list.filter((company) => company.company_type === "general_contractor").length,
-      producer: list.filter((company) => ["specialist_manufacturer", "modular_integrator"].includes(company.company_type)).length,
-    };
-  }, [companies]);
-  const options = [
-    { value: "all", label: "전체", count: counts.all },
-    { value: "general_contractor", label: "건설사", count: counts.general },
-    { value: "producer_group", label: "전문 제작·통합사", count: counts.producer },
-  ];
-  return (
-    <div className="company-quick-filters" aria-label="기업 유형 빠른 필터">
-      {options.map((option) => (
-        <button
-          key={option.value}
-          type="button"
-          className={activeRole === option.value ? "active" : ""}
-          onClick={() => onRoleChange(option.value)}
-        >
-          {option.label} <b>{option.count}</b>
-        </button>
-      ))}
-    </div>
-  );
-}
-
 export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare }) {
   const metric = getComparisonMetric(company);
   return (

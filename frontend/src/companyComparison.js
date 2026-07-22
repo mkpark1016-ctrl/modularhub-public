@@ -7,15 +7,18 @@ import {
   getCompetitiveRoleLabel,
   getLatestFinancial,
   getTierLabel,
+  isModularSpecialistCompany,
   isConfirmedProductionFacility,
   metricSourceValue,
+  MODULAR_SPECIALIST_ROLE,
+  MODULAR_SPECIALIST_COMPANY_TYPES,
   productionFacilities,
   productionSummary,
   technologyCount,
 } from "./companyInsights.js";
 
-export const PRODUCER_GROUP_ROLE = "producer_group";
-export const PRODUCER_COMPANY_TYPES = new Set(["specialist_manufacturer", "modular_integrator"]);
+export const PRODUCER_GROUP_ROLE = MODULAR_SPECIALIST_ROLE;
+export const PRODUCER_COMPANY_TYPES = MODULAR_SPECIALIST_COMPANY_TYPES;
 export const MAX_COMPARISON_COMPANIES = 4;
 export const MIN_COMPARISON_COMPANIES = 2;
 
@@ -149,11 +152,11 @@ export function getComparisonReadiness(metric) {
 }
 
 export function isProducerCompany(company) {
-  return PRODUCER_COMPANY_TYPES.has(company?.company_type);
+  return isModularSpecialistCompany(company);
 }
 
 export function matchesComparisonRole(company, role) {
-  if (role === PRODUCER_GROUP_ROLE) return isProducerCompany(company);
+  if (role === PRODUCER_GROUP_ROLE || role === "producer_group") return isProducerCompany(company);
   return company?.company_type === role;
 }
 
