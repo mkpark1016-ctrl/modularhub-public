@@ -8,26 +8,24 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.collectors.naver_news import clean_html
-from src.config import NAVER_CLIENT_ID, NAVER_CLIENT_SECRET, NAVER_NEWS_ENDPOINT
-
-
-def mask_key(value: str) -> str:
-    if not value:
-        return "missing"
-    return f"{value[:4]}*** (length={len(value)})"
+from src.collectors.naver_news import clean_html  # noqa: E402
+from src.config import (  # noqa: E402
+    NAVER_API_HUB_CLIENT_ID,
+    NAVER_API_HUB_CLIENT_SECRET,
+    NAVER_API_HUB_NEWS_ENDPOINT,
+)
 
 
 def main() -> int:
-    print(f"NAVER_CLIENT_ID: {mask_key(NAVER_CLIENT_ID)}")
-    print(f"NAVER_CLIENT_SECRET: {mask_key(NAVER_CLIENT_SECRET)}")
-    if not NAVER_CLIENT_ID or not NAVER_CLIENT_SECRET:
-        print("ERROR: .env에 NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET을 설정하세요.")
+    print(f"NAVER_API_HUB_CLIENT_ID configured: {bool(NAVER_API_HUB_CLIENT_ID)}")
+    print(f"NAVER_API_HUB_CLIENT_SECRET configured: {bool(NAVER_API_HUB_CLIENT_SECRET)}")
+    if not NAVER_API_HUB_CLIENT_ID or not NAVER_API_HUB_CLIENT_SECRET:
+        print("ERROR: configure NAVER_API_HUB_CLIENT_ID and NAVER_API_HUB_CLIENT_SECRET.")
         return 1
 
     headers = {
-        "X-Naver-Client-Id": NAVER_CLIENT_ID,
-        "X-Naver-Client-Secret": NAVER_CLIENT_SECRET,
+        "X-NCP-APIGW-API-KEY-ID": NAVER_API_HUB_CLIENT_ID,
+        "X-NCP-APIGW-API-KEY": NAVER_API_HUB_CLIENT_SECRET,
     }
     params = {
         "query": "모듈러 건축",
@@ -35,10 +33,10 @@ def main() -> int:
         "start": 1,
         "sort": "date",
     }
-    response = requests.get(NAVER_NEWS_ENDPOINT, headers=headers, params=params, timeout=20)
+    response = requests.get(NAVER_API_HUB_NEWS_ENDPOINT, headers=headers, params=params, timeout=20)
     print(f"HTTP status code: {response.status_code}")
     if response.status_code in (401, 403):
-        print("네이버 뉴스 API 인증 오류입니다. Client ID/Secret과 검색 API 사용 설정을 확인하세요.")
+        print("NAVER API HUB authentication or subscription status requires attention.")
         return 1
     response.raise_for_status()
     payload = response.json()

@@ -46,19 +46,13 @@ from src.config import (
     LH_LOOKBACK_DAYS,
     LH_OPENBID_ENDPOINT,
     LH_PAGE_SIZE,
-    NAVER_CLIENT_ID,
-    NAVER_CLIENT_SECRET,
+    NAVER_API_HUB_CLIENT_ID,
+    NAVER_API_HUB_CLIENT_SECRET,
+    NAVER_API_HUB_NEWS_ENDPOINT,
     NAVER_NEWS_DISPLAY,
-    NAVER_NEWS_ENDPOINT,
     NAVER_NEWS_LOOKBACK_DAYS,
     NAVER_NEWS_SORT,
 )
-
-
-def mask_key(value: str) -> str:
-    if not value:
-        return "missing"
-    return f"{value[:4]}*** (length={len(value)})"
 
 
 def main() -> int:
@@ -66,8 +60,7 @@ def main() -> int:
     print(f"current working directory: {os.getcwd()}")
     print(f".env path: {env_path}")
     print(f".env exists: {env_path.exists()}")
-    print(f"DATA_GO_KR_SERVICE_KEY exists: {bool(DATA_GO_KR_SERVICE_KEY)}")
-    print(f"DATA_GO_KR_SERVICE_KEY: {mask_key(DATA_GO_KR_SERVICE_KEY)}")
+    print(f"DATA_GO_KR_SERVICE_KEY configured: {bool(DATA_GO_KR_SERVICE_KEY)}")
     print("shared auth: DATA_GO_KR_SERVICE_KEY is used for G2B, LH, D2B plan, and D2B bid")
     print(f"G2B_MODULAR_ITEM_ONLY: {G2B_MODULAR_ITEM_ONLY}")
     print(f"G2B_MODULAR_TITLE_KEYWORD: {G2B_MODULAR_TITLE_KEYWORD}")
@@ -105,14 +98,12 @@ def main() -> int:
     print(f"D2B_BID_DOMESTIC_ENDPOINT: {D2B_BID_DOMESTIC_ENDPOINT}")
     print(f"D2B_BID_FOREIGN_ENDPOINT: {D2B_BID_FOREIGN_ENDPOINT}")
     print(f"D2B_BID_PUBLIC_PRIVATE_ENDPOINT: {D2B_BID_PUBLIC_PRIVATE_ENDPOINT}")
-    print(f"NAVER_CLIENT_ID exists: {bool(NAVER_CLIENT_ID)}")
-    print(f"NAVER_CLIENT_ID: {mask_key(NAVER_CLIENT_ID)}")
-    print(f"NAVER_CLIENT_SECRET exists: {bool(NAVER_CLIENT_SECRET)}")
-    print(f"NAVER_CLIENT_SECRET: {mask_key(NAVER_CLIENT_SECRET)}")
+    print(f"NAVER_API_HUB_CLIENT_ID configured: {bool(NAVER_API_HUB_CLIENT_ID)}")
+    print(f"NAVER_API_HUB_CLIENT_SECRET configured: {bool(NAVER_API_HUB_CLIENT_SECRET)}")
     print(f"NAVER_NEWS_LOOKBACK_DAYS: {NAVER_NEWS_LOOKBACK_DAYS}")
     print(f"NAVER_NEWS_DISPLAY: {NAVER_NEWS_DISPLAY}")
     print(f"NAVER_NEWS_SORT: {NAVER_NEWS_SORT}")
-    print(f"NAVER_NEWS_ENDPOINT: {NAVER_NEWS_ENDPOINT}")
+    print(f"NAVER_API_HUB_NEWS_ENDPOINT: {NAVER_API_HUB_NEWS_ENDPOINT}")
 
     if not DATA_GO_KR_SERVICE_KEY:
         print("ERROR: .env에 DATA_GO_KR_SERVICE_KEY를 설정하세요.")

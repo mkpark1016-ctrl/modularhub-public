@@ -358,7 +358,7 @@ def write_outputs(report: dict[str, Any], output_dir: Path) -> None:
     (output_dir / "overseas_rss_audit.md").write_text(render_markdown(report), encoding="utf-8")
 
 
-def audit_file(input_path: Path, output_dir: Path) -> dict[str, Any]:
+def audit_file(input_path: Path, output_dir: Path, *, now: datetime | None = None) -> dict[str, Any]:
     items, load_errors = load_news_items(input_path)
     if load_errors:
         report = {
@@ -391,7 +391,7 @@ def audit_file(input_path: Path, output_dir: Path) -> dict[str, Any]:
             "audit_status": "failed",
         }
     else:
-        report = audit_news_items(items)
+        report = audit_news_items(items, now=now)
     write_outputs(report, output_dir)
     return report
 

@@ -170,7 +170,7 @@ def test_output_files_are_written():
             ),
             encoding="utf-8",
         )
-        report = audit_file(input_path, output_dir)
+        report = audit_file(input_path, output_dir, now=FIXED_NOW)
         require(report["audit_status"] == "passed", "fixture audit should pass")
         require((output_dir / "overseas_rss_audit.json").exists(), "audit JSON not written")
         require((output_dir / "overseas_rss_audit.md").exists(), "audit markdown not written")

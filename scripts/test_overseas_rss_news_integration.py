@@ -3,6 +3,7 @@ from __future__ import annotations
 import sqlite3
 import sys
 import tempfile
+from datetime import date
 from pathlib import Path
 
 
@@ -49,6 +50,7 @@ def test_normalize_item_and_model() -> None:
     collector = OverseasRssNewsCollector(
         feeds=[{"name": "Fixture", "url": "https://feed.example.org/rss"}],
         requests_get=FakeGet({"https://feed.example.org/rss": FakeResponse(content=rss_feed(rss_item()))}),
+        today=date(2026, 7, 3),
     )
     raw = collector.collect()[0]
     normalized = normalize_item(raw)
@@ -64,6 +66,7 @@ def test_temp_db_upsert_deduplicates() -> None:
     collector = OverseasRssNewsCollector(
         feeds=[{"name": "Fixture", "url": "https://feed.example.org/rss"}],
         requests_get=FakeGet({"https://feed.example.org/rss": FakeResponse(content=rss_feed(rss_item()))}),
+        today=date(2026, 7, 3),
     )
     item = Item(**normalize_item(collector.collect()[0]))
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:

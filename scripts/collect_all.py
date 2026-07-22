@@ -29,8 +29,8 @@ from src.config import (
     G2B_MODULAR_SCOPE_ENABLED,
     G2B_MODULAR_TITLE_KEYWORD,
     G2B_SERVICE_SUBTYPE,
-    NAVER_CLIENT_ID,
-    NAVER_CLIENT_SECRET,
+    NAVER_API_HUB_CLIENT_ID,
+    NAVER_API_HUB_CLIENT_SECRET,
     OVERSEAS_RSS_NEWS_ENABLED,
 )
 
@@ -80,10 +80,10 @@ def main() -> int:
     else:
         print("DATA_GO_KR_SERVICE_KEY가 없어 공공데이터포털 기반 수집기를 건너뜁니다.")
 
-    if NAVER_CLIENT_ID and NAVER_CLIENT_SECRET:
+    if NAVER_API_HUB_CLIENT_ID and NAVER_API_HUB_CLIENT_SECRET:
         collectors.append(NaverNewsCollector())
     else:
-        print("NAVER_CLIENT_ID 또는 NAVER_CLIENT_SECRET이 없어 NaverNewsCollector를 건너뜁니다.")
+        print("NAVER_API_HUB_CLIENT_ID 또는 NAVER_API_HUB_CLIENT_SECRET이 없어 NaverNewsCollector를 건너뜁니다.")
 
     if GDELT_DOC_NEWS_ENABLED:
         collectors.append(GdeltDocNewsCollector())

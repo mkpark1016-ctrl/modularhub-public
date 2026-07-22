@@ -18,7 +18,7 @@ R&D, 특허, 트렌드, 블로그, 커뮤니티, 즐겨찾기, 로그인, AI 요
 - `frontend/`: API Key 없이 정적 JSON만 읽는 Vite React 공개 앱
 - `frontend/vercel.json`: Vercel SPA 라우팅과 JSON 캐시 설정
 
-프론트엔드에는 `DATA_GO_KR_SERVICE_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`을 넣지 않습니다. `source_detail_api_url`처럼 인증키가 포함될 가능성이 있는 값도 공개 JSON에서 제외됩니다.
+프론트엔드에는 `DATA_GO_KR_SERVICE_KEY`, `NAVER_API_HUB_CLIENT_ID`, `NAVER_API_HUB_CLIENT_SECRET`을 넣지 않습니다. `source_detail_api_url`처럼 인증키가 포함될 가능성이 있는 값도 공개 JSON에서 제외됩니다.
 
 ### 공개 앱 로컬 실행
 
@@ -92,7 +92,7 @@ Vercel 프로젝트 설정:
 1. GitHub Actions `Update public data` workflow가 schedule 또는 `workflow_dispatch`로 데이터를 수집합니다.
 2. 공개 JSON을 누적 병합하고 보안/축소 방지 테스트가 통과할 때만 `frontend/public/data/*.json`을 commit/push합니다.
 3. Vercel이 `main` 브랜치 commit을 감지해 Production을 재배포합니다.
-4. Vercel에는 API Key를 등록하지 않습니다. `DATA_GO_KR_SERVICE_KEY`, `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET`은 GitHub Repository Secrets에만 둡니다.
+4. Vercel에는 API Key를 등록하지 않습니다. `DATA_GO_KR_SERVICE_KEY`, `NAVER_API_HUB_CLIENT_ID`, `NAVER_API_HUB_CLIENT_SECRET`은 GitHub Repository Secrets에만 둡니다.
 5. Vercel Cron은 사용하지 않습니다.
 
 ### Vercel 배포 전 브라우저 QA
@@ -465,17 +465,17 @@ run_local.bat
 
 네이버 뉴스 수집기는 네이버 검색 API의 뉴스 검색 결과를 사용해 모듈러 건축, OSC, 공업화주택, 프리패브, 스마트건설, 공공기관, 경쟁사 관련 시장 뉴스를 수집합니다. 뉴스 본문 크롤링은 하지 않고 네이버 뉴스 검색 API가 제공하는 제목, 요약, 게시일, 링크만 저장합니다.
 
-네이버 개발자센터에서 애플리케이션을 등록하고 검색 API 사용 신청을 한 뒤, `NAVER_CLIENT_ID`와 `NAVER_CLIENT_SECRET`을 `.env`에 넣어야 합니다. 두 값은 코드에 하드코딩하지 않습니다.
+NAVER API HUB에서 애플리케이션을 등록하고 Search API 사용 신청을 한 뒤, `NAVER_API_HUB_CLIENT_ID`와 `NAVER_API_HUB_CLIENT_SECRET`을 `.env`에 넣어야 합니다. 두 값은 코드에 하드코딩하지 않습니다.
 
 `.env` 예시:
 
 ```text
-NAVER_CLIENT_ID=
-NAVER_CLIENT_SECRET=
+NAVER_API_HUB_CLIENT_ID=
+NAVER_API_HUB_CLIENT_SECRET=
+NAVER_API_HUB_NEWS_ENDPOINT=https://naverapihub.apigw.ntruss.com/search/v1/news
 NAVER_NEWS_LOOKBACK_DAYS=14
 NAVER_NEWS_DISPLAY=50
 NAVER_NEWS_SORT=date
-NAVER_NEWS_ENDPOINT=https://openapi.naver.com/v1/search/news.json
 ```
 
 권장 실행 순서:
@@ -1313,8 +1313,8 @@ cd /d "D:\backup01\Documents\New project 2"
 GitHub 저장소의 `Settings > Secrets and variables > Actions`에 다음 Repository secrets를 등록합니다.
 
 - `DATA_GO_KR_SERVICE_KEY`
-- `NAVER_CLIENT_ID`
-- `NAVER_CLIENT_SECRET`
+- `NAVER_API_HUB_CLIENT_ID`
+- `NAVER_API_HUB_CLIENT_SECRET`
 
 자동 실행 순서:
 

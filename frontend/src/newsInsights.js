@@ -287,15 +287,21 @@ export function compareNewsByRelevance(a, b) {
 
 export function selectHomeBriefingNews(items, limit = 5) {
   const seen = new Set();
-  return [...items]
-    .filter((item) => ["direct", "adjacent"].includes(getNewsRelevance(item)))
-    .sort(compareNewsByRelevance)
-    .filter((item) => {
-      const key = normalizedTitle(item);
-      if (!key) return true;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .slice(0, limit);
+  const uniqueByTitle = (item) => {
+    const key = normalizedTitle(item);
+    if (!key) return true;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  };
+  const newestFirst = (a, b) => compareNewsBySort(a, b, "newest");
+  const direct = [...items]
+    .filter((item) => getNewsRelevance(item) === "direct")
+    .sort(newestFirst)
+    .filter(uniqueByTitle);
+  const adjacent = [...items]
+    .filter((item) => getNewsRelevance(item) === "adjacent")
+    .sort(newestFirst)
+    .filter(uniqueByTitle);
+  return [...direct, ...adjacent].slice(0, limit);
 }

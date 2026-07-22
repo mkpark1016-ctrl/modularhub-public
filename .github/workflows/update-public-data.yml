@@ -38,13 +38,14 @@ jobs:
       - name: Create collector environment
         env:
           DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
-          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
-          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+          NAVER_API_HUB_CLIENT_ID: ${{ secrets.NAVER_API_HUB_CLIENT_ID }}
+          NAVER_API_HUB_CLIENT_SECRET: ${{ secrets.NAVER_API_HUB_CLIENT_SECRET }}
         run: |
           printf '%s\n' \
             "DATA_GO_KR_SERVICE_KEY=${DATA_GO_KR_SERVICE_KEY}" \
-            "NAVER_CLIENT_ID=${NAVER_CLIENT_ID}" \
-            "NAVER_CLIENT_SECRET=${NAVER_CLIENT_SECRET}" \
+            "NAVER_API_HUB_CLIENT_ID=${NAVER_API_HUB_CLIENT_ID}" \
+            "NAVER_API_HUB_CLIENT_SECRET=${NAVER_API_HUB_CLIENT_SECRET}" \
+            "NAVER_API_HUB_NEWS_ENDPOINT=https://naverapihub.apigw.ntruss.com/search/v1/news" \
             "G2B_MODULAR_LOOKBACK_DAYS=180" \
             "G2B_MODULAR_PAGE_SIZE=100" \
             "G2B_PLAN_LOOKAHEAD_MONTHS=12" \
@@ -69,6 +70,7 @@ jobs:
             "IH_CONTEST_TIMEOUT_SECONDS=20" \
             "NAVER_NEWS_LOOKBACK_DAYS=14" \
             "NAVER_NEWS_DISPLAY=50" \
+            "NAVER_NEWS_SORT=date" \
             "GDELT_DOC_NEWS_ENABLED=false" \
             "GDELT_DOC_NEWS_TIMESPAN=7d" \
             "GDELT_DOC_NEWS_MAX_RECORDS=250" \
@@ -230,6 +232,31 @@ jobs:
           if [ "$code" -ne 0 ]; then
             exit "$code"
           fi
+
+      - name: Summarize public news freshness
+        if: always()
+        run: |
+          set +e
+          python scripts/audit_public_news_freshness.py \
+            --news frontend/public/data/news.json \
+            --meta frontend/public/data/meta.json \
+            --output-dir artifacts/public_news_freshness
+          code=$?
+          if [ -f artifacts/public_news_freshness/public_news_freshness.md ]; then
+            cat artifacts/public_news_freshness/public_news_freshness.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+
+      - name: Upload public news freshness artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-news-freshness-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/public_news_freshness/
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload unified public news audit artifact
         if: always()

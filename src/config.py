@@ -85,15 +85,15 @@ DEFAULT_OVERSEAS_RSS_NEWS_FEEDS = [
 ]
 
 DATA_GO_KR_SERVICE_KEY = os.getenv("DATA_GO_KR_SERVICE_KEY", "")
-NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID", "")
-NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", "")
+NAVER_API_HUB_CLIENT_ID = os.getenv("NAVER_API_HUB_CLIENT_ID", "").strip().strip('"').strip("'")
+NAVER_API_HUB_CLIENT_SECRET = os.getenv("NAVER_API_HUB_CLIENT_SECRET", "").strip().strip('"').strip("'")
 NAVER_NEWS_LOOKBACK_DAYS = int(os.getenv("NAVER_NEWS_LOOKBACK_DAYS", "14"))
 NAVER_NEWS_DISPLAY = int(os.getenv("NAVER_NEWS_DISPLAY", "50"))
 NAVER_NEWS_SORT = os.getenv("NAVER_NEWS_SORT", "date")
-NAVER_NEWS_ENDPOINT = os.getenv(
-    "NAVER_NEWS_ENDPOINT",
-    "https://openapi.naver.com/v1/search/news.json",
-)
+NAVER_API_HUB_NEWS_ENDPOINT = os.getenv(
+    "NAVER_API_HUB_NEWS_ENDPOINT",
+    "https://naverapihub.apigw.ntruss.com/search/v1/news",
+).strip().strip('"').strip("'")
 GDELT_DOC_NEWS_ENABLED = _env_bool("GDELT_DOC_NEWS_ENABLED", False)
 GDELT_DOC_NEWS_ENDPOINT = os.getenv(
     "GDELT_DOC_NEWS_ENDPOINT",
