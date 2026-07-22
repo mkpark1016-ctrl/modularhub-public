@@ -1,0 +1,457 @@
+{
+  "schemaVersion": "company-data-quality-audit-v1",
+  "generatedAt": "2026-07-22T05:38:59.230175+00:00",
+  "companyCount": 11,
+  "companies": [
+    {
+      "companyId": "geogwang-enterprise",
+      "displayName": "거광기업",
+      "canonicalRole": "specialist_manufacturer",
+      "detailRoute": "/companies/geogwang-enterprise",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 13,
+      "sourcedFields": 6,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 2,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 78.6,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 24.4,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 8.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요"
+      ]
+    },
+    {
+      "companyId": "hyundai-engineering",
+      "displayName": "현대엔지니어링",
+      "canonicalRole": "general_contractor",
+      "detailRoute": "/companies/hyundai-engineering",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 13,
+      "sourcedFields": 24,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 3,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 79.6,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 24.4,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 9.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요",
+        "운영 생산시설 공개자료 확인 필요"
+      ]
+    },
+    {
+      "companyId": "dl-enc",
+      "displayName": "DL이앤씨",
+      "canonicalRole": "general_contractor",
+      "detailRoute": "/companies/dl-enc",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 13,
+      "sourcedFields": 27,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 2,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 79.6,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 24.4,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 9.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요",
+        "운영 생산시설 공개자료 확인 필요"
+      ]
+    },
+    {
+      "companyId": "daeseung-engineering",
+      "displayName": "대승엔지니어링",
+      "canonicalRole": "specialist_manufacturer",
+      "detailRoute": "/companies/daeseung-engineering",
+      "sourceFile": "frontend/src/data/daeseungEngineeringCompany.js",
+      "totalFields": 16,
+      "populatedFields": 13,
+      "sourcedFields": 5,
+      "tier1SourcedFields": 3,
+      "verifiedFields": 2,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 4,
+      "sourceCounts": {
+        "tier_1": 3,
+        "tier_3": 3
+      },
+      "score": 81.8,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 24.4,
+        "sourceQuality": 16.9,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 5.5
+      },
+      "topResearchGaps": [
+        "공식 홈페이지",
+        "군산 생산시설 주소 통합과 소유 관계",
+        "공식 생산능력",
+        "2025년 감사보고서 원문 재무 대조",
+        "공식 홈페이지 확인 필요"
+      ]
+    },
+    {
+      "companyId": "planm",
+      "displayName": "플랜엠",
+      "canonicalRole": "modular_integrator",
+      "detailRoute": "/companies/planm",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 14,
+      "sourcedFields": 32,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 18,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 82.5,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 26.2,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 10.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요"
+      ]
+    },
+    {
+      "companyId": "sungji-steel",
+      "displayName": "성지제강",
+      "canonicalRole": "specialist_manufacturer",
+      "detailRoute": "/companies/sungji-steel",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 14,
+      "sourcedFields": 10,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 4,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 82.5,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 26.2,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 10.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요"
+      ]
+    },
+    {
+      "companyId": "nrb",
+      "displayName": "엔알비",
+      "canonicalRole": "modular_integrator",
+      "detailRoute": "/companies/nrb",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 14,
+      "sourcedFields": 30,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 9,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 82.5,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 26.2,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 10.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요"
+      ]
+    },
+    {
+      "companyId": "gs-ec",
+      "displayName": "GS건설",
+      "canonicalRole": "general_contractor",
+      "detailRoute": "/companies/gs-ec",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 14,
+      "sourcedFields": 13,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 6,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 82.5,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 26.2,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 10.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요"
+      ]
+    },
+    {
+      "companyId": "samsung-ct-construction",
+      "displayName": "삼성물산 건설부문",
+      "canonicalRole": "general_contractor",
+      "detailRoute": "/companies/samsung-ct-construction",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 14,
+      "sourcedFields": 17,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 2,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 82.5,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 26.2,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 10.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요",
+        "공식 홈페이지 확인 필요"
+      ]
+    },
+    {
+      "companyId": "yuchang-enc",
+      "displayName": "유창이앤씨",
+      "canonicalRole": "specialist_manufacturer",
+      "detailRoute": "/companies/yuchang-enc",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 16,
+      "sourcedFields": 25,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 14,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 86.2,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 30.0,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 10.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요"
+      ]
+    },
+    {
+      "companyId": "kumkang-kind",
+      "displayName": "금강공업",
+      "canonicalRole": "specialist_manufacturer",
+      "detailRoute": "/companies/kumkang-kind",
+      "sourceFile": "frontend/public/data/companies/companies.json",
+      "totalFields": 16,
+      "populatedFields": 16,
+      "sourcedFields": 21,
+      "tier1SourcedFields": 0,
+      "verifiedFields": 13,
+      "conflictingFields": 0,
+      "staleFields": 0,
+      "unresolvedFields": 0,
+      "sourceCounts": {
+        "internal_verified": 1
+      },
+      "score": 86.2,
+      "scoreBand": "운영 가능",
+      "components": {
+        "completeness": 30.0,
+        "sourceQuality": 11.2,
+        "freshness": 20,
+        "consistency": 15,
+        "modularSpecificity": 10.0
+      },
+      "topResearchGaps": [
+        "공식·공공 원천 출처 registry 연결 필요"
+      ]
+    }
+  ],
+  "identityChecks": [
+    {
+      "companyId": "yuchang-enc",
+      "displayName": "유창이앤씨",
+      "status": "verified_cross_source",
+      "missingFields": [],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "kumkang-kind",
+      "displayName": "금강공업",
+      "status": "verified_cross_source",
+      "missingFields": [],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "planm",
+      "displayName": "플랜엠",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "sungji-steel",
+      "displayName": "성지제강",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "geogwang-enterprise",
+      "displayName": "거광기업",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "nrb",
+      "displayName": "엔알비",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "gs-ec",
+      "displayName": "GS건설",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "hyundai-engineering",
+      "displayName": "현대엔지니어링",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "samsung-ct-construction",
+      "displayName": "삼성물산 건설부문",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "dl-enc",
+      "displayName": "DL이앤씨",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "not_detected"
+    },
+    {
+      "companyId": "daeseung-engineering",
+      "displayName": "대승엔지니어링",
+      "status": "partially_verified",
+      "missingFields": [
+        "officialWebsite"
+      ],
+      "sameNameRisk": "explicitly_controlled"
+    }
+  ],
+  "sourceSummary": {
+    "internal_verified": 10,
+    "tier_1": 3,
+    "tier_3": 3
+  },
+  "sourceCount": 16,
+  "validationIssues": [],
+  "status": "passed"
+}

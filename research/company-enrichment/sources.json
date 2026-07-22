@@ -1,0 +1,482 @@
+[
+  {
+    "sourceId": "manual-verified-dl-enc-20260716",
+    "companyIds": [
+      "dl-enc"
+    ],
+    "title": "DL이앤씨 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-geogwang-enterprise-20260716",
+    "companyIds": [
+      "geogwang-enterprise"
+    ],
+    "title": "거광기업 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-gs-ec-20260716",
+    "companyIds": [
+      "gs-ec"
+    ],
+    "title": "GS건설 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-hyundai-engineering-20260716",
+    "companyIds": [
+      "hyundai-engineering"
+    ],
+    "title": "현대엔지니어링 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-kumkang-kind-20260716",
+    "companyIds": [
+      "kumkang-kind"
+    ],
+    "title": "금강공업 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-nrb-20260716",
+    "companyIds": [
+      "nrb"
+    ],
+    "title": "엔알비 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-planm-20260716",
+    "companyIds": [
+      "planm"
+    ],
+    "title": "플랜엠 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-samsung-ct-construction-20260716",
+    "companyIds": [
+      "samsung-ct-construction"
+    ],
+    "title": "삼성물산 건설부문 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-sungji-steel-20260716",
+    "companyIds": [
+      "sungji-steel"
+    ],
+    "title": "성지제강 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "manual-verified-yuchang-enc-20260716",
+    "companyIds": [
+      "yuchang-enc"
+    ],
+    "title": "유창이앤씨 수동 검증 기업정보 기준선",
+    "publisher": "Manual verified competitor research",
+    "url": null,
+    "sourceType": "manual_verified_research",
+    "sourceTier": "internal_verified",
+    "publishedAt": null,
+    "accessedAt": "2026-07-16T22:30:00+09:00",
+    "language": "ko",
+    "supports": [
+      "building_area",
+      "building_area_m2",
+      "capacity_value",
+      "facility_name",
+      "financials",
+      "identity",
+      "location",
+      "operation_status",
+      "ownership_type",
+      "production",
+      "production_processes",
+      "production_scope",
+      "projects",
+      "reported_capacity",
+      "site_area",
+      "site_area_m2",
+      "strategy",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": "ChatGPT 보조 검토와 사람의 직접 검증으로 확정한 구조화 기준자료입니다. PDF 원본은 저장소에 포함하지 않습니다."
+  },
+  {
+    "sourceId": "daeseung-patent-kr102761128b1",
+    "companyIds": [
+      "daeseung-engineering"
+    ],
+    "title": "KR102761128B1 모듈러 건축물의 접합부 결합 고정방법",
+    "publisher": "Google Patents",
+    "url": "https://patents.google.com/patent/KR102761128B1/ko",
+    "sourceType": "patent",
+    "sourceTier": "tier_1",
+    "publishedAt": "2025-02-03",
+    "accessedAt": "2026-07-19",
+    "language": "ko",
+    "supports": [
+      "patent_status",
+      "technology"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": null
+  },
+  {
+    "sourceId": "daeseung-seogwang-payment-2025",
+    "companyIds": [
+      "daeseung-engineering"
+    ],
+    "title": "서광초 임시교사(모듈러) 임차용역 대가지급",
+    "publisher": "광주광역시교육청",
+    "url": "https://www.gen.go.kr/opengen/contract/index.php?DateYear=2025&mode=billpaymt_view&num=101178663",
+    "sourceType": "public_official",
+    "sourceTier": "tier_1",
+    "publishedAt": "2025",
+    "accessedAt": "2026-07-19",
+    "language": "ko",
+    "supports": [
+      "client",
+      "contract_amount",
+      "project"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": null
+  },
+  {
+    "sourceId": "daeseung-yongsan-contract-20241223",
+    "companyIds": [
+      "daeseung-engineering"
+    ],
+    "title": "용산초 그린스마트스쿨 임시교사 임대용역 계약체결현황",
+    "publisher": "전북특별자치도교육청",
+    "url": "https://www.jbe.go.kr/open/edufine/eduCntrView2.jbe?cm_seq_no=103675418&fscl_y=2024",
+    "sourceType": "public_official",
+    "sourceTier": "tier_1",
+    "publishedAt": "2024-12-23",
+    "accessedAt": "2026-07-19",
+    "language": "ko",
+    "supports": [
+      "client",
+      "contract_amount",
+      "project"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": null
+  },
+  {
+    "sourceId": "daeseung-company-info-2025",
+    "companyIds": [
+      "daeseung-engineering"
+    ],
+    "title": "대승엔지니어링 기업정보",
+    "publisher": "사람인·잡코리아·캐치",
+    "url": "https://www.saramin.co.kr/zf_user/company-info/view/csn/aVB0ZThORGFDTW5HcEl4eUROL2hZZz09/company_nm/%28%EC%A3%BC%29%EB%8C%80%EC%8A%B9%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81",
+    "sourceType": "company_information",
+    "sourceTier": "tier_3",
+    "publishedAt": "2026",
+    "accessedAt": "2026-07-19",
+    "language": "ko",
+    "supports": [
+      "financials",
+      "identity"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": null
+  },
+  {
+    "sourceId": "daeseung-factory-db-20260501",
+    "companyIds": [
+      "daeseung-engineering"
+    ],
+    "title": "군산 공장정보 DB (오식도동 857)",
+    "publisher": "iFactoryHub",
+    "url": "https://ifactoryhub.com/factory/13104-%EC%A3%BC%EB%8C%80%EC%8A%B9%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81-%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84-%EA%B5%B0%EC%82%B0%EC%8B%9C",
+    "sourceType": "factory_database",
+    "sourceTier": "tier_3",
+    "publishedAt": "2026-05-01",
+    "accessedAt": "2026-07-19",
+    "language": "ko",
+    "supports": [
+      "production"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": null
+  },
+  {
+    "sourceId": "daeseung-factory-db-20260601",
+    "companyIds": [
+      "daeseung-engineering"
+    ],
+    "title": "군산 공장정보 DB (오식도동 873-11)",
+    "publisher": "iFactoryHub",
+    "url": "https://ifactoryhub.com/factory/13105-%EC%A3%BC%EB%8C%80%EC%8A%B9%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81-%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84-%EA%B5%B0%EC%82%B0%EC%8B%9C",
+    "sourceType": "factory_database",
+    "sourceTier": "tier_3",
+    "publishedAt": "2026-06-01",
+    "accessedAt": "2026-07-19",
+    "language": "ko",
+    "supports": [
+      "production"
+    ],
+    "archiveStatus": "not_archived",
+    "notes": null
+  }
+]
