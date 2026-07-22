@@ -87,6 +87,10 @@ jobs:
             echo "create_proposal requires acknowledge_proposal=true" >&2
             exit 2
           fi
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.acknowledge_live }}" != "true" ]]; then
+            echo "acknowledge_live=true is required before live-capable source checks" >&2
+            exit 2
+          fi
           echo "DART_API_KEY configured: $([[ -n "${DART_API_KEY:-}" ]] && echo true || echo false)"
           echo "NAVER_API_HUB_CLIENT_ID configured: $([[ -n "${NAVER_API_HUB_CLIENT_ID:-}" ]] && echo true || echo false)"
           echo "NAVER_API_HUB_CLIENT_SECRET configured: $([[ -n "${NAVER_API_HUB_CLIENT_SECRET:-}" ]] && echo true || echo false)"
@@ -104,7 +108,7 @@ jobs:
           COMPANIES="${{ inputs.companies || '' }}"
           SOURCES="${{ inputs.sources || 'public_news,naver_api_hub,dart' }}"
           LOOKBACK="${{ inputs.lookback_days || '30' }}"
-          ACK_LIVE="${{ inputs.acknowledge_live || 'true' }}"
+          ACK_LIVE="${{ github.event_name == 'workflow_dispatch' && inputs.acknowledge_live || 'true' }}"
           python scripts/company_change_monitoring/build_change_review_queue.py \
             --mode "$MODE" \
             --companies "$COMPANIES" \
