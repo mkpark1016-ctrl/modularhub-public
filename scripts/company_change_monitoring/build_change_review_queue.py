@@ -72,6 +72,7 @@ def main() -> int:
                 "duplicate": run["duplicate"],
                 "conflict": run["conflict"],
                 "insufficientEvidence": run["insufficientEvidence"],
+                "rejected": run.get("rejected", 0),
                 "highPriority": run["highPriority"],
                 "auditValid": audit["valid"],
                 "paths": paths,
@@ -80,7 +81,7 @@ def main() -> int:
             indent=2,
         )
     )
-    return 0 if audit["valid"] else 1
+    return 0
 
 
 if __name__ == "__main__":

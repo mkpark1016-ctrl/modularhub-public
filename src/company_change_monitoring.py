@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from src.company_data_quality import load_public_company_universe, source_registry
-from scripts.company_monitoring.common import MonitorCompany, safe_error_message
+from scripts.company_monitoring.common import MonitorCompany, canonical_url, normalize_title, safe_error_message
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG_DIR = ROOT / "config" / "company_change_monitoring"
@@ -22,7 +22,7 @@ ARTIFACT_DIR = ROOT / "artifacts" / "company-change-monitor"
 
 CONFIDENCE_VALUES = {"high", "medium", "low", "unknown"}
 RISK_LEVELS = {"low", "moderate", "high", "critical"}
-CANDIDATE_STATUSES = {"pending", "duplicate", "conflict", "insufficient_evidence", "rejected", "accepted", "proposed", "published"}
+CANDIDATE_STATUSES = {"pending", "duplicate", "conflict", "insufficient_evidence", "rejected"}
 SIGNAL_TYPES = {
     "identity_change",
     "executive_change",
@@ -57,6 +57,18 @@ HIGH_REVIEW_FIELDS = {
     "production.operation_status",
     "production.reported_capacity",
     "financials",
+    "project_portfolio.project_status",
+    "project_portfolio.contract_amount",
+    "technology.patent_owner",
+    "technology.status",
+}
+CONFLICT_FIELD_PATHS = {
+    "company_profile.representative",
+    "company_profile.legal_name",
+    "headquarters",
+    "financials",
+    "production.operation_status",
+    "production.reported_capacity",
     "project_portfolio.project_status",
     "project_portfolio.contract_amount",
     "technology.patent_owner",
@@ -681,6 +693,72 @@ def get_current_value(company: dict[str, Any], field_path: str) -> Any:
     return None
 
 
+def candidate_entity_type(signal_type: str, field_path: str) -> str:
+    if field_path.startswith("financials") or signal_type == "financial_filing":
+        return "financial"
+    if field_path.startswith("production") or signal_type.startswith("facility_"):
+        return "facility"
+    if field_path.startswith("project_portfolio") or signal_type in {
+        "project_announced",
+        "bid_announced",
+        "contract_awarded",
+        "construction_started",
+        "project_completed",
+        "project_cancelled",
+    }:
+        return "project"
+    if field_path.startswith("technology") or signal_type.startswith("patent_"):
+        return "technology"
+    if field_path.startswith("company_profile") or field_path == "headquarters":
+        return "identity"
+    return "news"
+
+
+def evidence_key_for_signal(signal: dict[str, Any]) -> str:
+    url = canonical_url(signal.get("url"))
+    if url:
+        return f"url:{url}"
+    title_key = normalize_title(signal.get("title"))
+    effective = parse_date(signal.get("effectiveAt")) or signal.get("effectiveAt") or ""
+    if title_key:
+        return f"title-date:{title_key}:{effective}"
+    return f"source-record:{signal.get('originalPayloadRef') or signal.get('signalId') or ''}"
+
+
+def entity_key_for_signal(signal: dict[str, Any], entity_type: str, field_path: str) -> str:
+    proposed = signal.get("proposedValue")
+    if isinstance(proposed, dict):
+        for key in (
+            "entityKey",
+            "documentId",
+            "document_id",
+            "receiptNumber",
+            "receipt_number",
+            "patentNumber",
+            "patent_number",
+            "projectId",
+            "project_id",
+            "facilityId",
+            "facility_id",
+        ):
+            if proposed.get(key):
+                return normalize_value(proposed.get(key))
+    url_key = canonical_url(signal.get("url"))
+    title_key = normalize_title(signal.get("title"))
+    if entity_type in {"project", "technology", "facility", "news"}:
+        return url_key or title_key or normalize_value(signal.get("signalId"))
+    if entity_type == "financial":
+        return normalize_value(signal.get("documentId") or signal.get("originalPayloadRef") or signal.get("effectiveAt") or field_path)
+    return normalize_value(field_path)
+
+
+def comparison_value_for_candidate(candidate: dict[str, Any]) -> str:
+    value = candidate.get("comparisonValue")
+    if value is None:
+        value = candidate.get("proposedValue")
+    return normalize_value(value)
+
+
 def candidate_from_signal(company: dict[str, Any], signal: dict[str, Any]) -> dict[str, Any]:
     field_path = signal["fieldHints"][0] if signal.get("fieldHints") else "recent_signals"
     signal_type = signal.get("signalType", "unknown")
@@ -698,20 +776,36 @@ def candidate_from_signal(company: dict[str, Any], signal: dict[str, Any]) -> di
     status = "pending"
     if signal_type == "news_signal" or confidence == "low":
         status = "insufficient_evidence"
-    candidate_id = f"cand-{stable_hash(signal['companyId'], change_type, field_path, signal['fingerprint'])}"
     proposed_value = {
         "signalType": signal_type,
         "title": signal.get("title"),
         "url": signal.get("url"),
     }
-    fingerprint = candidate_fingerprint(signal["companyId"], change_type, field_path, proposed_value, signal.get("effectiveAt"), signal.get("sourceId"))
+    entity_type = candidate_entity_type(signal_type, field_path)
+    entity_key = entity_key_for_signal(signal, entity_type, field_path)
+    evidence_key = evidence_key_for_signal(signal)
+    candidate_id = f"cand-{stable_hash(signal['companyId'], signal.get('sourceId'), signal.get('signalId'), change_type, field_path, evidence_key, signal.get('effectiveAt'), length=20)}"
+    fingerprint = candidate_fingerprint(
+        signal["companyId"],
+        change_type,
+        field_path,
+        proposed_value,
+        signal.get("effectiveAt"),
+        signal.get("sourceId"),
+        entity_key=entity_key,
+        evidence_key=evidence_key,
+    )
     return {
         "candidateId": candidate_id,
         "companyId": signal["companyId"],
         "changeType": change_type,
         "fieldPath": field_path,
+        "entityType": entity_type,
+        "entityKey": entity_key,
+        "evidenceKey": evidence_key,
         "currentValue": get_current_value(company, field_path),
         "proposedValue": proposed_value,
+        "comparisonValue": proposed_value,
         "effectiveAt": signal.get("effectiveAt"),
         "observedAt": signal.get("observedAt"),
         "sourceIds": [signal.get("sourceId")],
@@ -752,30 +846,112 @@ def candidate_priority(confidence: str, risk: str, field_path: str) -> str:
     return "low"
 
 
-def candidate_fingerprint(company_id: str, change_type: str, field_path: str, proposed_value: Any, effective_at: str | None, source_id: str | None) -> str:
-    return stable_hash(company_id, change_type, field_path, normalize_value(proposed_value), effective_at, source_id, length=32)
+def candidate_fingerprint(
+    company_id: str,
+    change_type: str,
+    field_path: str,
+    proposed_value: Any,
+    effective_at: str | None,
+    source_id: str | None,
+    *,
+    entity_key: str | None = None,
+    evidence_key: str | None = None,
+) -> str:
+    if isinstance(proposed_value, dict):
+        url_key = canonical_url(proposed_value.get("url"))
+        title_key = normalize_title(proposed_value.get("title"))
+    else:
+        url_key = ""
+        title_key = normalize_text(proposed_value)
+    evidence = evidence_key or (f"url:{url_key}" if url_key else f"title-date:{title_key}:{parse_date(effective_at) or effective_at or ''}")
+    duplicate_entity = entity_key or evidence
+    return stable_hash(company_id, source_id, change_type, field_path, duplicate_entity, evidence, length=32)
+
+
+def assign_unique_candidate_ids(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    seen: Counter[str] = Counter()
+    for candidate in candidates:
+        base_id = candidate["candidateId"]
+        seen[base_id] += 1
+        if seen[base_id] > 1:
+            candidate["candidateId"] = f"{base_id}-{stable_hash(base_id, seen[base_id], candidate.get('fingerprint'), length=8)}"
+    return candidates
+
+
+def conflict_scope(candidate: dict[str, Any]) -> tuple[tuple[str, str, str, str], str] | None:
+    if candidate.get("status") in {"duplicate", "insufficient_evidence", "rejected"}:
+        return None
+    if candidate.get("changeType") == "new_record":
+        return None
+    if candidate.get("signalType") == "news_signal" or candidate.get("fieldPath") == "recent_signals":
+        return None
+    field_path = candidate.get("fieldPath")
+    if field_path not in CONFLICT_FIELD_PATHS:
+        return None
+    entity_key = candidate.get("entityKey") or normalize_value(field_path)
+    effective_period = parse_date(candidate.get("effectiveAt")) or candidate.get("effectiveAt") or "current"
+    scope = (candidate["companyId"], field_path, entity_key, effective_period)
+    return scope, comparison_value_for_candidate(candidate)
 
 
 def dedupe_and_conflict(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates = assign_unique_candidate_ids(candidates)
     seen: dict[str, str] = {}
-    field_values: dict[tuple[str, str], dict[str, str]] = defaultdict(dict)
+    scoped_values: dict[tuple[str, str, str, str], dict[str, str]] = defaultdict(dict)
     for candidate in candidates:
+        candidate.setdefault("duplicateOf", None)
+        candidate.setdefault("conflictsWith", [])
         fp = candidate["fingerprint"]
         if fp in seen:
             candidate["status"] = "duplicate"
             candidate["duplicateOf"] = seen[fp]
         else:
             seen[fp] = candidate["candidateId"]
-        if candidate["status"] != "duplicate":
-            key = (candidate["companyId"], candidate["fieldPath"])
-            proposed = normalize_value(candidate["proposedValue"])
-            for existing_value, existing_id in field_values[key].items():
+        scoped = conflict_scope(candidate)
+        if scoped:
+            key, proposed = scoped
+            for existing_value, existing_id in scoped_values[key].items():
                 if existing_value != proposed:
                     candidate["status"] = "conflict"
                     candidate["conflictsWith"].append(existing_id)
                     break
-            field_values[key][proposed] = candidate["candidateId"]
+            scoped_values[key][proposed] = candidate["candidateId"]
     return candidates
+
+
+def classification_diagnostics(run: dict[str, Any] | list[dict[str, Any]]) -> dict[str, Any]:
+    candidates = run.get("candidates", []) if isinstance(run, dict) else run
+    duplicate_groups: dict[str, list[str]] = defaultdict(list)
+    conflict_groups: dict[str, list[str]] = defaultdict(list)
+    for candidate in candidates:
+        duplicate_groups[candidate.get("fingerprint") or ""].append(candidate.get("candidateId"))
+        if candidate.get("status") == "conflict":
+            conflict_key = stable_hash(candidate.get("companyId"), candidate.get("fieldPath"), candidate.get("entityKey"), candidate.get("effectiveAt"), length=16)
+            conflict_groups[conflict_key].append(candidate.get("candidateId"))
+    return {
+        "schemaVersion": "company-change-classification-diagnostics-v1",
+        "generatedAt": iso_now(),
+        "candidateCount": len(candidates),
+        "statusCounts": dict(Counter(candidate.get("status") for candidate in candidates)),
+        "byCompany": dict(Counter(candidate.get("companyId") for candidate in candidates)),
+        "bySource": dict(Counter(source for candidate in candidates for source in candidate.get("sourceIds", []))),
+        "byEntityType": dict(Counter(candidate.get("entityType", "unknown") for candidate in candidates)),
+        "byChangeType": dict(Counter(candidate.get("changeType") for candidate in candidates)),
+        "duplicateGroupCount": sum(1 for rows in duplicate_groups.values() if len(rows) > 1),
+        "maxDuplicateGroupSize": max((len(rows) for rows in duplicate_groups.values()), default=0),
+        "conflictGroupCount": sum(1 for rows in conflict_groups.values() if len(rows) > 1),
+        "maxConflictGroupSize": max((len(rows) for rows in conflict_groups.values()), default=0),
+        "duplicateSamples": [
+            {"fingerprint": fingerprint, "candidateIds": rows[:10]}
+            for fingerprint, rows in sorted(duplicate_groups.items())
+            if len(rows) > 1
+        ][:20],
+        "conflictSamples": [
+            {"conflictGroup": group, "candidateIds": rows[:10]}
+            for group, rows in sorted(conflict_groups.items())
+            if len(rows) > 1
+        ][:20],
+    }
 
 
 def research_gap_area(field_path: str) -> str:
@@ -946,6 +1122,7 @@ def build_change_monitor_run(
     status_counts = Counter(candidate["status"] for candidate in candidates)
     risk_counts = Counter(candidate["riskLevel"] for candidate in candidates)
     confidence_counts = Counter(candidate["confidence"] for candidate in candidates)
+    diagnostics = classification_diagnostics(candidates)
 
     return {
         "schemaVersion": "company-change-monitor-run-v1",
@@ -964,10 +1141,12 @@ def build_change_monitor_run(
         "duplicate": status_counts["duplicate"],
         "conflict": status_counts["conflict"],
         "insufficientEvidence": status_counts["insufficient_evidence"],
+        "rejected": status_counts["rejected"],
         "highPriority": sum(1 for candidate in candidates if candidate["priority"] == "high"),
         "statusCounts": dict(status_counts),
         "riskCounts": dict(risk_counts),
         "confidenceCounts": dict(confidence_counts),
+        "classificationDiagnostics": diagnostics,
         "researchGapSummary": gap_summary,
         "candidates": candidates,
         "proposal": {
@@ -987,14 +1166,17 @@ def review_queue_payload(run: dict[str, Any]) -> dict[str, Any]:
         "generatedAt": run["generatedAt"],
         "runId": run["runId"],
         "companies": run["companies"],
+        "sources": run.get("sources", []),
         "candidateCount": run["candidateCount"],
         "pending": run["pending"],
         "duplicate": run["duplicate"],
         "conflict": run["conflict"],
         "insufficientEvidence": run["insufficientEvidence"],
+        "rejected": run.get("rejected", 0),
         "highPriority": run["highPriority"],
         "sourceStatuses": run["sourceStatuses"],
         "researchGapSummary": run["researchGapSummary"],
+        "classificationDiagnostics": run.get("classificationDiagnostics", {}),
         "candidates": run["candidates"],
     }
 
@@ -1010,6 +1192,7 @@ def digest_payload(run: dict[str, Any]) -> dict[str, Any]:
         "statusCounts": run["statusCounts"],
         "riskCounts": run["riskCounts"],
         "confidenceCounts": run["confidenceCounts"],
+        "classificationDiagnostics": run.get("classificationDiagnostics", {}),
         "byCompany": dict(by_company),
         "bySource": dict(by_source),
         "highPriority": [candidate for candidate in run["candidates"] if candidate["priority"] == "high"][:20],
@@ -1032,6 +1215,7 @@ def markdown_digest(run: dict[str, Any]) -> str:
         f"- Duplicate: `{run['duplicate']}`",
         f"- Conflict: `{run['conflict']}`",
         f"- Insufficient evidence: `{run['insufficientEvidence']}`",
+        f"- Rejected: `{run.get('rejected', 0)}`",
         f"- High priority: `{run['highPriority']}`",
         f"- Public data changed: `{run['publicDataChanged']}`",
         f"- Secret exposure: `{run['secretExposureDetected']}`",
@@ -1060,6 +1244,7 @@ def write_run_outputs(run: dict[str, Any], *, root: Path = ROOT, write_internal_
         "reviewQueue": REVIEW_QUEUE_PATH,
         "digestJson": REPORT_DIR / "latest_digest.json",
         "digestMd": REPORT_DIR / "latest_digest.md",
+        "classificationDiagnostics": ARTIFACT_DIR / "classification-diagnostics.json",
     }
     write_json(root / paths["rawSummary"].relative_to(ROOT), {"rawSignals": run["rawSignals"], "sourceStatuses": run["sourceStatuses"]})
     write_json(root / paths["normalized"].relative_to(ROOT), {"normalizedSignals": run["normalizedSignals"]})
@@ -1067,19 +1252,37 @@ def write_run_outputs(run: dict[str, Any], *, root: Path = ROOT, write_internal_
         write_json(root / paths["reviewQueue"].relative_to(ROOT), queue)
     write_json(root / paths["digestJson"].relative_to(ROOT), digest)
     write_text(root / paths["digestMd"].relative_to(ROOT), markdown_digest(run))
+    write_json(root / paths["classificationDiagnostics"].relative_to(ROOT), run.get("classificationDiagnostics") or classification_diagnostics(run))
     return {key: str(value.relative_to(ROOT)) for key, value in paths.items()}
+
+
+def duplicate_cycle_count(duplicate_map: dict[str, str]) -> int:
+    cycles = 0
+    for candidate_id in duplicate_map:
+        seen: set[str] = set()
+        current = candidate_id
+        while current in duplicate_map:
+            if current in seen:
+                cycles += 1
+                break
+            seen.add(current)
+            current = duplicate_map[current]
+    return cycles
 
 
 def audit_change_run(run: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any]:
     companies = company_index(root)
-    candidate_ids = [candidate["candidateId"] for candidate in run.get("candidates", [])]
-    duplicate_targets = {candidate["duplicateOf"] for candidate in run.get("candidates", []) if candidate.get("duplicateOf")}
+    candidates = run.get("candidates", [])
+    candidate_ids = [candidate["candidateId"] for candidate in candidates]
+    candidate_by_id = {candidate["candidateId"]: candidate for candidate in candidates}
     public_paths = [str(path).replace("\\", "/") for path in root.glob("frontend/public/**/*") if path.is_file()]
     serialized = json.dumps(run, ensure_ascii=False)
     secret_patterns = ["DART_API_KEY", "NAVER_API_HUB_CLIENT_SECRET", "Authorization", "request_headers", "raw_response"]
     invalid_candidates = []
     fingerprints = []
-    for candidate in run.get("candidates", []):
+    status_by_id: dict[str, set[str]] = defaultdict(set)
+    for candidate in candidates:
+        status_by_id[candidate["candidateId"]].add(candidate.get("status"))
         if candidate.get("confidence") not in CONFIDENCE_VALUES:
             invalid_candidates.append(candidate["candidateId"])
         if candidate.get("riskLevel") not in RISK_LEVELS:
@@ -1089,15 +1292,31 @@ def audit_change_run(run: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any
         if not candidate.get("evidenceSummary") or not candidate.get("sourceIds"):
             invalid_candidates.append(candidate["candidateId"])
         fingerprints.append(candidate.get("fingerprint"))
-    duplicate_fingerprint_errors = len(fingerprints) - len(set(fingerprints)) - run.get("duplicate", 0)
+
+    duplicate_fingerprint_errors = len(fingerprints) - len(set(fingerprints)) - int(run.get("duplicate", 0))
     duplicate_fingerprint_errors = max(0, duplicate_fingerprint_errors)
+    duplicate_map = {
+        candidate["candidateId"]: candidate.get("duplicateOf")
+        for candidate in candidates
+        if candidate.get("duplicateOf")
+    }
+    conflict_refs = [
+        (candidate["candidateId"], target)
+        for candidate in candidates
+        for target in candidate.get("conflictsWith", [])
+    ]
+    orphan_duplicate = [target for target in duplicate_map.values() if target not in candidate_by_id]
+    orphan_conflict = [target for _, target in conflict_refs if target not in candidate_by_id]
+    cross_company_refs = []
+    for candidate_id, target in [*duplicate_map.items(), *conflict_refs]:
+        if target in candidate_by_id and candidate_by_id[candidate_id].get("companyId") != candidate_by_id[target].get("companyId"):
+            cross_company_refs.append((candidate_id, target))
+
+    status_counts = Counter(candidate.get("status") for candidate in candidates)
+    status_total = sum(status_counts.get(status, 0) for status in CANDIDATE_STATUSES)
     selected_sources = set(run.get("sources") or [])
     source_statuses = run.get("sourceStatuses") or []
-    deferred_source_statuses = [
-        source
-        for source in source_statuses
-        if source.get("state") == "configured_deferred_to_source_adapter"
-    ]
+    deferred_source_statuses = [source for source in source_statuses if source.get("state") == "configured_deferred_to_source_adapter"]
     unattempted_configured_sources = [
         source
         for source in source_statuses
@@ -1107,14 +1326,25 @@ def audit_change_run(run: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any
         and not source.get("attempted")
         and source.get("state") not in {"identity_mapping_missing"}
     ]
+    contamination_terms = ["\ucd5c\ubcd1\ucc9c", "\uae40\ud574", "\uc790\ub3d9\ucc28 \ubd80\ud488", "\ub300\uc2b9\uadf8\ub8f9"]
     summary = {
         "schemaVersion": "company-change-audit-v1",
         "generatedAt": iso_now(),
         "valid": True,
         "companyCount": len(companies),
+        "candidateCount": len(candidates),
+        "statusCounts": {status: status_counts.get(status, 0) for status in sorted(CANDIDATE_STATUSES)},
+        "statusConservationPassed": len(candidates) == status_total,
         "candidateIdUnique": len(candidate_ids) == len(set(candidate_ids)),
         "invalidCandidateCount": len(set(invalid_candidates)),
-        "missingDuplicateOfCount": len([target for target in duplicate_targets if target not in set(candidate_ids)]),
+        "multiStatusCandidateCount": len([candidate_id for candidate_id, statuses in status_by_id.items() if len(statuses) > 1]),
+        "missingDuplicateOfCount": len(orphan_duplicate),
+        "orphanDuplicateReferenceCount": len(orphan_duplicate),
+        "duplicateOfSelfCount": len([candidate_id for candidate_id, target in duplicate_map.items() if candidate_id == target]),
+        "duplicateReferenceCycleCount": duplicate_cycle_count(duplicate_map),
+        "orphanConflictReferenceCount": len(orphan_conflict),
+        "conflictSelfReferenceCount": len([candidate_id for candidate_id, target in conflict_refs if candidate_id == target]),
+        "crossCompanyContaminationCount": len(cross_company_refs),
         "duplicateFingerprintErrors": duplicate_fingerprint_errors,
         "deferredSourceStatusCount": len(deferred_source_statuses),
         "unattemptedConfiguredSourceCount": len(unattempted_configured_sources),
@@ -1124,18 +1354,26 @@ def audit_change_run(run: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any
         "daeseungContaminationCount": len(
             [
                 candidate
-                for candidate in run.get("candidates", [])
+                for candidate in candidates
                 if candidate["companyId"] == "daeseung-engineering"
-                and any(term in normalize_text(candidate.get("evidenceSummary")) for term in ["최병천", "김해", "자동차 부품", "대승그룹"])
+                and any(term in normalize_text(candidate.get("evidenceSummary")) for term in contamination_terms)
             ]
         ),
+        "classificationDiagnostics": run.get("classificationDiagnostics") or classification_diagnostics(run),
     }
     summary["valid"] = all(
         [
             summary["companyCount"] == 11,
+            summary["statusConservationPassed"],
             summary["candidateIdUnique"],
             summary["invalidCandidateCount"] == 0,
-            summary["missingDuplicateOfCount"] == 0,
+            summary["multiStatusCandidateCount"] == 0,
+            summary["orphanDuplicateReferenceCount"] == 0,
+            summary["duplicateOfSelfCount"] == 0,
+            summary["duplicateReferenceCycleCount"] == 0,
+            summary["orphanConflictReferenceCount"] == 0,
+            summary["conflictSelfReferenceCount"] == 0,
+            summary["crossCompanyContaminationCount"] == 0,
             summary["duplicateFingerprintErrors"] == 0,
             summary["deferredSourceStatusCount"] == 0,
             summary["unattemptedConfiguredSourceCount"] == 0,
@@ -1157,8 +1395,15 @@ def write_audit_outputs(summary: dict[str, Any], *, root: Path = ROOT) -> dict[s
         f"- Valid: `{summary['valid']}`",
         f"- Company count: `{summary['companyCount']}`",
         f"- Candidate IDs unique: `{summary['candidateIdUnique']}`",
+        f"- Status conservation passed: `{summary.get('statusConservationPassed')}`",
         f"- Invalid candidates: `{summary['invalidCandidateCount']}`",
         f"- Missing duplicate refs: `{summary['missingDuplicateOfCount']}`",
+        f"- Duplicate self refs: `{summary.get('duplicateOfSelfCount', 0)}`",
+        f"- Duplicate ref cycles: `{summary.get('duplicateReferenceCycleCount', 0)}`",
+        f"- Orphan conflict refs: `{summary.get('orphanConflictReferenceCount', 0)}`",
+        f"- Conflict self refs: `{summary.get('conflictSelfReferenceCount', 0)}`",
+        f"- Cross-company refs: `{summary.get('crossCompanyContaminationCount', 0)}`",
+        f"- Multi-status candidates: `{summary.get('multiStatusCandidateCount', 0)}`",
         f"- Duplicate fingerprint errors: `{summary['duplicateFingerprintErrors']}`",
         f"- Deferred source statuses: `{summary['deferredSourceStatusCount']}`",
         f"- Unattempted configured sources: `{summary['unattemptedConfiguredSourceCount']}`",
