@@ -118,6 +118,7 @@ jobs:
         id: build
         shell: bash
         run: |
+          set +e
           MODE="${{ inputs.mode || 'daily_signals' }}"
           COMPANIES="${{ inputs.companies || '' }}"
           SOURCES="${{ inputs.sources || 'public_news,naver_api_hub,dart' }}"
@@ -131,16 +132,44 @@ jobs:
             --lookback-days "$LOOKBACK" \
             --live \
             $([[ "$ACK_LIVE" == "true" ]] && echo "--acknowledge-live")
+          BUILD_EXIT=$?
+          set -e
+          echo "exit_code=$BUILD_EXIT" >> "$GITHUB_OUTPUT"
+          echo "build_exit_code=$BUILD_EXIT"
+          exit 0
 
       - name: Audit candidates
-        run: python scripts/audit_company_change_candidates.py
+        id: audit
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          python scripts/audit_company_change_candidates.py
+          AUDIT_EXIT=$?
+          set -e
+          echo "exit_code=$AUDIT_EXIT" >> "$GITHUB_OUTPUT"
+          echo "audit_exit_code=$AUDIT_EXIT"
+          exit 0
 
       - name: Protected public data unchanged
+        id: protected
+        if: always()
+        shell: bash
         run: |
+          set +e
           git diff --exit-code -- frontend/public/data/news.json frontend/public/data/business.json frontend/public/data/meta.json frontend/public/data/companies/companies.json frontend/public/data/companies/company_intelligence_v2.json
+          PROTECTED_EXIT=$?
+          set -e
+          echo "exit_code=$PROTECTED_EXIT" >> "$GITHUB_OUTPUT"
+          echo "protected_exit_code=$PROTECTED_EXIT"
+          exit 0
 
       - name: Secret exposure scan
+        id: secret_scan
+        if: always()
+        shell: bash
         run: |
+          set +e
           python - <<'PY'
           from pathlib import Path
           blocked = ["DART_API_KEY=", "NAVER_API_HUB_CLIENT_SECRET=", "Authorization:", "request_headers", "raw_response"]
@@ -151,15 +180,27 @@ jobs:
               raise SystemExit(f"secret_exposure_detected: true")
           print("secret_exposure_detected: false")
           PY
+          SECRET_EXIT=$?
+          set -e
+          echo "exit_code=$SECRET_EXIT" >> "$GITHUB_OUTPUT"
+          echo "secret_scan_exit_code=$SECRET_EXIT"
+          exit 0
 
       - name: Write summary
+        if: always()
+        shell: bash
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
           from pathlib import Path
-          queue = json.loads(Path("data/company_change_monitoring/review_queue.json").read_text(encoding="utf-8"))
-          audit = json.loads(Path("artifacts/company-change-monitor/audit-summary.json").read_text(encoding="utf-8"))
+          queue_path = Path("data/company_change_monitoring/review_queue.json")
+          audit_path = Path("artifacts/company-change-monitor/audit-summary.json")
           print("## Company Change Monitor")
+          if not queue_path.exists() or not audit_path.exists():
+              print("- Artifact status: `missing required build or audit outputs`")
+              raise SystemExit(0)
+          queue = json.loads(queue_path.read_text(encoding="utf-8"))
+          audit = json.loads(audit_path.read_text(encoding="utf-8"))
           print(f"- Run ID: `{queue['runId']}`")
           print(f"- Companies: `{len(queue['companies'])}`")
           print(f"- Candidates: `{queue['candidateCount']}`")
@@ -167,8 +208,14 @@ jobs:
           print(f"- Duplicate: `{queue['duplicate']}`")
           print(f"- Conflict: `{queue['conflict']}`")
           print(f"- Insufficient evidence: `{queue['insufficientEvidence']}`")
+          print(f"- Rejected: `{queue.get('rejected', 0)}`")
           print(f"- High priority: `{queue['highPriority']}`")
           print(f"- Audit valid: `{audit['valid']}`")
+          print(f"- Candidate IDs unique: `{audit.get('candidateIdUnique')}`")
+          print(f"- Status conservation: `{audit.get('statusConservationPassed')}`")
+          print(f"- Orphan duplicate refs: `{audit.get('orphanDuplicateReferenceCount')}`")
+          print(f"- Orphan conflict refs: `{audit.get('orphanConflictReferenceCount')}`")
+          print(f"- Multi-status candidates: `{audit.get('multiStatusCandidateCount')}`")
           print(f"- Secret exposure: `{audit['secretExposureDetected']}`")
           print(f"- Public data changed: `{audit['publicDataChanged']}`")
           print("### Sources")
@@ -177,26 +224,95 @@ jobs:
           PY
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: company-change-raw-summary
           path: artifacts/company-change-monitor/raw-summary.json
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: company-change-normalized
           path: artifacts/company-change-monitor/normalized-signals.json
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: company-change-review-queue
           path: data/company_change_monitoring/review_queue.json
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: company-change-digest
           path: reports/company_change_monitoring/
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: company-change-audit
           path: artifacts/company-change-monitor/audit-*
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: company-change-classification-diagnostics
+          path: artifacts/company-change-monitor/classification-diagnostics.json
+
+      - name: Final acceptance gate
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          failures = []
+          if "${{ steps.build.outputs.exit_code }}" != "0":
+              failures.append("generation_failed")
+          if "${{ steps.audit.outputs.exit_code }}" != "0":
+              failures.append("audit_step_failed")
+          if "${{ steps.protected.outputs.exit_code }}" != "0":
+              failures.append("public_data_changed")
+          if "${{ steps.secret_scan.outputs.exit_code }}" != "0":
+              failures.append("secret_exposure")
+
+          required = [
+              Path("artifacts/company-change-monitor/raw-summary.json"),
+              Path("artifacts/company-change-monitor/normalized-signals.json"),
+              Path("data/company_change_monitoring/review_queue.json"),
+              Path("reports/company_change_monitoring/latest_digest.json"),
+              Path("artifacts/company-change-monitor/audit-summary.json"),
+              Path("artifacts/company-change-monitor/classification-diagnostics.json"),
+          ]
+          missing = [str(path) for path in required if not path.exists()]
+          if missing:
+              failures.append("missing_artifacts")
+          else:
+              audit = json.loads(Path("artifacts/company-change-monitor/audit-summary.json").read_text(encoding="utf-8"))
+              if not audit.get("valid"):
+                  failures.append("audit_invalid")
+              for key in [
+                  "orphanDuplicateReferenceCount",
+                  "orphanConflictReferenceCount",
+                  "duplicateOfSelfCount",
+                  "conflictSelfReferenceCount",
+                  "duplicateReferenceCycleCount",
+                  "multiStatusCandidateCount",
+                  "crossCompanyContaminationCount",
+              ]:
+                  if audit.get(key, 0):
+                      failures.append(key)
+              queue = json.loads(Path("data/company_change_monitoring/review_queue.json").read_text(encoding="utf-8"))
+              for source in queue.get("sourceStatuses", []):
+                  if source.get("sourceId") in {"naver_api_hub", "dart"} and source.get("configured") is True and not source.get("attempted"):
+                      failures.append(f"{source.get('sourceId')}_configured_not_attempted")
+
+          if failures:
+              print("final_acceptance: failed")
+              for item in sorted(set(failures)):
+                  print(f"- {item}")
+              raise SystemExit(1)
+          print("final_acceptance: passed")
+          PY

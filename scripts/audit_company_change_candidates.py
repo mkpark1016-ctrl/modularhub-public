@@ -25,9 +25,14 @@ def main() -> int:
         "runId": payload.get("runId"),
         "companies": payload.get("companies", []),
         "sourceStatuses": payload.get("sourceStatuses", []),
+        "sources": payload.get("sources", []),
         "candidates": payload.get("candidates", []),
         "candidateCount": payload.get("candidateCount", 0),
         "duplicate": payload.get("duplicate", 0),
+        "conflict": payload.get("conflict", 0),
+        "insufficientEvidence": payload.get("insufficientEvidence", 0),
+        "rejected": payload.get("rejected", 0),
+        "classificationDiagnostics": payload.get("classificationDiagnostics", {}),
         "publicDataChanged": False,
     }
     summary = audit_change_run(run)

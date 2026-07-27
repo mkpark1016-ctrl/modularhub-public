@@ -129,6 +129,9 @@ def test_company_change_workflow_names_live_collection_step() -> None:
     assert "Collect live company change sources and build review queue" in text
     assert "attempted=" in text
     assert "safeErrorCategory" in text
+    assert "company-change-classification-diagnostics" in text
+    assert "Final acceptance gate" in text
+    assert "if: always()" in text
 
 
 def test_dev_requirements_include_runtime_requirements_and_pytest() -> None:
@@ -258,24 +261,172 @@ def test_publish_guard_blocks_public_update() -> None:
         build_change_monitor_run(publish=True)
 
 
-def test_duplicate_fingerprint_and_conflict_detection() -> None:
-    base = {
-        "candidateId": "a",
-        "companyId": "kumkang-kind",
-        "fieldPath": "project_portfolio",
-        "proposedValue": {"title": "A"},
-        "fingerprint": "same",
-        "status": "pending",
+def change_candidate(
+    candidate_id: str,
+    *,
+    company_id: str = "kumkang-kind",
+    field_path: str = "recent_signals",
+    fingerprint: str | None = None,
+    status: str = "pending",
+    change_type: str = "freshness_update",
+    signal_type: str = "modular_strategy",
+    entity_type: str = "news",
+    entity_key: str = "entity-a",
+    effective_at: str = "2026-07-22",
+    proposed_value: dict | None = None,
+) -> dict:
+    proposed_value = proposed_value or {"title": candidate_id, "url": f"https://news.example/{candidate_id}"}
+    fingerprint = fingerprint or candidate_fingerprint(company_id, change_type, field_path, proposed_value, effective_at, "public_news", entity_key=entity_key)
+    return {
+        "candidateId": candidate_id,
+        "companyId": company_id,
+        "fieldPath": field_path,
+        "changeType": change_type,
+        "signalType": signal_type,
+        "entityType": entity_type,
+        "entityKey": entity_key,
+        "effectiveAt": effective_at,
+        "proposedValue": proposed_value,
+        "comparisonValue": proposed_value,
+        "fingerprint": fingerprint,
+        "status": status,
         "duplicateOf": None,
         "conflictsWith": [],
+        "confidence": "medium",
+        "riskLevel": "low",
+        "evidenceSummary": proposed_value.get("title"),
+        "sourceIds": ["public_news"],
     }
-    duplicate = {**base, "candidateId": "b"}
-    conflict = {**base, "candidateId": "c", "fingerprint": "different", "proposedValue": {"title": "B"}}
-    result = dedupe_and_conflict([base, duplicate, conflict])
+
+
+def test_same_canonical_url_is_duplicate_without_candidate_id_collision() -> None:
+    proposed = {"title": "First title", "url": "https://news.example/path?utm_source=test"}
+    duplicate_proposed = {"title": "Second title", "url": "https://news.example/path"}
+    first = change_candidate("c1", proposed_value=proposed)
+    second = change_candidate("c2", proposed_value=duplicate_proposed)
+    first["fingerprint"] = candidate_fingerprint("kumkang-kind", "freshness_update", "recent_signals", proposed, "2026-07-22", "public_news", entity_key="https://news.example/path")
+    second["fingerprint"] = first["fingerprint"]
+
+    result = dedupe_and_conflict([first, second])
+
+    assert result[0]["status"] == "pending"
     assert result[1]["status"] == "duplicate"
-    assert result[1]["duplicateOf"] == "a"
-    assert result[2]["status"] == "conflict"
-    assert result[2]["conflictsWith"] == ["a"]
+    assert result[1]["duplicateOf"] == "c1"
+    assert result[0]["candidateId"] != result[1]["candidateId"]
+
+
+def test_missing_url_same_title_and_date_is_duplicate() -> None:
+    proposed = {"title": "Modular school contract", "url": ""}
+    first = change_candidate("title-a", proposed_value=proposed, entity_key="modular school contract")
+    second = change_candidate("title-b", proposed_value=proposed, entity_key="modular school contract")
+    result = dedupe_and_conflict([first, second])
+    assert result[0]["status"] == "pending"
+    assert result[1]["status"] == "duplicate"
+    assert result[1]["duplicateOf"] == "title-a"
+
+
+def test_distinct_news_same_company_are_not_conflicts() -> None:
+    result = dedupe_and_conflict(
+        [
+            change_candidate("news-a", proposed_value={"title": "A", "url": "https://news.example/a"}, entity_key="https://news.example/a"),
+            change_candidate("news-b", proposed_value={"title": "B", "url": "https://news.example/b"}, entity_key="https://news.example/b"),
+        ]
+    )
+    assert [candidate["status"] for candidate in result] == ["pending", "pending"]
+    assert all(not candidate["conflictsWith"] for candidate in result)
+
+
+def test_same_url_different_company_is_not_cross_company_duplicate() -> None:
+    proposed = {"title": "Shared article", "url": "https://news.example/shared"}
+    result = dedupe_and_conflict(
+        [
+            change_candidate("a", company_id="kumkang-kind", proposed_value=proposed, entity_key="https://news.example/shared"),
+            change_candidate("b", company_id="yuchang-enc", proposed_value=proposed, entity_key="https://news.example/shared"),
+        ]
+    )
+    assert [candidate["status"] for candidate in result] == ["pending", "pending"]
+
+
+def test_independent_projects_patents_and_facilities_are_not_conflicts() -> None:
+    result = dedupe_and_conflict(
+        [
+            change_candidate("project-a", field_path="project_portfolio", change_type="new_record", signal_type="contract_awarded", entity_type="project", entity_key="project-a"),
+            change_candidate("project-b", field_path="project_portfolio", change_type="new_record", signal_type="contract_awarded", entity_type="project", entity_key="project-b"),
+            change_candidate("patent-a", field_path="technology", change_type="new_record", signal_type="patent_filed", entity_type="technology", entity_key="patent-a"),
+            change_candidate("facility-a", field_path="production", change_type="new_record", signal_type="facility_opened", entity_type="facility", entity_key="facility-a"),
+        ]
+    )
+    assert all(candidate["status"] == "pending" for candidate in result)
+    assert all(not candidate["conflictsWith"] for candidate in result)
+
+
+def test_real_financial_value_conflict_uses_same_scope() -> None:
+    first = change_candidate(
+        "financial-a",
+        field_path="financials",
+        change_type="new_value",
+        signal_type="financial_filing",
+        entity_type="financial",
+        entity_key="2025-revenue",
+        proposed_value={"year": 2025, "revenue": 100},
+    )
+    second = change_candidate(
+        "financial-b",
+        field_path="financials",
+        change_type="new_value",
+        signal_type="financial_filing",
+        entity_type="financial",
+        entity_key="2025-revenue",
+        proposed_value={"year": 2025, "revenue": 200},
+    )
+    first["fingerprint"] = "financial-a"
+    second["fingerprint"] = "financial-b"
+
+    result = dedupe_and_conflict([first, second])
+
+    assert result[0]["status"] == "pending"
+    assert result[1]["status"] == "conflict"
+    assert result[1]["conflictsWith"] == ["financial-a"]
+
+
+def test_repeated_same_base_candidate_id_is_made_unique() -> None:
+    first = change_candidate("same-id", fingerprint="same")
+    second = change_candidate("same-id", fingerprint="same")
+    result = dedupe_and_conflict([first, second])
+    assert result[0]["candidateId"] != result[1]["candidateId"]
+    assert result[1]["status"] == "duplicate"
+    assert result[1]["duplicateOf"] == result[0]["candidateId"]
+
+
+def test_audit_reference_integrity_and_status_conservation() -> None:
+    candidates = dedupe_and_conflict(
+        [
+            change_candidate("a", fingerprint="same"),
+            change_candidate("b", fingerprint="same"),
+            change_candidate("c", field_path="financials", change_type="new_value", signal_type="financial_filing", entity_type="financial", entity_key="2025", proposed_value={"value": 1}, fingerprint="financial-1"),
+            change_candidate("d", field_path="financials", change_type="new_value", signal_type="financial_filing", entity_type="financial", entity_key="2025", proposed_value={"value": 2}, fingerprint="financial-2"),
+        ]
+    )
+    run = {
+        "companies": ["kumkang-kind"],
+        "sources": ["public_news"],
+        "sourceStatuses": [],
+        "candidates": candidates,
+        "candidateCount": len(candidates),
+        "duplicate": sum(1 for candidate in candidates if candidate["status"] == "duplicate"),
+        "publicDataChanged": False,
+    }
+
+    summary = audit_change_run(run)
+
+    assert summary["statusConservationPassed"] is True
+    assert summary["candidateIdUnique"] is True
+    assert summary["orphanDuplicateReferenceCount"] == 0
+    assert summary["orphanConflictReferenceCount"] == 0
+    assert summary["duplicateOfSelfCount"] == 0
+    assert summary["duplicateReferenceCycleCount"] == 0
+    assert summary["conflictSelfReferenceCount"] == 0
+    assert summary["crossCompanyContaminationCount"] == 0
 
 
 def test_candidate_fingerprint_is_stable() -> None:
