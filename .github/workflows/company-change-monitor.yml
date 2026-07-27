@@ -166,7 +166,14 @@ jobs:
 
       - name: Run company change monitoring tests
         run: |
-          python -m pytest tests/test_company_change_monitoring.py tests/test_company_data_quality.py -q
+          python -m pytest \
+            tests/test_company_change_monitoring.py \
+            tests/test_company_data_quality.py \
+            tests/test_company_source_coverage.py \
+            tests/test_dart_company_identity_registry.py \
+            tests/test_public_news_empty_diagnostics.py \
+            tests/test_source_concentration_policy.py \
+            -q
 
       - name: Collect live company change sources and build review queue
         id: build
@@ -205,6 +212,19 @@ jobs:
           echo "audit_exit_code=$AUDIT_EXIT"
           exit 0
 
+      - name: Audit source coverage
+        id: source_coverage
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          python scripts/audit_company_source_coverage.py --head-sha "${{ github.sha }}"
+          COVERAGE_EXIT=$?
+          set -e
+          echo "exit_code=$COVERAGE_EXIT" >> "$GITHUB_OUTPUT"
+          echo "source_coverage_exit_code=$COVERAGE_EXIT"
+          exit 0
+
       - name: Protected public data unchanged
         id: protected
         if: always()
@@ -227,7 +247,11 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           blocked = ["DART_API_KEY=", "NAVER_API_HUB_CLIENT_SECRET=", "Authorization:", "request_headers", "raw_response"]
-          paths = [*Path("reports/company_change_monitoring").glob("*"), *Path("artifacts/company-change-monitor").glob("*")]
+          paths = [
+              *Path("reports/company_change_monitoring").glob("*"),
+              *Path("artifacts/company-change-monitor").glob("*"),
+              *Path("artifacts/company-source-coverage").glob("*"),
+          ]
           text = "\n".join(path.read_text(encoding="utf-8", errors="ignore") for path in paths if path.is_file())
           hits = [item for item in blocked if item in text]
           if hits:
@@ -282,6 +306,7 @@ jobs:
           from pathlib import Path
           queue_path = Path("data/company_change_monitoring/review_queue.json")
           audit_path = Path("artifacts/company-change-monitor/audit-summary.json")
+          coverage_path = Path("artifacts/company-source-coverage/source-coverage-report.json")
           operations_path = Path("artifacts/company-change-monitor/operations-evaluation.json")
           alert_path = Path("artifacts/company-change-monitor/operations-alert.json")
           print("## Company Change Monitor")
@@ -291,6 +316,7 @@ jobs:
           queue = json.loads(queue_path.read_text(encoding="utf-8"))
           audit = json.loads(audit_path.read_text(encoding="utf-8"))
           operations = json.loads(operations_path.read_text(encoding="utf-8")) if operations_path.exists() else {}
+          coverage = json.loads(coverage_path.read_text(encoding="utf-8")) if coverage_path.exists() else {}
           alert = json.loads(alert_path.read_text(encoding="utf-8")) if alert_path.exists() else {}
           run_kind = operations.get("runMetadata", {}).get("runKind", "${{ steps.guard.outputs.run_kind }}")
           print(f"- Run kind: `{run_kind}`")
@@ -312,6 +338,10 @@ jobs:
           print(f"- Secret exposure: `{audit['secretExposureDetected']}`")
           print(f"- Public data changed: `{audit['publicDataChanged']}`")
           print(f"- Operations state: `{operations.get('state', 'missing')}`")
+          print(f"- Source coverage state: `{coverage.get('state', 'missing')}`")
+          print(f"- Source coverage warnings: `{','.join(coverage.get('warningCodes', [])) or 'none'}`")
+          print(f"- Source coverage failures: `{','.join(coverage.get('failureCodes', [])) or 'none'}`")
+          print(f"- DART identity coverage: `{coverage.get('dartMappingCoverage', {}).get('percent', 'missing')}`")
           print(f"- Alert action: `{alert.get('action', 'none')}`")
           print(f"- Alert code: `{alert.get('alertCode', 'none')}`")
           print("### Sources")
@@ -369,6 +399,29 @@ jobs:
           path: artifacts/company-change-monitor/classification-diagnostics.json
           retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: company-source-coverage
+          path: |
+            artifacts/company-source-coverage/source-coverage-report.json
+            artifacts/company-source-coverage/source-coverage-report.md
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: company-dart-identity-coverage
+          path: artifacts/company-source-coverage/dart-mapping-report.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: company-public-news-diagnostics
+          path: artifacts/company-source-coverage/public-news-empty-diagnostics.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
+
       - name: Final acceptance gate
         if: always()
         shell: bash
@@ -383,6 +436,8 @@ jobs:
               failures.append("generation_failed")
           if "${{ steps.audit.outputs.exit_code }}" != "0":
               failures.append("audit_step_failed")
+          if "${{ steps.source_coverage.outputs.exit_code }}" != "0":
+              failures.append("source_coverage_step_failed")
           if "${{ steps.protected.outputs.exit_code }}" != "0":
               failures.append("public_data_changed")
           if "${{ steps.secret_scan.outputs.exit_code }}" != "0":
@@ -398,6 +453,9 @@ jobs:
               Path("artifacts/company-change-monitor/audit-summary.json"),
               Path("artifacts/company-change-monitor/classification-diagnostics.json"),
               Path("artifacts/company-change-monitor/operations-evaluation.json"),
+              Path("artifacts/company-source-coverage/source-coverage-report.json"),
+              Path("artifacts/company-source-coverage/dart-mapping-report.json"),
+              Path("artifacts/company-source-coverage/public-news-empty-diagnostics.json"),
           ]
           missing = [str(path) for path in required if not path.exists()]
           if missing:
@@ -424,6 +482,9 @@ jobs:
               operations = json.loads(Path("artifacts/company-change-monitor/operations-evaluation.json").read_text(encoding="utf-8"))
               if operations.get("state") == "FAILED":
                   failures.append("operations_state_failed")
+              coverage = json.loads(Path("artifacts/company-source-coverage/source-coverage-report.json").read_text(encoding="utf-8"))
+              if coverage.get("state") == "FAILED" or coverage.get("valid") is False:
+                  failures.append("source_coverage_failed")
 
           if failures:
               print("final_acceptance: failed")

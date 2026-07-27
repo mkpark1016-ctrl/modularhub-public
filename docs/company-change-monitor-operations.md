@@ -117,3 +117,9 @@ Do not copy candidate records into public JSON without a separate human-reviewed
 ## Phase 4G Backlog
 
 DART corp-code coverage improvements, additional source adapters, and public-source rebalancing are Phase 4G scope. They are intentionally not part of the operations automation PR.
+
+## Source Coverage Reliability
+
+Company Change Monitor now runs an offline source coverage audit after candidate validation. The audit verifies `public_news`, `naver_api_hub`, and `dart` attempt coverage, DART identity mapping coverage, source concentration, and public news empty-result diagnostics without recalling external APIs.
+
+Artifacts are uploaded as `company-source-coverage`, `company-dart-identity-coverage`, and `company-public-news-diagnostics`. See `docs/company-source-coverage-reliability.md` for the policy and local command.

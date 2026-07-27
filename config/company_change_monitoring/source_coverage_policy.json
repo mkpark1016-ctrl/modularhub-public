@@ -1,0 +1,35 @@
+{
+  "policyVersion": "company-source-coverage-v1",
+  "expectedSources": [
+    "public_news",
+    "naver_api_hub",
+    "dart"
+  ],
+  "requiredAttemptedSources": 3,
+  "sourceConcentrationWarningThreshold": 0.8,
+  "sourceConcentrationFailureThreshold": 0.95,
+  "sustainedRunCount": 3,
+  "minimumCompanySourceCoverage": 1,
+  "minimumDartMappingCoverage": 0.8,
+  "emptyResultStatePolicy": {
+    "attemptedEmptyIsFailure": false,
+    "allowedStates": [
+      "success_empty",
+      "success_empty_valid",
+      "success_empty_query_miss",
+      "success_empty_date_window",
+      "success_empty_identity_unavailable"
+    ]
+  },
+  "alertPolicy": {
+    "singleRunConcentrationCreatesIssue": false,
+    "sustainedWarningsCreateIssue": true,
+    "historyUnavailableCreatesIssue": false
+  },
+  "historyWindow": 3,
+  "artifactRetentionDays": {
+    "daily": 14,
+    "weekly": 30,
+    "manual": 30
+  }
+}

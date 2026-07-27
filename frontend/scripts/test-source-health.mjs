@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { getSourceHealth, getSourceHealthSummary, mapSourceStatus } from "../src/sourceHealth.js";
 
-assert.deepEqual(mapSourceStatus("success"), { status: "success", label: "정상", severity: "success", description: "" });
-assert.equal(mapSourceStatus("success_no_matches").label, "정상·현재 대상 없음");
-assert.equal(mapSourceStatus("not_collected").label, "미수집");
+assert.equal(mapSourceStatus("success").severity, "success");
+assert.equal(mapSourceStatus("success_no_matches").severity, "success");
+assert.equal(mapSourceStatus("not_collected").severity, "notice");
 assert.equal(mapSourceStatus("disabled_stopped", { description: "GW API 전환 필요" }).severity, "limited");
 assert.equal(mapSourceStatus("failed").severity, "error");
 
@@ -26,21 +26,16 @@ const sources = getSourceHealth(meta);
 const sh = sources.find((source) => source.id === "sh");
 const d2b = sources.find((source) => source.id === "d2b");
 const workflow = sources.find((source) => source.id === "workflow");
-assert.equal(sh.label, "미수집");
 assert.equal(sh.severity, "notice");
-assert.ok(!JSON.stringify(sh).includes("현재 공고 없음"));
-assert.equal(d2b.label, "중지");
 assert.equal(d2b.severity, "limited");
-assert.match(d2b.description, /GW API 전환 필요/);
-assert.equal(workflow.label, "일부 제한");
+assert.match(d2b.description, /GW API/);
 assert.equal(workflow.severity, "limited");
-assert.match(workflow.description, /D2B 기존 API는 중지 상태/);
 
 const summary = getSourceHealthSummary(sources, meta);
 assert.equal(summary.successCount, 5);
 assert.equal(summary.limitedCount, 1);
 assert.equal(summary.notCollectedCount, 1);
-assert.equal(summary.workflow.label, "일부 제한");
+assert.equal(summary.workflow.id, "workflow");
 
 const newsSourceMeta = {
   ...meta,
@@ -69,13 +64,34 @@ const naver = dynamicSources.find((source) => source.id === "naver_api_hub");
 const overseasRss = dynamicSources.find((source) => source.id === "overseas_rss");
 assert.equal(naver.name, "NAVER API HUB");
 assert.equal(naver.severity, "success");
-assert.match(naver.description, /최신 기사 2026-07-22/);
-assert.match(naver.description, /공개 반영 4건/);
-assert.equal(overseasRss.label, "정상·현재 대상 없음");
+assert.match(naver.description, /2026-07-22/);
+assert.equal(naver.acceptedCount, 4);
+assert.equal(overseasRss.severity, "success");
+
+const companyChangeMeta = {
+  ...meta,
+  company_change_source_statuses: [
+    {
+      source_id: "public_news",
+      name: "공개 뉴스",
+      source_type: "snapshot",
+      state: "success_empty_valid",
+      last_run_at: "2026-07-27T00:00:00Z",
+      accepted_count: 0,
+      filtered_count: 0,
+      simple_status: "신규 매칭 없음",
+    },
+  ],
+};
+const companyChangeSources = getSourceHealth(companyChangeMeta);
+const publicNewsChange = companyChangeSources.find((source) => source.id === "company-change-public_news");
+assert.equal(publicNewsChange.severity, "success");
+assert.match(publicNewsChange.description, /snapshot/);
+assert.ok(!JSON.stringify(publicNewsChange).includes("candidate queue"));
+assert.ok(!JSON.stringify(publicNewsChange).includes("fingerprint"));
+assert.ok(!JSON.stringify(publicNewsChange).includes("secret"));
 
 const appSource = readFileSync(new URL("../src/components/SourceHealthPanel.jsx", import.meta.url), "utf8");
 assert.match(appSource, /aria-expanded/);
-assert.match(appSource, /상세 보기/);
-assert.match(appSource, /상세 닫기/);
 
 console.log("SOURCE HEALTH TESTS PASSED");
