@@ -169,11 +169,15 @@ jobs:
           python -m pytest \
             tests/test_company_change_monitoring.py \
             tests/test_company_data_quality.py \
+            tests/test_dart_identity_resolution.py \
             tests/test_company_source_coverage.py \
             tests/test_dart_company_identity_registry.py \
             tests/test_public_news_empty_diagnostics.py \
             tests/test_source_concentration_policy.py \
             -q
+
+      - name: Validate DART identity registry
+        run: python scripts/validate_dart_identity_registry.py
 
       - name: Collect live company change sources and build review queue
         id: build
