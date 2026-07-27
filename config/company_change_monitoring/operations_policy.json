@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "timezone": "Asia/Seoul",
+  "daily": {
+    "cronUtc": "10 23 * * *",
+    "localDescription": "Every day 08:10 KST",
+    "mode": "daily_signals",
+    "companies": "",
+    "sources": "public_news,naver_api_hub,dart",
+    "lookbackDays": 2,
+    "acknowledgeLive": true,
+    "createProposal": false,
+    "acknowledgeProposal": false
+  },
+  "weekly": {
+    "cronUtc": "40 23 * * 6",
+    "localDescription": "Every Sunday 08:40 KST",
+    "mode": "daily_signals",
+    "companies": "",
+    "sources": "public_news,naver_api_hub,dart",
+    "lookbackDays": 30,
+    "acknowledgeLive": true,
+    "createProposal": false,
+    "acknowledgeProposal": false
+  },
+  "artifactRetentionDays": {
+    "daily": 14,
+    "weekly": 30,
+    "manual": 30
+  },
+  "thresholds": {
+    "expectedCompanyCount": 11,
+    "maxCrossCompanyContamination": 0,
+    "maxMultiStatusCandidates": 0,
+    "maxOrphanReferences": 0,
+    "maxSelfReferences": 0,
+    "maxReferenceCycles": 0,
+    "maxInvalidConflictLinks": 0,
+    "pendingWarningCount": 3000,
+    "candidateCountWarningIncreasePercent": 50,
+    "sourceEmptyConsecutiveWarningRuns": 3,
+    "naverOnlyConsecutiveWarningRuns": 3,
+    "dartIdentityMappingCoverageWarningPercent": 80
+  }
+}

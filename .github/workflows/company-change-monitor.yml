@@ -2,8 +2,10 @@ name: Company Change Monitor
 
 on:
   schedule:
-    # 05:45 KST, after public data freshness jobs and before business hours.
-    - cron: "45 20 * * *"
+    # GitHub cron uses UTC. 23:10 UTC is 08:10 KST for the daily 2-day signal scan.
+    - cron: "10 23 * * *"
+    # GitHub cron uses UTC. 23:40 UTC Saturday is 08:40 KST Sunday for the weekly 30-day scan.
+    - cron: "40 23 * * 6"
   workflow_dispatch:
     inputs:
       mode:
@@ -75,13 +77,47 @@ jobs:
             requirements-dev.txt
 
       - name: Guard inputs
+        id: guard
         shell: bash
         run: |
           set -euo pipefail
           EVENT_NAME="${{ github.event_name }}"
-          ACKNOWLEDGE_LIVE="${{ inputs.acknowledge_live }}"
-          CREATE_PROPOSAL="${{ inputs.create_proposal }}"
-          ACKNOWLEDGE_PROPOSAL="${{ inputs.acknowledge_proposal }}"
+          EVENT_SCHEDULE="${{ github.event.schedule }}"
+          POLICY="config/company_change_monitoring/operations_policy.json"
+          if [[ "$EVENT_NAME" == "schedule" && "$EVENT_SCHEDULE" == "10 23 * * *" ]]; then
+            RUN_KIND="daily"
+            MODE=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['daily']['mode'])")
+            COMPANIES=""
+            SOURCES=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['daily']['sources'])")
+            LOOKBACK=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['daily']['lookbackDays'])")
+            ACKNOWLEDGE_LIVE="true"
+            CREATE_PROPOSAL="false"
+            ACKNOWLEDGE_PROPOSAL="false"
+            ARTIFACT_RETENTION_DAYS=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['artifactRetentionDays']['daily'])")
+          elif [[ "$EVENT_NAME" == "schedule" && "$EVENT_SCHEDULE" == "40 23 * * 6" ]]; then
+            RUN_KIND="weekly"
+            MODE=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['weekly']['mode'])")
+            COMPANIES=""
+            SOURCES=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['weekly']['sources'])")
+            LOOKBACK=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['weekly']['lookbackDays'])")
+            ACKNOWLEDGE_LIVE="true"
+            CREATE_PROPOSAL="false"
+            ACKNOWLEDGE_PROPOSAL="false"
+            ARTIFACT_RETENTION_DAYS=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['artifactRetentionDays']['weekly'])")
+          elif [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            RUN_KIND="manual"
+            MODE="${{ inputs.mode }}"
+            COMPANIES="${{ inputs.companies }}"
+            SOURCES="${{ inputs.sources }}"
+            LOOKBACK="${{ inputs.lookback_days }}"
+            ACKNOWLEDGE_LIVE="${{ inputs.acknowledge_live }}"
+            CREATE_PROPOSAL="${{ inputs.create_proposal }}"
+            ACKNOWLEDGE_PROPOSAL="${{ inputs.acknowledge_proposal }}"
+            ARTIFACT_RETENTION_DAYS=$(python -c "import json; print(json.load(open('$POLICY', encoding='utf-8'))['artifactRetentionDays']['manual'])")
+          else
+            echo "Unsupported Company Change Monitor trigger: event=$EVENT_NAME schedule=$EVENT_SCHEDULE" >&2
+            exit 2
+          fi
           PUBLISH="false"
           if [[ "$EVENT_NAME" == "workflow_dispatch" && "$CREATE_PROPOSAL" == "true" && "$ACKNOWLEDGE_PROPOSAL" != "true" ]]; then
             echo "create_proposal requires acknowledge_proposal=true" >&2
@@ -91,6 +127,24 @@ jobs:
             echo "acknowledge_live=true is required before live-capable source checks" >&2
             exit 2
           fi
+          if [[ "$COMPANIES" != "" ]]; then
+            echo "Manual scoped run detected; scheduled runs keep companies blank to use all 11."
+          fi
+          echo "run_kind=$RUN_KIND" >> "$GITHUB_OUTPUT"
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+          echo "companies=$COMPANIES" >> "$GITHUB_OUTPUT"
+          echo "sources=$SOURCES" >> "$GITHUB_OUTPUT"
+          echo "lookback_days=$LOOKBACK" >> "$GITHUB_OUTPUT"
+          echo "acknowledge_live=$ACKNOWLEDGE_LIVE" >> "$GITHUB_OUTPUT"
+          echo "create_proposal=$CREATE_PROPOSAL" >> "$GITHUB_OUTPUT"
+          echo "acknowledge_proposal=$ACKNOWLEDGE_PROPOSAL" >> "$GITHUB_OUTPUT"
+          echo "artifact_retention_days=$ARTIFACT_RETENTION_DAYS" >> "$GITHUB_OUTPUT"
+          echo "run_kind: $RUN_KIND"
+          echo "mode: $MODE"
+          echo "companies: ${COMPANIES:-<all 11>}"
+          echo "sources: $SOURCES"
+          echo "lookback_days: $LOOKBACK"
+          echo "artifact_retention_days: $ARTIFACT_RETENTION_DAYS"
           echo "acknowledge_live: ${ACKNOWLEDGE_LIVE:-false}"
           echo "publish: $PUBLISH"
           echo "create_proposal: ${CREATE_PROPOSAL:-false}"
@@ -119,11 +173,11 @@ jobs:
         shell: bash
         run: |
           set +e
-          MODE="${{ inputs.mode || 'daily_signals' }}"
-          COMPANIES="${{ inputs.companies || '' }}"
-          SOURCES="${{ inputs.sources || 'public_news,naver_api_hub,dart' }}"
-          LOOKBACK="${{ inputs.lookback_days || '30' }}"
-          ACK_LIVE="${{ github.event_name == 'workflow_dispatch' && inputs.acknowledge_live || 'true' }}"
+          MODE="${{ steps.guard.outputs.mode }}"
+          COMPANIES="${{ steps.guard.outputs.companies }}"
+          SOURCES="${{ steps.guard.outputs.sources }}"
+          LOOKBACK="${{ steps.guard.outputs.lookback_days }}"
+          ACK_LIVE="${{ steps.guard.outputs.acknowledge_live }}"
           PUBLISH="false"
           python scripts/company_change_monitoring/build_change_review_queue.py \
             --mode "$MODE" \
@@ -186,6 +240,39 @@ jobs:
           echo "secret_scan_exit_code=$SECRET_EXIT"
           exit 0
 
+      - name: Evaluate operations
+        id: operations
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          python scripts/evaluate_company_change_operations.py \
+            --run-kind "${{ steps.guard.outputs.run_kind }}" \
+            --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --run-number "${{ github.run_number }}" \
+            --run-sha "${{ github.sha }}" \
+            --workflow-event "${{ github.event_name }}"
+          OPS_EXIT=$?
+          set -e
+          echo "exit_code=$OPS_EXIT" >> "$GITHUB_OUTPUT"
+          echo "operations_exit_code=$OPS_EXIT"
+          exit 0
+
+      - name: Publish operations alert
+        id: operations_alert
+        if: always()
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          python scripts/company_change_operations_alert.py
+          ALERT_EXIT=$?
+          set -e
+          echo "exit_code=$ALERT_EXIT" >> "$GITHUB_OUTPUT"
+          echo "operations_alert_exit_code=$ALERT_EXIT"
+          exit 0
+
       - name: Write summary
         if: always()
         shell: bash
@@ -195,12 +282,18 @@ jobs:
           from pathlib import Path
           queue_path = Path("data/company_change_monitoring/review_queue.json")
           audit_path = Path("artifacts/company-change-monitor/audit-summary.json")
+          operations_path = Path("artifacts/company-change-monitor/operations-evaluation.json")
+          alert_path = Path("artifacts/company-change-monitor/operations-alert.json")
           print("## Company Change Monitor")
           if not queue_path.exists() or not audit_path.exists():
               print("- Artifact status: `missing required build or audit outputs`")
               raise SystemExit(0)
           queue = json.loads(queue_path.read_text(encoding="utf-8"))
           audit = json.loads(audit_path.read_text(encoding="utf-8"))
+          operations = json.loads(operations_path.read_text(encoding="utf-8")) if operations_path.exists() else {}
+          alert = json.loads(alert_path.read_text(encoding="utf-8")) if alert_path.exists() else {}
+          run_kind = operations.get("runMetadata", {}).get("runKind", "${{ steps.guard.outputs.run_kind }}")
+          print(f"- Run kind: `{run_kind}`")
           print(f"- Run ID: `{queue['runId']}`")
           print(f"- Companies: `{len(queue['companies'])}`")
           print(f"- Candidates: `{queue['candidateCount']}`")
@@ -218,9 +311,16 @@ jobs:
           print(f"- Multi-status candidates: `{audit.get('multiStatusCandidateCount')}`")
           print(f"- Secret exposure: `{audit['secretExposureDetected']}`")
           print(f"- Public data changed: `{audit['publicDataChanged']}`")
+          print(f"- Operations state: `{operations.get('state', 'missing')}`")
+          print(f"- Alert action: `{alert.get('action', 'none')}`")
+          print(f"- Alert code: `{alert.get('alertCode', 'none')}`")
           print("### Sources")
           for source in queue["sourceStatuses"]:
               print(f"- `{source['sourceId']}`: {source['state']} / configured={source['configured']} / attempted={source.get('attempted')} / raw={source['rawCount']} / normalized={source['normalizedCount']} / error={source.get('safeErrorCategory')}")
+          print("### Artifacts")
+          if operations:
+              for name, status in operations.get("artifacts", {}).items():
+                  print(f"- `{name}`: exists={status.get('exists')} / size={status.get('sizeBytes')} / parseable={status.get('parseable')}")
           PY
 
       - uses: actions/upload-artifact@v4
@@ -228,36 +328,46 @@ jobs:
         with:
           name: company-change-raw-summary
           path: artifacts/company-change-monitor/raw-summary.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: company-change-normalized
           path: artifacts/company-change-monitor/normalized-signals.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: company-change-review-queue
           path: data/company_change_monitoring/review_queue.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: company-change-digest
           path: reports/company_change_monitoring/
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: company-change-audit
-          path: artifacts/company-change-monitor/audit-*
+          path: |
+            artifacts/company-change-monitor/audit-*
+            artifacts/company-change-monitor/operations-evaluation.json
+            artifacts/company-change-monitor/operations-alert.json
+            reports/company_change_monitoring/latest_operations_evaluation.md
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: company-change-classification-diagnostics
           path: artifacts/company-change-monitor/classification-diagnostics.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
       - name: Final acceptance gate
         if: always()
@@ -277,6 +387,8 @@ jobs:
               failures.append("public_data_changed")
           if "${{ steps.secret_scan.outputs.exit_code }}" != "0":
               failures.append("secret_exposure")
+          if "${{ steps.operations.outputs.exit_code }}" != "0":
+              failures.append("operations_failed")
 
           required = [
               Path("artifacts/company-change-monitor/raw-summary.json"),
@@ -285,6 +397,7 @@ jobs:
               Path("reports/company_change_monitoring/latest_digest.json"),
               Path("artifacts/company-change-monitor/audit-summary.json"),
               Path("artifacts/company-change-monitor/classification-diagnostics.json"),
+              Path("artifacts/company-change-monitor/operations-evaluation.json"),
           ]
           missing = [str(path) for path in required if not path.exists()]
           if missing:
@@ -308,6 +421,9 @@ jobs:
               for source in queue.get("sourceStatuses", []):
                   if source.get("sourceId") in {"naver_api_hub", "dart"} and source.get("configured") is True and not source.get("attempted"):
                       failures.append(f"{source.get('sourceId')}_configured_not_attempted")
+              operations = json.loads(Path("artifacts/company-change-monitor/operations-evaluation.json").read_text(encoding="utf-8"))
+              if operations.get("state") == "FAILED":
+                  failures.append("operations_state_failed")
 
           if failures:
               print("final_acceptance: failed")
