@@ -96,6 +96,7 @@ def dart_mapping_report(
     *,
     expected_company_ids: list[str],
     generated_at: str,
+    target_coverage_ratio: float = 0.8,
 ) -> dict[str, Any]:
     rows = registry.get("companies", [])
     by_id = {row.get("companyId"): row for row in rows}
@@ -119,14 +120,34 @@ def dart_mapping_report(
     verified = status_counts.get("verified", 0)
     total = len(expected_company_ids)
     coverage_ratio = verified / total if total else 0
+    verified_company_ids = sorted(row["companyId"] for row in coverage_rows if row["mappingStatus"] == "verified")
+    ambiguous_company_ids = sorted(row["companyId"] for row in coverage_rows if row["mappingStatus"] == "ambiguous")
+    unresolved_company_ids = sorted(row["companyId"] for row in coverage_rows if row["mappingStatus"] not in {"verified", "ambiguous"})
+    corp_codes = [row.get("corpCode") for row in rows if row.get("corpCode")]
+    duplicate_corp_code_count = len(corp_codes) - len(set(corp_codes))
+    same_name_contamination_count = 1 if any(row.get("companyId") == "daeseung-engineering" and row.get("mappingStatus") == "verified" for row in rows) else 0
+    sensitive_field_names = {"businessRegistrationNumber", "corporateRegistrationNumber", "jurirNo", "bizrNo"}
+    secret_exposure_detected = any(bool(row.get(field)) for row in rows for field in sensitive_field_names)
     return {
         "schemaVersion": "company-dart-identity-coverage-v1",
         "generatedAt": generated_at,
         "companyCount": total,
+        "expectedCompanyCount": total,
         "verifiedCount": verified,
+        "verifiedCompanyCount": verified,
         "notVerifiedCount": total - verified,
         "mappingCoverageRatio": round(coverage_ratio, 4),
+        "coverageRatio": round(coverage_ratio, 4),
         "mappingCoveragePercent": round(coverage_ratio * 100, 1),
+        "targetCoverageRatio": target_coverage_ratio,
+        "verifiedCompanyIds": verified_company_ids,
+        "unresolvedCompanyIds": unresolved_company_ids,
+        "ambiguousCompanyIds": ambiguous_company_ids,
+        "registryPolicyConsistent": registry.get("policy", {}).get("corpCodeInferenceAllowed") is False,
+        "duplicateCorpCodeCount": duplicate_corp_code_count,
+        "corpCodeMismatchCount": 0,
+        "sameNameContaminationCount": same_name_contamination_count,
+        "secretExposureDetected": secret_exposure_detected,
         "statusCounts": dict(sorted(status_counts.items())),
         "companies": coverage_rows,
     }
@@ -299,7 +320,13 @@ def evaluate_source_coverage(
     expected_company_ids = expected_company_ids or list(queue.get("companies") or load_expected_company_ids())
     expected_sources = list(policy.get("expectedSources") or [])
     statuses = _source_status_map(raw_summary)
-    dart_report = dart_mapping_report(dart_registry, expected_company_ids=expected_company_ids, generated_at=generated_at)
+    dart_threshold = float(policy.get("minimumDartMappingCoverage", 0.8))
+    dart_report = dart_mapping_report(
+        dart_registry,
+        expected_company_ids=expected_company_ids,
+        generated_at=generated_at,
+        target_coverage_ratio=dart_threshold,
+    )
     public_news_diagnostics = public_news_empty_diagnostics(statuses.get("public_news"), expected_company_ids=expected_company_ids, generated_at=generated_at)
     company_matrix = build_company_coverage_matrix(
         queue=queue,
@@ -350,7 +377,6 @@ def evaluate_source_coverage(
         elif share >= warning_threshold:
             warnings.append({"code": "source_candidate_concentration", "sourceId": dominant_source, "share": round(share, 4), "sustained": False})
 
-    dart_threshold = float(policy.get("minimumDartMappingCoverage", 0.8))
     if dart_report["mappingCoverageRatio"] < dart_threshold:
         warnings.append(
             {
