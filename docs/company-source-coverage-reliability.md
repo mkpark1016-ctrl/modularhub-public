@@ -23,6 +23,9 @@ Company Change Monitor는 11개 공개 모듈러 기업을 대상으로 `public_
 - `artifacts/company-source-coverage/source-coverage-report.md`
 - `artifacts/company-source-coverage/dart-mapping-report.json`
 - `artifacts/company-source-coverage/public-news-empty-diagnostics.json`
+- `artifacts/company-source-coverage/source-contribution-history.json`
+- `artifacts/company-source-coverage/source-concentration-diagnostics.json`
+- `artifacts/company-source-coverage/source-concentration-diagnostics.md`
 
 ## State Rules
 
@@ -31,6 +34,20 @@ Company Change Monitor는 11개 공개 모듈러 기업을 대상으로 `public_
 Single-run source concentration is a warning only. Issue creation is reserved for sustained warnings or hard failures.
 
 DART identity coverage is expected to remain below 100% until all 11 companies have verified corp_code mappings. Missing mappings are reported as identity coverage gaps, not guessed.
+
+## Source Contribution History
+
+`source-contribution-history.json` stores sanitized run-level and source-level counts from the current monitor run and any recent comparable successful production runs whose artifacts are still available. It records raw candidate share, unique candidate share, high-priority share, company coverage share, and independent evidence share. It never stores raw article bodies, raw API responses, review queue records, request headers, GitHub tokens, or source credentials.
+
+`source-concentration-diagnostics.json` separates a single concentrated run from sustained source concentration:
+
+- `history_unavailable`: previous run artifacts could not be read; the current run is preserved and the gate does not fail.
+- `history_insufficient`: fewer than 3 comparable runs are available; sustained concentration is false.
+- `observe`: the current run exceeds the concentration threshold, but the recent history does not show a sustained pattern.
+- `warning`: at least 3 consecutive comparable runs, or at least 4 of the last 5 comparable runs, exceed the concentration threshold. This is an operations warning, not a public data mutation.
+- `failed`: source coverage failures or configured-source execution failures require operator action.
+
+Raw candidate share is based on source candidate volume. Unique candidate share counts each candidate ID once per source so duplicate-heavy sources do not overstate their durable contribution. Independent evidence share is the share of source candidates that also have evidence from another source.
 
 ## Local Audit
 

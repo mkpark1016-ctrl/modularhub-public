@@ -23,6 +23,8 @@ SOURCE_COVERAGE_ARTIFACTS = {
     "sourceCoverage": "artifacts/company-source-coverage/source-coverage-report.json",
     "dartMapping": "artifacts/company-source-coverage/dart-mapping-report.json",
     "publicNewsDiagnostics": "artifacts/company-source-coverage/public-news-empty-diagnostics.json",
+    "sourceContributionHistory": "artifacts/company-source-coverage/source-contribution-history.json",
+    "sourceConcentrationDiagnostics": "artifacts/company-source-coverage/source-concentration-diagnostics.json",
 }
 FAILED = "FAILED"
 WARNING = "WARNING"
@@ -165,6 +167,8 @@ def evaluate_operations(
     run_metadata: dict[str, Any] | None = None,
     artifact_paths: dict[str, str] | None = None,
     source_coverage: dict[str, Any] | None = None,
+    source_contribution_history: dict[str, Any] | None = None,
+    source_concentration_diagnostics: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     policy = policy or load_operations_policy(root)
     thresholds = policy.get("thresholds", {})
@@ -191,6 +195,18 @@ def evaluate_operations(
             source_coverage = read_json(root / coverage_status["path"])
         else:
             source_coverage = {}
+    if source_contribution_history is None:
+        history_status = source_coverage_artifacts["sourceContributionHistory"]
+        if history_status["exists"] and history_status["parseable"] and history_status["fileType"] == "json":
+            source_contribution_history = read_json(root / history_status["path"])
+        else:
+            source_contribution_history = {}
+    if source_concentration_diagnostics is None:
+        concentration_status = source_coverage_artifacts["sourceConcentrationDiagnostics"]
+        if concentration_status["exists"] and concentration_status["parseable"] and concentration_status["fileType"] == "json":
+            source_concentration_diagnostics = read_json(root / concentration_status["path"])
+        else:
+            source_concentration_diagnostics = {}
 
     expected_ids = load_expected_company_ids(root)
     actual_ids = sorted(queue.get("companies") or [])
@@ -325,6 +341,37 @@ def evaluate_operations(
             failures.append({"code": "source_coverage_failed", "severity": FAILED})
     else:
         notes.append({"code": "source_coverage_artifact_unavailable", "message": "Source coverage artifact was not available for operations evaluation."})
+
+    if source_concentration_diagnostics:
+        contribution_state = source_concentration_diagnostics.get("state")
+        if contribution_state == "failed":
+            failures.append({"code": "source_concentration_diagnostics_failed", "severity": FAILED})
+        elif contribution_state == "warning":
+            warnings.append(
+                {
+                    "code": "source_candidate_concentration",
+                    "severity": WARNING,
+                    "sourceId": source_concentration_diagnostics.get("dominantSource"),
+                    "sharePercent": round(float(source_concentration_diagnostics.get("rawDominantSourceShare", 0) or 0) * 100, 1),
+                    "sustained": bool(source_concentration_diagnostics.get("concentrationSustained")),
+                    "source": "source_contribution_history",
+                }
+            )
+        elif contribution_state in {"observe", "history_insufficient", "history_unavailable"}:
+            notes.append(
+                {
+                    "code": contribution_state,
+                    "message": source_concentration_diagnostics.get("recommendation"),
+                    "source": "source_contribution_history",
+                }
+            )
+        if source_concentration_diagnostics.get("secretExposureDetected"):
+            failures.append({"code": "source_concentration_secret_exposure", "severity": FAILED})
+        if int(source_concentration_diagnostics.get("publicReviewQueueExposureCount", 0) or 0) > 0:
+            failures.append({"code": "source_concentration_public_review_queue_exposure", "severity": FAILED})
+    else:
+        notes.append({"code": "source_concentration_diagnostics_unavailable", "message": "Source contribution history artifact was not available."})
+
     state = FAILED if failures else WARNING if warnings else HEALTHY
     return {
         "schemaVersion": "company-change-operations-evaluation-v1",
@@ -374,6 +421,20 @@ def evaluate_operations(
             "dartMappingCoverage": source_coverage.get("dartMappingCoverage", {}),
             "publicNewsDiagnostics": source_coverage.get("publicNewsDiagnostics", {}),
         },
+        "sourceContribution": {
+            "available": bool(source_concentration_diagnostics),
+            "historyState": source_concentration_diagnostics.get("historyState") if source_concentration_diagnostics else None,
+            "state": source_concentration_diagnostics.get("state") if source_concentration_diagnostics else None,
+            "concentrationCurrent": source_concentration_diagnostics.get("concentrationCurrent") if source_concentration_diagnostics else None,
+            "concentrationSustained": source_concentration_diagnostics.get("concentrationSustained") if source_concentration_diagnostics else None,
+            "comparableRunCount": source_concentration_diagnostics.get("comparableRunCount") if source_concentration_diagnostics else 0,
+            "dominantSource": source_concentration_diagnostics.get("dominantSource") if source_concentration_diagnostics else None,
+            "rawDominantSourceShare": source_concentration_diagnostics.get("rawDominantSourceShare") if source_concentration_diagnostics else None,
+            "uniqueDominantSourceShare": source_concentration_diagnostics.get("uniqueDominantSourceShare") if source_concentration_diagnostics else None,
+            "independentEvidenceShare": source_concentration_diagnostics.get("independentEvidenceShare") if source_concentration_diagnostics else None,
+            "emptySourceStreaks": source_concentration_diagnostics.get("emptySourceStreaks", {}) if source_concentration_diagnostics else {},
+            "historyRunCount": source_contribution_history.get("comparableRunCount", 0) if source_contribution_history else 0,
+        },
         "protection": {
             "publicDataChanged": bool(audit.get("publicDataChanged") or digest.get("publicDataChanged")),
             "proposalGenerated": bool(queue.get("proposal", {}).get("created") or run_metadata.get("proposalGenerated")),
@@ -385,7 +446,7 @@ def evaluate_operations(
         "warnings": warnings,
         "failures": failures,
         "notes": notes,
-        "historyStatus": "available" if history else "history_unavailable",
+        "historyStatus": source_contribution_history.get("historyState") if source_contribution_history else "available" if history else "history_unavailable",
         "alertRequired": bool(failures) or any(warning.get("sustained") for warning in warnings),
         "alertCode": alert_code({"state": state, "failures": failures, "warnings": warnings}),
     }
@@ -436,6 +497,16 @@ def markdown_evaluation(evaluation: dict[str, Any]) -> str:
         lines.append(f"- Warning codes: `{', '.join(coverage.get('warningCodes') or []) or 'none'}`")
         lines.append(f"- Failure codes: `{', '.join(coverage.get('failureCodes') or []) or 'none'}`")
         lines.append(f"- DART mapping coverage: `{(coverage.get('dartMappingCoverage') or {}).get('percent')}`")
+    contribution = evaluation.get("sourceContribution") or {}
+    if contribution.get("available"):
+        lines.extend(["", "## Source Contribution", ""])
+        lines.append(f"- State: `{contribution.get('state')}`")
+        lines.append(f"- History state: `{contribution.get('historyState')}`")
+        lines.append(f"- Comparable runs: `{contribution.get('comparableRunCount')}`")
+        lines.append(f"- Dominant source: `{contribution.get('dominantSource')}`")
+        lines.append(f"- Raw dominant share: `{contribution.get('rawDominantSourceShare')}`")
+        lines.append(f"- Unique dominant share: `{contribution.get('uniqueDominantSourceShare')}`")
+        lines.append(f"- Sustained: `{contribution.get('concentrationSustained')}`")
     if evaluation.get("failures"):
         lines.extend(["", "## Failures", ""])
         for failure in evaluation["failures"]:

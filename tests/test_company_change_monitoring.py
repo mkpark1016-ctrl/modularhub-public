@@ -134,6 +134,8 @@ def test_company_change_workflow_names_live_collection_step() -> None:
     assert "attempted=" in text
     assert "safeErrorCategory" in text
     assert "company-change-classification-diagnostics" in text
+    assert "company-source-contribution-history" in text
+    assert "company-source-concentration-diagnostics" in text
     assert "Final acceptance gate" in text
     assert "if: always()" in text
 

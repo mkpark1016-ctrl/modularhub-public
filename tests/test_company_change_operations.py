@@ -303,6 +303,9 @@ def test_company_change_workflow_contract() -> None:
     assert "issues: write" in text
     assert "Evaluate operations" in text and "if: always()" in text
     assert "Publish operations alert" in text
+    assert "Build source contribution history and concentration diagnostics" in text
+    assert text.index("Audit source coverage") < text.index("Build source contribution history and concentration diagnostics")
+    assert text.index("Build source contribution history and concentration diagnostics") < text.index("Evaluate operations")
     assert text.index("Evaluate operations") < text.index("Write summary")
     assert text.index("company-change-classification-diagnostics") < text.index("Final acceptance gate")
     for name in [
@@ -312,7 +315,11 @@ def test_company_change_workflow_contract() -> None:
         "company-change-digest",
         "company-change-audit",
         "company-change-classification-diagnostics",
+        "company-source-contribution-history",
+        "company-source-concentration-diagnostics",
     ]:
         assert name in text
+    assert "source-contribution-history.json" in text
+    assert "source-concentration-diagnostics.json" in text
     assert "frontend/public/data/news.json" in text
     assert "git diff --exit-code -- frontend/public/data/news.json" in text
