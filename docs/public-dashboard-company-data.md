@@ -73,3 +73,7 @@ python scripts\audit_company_data_quality.py
 ## 공개 Review Queue 제거
 
 `frontend/public/data/company-intelligence/`의 Review Queue와 Manifest는 공개 배포 대상에서 제외한다. `/company-intelligence` 직접 접근은 Not Found 화면으로 처리한다.
+
+## Public Source Health Boundary
+
+The public dashboard keeps only the business, news, and company information surfaces. Company Change Monitor review queues and raw artifacts are internal-only and must not be bundled into `frontend/public`. The existing source health panel may show sanitized collector health fields such as source name, type, state, last run, and public-safe counts, but it must not expose review queue records, fingerprints, conflict internals, secrets, headers, or raw API responses.

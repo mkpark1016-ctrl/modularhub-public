@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 import json
 from collections import Counter
@@ -19,6 +19,11 @@ REQUIRED_ARTIFACTS = {
     "diagnostics": "artifacts/company-change-monitor/classification-diagnostics.json",
 }
 
+SOURCE_COVERAGE_ARTIFACTS = {
+    "sourceCoverage": "artifacts/company-source-coverage/source-coverage-report.json",
+    "dartMapping": "artifacts/company-source-coverage/dart-mapping-report.json",
+    "publicNewsDiagnostics": "artifacts/company-source-coverage/public-news-empty-diagnostics.json",
+}
 FAILED = "FAILED"
 WARNING = "WARNING"
 HEALTHY = "HEALTHY"
@@ -159,12 +164,14 @@ def evaluate_operations(
     history: list[dict[str, Any]] | None = None,
     run_metadata: dict[str, Any] | None = None,
     artifact_paths: dict[str, str] | None = None,
+    source_coverage: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     policy = policy or load_operations_policy(root)
     thresholds = policy.get("thresholds", {})
     history = history or []
     run_metadata = run_metadata or {}
     artifacts = _artifact_statuses(root, artifact_paths)
+    source_coverage_artifacts = _artifact_statuses(root, SOURCE_COVERAGE_ARTIFACTS)
 
     def load_optional(name: str) -> dict[str, Any]:
         status = artifacts[name]
@@ -178,6 +185,12 @@ def evaluate_operations(
     raw_summary = raw_summary if raw_summary is not None else load_optional("rawSummary")
     normalized = normalized if normalized is not None else load_optional("normalized")
     digest = digest if digest is not None else load_optional("digest")
+    if source_coverage is None:
+        coverage_status = source_coverage_artifacts["sourceCoverage"]
+        if coverage_status["exists"] and coverage_status["parseable"] and coverage_status["fileType"] == "json":
+            source_coverage = read_json(root / coverage_status["path"])
+        else:
+            source_coverage = {}
 
     expected_ids = load_expected_company_ids(root)
     actual_ids = sorted(queue.get("companies") or [])
@@ -294,6 +307,24 @@ def evaluate_operations(
         if coverage is not None and coverage < threshold:
             warnings.append({"code": "dart_identity_mapping_coverage_low", "severity": WARNING, "coveragePercent": round(coverage, 1), "thresholdPercent": threshold, "sustained": False})
 
+    if source_coverage:
+        for code in source_coverage.get("failureCodes", []):
+            failures.append({"code": code, "severity": FAILED, "source": "source_coverage"})
+        for warning in source_coverage.get("warnings", []):
+            warnings.append(
+                {
+                    "code": warning.get("code", "source_coverage_warning"),
+                    "severity": WARNING,
+                    "sourceId": warning.get("sourceId"),
+                    "companyId": warning.get("companyId"),
+                    "sustained": bool(warning.get("sustained")),
+                    "source": "source_coverage",
+                }
+            )
+        if source_coverage.get("state") == FAILED or source_coverage.get("valid") is False:
+            failures.append({"code": "source_coverage_failed", "severity": FAILED})
+    else:
+        notes.append({"code": "source_coverage_artifact_unavailable", "message": "Source coverage artifact was not available for operations evaluation."})
     state = FAILED if failures else WARNING if warnings else HEALTHY
     return {
         "schemaVersion": "company-change-operations-evaluation-v1",
@@ -333,6 +364,16 @@ def evaluate_operations(
             "invalidCandidateCount": audit.get("invalidCandidateCount", 0),
         },
         "artifacts": artifacts,
+        "sourceCoverageArtifacts": source_coverage_artifacts,
+        "sourceCoverage": {
+            "available": bool(source_coverage),
+            "state": source_coverage.get("state"),
+            "valid": source_coverage.get("valid"),
+            "warningCodes": source_coverage.get("warningCodes", []),
+            "failureCodes": source_coverage.get("failureCodes", []),
+            "dartMappingCoverage": source_coverage.get("dartMappingCoverage", {}),
+            "publicNewsDiagnostics": source_coverage.get("publicNewsDiagnostics", {}),
+        },
         "protection": {
             "publicDataChanged": bool(audit.get("publicDataChanged") or digest.get("publicDataChanged")),
             "proposalGenerated": bool(queue.get("proposal", {}).get("created") or run_metadata.get("proposalGenerated")),
@@ -387,6 +428,14 @@ def markdown_evaluation(evaluation: dict[str, Any]) -> str:
         lines.append(
             f"- `{source.get('sourceId')}`: configured={source.get('configured')}, attempted={source.get('attempted')}, state={source.get('state')}, raw={source.get('rawCount')}, normalized={source.get('normalizedCount')}"
         )
+    coverage = evaluation.get("sourceCoverage") or {}
+    if coverage.get("available"):
+        lines.extend(["", "## Source Coverage", ""])
+        lines.append(f"- State: `{coverage.get('state')}`")
+        lines.append(f"- Valid: `{coverage.get('valid')}`")
+        lines.append(f"- Warning codes: `{', '.join(coverage.get('warningCodes') or []) or 'none'}`")
+        lines.append(f"- Failure codes: `{', '.join(coverage.get('failureCodes') or []) or 'none'}`")
+        lines.append(f"- DART mapping coverage: `{(coverage.get('dartMappingCoverage') or {}).get('percent')}`")
     if evaluation.get("failures"):
         lines.extend(["", "## Failures", ""])
         for failure in evaluation["failures"]:

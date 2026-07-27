@@ -413,11 +413,13 @@ def collect_public_news_signals(
     normalized: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     per_company: Counter[str] = Counter()
+    scanned_count = 0
 
     for news in news_items:
         published = parse_date(news.get("published_at"))
         if not published or datetime.fromisoformat(published).date() < cutoff:
             continue
+        scanned_count += 1
         for policy in policies:
             if per_company[policy.company_id] >= max_per_company:
                 continue
@@ -440,6 +442,7 @@ def collect_public_news_signals(
 
     return {
         "sourceId": "public_news",
+        "sourceType": "snapshot",
         "configured": True,
         "attempted": True,
         "state": "success_with_candidates" if normalized else "success_empty",
@@ -448,6 +451,30 @@ def collect_public_news_signals(
         "rejected": rejected,
         "latestPublishedAt": latest,
         "fetchedAt": fetched_at,
+        "queryCount": 0,
+        "responseCount": scanned_count,
+        "companyCountAttempted": len(policies),
+        "companyCountWithResults": len(per_company),
+        "companyCountSkipped": 0,
+        "skipReasons": {},
+        "diagnostics": {
+            "snapshotPath": str(NEWS_PATH.relative_to(ROOT)),
+            "lookbackDays": lookback_days,
+            "snapshotItemsScanned": scanned_count,
+            "matchedCompanyCount": len(per_company),
+        },
+        "companyResults": [
+            {
+                "companyId": policy.company_id,
+                "attempted": True,
+                "state": "success_with_candidates" if per_company[policy.company_id] else "success_empty",
+                "rawRecordCount": per_company[policy.company_id],
+                "candidateCount": per_company[policy.company_id],
+                "rejectedCount": 0,
+                "safeErrorCategory": "none",
+            }
+            for policy in policies
+        ],
     }
 
 
@@ -489,6 +516,7 @@ def collect_naver_api_hub_signals(
     if not configured:
         return {
             "sourceId": "naver_api_hub",
+            "sourceType": "live",
             "configured": False,
             "attempted": False,
             "state": "source_not_configured",
@@ -498,6 +526,12 @@ def collect_naver_api_hub_signals(
             "latestPublishedAt": None,
             "safeErrorCategory": "missing_secret_or_adapter",
             "companyResults": company_results,
+            "queryCount": 0,
+            "responseCount": 0,
+            "companyCountAttempted": 0,
+            "companyCountWithResults": 0,
+            "companyCountSkipped": len(policies),
+            "skipReasons": {"missing_secret_or_adapter": len(policies)},
         }
 
     tier = source_tier("naver_api_hub")
@@ -523,6 +557,7 @@ def collect_naver_api_hub_signals(
                     "candidateCount": len(candidates),
                     "rejectedCount": len(rejected_items),
                     "safeErrorCategory": "none",
+                    "queryCount": len(result.get("queries") or []),
                 }
             )
         except Exception as exc:  # source-level failure isolation
@@ -552,6 +587,7 @@ def collect_naver_api_hub_signals(
 
     return {
         "sourceId": "naver_api_hub",
+        "sourceType": "live",
         "configured": True,
         "attempted": True,
         "state": state,
@@ -561,6 +597,12 @@ def collect_naver_api_hub_signals(
         "latestPublishedAt": latest,
         "safeErrorCategory": "none" if not error_categories else ",".join(sorted(error_categories)),
         "companyResults": company_results,
+        "queryCount": sum(int(row.get("queryCount", 0) or 0) for row in company_results),
+        "responseCount": sum(int(row.get("rawRecordCount", 0) or 0) for row in company_results),
+        "companyCountAttempted": sum(1 for row in company_results if row.get("attempted")),
+        "companyCountWithResults": sum(1 for row in company_results if int(row.get("candidateCount", 0) or 0) > 0),
+        "companyCountSkipped": sum(1 for row in company_results if not row.get("attempted")),
+        "skipReasons": dict(error_categories),
     }
 
 
@@ -584,6 +626,7 @@ def collect_dart_signals(
     if not configured:
         return {
             "sourceId": "dart",
+            "sourceType": "registry",
             "configured": False,
             "attempted": False,
             "state": "source_not_configured",
@@ -593,6 +636,12 @@ def collect_dart_signals(
             "latestPublishedAt": None,
             "safeErrorCategory": "missing_secret_or_adapter",
             "companyResults": company_results,
+            "queryCount": 0,
+            "responseCount": 0,
+            "companyCountAttempted": 0,
+            "companyCountWithResults": 0,
+            "companyCountSkipped": len(policies),
+            "skipReasons": {"missing_secret_or_adapter": len(policies)},
         }
 
     tier = source_tier("dart")
@@ -607,6 +656,7 @@ def collect_dart_signals(
                     "candidateCount": 0,
                     "rejectedCount": 0,
                     "safeErrorCategory": "identity_mapping_missing",
+                    "queryCount": 0,
                 }
             )
             continue
@@ -629,6 +679,7 @@ def collect_dart_signals(
                     "candidateCount": len(candidates),
                     "rejectedCount": 0,
                     "safeErrorCategory": "none",
+                    "queryCount": 1,
                 }
             )
         except Exception as exc:  # source-level failure isolation
@@ -662,6 +713,7 @@ def collect_dart_signals(
 
     return {
         "sourceId": "dart",
+        "sourceType": "registry",
         "configured": True,
         "attempted": attempted,
         "state": state,
@@ -671,6 +723,12 @@ def collect_dart_signals(
         "latestPublishedAt": latest,
         "safeErrorCategory": "identity_mapping_missing" if state == "identity_mapping_missing" else "none" if not error_categories else ",".join(sorted(error_categories)),
         "companyResults": company_results,
+        "queryCount": sum(int(row.get("queryCount", 0) or 0) for row in company_results),
+        "responseCount": sum(int(row.get("rawRecordCount", 0) or 0) for row in company_results),
+        "companyCountAttempted": sum(1 for row in company_results if row.get("attempted")),
+        "companyCountWithResults": sum(1 for row in company_results if int(row.get("candidateCount", 0) or 0) > 0),
+        "companyCountSkipped": sum(1 for row in company_results if not row.get("attempted")),
+        "skipReasons": {"identity_mapping_missing": identity_missing_count, **dict(error_categories)},
     }
 
 
@@ -1057,6 +1115,7 @@ def build_change_monitor_run(
             else:
                 result = {
                     "sourceId": source_id,
+                    "sourceType": "live",
                     "configured": source_configured(source_id),
                     "attempted": False,
                     "state": "live_opt_in_required",
@@ -1073,6 +1132,7 @@ def build_change_monitor_run(
             else:
                 result = {
                     "sourceId": source_id,
+                    "sourceType": "registry",
                     "configured": source_configured(source_id),
                     "attempted": False,
                     "state": "live_opt_in_required",
@@ -1104,6 +1164,7 @@ def build_change_monitor_run(
         source_statuses.append(
             {
                 "sourceId": source_id,
+                "sourceType": result.get("sourceType") or "derived",
                 "configured": result["configured"],
                 "attempted": result.get("attempted", False),
                 "state": result["state"],
@@ -1113,6 +1174,13 @@ def build_change_monitor_run(
                 "latestPublishedAt": result["latestPublishedAt"],
                 "safeErrorCategory": result.get("safeErrorCategory", "none"),
                 "companyResults": result.get("companyResults", []),
+                "queryCount": result.get("queryCount", 0),
+                "responseCount": result.get("responseCount", len(result["raw"])),
+                "companyCountAttempted": result.get("companyCountAttempted", 0),
+                "companyCountWithResults": result.get("companyCountWithResults", 0),
+                "companyCountSkipped": result.get("companyCountSkipped", 0),
+                "skipReasons": result.get("skipReasons", {}),
+                "diagnostics": result.get("diagnostics", {}),
             }
         )
 

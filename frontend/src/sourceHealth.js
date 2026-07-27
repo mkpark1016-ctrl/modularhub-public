@@ -1,6 +1,6 @@
 export const SOURCE_STATUS_LABELS = {
   success: "정상",
-  success_no_matches: "정상·현재 대상 없음",
+  success_no_matches: "정상 · 현재 대상 없음",
   not_collected: "미수집",
   disabled_stopped: "중지",
   warning: "확인 필요",
@@ -74,6 +74,40 @@ function dynamicNewsSources(meta = {}) {
   }));
 }
 
+function normalizeCompanyChangeStatus(state) {
+  const normalized = String(state || "").toLowerCase();
+  if (normalized === "success_empty_valid" || normalized === "success_empty") return "success_no_matches";
+  if (normalized === "success_with_candidates" || normalized === "healthy") return "success";
+  if (normalized.includes("missing") || normalized.includes("warning")) return "warning";
+  if (normalized.includes("failed") || normalized.includes("error") || normalized.includes("not_configured")) return "failed";
+  return normalized || "unknown";
+}
+
+function companyChangeSourceDescription(source = {}) {
+  const parts = [];
+  if (source.source_type) parts.push(source.source_type);
+  if (source.last_run_at) parts.push(`마지막 실행 ${source.last_run_at}`);
+  if (Number.isFinite(Number(source.accepted_count))) parts.push(`반영 ${Number(source.accepted_count).toLocaleString("ko-KR")}건`);
+  if (Number.isFinite(Number(source.filtered_count))) parts.push(`검토 제외 ${Number(source.filtered_count).toLocaleString("ko-KR")}건`);
+  if (source.simple_status) parts.push(source.simple_status);
+  return parts.join(" · ");
+}
+
+function dynamicCompanyChangeSources(meta = {}) {
+  if (!Array.isArray(meta.company_change_source_statuses)) return [];
+  return meta.company_change_source_statuses.map((source) => ({
+    id: `company-change-${source.id || source.source_id || source.name}`,
+    name: source.name || source.collector_name || source.source_id || "기업 변화 감지",
+    ...mapSourceStatus(normalizeCompanyChangeStatus(source.state), {
+      description: companyChangeSourceDescription(source),
+    }),
+    latestItemPublishedAt: source.latest_item_published_at || source.last_run_at || "",
+    fetchedCount: Number(source.fetched_count || 0),
+    acceptedCount: Number(source.accepted_count || 0),
+    duplicateCount: Number(source.duplicate_count || 0),
+  }));
+}
+
 function activeCollectorFailed(meta = {}) {
   const statuses = [
     meta.g2b_order_plan_status,
@@ -95,7 +129,7 @@ function workflowStatus(meta = {}) {
       status: "warning",
       label: "일부 제한",
       severity: "limited",
-      description: "주요 수집원은 정상이며 D2B 기존 API는 중지 상태",
+      description: "주요 수집원은 정상이며 D2B 기존 API만 중지 상태",
     };
   }
   return mapSourceStatus(normalized, {
@@ -105,6 +139,7 @@ function workflowStatus(meta = {}) {
 
 export function getSourceHealth(meta = {}) {
   const newsSources = dynamicNewsSources(meta);
+  const companyChangeSources = dynamicCompanyChangeSources(meta);
   const d2b = mapSourceStatus(meta.d2b_status || meta.d2b_legacy_status || "disabled_stopped", {
     description: meta.d2b_gw_migration_required ? "GW API 전환 필요" : (meta.d2b_message || "비활성화"),
   });
@@ -132,6 +167,7 @@ export function getSourceHealth(meta = {}) {
         name: "해외 RSS",
         ...mapSourceStatus("success", { description: "해외 모듈러 RSS 수집 정상" }),
       }]),
+    ...companyChangeSources,
     {
       id: "workflow",
       name: "전체 Workflow",
