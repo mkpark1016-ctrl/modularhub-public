@@ -139,6 +139,10 @@ def write_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def repo_relative_posix(path: Path, root: Path = ROOT) -> str:
+    return path.relative_to(root).as_posix()
+
+
 def normalize_text(value: Any) -> str:
     text = "" if value is None else str(value)
     text = CORP_RE.sub(" ", text.lower())
@@ -458,7 +462,7 @@ def collect_public_news_signals(
         "companyCountSkipped": 0,
         "skipReasons": {},
         "diagnostics": {
-            "snapshotPath": str(NEWS_PATH.relative_to(ROOT)),
+            "snapshotPath": repo_relative_posix(NEWS_PATH),
             "lookbackDays": lookback_days,
             "snapshotItemsScanned": scanned_count,
             "matchedCompanyCount": len(per_company),
@@ -1321,7 +1325,7 @@ def write_run_outputs(run: dict[str, Any], *, root: Path = ROOT, write_internal_
     write_json(root / paths["digestJson"].relative_to(ROOT), digest)
     write_text(root / paths["digestMd"].relative_to(ROOT), markdown_digest(run))
     write_json(root / paths["classificationDiagnostics"].relative_to(ROOT), run.get("classificationDiagnostics") or classification_diagnostics(run))
-    return {key: str(value.relative_to(ROOT)) for key, value in paths.items()}
+    return {key: repo_relative_posix(value) for key, value in paths.items()}
 
 
 def duplicate_cycle_count(duplicate_map: dict[str, str]) -> int:
@@ -1481,7 +1485,7 @@ def write_audit_outputs(summary: dict[str, Any], *, root: Path = ROOT) -> dict[s
     ]
     write_json(root / json_path.relative_to(ROOT), summary)
     write_text(root / md_path.relative_to(ROOT), "\n".join(lines) + "\n")
-    return {"auditSummary": str(json_path.relative_to(ROOT)), "auditReport": str(md_path.relative_to(ROOT))}
+    return {"auditSummary": repo_relative_posix(json_path), "auditReport": repo_relative_posix(md_path)}
 
 
 def issue_fingerprint(candidate: dict[str, Any]) -> str:

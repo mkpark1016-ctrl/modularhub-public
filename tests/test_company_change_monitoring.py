@@ -8,7 +8,10 @@ import pytest
 from src.company_change_monitoring import (
     CANDIDATE_STATUSES,
     CONFIDENCE_VALUES,
+    NEWS_PATH,
     RISK_LEVELS,
+    REVIEW_QUEUE_PATH,
+    ROOT,
     audit_change_run,
     build_change_monitor_run,
     candidate_fingerprint,
@@ -19,6 +22,7 @@ from src.company_change_monitoring import (
     link_research_gaps,
     load_identity_policies,
     load_source_policy,
+    repo_relative_posix,
     review_queue_payload,
     source_configured,
     valid_patent_transition,
@@ -246,7 +250,35 @@ def test_review_queue_payload_keeps_candidates_internal() -> None:
     queue = review_queue_payload(run)
     assert queue["schemaVersion"] == "company-change-review-queue-v1"
     assert "candidates" in queue
-    assert "frontend/public" not in json.dumps(queue, ensure_ascii=False)
+    assert queue["candidateCount"] == len(queue["candidates"])
+    assert repo_relative_posix(REVIEW_QUEUE_PATH) == "data/company_change_monitoring/review_queue.json"
+    assert "frontend/public" not in repo_relative_posix(REVIEW_QUEUE_PATH)
+    for candidate in queue["candidates"]:
+        assert "publicOutputPath" not in candidate
+        assert "publishPath" not in candidate
+        assert "exportPath" not in candidate
+
+
+def test_public_news_snapshot_provenance_is_allowed() -> None:
+    run = build_change_monitor_run(companies=["kumkang-kind"], sources=["public_news"], lookback_days=30)
+    public_news = next(source for source in run["sourceStatuses"] if source["sourceId"] == "public_news")
+    assert public_news["diagnostics"]["snapshotPath"] == "frontend/public/data/news.json"
+    assert public_news["diagnostics"]["snapshotPath"] == repo_relative_posix(NEWS_PATH)
+
+
+def test_review_queue_is_not_copied_to_public_bundle() -> None:
+    public_files = [path.relative_to(ROOT).as_posix() for path in (ROOT / "frontend" / "public").rglob("*") if path.is_file()]
+    blocked_names = {"review_queue.json", "company-change-review-queue.json"}
+    assert not any(Path(path).name in blocked_names for path in public_files)
+    assert not any("company-change-review-queue-v1" in (ROOT / path).read_text(encoding="utf-8", errors="ignore") for path in public_files)
+
+
+def test_repository_paths_are_serialized_as_posix() -> None:
+    run = build_change_monitor_run(companies=["kumkang-kind"], sources=["public_news"], lookback_days=30)
+    public_news = next(source for source in run["sourceStatuses"] if source["sourceId"] == "public_news")
+    assert public_news["diagnostics"]["snapshotPath"] == "frontend/public/data/news.json"
+    assert "\\" not in public_news["diagnostics"]["snapshotPath"]
+    assert repo_relative_posix(REVIEW_QUEUE_PATH) == "data/company_change_monitoring/review_queue.json"
 
 
 def test_proposal_guard_requires_acknowledgement() -> None:

@@ -52,6 +52,10 @@ def write_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+def repo_relative_posix(path: Path, root: Path = ROOT) -> str:
+    return path.relative_to(root).as_posix()
+
+
 def load_source_coverage_policy(root: Path = ROOT) -> dict[str, Any]:
     return read_json(root / POLICY_PATH.relative_to(ROOT))
 
@@ -459,7 +463,7 @@ def write_source_coverage_outputs(report: dict[str, Any], *, root: Path = ROOT) 
     write_text(paths["sourceCoverageMarkdown"], markdown_report(report))
     write_json(paths["dartMappingReport"], report["dartMappingReport"])
     write_json(paths["publicNewsEmptyDiagnostics"], report["publicNewsDiagnostics"])
-    return {key: str(path.relative_to(root)) for key, path in paths.items()}
+    return {key: repo_relative_posix(path, root) for key, path in paths.items()}
 
 
 def audit_source_coverage_from_files(
