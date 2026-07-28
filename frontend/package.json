@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint src --max-warnings=0",
     "test:business": "node scripts/test-business-insights.mjs",
+    "test:companies-activities": "node scripts/test-company-activities.mjs",
     "test:companies": "node scripts/test-company-insights.mjs",
     "test:companies-comparison": "node scripts/test-company-comparison.mjs",
     "test:companies-detail": "node scripts/test-company-detail-ui.mjs",
