@@ -266,6 +266,27 @@ code { overflow-wrap: anywhere; }
 .company-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 4px 0 0; }
 .company-kpi-grid div { min-width: 0; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
 .company-kpi-grid dd { font-size: 18px; font-weight: 800; }
+.company-report-kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin: 14px 0 0; }
+.company-report-kpi { display: grid; gap: 5px; min-width: 0; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-report-kpi span, .company-report-kpi small { color: #666; font-size: 12px; font-weight: 800; line-height: 1.4; }
+.company-report-kpi strong { font-size: 18px; overflow-wrap: anywhere; }
+.company-report-table { min-width: 760px; }
+.company-report-table .is-negative, .company-report-kpi .is-negative { color: #9a3412; }
+.company-report-signal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.company-report-signal { display: grid; gap: 6px; min-width: 0; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-report-signal span { width: fit-content; padding: 3px 7px; border: 1px solid #bbd7c2; border-radius: 999px; color: #174b31; background: #eef7f1; font-size: 12px; font-weight: 800; }
+.company-report-signal.watch span { color: #92400e; border-color: #fcd34d; background: #fffbeb; }
+.company-report-signal strong { font-size: 14px; }
+.company-report-signal p, .company-report-warning p { margin: 0; color: #666; font-size: 13px; line-height: 1.55; }
+.company-report-warning summary { cursor: pointer; font-weight: 800; line-height: 1.5; }
+.company-report-source-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
+.company-report-source-summary div { min-width: 0; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-report-source-summary dt { color: #666; font-size: 12px; font-weight: 800; }
+.company-report-source-summary dd { margin: 4px 0 0; font-weight: 800; overflow-wrap: anywhere; }
+.company-report-section-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.company-report-section-tags span, .audit-source-location { display: inline-flex; width: fit-content; align-items: center; gap: 5px; padding: 4px 8px; border: 1px solid #d7d7d2; border-radius: 999px; background: #f7f7f4; color: #444; font-size: 12px; font-weight: 800; line-height: 1.4; }
+.company-report-section-tags small { color: #666; font-size: 11px; }
+.audit-source-location { margin: 2px 5px 2px 0; }
 .company-tabs { position: sticky; top: 74px; z-index: 4; display: flex; gap: 6px; flex-wrap: wrap; margin-top: 24px; padding: 10px; border: 1px solid #d7d7d2; border-radius: 8px; background: rgba(255, 255, 255, 0.96); }
 .company-tabs button { min-height: 38px; padding: 0 12px; border: 1px solid #cfcfca; border-radius: 6px; background: #fff; color: #444; cursor: pointer; font-weight: 800; }
 .company-tabs button.active, .company-tabs button[aria-selected="true"] { border-color: #171717; background: #171717; color: #fff; }
@@ -350,7 +371,7 @@ code { overflow-wrap: anywhere; }
   .card-topline, .detail-action-row { flex-direction: column; }
   .company-card-grid { grid-template-columns: 1fr; }
   .company-domain-grid { grid-template-columns: 1fr 1fr; }
-  .company-kpi-grid, .company-toolbar { grid-template-columns: 1fr 1fr; }
+  .company-kpi-grid, .company-report-kpi-grid, .company-report-signal-grid, .company-report-source-summary, .company-toolbar { grid-template-columns: 1fr 1fr; }
   .monitor-kpi-grid, .monitor-controls { grid-template-columns: 1fr 1fr; }
   .company-tabs { position: static; }
   .company-comparison-bar { bottom: 10px; flex-direction: column; align-items: stretch; width: calc(100vw - 24px); }
@@ -359,7 +380,7 @@ code { overflow-wrap: anywhere; }
 }
 
 @media (max-width: 520px) {
-  .company-kpi-grid, .company-toolbar, .company-row-detail dl { grid-template-columns: 1fr; }
+  .company-kpi-grid, .company-report-kpi-grid, .company-report-signal-grid, .company-report-source-summary, .company-toolbar, .company-row-detail dl { grid-template-columns: 1fr; }
   .monitor-kpi-grid, .monitor-controls, .monitor-card dl { grid-template-columns: 1fr; }
   .monitor-table-wrap { display: none; }
   .monitor-card-list { display: grid; }

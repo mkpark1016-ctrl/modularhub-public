@@ -6,8 +6,9 @@ import {
   metricMargin,
   metricValue,
 } from "./companyDetailHelpers";
+import CompanyAuditFinancialPanel from "./CompanyAuditFinancialPanel";
 
-export default function CompanyFinancialTab({ company }) {
+export default function CompanyFinancialTab({ company, reportInsight = null }) {
   const model = detailModel(company);
   const { financials, latestAudit } = model;
   const extraRows = financials.filter((item) => metricValue(item.net_income) !== null || metricValue(item.operating_cash_flow) !== null);
@@ -20,6 +21,10 @@ export default function CompanyFinancialTab({ company }) {
   return (
     <section className="summary company-tab-panel" id="company-tab-panel-financial" role="tabpanel" aria-labelledby="company-tab-financial">
       <h2>최근 3개년 재무</h2>
+      {reportInsight ? (
+        <CompanyAuditFinancialPanel insight={reportInsight} />
+      ) : (
+        <>
       {financials.length ? (
         <>
           <p className="finance-note">
@@ -96,6 +101,8 @@ export default function CompanyFinancialTab({ company }) {
         </>
       ) : (
         <p>공개자료에서 확인된 재무정보가 없습니다.</p>
+      )}
+        </>
       )}
     </section>
   );
