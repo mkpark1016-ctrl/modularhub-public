@@ -229,6 +229,29 @@ jobs:
           echo "source_coverage_exit_code=$COVERAGE_EXIT"
           exit 0
 
+      - name: Build source contribution history and concentration diagnostics
+        id: source_contribution
+        if: always()
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set +e
+          python scripts/build_company_source_contribution_history.py \
+            --run-kind "${{ steps.guard.outputs.run_kind }}" \
+            --mode "${{ steps.guard.outputs.mode }}" \
+            --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --run-number "${{ github.run_number }}" \
+            --run-id "${{ github.run_id }}" \
+            --run-sha "${{ github.sha }}" \
+            --workflow-event "${{ github.event_name }}"
+          CONTRIBUTION_EXIT=$?
+          set -e
+          echo "exit_code=$CONTRIBUTION_EXIT" >> "$GITHUB_OUTPUT"
+          echo "source_contribution_exit_code=$CONTRIBUTION_EXIT"
+          exit 0
+
       - name: Protected public data unchanged
         id: protected
         if: always()
@@ -311,6 +334,8 @@ jobs:
           queue_path = Path("data/company_change_monitoring/review_queue.json")
           audit_path = Path("artifacts/company-change-monitor/audit-summary.json")
           coverage_path = Path("artifacts/company-source-coverage/source-coverage-report.json")
+          contribution_path = Path("artifacts/company-source-coverage/source-contribution-history.json")
+          concentration_path = Path("artifacts/company-source-coverage/source-concentration-diagnostics.json")
           operations_path = Path("artifacts/company-change-monitor/operations-evaluation.json")
           alert_path = Path("artifacts/company-change-monitor/operations-alert.json")
           print("## Company Change Monitor")
@@ -321,6 +346,8 @@ jobs:
           audit = json.loads(audit_path.read_text(encoding="utf-8"))
           operations = json.loads(operations_path.read_text(encoding="utf-8")) if operations_path.exists() else {}
           coverage = json.loads(coverage_path.read_text(encoding="utf-8")) if coverage_path.exists() else {}
+          contribution = json.loads(contribution_path.read_text(encoding="utf-8")) if contribution_path.exists() else {}
+          concentration = json.loads(concentration_path.read_text(encoding="utf-8")) if concentration_path.exists() else {}
           alert = json.loads(alert_path.read_text(encoding="utf-8")) if alert_path.exists() else {}
           run_kind = operations.get("runMetadata", {}).get("runKind", "${{ steps.guard.outputs.run_kind }}")
           print(f"- Run kind: `{run_kind}`")
@@ -346,6 +373,8 @@ jobs:
           print(f"- Source coverage warnings: `{','.join(coverage.get('warningCodes', [])) or 'none'}`")
           print(f"- Source coverage failures: `{','.join(coverage.get('failureCodes', [])) or 'none'}`")
           print(f"- DART identity coverage: `{coverage.get('dartMappingCoverage', {}).get('percent', 'missing')}`")
+          print(f"- Source contribution history: `{contribution.get('historyState', 'missing')}` / runs=`{contribution.get('comparableRunCount', 'missing')}`")
+          print(f"- Source concentration state: `{concentration.get('state', 'missing')}` / sustained=`{concentration.get('concentrationSustained', 'missing')}`")
           print(f"- Alert action: `{alert.get('action', 'none')}`")
           print(f"- Alert code: `{alert.get('alertCode', 'none')}`")
           print("### Sources")
@@ -426,6 +455,22 @@ jobs:
           path: artifacts/company-source-coverage/public-news-empty-diagnostics.json
           retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: company-source-contribution-history
+          path: artifacts/company-source-coverage/source-contribution-history.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: company-source-concentration-diagnostics
+          path: |
+            artifacts/company-source-coverage/source-concentration-diagnostics.json
+            artifacts/company-source-coverage/source-concentration-diagnostics.md
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
+
       - name: Final acceptance gate
         if: always()
         shell: bash
@@ -442,6 +487,8 @@ jobs:
               failures.append("audit_step_failed")
           if "${{ steps.source_coverage.outputs.exit_code }}" != "0":
               failures.append("source_coverage_step_failed")
+          if "${{ steps.source_contribution.outputs.exit_code }}" != "0":
+              failures.append("source_contribution_step_failed")
           if "${{ steps.protected.outputs.exit_code }}" != "0":
               failures.append("public_data_changed")
           if "${{ steps.secret_scan.outputs.exit_code }}" != "0":
@@ -460,6 +507,8 @@ jobs:
               Path("artifacts/company-source-coverage/source-coverage-report.json"),
               Path("artifacts/company-source-coverage/dart-mapping-report.json"),
               Path("artifacts/company-source-coverage/public-news-empty-diagnostics.json"),
+              Path("artifacts/company-source-coverage/source-contribution-history.json"),
+              Path("artifacts/company-source-coverage/source-concentration-diagnostics.json"),
           ]
           missing = [str(path) for path in required if not path.exists()]
           if missing:
@@ -489,6 +538,14 @@ jobs:
               coverage = json.loads(Path("artifacts/company-source-coverage/source-coverage-report.json").read_text(encoding="utf-8"))
               if coverage.get("state") == "FAILED" or coverage.get("valid") is False:
                   failures.append("source_coverage_failed")
+              contribution = json.loads(Path("artifacts/company-source-coverage/source-contribution-history.json").read_text(encoding="utf-8"))
+              concentration = json.loads(Path("artifacts/company-source-coverage/source-concentration-diagnostics.json").read_text(encoding="utf-8"))
+              if contribution.get("secretExposureDetected") or concentration.get("secretExposureDetected"):
+                  failures.append("source_contribution_secret_exposure")
+              if int(contribution.get("publicReviewQueueExposureCount", 0) or 0) > 0 or int(concentration.get("publicReviewQueueExposureCount", 0) or 0) > 0:
+                  failures.append("source_contribution_public_review_queue_exposure")
+              if concentration.get("state") == "failed":
+                  failures.append("source_concentration_failed")
 
           if failures:
               print("final_acceptance: failed")

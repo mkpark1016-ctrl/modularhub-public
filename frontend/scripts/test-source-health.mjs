@@ -82,14 +82,30 @@ const companyChangeMeta = {
       simple_status: "신규 매칭 없음",
     },
   ],
+  company_change_source_concentration: {
+    state: "history_insufficient",
+    history_state: "history_insufficient",
+    dominant_source: "naver_api_hub",
+    raw_dominant_source_share: 0.9955,
+    unique_dominant_source_share: 0.991,
+    comparable_run_count: 2,
+    concentration_sustained: false,
+  },
 };
 const companyChangeSources = getSourceHealth(companyChangeMeta);
 const publicNewsChange = companyChangeSources.find((source) => source.id === "company-change-public_news");
+const concentration = companyChangeSources.find((source) => source.id === "company-change-source-concentration");
 assert.equal(publicNewsChange.severity, "success");
 assert.match(publicNewsChange.description, /snapshot/);
+assert.equal(concentration.severity, "warning");
+assert.match(concentration.description, /naver_api_hub/);
+assert.match(concentration.description, /99\.6%/);
 assert.ok(!JSON.stringify(publicNewsChange).includes("candidate queue"));
 assert.ok(!JSON.stringify(publicNewsChange).includes("fingerprint"));
 assert.ok(!JSON.stringify(publicNewsChange).includes("secret"));
+assert.ok(!JSON.stringify(concentration).includes("review_queue"));
+assert.ok(!JSON.stringify(concentration).includes("raw_response"));
+assert.ok(!JSON.stringify(concentration).includes("Authorization"));
 
 const appSource = readFileSync(new URL("../src/components/SourceHealthPanel.jsx", import.meta.url), "utf8");
 assert.match(appSource, /aria-expanded/);

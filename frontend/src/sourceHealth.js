@@ -93,9 +93,52 @@ function companyChangeSourceDescription(source = {}) {
   return parts.join(" · ");
 }
 
+function normalizeConcentrationStatus(state) {
+  const normalized = String(state || "").toLowerCase();
+  if (normalized === "normal") return "success";
+  if (["observe", "history_insufficient", "history_unavailable", "warning"].includes(normalized)) return "warning";
+  if (normalized === "failed") return "failed";
+  return "unknown";
+}
+
+function formatShare(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return null;
+  return `${(number * 100).toFixed(1)}%`;
+}
+
+function companyChangeConcentrationSource(meta = {}) {
+  const concentration = meta.company_change_source_concentration || meta.companyChangeSourceConcentration;
+  if (!concentration || typeof concentration !== "object") return null;
+  const parts = [];
+  const dominantSource = concentration.dominant_source || concentration.dominantSource;
+  if (dominantSource) parts.push(`우세 source ${dominantSource}`);
+  const rawShare = formatShare(concentration.raw_dominant_source_share ?? concentration.rawDominantSourceShare);
+  if (rawShare) parts.push(`raw ${rawShare}`);
+  const uniqueShare = formatShare(concentration.unique_dominant_source_share ?? concentration.uniqueDominantSourceShare);
+  if (uniqueShare) parts.push(`unique ${uniqueShare}`);
+  const comparableRunCount = concentration.comparable_run_count ?? concentration.comparableRunCount;
+  if (Number.isFinite(Number(comparableRunCount))) parts.push(`비교 run ${Number(comparableRunCount).toLocaleString("ko-KR")}회`);
+  const sustained = concentration.concentration_sustained ?? concentration.concentrationSustained;
+  if (typeof sustained === "boolean") parts.push(`지속 ${sustained ? "예" : "아니오"}`);
+  const historyState = concentration.history_state || concentration.historyState;
+  if (historyState) parts.push(historyState);
+  return {
+    id: "company-change-source-concentration",
+    name: "기업 변화 감지 Source 집중도",
+    ...mapSourceStatus(normalizeConcentrationStatus(concentration.state), {
+      description: parts.join(" · "),
+    }),
+    latestItemPublishedAt: concentration.generated_at || concentration.generatedAt || "",
+    fetchedCount: Number(concentration.candidate_count || concentration.candidateCount || 0),
+    acceptedCount: 0,
+    duplicateCount: 0,
+  };
+}
+
 function dynamicCompanyChangeSources(meta = {}) {
-  if (!Array.isArray(meta.company_change_source_statuses)) return [];
-  return meta.company_change_source_statuses.map((source) => ({
+  const statuses = Array.isArray(meta.company_change_source_statuses) ? meta.company_change_source_statuses : [];
+  const rows = statuses.map((source) => ({
     id: `company-change-${source.id || source.source_id || source.name}`,
     name: source.name || source.collector_name || source.source_id || "기업 변화 감지",
     ...mapSourceStatus(normalizeCompanyChangeStatus(source.state), {
@@ -106,6 +149,9 @@ function dynamicCompanyChangeSources(meta = {}) {
     acceptedCount: Number(source.accepted_count || 0),
     duplicateCount: Number(source.duplicate_count || 0),
   }));
+  const concentration = companyChangeConcentrationSource(meta);
+  if (concentration) rows.push(concentration);
+  return rows;
 }
 
 function activeCollectorFailed(meta = {}) {
