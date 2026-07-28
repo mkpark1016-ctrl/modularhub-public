@@ -58,3 +58,13 @@ python scripts\audit_company_source_coverage.py
 ```
 
 The command does not call DART, NAVER, or any external API.
+
+## Read-Only Proposal Manifest
+
+`artifacts/company-change-monitor/proposal-manifest.json` is an internal review metadata artifact. It does not modify verified company data, public JSON, or frontend-visible review queues.
+
+The manifest is produced for every Company Change Monitor run so the artifact contract remains stable. In the default run, `create_proposal=false`, the manifest is empty with `requested=false`, `created=false`, and no items.
+
+Proposal candidates are included only when both `create_proposal=true` and `acknowledge_proposal=true` are provided. The manifest includes at most 20 candidates, and only candidates that are pending, high confidence, non-duplicate, non-conflicting, and backed by an evidence URL or evidence key.
+
+Proposal manifest generation and actual data promotion are separate stages. The monitor must not create patches, update public data, open pull requests, or merge changes from this artifact.

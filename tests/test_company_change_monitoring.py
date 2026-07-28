@@ -12,7 +12,9 @@ from src.company_change_monitoring import (
     RISK_LEVELS,
     REVIEW_QUEUE_PATH,
     ROOT,
+    audit_proposal_manifest,
     audit_change_run,
+    build_proposal_manifest,
     build_change_monitor_run,
     candidate_fingerprint,
     classify_signal,
@@ -131,9 +133,15 @@ def test_company_change_workflow_installs_python_test_dependencies_before_pytest
 def test_company_change_workflow_names_live_collection_step() -> None:
     text = workflow_text()
     assert "Collect live company change sources and build review queue" in text
+    assert 'CREATE_PROPOSAL="${{ steps.guard.outputs.create_proposal }}"' in text
+    assert 'ACKNOWLEDGE_PROPOSAL="${{ steps.guard.outputs.acknowledge_proposal }}"' in text
+    assert "ARGS+=(--create-proposal)" in text
+    assert "ARGS+=(--acknowledge-proposal)" in text
     assert "attempted=" in text
     assert "safeErrorCategory" in text
     assert "company-change-classification-diagnostics" in text
+    assert "company-change-proposal" in text
+    assert "artifacts/company-change-monitor/proposal-manifest.json" in text
     assert "company-source-contribution-history" in text
     assert "company-source-concentration-diagnostics" in text
     assert "Final acceptance gate" in text
@@ -288,6 +296,119 @@ def test_proposal_guard_requires_acknowledgement() -> None:
         build_change_monitor_run(create_proposal=True, acknowledge_proposal=False)
     run = build_change_monitor_run(companies=["kumkang-kind"], sources=["public_news"], create_proposal=True, acknowledge_proposal=True)
     assert run["proposal"]["guard"] == "acknowledge_proposal_required"
+    assert run["proposal"]["acknowledgeProposal"] is True
+    assert run["proposal"]["created"] is False
+
+
+def proposal_run(candidates: list[dict], *, create: bool = False, acknowledge: bool = False) -> dict:
+    return {
+        "generatedAt": "2026-07-28T00:00:00Z",
+        "runId": "run-proposal-test",
+        "mode": "daily_signals",
+        "companies": ["kumkang-kind", "yuchang-enc"],
+        "sources": ["public_news", "naver_api_hub"],
+        "candidates": candidates,
+        "proposal": {
+            "createProposal": create,
+            "acknowledgeProposal": acknowledge,
+            "created": False,
+        },
+    }
+
+
+def eligible_proposal_candidate(candidate_id: str, **overrides) -> dict:
+    candidate = change_candidate(candidate_id)
+    candidate.update(
+        {
+            "confidence": "high",
+            "priority": "high",
+            "riskLevel": "critical",
+            "sourceTiers": ["tier_1"],
+            "requiresHumanReview": True,
+            "evidenceKey": f"url:https://news.example/{candidate_id}",
+        }
+    )
+    candidate.update(overrides)
+    return candidate
+
+
+def test_proposal_manifest_unrequested_is_empty() -> None:
+    manifest = build_proposal_manifest(proposal_run([eligible_proposal_candidate("eligible")]))
+
+    assert manifest["requested"] is False
+    assert manifest["acknowledged"] is False
+    assert manifest["created"] is False
+    assert manifest["reason"] == "not_requested"
+    assert manifest["selectedCount"] == 0
+    assert manifest["items"] == []
+    assert audit_proposal_manifest(manifest) == []
+
+
+def test_proposal_manifest_requested_and_acknowledged_selects_only_eligible_candidates() -> None:
+    candidates = [
+        eligible_proposal_candidate("medium-confidence", confidence="medium"),
+        eligible_proposal_candidate("duplicate", status="duplicate", duplicateOf="eligible-low"),
+        eligible_proposal_candidate("conflict", status="conflict", conflictsWith=["eligible-low"]),
+        eligible_proposal_candidate("insufficient", status="insufficient_evidence"),
+        eligible_proposal_candidate("no-evidence", proposedValue={"title": "No evidence", "url": ""}, evidenceKey=""),
+        eligible_proposal_candidate("eligible-low", priority="low", riskLevel="low", companyId="yuchang-enc"),
+        eligible_proposal_candidate("eligible-high", priority="high", riskLevel="high", companyId="kumkang-kind"),
+        eligible_proposal_candidate("eligible-critical", priority="high", riskLevel="critical", companyId="kumkang-kind"),
+    ]
+
+    manifest = build_proposal_manifest(proposal_run(candidates, create=True, acknowledge=True), max_items=20)
+
+    assert manifest["created"] is True
+    assert manifest["reason"] == "proposal_manifest_created"
+    assert manifest["eligibleCount"] == 3
+    assert [item["candidateId"] for item in manifest["items"]] == ["eligible-critical", "eligible-high", "eligible-low"]
+    assert manifest["selectedCount"] == 3
+    assert all(set(item) == set(change_monitoring.PROPOSAL_ITEM_FIELDS) for item in manifest["items"])
+    assert "fingerprint" not in json.dumps(manifest, ensure_ascii=False)
+    assert "review_queue.json" not in json.dumps(manifest, ensure_ascii=False)
+    assert audit_proposal_manifest(manifest) == []
+
+
+def test_proposal_manifest_caps_selected_items_at_twenty() -> None:
+    candidates = [eligible_proposal_candidate(f"eligible-{index:02d}") for index in range(25)]
+
+    manifest = build_proposal_manifest(proposal_run(candidates, create=True, acknowledge=True), max_items=20)
+
+    assert manifest["eligibleCount"] == 25
+    assert manifest["selectedCount"] == 20
+    assert len(manifest["items"]) == 20
+    assert audit_proposal_manifest(manifest) == []
+
+
+def test_proposal_manifest_no_eligible_candidates_is_noop() -> None:
+    manifest = build_proposal_manifest(
+        proposal_run([eligible_proposal_candidate("low", confidence="low")], create=True, acknowledge=True)
+    )
+
+    assert manifest["requested"] is True
+    assert manifest["acknowledged"] is True
+    assert manifest["created"] is False
+    assert manifest["reason"] == "no_eligible_candidates"
+    assert manifest["eligibleCount"] == 0
+    assert manifest["items"] == []
+    assert audit_proposal_manifest(manifest) == []
+
+
+def test_proposal_manifest_security_scan_blocks_sensitive_strings() -> None:
+    manifest = build_proposal_manifest(proposal_run([eligible_proposal_candidate("eligible")], create=True, acknowledge=True))
+    serialized = json.dumps(manifest, ensure_ascii=False)
+    for blocked in [
+        "DART_API_KEY=",
+        "NAVER_API_HUB_CLIENT_SECRET=",
+        "Authorization:",
+        "request_headers",
+        "raw_response",
+        "review_queue.json",
+    ]:
+        assert blocked not in serialized
+
+    manifest["items"][0]["evidenceSummary"] = "raw_response"
+    assert "proposal_sensitive_content" in audit_proposal_manifest(manifest)
 
 
 def test_publish_guard_blocks_public_update() -> None:
