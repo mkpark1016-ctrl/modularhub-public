@@ -45,6 +45,24 @@ REQUIRED_WORKING_CAPITAL_FIELDS = {
 }
 REQUIRED_INVESTMENT_FIELDS = {"construction_in_progress", "industrial_property_rights", "research_and_development_expense"}
 SOURCE_LOCATION_STATUSES = {"verified", "verified_section_range", "pending_manual_page_check"}
+SOURCE_SECTION_CODES = {
+    "statement.income_statement",
+    "statement.balance_sheet",
+    "statement.cash_flow",
+    "note.revenue_breakdown",
+    "note.working_capital",
+    "note.borrowings",
+    "note.investment_signals",
+}
+SOURCE_SECTION_BY_PARENT = {
+    "income_statement": "statement.income_statement",
+    "balance_sheet": "statement.balance_sheet",
+    "cash_flow": "statement.cash_flow",
+    "revenue_breakdown": "note.revenue_breakdown",
+    "working_capital": "note.working_capital",
+    "borrowings": "note.borrowings",
+    "investment_signals": "note.investment_signals",
+}
 
 
 @dataclass
@@ -253,6 +271,10 @@ def validate_amount_shapes(payload: dict[str, Any], issues: list[Issue]) -> None
                         issue(issues, "source_location_ref_not_in_source_refs", f"{location_path}.source_ref", "source_location source_ref must also be listed in source_refs", refs, location.get("source_ref"))
                     if not location.get("section"):
                         issue(issues, "missing_source_location_section", f"{location_path}.section", "source_location requires section")
+                    elif "?" in str(location.get("section")):
+                        issue(issues, "corrupted_source_location_section", f"{location_path}.section", "source_location section must not contain question marks", actual=location.get("section"))
+                    elif location.get("section") not in SOURCE_SECTION_CODES:
+                        issue(issues, "invalid_source_location_section", f"{location_path}.section", "source_location section is not an allowed standard code", sorted(SOURCE_SECTION_CODES), location.get("section"))
                     status = location.get("verification_status")
                     if status not in SOURCE_LOCATION_STATUSES:
                         issue(issues, "invalid_source_location_status", f"{location_path}.verification_status", "invalid source location verification status", sorted(SOURCE_LOCATION_STATUSES), status)
@@ -260,6 +282,24 @@ def validate_amount_shapes(payload: dict[str, Any], issues: list[Issue]) -> None
                         issue(issues, "missing_source_location_page", location_path, "verified source locations require page or page_range")
         if "inference" in record:
             issue(issues, "inference_stored_with_reported", path, "inference must not be stored inside a reported amount")
+
+
+def validate_source_location_parent_sections(payload: dict[str, Any], issues: list[Issue]) -> None:
+    for year, year_record in (payload.get("financial_years") or {}).items():
+        for parent_section, expected_code in SOURCE_SECTION_BY_PARENT.items():
+            for metric_name, metric in (year_record.get(parent_section) or {}).items():
+                for index, location in enumerate(metric.get("source_locations") or []):
+                    actual_code = location.get("section")
+                    if actual_code != expected_code:
+                        issue(
+                            issues,
+                            "source_location_parent_section_mismatch",
+                            f"financial_years.{year}.{parent_section}.{metric_name}.source_locations[{index}].section",
+                            "source_location section must match its parent financial section",
+                            expected_code,
+                            actual_code,
+                            source=year,
+                        )
 
 
 def validate_accounting(payload: dict[str, Any], issues: list[Issue]) -> None:
@@ -414,6 +454,7 @@ def validate(payload: dict[str, Any], expected_year_override: list[int] | None =
     validate_years(payload, issues, expected_years)
     if set((payload.get("financial_years") or {}).keys()) == expected_years:
         validate_amount_shapes(payload, issues)
+        validate_source_location_parent_sections(payload, issues)
         validate_accounting(payload, issues)
         validate_source_priority(payload, issues, expected_years)
         validate_attribution(payload, issues)

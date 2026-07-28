@@ -13,6 +13,8 @@ from scripts.validate_company_audit_financials import (
     DEFAULT_INPUT,
     PROTECTED_PUBLIC_FILES,
     REQUIRED_BORROWING_FIELDS,
+    SOURCE_SECTION_BY_PARENT,
+    SOURCE_SECTION_CODES,
     calculate_derived_metrics,
     contains_key,
     protected_public_diff_status,
@@ -188,6 +190,31 @@ def test_reported_amount_source_locations_are_valid() -> None:
     assert len(locations) == 84
     assert sum(1 for location in locations if location["verification_status"] == "pending_manual_page_check") == 45
     assert sum(1 for location in locations if location["verification_status"] == "verified_section_range") == 39
+    assert all(location["section"] in SOURCE_SECTION_CODES for location in locations)
+    assert all("?" not in location["section"] for location in locations)
+
+
+def test_source_location_sections_match_parent_financial_section() -> None:
+    payload = load_payload()
+    for year, record in payload["financial_years"].items():
+        for parent_section, expected_code in SOURCE_SECTION_BY_PARENT.items():
+            for metric_name, metric in record[parent_section].items():
+                for location in metric.get("source_locations", []):
+                    assert location["section"] == expected_code, (year, parent_section, metric_name)
+
+
+def test_validator_rejects_corrupted_or_mismatched_source_location_section() -> None:
+    payload = deepcopy(load_payload())
+    payload["financial_years"]["2025"]["income_statement"]["revenue"]["source_locations"][0]["section"] = "?????"
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "corrupted_source_location_section" for issue in result["issues"])
+
+    payload = deepcopy(load_payload())
+    payload["financial_years"]["2025"]["income_statement"]["revenue"]["source_locations"][0]["section"] = "note.borrowings"
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "source_location_parent_section_mismatch" for issue in result["issues"])
 
 
 def test_expected_years_are_read_from_dataset_metadata() -> None:

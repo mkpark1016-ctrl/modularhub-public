@@ -274,7 +274,7 @@
           ]
         },
         "page_range": { "type": "string", "minLength": 1 },
-        "section": { "type": "string", "minLength": 1 },
+        "section": { "$ref": "#/$defs/sourceSectionCode" },
         "verification_status": {
           "enum": ["verified", "verified_section_range", "pending_manual_page_check"]
         }
@@ -384,6 +384,17 @@
     },
     "cashFlowSign": {
       "enum": ["positive", "negative", "zero", "non_negative", "non_positive"]
+    },
+    "sourceSectionCode": {
+      "enum": [
+        "statement.income_statement",
+        "statement.balance_sheet",
+        "statement.cash_flow",
+        "note.revenue_breakdown",
+        "note.working_capital",
+        "note.borrowings",
+        "note.investment_signals"
+      ]
     }
   }
 }
