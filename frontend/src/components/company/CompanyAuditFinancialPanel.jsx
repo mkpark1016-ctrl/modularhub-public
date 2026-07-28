@@ -5,11 +5,13 @@ import {
   metricToneClass,
   REPORT_AMOUNT_ROWS,
   REPORT_RATIO_ROWS,
+  reportFinancialHeading,
   reportMetricByYear,
   reportRatioByYear,
   reportSectionLabel,
   reportYears,
   sourceSectionCounts,
+  verificationStatusLabel,
 } from "../../companyReportInsights";
 
 const KPI_CARDS = [
@@ -28,12 +30,6 @@ function formatDate(value) {
   return value || "확인되지 않음";
 }
 
-function verificationLabel(value) {
-  if (value === "verified_section_range") return "검증된 구간";
-  if (value === "pending_manual_page_check") return "페이지 수동 확인 필요";
-  return "검증 상태 확인 필요";
-}
-
 function SourceLocationList({ metric }) {
   const locations = Array.isArray(metric?.source_locations) ? metric.source_locations : [];
   if (!locations.length) return <span>출처 위치 확인 필요</span>;
@@ -44,7 +40,7 @@ function SourceLocationList({ metric }) {
           {reportSectionLabel(location.section)}
           {location.page_range ? ` ${location.page_range}쪽` : ""}
           {" · "}
-          {verificationLabel(location.verification_status)}
+          {verificationStatusLabel(location.verification_status)}
         </span>
       ))}
     </span>
@@ -79,7 +75,7 @@ export default function CompanyAuditFinancialPanel({ insight }) {
       </div>
 
       <div className="company-subsection">
-        <h3>2023~2025년 재무 추이</h3>
+        <h3>{reportFinancialHeading(insight)}</h3>
         <div className="company-table-wrap">
           <table className="company-financial-table company-report-table">
             <thead>

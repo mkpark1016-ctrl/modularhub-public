@@ -43,6 +43,13 @@ export function reportYears(insight) {
     .sort((a, b) => a - b);
 }
 
+export function reportFinancialHeading(insight) {
+  const years = reportYears(insight);
+  if (years.length === 0) return "재무 추이";
+  if (years.length === 1) return `${years[0]}년 재무 현황`;
+  return `${years[0]}~${years[years.length - 1]}년 재무 추이`;
+}
+
 export function reportMetricByYear(insight, year, metricKey) {
   const row = (insight?.financial_series || []).find((item) => Number(item.year) === Number(year));
   return row?.metrics?.[metricKey] || null;
@@ -67,7 +74,15 @@ export function reportSectionLabel(section) {
 export function financialScopeLabel(scope) {
   if (scope === "standalone") return "별도 재무제표";
   if (scope === "consolidated") return "연결 재무제표";
+  if (scope === "standalone_and_consolidated") return "별도·연결 재무제표";
   return "재무제표 기준 확인 중";
+}
+
+export function verificationStatusLabel(status) {
+  if (status === "verified") return "검증 완료";
+  if (status === "verified_section_range") return "검증된 구간";
+  if (status === "pending_manual_page_check") return "페이지 수동 확인 필요";
+  return "검증 상태 확인 필요";
 }
 
 export function latestAuditOpinion(insight) {

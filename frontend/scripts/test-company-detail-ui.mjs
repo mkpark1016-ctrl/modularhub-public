@@ -9,14 +9,17 @@ import {
   technologyItems,
 } from "../src/components/company/companyDetailHelpers.js";
 import {
+  financialScopeLabel,
   getCompanyReportInsight,
   metricDisplayText,
   metricToneClass,
+  reportFinancialHeading,
   reportMetricByYear,
   reportRatioByYear,
   reportSectionLabel,
   reportYears,
   sourceSectionCounts,
+  verificationStatusLabel,
 } from "../src/companyReportInsights.js";
 import { getCompanyItems, getCompanyEvents } from "../src/companyInsights.js";
 
@@ -52,6 +55,7 @@ assert.ok(componentFiles.includes("감사보고서 근거 확인"), "financial t
 assert.ok(componentFiles.includes("단위"), "financial tab should show source unit/currency");
 assert.ok(componentFiles.includes("companies/company_report_insights"), "company detail page should load company report insights");
 assert.ok(componentFiles.includes("reportInsight ?"), "financial tab should prefer audit View Model when available");
+assert.equal(componentFiles.includes("<h3>2023~2025년 재무 추이</h3>"), false, "financial report heading should come from available years");
 assert.ok(componentFiles.includes("제품매출과 공사매출은 모듈러 매출로 자동 해석하지 않으며"), "financial tab should prevent modular revenue overstatement");
 assert.ok(componentFiles.includes("유창엠앤씨 등 관계사 실적도 유창이앤씨 별도 실적으로 합산하지 않습니다"), "financial tab should prevent related-entity aggregation");
 assert.ok(stylesheet.includes(".company-report-table { min-width: 760px; }"), "financial report tables should use contained horizontal scrolling");
@@ -81,6 +85,16 @@ const yuchangReport = getCompanyReportInsight(reportPayload, "yuchang-enc");
 assert.ok(yuchangReport, "yuchang-enc report insight must load");
 assert.equal(getCompanyReportInsight(reportPayload, "gs-ec"), null, "companies without report insights should fall back to legacy financial UI");
 assert.deepEqual(reportYears(yuchangReport), [2023, 2024, 2025]);
+assert.equal(reportFinancialHeading({ available_years: [2023, 2024, 2025] }), "2023~2025년 재무 추이");
+assert.equal(reportFinancialHeading({ available_years: [2024, 2025, 2026] }), "2024~2026년 재무 추이");
+assert.equal(reportFinancialHeading({ available_years: [2025] }), "2025년 재무 현황");
+assert.equal(reportFinancialHeading({ available_years: [] }), "재무 추이");
+assert.equal(financialScopeLabel("standalone"), "별도 재무제표");
+assert.equal(financialScopeLabel("consolidated"), "연결 재무제표");
+assert.equal(financialScopeLabel("standalone_and_consolidated"), "별도·연결 재무제표");
+assert.equal(verificationStatusLabel("verified"), "검증 완료");
+assert.equal(verificationStatusLabel("verified_section_range"), "검증된 구간");
+assert.equal(verificationStatusLabel("pending_manual_page_check"), "페이지 수동 확인 필요");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "revenue")), "3,076.8억원");
 assert.equal(metricDisplayText(reportRatioByYear(yuchangReport, 2025, "operating_margin_pct")), "4.8%");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "operating_cash_flow")), "-308.3억원");
