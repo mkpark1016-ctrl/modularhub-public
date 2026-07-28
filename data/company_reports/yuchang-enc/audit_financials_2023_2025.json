@@ -1,0 +1,1384 @@
+{
+  "schema_version": "company_audit_financials_v1",
+  "company_id": "yuchang-enc",
+  "company_name": "유창이앤씨",
+  "reporting_entity": "주식회사 유창이앤씨",
+  "accounting_standard": {
+    "code": "korean_gaap",
+    "label_ko": "일반기업회계기준",
+    "label_en": "Korean GAAP"
+  },
+  "currency": "KRW",
+  "unit": "won",
+  "audit_opinions": [
+    {
+      "source_ref": "yuchang_audit_report_2026_04_08",
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2026-03-31"
+    },
+    {
+      "source_ref": "yuchang_audit_report_2025_04_04",
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2025-03-27"
+    },
+    {
+      "source_ref": "yuchang_audit_report_2024_04_05",
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "covered_years": [
+        2023,
+        2022
+      ],
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2024-03-27"
+    }
+  ],
+  "source_documents": {
+    "yuchang_audit_report_2026_04_08": {
+      "filename": "[유창이앤씨]감사보고서(2026.04.08).pdf",
+      "report_date": "2026-04-08",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2026-03-31",
+      "audit_opinion": "적정의견",
+      "balance_sheet_pages": "6~8",
+      "income_statement_pages": "9~10",
+      "cash_flow_pages": "12~13",
+      "company_overview_page": "14",
+      "source_role": "primary_2025_and_2024_comparative"
+    },
+    "yuchang_audit_report_2025_04_04": {
+      "filename": "[유창이앤씨]감사보고서(2025.04.04).pdf",
+      "report_date": "2025-04-04",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2025-03-27",
+      "audit_opinion": "적정의견",
+      "balance_sheet_pages": "6~8",
+      "income_statement_pages": "9~10",
+      "cash_flow_pages": "12~13",
+      "company_overview_page": "14",
+      "source_role": "primary_2023_comparative"
+    },
+    "yuchang_audit_report_2024_04_05": {
+      "filename": "[유창이앤씨]감사보고서(2024.04.05).pdf",
+      "report_date": "2024-04-05",
+      "covered_years": [
+        2023,
+        2022
+      ],
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2024-03-27",
+      "audit_opinion": "적정의견",
+      "source_role": "cross_check_2023_only",
+      "usage": "2023 cross-check only"
+    }
+  },
+  "source_priority": {
+    "2025": {
+      "primary_source_ref": "yuchang_audit_report_2026_04_08",
+      "basis": "current_year_financial_statements"
+    },
+    "2024": {
+      "primary_source_ref": "yuchang_audit_report_2026_04_08",
+      "basis": "comparative_financial_statements"
+    },
+    "2023": {
+      "primary_source_ref": "yuchang_audit_report_2025_04_04",
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "yuchang_audit_report_2024_04_05"
+      ]
+    }
+  },
+  "financial_years": {
+    "2023": {
+      "source_refs": [
+        "yuchang_audit_report_2025_04_04",
+        "yuchang_audit_report_2024_04_05"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 419041119841,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 26668499293,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 16108176475,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 17590723723,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": 44024872213,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -60087140416,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 34323485000,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 32910895662,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 224437469439,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 171736412877,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 52701056562,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 131486870963,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 139504998213,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": 3182273859,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "product_revenue": {
+          "reported": 187763557303,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "notes": "제품매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 222941099300,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "notes": "공사매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 0,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "other_revenue": {
+          "reported": 5154189379,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 29583827627,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": 48213478865,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "inventory": {
+          "reported": 16513460035,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": 16450166035,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 12000000000,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": 0,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 28000000000,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 18536682649,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 34795101,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 55725238,
+          "source_refs": [
+            "yuchang_audit_report_2025_04_04"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2025_04_04",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      }
+    },
+    "2024": {
+      "source_refs": [
+        "yuchang_audit_report_2026_04_08"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 364024587969,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 33304897232,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 9124197103,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 10850960336,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": -32263069529,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -20144150483,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 23500000000,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 4003675650,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 210303317036,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 147153608014,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 63149709022,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 112736617798,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 115595787713,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": 22374003638,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "product_revenue": {
+          "reported": 56802137989,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "notes": "제품매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 283675368182,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "notes": "공사매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 0,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "other_revenue": {
+          "reported": 1173078160,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 37151308154,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": 37672268674,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "inventory": {
+          "reported": 20450417510,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": 19241124314,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 35500000000,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": 0,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 28000000000,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 1764656567,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 32490522,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 590641600,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      }
+    },
+    "2025": {
+      "source_refs": [
+        "yuchang_audit_report_2026_04_08"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 307684467052,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 33339609191,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 14867615594,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 5662989075,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "9~10",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": -30830315410,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -16119982901,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 48634492523,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 5687869862,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "12~13",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 270984904156,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 200386015125,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 70598889031,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 159410944903,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 130804571103,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "page_range": "6~8",
+              "section": "?????",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": 10852923849,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "product_revenue": {
+          "reported": 116932856078,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "notes": "제품매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 176541594274,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "notes": "공사매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 1410283370,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "other_revenue": {
+          "reported": 1946809481,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 46277489207,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": 69508656785,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "inventory": {
+          "reported": 30004051329,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": 28951436757,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "???? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 45000000000,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": 1178880000,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 65955612523,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "??? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 9630188187,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 4441621231,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 227156628,
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "section": "?? ? ???? ?? ??",
+              "verification_status": "pending_manual_page_check"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "entity_attribution": {
+    "reporting_entity": "주식회사 유창이앤씨",
+    "financial_scope": "standalone",
+    "related_entity_attribution_required": true,
+    "modular_segment_revenue_disclosed": false,
+    "attribution_warning": "본 재무정보는 주식회사 유창이앤씨 별도 재무제표 기준이다. 2022년 학교 모듈러 제작업 부문 인적분할 이후 유창엠앤씨 등 관계사의 프로젝트, 생산, 매출을 유창이앤씨 단일 법인 실적으로 자동 합산하지 않는다.",
+    "special_events": [
+      {
+        "event_type": "business_spin_off",
+        "effective_date": "2022-07-21",
+        "description": "학교 모듈러 제작업 부문 인적분할",
+        "related_entities": [
+          "유창엠앤씨"
+        ],
+        "source_refs": [
+          "yuchang_audit_report_2026_04_08",
+          "yuchang_audit_report_2025_04_04"
+        ],
+        "attribution_effect": "관계사 프로젝트·생산·매출을 유창이앤씨 별도 실적으로 자동 합산하지 않음"
+      }
+    ]
+  },
+  "disclosure_limitations": [
+    "감사보고서에는 모듈러 사업부문 별도 매출이 공시되지 않았다.",
+    "제품매출 중 모듈러 제품 비중은 감사보고서만으로 확인할 수 없다.",
+    "공사매출 중 모듈러 공사 비중은 감사보고서만으로 확인할 수 없다.",
+    "프로젝트별 매출 또는 수익성은 감사보고서만으로 확인할 수 없다.",
+    "개별 공장의 모듈 생산능력은 감사보고서만으로 확인할 수 없다.",
+    "유창엠앤씨 등 관계사 실적은 주식회사 유창이앤씨 별도 실적으로 합산하지 않는다."
+  ],
+  "validation_metadata": {
+    "created_for": "phase_6a_1_yuchang_audit_financials_pilot",
+    "amount_storage": "KRW integer won",
+    "derived_metrics_storage": "computed_by_validator_only",
+    "pdf_handling": "source PDFs are not copied into the repository",
+    "public_ui_impact": "none",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "validation_policy": {
+      "forbidden_field_names": [
+        "modular_revenue",
+        "derived",
+        "inference"
+      ],
+      "required_attribution_warning_terms": [
+        "별도 재무제표",
+        "유창엠앤씨",
+        "자동 합산하지 않는다"
+      ],
+      "expected_cash_flow_signs": {
+        "2023": {
+          "operating_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "financing_cash_flow": "positive"
+        },
+        "2024": {
+          "operating_cash_flow": "negative",
+          "investing_cash_flow": "negative",
+          "financing_cash_flow": "positive"
+        },
+        "2025": {
+          "operating_cash_flow": "negative",
+          "investing_cash_flow": "negative",
+          "financing_cash_flow": "positive"
+        }
+      },
+      "required_disclosure_limitations": [
+        "감사보고서에는 모듈러 사업부문 별도 매출이 공시되지 않았다.",
+        "유창엠앤씨 등 관계사 실적은 주식회사 유창이앤씨 별도 실적으로 합산하지 않는다."
+      ]
+    }
+  }
+}
