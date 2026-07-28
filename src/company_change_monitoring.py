@@ -1223,7 +1223,8 @@ def build_change_monitor_run(
         "candidates": candidates,
         "proposal": {
             "createProposal": create_proposal,
-            "created": bool(create_proposal and acknowledge_proposal and any(candidate["confidence"] == "high" for candidate in candidates)),
+            "acknowledgeProposal": acknowledge_proposal,
+            "created": False,
             "guard": "acknowledge_proposal_required",
         },
         "publish": False,
@@ -1275,6 +1276,185 @@ def digest_payload(run: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+PROPOSAL_PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2}
+PROPOSAL_RISK_ORDER = {"critical": 0, "high": 1, "moderate": 2, "low": 3}
+PROPOSAL_ITEM_FIELDS = (
+    "candidateId",
+    "companyId",
+    "changeType",
+    "fieldPath",
+    "entityType",
+    "signalType",
+    "effectiveAt",
+    "sourceIds",
+    "sourceTiers",
+    "evidenceSummary",
+    "evidenceUrl",
+    "evidenceKey",
+    "confidence",
+    "priority",
+    "riskLevel",
+    "requiresHumanReview",
+)
+PROPOSAL_ITEM_FIELD_SET = set(PROPOSAL_ITEM_FIELDS)
+
+
+def proposal_requested(run: dict[str, Any]) -> bool:
+    return bool(run.get("proposal", {}).get("createProposal"))
+
+
+def proposal_acknowledged(run: dict[str, Any]) -> bool:
+    return bool(run.get("proposal", {}).get("acknowledgeProposal"))
+
+
+def proposal_candidate_is_eligible(candidate: dict[str, Any]) -> bool:
+    proposed_value = candidate.get("proposedValue") if isinstance(candidate.get("proposedValue"), dict) else {}
+    return all(
+        [
+            candidate.get("status") == "pending",
+            candidate.get("confidence") == "high",
+            not candidate.get("duplicateOf"),
+            not candidate.get("conflictsWith"),
+            bool(candidate.get("candidateId")),
+            bool(candidate.get("companyId")),
+            bool(candidate.get("sourceIds")),
+            bool(proposed_value.get("url") or candidate.get("evidenceKey")),
+        ]
+    )
+
+
+def proposal_sort_key(candidate: dict[str, Any]) -> tuple[int, int, str, str]:
+    return (
+        PROPOSAL_PRIORITY_ORDER.get(candidate.get("priority"), 99),
+        PROPOSAL_RISK_ORDER.get(candidate.get("riskLevel"), 99),
+        str(candidate.get("companyId") or ""),
+        str(candidate.get("candidateId") or ""),
+    )
+
+
+def proposal_item(candidate: dict[str, Any]) -> dict[str, Any]:
+    proposed_value = candidate.get("proposedValue") if isinstance(candidate.get("proposedValue"), dict) else {}
+    item = {
+        "candidateId": candidate.get("candidateId"),
+        "companyId": candidate.get("companyId"),
+        "changeType": candidate.get("changeType"),
+        "fieldPath": candidate.get("fieldPath"),
+        "entityType": candidate.get("entityType"),
+        "signalType": candidate.get("signalType"),
+        "effectiveAt": candidate.get("effectiveAt"),
+        "sourceIds": list(candidate.get("sourceIds") or []),
+        "sourceTiers": list(candidate.get("sourceTiers") or []),
+        "evidenceSummary": candidate.get("evidenceSummary"),
+        "evidenceUrl": proposed_value.get("url"),
+        "evidenceKey": candidate.get("evidenceKey"),
+        "confidence": candidate.get("confidence"),
+        "priority": candidate.get("priority"),
+        "riskLevel": candidate.get("riskLevel"),
+        "requiresHumanReview": bool(candidate.get("requiresHumanReview")),
+    }
+    return {key: item.get(key) for key in PROPOSAL_ITEM_FIELDS}
+
+
+def build_proposal_manifest(run: dict[str, Any], max_items: int = 20) -> dict[str, Any]:
+    requested = proposal_requested(run)
+    acknowledged = proposal_acknowledged(run)
+    eligible = sorted(
+        {candidate["candidateId"]: candidate for candidate in run.get("candidates", []) if proposal_candidate_is_eligible(candidate)}.values(),
+        key=proposal_sort_key,
+    )
+    items = [proposal_item(candidate) for candidate in eligible[:max_items]] if requested and acknowledged else []
+    if not requested:
+        reason = "not_requested"
+        created = False
+    elif not acknowledged:
+        reason = "acknowledgement_required"
+        created = False
+    elif not eligible:
+        reason = "no_eligible_candidates"
+        created = False
+    else:
+        reason = "proposal_manifest_created"
+        created = True
+    return {
+        "schemaVersion": "company-change-proposal-manifest-v1",
+        "generatedAt": run.get("generatedAt") or iso_now(),
+        "runId": run.get("runId"),
+        "mode": run.get("mode"),
+        "companies": list(run.get("companies") or []),
+        "sources": list(run.get("sources") or []),
+        "requested": requested,
+        "acknowledged": acknowledged,
+        "created": created,
+        "reason": reason,
+        "selectionPolicy": {
+            "status": "pending",
+            "confidence": "high",
+            "excludeDuplicates": True,
+            "excludeConflicts": True,
+            "requireEvidenceReference": True,
+            "maxItems": max_items,
+        },
+        "eligibleCount": len(eligible),
+        "selectedCount": len(items),
+        "items": items,
+        "publish": False,
+        "publicDataChanged": False,
+        "secretExposureDetected": False,
+        "publicReviewQueueExposureCount": 0,
+    }
+
+
+def audit_proposal_manifest(manifest: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    if manifest.get("publish") is not False:
+        failures.append("proposal_publish_not_false")
+    if manifest.get("publicDataChanged") is not False:
+        failures.append("proposal_public_data_changed")
+    if manifest.get("secretExposureDetected") is not False:
+        failures.append("proposal_secret_exposure")
+    if manifest.get("publicReviewQueueExposureCount") != 0:
+        failures.append("proposal_public_review_queue_exposure")
+    items = manifest.get("items") or []
+    if manifest.get("selectedCount") != len(items):
+        failures.append("proposal_selected_count_mismatch")
+    if len(items) > 20:
+        failures.append("proposal_too_many_items")
+    candidate_ids = [item.get("candidateId") for item in items]
+    if len(candidate_ids) != len(set(candidate_ids)):
+        failures.append("proposal_duplicate_candidate_ids")
+    requested = bool(manifest.get("requested"))
+    acknowledged = bool(manifest.get("acknowledged"))
+    eligible_count = int(manifest.get("eligibleCount") or 0)
+    if not requested:
+        if manifest.get("created") is not False or manifest.get("selectedCount") != 0 or items:
+            failures.append("proposal_unrequested_has_items")
+    elif requested and not acknowledged:
+        failures.append("proposal_acknowledgement_required")
+    elif eligible_count == 0:
+        if manifest.get("created") is not False or manifest.get("reason") != "no_eligible_candidates":
+            failures.append("proposal_empty_reason_invalid")
+    else:
+        if manifest.get("created") is not True or manifest.get("reason") != "proposal_manifest_created" or manifest.get("selectedCount", 0) <= 0:
+            failures.append("proposal_created_reason_invalid")
+    serialized = json.dumps(manifest, ensure_ascii=False)
+    blocked = [
+        "DART_API_KEY=",
+        "NAVER_API_HUB_CLIENT_SECRET=",
+        "Authorization:",
+        "request_headers",
+        "raw_response",
+        "review_queue.json",
+    ]
+    if any(item in serialized for item in blocked):
+        failures.append("proposal_sensitive_content")
+    for item in items:
+        extra_fields = set(item) - PROPOSAL_ITEM_FIELD_SET
+        if extra_fields:
+            failures.append("proposal_item_extra_fields")
+            break
+    return failures
+
+
 def markdown_digest(run: dict[str, Any]) -> str:
     lines = [
         "# Company Change Monitoring Digest",
@@ -1310,6 +1490,7 @@ def markdown_digest(run: dict[str, Any]) -> str:
 def write_run_outputs(run: dict[str, Any], *, root: Path = ROOT, write_internal_queue: bool = True) -> dict[str, str]:
     queue = review_queue_payload(run)
     digest = digest_payload(run)
+    proposal_manifest = build_proposal_manifest(run)
     paths = {
         "rawSummary": ARTIFACT_DIR / "raw-summary.json",
         "normalized": ARTIFACT_DIR / "normalized-signals.json",
@@ -1317,6 +1498,7 @@ def write_run_outputs(run: dict[str, Any], *, root: Path = ROOT, write_internal_
         "digestJson": REPORT_DIR / "latest_digest.json",
         "digestMd": REPORT_DIR / "latest_digest.md",
         "classificationDiagnostics": ARTIFACT_DIR / "classification-diagnostics.json",
+        "proposalManifest": ARTIFACT_DIR / "proposal-manifest.json",
     }
     write_json(root / paths["rawSummary"].relative_to(ROOT), {"rawSignals": run["rawSignals"], "sourceStatuses": run["sourceStatuses"]})
     write_json(root / paths["normalized"].relative_to(ROOT), {"normalizedSignals": run["normalizedSignals"]})
@@ -1325,6 +1507,7 @@ def write_run_outputs(run: dict[str, Any], *, root: Path = ROOT, write_internal_
     write_json(root / paths["digestJson"].relative_to(ROOT), digest)
     write_text(root / paths["digestMd"].relative_to(ROOT), markdown_digest(run))
     write_json(root / paths["classificationDiagnostics"].relative_to(ROOT), run.get("classificationDiagnostics") or classification_diagnostics(run))
+    write_json(root / paths["proposalManifest"].relative_to(ROOT), proposal_manifest)
     return {key: repo_relative_posix(value) for key, value in paths.items()}
 
 

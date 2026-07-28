@@ -189,14 +189,26 @@ jobs:
           SOURCES="${{ steps.guard.outputs.sources }}"
           LOOKBACK="${{ steps.guard.outputs.lookback_days }}"
           ACK_LIVE="${{ steps.guard.outputs.acknowledge_live }}"
+          CREATE_PROPOSAL="${{ steps.guard.outputs.create_proposal }}"
+          ACKNOWLEDGE_PROPOSAL="${{ steps.guard.outputs.acknowledge_proposal }}"
           PUBLISH="false"
-          python scripts/company_change_monitoring/build_change_review_queue.py \
-            --mode "$MODE" \
-            --companies "$COMPANIES" \
-            --sources "$SOURCES" \
-            --lookback-days "$LOOKBACK" \
-            --live \
-            $([[ "$ACK_LIVE" == "true" ]] && echo "--acknowledge-live")
+          ARGS=(
+            --mode "$MODE"
+            --companies "$COMPANIES"
+            --sources "$SOURCES"
+            --lookback-days "$LOOKBACK"
+            --live
+          )
+          if [[ "$ACK_LIVE" == "true" ]]; then
+            ARGS+=(--acknowledge-live)
+          fi
+          if [[ "$CREATE_PROPOSAL" == "true" ]]; then
+            ARGS+=(--create-proposal)
+          fi
+          if [[ "$ACKNOWLEDGE_PROPOSAL" == "true" ]]; then
+            ARGS+=(--acknowledge-proposal)
+          fi
+          python scripts/company_change_monitoring/build_change_review_queue.py "${ARGS[@]}"
           BUILD_EXIT=$?
           set -e
           echo "exit_code=$BUILD_EXIT" >> "$GITHUB_OUTPUT"
@@ -336,6 +348,7 @@ jobs:
           coverage_path = Path("artifacts/company-source-coverage/source-coverage-report.json")
           contribution_path = Path("artifacts/company-source-coverage/source-contribution-history.json")
           concentration_path = Path("artifacts/company-source-coverage/source-concentration-diagnostics.json")
+          proposal_path = Path("artifacts/company-change-monitor/proposal-manifest.json")
           operations_path = Path("artifacts/company-change-monitor/operations-evaluation.json")
           alert_path = Path("artifacts/company-change-monitor/operations-alert.json")
           print("## Company Change Monitor")
@@ -348,6 +361,7 @@ jobs:
           coverage = json.loads(coverage_path.read_text(encoding="utf-8")) if coverage_path.exists() else {}
           contribution = json.loads(contribution_path.read_text(encoding="utf-8")) if contribution_path.exists() else {}
           concentration = json.loads(concentration_path.read_text(encoding="utf-8")) if concentration_path.exists() else {}
+          proposal = json.loads(proposal_path.read_text(encoding="utf-8")) if proposal_path.exists() else {}
           alert = json.loads(alert_path.read_text(encoding="utf-8")) if alert_path.exists() else {}
           run_kind = operations.get("runMetadata", {}).get("runKind", "${{ steps.guard.outputs.run_kind }}")
           print(f"- Run kind: `{run_kind}`")
@@ -375,6 +389,12 @@ jobs:
           print(f"- DART identity coverage: `{coverage.get('dartMappingCoverage', {}).get('percent', 'missing')}`")
           print(f"- Source contribution history: `{contribution.get('historyState', 'missing')}` / runs=`{contribution.get('comparableRunCount', 'missing')}`")
           print(f"- Source concentration state: `{concentration.get('state', 'missing')}` / sustained=`{concentration.get('concentrationSustained', 'missing')}`")
+          print(f"- Proposal requested: `{proposal.get('requested', 'missing')}`")
+          print(f"- Proposal acknowledged: `{proposal.get('acknowledged', 'missing')}`")
+          print(f"- Proposal created: `{proposal.get('created', 'missing')}`")
+          print(f"- Proposal reason: `{proposal.get('reason', 'missing')}`")
+          print(f"- Proposal eligible count: `{proposal.get('eligibleCount', 'missing')}`")
+          print(f"- Proposal selected count: `{proposal.get('selectedCount', 'missing')}`")
           print(f"- Alert action: `{alert.get('action', 'none')}`")
           print(f"- Alert code: `{alert.get('alertCode', 'none')}`")
           print("### Sources")
@@ -430,6 +450,13 @@ jobs:
         with:
           name: company-change-classification-diagnostics
           path: artifacts/company-change-monitor/classification-diagnostics.json
+          retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: company-change-proposal
+          path: artifacts/company-change-monitor/proposal-manifest.json
           retention-days: ${{ steps.guard.outputs.artifact_retention_days || 30 }}
 
       - uses: actions/upload-artifact@v4
@@ -503,6 +530,7 @@ jobs:
               Path("reports/company_change_monitoring/latest_digest.json"),
               Path("artifacts/company-change-monitor/audit-summary.json"),
               Path("artifacts/company-change-monitor/classification-diagnostics.json"),
+              Path("artifacts/company-change-monitor/proposal-manifest.json"),
               Path("artifacts/company-change-monitor/operations-evaluation.json"),
               Path("artifacts/company-source-coverage/source-coverage-report.json"),
               Path("artifacts/company-source-coverage/dart-mapping-report.json"),
@@ -546,6 +574,60 @@ jobs:
                   failures.append("source_contribution_public_review_queue_exposure")
               if concentration.get("state") == "failed":
                   failures.append("source_concentration_failed")
+              proposal = json.loads(Path("artifacts/company-change-monitor/proposal-manifest.json").read_text(encoding="utf-8"))
+              if proposal.get("publish") is not False:
+                  failures.append("proposal_publish_not_false")
+              if proposal.get("publicDataChanged") is not False:
+                  failures.append("proposal_public_data_changed")
+              if proposal.get("secretExposureDetected") is not False:
+                  failures.append("proposal_secret_exposure")
+              if int(proposal.get("publicReviewQueueExposureCount", 0) or 0) != 0:
+                  failures.append("proposal_public_review_queue_exposure")
+              items = proposal.get("items") or []
+              if proposal.get("selectedCount") != len(items):
+                  failures.append("proposal_selected_count_mismatch")
+              if len(items) > 20:
+                  failures.append("proposal_too_many_items")
+              candidate_ids = [item.get("candidateId") for item in items]
+              if len(candidate_ids) != len(set(candidate_ids)):
+                  failures.append("proposal_duplicate_candidate_ids")
+              allowed_proposal_fields = {
+                  "candidateId",
+                  "companyId",
+                  "changeType",
+                  "fieldPath",
+                  "entityType",
+                  "signalType",
+                  "effectiveAt",
+                  "sourceIds",
+                  "sourceTiers",
+                  "evidenceSummary",
+                  "evidenceUrl",
+                  "evidenceKey",
+                  "confidence",
+                  "priority",
+                  "riskLevel",
+                  "requiresHumanReview",
+              }
+              for item in items:
+                  if set(item) - allowed_proposal_fields:
+                      failures.append("proposal_item_extra_fields")
+                      break
+              serialized_proposal = json.dumps(proposal, ensure_ascii=False)
+              for blocked in ["DART_API_KEY=", "NAVER_API_HUB_CLIENT_SECRET=", "Authorization:", "request_headers", "raw_response", "review_queue.json"]:
+                  if blocked in serialized_proposal:
+                      failures.append("proposal_sensitive_content")
+              if proposal.get("requested") is False:
+                  if proposal.get("created") is not False or proposal.get("selectedCount") != 0 or items:
+                      failures.append("proposal_unrequested_has_items")
+              elif proposal.get("requested") is True and proposal.get("acknowledged") is True and int(proposal.get("eligibleCount", 0) or 0) == 0:
+                  if proposal.get("created") is not False or proposal.get("reason") != "no_eligible_candidates":
+                      failures.append("proposal_empty_reason_invalid")
+              elif proposal.get("requested") is True and proposal.get("acknowledged") is True and int(proposal.get("eligibleCount", 0) or 0) > 0:
+                  if proposal.get("created") is not True or proposal.get("reason") != "proposal_manifest_created" or proposal.get("selectedCount", 0) <= 0:
+                      failures.append("proposal_created_reason_invalid")
+              else:
+                  failures.append("proposal_acknowledgement_required")
 
           if failures:
               print("final_acceptance: failed")
