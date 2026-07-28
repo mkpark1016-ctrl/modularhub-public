@@ -1308,15 +1308,25 @@
   },
   "entity_attribution": {
     "reporting_entity": "주식회사 유창이앤씨",
-    "standalone_financials": true,
-    "group_consolidated_financials": false,
-    "school_modular_business_spin_off_date": "2022-07-21",
-    "school_modular_business_spin_off_disclosed": true,
-    "modular_segment_revenue_disclosed": false,
-    "product_revenue_is_not_modular_revenue": true,
-    "construction_revenue_is_not_modular_revenue": true,
+    "financial_scope": "standalone",
     "related_entity_attribution_required": true,
-    "attribution_warning": "본 재무정보는 주식회사 유창이앤씨 별도 재무제표 기준이다. 2022년 학교 모듈러 제작업 부문 인적분할 이후 유창엠앤씨 등 관계사의 프로젝트, 생산, 매출을 유창이앤씨 단일 법인 실적으로 자동 합산하지 않는다."
+    "modular_segment_revenue_disclosed": false,
+    "attribution_warning": "본 재무정보는 주식회사 유창이앤씨 별도 재무제표 기준이다. 2022년 학교 모듈러 제작업 부문 인적분할 이후 유창엠앤씨 등 관계사의 프로젝트, 생산, 매출을 유창이앤씨 단일 법인 실적으로 자동 합산하지 않는다.",
+    "special_events": [
+      {
+        "event_type": "business_spin_off",
+        "effective_date": "2022-07-21",
+        "description": "학교 모듈러 제작업 부문 인적분할",
+        "related_entities": [
+          "유창엠앤씨"
+        ],
+        "source_refs": [
+          "yuchang_audit_report_2026_04_08",
+          "yuchang_audit_report_2025_04_04"
+        ],
+        "attribution_effect": "관계사 프로젝트·생산·매출을 유창이앤씨 별도 실적으로 자동 합산하지 않음"
+      }
+    ]
   },
   "disclosure_limitations": [
     "감사보고서에는 모듈러 사업부문 별도 매출이 공시되지 않았다.",
@@ -1336,6 +1346,39 @@
       2023,
       2024,
       2025
-    ]
+    ],
+    "validation_policy": {
+      "forbidden_field_names": [
+        "modular_revenue",
+        "derived",
+        "inference"
+      ],
+      "required_attribution_warning_terms": [
+        "별도 재무제표",
+        "유창엠앤씨",
+        "자동 합산하지 않는다"
+      ],
+      "expected_cash_flow_signs": {
+        "2023": {
+          "operating_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "financing_cash_flow": "positive"
+        },
+        "2024": {
+          "operating_cash_flow": "negative",
+          "investing_cash_flow": "negative",
+          "financing_cash_flow": "positive"
+        },
+        "2025": {
+          "operating_cash_flow": "negative",
+          "investing_cash_flow": "negative",
+          "financing_cash_flow": "positive"
+        }
+      },
+      "required_disclosure_limitations": [
+        "감사보고서에는 모듈러 사업부문 별도 매출이 공시되지 않았다.",
+        "유창엠앤씨 등 관계사 실적은 주식회사 유창이앤씨 별도 실적으로 합산하지 않는다."
+      ]
+    }
   }
 }

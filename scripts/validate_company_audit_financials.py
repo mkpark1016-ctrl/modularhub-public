@@ -82,6 +82,11 @@ def expected_years_for(payload: dict[str, Any], override: list[int] | None = Non
     return set((payload.get("financial_years") or {}).keys())
 
 
+def validation_policy_for(payload: dict[str, Any]) -> dict[str, Any]:
+    policy = (payload.get("validation_metadata") or {}).get("validation_policy")
+    return policy if isinstance(policy, dict) else {}
+
+
 def issue(issues: list[Issue], code: str, path: str, message: str, expected: Any = None, actual: Any = None, source: str | None = None) -> None:
     issues.append(Issue(code=code, path=path, message=message, expected=expected, actual=actual, source=source))
 
@@ -273,6 +278,9 @@ def validate_accounting(payload: dict[str, Any], issues: list[Issue]) -> None:
 def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expected_years: set[str]) -> None:
     source_ids = set((payload.get("source_documents") or {}).keys())
     priority = payload.get("source_priority") or {}
+    priority_years = set(priority.keys())
+    if priority_years != expected_years:
+        issue(issues, "source_priority_years_mismatch", "source_priority", "source priority years must match expected years", sorted(expected_years), sorted(priority_years))
     for year in sorted(expected_years):
         actual = priority.get(year) or {}
         source_ref = actual.get("primary_source_ref")
@@ -295,49 +303,61 @@ def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expec
 
 def validate_attribution(payload: dict[str, Any], issues: list[Issue]) -> None:
     attribution = payload.get("entity_attribution") or {}
-    expected_true = [
-        "standalone_financials",
-        "school_modular_business_spin_off_disclosed",
-        "product_revenue_is_not_modular_revenue",
-        "construction_revenue_is_not_modular_revenue",
+    required_fields = {
+        "reporting_entity",
+        "financial_scope",
         "related_entity_attribution_required",
-    ]
-    for key in expected_true:
-        if attribution.get(key) is not True:
-            issue(issues, "entity_attribution_mismatch", f"entity_attribution.{key}", "entity attribution flag must be true", True, attribution.get(key))
-    if attribution.get("group_consolidated_financials") is not False:
-        issue(issues, "entity_attribution_mismatch", "entity_attribution.group_consolidated_financials", "dataset must be standalone, not group consolidated", False, attribution.get("group_consolidated_financials"))
-    if attribution.get("modular_segment_revenue_disclosed") is not False:
-        issue(issues, "modular_segment_misclassification", "entity_attribution.modular_segment_revenue_disclosed", "modular segment revenue must remain undisclosed", False, attribution.get("modular_segment_revenue_disclosed"))
+        "modular_segment_revenue_disclosed",
+        "attribution_warning",
+        "special_events",
+    }
+    for key in sorted(required_fields - set(attribution)):
+        issue(issues, "missing_entity_attribution_field", f"entity_attribution.{key}", "entity attribution field is required")
+    if attribution.get("financial_scope") not in {"standalone", "consolidated", "standalone_and_consolidated"}:
+        issue(issues, "entity_attribution_mismatch", "entity_attribution.financial_scope", "financial_scope is invalid", ["standalone", "consolidated", "standalone_and_consolidated"], attribution.get("financial_scope"))
+    if not isinstance(attribution.get("special_events"), list):
+        issue(issues, "entity_attribution_mismatch", "entity_attribution.special_events", "special_events must be a list", "list", attribution.get("special_events"))
     warning = attribution.get("attribution_warning", "")
-    for required in ["별도 재무제표", "유창엠앤씨", "자동 합산하지 않는다"]:
+    policy = validation_policy_for(payload)
+    for required in policy.get("required_attribution_warning_terms") or []:
         if required not in warning:
             issue(issues, "missing_attribution_warning", "entity_attribution.attribution_warning", f"warning must mention {required!r}")
+    disclosure_limitations = payload.get("disclosure_limitations") or []
+    for required in policy.get("required_disclosure_limitations") or []:
+        if required not in disclosure_limitations:
+            issue(issues, "missing_disclosure_limitation", "disclosure_limitations", "required disclosure limitation is missing", required, disclosure_limitations)
 
 
 def validate_no_forbidden_fields(payload: dict[str, Any], issues: list[Issue]) -> None:
-    if contains_key(payload, "modular_revenue"):
-        issue(issues, "forbidden_modular_revenue", "modular_revenue", "modular_revenue must not be stored because the audit reports do not disclose segment revenue")
-    if contains_key(payload, "derived"):
-        issue(issues, "derived_stored_in_source_json", "derived", "derived values must be calculated by validator/public transform code, not manually stored in source JSON")
-    if contains_key(payload, "inference"):
-        issue(issues, "inference_stored_in_source_json", "inference", "inference must not be stored as reported source data")
+    policy = validation_policy_for(payload)
+    for field_name in policy.get("forbidden_field_names") or []:
+        if contains_key(payload, field_name):
+            issue(issues, "forbidden_field_name", field_name, "validation policy forbids this field name")
 
 
 def validate_cash_flow_signs(payload: dict[str, Any], issues: list[Issue]) -> None:
-    expected_signs = {
-        "2023": {"operating_cash_flow": 1, "investing_cash_flow": -1, "financing_cash_flow": 1},
-        "2024": {"operating_cash_flow": -1, "investing_cash_flow": -1, "financing_cash_flow": 1},
-        "2025": {"operating_cash_flow": -1, "investing_cash_flow": -1, "financing_cash_flow": 1},
-    }
+    expected_signs = validation_policy_for(payload).get("expected_cash_flow_signs") or {}
     for year, fields in expected_signs.items():
-        record = payload["financial_years"][year]
+        record = (payload.get("financial_years") or {}).get(year)
+        if not record:
+            issue(issues, "cash_flow_sign_year_missing", f"financial_years.{year}", "cash-flow sign policy references a missing year", source=year)
+            continue
         for field, sign in fields.items():
+            if field not in record.get("cash_flow", {}):
+                issue(issues, "cash_flow_sign_field_missing", f"financial_years.{year}.cash_flow.{field}", "cash-flow sign policy references a missing field", source=year)
+                continue
             value = amount(record, "cash_flow", field)
-            if sign > 0 and value < 0:
-                issue(issues, "cash_flow_sign_mismatch", f"financial_years.{year}.cash_flow.{field}", "cash-flow sign changed unexpectedly", "positive", value, source=year)
-            if sign < 0 and value > 0:
-                issue(issues, "cash_flow_sign_mismatch", f"financial_years.{year}.cash_flow.{field}", "cash-flow sign changed unexpectedly", "negative", value, source=year)
+            sign_matches = {
+                "positive": value > 0,
+                "negative": value < 0,
+                "zero": value == 0,
+                "non_negative": value >= 0,
+                "non_positive": value <= 0,
+            }
+            if sign not in sign_matches:
+                issue(issues, "cash_flow_sign_policy_invalid", f"validation_metadata.validation_policy.expected_cash_flow_signs.{year}.{field}", "invalid cash-flow sign policy", sorted(sign_matches), sign, source=year)
+            elif not sign_matches[sign]:
+                issue(issues, "cash_flow_sign_mismatch", f"financial_years.{year}.cash_flow.{field}", "cash-flow sign changed unexpectedly", sign, value, source=year)
 
 
 def git_ref_exists(ref: str) -> bool:

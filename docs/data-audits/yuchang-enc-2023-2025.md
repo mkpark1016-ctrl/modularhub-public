@@ -47,7 +47,7 @@
 
 - 모든 금액은 정수 KRW 원 단위다.
 - 2023, 2024, 2025년이 모두 존재한다.
-- JSON Schema가 `financial_years`의 연도 키와 하위 재무 섹션 구조를 검증한다.
+- JSON Schema가 `financial_years`의 4자리 연도 키와 하위 재무 섹션 구조를 검증한다.
 - 각 금액 필드는 Schema의 `$defs.reportedAmount`를 사용한다.
 - 연도별 `total_assets = total_liabilities + total_equity`가 성립한다.
 - 연도별 매출 구성 합계가 매출액과 일치한다.
@@ -59,11 +59,17 @@
 
 ## Schema와 Python Validator 역할
 
-JSON Schema는 데이터 형태를 검증한다. 필수 섹션, 필수 metric, 알 수 없는 필드 차단, `reported` 정수 여부, `source_refs`, `source_locations` 구조를 검사한다.
+JSON Schema는 기업 공통 데이터 계약이다. 4자리 연도 키, 필수 섹션, 필수 metric, 알 수 없는 필드 차단, `reported` 정수 여부, `source_refs`, `source_locations` 구조를 검사한다. 정확한 연도 집합은 Schema에 하드코딩하지 않고 각 데이터셋의 `validation_metadata.expected_years`와 Python Validator가 검증한다.
 
 Python Validator는 회계적 보존식과 운영 보호 규칙을 검증한다. 자산 등식, 매출 구성 합계, source priority 적용, 차입금 합계, 현금흐름 부호, forbidden field, public JSON 변경 여부를 검사하고 파생 지표를 계산한다.
 
-Validator는 유창이앤씨 전용 연도 하드코딩 대신 데이터셋의 `validation_metadata.expected_years`를 읽는다. 다음 기업을 추가할 때는 Validator 코드를 기업별로 수정하지 않고, 데이터셋 메타데이터와 source priority를 확장하는 방식을 따른다.
+기업별 특수 검증은 `validation_metadata.validation_policy`에 선언한다. 유창이앤씨의 금지 필드, attribution warning 필수 문구, 현금흐름 부호 기대값, 필수 한계 문구도 이 정책에 있다.
+
+Validator는 유창이앤씨 전용 연도, 기업명, 현금흐름 부호를 하드코딩하지 않는다. 다음 기업을 추가할 때는 Validator Python 파일을 수정하지 않고, 데이터셋 메타데이터, source priority, validation policy를 확장하는 방식을 따른다.
+
+## special_events 사용
+
+`entity_attribution.special_events`는 인적분할, 합병, 사업양수도, 주요 관계사 귀속 이슈처럼 특정 기업에만 적용되는 사건을 기록한다. 유창이앤씨의 2022년 학교 모듈러 제작업 부문 인적분할은 `business_spin_off` 이벤트로 기록했으며, 관계사 프로젝트·생산·매출을 유창이앤씨 별도 실적으로 자동 합산하지 않는 attribution effect를 명시했다.
 
 ## 법인 귀속 주의사항
 
@@ -92,7 +98,9 @@ Validator는 유창이앤씨 전용 연도 하드코딩 대신 데이터셋의 `
 5. 확인된 페이지 또는 섹션 범위를 `source_locations`에 연결한다.
 6. 정확한 주석 페이지가 미확인인 경우 `pending_manual_page_check`로 남긴다.
 7. `validation_metadata.expected_years`를 입력한다.
-8. 법인 귀속과 관계사 혼입 위험을 `entity_attribution`에 기록한다.
-9. `python scripts/validate_company_audit_financials.py --input <path> --base-ref origin/main`를 실행한다.
-10. `python -m pytest -q tests/test_company_audit_financials.py`를 실행한다.
-11. 검토 후 별도 public 변환 단계에서 필요한 값만 노출한다.
+8. 기업별 특수 검증이 필요하면 `validation_metadata.validation_policy`에 선언한다.
+9. 인적분할, 합병, 사업양수도 등 법인 귀속 이슈는 `entity_attribution.special_events`에 기록한다.
+10. 법인 귀속과 관계사 혼입 위험을 `entity_attribution.attribution_warning`에 기록한다.
+11. `python scripts/validate_company_audit_financials.py --input <path> --base-ref origin/main`를 실행한다.
+12. `python -m pytest -q tests/test_company_audit_financials.py`를 실행한다.
+13. 검토 후 별도 public 변환 단계에서 필요한 값만 노출한다.

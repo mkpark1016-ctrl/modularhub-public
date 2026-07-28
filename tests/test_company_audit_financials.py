@@ -69,12 +69,45 @@ def schema_errors(payload: dict) -> list:
     return sorted(validator.iter_errors(payload), key=lambda error: list(error.path))
 
 
+def synthetic_company_payload() -> dict:
+    payload = deepcopy(load_payload())
+    payload["company_id"] = "sample-company"
+    payload["company_name"] = "Sample Company"
+    payload["reporting_entity"] = "Sample Company"
+    payload["financial_years"] = {
+        "2024": payload["financial_years"]["2023"],
+        "2025": payload["financial_years"]["2024"],
+        "2026": payload["financial_years"]["2025"],
+    }
+    payload["source_priority"] = {
+        "2024": payload["source_priority"]["2023"],
+        "2025": payload["source_priority"]["2024"],
+        "2026": payload["source_priority"]["2025"],
+    }
+    payload["financial_years"]["2026"]["cash_flow"]["operating_cash_flow"]["reported"] = 30830315410
+    payload["entity_attribution"] = {
+        "reporting_entity": "Sample Company",
+        "financial_scope": "standalone",
+        "related_entity_attribution_required": False,
+        "modular_segment_revenue_disclosed": False,
+        "attribution_warning": "Sample Company standalone financial information. Related entities are not automatically combined.",
+        "special_events": [],
+    }
+    payload["validation_metadata"]["expected_years"] = [2024, 2025, 2026]
+    payload["validation_metadata"]["validation_policy"] = {
+        "forbidden_field_names": ["modular_revenue", "derived", "inference"]
+    }
+    return payload
+
+
 def test_json_schema_contract_is_complete() -> None:
     schema = load_schema()
     defs = schema["$defs"]
-    assert schema["properties"]["financial_years"]["$ref"] == "#/$defs/financialYearsPilot"
-    assert defs["financialYearsPilot"]["additionalProperties"] is False
-    assert set(defs["financialYearsPilot"]["properties"]) == {"2023", "2024", "2025"}
+    assert schema["properties"]["financial_years"]["$ref"] == "#/$defs/financialYears"
+    assert defs["financialYears"]["patternProperties"]["^[0-9]{4}$"]["$ref"] == "#/$defs/financialYear"
+    assert defs["financialYears"]["additionalProperties"] is False
+    assert defs["sourcePriorityByYear"]["patternProperties"]["^[0-9]{4}$"]["$ref"] == "#/$defs/sourcePriority"
+    assert defs["sourcePriorityByYear"]["additionalProperties"] is False
     assert defs["financialYear"]["required"] == [
         "income_statement",
         "balance_sheet",
@@ -88,6 +121,9 @@ def test_json_schema_contract_is_complete() -> None:
     assert defs["incomeStatement"]["properties"]["revenue"]["$ref"] == "#/$defs/reportedAmount"
     assert "source_locations" in defs["reportedAmount"]["properties"]
     assert defs["reportedAmount"]["additionalProperties"] is False
+    assert defs["entityAttribution"]["properties"]["financial_scope"]["enum"] == ["standalone", "consolidated", "standalone_and_consolidated"]
+    assert "specialEvent" in defs
+    assert "validationPolicy" in defs
 
 
 def test_curated_dataset_matches_schema() -> None:
@@ -119,6 +155,19 @@ def test_schema_rejects_unknown_metric_field() -> None:
     assert any("Additional properties" in error.message for error in errors)
 
 
+def test_schema_accepts_generic_2024_to_2026_company() -> None:
+    assert schema_errors(synthetic_company_payload()) == []
+
+
+def test_validator_accepts_generic_company_without_yuchang_specific_policy() -> None:
+    payload = synthetic_company_payload()
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert result["company_id"] == "sample-company"
+    assert result["expected_years"] == ["2024", "2025", "2026"]
+    assert "유창엠앤씨" not in payload["entity_attribution"]["attribution_warning"]
+
+
 def test_validator_rejects_reported_value_without_source_refs() -> None:
     payload = deepcopy(load_payload())
     del payload["financial_years"]["2025"]["income_statement"]["revenue"]["source_refs"]
@@ -147,6 +196,14 @@ def test_expected_years_are_read_from_dataset_metadata() -> None:
     result = validate(payload, base_ref=None)
     assert not result["valid"]
     assert any(issue["code"] == "financial_years_mismatch" for issue in result["issues"])
+
+
+def test_source_priority_years_must_match_expected_years() -> None:
+    payload = deepcopy(load_payload())
+    payload["source_priority"]["2026"] = payload["source_priority"]["2025"]
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "source_priority_years_mismatch" for issue in result["issues"])
 
 
 def test_base_ref_missing_returns_explicit_warning() -> None:
@@ -202,6 +259,8 @@ def test_cash_flow_signs_are_preserved() -> None:
     assert reported(payload["financial_years"]["2023"], "cash_flow", "investing_cash_flow") < 0
     assert reported(payload["financial_years"]["2024"], "cash_flow", "investing_cash_flow") < 0
     assert reported(payload["financial_years"]["2025"], "cash_flow", "investing_cash_flow") < 0
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
 
 
 def test_2025_revenue_breakdown_exact_sum() -> None:
@@ -237,10 +296,19 @@ def test_no_modular_revenue_field_or_derived_values_are_stored() -> None:
 
 
 def test_entity_attribution_warning_exists() -> None:
+    attribution = load_payload()["entity_attribution"]
+    assert attribution["financial_scope"] == "standalone"
+    assert attribution["special_events"][0]["event_type"] == "business_spin_off"
     warning = load_payload()["entity_attribution"]["attribution_warning"]
     assert "주식회사 유창이앤씨 별도 재무제표" in warning
     assert "유창엠앤씨" in warning
     assert "자동 합산하지 않는다" in warning
+
+
+def test_validator_has_no_company_name_or_cash_flow_sign_hardcoding() -> None:
+    source = (ROOT / "scripts" / "validate_company_audit_financials.py").read_text(encoding="utf-8")
+    assert "유창엠앤씨" not in source
+    assert "expected_signs = {" not in source
 
 
 def test_public_data_files_are_not_changed() -> None:
