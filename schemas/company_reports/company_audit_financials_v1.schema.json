@@ -24,39 +24,310 @@
     "company_id": { "type": "string", "minLength": 1 },
     "company_name": { "type": "string", "minLength": 1 },
     "reporting_entity": { "type": "string", "minLength": 1 },
-    "accounting_standard": {
-      "type": "object",
-      "required": ["code", "label_ko", "label_en"],
-      "properties": {
-        "code": { "type": "string" },
-        "label_ko": { "type": "string" },
-        "label_en": { "type": "string" }
-      },
-      "additionalProperties": false
-    },
+    "accounting_standard": { "$ref": "#/$defs/accountingStandard" },
     "currency": { "const": "KRW" },
     "unit": { "const": "won" },
-    "audit_opinions": { "type": "array" },
-    "source_documents": { "type": "object" },
-    "source_priority": { "type": "object" },
-    "financial_years": { "type": "object" },
-    "entity_attribution": { "type": "object" },
-    "disclosure_limitations": { "type": "array" },
-    "validation_metadata": { "type": "object" }
+    "audit_opinions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/auditOpinion" },
+      "minItems": 1
+    },
+    "source_documents": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/sourceDocument" },
+      "minProperties": 1
+    },
+    "source_priority": { "$ref": "#/$defs/sourcePriorityByYear" },
+    "financial_years": { "$ref": "#/$defs/financialYearsPilot" },
+    "entity_attribution": { "$ref": "#/$defs/entityAttribution" },
+    "disclosure_limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "validation_metadata": { "$ref": "#/$defs/validationMetadata" }
   },
   "additionalProperties": false,
   "$defs": {
+    "accountingStandard": {
+      "type": "object",
+      "required": ["code", "label_ko", "label_en"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "label_ko": { "type": "string", "minLength": 1 },
+        "label_en": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "auditOpinion": {
+      "type": "object",
+      "required": ["source_ref", "opinion", "opinion_label_ko", "covered_years", "auditor", "auditor_report_date"],
+      "properties": {
+        "source_ref": { "type": "string", "minLength": 1 },
+        "opinion": { "enum": ["unqualified", "qualified", "adverse", "disclaimer", "unknown"] },
+        "opinion_label_ko": { "type": "string", "minLength": 1 },
+        "covered_years": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 1
+        },
+        "auditor": { "type": "string", "minLength": 1 },
+        "auditor_report_date": { "type": "string", "format": "date" }
+      },
+      "additionalProperties": false
+    },
+    "sourceDocument": {
+      "type": "object",
+      "required": [
+        "filename",
+        "report_date",
+        "covered_years",
+        "auditor",
+        "auditor_report_date",
+        "audit_opinion",
+        "source_role"
+      ],
+      "properties": {
+        "filename": { "type": "string", "minLength": 1 },
+        "report_date": { "type": "string", "format": "date" },
+        "covered_years": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 1
+        },
+        "auditor": { "type": "string", "minLength": 1 },
+        "auditor_report_date": { "type": "string", "format": "date" },
+        "audit_opinion": { "type": "string", "minLength": 1 },
+        "balance_sheet_pages": { "type": "string" },
+        "income_statement_pages": { "type": "string" },
+        "cash_flow_pages": { "type": "string" },
+        "company_overview_page": { "type": "string" },
+        "source_role": { "type": "string", "minLength": 1 },
+        "usage": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sourcePriorityByYear": {
+      "type": "object",
+      "required": ["2023", "2024", "2025"],
+      "properties": {
+        "2023": { "$ref": "#/$defs/sourcePriority" },
+        "2024": { "$ref": "#/$defs/sourcePriority" },
+        "2025": { "$ref": "#/$defs/sourcePriority" }
+      },
+      "additionalProperties": false
+    },
+    "sourcePriority": {
+      "type": "object",
+      "required": ["primary_source_ref", "basis"],
+      "properties": {
+        "primary_source_ref": { "type": "string", "minLength": 1 },
+        "basis": {
+          "enum": [
+            "current_year_financial_statements",
+            "comparative_financial_statements",
+            "cross_check"
+          ]
+        },
+        "cross_check_source_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "financialYearsPilot": {
+      "type": "object",
+      "required": ["2023", "2024", "2025"],
+      "properties": {
+        "2023": { "$ref": "#/$defs/financialYear" },
+        "2024": { "$ref": "#/$defs/financialYear" },
+        "2025": { "$ref": "#/$defs/financialYear" }
+      },
+      "additionalProperties": false
+    },
+    "financialYear": {
+      "type": "object",
+      "required": [
+        "income_statement",
+        "balance_sheet",
+        "cash_flow",
+        "revenue_breakdown",
+        "working_capital",
+        "borrowings",
+        "investment_signals",
+        "source_refs"
+      ],
+      "properties": {
+        "source_refs": { "$ref": "#/$defs/sourceRefs" },
+        "income_statement": { "$ref": "#/$defs/incomeStatement" },
+        "balance_sheet": { "$ref": "#/$defs/balanceSheet" },
+        "cash_flow": { "$ref": "#/$defs/cashFlow" },
+        "revenue_breakdown": { "$ref": "#/$defs/revenueBreakdown" },
+        "working_capital": { "$ref": "#/$defs/workingCapital" },
+        "borrowings": { "$ref": "#/$defs/borrowings" },
+        "investment_signals": { "$ref": "#/$defs/investmentSignals" }
+      },
+      "additionalProperties": false
+    },
+    "incomeStatement": {
+      "type": "object",
+      "required": ["revenue", "gross_profit", "operating_profit", "net_income"],
+      "properties": {
+        "revenue": { "$ref": "#/$defs/reportedAmount" },
+        "gross_profit": { "$ref": "#/$defs/reportedAmount" },
+        "operating_profit": { "$ref": "#/$defs/reportedAmount" },
+        "net_income": { "$ref": "#/$defs/reportedAmount" }
+      },
+      "additionalProperties": false
+    },
+    "balanceSheet": {
+      "type": "object",
+      "required": ["total_assets", "total_liabilities", "total_equity", "current_assets", "current_liabilities"],
+      "properties": {
+        "total_assets": { "$ref": "#/$defs/reportedAmount" },
+        "total_liabilities": { "$ref": "#/$defs/reportedAmount" },
+        "total_equity": { "$ref": "#/$defs/reportedAmount" },
+        "current_assets": { "$ref": "#/$defs/reportedAmount" },
+        "current_liabilities": { "$ref": "#/$defs/reportedAmount" }
+      },
+      "additionalProperties": false
+    },
+    "cashFlow": {
+      "type": "object",
+      "required": ["operating_cash_flow", "investing_cash_flow", "financing_cash_flow", "ending_cash"],
+      "properties": {
+        "operating_cash_flow": { "$ref": "#/$defs/reportedAmount" },
+        "investing_cash_flow": { "$ref": "#/$defs/reportedAmount" },
+        "financing_cash_flow": { "$ref": "#/$defs/reportedAmount" },
+        "ending_cash": { "$ref": "#/$defs/reportedAmount" }
+      },
+      "additionalProperties": false
+    },
+    "revenueBreakdown": {
+      "type": "object",
+      "required": ["goods_revenue", "product_revenue", "construction_revenue", "rental_revenue", "other_revenue"],
+      "properties": {
+        "goods_revenue": { "$ref": "#/$defs/reportedAmount" },
+        "product_revenue": { "$ref": "#/$defs/reportedAmount" },
+        "construction_revenue": { "$ref": "#/$defs/reportedAmount" },
+        "rental_revenue": { "$ref": "#/$defs/reportedAmount" },
+        "other_revenue": { "$ref": "#/$defs/reportedAmount" }
+      },
+      "additionalProperties": false
+    },
+    "workingCapital": {
+      "type": "object",
+      "required": ["trade_receivables_gross", "construction_receivables_gross", "inventory", "work_in_progress"],
+      "properties": {
+        "trade_receivables_gross": { "$ref": "#/$defs/reportedAmount" },
+        "construction_receivables_gross": { "$ref": "#/$defs/reportedAmount" },
+        "inventory": { "$ref": "#/$defs/reportedAmount" },
+        "work_in_progress": { "$ref": "#/$defs/reportedAmount" }
+      },
+      "additionalProperties": false
+    },
+    "borrowings": {
+      "type": "object",
+      "required": ["short_term_borrowings", "current_portion_long_term_borrowings", "long_term_borrowings"],
+      "properties": {
+        "short_term_borrowings": { "$ref": "#/$defs/reportedAmount" },
+        "current_portion_long_term_borrowings": { "$ref": "#/$defs/reportedAmount" },
+        "long_term_borrowings": { "$ref": "#/$defs/reportedAmount" }
+      },
+      "additionalProperties": false
+    },
+    "investmentSignals": {
+      "type": "object",
+      "required": ["construction_in_progress", "industrial_property_rights", "research_and_development_expense"],
+      "properties": {
+        "construction_in_progress": { "$ref": "#/$defs/reportedAmount" },
+        "industrial_property_rights": { "$ref": "#/$defs/reportedAmount" },
+        "research_and_development_expense": { "$ref": "#/$defs/reportedAmount" }
+      },
+      "additionalProperties": false
+    },
     "reportedAmount": {
       "type": "object",
       "required": ["reported", "source_refs"],
       "properties": {
         "reported": { "type": "integer" },
-        "source_refs": {
+        "source_refs": { "$ref": "#/$defs/sourceRefs" },
+        "source_locations": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": { "$ref": "#/$defs/sourceLocation" },
           "minItems": 1
         },
         "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sourceRefs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "sourceLocation": {
+      "type": "object",
+      "required": ["source_ref", "section", "verification_status"],
+      "properties": {
+        "source_ref": { "type": "string", "minLength": 1 },
+        "page": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "string", "minLength": 1 }
+          ]
+        },
+        "page_range": { "type": "string", "minLength": 1 },
+        "section": { "type": "string", "minLength": 1 },
+        "verification_status": {
+          "enum": ["verified", "verified_section_range", "pending_manual_page_check"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "entityAttribution": {
+      "type": "object",
+      "required": [
+        "reporting_entity",
+        "standalone_financials",
+        "group_consolidated_financials",
+        "school_modular_business_spin_off_date",
+        "school_modular_business_spin_off_disclosed",
+        "modular_segment_revenue_disclosed",
+        "product_revenue_is_not_modular_revenue",
+        "construction_revenue_is_not_modular_revenue",
+        "related_entity_attribution_required",
+        "attribution_warning"
+      ],
+      "properties": {
+        "reporting_entity": { "type": "string", "minLength": 1 },
+        "standalone_financials": { "type": "boolean" },
+        "group_consolidated_financials": { "type": "boolean" },
+        "school_modular_business_spin_off_date": { "type": "string", "format": "date" },
+        "school_modular_business_spin_off_disclosed": { "type": "boolean" },
+        "modular_segment_revenue_disclosed": { "type": "boolean" },
+        "product_revenue_is_not_modular_revenue": { "type": "boolean" },
+        "construction_revenue_is_not_modular_revenue": { "type": "boolean" },
+        "related_entity_attribution_required": { "type": "boolean" },
+        "attribution_warning": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "validationMetadata": {
+      "type": "object",
+      "required": ["created_for", "amount_storage", "derived_metrics_storage", "pdf_handling", "public_ui_impact", "expected_years"],
+      "properties": {
+        "created_for": { "type": "string", "minLength": 1 },
+        "amount_storage": { "type": "string", "minLength": 1 },
+        "derived_metrics_storage": { "type": "string", "minLength": 1 },
+        "pdf_handling": { "type": "string", "minLength": 1 },
+        "public_ui_impact": { "type": "string", "minLength": 1 },
+        "expected_years": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 1,
+          "uniqueItems": true
+        }
       },
       "additionalProperties": false
     }

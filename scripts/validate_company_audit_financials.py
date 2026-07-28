@@ -14,7 +14,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "data" / "company_reports" / "yuchang-enc" / "audit_financials_2023_2025.json"
 SCHEMA_VERSION = "company_audit_financials_v1"
-EXPECTED_YEARS = {"2023", "2024", "2025"}
+DEFAULT_BASE_REF = "origin/main"
 PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "business.json",
     ROOT / "frontend" / "public" / "data" / "news.json",
@@ -44,6 +44,7 @@ REQUIRED_WORKING_CAPITAL_FIELDS = {
     "work_in_progress",
 }
 REQUIRED_INVESTMENT_FIELDS = {"construction_in_progress", "industrial_property_rights", "research_and_development_expense"}
+SOURCE_LOCATION_STATUSES = {"verified", "verified_section_range", "pending_manual_page_check"}
 
 
 @dataclass
@@ -70,6 +71,15 @@ class Issue:
 
 def load_payload(path: Path = DEFAULT_INPUT) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def expected_years_for(payload: dict[str, Any], override: list[int] | None = None) -> set[str]:
+    if override:
+        return {str(year) for year in override}
+    metadata_years = (payload.get("validation_metadata") or {}).get("expected_years")
+    if isinstance(metadata_years, list) and metadata_years:
+        return {str(year) for year in metadata_years}
+    return set((payload.get("financial_years") or {}).keys())
 
 
 def issue(issues: list[Issue], code: str, path: str, message: str, expected: Any = None, actual: Any = None, source: str | None = None) -> None:
@@ -181,10 +191,10 @@ def validate_required_fields(payload: dict[str, Any], issues: list[Issue]) -> No
         issue(issues, "currency_unit_mismatch", "currency/unit", "amounts must be KRW integer won", "KRW/won", f"{payload.get('currency')}/{payload.get('unit')}")
 
 
-def validate_years(payload: dict[str, Any], issues: list[Issue]) -> None:
+def validate_years(payload: dict[str, Any], issues: list[Issue], expected_years: set[str]) -> None:
     years = set((payload.get("financial_years") or {}).keys())
-    if years != EXPECTED_YEARS:
-        issue(issues, "financial_years_mismatch", "financial_years", "expected exactly 2023, 2024, and 2025", sorted(EXPECTED_YEARS), sorted(years))
+    if years != expected_years:
+        issue(issues, "financial_years_mismatch", "financial_years", "financial years do not match validation metadata or CLI override", sorted(expected_years), sorted(years))
         return
     for year, record in payload["financial_years"].items():
         missing_sections = REQUIRED_YEAR_SECTIONS - set(record)
@@ -218,6 +228,31 @@ def validate_amount_shapes(payload: dict[str, Any], issues: list[Issue]) -> None
         for source_ref in refs:
             if source_ref not in source_ids:
                 issue(issues, "unknown_source_ref", f"{path}.source_refs", "source_ref is not defined", sorted(source_ids), source_ref)
+        locations = record.get("source_locations")
+        if locations is not None:
+            if not isinstance(locations, list) or not locations:
+                issue(issues, "invalid_source_locations", f"{path}.source_locations", "source_locations must be a non-empty list when present")
+            else:
+                for index, location in enumerate(locations):
+                    location_path = f"{path}.source_locations[{index}]"
+                    if not isinstance(location, dict):
+                        issue(issues, "invalid_source_location", location_path, "source_location must be an object", "object", location)
+                        continue
+                    allowed = {"source_ref", "page", "page_range", "section", "verification_status"}
+                    extra_keys = sorted(set(location) - allowed)
+                    if extra_keys:
+                        issue(issues, "unknown_source_location_field", location_path, "source_location contains unknown fields", [], extra_keys)
+                    if location.get("source_ref") not in source_ids:
+                        issue(issues, "unknown_source_location_ref", f"{location_path}.source_ref", "source_location source_ref is not defined", sorted(source_ids), location.get("source_ref"))
+                    if location.get("source_ref") not in refs:
+                        issue(issues, "source_location_ref_not_in_source_refs", f"{location_path}.source_ref", "source_location source_ref must also be listed in source_refs", refs, location.get("source_ref"))
+                    if not location.get("section"):
+                        issue(issues, "missing_source_location_section", f"{location_path}.section", "source_location requires section")
+                    status = location.get("verification_status")
+                    if status not in SOURCE_LOCATION_STATUSES:
+                        issue(issues, "invalid_source_location_status", f"{location_path}.verification_status", "invalid source location verification status", sorted(SOURCE_LOCATION_STATUSES), status)
+                    if status in {"verified", "verified_section_range"} and not (location.get("page") or location.get("page_range")):
+                        issue(issues, "missing_source_location_page", location_path, "verified source locations require page or page_range")
         if "inference" in record:
             issue(issues, "inference_stored_with_reported", path, "inference must not be stored inside a reported amount")
 
@@ -235,25 +270,27 @@ def validate_accounting(payload: dict[str, Any], issues: list[Issue]) -> None:
             issue(issues, "revenue_breakdown_mismatch", f"financial_years.{year}.revenue_breakdown", "revenue breakdown must equal revenue", revenue, revenue_total, source=year)
 
 
-def validate_source_priority(payload: dict[str, Any], issues: list[Issue]) -> None:
-    expected = {
-        "2025": ("yuchang_audit_report_2026_04_08", "current_year_financial_statements"),
-        "2024": ("yuchang_audit_report_2026_04_08", "comparative_financial_statements"),
-        "2023": ("yuchang_audit_report_2025_04_04", "comparative_financial_statements"),
-    }
+def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expected_years: set[str]) -> None:
+    source_ids = set((payload.get("source_documents") or {}).keys())
     priority = payload.get("source_priority") or {}
-    for year, (source_ref, basis) in expected.items():
+    for year in sorted(expected_years):
         actual = priority.get(year) or {}
-        if actual.get("primary_source_ref") != source_ref or actual.get("basis") != basis:
-            issue(issues, "source_priority_mismatch", f"source_priority.{year}", "source priority does not match the audit-report policy", {"primary_source_ref": source_ref, "basis": basis}, actual, source=year)
+        source_ref = actual.get("primary_source_ref")
+        if not source_ref:
+            issue(issues, "source_priority_missing_primary", f"source_priority.{year}.primary_source_ref", "source priority requires primary_source_ref", source=year)
+            continue
+        if source_ref not in source_ids:
+            issue(issues, "source_priority_unknown_source_ref", f"source_priority.{year}.primary_source_ref", "source priority references an unknown source document", sorted(source_ids), source_ref, source=year)
+        if actual.get("basis") not in {"current_year_financial_statements", "comparative_financial_statements", "cross_check"}:
+            issue(issues, "source_priority_invalid_basis", f"source_priority.{year}.basis", "source priority basis is invalid", actual=actual.get("basis"), source=year)
         primary_refs = []
         for _, record in money_paths((payload.get("financial_years") or {}).get(year, {})):
             primary_refs.extend(record.get("source_refs") or [])
         if source_ref not in set(primary_refs):
             issue(issues, "source_ref_missing_primary", f"financial_years.{year}", "primary source_ref is not used by year values", source_ref, sorted(set(primary_refs)), source=year)
-    cross_checks = priority.get("2023", {}).get("cross_check_source_refs") or []
-    if "yuchang_audit_report_2024_04_05" not in cross_checks:
-        issue(issues, "missing_2023_cross_check", "source_priority.2023.cross_check_source_refs", "2024.04.05 report must be marked as 2023 cross-check only")
+        for cross_ref in actual.get("cross_check_source_refs") or []:
+            if cross_ref not in source_ids:
+                issue(issues, "source_priority_unknown_cross_check_ref", f"source_priority.{year}.cross_check_source_refs", "cross-check source_ref is not defined", sorted(source_ids), cross_ref, source=year)
 
 
 def validate_attribution(payload: dict[str, Any], issues: list[Issue]) -> None:
@@ -303,56 +340,90 @@ def validate_cash_flow_signs(payload: dict[str, Any], issues: list[Issue]) -> No
                 issue(issues, "cash_flow_sign_mismatch", f"financial_years.{year}.cash_flow.{field}", "cash-flow sign changed unexpectedly", "negative", value, source=year)
 
 
-def protected_public_diffs(paths: list[Path] = PROTECTED_PUBLIC_FILES) -> list[str]:
+def git_ref_exists(ref: str) -> bool:
+    result = subprocess.run(
+        ["git", "rev-parse", "--verify", "--quiet", ref],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths: list[Path] = PROTECTED_PUBLIC_FILES) -> dict[str, Any]:
     existing = [str(path.relative_to(ROOT)) for path in paths if path.exists()]
     if not existing:
-        return []
+        return {"mode": "none", "base_ref": base_ref, "changed_files": [], "warnings": ["no protected files found"]}
+    warnings: list[str] = []
+    args = ["git", "diff", "--name-only"]
+    mode = "worktree"
+    if base_ref:
+        if git_ref_exists(base_ref):
+            args.append(f"{base_ref}...HEAD")
+            mode = "branch_vs_base"
+        else:
+            warnings.append(f"base ref not found: {base_ref}; falling back to worktree diff")
+    args.extend(["--", *existing])
     try:
         result = subprocess.run(
-            ["git", "diff", "--name-only", "--", *existing],
+            args,
             cwd=ROOT,
             text=True,
             capture_output=True,
             check=False,
         )
     except OSError:
-        return []
-    return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+        return {"mode": mode, "base_ref": base_ref, "changed_files": [], "warnings": warnings + ["git diff command failed"]}
+    return {
+        "mode": mode,
+        "base_ref": base_ref,
+        "changed_files": [line.strip() for line in result.stdout.splitlines() if line.strip()],
+        "warnings": warnings,
+    }
 
 
-def validate(payload: dict[str, Any]) -> dict[str, Any]:
+def protected_public_diffs(paths: list[Path] = PROTECTED_PUBLIC_FILES) -> list[str]:
+    return protected_public_diff_status(base_ref=None, paths=paths)["changed_files"]
+
+
+def validate(payload: dict[str, Any], expected_year_override: list[int] | None = None, base_ref: str | None = DEFAULT_BASE_REF) -> dict[str, Any]:
     issues: list[Issue] = []
+    expected_years = expected_years_for(payload, expected_year_override)
     validate_required_fields(payload, issues)
-    validate_years(payload, issues)
-    if set((payload.get("financial_years") or {}).keys()) == EXPECTED_YEARS:
+    validate_years(payload, issues, expected_years)
+    if set((payload.get("financial_years") or {}).keys()) == expected_years:
         validate_amount_shapes(payload, issues)
         validate_accounting(payload, issues)
-        validate_source_priority(payload, issues)
+        validate_source_priority(payload, issues, expected_years)
         validate_attribution(payload, issues)
         validate_no_forbidden_fields(payload, issues)
         validate_cash_flow_signs(payload, issues)
-    protected_diffs = protected_public_diffs()
-    if protected_diffs:
-        issue(issues, "protected_public_file_changed", "frontend/public/data", "protected public data files have local diffs", [], protected_diffs)
+    protected_status = protected_public_diff_status(base_ref=base_ref)
+    if protected_status["changed_files"]:
+        issue(issues, "protected_public_file_changed", "frontend/public/data", "protected public data files changed versus protected diff scope", [], protected_status["changed_files"])
     derived_metrics = calculate_derived_metrics(payload) if not any(item.code.startswith("missing") for item in issues) else {}
     return {
         "valid": not any(item.severity == "error" for item in issues),
         "schema_version": payload.get("schema_version"),
         "company_id": payload.get("company_id"),
         "financial_years_loaded": sorted((payload.get("financial_years") or {}).keys()),
+        "expected_years": sorted(expected_years),
         "derived_metrics": derived_metrics,
         "issue_count": len(issues),
         "issues": [item.as_dict() for item in issues],
-        "protected_public_files_changed": protected_diffs,
+        "protected_public_diff": protected_status,
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate company audit financial source data.")
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
+    parser.add_argument("--expected-years", nargs="*", type=int, default=None, help="Override expected financial years.")
+    parser.add_argument("--base-ref", default=DEFAULT_BASE_REF, help="Base ref used for protected public data diff checks.")
     args = parser.parse_args()
     payload = load_payload(args.input)
-    result = validate(payload)
+    result = validate(payload, expected_year_override=args.expected_years, base_ref=args.base_ref)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0 if result["valid"] else 1
 

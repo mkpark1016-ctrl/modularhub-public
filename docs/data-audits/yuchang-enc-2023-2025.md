@@ -23,6 +23,18 @@
 
 감사보고서에 직접 표시된 금액은 KRW 원 단위 정수로만 저장한다. 억원 단위 표시값, 비율, 전년 대비 증감률, 차입금 합계는 원천 JSON에 수동 저장하지 않고 `scripts/validate_company_audit_financials.py`에서 계산한다.
 
+## 출처 식별자와 위치 정보
+
+`source_refs`는 보고서 파일 단위의 출처 식별자다. 예를 들어 `yuchang_audit_report_2026_04_08`은 `[유창이앤씨]감사보고서(2026.04.08).pdf`를 의미한다.
+
+`source_locations`는 각 reported 값이 어느 재무제표 또는 주석 섹션에서 확인되는지 나타낸다.
+
+- `verified`: 특정 페이지 또는 항목 위치가 직접 확인된 상태
+- `verified_section_range`: 재무제표 페이지 범위가 확인된 상태
+- `pending_manual_page_check`: 보고서 원천은 연결됐지만 주석 세부 항목의 정확한 페이지는 후속 수동 확인이 필요한 상태
+
+이번 파일럿에서는 재무상태표, 손익계산서, 현금흐름표의 페이지 범위를 각각 보고서 메타데이터의 `6~8`, `9~10`, `12~13`과 연결했다. 매출 구성, 운전자본, 차입금, 투자 신호처럼 주석 기반 세부값은 임의 페이지를 만들지 않고 `pending_manual_page_check`로 표시했다.
+
 ## 핵심 수치
 
 | 연도 | 매출액 | 매출총이익 | 영업이익 | 당기순이익 | 총자산 | 총부채 | 총자본 | 영업현금흐름 |
@@ -35,6 +47,8 @@
 
 - 모든 금액은 정수 KRW 원 단위다.
 - 2023, 2024, 2025년이 모두 존재한다.
+- JSON Schema가 `financial_years`의 연도 키와 하위 재무 섹션 구조를 검증한다.
+- 각 금액 필드는 Schema의 `$defs.reportedAmount`를 사용한다.
 - 연도별 `total_assets = total_liabilities + total_equity`가 성립한다.
 - 연도별 매출 구성 합계가 매출액과 일치한다.
 - 차입금 합계는 단기차입금, 유동성장기차입금, 장기차입금으로 계산한다.
@@ -42,6 +56,14 @@
 - 2023년 source priority는 2025.04.04 보고서의 비교 재무제표이며, 2024.04.05 보고서는 교차검증용이다.
 - `modular_revenue`, `derived`, `inference`는 원천 JSON에 저장하지 않는다.
 - 기존 public JSON과 UI는 변경하지 않는다.
+
+## Schema와 Python Validator 역할
+
+JSON Schema는 데이터 형태를 검증한다. 필수 섹션, 필수 metric, 알 수 없는 필드 차단, `reported` 정수 여부, `source_refs`, `source_locations` 구조를 검사한다.
+
+Python Validator는 회계적 보존식과 운영 보호 규칙을 검증한다. 자산 등식, 매출 구성 합계, source priority 적용, 차입금 합계, 현금흐름 부호, forbidden field, public JSON 변경 여부를 검사하고 파생 지표를 계산한다.
+
+Validator는 유창이앤씨 전용 연도 하드코딩 대신 데이터셋의 `validation_metadata.expected_years`를 읽는다. 다음 기업을 추가할 때는 Validator 코드를 기업별로 수정하지 않고, 데이터셋 메타데이터와 source priority를 확장하는 방식을 따른다.
 
 ## 법인 귀속 주의사항
 
@@ -67,7 +89,10 @@
 2. 최신 감사보고서와 비교 재무제표의 우선순위를 지정한다.
 3. 감사보고서 직접 표시값을 원 단위 `reported` 값으로 입력한다.
 4. 각 값에 `source_refs`를 연결한다.
-5. 법인 귀속과 관계사 혼입 위험을 `entity_attribution`에 기록한다.
-6. `python scripts/validate_company_audit_financials.py --input <path>`를 실행한다.
-7. `python -m pytest -q tests/test_company_audit_financials.py`를 실행한다.
-8. 검토 후 별도 public 변환 단계에서 필요한 값만 노출한다.
+5. 확인된 페이지 또는 섹션 범위를 `source_locations`에 연결한다.
+6. 정확한 주석 페이지가 미확인인 경우 `pending_manual_page_check`로 남긴다.
+7. `validation_metadata.expected_years`를 입력한다.
+8. 법인 귀속과 관계사 혼입 위험을 `entity_attribution`에 기록한다.
+9. `python scripts/validate_company_audit_financials.py --input <path> --base-ref origin/main`를 실행한다.
+10. `python -m pytest -q tests/test_company_audit_financials.py`를 실행한다.
+11. 검토 후 별도 public 변환 단계에서 필요한 값만 노출한다.
