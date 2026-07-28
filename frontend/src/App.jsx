@@ -34,6 +34,7 @@ import {
   parseCompareParam,
   serializeCompareSelection,
 } from "./companyComparison";
+import { getCompanyReportInsight } from "./companyReportInsights";
 import { COMPANY_SORT_VALUES, sanitizeCompanySearchParams } from "./companyUrlParams";
 import { getCompanyActivities } from "./companyActivities";
 import {
@@ -912,7 +913,9 @@ function CompanyDetailPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { loading, error, data } = useDataset("companies/companies");
   const activityState = useDataset("companies/company-activities");
+  const reportInsightState = useDataset("companies/company_report_insights");
   const company = getCompanyItems(data).find((item) => item.company_id === companyId);
+  const reportInsight = getCompanyReportInsight(reportInsightState.data, companyId);
   const activities = getCompanyActivities(activityState.data, companyId);
   const activeTab = normalizeCompanyTab(searchParams.get("tab") || "overview");
 
@@ -949,7 +952,7 @@ function CompanyDetailPage() {
 
   return (
     <Layout>
-      <CompanyDetailView company={company} activeTab={activeTab} onTabChange={setCompanyTab} activities={activities} />
+      <CompanyDetailView company={company} activeTab={activeTab} onTabChange={setCompanyTab} activities={activities} reportInsight={reportInsight} />
     </Layout>
   );
 }
