@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modularhub.local/schemas/company_reports/company_report_insights_v1.schema.json",
+  "title": "Company Report Insights v1",
+  "type": "object",
+  "required": ["schema_version", "companies"],
+  "properties": {
+    "schema_version": { "const": "company_report_insights_v1" },
+    "companies": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/companyReportInsight" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "companyReportInsight": {
+      "type": "object",
+      "required": [
+        "company_id",
+        "company_name",
+        "reporting_entity",
+        "financial_scope",
+        "currency",
+        "source_schema_version",
+        "available_years",
+        "latest_year",
+        "latest_metrics",
+        "financial_series",
+        "derived_metrics",
+        "trend_signals",
+        "disclosure_warnings",
+        "attribution",
+        "source_summary",
+        "data_quality"
+      ],
+      "properties": {
+        "company_id": { "type": "string", "minLength": 1 },
+        "company_name": { "type": "string", "minLength": 1 },
+        "reporting_entity": { "type": "string", "minLength": 1 },
+        "financial_scope": { "enum": ["standalone", "consolidated", "standalone_and_consolidated"] },
+        "currency": { "const": "KRW" },
+        "source_schema_version": { "const": "company_audit_financials_v1" },
+        "available_years": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 1
+        },
+        "latest_year": { "type": "integer" },
+        "latest_metrics": { "$ref": "#/$defs/metricMap" },
+        "financial_series": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/yearSeries" },
+          "minItems": 1
+        },
+        "derived_metrics": {
+          "type": "object",
+          "patternProperties": {
+            "^[0-9]{4}$": { "$ref": "#/$defs/derivedMetricMap" }
+          },
+          "additionalProperties": false
+        },
+        "trend_signals": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/trendSignal" }
+        },
+        "disclosure_warnings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/warning" }
+        },
+        "attribution": { "type": "object" },
+        "source_summary": { "$ref": "#/$defs/sourceSummary" },
+        "data_quality": { "$ref": "#/$defs/dataQuality" }
+      },
+      "additionalProperties": false
+    },
+    "yearSeries": {
+      "type": "object",
+      "required": ["year", "metrics"],
+      "properties": {
+        "year": { "type": "integer" },
+        "metrics": { "$ref": "#/$defs/metricMap" }
+      },
+      "additionalProperties": false
+    },
+    "metricMap": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/moneyMetric" }
+    },
+    "moneyMetric": {
+      "type": "object",
+      "required": ["raw_krw", "display_eok", "display_text", "source_refs", "source_locations"],
+      "properties": {
+        "raw_krw": { "type": "integer" },
+        "display_eok": { "type": "number" },
+        "display_text": { "type": "string", "minLength": 1 },
+        "source_refs": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "source_locations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sourceLocation" }
+        },
+        "calculation_basis": { "enum": ["reported", "derived_from_reported"] }
+      },
+      "additionalProperties": false
+    },
+    "sourceLocation": {
+      "type": "object",
+      "required": ["source_ref", "section", "verification_status"],
+      "properties": {
+        "source_ref": { "type": "string", "minLength": 1 },
+        "page": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "string", "minLength": 1 }
+          ]
+        },
+        "page_range": { "type": "string", "minLength": 1 },
+        "section": { "type": "string", "minLength": 1 },
+        "verification_status": {
+          "enum": ["verified", "verified_section_range", "pending_manual_page_check"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "derivedMetricMap": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/derivedMetric" }
+    },
+    "derivedMetric": {
+      "type": "object",
+      "required": ["value", "display_text", "calculation_basis"],
+      "properties": {
+        "value": { "type": ["number", "null"] },
+        "display_text": { "type": "string" },
+        "calculation_basis": { "const": "derived_from_reported" }
+      },
+      "additionalProperties": false
+    },
+    "trendSignal": {
+      "type": "object",
+      "required": ["code", "level", "title", "description", "based_on_years", "metric_values", "interpretation_type"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "level": { "enum": ["info", "watch", "neutral"] },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "based_on_years": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 1
+        },
+        "metric_values": { "type": "object" },
+        "interpretation_type": { "const": "rule_based" }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["code", "message", "level"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "level": { "enum": ["info", "warning"] }
+      },
+      "additionalProperties": false
+    },
+    "sourceSummary": {
+      "type": "object",
+      "required": [
+        "primary_documents",
+        "source_priority_by_year",
+        "audit_opinions",
+        "auditors",
+        "verified_location_count",
+        "pending_location_count",
+        "latest_report_date"
+      ],
+      "properties": {
+        "primary_documents": { "type": "array" },
+        "source_priority_by_year": { "type": "object" },
+        "audit_opinions": { "type": "array" },
+        "auditors": { "type": "array" },
+        "verified_location_count": { "type": "integer" },
+        "pending_location_count": { "type": "integer" },
+        "latest_report_date": { "type": "string", "format": "date" }
+      },
+      "additionalProperties": false
+    },
+    "dataQuality": {
+      "type": "object",
+      "required": [
+        "source_validator_status",
+        "source_location_count",
+        "pending_manual_page_check_count",
+        "manual_page_check_required",
+        "modular_segment_revenue_disclosed"
+      ],
+      "properties": {
+        "source_validator_status": { "enum": ["passed", "failed"] },
+        "source_location_count": { "type": "integer" },
+        "pending_manual_page_check_count": { "type": "integer" },
+        "manual_page_check_required": { "type": "boolean" },
+        "modular_segment_revenue_disclosed": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

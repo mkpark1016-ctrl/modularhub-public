@@ -1,0 +1,1418 @@
+{
+  "companies": [
+    {
+      "attribution": {
+        "attribution_warning": "본 재무정보는 주식회사 유창이앤씨 별도 재무제표 기준이다. 2022년 학교 모듈러 제작업 부문 인적분할 이후 유창엠앤씨 등 관계사의 프로젝트, 생산, 매출을 유창이앤씨 단일 법인 실적으로 자동 합산하지 않는다.",
+        "financial_scope": "standalone",
+        "modular_segment_revenue_disclosed": false,
+        "related_entity_attribution_required": true,
+        "reporting_entity": "주식회사 유창이앤씨",
+        "special_events": [
+          {
+            "attribution_effect": "관계사 프로젝트·생산·매출을 유창이앤씨 별도 실적으로 자동 합산하지 않음",
+            "description": "학교 모듈러 제작업 부문 인적분할",
+            "effective_date": "2022-07-21",
+            "event_type": "business_spin_off",
+            "related_entities": [
+              "유창엠앤씨"
+            ],
+            "source_refs": [
+              "yuchang_audit_report_2026_04_08",
+              "yuchang_audit_report_2025_04_04"
+            ]
+          }
+        ]
+      },
+      "available_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "yuchang-enc",
+      "company_name": "유창이앤씨",
+      "currency": "KRW",
+      "data_quality": {
+        "manual_page_check_required": true,
+        "modular_segment_revenue_disclosed": false,
+        "pending_manual_page_check_count": 45,
+        "source_location_count": 84,
+        "source_validator_status": "passed"
+      },
+      "derived_metrics": {
+        "2023": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "75.9%",
+            "value": 75.9
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "53.2%",
+            "value": 53.2
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "94.3%",
+            "value": 94.3
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.8%",
+            "value": 0.8
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "6.4%",
+            "value": 6.4
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "3.9%",
+            "value": 3.9
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "325.9%",
+            "value": 325.9
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "4.2%",
+            "value": 4.2
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.5",
+            "value": 2.503
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "3.8%",
+            "value": 3.8
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.2%",
+            "value": 1.2
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "44.8%",
+            "value": 44.8
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "18.6%",
+            "value": 18.6
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.0%",
+            "value": 0.0
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          }
+        },
+        "2024": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "100.6%",
+            "value": 100.6
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "77.9%",
+            "value": 77.9
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "97.5%",
+            "value": 97.5
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "6.1%",
+            "value": 6.1
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "9.1%",
+            "value": 9.1
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "5.6%",
+            "value": 5.6
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "233.0%",
+            "value": 233.0
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "3.0%",
+            "value": 3.0
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-3.0",
+            "value": -2.973
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.5%",
+            "value": 2.5
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.3%",
+            "value": 0.3
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "15.6%",
+            "value": 15.6
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "20.6%",
+            "value": 20.6
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.0%",
+            "value": 0.0
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-13.1%",
+            "value": -13.1
+          }
+        },
+        "2025": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "158.8%",
+            "value": 158.8
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "57.4%",
+            "value": 57.4
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "121.9%",
+            "value": 121.9
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "3.5%",
+            "value": 3.5
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.8%",
+            "value": 10.8
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "9.8%",
+            "value": 9.8
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "283.8%",
+            "value": 283.8
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.8%",
+            "value": 1.8
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-5.4",
+            "value": -5.444
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "4.8%",
+            "value": 4.8
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.6%",
+            "value": 0.6
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "38.0%",
+            "value": 38.0
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "37.6%",
+            "value": 37.6
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.5%",
+            "value": 0.5
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-15.5%",
+            "value": -15.5
+          }
+        }
+      },
+      "disclosure_warnings": [
+        {
+          "code": "modular_segment_revenue_not_disclosed",
+          "level": "warning",
+          "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다."
+        },
+        {
+          "code": "product_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "제품매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "construction_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "공사매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "related_entity_results_not_combined",
+          "level": "warning",
+          "message": "본 재무정보는 주식회사 유창이앤씨 별도 재무제표 기준이다. 2022년 학교 모듈러 제작업 부문 인적분할 이후 유창엠앤씨 등 관계사의 프로젝트, 생산, 매출을 유창이앤씨 단일 법인 실적으로 자동 합산하지 않는다."
+        },
+        {
+          "code": "pending_manual_page_check",
+          "level": "info",
+          "message": "주석 기반 수치 45건은 정확한 페이지 수동 확인이 남아 있다."
+        }
+      ],
+      "financial_scope": "standalone",
+      "financial_series": [
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 1314.9,
+              "display_text": "1,314.9억원",
+              "raw_krw": 131486870963,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 1395.0,
+              "display_text": "1,395.0억원",
+              "raw_krw": 139504998213,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 266.7,
+              "display_text": "266.7억원",
+              "raw_krw": 26668499293,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "display_eok": 165.1,
+              "display_text": "165.1억원",
+              "raw_krw": 16513460035,
+              "source_locations": [
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "display_eok": 175.9,
+              "display_text": "175.9억원",
+              "raw_krw": 17590723723,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "display_eok": 440.2,
+              "display_text": "440.2억원",
+              "raw_krw": 44024872213,
+              "source_locations": [
+                {
+                  "page_range": "12~13",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 161.1,
+              "display_text": "161.1억원",
+              "raw_krw": 16108176475,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 778.0,
+              "display_text": "778.0억원",
+              "raw_krw": 77797306492,
+              "source_locations": [
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "display_eok": 4190.4,
+              "display_text": "4,190.4억원",
+              "raw_krw": 419041119841,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 2244.4,
+              "display_text": "2,244.4억원",
+              "raw_krw": 224437469439,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 400.0,
+              "display_text": "400.0억원",
+              "raw_krw": 40000000000,
+              "source_locations": [
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "display_eok": 527.0,
+              "display_text": "527.0억원",
+              "raw_krw": 52701056562,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 1717.4,
+              "display_text": "1,717.4억원",
+              "raw_krw": 171736412877,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2025_04_04",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2025_04_04"
+              ]
+            }
+          },
+          "year": 2023
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 1127.4,
+              "display_text": "1,127.4억원",
+              "raw_krw": 112736617798,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 1156.0,
+              "display_text": "1,156.0억원",
+              "raw_krw": 115595787713,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 333.0,
+              "display_text": "333.0억원",
+              "raw_krw": 33304897232,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "display_eok": 204.5,
+              "display_text": "204.5억원",
+              "raw_krw": 20450417510,
+              "source_locations": [
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "display_eok": 108.5,
+              "display_text": "108.5억원",
+              "raw_krw": 10850960336,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "display_eok": -322.6,
+              "display_text": "-322.6억원",
+              "raw_krw": -32263069529,
+              "source_locations": [
+                {
+                  "page_range": "12~13",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 91.2,
+              "display_text": "91.2억원",
+              "raw_krw": 9124197103,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 748.2,
+              "display_text": "748.2억원",
+              "raw_krw": 74823576828,
+              "source_locations": [
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "display_eok": 3640.2,
+              "display_text": "3,640.2억원",
+              "raw_krw": 364024587969,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 2103.0,
+              "display_text": "2,103.0억원",
+              "raw_krw": 210303317036,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 635.0,
+              "display_text": "635.0억원",
+              "raw_krw": 63500000000,
+              "source_locations": [
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "display_eok": 631.5,
+              "display_text": "631.5억원",
+              "raw_krw": 63149709022,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 1471.5,
+              "display_text": "1,471.5억원",
+              "raw_krw": 147153608014,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            }
+          },
+          "year": 2024
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 1594.1,
+              "display_text": "1,594.1억원",
+              "raw_krw": 159410944903,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 1308.0,
+              "display_text": "1,308.0억원",
+              "raw_krw": 130804571103,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 333.4,
+              "display_text": "333.4억원",
+              "raw_krw": 33339609191,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "display_eok": 300.0,
+              "display_text": "300.0억원",
+              "raw_krw": 30004051329,
+              "source_locations": [
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "display_eok": 56.6,
+              "display_text": "56.6억원",
+              "raw_krw": 5662989075,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "display_eok": -308.3,
+              "display_text": "-308.3억원",
+              "raw_krw": -30830315410,
+              "source_locations": [
+                {
+                  "page_range": "12~13",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 148.7,
+              "display_text": "148.7억원",
+              "raw_krw": 14867615594,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 1157.9,
+              "display_text": "1,157.9억원",
+              "raw_krw": 115786145992,
+              "source_locations": [
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "???? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "display_eok": 3076.8,
+              "display_text": "3,076.8억원",
+              "raw_krw": 307684467052,
+              "source_locations": [
+                {
+                  "page_range": "9~10",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 2709.8,
+              "display_text": "2,709.8억원",
+              "raw_krw": 270984904156,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 1121.3,
+              "display_text": "1,121.3억원",
+              "raw_krw": 112134492523,
+              "source_locations": [
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "??? ??",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "display_eok": 706.0,
+              "display_text": "706.0억원",
+              "raw_krw": 70598889031,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 2003.9,
+              "display_text": "2,003.9억원",
+              "raw_krw": 200386015125,
+              "source_locations": [
+                {
+                  "page_range": "6~8",
+                  "section": "?????",
+                  "source_ref": "yuchang_audit_report_2026_04_08",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "yuchang_audit_report_2026_04_08"
+              ]
+            }
+          },
+          "year": 2025
+        }
+      ],
+      "latest_metrics": {
+        "gross_profit": {
+          "calculation_basis": "reported",
+          "display_eok": 333.4,
+          "display_text": "333.4억원",
+          "raw_krw": 33339609191,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "inventory": {
+          "calculation_basis": "reported",
+          "display_eok": 300.0,
+          "display_text": "300.0억원",
+          "raw_krw": 30004051329,
+          "source_locations": [
+            {
+              "section": "???? ??",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "net_income": {
+          "calculation_basis": "reported",
+          "display_eok": 56.6,
+          "display_text": "56.6억원",
+          "raw_krw": 5662989075,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "display_eok": -308.3,
+          "display_text": "-308.3억원",
+          "raw_krw": -30830315410,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "display_eok": 148.7,
+          "display_text": "148.7억원",
+          "raw_krw": 14867615594,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "receivables_total": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 1157.9,
+          "display_text": "1,157.9억원",
+          "raw_krw": 115786145992,
+          "source_locations": [
+            {
+              "section": "???? ??",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "???? ??",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "display_eok": 3076.8,
+          "display_text": "3,076.8억원",
+          "raw_krw": 307684467052,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "display_eok": 2709.8,
+          "display_text": "2,709.8억원",
+          "raw_krw": 270984904156,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 1121.3,
+          "display_text": "1,121.3억원",
+          "raw_krw": 112134492523,
+          "source_locations": [
+            {
+              "section": "??? ??",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "??? ??",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "??? ??",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "display_eok": 706.0,
+          "display_text": "706.0억원",
+          "raw_krw": 70598889031,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "display_eok": 2003.9,
+          "display_text": "2,003.9억원",
+          "raw_krw": 200386015125,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "?????",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "work_in_progress": {
+          "calculation_basis": "reported",
+          "display_eok": 289.5,
+          "display_text": "289.5억원",
+          "raw_krw": 28951436757,
+          "source_locations": [
+            {
+              "section": "???? ??",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        }
+      },
+      "latest_year": 2025,
+      "reporting_entity": "주식회사 유창이앤씨",
+      "source_schema_version": "company_audit_financials_v1",
+      "source_summary": {
+        "audit_opinions": [
+          {
+            "auditor": "신정회계법인",
+            "auditor_report_date": "2026-03-31",
+            "covered_years": [
+              2025,
+              2024
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "yuchang_audit_report_2026_04_08"
+          },
+          {
+            "auditor": "신정회계법인",
+            "auditor_report_date": "2025-03-27",
+            "covered_years": [
+              2024,
+              2023
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "yuchang_audit_report_2025_04_04"
+          },
+          {
+            "auditor": "신정회계법인",
+            "auditor_report_date": "2024-03-27",
+            "covered_years": [
+              2023,
+              2022
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "yuchang_audit_report_2024_04_05"
+          }
+        ],
+        "auditors": [
+          "신정회계법인"
+        ],
+        "latest_report_date": "2026-04-08",
+        "pending_location_count": 45,
+        "primary_documents": [
+          {
+            "filename": "[유창이앤씨]감사보고서(2025.04.04).pdf",
+            "report_date": "2025-04-04",
+            "source_ref": "yuchang_audit_report_2025_04_04",
+            "source_role": "primary_2023_comparative"
+          },
+          {
+            "filename": "[유창이앤씨]감사보고서(2026.04.08).pdf",
+            "report_date": "2026-04-08",
+            "source_ref": "yuchang_audit_report_2026_04_08",
+            "source_role": "primary_2025_and_2024_comparative"
+          }
+        ],
+        "source_priority_by_year": {
+          "2023": {
+            "basis": "comparative_financial_statements",
+            "cross_check_source_refs": [
+              "yuchang_audit_report_2024_04_05"
+            ],
+            "primary_source_ref": "yuchang_audit_report_2025_04_04"
+          },
+          "2024": {
+            "basis": "comparative_financial_statements",
+            "primary_source_ref": "yuchang_audit_report_2026_04_08"
+          },
+          "2025": {
+            "basis": "current_year_financial_statements",
+            "primary_source_ref": "yuchang_audit_report_2026_04_08"
+          }
+        },
+        "verified_location_count": 39
+      },
+      "trend_signals": [
+        {
+          "based_on_years": [
+            2023,
+            2025
+          ],
+          "code": "revenue_decreased",
+          "description": "2023년 대비 2025년 매출액이 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 307684467052,
+            "start_raw_krw": 419041119841
+          },
+          "title": "매출 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "operating_margin_improved",
+          "description": "2024년 대비 2025년 영업이익률이 개선됐다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 4.8,
+            "previous_pct": 2.5
+          },
+          "title": "영업이익률 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "operating_cash_flow_negative",
+          "description": "2025년 영업현금흐름은 음수다.",
+          "interpretation_type": "rule_based",
+          "level": "watch",
+          "metric_values": {
+            "latest_raw_krw": -30830315410
+          },
+          "title": "영업현금흐름 상태"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "borrowings_increased",
+          "description": "2024년 대비 2025년 총차입금이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 112134492523,
+            "previous_raw_krw": 63500000000
+          },
+          "title": "차입금 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "receivables_increased",
+          "description": "2024년 대비 2025년 매출채권 합계가 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 115786145992,
+            "previous_raw_krw": 74823576828
+          },
+          "title": "매출채권 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "inventory_increased",
+          "description": "2024년 대비 2025년 재고자산이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 30004051329,
+            "previous_raw_krw": 20450417510
+          },
+          "title": "재고 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "current_ratio_above_100",
+          "description": "2025년 유동비율은 121.9%다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 121.9
+          },
+          "title": "유동비율 상태"
+        }
+      ]
+    }
+  ],
+  "schema_version": "company_report_insights_v1"
+}
