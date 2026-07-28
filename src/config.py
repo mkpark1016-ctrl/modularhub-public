@@ -69,8 +69,14 @@ def _env_feed_list(name: str, default: list[dict[str, str]]) -> list[dict[str, s
 
 GOOGLE_NEWS_MODULAR_QUERY = (
     '"modular construction" OR "modular housing" OR "volumetric modular" '
-    'OR "offsite construction" OR "prefabricated building" when:7d'
+    'OR "offsite construction" OR "prefabricated building" when:30d'
 )
+
+
+def _google_news_rss_url(query: str, *, hl: str, gl: str, ceid: str) -> str:
+    return f"https://news.google.com/rss/search?q={quote_plus(query + ' when:30d')}&hl={hl}&gl={gl}&ceid={ceid}"
+
+
 DEFAULT_OVERSEAS_RSS_NEWS_FEEDS = [
     {"name": "Construction Dive News", "url": "https://www.constructiondive.com/feeds/news/"},
     {"name": "Construction Enquirer", "url": "https://www.constructionenquirer.com/feed/"},
@@ -81,6 +87,34 @@ DEFAULT_OVERSEAS_RSS_NEWS_FEEDS = [
             "https://news.google.com/rss/search?q="
             f"{quote_plus(GOOGLE_NEWS_MODULAR_QUERY)}&hl=en-US&gl=US&ceid=US:en"
         ),
+    },
+    {
+        "name": "Google News modular housing US",
+        "url": _google_news_rss_url("modular housing", hl="en-US", gl="US", ceid="US:en"),
+    },
+    {
+        "name": "Google News factory-built housing US",
+        "url": _google_news_rss_url("factory-built housing", hl="en-US", gl="US", ceid="US:en"),
+    },
+    {
+        "name": "Google News volumetric modular UK",
+        "url": _google_news_rss_url("volumetric modular", hl="en-GB", gl="GB", ceid="GB:en"),
+    },
+    {
+        "name": "Google News offsite construction UK",
+        "url": _google_news_rss_url("offsite construction", hl="en-GB", gl="GB", ceid="GB:en"),
+    },
+    {
+        "name": "Google News modern methods of construction UK",
+        "url": _google_news_rss_url("modern methods of construction", hl="en-GB", gl="GB", ceid="GB:en"),
+    },
+    {
+        "name": "Google News prefabricated building Canada",
+        "url": _google_news_rss_url("prefabricated building", hl="en-CA", gl="CA", ceid="CA:en"),
+    },
+    {
+        "name": "Google News prefab housing Australia",
+        "url": _google_news_rss_url("prefab housing", hl="en-AU", gl="AU", ceid="AU:en"),
     },
 ]
 

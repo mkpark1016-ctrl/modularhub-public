@@ -44,6 +44,10 @@ def has_code(report, code):
     return any(issue.get("code") == code for issue in report["validation_errors"] + report["warnings"])
 
 
+def has_coverage_code(report, code):
+    return any(issue.get("code") == code for issue in report.get("coverage_warnings", []))
+
+
 def test_normal_and_domestic_scope():
     report = audit([
         rss_item(id=idx, title=f"Modular construction project {idx}", original_url=f"https://example-news.test/modular-project-{idx}")
@@ -132,6 +136,41 @@ def test_google_news_url_allowed_as_information():
     require(report["invalid_url_count"] == 0, "Google News URL must not be invalid")
 
 
+def test_overseas_coverage_diagnostics_are_reported():
+    report = audit([
+        rss_item(
+            id=50,
+            title="Modular construction project opens in Seattle",
+            original_url="https://example-news.test/coverage-a",
+            published_at="2026-07-02T00:00:00+00:00",
+            publisher_country_code="US",
+        ),
+        rss_item(
+            id=51,
+            title="Offsite construction school opens in London",
+            original_url="https://example-news.test/coverage-b",
+            published_at="2026-06-20T00:00:00+00:00",
+            publisher_country_code="GB",
+        ),
+        {
+            "id": 52,
+            "source": "GDELT 해외뉴스",
+            "media": "World Construction",
+            "title": "Volumetric modular housing starts in Canada",
+            "summary": "A volumetric modular housing project starts in Canada.",
+            "published_at": "2026-07-01T00:00:00+00:00",
+            "original_url": "https://example-news.test/gdelt-coverage",
+            "publisher_country_code": "CA",
+        },
+    ])
+    require(report["audit_status"] == "passed_with_warnings", "small coverage fixture should pass with operational warnings")
+    require(report["overseas_news_count"] == 3, "overseas news count must include RSS and GDELT")
+    require(report["recent_30_day_overseas_count"] == 3, "recent overseas count mismatch")
+    require(report["recent_30_day_overseas_source_count"] == 2, "source diversity count mismatch")
+    require(report["overseas_country_distribution"]["US"] == 1, "US country count mismatch")
+    require(has_coverage_code(report, "recent_30_overseas_low_count"), "low count coverage warning missing")
+
+
 def test_unified_v2_score_contract():
     report = audit([
         rss_item(id=40, relevance_score=55, relevance_score_version="unified-v2", relevance_level="adjacent")
@@ -189,6 +228,7 @@ def main():
         test_duplicate_failures,
         test_warnings,
         test_google_news_url_allowed_as_information,
+        test_overseas_coverage_diagnostics_are_reported,
         test_unified_v2_score_contract,
         test_output_files_are_written,
     ]

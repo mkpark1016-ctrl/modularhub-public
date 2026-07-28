@@ -19,7 +19,9 @@ from src.keywords import GDELT_DOC_NEWS_EXCLUDE_CONTEXT  # noqa: E402
 from src.overseas_news_rules import overseas_news_content_key  # noqa: E402
 
 OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS"
+GDELT_DOC_SOURCE = "GDELT 해외뉴스"
 RECENT_DAYS = 14
+RECENT_30_DAYS = 30
 TRACKING_PARAMS = {
     "utm_source",
     "utm_medium",
@@ -92,6 +94,19 @@ def split_keywords(value: Any) -> list[str]:
     return [str(part).strip() for part in parts if str(part).strip()]
 
 
+def source_name(item: dict[str, Any]) -> str:
+    return str(item.get("source") or item.get("source_name") or item.get("collection_source") or "").strip()
+
+
+def is_overseas_news(item: dict[str, Any]) -> bool:
+    source = source_name(item)
+    return source in {OVERSEAS_RSS_SOURCE, GDELT_DOC_SOURCE}
+
+
+def publisher_country_code(item: dict[str, Any]) -> str:
+    return str(item.get("publisher_country_code") or item.get("country_code") or "unknown").strip().upper() or "unknown"
+
+
 def has_excluded_context(item: dict[str, Any]) -> str:
     haystack = normalize_text(f"{item.get('title', '')} {item.get('summary', '')}")
     for phrase in GDELT_DOC_NEWS_EXCLUDE_CONTEXT:
@@ -140,7 +155,9 @@ def add_issue(bucket: list[dict[str, Any]], code: str, item: dict[str, Any], mes
 def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None) -> dict[str, Any]:
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     threshold = now - timedelta(days=RECENT_DAYS)
+    threshold_30 = now - timedelta(days=RECENT_30_DAYS)
     overseas = [item for item in items if item.get("source") == OVERSEAS_RSS_SOURCE]
+    all_overseas = [item for item in items if is_overseas_news(item)]
 
     validation_errors: list[dict[str, Any]] = []
     warnings: list[dict[str, Any]] = []
@@ -152,6 +169,12 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
     counters: Counter[str] = Counter()
     media_distribution: Counter[str] = Counter()
     keyword_distribution: Counter[str] = Counter()
+    overseas_source_distribution: Counter[str] = Counter()
+    overseas_country_distribution: Counter[str] = Counter()
+    recent_30_overseas_source_distribution: Counter[str] = Counter()
+    recent_30_overseas_count = 0
+    recent_30_total_count = 0
+    recent_7_overseas_count = 0
 
     for item in overseas:
         item_key = item.get("id") or f"title:{item.get('title', '')}"
@@ -262,6 +285,22 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
         if len(validation_errors) > item_errors_before:
             invalid_ids.add(item_key)
 
+    for item in items:
+        parsed_date = parse_datetime(item.get("published_at"))
+        if parsed_date and parsed_date >= threshold_30:
+            recent_30_total_count += 1
+
+    for item in all_overseas:
+        source = source_name(item) or "unknown"
+        overseas_source_distribution.update([source])
+        overseas_country_distribution.update([publisher_country_code(item)])
+        parsed_date = parse_datetime(item.get("published_at"))
+        if parsed_date and parsed_date >= threshold_30:
+            recent_30_overseas_count += 1
+            recent_30_overseas_source_distribution.update([source])
+            if parsed_date >= now - timedelta(days=7):
+                recent_7_overseas_count += 1
+
     if not overseas:
         warnings.append({"code": "overseas_rss_empty", "message": "No overseas RSS news items are currently published"})
     if overseas and counters["recent_14_day_count"] < 5:
@@ -273,13 +312,49 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
             }
         )
 
+    coverage_warnings: list[dict[str, Any]] = []
+    recent_30_overseas_share = recent_30_overseas_count / recent_30_total_count if recent_30_total_count else 0.0
+    top_source_count = max(recent_30_overseas_source_distribution.values(), default=0)
+    top_source_concentration = top_source_count / recent_30_overseas_count if recent_30_overseas_count else 0.0
+    if recent_30_overseas_count < 20:
+        coverage_warnings.append(
+            {
+                "code": "recent_30_overseas_low_count",
+                "message": "Fewer than 20 overseas news items were published in the last 30 days",
+                "recent_30_day_overseas_count": recent_30_overseas_count,
+            }
+        )
+    if recent_30_total_count and recent_30_overseas_share < 0.2:
+        coverage_warnings.append(
+            {
+                "code": "recent_30_overseas_low_share",
+                "message": "Overseas news share is below 20% for the last 30 days",
+                "recent_30_day_overseas_share": recent_30_overseas_share,
+            }
+        )
+    if len(recent_30_overseas_source_distribution) < 3:
+        coverage_warnings.append(
+            {
+                "code": "recent_30_overseas_low_source_diversity",
+                "message": "Fewer than 3 overseas sources are represented in the last 30 days",
+                "recent_30_day_overseas_source_count": len(recent_30_overseas_source_distribution),
+            }
+        )
+
     invalid_count = len(invalid_ids)
     audit_status = "failed" if validation_errors else ("passed_with_warnings" if warnings else "passed")
     return {
         "generated_at": now.isoformat(),
         "total_news_count": len(items),
         "overseas_rss_count": len(overseas),
+        "overseas_news_count": len(all_overseas),
+        "recent_7_day_overseas_count": recent_7_overseas_count,
         "recent_14_day_count": counters["recent_14_day_count"],
+        "recent_30_day_total_count": recent_30_total_count,
+        "recent_30_day_overseas_count": recent_30_overseas_count,
+        "recent_30_day_overseas_share": round(recent_30_overseas_share, 4),
+        "recent_30_day_overseas_source_count": len(recent_30_overseas_source_distribution),
+        "top_source_concentration": round(top_source_concentration, 4),
         "valid_count": max(0, len(overseas) - invalid_count),
         "invalid_count": invalid_count,
         "warning_count": len(warnings),
@@ -300,6 +375,10 @@ def audit_news_items(items: list[dict[str, Any]], *, now: datetime | None = None
         "google_news_rss_url_policy": "allowed_intermediary_url",
         "media_distribution": dict(sorted(media_distribution.items())),
         "keyword_distribution": dict(sorted(keyword_distribution.items())),
+        "overseas_source_distribution": dict(sorted(overseas_source_distribution.items())),
+        "overseas_country_distribution": dict(sorted(overseas_country_distribution.items())),
+        "recent_30_day_overseas_source_distribution": dict(sorted(recent_30_overseas_source_distribution.items())),
+        "coverage_warnings": coverage_warnings,
         "validation_errors": validation_errors,
         "warnings": warnings,
         "audit_status": audit_status,
@@ -313,7 +392,13 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- Audit Status: {report['audit_status']}",
         f"- Total news count: {report['total_news_count']}",
         f"- Overseas RSS count: {report['overseas_rss_count']}",
+        f"- Overseas news count: {report.get('overseas_news_count', report['overseas_rss_count'])}",
+        f"- Recent 7 day overseas count: {report.get('recent_7_day_overseas_count', 0)}",
         f"- Recent 14 day count: {report['recent_14_day_count']}",
+        f"- Recent 30 day overseas count: {report.get('recent_30_day_overseas_count', 0)}",
+        f"- Recent 30 day overseas share: {report.get('recent_30_day_overseas_share', 0)}",
+        f"- Recent 30 day overseas source count: {report.get('recent_30_day_overseas_source_count', 0)}",
+        f"- Top source concentration: {report.get('top_source_concentration', 0)}",
         f"- Valid count: {report['valid_count']}",
         f"- Invalid count: {report['invalid_count']}",
         f"- Warning count: {report['warning_count']}",
@@ -330,6 +415,26 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- Google News RSS URL policy: {report.get('google_news_rss_url_policy', 'allowed_intermediary_url')}",
         "",
     ]
+    coverage_warnings = report.get("coverage_warnings") or []
+    lines.append("## Overseas Coverage Diagnostics")
+    lines.append("")
+    if report.get("overseas_source_distribution"):
+        lines.append("### Source Distribution")
+        for source, count in sorted(report["overseas_source_distribution"].items()):
+            lines.append(f"- {source}: {count}")
+        lines.append("")
+    if report.get("overseas_country_distribution"):
+        lines.append("### Country Distribution")
+        for country, count in sorted(report["overseas_country_distribution"].items()):
+            lines.append(f"- {country}: {count}")
+        lines.append("")
+    lines.append("### Coverage Warnings")
+    if coverage_warnings:
+        for warning in coverage_warnings:
+            lines.append(f"- {warning.get('code')}: {warning.get('message')}")
+    else:
+        lines.append("- None")
+    lines.append("")
     samples = report.get("google_news_rss_url_sample") or []
     if samples:
         lines.append("### Google News RSS URL Samples")
@@ -365,7 +470,14 @@ def audit_file(input_path: Path, output_dir: Path, *, now: datetime | None = Non
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "total_news_count": 0,
             "overseas_rss_count": 0,
+            "overseas_news_count": 0,
+            "recent_7_day_overseas_count": 0,
             "recent_14_day_count": 0,
+            "recent_30_day_total_count": 0,
+            "recent_30_day_overseas_count": 0,
+            "recent_30_day_overseas_share": 0,
+            "recent_30_day_overseas_source_count": 0,
+            "top_source_concentration": 0,
             "valid_count": 0,
             "invalid_count": 0,
             "warning_count": 0,
@@ -386,6 +498,10 @@ def audit_file(input_path: Path, output_dir: Path, *, now: datetime | None = Non
             "google_news_rss_url_policy": "allowed_intermediary_url",
             "media_distribution": {},
             "keyword_distribution": {},
+            "overseas_source_distribution": {},
+            "overseas_country_distribution": {},
+            "recent_30_day_overseas_source_distribution": {},
+            "coverage_warnings": [],
             "validation_errors": load_errors,
             "warnings": [],
             "audit_status": "failed",

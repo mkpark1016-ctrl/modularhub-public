@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import sys
 import argparse
+import json
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -33,6 +36,61 @@ from src.config import (
     NAVER_API_HUB_CLIENT_SECRET,
     OVERSEAS_RSS_NEWS_ENABLED,
 )
+
+DIAGNOSTICS_DIR = Path("artifacts/news_collection_diagnostics")
+
+
+def safe_collector_stats(collector: object) -> dict[str, Any]:
+    stats = getattr(collector, "stats", {}) or {}
+    if not isinstance(stats, dict):
+        return {}
+    blocked = {"raw", "raw_response", "request_headers", "headers", "authorization"}
+    return {key: value for key, value in stats.items() if str(key).lower() not in blocked}
+
+
+def write_news_collection_diagnostics(results: list[dict[str, Any]]) -> None:
+    DIAGNOSTICS_DIR.mkdir(parents=True, exist_ok=True)
+    source_counts = {
+        row["collectorName"]: {
+            "status": row["status"],
+            "inserted": row["insertedCount"],
+            "updated": row["updatedCount"],
+            "skipped": row["skippedCount"],
+            "returned": row["stats"].get("returned_count"),
+            "fetched": row["stats"].get("fetched_item_count") or row["stats"].get("article_count"),
+        }
+        for row in results
+        if row["sourceType"] == "news"
+    }
+    report = {
+        "schemaVersion": "news-collection-diagnostics-v1",
+        "generatedAt": datetime.now(timezone.utc).isoformat(),
+        "collectors": results,
+        "sourceCounts": source_counts,
+        "gdelt": next((row for row in results if row["collectorName"] == "GDELT 해외뉴스"), None),
+        "overseasRss": next((row for row in results if row["collectorName"] == "해외 모듈러 RSS"), None),
+    }
+    (DIAGNOSTICS_DIR / "news-collection-diagnostics.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    lines = ["# News Collection Diagnostics", ""]
+    for row in results:
+        lines.append(
+            f"- `{row['collectorName']}`: status={row['status']}, inserted={row['insertedCount']}, "
+            f"updated={row['updatedCount']}, skipped={row['skippedCount']}"
+        )
+        stats = row.get("stats") or {}
+        if row["collectorName"] == "해외 모듈러 RSS":
+            lines.append(
+                f"  - feeds={stats.get('feed_count')}, success={stats.get('successful_feed_count')}, "
+                f"failed={stats.get('failed_feed_count')}, fetched={stats.get('fetched_item_count')}, "
+                f"published={stats.get('returned_count')}"
+            )
+        if row["collectorName"] == "GDELT 해외뉴스":
+            lines.append(
+                f"  - requests={stats.get('request_count')}, articles={stats.get('article_count')}, "
+                f"published={stats.get('returned_count')}, relevance_excluded={stats.get('relevance_excluded_count')}, "
+                f"duplicates={stats.get('duplicate_excluded_count')}"
+            )
+    (DIAGNOSTICS_DIR / "news-collection-diagnostics.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> int:
@@ -96,8 +154,21 @@ def main() -> int:
         print("OVERSEAS_RSS_NEWS_ENABLED=false; skipping OverseasRssNewsCollector.")
 
     exit_code = 0
+    diagnostics: list[dict[str, Any]] = []
     for collector in collectors:
         result = run_collector(collector)
+        diagnostics.append(
+            {
+                "collectorName": result.collector_name,
+                "sourceType": result.source_type,
+                "status": result.status,
+                "insertedCount": result.inserted_count,
+                "updatedCount": result.updated_count,
+                "skippedCount": result.skipped_count,
+                "safeErrorCategory": "none" if not result.error_message else result.error_message.split(":", 1)[0][:80],
+                "stats": safe_collector_stats(collector),
+            }
+        )
         print(
             f"{result.collector_name}: status={result.status}, "
             f"inserted={result.inserted_count}, updated={result.updated_count}, "
@@ -107,6 +178,7 @@ def main() -> int:
             print(f"error: {result.error_message}")
             exit_code = 1
 
+    write_news_collection_diagnostics(diagnostics)
     return exit_code
 
 
