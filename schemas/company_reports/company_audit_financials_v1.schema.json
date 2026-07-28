@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modularhub.local/schemas/company_reports/company_audit_financials_v1.schema.json",
+  "title": "Company Audit Financials v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "company_id",
+    "company_name",
+    "reporting_entity",
+    "accounting_standard",
+    "currency",
+    "unit",
+    "audit_opinions",
+    "source_documents",
+    "source_priority",
+    "financial_years",
+    "entity_attribution",
+    "disclosure_limitations",
+    "validation_metadata"
+  ],
+  "properties": {
+    "schema_version": { "const": "company_audit_financials_v1" },
+    "company_id": { "type": "string", "minLength": 1 },
+    "company_name": { "type": "string", "minLength": 1 },
+    "reporting_entity": { "type": "string", "minLength": 1 },
+    "accounting_standard": {
+      "type": "object",
+      "required": ["code", "label_ko", "label_en"],
+      "properties": {
+        "code": { "type": "string" },
+        "label_ko": { "type": "string" },
+        "label_en": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "currency": { "const": "KRW" },
+    "unit": { "const": "won" },
+    "audit_opinions": { "type": "array" },
+    "source_documents": { "type": "object" },
+    "source_priority": { "type": "object" },
+    "financial_years": { "type": "object" },
+    "entity_attribution": { "type": "object" },
+    "disclosure_limitations": { "type": "array" },
+    "validation_metadata": { "type": "object" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "reportedAmount": {
+      "type": "object",
+      "required": ["reported", "source_refs"],
+      "properties": {
+        "reported": { "type": "integer" },
+        "source_refs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
