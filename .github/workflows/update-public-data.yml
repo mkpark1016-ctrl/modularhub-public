@@ -205,6 +205,28 @@ jobs:
       - name: Export public JSON
         run: python scripts/export_public_json.py
 
+      - name: Build company activity timelines
+        run: |
+          set +e
+          python scripts/build_company_activity_timeline.py
+          code=$?
+          if [ -f artifacts/company_activity_timeline/company-activity-audit.md ]; then
+            cat artifacts/company_activity_timeline/company-activity-audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            echo "::warning::Company activity timeline generation failed. Existing company-activities.json is preserved if present. exit_code=$code"
+          fi
+          exit 0
+
+      - name: Upload company activity timeline audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-activity-timeline-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/company_activity_timeline/
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Audit overseas RSS publication
         run: |
           set +e

@@ -1,4 +1,5 @@
 import { ExternalLink } from "lucide-react";
+import CompanyActivityTimeline from "./CompanyActivityTimeline";
 import {
   detailModel,
   formatDate,
@@ -27,7 +28,7 @@ function TagList({ items }) {
   );
 }
 
-export default function CompanyOverviewTab({ company }) {
+export default function CompanyOverviewTab({ company, activities = [] }) {
   const model = detailModel(company);
   const profile = company.company_profile || {};
   const recentSignals = recentSignalEvents(model.events);
@@ -76,6 +77,8 @@ export default function CompanyOverviewTab({ company }) {
           <p>현재 공개자료를 추가 조사 중입니다.</p>
         )}
       </div>
+
+      <CompanyActivityTimeline activities={activities} />
     </section>
   );
 }

@@ -272,6 +272,17 @@ code { overflow-wrap: anywhere; }
 .company-tab-panel { outline: 0; }
 .company-subsection { margin-top: 22px; }
 .company-subsection h3 { margin: 0 0 10px; font-size: 15px; }
+.company-subsection-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.company-subsection-heading h3 { margin: 0; }
+.company-subsection-heading span { color: #666; font-size: 13px; font-weight: 800; }
+.company-activity-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.company-activity-filters button { border: 1px solid #d7d7d2; border-radius: 999px; background: #fff; color: #444; padding: 6px 10px; font-size: 12px; font-weight: 800; cursor: pointer; }
+.company-activity-filters button.active { border-color: #8fd0a6; background: #eef7f1; color: #174b31; }
+.company-activity-title-row { display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap; }
+.company-activity-title-row strong { flex: 1 1 220px; min-width: 0; }
+.company-activity-item p { margin: 0; color: #555; font-size: 13px; line-height: 1.55; }
+.company-activity-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #666; font-size: 13px; }
+.company-activity-more { margin-top: 12px; }
 .company-tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .company-tag-list span, .mini-status-badge { display: inline-flex; width: fit-content; align-items: center; min-height: 24px; padding: 3px 7px; border: 1px solid #d7d7d2; border-radius: 999px; background: #f7f7f4; color: #444; font-size: 12px; font-weight: 800; }
 .inline-link, .source-list a { width: fit-content; display: inline-flex; align-items: center; gap: 4px; font-weight: 800; }

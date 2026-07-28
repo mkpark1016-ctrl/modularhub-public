@@ -35,6 +35,7 @@ import {
   serializeCompareSelection,
 } from "./companyComparison";
 import { COMPANY_SORT_VALUES, sanitizeCompanySearchParams } from "./companyUrlParams";
+import { getCompanyActivities } from "./companyActivities";
 import {
   compareBusinessByPriority,
   compareBusinessBySort,
@@ -910,7 +911,9 @@ function CompanyDetailPage() {
   const { companyId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { loading, error, data } = useDataset("companies/companies");
+  const activityState = useDataset("companies/company-activities");
   const company = getCompanyItems(data).find((item) => item.company_id === companyId);
+  const activities = getCompanyActivities(activityState.data, companyId);
   const activeTab = normalizeCompanyTab(searchParams.get("tab") || "overview");
 
   useEffect(() => {
@@ -946,7 +949,7 @@ function CompanyDetailPage() {
 
   return (
     <Layout>
-      <CompanyDetailView company={company} activeTab={activeTab} onTabChange={setCompanyTab} />
+      <CompanyDetailView company={company} activeTab={activeTab} onTabChange={setCompanyTab} activities={activities} />
     </Layout>
   );
 }
