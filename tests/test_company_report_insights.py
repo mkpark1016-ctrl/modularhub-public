@@ -7,7 +7,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 
 from scripts.build_company_report_insights import DEFAULT_OUTPUT, build_view_model, stable_json
-from scripts.validate_company_audit_financials import load_payload, validate
+from scripts.validate_company_audit_financials import SOURCE_SECTION_CODES, load_payload, validate
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "company_reports" / "company_report_insights_v1.schema.json"
@@ -71,6 +71,20 @@ def test_source_location_counts_and_quality() -> None:
     assert company["data_quality"]["pending_manual_page_check_count"] == 45
     assert company["source_summary"]["verified_location_count"] == 39
     assert company["source_summary"]["pending_location_count"] == 45
+
+
+def test_public_source_location_sections_are_standard_codes() -> None:
+    payload = load_output()
+    sections = []
+    for company in payload["companies"]:
+        for series in company["financial_series"]:
+            for metric in series["metrics"].values():
+                sections.extend(location["section"] for location in metric.get("source_locations", []))
+        for metric in company["latest_metrics"].values():
+            sections.extend(location["section"] for location in metric.get("source_locations", []))
+    assert sections
+    assert all(section in SOURCE_SECTION_CODES for section in sections)
+    assert all("?" not in section for section in sections)
 
 
 def test_deterministic_generation_matches_stored_output() -> None:

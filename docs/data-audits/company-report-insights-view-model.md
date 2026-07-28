@@ -38,6 +38,12 @@ UI는 감사보고서 원천 JSON을 직접 읽지 않는다. 원천 데이터�
 
 법인 귀속 주의사항은 `entity_attribution`과 `disclosure_warnings`에 유지한다. 유창이앤씨의 경우 유창엠앤씨 등 관계사 프로젝트·생산·매출을 유창이앤씨 별도 실적으로 자동 합산하지 않는다는 경고가 포함된다.
 
+## Source Section 코드
+
+`source_locations.section`은 인코딩에 안전한 표준 코드로 저장한다. 허용 코드는 `statement.income_statement`, `statement.balance_sheet`, `statement.cash_flow`, `note.revenue_breakdown`, `note.working_capital`, `note.borrowings`, `note.investment_signals`이다.
+
+한국어 표시명은 후속 UI에서 코드 매핑으로 제공한다. `pending_manual_page_check`는 정확한 페이지 수동 확인이 남아 있다는 뜻이며, section 분류가 미확인이라는 뜻은 아니다.
+
 ## 새 기업 추가
 
 새 기업 감사보고서 원천 파일을 `company_audit_financials_v1` 구조로 추가하고 Validator를 통과하면, 별도 코드 수정 없이 `build_company_report_insights.py`가 자동 탐색해 View Model에 포함한다.

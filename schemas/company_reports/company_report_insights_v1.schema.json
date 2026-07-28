@@ -88,7 +88,7 @@
     },
     "moneyMetric": {
       "type": "object",
-      "required": ["raw_krw", "display_eok", "display_text", "source_refs", "source_locations"],
+      "required": ["raw_krw", "display_eok", "display_text", "source_refs", "source_locations", "calculation_basis"],
       "properties": {
         "raw_krw": { "type": "integer" },
         "display_eok": { "type": "number" },
@@ -118,7 +118,7 @@
           ]
         },
         "page_range": { "type": "string", "minLength": 1 },
-        "section": { "type": "string", "minLength": 1 },
+        "section": { "$ref": "#/$defs/sourceSectionCode" },
         "verification_status": {
           "enum": ["verified", "verified_section_range", "pending_manual_page_check"]
         }
@@ -206,6 +206,17 @@
         "modular_segment_revenue_disclosed": { "type": "boolean" }
       },
       "additionalProperties": false
+    },
+    "sourceSectionCode": {
+      "enum": [
+        "statement.income_statement",
+        "statement.balance_sheet",
+        "statement.cash_flow",
+        "note.revenue_breakdown",
+        "note.working_capital",
+        "note.borrowings",
+        "note.investment_signals"
+      ]
     }
   }
 }

@@ -310,7 +310,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -327,7 +327,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -344,7 +344,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -360,7 +360,7 @@
               "raw_krw": 16513460035,
               "source_locations": [
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -377,7 +377,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -394,7 +394,7 @@
               "source_locations": [
                 {
                   "page_range": "12~13",
-                  "section": "?????",
+                  "section": "statement.cash_flow",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -411,7 +411,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -427,12 +427,12 @@
               "raw_krw": 77797306492,
               "source_locations": [
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -449,7 +449,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -466,7 +466,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -482,17 +482,17 @@
               "raw_krw": 40000000000,
               "source_locations": [
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -509,7 +509,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -526,7 +526,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2025_04_04",
                   "verification_status": "verified_section_range"
                 }
@@ -548,7 +548,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -565,7 +565,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -582,7 +582,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -598,7 +598,7 @@
               "raw_krw": 20450417510,
               "source_locations": [
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -615,7 +615,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -632,7 +632,7 @@
               "source_locations": [
                 {
                   "page_range": "12~13",
-                  "section": "?????",
+                  "section": "statement.cash_flow",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -649,7 +649,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -665,12 +665,12 @@
               "raw_krw": 74823576828,
               "source_locations": [
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -687,7 +687,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -704,7 +704,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -720,17 +720,17 @@
               "raw_krw": 63500000000,
               "source_locations": [
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -747,7 +747,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -764,7 +764,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -786,7 +786,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -803,7 +803,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -820,7 +820,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -836,7 +836,7 @@
               "raw_krw": 30004051329,
               "source_locations": [
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -853,7 +853,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -870,7 +870,7 @@
               "source_locations": [
                 {
                   "page_range": "12~13",
-                  "section": "?????",
+                  "section": "statement.cash_flow",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -887,7 +887,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -903,12 +903,12 @@
               "raw_krw": 115786145992,
               "source_locations": [
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "???? ??",
+                  "section": "note.working_capital",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -925,7 +925,7 @@
               "source_locations": [
                 {
                   "page_range": "9~10",
-                  "section": "?????",
+                  "section": "statement.income_statement",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -942,7 +942,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -958,17 +958,17 @@
               "raw_krw": 112134492523,
               "source_locations": [
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 },
                 {
-                  "section": "??? ??",
+                  "section": "note.borrowings",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "pending_manual_page_check"
                 }
@@ -985,7 +985,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -1002,7 +1002,7 @@
               "source_locations": [
                 {
                   "page_range": "6~8",
-                  "section": "?????",
+                  "section": "statement.balance_sheet",
                   "source_ref": "yuchang_audit_report_2026_04_08",
                   "verification_status": "verified_section_range"
                 }
@@ -1024,7 +1024,7 @@
           "source_locations": [
             {
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1040,7 +1040,7 @@
           "raw_krw": 30004051329,
           "source_locations": [
             {
-              "section": "???? ??",
+              "section": "note.working_capital",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "pending_manual_page_check"
             }
@@ -1057,7 +1057,7 @@
           "source_locations": [
             {
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1074,7 +1074,7 @@
           "source_locations": [
             {
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1091,7 +1091,7 @@
           "source_locations": [
             {
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1107,12 +1107,12 @@
           "raw_krw": 115786145992,
           "source_locations": [
             {
-              "section": "???? ??",
+              "section": "note.working_capital",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "pending_manual_page_check"
             },
             {
-              "section": "???? ??",
+              "section": "note.working_capital",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "pending_manual_page_check"
             }
@@ -1129,7 +1129,7 @@
           "source_locations": [
             {
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1146,7 +1146,7 @@
           "source_locations": [
             {
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1162,17 +1162,17 @@
           "raw_krw": 112134492523,
           "source_locations": [
             {
-              "section": "??? ??",
+              "section": "note.borrowings",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "pending_manual_page_check"
             },
             {
-              "section": "??? ??",
+              "section": "note.borrowings",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "pending_manual_page_check"
             },
             {
-              "section": "??? ??",
+              "section": "note.borrowings",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "pending_manual_page_check"
             }
@@ -1189,7 +1189,7 @@
           "source_locations": [
             {
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1206,7 +1206,7 @@
           "source_locations": [
             {
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "verified_section_range"
             }
@@ -1222,7 +1222,7 @@
           "raw_krw": 28951436757,
           "source_locations": [
             {
-              "section": "???? ??",
+              "section": "note.working_capital",
               "source_ref": "yuchang_audit_report_2026_04_08",
               "verification_status": "pending_manual_page_check"
             }

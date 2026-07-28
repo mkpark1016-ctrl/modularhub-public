@@ -125,7 +125,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -139,7 +139,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -153,7 +153,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -167,7 +167,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -183,7 +183,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -197,7 +197,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -211,7 +211,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -225,7 +225,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -241,7 +241,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -255,7 +255,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -269,7 +269,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -283,7 +283,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -297,7 +297,7 @@
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -312,7 +312,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -326,7 +326,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -340,7 +340,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -353,7 +353,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -366,7 +366,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -381,7 +381,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -394,7 +394,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -407,7 +407,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -420,7 +420,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -435,7 +435,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -448,7 +448,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -461,7 +461,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -476,7 +476,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -489,7 +489,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -502,7 +502,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2025_04_04",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -523,7 +523,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -537,7 +537,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -551,7 +551,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -565,7 +565,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -581,7 +581,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -595,7 +595,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -609,7 +609,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -623,7 +623,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -639,7 +639,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -653,7 +653,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -667,7 +667,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -681,7 +681,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -695,7 +695,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -710,7 +710,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -724,7 +724,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -738,7 +738,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -751,7 +751,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -764,7 +764,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -779,7 +779,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -792,7 +792,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -805,7 +805,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -818,7 +818,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -833,7 +833,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -846,7 +846,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -859,7 +859,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -874,7 +874,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -887,7 +887,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -900,7 +900,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -921,7 +921,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -935,7 +935,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -949,7 +949,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -963,7 +963,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "9~10",
-              "section": "?????",
+              "section": "statement.income_statement",
               "verification_status": "verified_section_range"
             }
           ]
@@ -979,7 +979,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -993,7 +993,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1007,7 +1007,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1021,7 +1021,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "12~13",
-              "section": "?????",
+              "section": "statement.cash_flow",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1037,7 +1037,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1051,7 +1051,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1065,7 +1065,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1079,7 +1079,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1093,7 +1093,7 @@
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
               "page_range": "6~8",
-              "section": "?????",
+              "section": "statement.balance_sheet",
               "verification_status": "verified_section_range"
             }
           ]
@@ -1108,7 +1108,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1122,7 +1122,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1136,7 +1136,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1149,7 +1149,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1162,7 +1162,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ?? ??",
+              "section": "note.revenue_breakdown",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1177,7 +1177,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1190,7 +1190,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1203,7 +1203,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1216,7 +1216,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "???? ??",
+              "section": "note.working_capital",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1231,7 +1231,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1244,7 +1244,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1257,7 +1257,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "??? ??",
+              "section": "note.borrowings",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1272,7 +1272,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1285,7 +1285,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
@@ -1298,7 +1298,7 @@
           "source_locations": [
             {
               "source_ref": "yuchang_audit_report_2026_04_08",
-              "section": "?? ? ???? ?? ??",
+              "section": "note.investment_signals",
               "verification_status": "pending_manual_page_check"
             }
           ]
