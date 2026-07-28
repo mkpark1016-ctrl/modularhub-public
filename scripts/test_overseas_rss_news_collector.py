@@ -171,6 +171,12 @@ def test_partial_feed_failure_continues() -> None:
     assert_true(len(items) == 1, "successful feed must still return items")
     assert_true(collector.stats["successful_feed_count"] == 1, "one successful feed expected")
     assert_true(collector.stats["failed_feed_count"] == 1, "one failed feed expected")
+    assert_true(len(collector.stats["feed_results"]) == 2, "one safe diagnostic row per feed expected")
+    bad, good = collector.stats["feed_results"]
+    assert_true(bad["feed"] == "Bad" and bad["status"] == "failed", "failed feed diagnostic mismatch")
+    assert_true(good["feed"] == "Good" and good["status"] == "success", "successful feed diagnostic mismatch")
+    assert_true(good["fetched_count"] == 1 and good["published_count"] == 1, "successful feed counts mismatch")
+    assert_true("error" in bad and bad["error"], "failed feed must include safe error category")
     assert_true(len(fake_get.calls) == 2, "one request per feed expected")
 
 

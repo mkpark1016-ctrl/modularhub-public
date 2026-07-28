@@ -107,7 +107,7 @@ assert.deepEqual(
   }),
   [
     ["54", false, false, "closed", "마감"],
-    ["5772", true, true, "scheduled", "검토 예정"],
+    ["5772", true, true, "this_week", "이번 주 검토"],
     ["208", true, true, "long_term", "중장기 검토"],
   ],
 );

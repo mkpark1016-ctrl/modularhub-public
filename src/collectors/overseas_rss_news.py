@@ -72,6 +72,7 @@ class OverseasRssNewsCollector(BaseCollector):
             "duplicate_excluded_count": 0,
             "returned_count": 0,
             "feed_errors": [],
+            "feed_results": [],
         }
 
     def get_source_type(self) -> str:
@@ -86,15 +87,32 @@ class OverseasRssNewsCollector(BaseCollector):
         seen_content_keys: set[tuple[str, str]] = set()
 
         for feed in self.feeds:
+            feed_result = {
+                "feed": feed.name,
+                "status": "success",
+                "fetched_count": 0,
+                "published_count": 0,
+                "relevance_excluded_count": 0,
+                "date_excluded_count": 0,
+                "duplicate_excluded_count": 0,
+                "error": "",
+            }
             try:
                 entries = self._fetch_feed(feed)
+                feed_result["fetched_count"] = len(entries)
                 self.stats["successful_feed_count"] += 1
             except Exception as exc:
                 self.stats["failed_feed_count"] += 1
-                self.stats["feed_errors"].append({"feed": feed.name, "error": safe_error(str(exc))})
+                feed_result["status"] = "failed"
+                feed_result["error"] = safe_error(str(exc))
+                self.stats["feed_errors"].append({"feed": feed.name, "error": feed_result["error"]})
+                self.stats["feed_results"].append(feed_result)
                 continue
 
             self.stats["fetched_item_count"] += len(entries)
+            start_relevance_excluded = self.stats["relevance_excluded_count"]
+            start_date_excluded = self.stats["date_excluded_count"]
+            start_duplicate_excluded = self.stats["duplicate_excluded_count"]
             for entry in entries[: self.max_items_per_feed]:
                 raw_item = self._entry_to_raw_item(feed, entry)
                 if raw_item is None:
@@ -114,6 +132,11 @@ class OverseasRssNewsCollector(BaseCollector):
                 if all(dedup_key):
                     seen_content_keys.add(dedup_key)
                 collected.append(raw_item)
+                feed_result["published_count"] += 1
+            feed_result["relevance_excluded_count"] = self.stats["relevance_excluded_count"] - start_relevance_excluded
+            feed_result["date_excluded_count"] = self.stats["date_excluded_count"] - start_date_excluded
+            feed_result["duplicate_excluded_count"] = self.stats["duplicate_excluded_count"] - start_duplicate_excluded
+            self.stats["feed_results"].append(feed_result)
 
         if self.feeds and self.stats["successful_feed_count"] == 0:
             raise RuntimeError(f"all RSS feeds failed: {self.stats['feed_errors']}")

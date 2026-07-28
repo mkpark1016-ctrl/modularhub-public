@@ -76,17 +76,17 @@ jobs:
             "NAVER_NEWS_LOOKBACK_DAYS=14" \
             "NAVER_NEWS_DISPLAY=50" \
             "NAVER_NEWS_SORT=date" \
-            "GDELT_DOC_NEWS_ENABLED=false" \
-            "GDELT_DOC_NEWS_TIMESPAN=7d" \
+            "GDELT_DOC_NEWS_ENABLED=true" \
+            "GDELT_DOC_NEWS_TIMESPAN=14d" \
             "GDELT_DOC_NEWS_MAX_RECORDS=250" \
             "GDELT_DOC_NEWS_TIMEOUT_SECONDS=30" \
-            "GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE=70" \
+            "GDELT_DOC_NEWS_MIN_RELEVANCE_SCORE=65" \
             "GDELT_DOC_NEWS_LANGUAGE=English" \
             "OVERSEAS_RSS_NEWS_ENABLED=true" \
             "OVERSEAS_RSS_NEWS_TIMEOUT_SECONDS=20" \
-            "OVERSEAS_RSS_NEWS_LOOKBACK_DAYS=14" \
+            "OVERSEAS_RSS_NEWS_LOOKBACK_DAYS=30" \
             "OVERSEAS_RSS_NEWS_MAX_ITEMS_PER_FEED=100" \
-            "OVERSEAS_RSS_NEWS_MIN_RELEVANCE_SCORE=70" > .env
+            "OVERSEAS_RSS_NEWS_MIN_RELEVANCE_SCORE=65" > .env
 
       - name: Back up currently published JSON
         run: |
@@ -107,6 +107,15 @@ jobs:
             echo "::warning::입찰/뉴스 일부 수집기가 실패했습니다. exit_code=$code"
           fi
           exit 0
+
+      - name: Upload news collection diagnostics artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-collection-diagnostics-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/news_collection_diagnostics/
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Collect G2B procurement plans
         run: |
