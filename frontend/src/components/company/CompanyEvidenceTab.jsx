@@ -6,9 +6,9 @@ import {
   formatNumber,
   labelValue,
 } from "./companyDetailHelpers";
-import { buildSourceRows, sourceHasPublicUrl } from "../../companyEvidence";
+import { buildSourceRows, sourceHasPublicUrl, sourceTypeSummaryForDomain } from "../../companyEvidence";
 import { sourceSectionCounts } from "../../companyReportInsights";
-import { companyDataGapRows } from "../../companyDataGaps";
+import { companyDataGapRows, dataGapSummaryForDomain } from "../../companyDataGaps";
 
 const MATRIX_AREAS = [
   { key: "identity", label: "법인정보", tab: "overview" },
@@ -19,11 +19,6 @@ const MATRIX_AREAS = [
   { key: "recent_signal", label: "최근 활동", tab: "overview" },
 ];
 
-function sourceTypeSummary(rows) {
-  const labels = [...new Set(rows.map((row) => row.sourceType).filter(Boolean))];
-  return labels.slice(0, 2).join(", ") || "출처 유형 확인 중";
-}
-
 export default function CompanyEvidenceTab({ company, reportInsight = null, onShowEvidence, onTabChange }) {
   const model = detailModel(company);
   const gaps = Array.isArray(company.research_gaps) ? company.research_gaps : [];
@@ -33,9 +28,9 @@ export default function CompanyEvidenceTab({ company, reportInsight = null, onSh
   const matrixRows = domainStatusRows(company).map((row, index) => ({
     ...MATRIX_AREAS[index],
     status: row.value,
-    sourceTypes: sourceTypeSummary(sourceRows),
+    sourceTypes: sourceTypeSummaryForDomain(sourceRows, MATRIX_AREAS[index]?.key),
     verifiedAt: model.header.latestVerifiedAt,
-    gapCount: gapRows.filter((gap) => String(gap.key || "").includes(MATRIX_AREAS[index]?.key)).length,
+    gapSummary: dataGapSummaryForDomain(gapRows, MATRIX_AREAS[index]?.key),
   }));
 
   return (
@@ -64,7 +59,7 @@ export default function CompanyEvidenceTab({ company, reportInsight = null, onSh
                   <td>{row.status}</td>
                   <td>{row.sourceTypes}</td>
                   <td>{formatDate(row.verifiedAt)}</td>
-                  <td>{row.gapCount ? formatNumber(row.gapCount, "건") : "없음"}</td>
+                  <td>{row.gapSummary}</td>
                   <td><button type="button" className="text-button" onClick={() => onTabChange?.(row.tab)}>탭 열기</button></td>
                 </tr>
               ))}

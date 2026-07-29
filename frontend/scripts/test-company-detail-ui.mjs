@@ -23,6 +23,13 @@ import {
   verificationStatusLabel,
 } from "../src/companyReportInsights.js";
 import { getCompanyItems, getCompanyEvents } from "../src/companyInsights.js";
+import {
+  buildCompanyItemEvidence,
+  buildSourceRows,
+  sourceTypeSummaryForDomain,
+  sourcesForDomain,
+} from "../src/companyEvidence.js";
+import { companyDataGapRows, dataGapSummaryForDomain } from "../src/companyDataGaps.js";
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
 const reportPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company_report_insights.json", import.meta.url), "utf8"));
@@ -74,6 +81,12 @@ assert.ok(stylesheet.includes(".company-report-table { min-width: 760px; }"), "f
 assert.ok(stylesheet.includes(".company-report-kpi-grid") && stylesheet.includes("grid-template-columns: 1fr"), "financial report layout should collapse on mobile");
 assert.ok(stylesheet.includes(".responsive-card-list") && stylesheet.includes(".responsive-table-wrap { display: none; }"), "facility/project tables should switch to cards on mobile");
 assert.ok(stylesheet.includes(".evidence-drawer") && componentFiles.includes("role=\"dialog\""), "evidence drawer styles and dialog markup should exist");
+assert.ok(componentFiles.includes("FOCUSABLE_SELECTOR"), "evidence drawer should define focusable targets");
+assert.ok(componentFiles.includes("event.key !== \"Tab\""), "evidence drawer should trap Tab navigation");
+assert.ok(componentFiles.includes("event.shiftKey"), "evidence drawer should support reverse Tab navigation");
+assert.ok(componentFiles.includes("previousFocus"), "evidence drawer should restore the trigger focus");
+assert.equal(componentFiles.includes("sourceTypeSummary(sourceRows)"), false, "evidence matrix should not repeat a global source summary for every domain");
+assert.ok(componentFiles.includes("sourceTypeSummaryForDomain"), "evidence matrix should use domain-scoped source summaries");
 assert.equal(labelValue("school_modular"), "학교 모듈러");
 assert.equal(labelValue("large_modular"), "대형 모듈러");
 
@@ -100,6 +113,17 @@ for (const company of companies) {
 const yuchangReport = getCompanyReportInsight(reportPayload, "yuchang-enc");
 assert.ok(yuchangReport, "yuchang-enc report insight must load");
 assert.equal(getCompanyReportInsight(reportPayload, "gs-ec"), null, "companies without report insights should fall back to legacy financial UI");
+const yuchang = byId("yuchang-enc");
+const missingEvidence = buildCompanyItemEvidence(yuchang, "직접 출처 미정리 항목", 0, ["missing-source-id"]);
+assert.equal(missingEvidence.value, 0, "zero values should be preserved in evidence payloads");
+assert.equal(missingEvidence.sources.length, 0, "missing source IDs should not fall back to unrelated company sources");
+assert.match(missingEvidence.note, /직접 연결된 출처/, "missing direct source should produce a clear pending-source note");
+const yuchangSources = buildSourceRows(yuchang, yuchangReport);
+assert.ok(sourcesForDomain(yuchangSources, "financial").length > 0, "financial matrix domain should have explicit audit sources");
+assert.ok(sourceTypeSummaryForDomain(yuchangSources, "financial").includes("감사보고서"), "financial matrix domain should show audit report sources");
+assert.equal(sourceTypeSummaryForDomain([], "production"), "영역별 연결 근거 확인 필요");
+const yuchangGaps = companyDataGapRows(yuchang, yuchangReport);
+assert.notEqual(dataGapSummaryForDomain(yuchangGaps, "financial"), "연결 공백 없음", "financial gap summary should use explicit domain mapping");
 assert.deepEqual(reportYears(yuchangReport), [2023, 2024, 2025]);
 assert.equal(reportFinancialHeading({ available_years: [2023, 2024, 2025] }), "2023~2025년 재무 추이");
 assert.equal(reportFinancialHeading({ available_years: [2024, 2025, 2026] }), "2024~2026년 재무 추이");

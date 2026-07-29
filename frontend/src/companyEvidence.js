@@ -1,5 +1,5 @@
-import { formatDate, labelValue } from "./components/company/companyDetailHelpers";
-import { financialScopeLabel, reportSectionLabel, verificationStatusLabel } from "./companyReportInsights";
+import { formatDate, labelValue } from "./components/company/companyDetailHelpers.js";
+import { financialScopeLabel, reportSectionLabel, verificationStatusLabel } from "./companyReportInsights.js";
 
 function sourceGroupLabel(type) {
   const labels = {
@@ -17,6 +17,29 @@ function sourceGroupLabel(type) {
   return labels[type] || labelValue(type, "기타");
 }
 
+const DOMAIN_CLAIMS = {
+  identity: ["identity", "company_identity", "profile", "overview", "corporate"],
+  financial: ["financial", "financials", "finance", "audit_report", "income_statement", "balance_sheet", "cash_flow"],
+  production: ["production", "facility", "factory", "production_facility"],
+  project: ["project", "projects", "delivery", "contract"],
+  technology: ["technology", "patent", "patents", "ip"],
+  recent_signal: ["recent_signal", "recent_signals", "news", "strategy", "market", "activity"],
+};
+
+function normalizeClaim(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function sourceMatchesDomain(source, domain) {
+  const expected = new Set(DOMAIN_CLAIMS[domain] || [domain]);
+  const claims = [
+    ...(Array.isArray(source?.supportedClaims) ? source.supportedClaims : []),
+    source?.groupType,
+    source?.sourceType,
+  ].map(normalizeClaim);
+  return claims.some((claim) => expected.has(claim));
+}
+
 export function sourceHasPublicUrl(source) {
   const url = source?.url || source?.source_url || "";
   return /^https?:\/\//.test(String(url));
@@ -27,15 +50,16 @@ export function flattenCompanySources(company) {
     ? company.intelligence_v2.source_groups
     : [];
   const groupedRows = groups.flatMap((group) => (Array.isArray(group.sources) ? group.sources : []).map((source) => ({
-    id: source.source_id,
-    title: source.title || source.publisher || sourceGroupLabel(group.group_type),
-    publisher: source.publisher || "기관 확인 중",
-    sourceType: sourceGroupLabel(source.source_type || group.group_type),
-    publishedAt: source.published_at || source.retrieved_at || source.accessed_at || "",
-    documentId: source.document_id || "",
-    url: source.url || source.source_url || "",
-    groupType: group.group_type,
-  })));
+      id: source.source_id,
+      title: source.title || source.publisher || sourceGroupLabel(group.group_type),
+      publisher: source.publisher || "기관 확인 중",
+      sourceType: sourceGroupLabel(source.source_type || group.group_type),
+      publishedAt: source.published_at || source.retrieved_at || source.accessed_at || "",
+      documentId: source.document_id || "",
+      url: source.url || source.source_url || "",
+      groupType: group.group_type,
+      supportedClaims: source.supported_claims || source.supportedClaims || [group.group_type],
+    })));
   const rows = [...groupedRows];
   const seen = new Set(rows.map((row) => row.id).filter(Boolean));
   for (const source of Array.isArray(company?.sources) ? company.sources : []) {
@@ -99,11 +123,14 @@ export function buildReportMetricEvidence(insight, label, metric) {
 
 export function buildCompanyItemEvidence(company, title, value, sourceIds = [], note = "") {
   const sources = findCompanySources(company, sourceIds);
+  const missingSourceNote = "이 항목과 직접 연결된 출처가 아직 정리되지 않았습니다.";
+  const evidenceNote = sources.length ? note : [note, missingSourceNote].filter(Boolean).join(" ");
   return {
     title,
-    value: value || "확인되지 않음",
-    note,
-    sources: sources.length ? sources : flattenCompanySources(company).slice(0, 1),
+    value: value ?? "확인되지 않음",
+    note: evidenceNote,
+    evidenceStatus: sources.length ? "linked" : "source_pending",
+    sources,
   };
 }
 
@@ -123,10 +150,20 @@ export function buildSourceRows(company, reportInsight = null) {
         documentId: doc.source_role || "",
         url: "",
         groupType: "dart",
+        supportedClaims: ["financial", "financials", "audit_report"],
       });
     }
   }
   return rows.sort((a, b) => String(b.publishedAt || "").localeCompare(String(a.publishedAt || "")));
+}
+
+export function sourcesForDomain(sourceRows, domain) {
+  return (Array.isArray(sourceRows) ? sourceRows : []).filter((source) => sourceMatchesDomain(source, domain));
+}
+
+export function sourceTypeSummaryForDomain(sourceRows, domain) {
+  const labels = [...new Set(sourcesForDomain(sourceRows, domain).map((row) => row.sourceType).filter(Boolean))];
+  return labels.slice(0, 2).join(", ") || "영역별 연결 근거 확인 필요";
 }
 
 export function formatSourceDate(value) {
