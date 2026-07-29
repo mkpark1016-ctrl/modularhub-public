@@ -1,4 +1,4 @@
-export const COMPANY_SORT_VALUES = ["tier", "verified", "name", "revenue", "operating_margin", "production", "verified_projects", "technology"];
+export const COMPANY_SORT_VALUES = ["tier", "recent_activity", "verified", "name", "revenue", "operating_margin", "production", "verified_projects", "technology"];
 export const COMPANY_STATUS_VALUES = ["all", "core_verified", "partially_verified", "research_in_progress", "watchlist", "insufficient_public_data"];
 const LEGACY_STATUS_ALIASES = {
   verified: "core_verified",

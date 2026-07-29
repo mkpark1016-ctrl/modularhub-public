@@ -8,6 +8,8 @@ import {
 } from "../../companyComparison";
 import {
   getCompanyResearchGapCount,
+  getCompanyCompactSummary,
+  getCompanyDataGapCount,
   getCompanyVerificationLevel,
   getLatestVerifiedAt,
   getVerificationLevelLabel,
@@ -39,18 +41,21 @@ function projectText(metric) {
   return parts.join(" · ");
 }
 
-export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare }) {
+export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare, activities = [] }) {
   const metric = getComparisonMetric(company);
-  const gapCount = getCompanyResearchGapCount(company);
+  const gapCount = getCompanyDataGapCount(company);
   const verificationLevel = getVerificationLevelLabel(getCompanyVerificationLevel(company));
   const latestVerifiedAt = formatDate(getLatestVerifiedAt(company));
+  const latestActivity = activities[0];
+  const cautionText = gapCount > 0
+    ? `보완 필요 ${formatNumber(gapCount, "건")}`
+    : (getCompanyResearchGapCount(company) > 0 ? `조사 공백 ${formatNumber(getCompanyResearchGapCount(company), "건")}` : "");
   return (
-    <article className="result-card company-card company-summary-card">
+    <article className="result-card company-card company-summary-card" tabIndex="0">
       <div className="card-topline">
         <div className="badge-row">
           <span>{metric.typeLabel}</span>
           <span>{metric.relationshipLabel}</span>
-          <span>{metric.tierLabel}</span>
           <span className={`company-status ${metric.dataStatus}`}>{metric.dataStatusLabel}</span>
         </div>
       </div>
@@ -70,23 +75,34 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
           비교
         </label>
       </div>
-      <p className="company-card-summary">{company.summary_ko || company.positioning_summary_ko || "현재 공개자료를 추가 조사 중입니다."}</p>
+      <p className="company-card-summary">{getCompanyCompactSummary(company)}</p>
       <dl className="company-kpi-list">
         <div><dt>최근 매출</dt><dd>{metric.revenue === null ? "확인되지 않음" : `${metric.latestFinancialYear}년 ${formatKrw(metric.revenue)}`}</dd></div>
         <div><dt>영업이익률</dt><dd>{formatMargin(metric.operatingMargin)}</dd></div>
         <div><dt>생산시설</dt><dd>{facilityText(metric)}</dd></div>
         <div><dt>검증 실적</dt><dd>{projectText(metric)}</dd></div>
-        <div><dt>기술·특허</dt><dd>{formatNumber(metric.technologyCount, "건")}</dd></div>
       </dl>
+      <div className="company-card-decision">
+        <div>
+          <span>최근 변화</span>
+          <strong>{latestActivity ? latestActivity.title : "최근 90일 주요 변화 없음"}</strong>
+          {latestActivity?.publishedAt && <small>{formatDate(latestActivity.publishedAt)}</small>}
+        </div>
+        {cautionText && (
+          <div>
+            <span>주의사항</span>
+            <strong>{cautionText}</strong>
+            <small>{latestVerifiedAt} 기준</small>
+          </div>
+        )}
+      </div>
       <div className="company-tag-block">
         <span>{joinLabels(metric.targetMarkets.slice(0, 3))}</span>
         <span>{joinLabels(metric.modularMethods.slice(0, 2))}</span>
       </div>
-      <p className="company-card-meta">
-        데이터 검증 수준 {verificationLevel} · 최신 검증일 {latestVerifiedAt} · {gapCount > 0 ? `조사 공백 ${formatNumber(gapCount, "건")}` : "핵심 공백 없음"}
-      </p>
+      <p className="company-card-meta">검증 수준 {verificationLevel} · 최신 검증일 {latestVerifiedAt}</p>
       <div className="card-footer">
-        <span>{metric.comparisonStatus}</span>
+        <span>{metric.tierLabel}</span>
         <div className="card-actions">
           <Link to={`/companies/${company.company_id}`}>상세보기</Link>
         </div>
@@ -95,7 +111,7 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
   );
 }
 
-export function CompanyCardGrid({ companies, selectedIds, onToggleCompare }) {
+export function CompanyCardGrid({ companies, selectedIds, onToggleCompare, activitiesByCompany = new Map() }) {
   const selectionDisabled = selectedIds.length >= MAX_COMPARISON_COMPANIES;
   return (
     <div className="company-card-grid">
@@ -106,6 +122,7 @@ export function CompanyCardGrid({ companies, selectedIds, onToggleCompare }) {
           selected={selectedIds.includes(company.company_id)}
           selectionDisabled={selectionDisabled}
           onToggleCompare={onToggleCompare}
+          activities={activitiesByCompany.get(company.company_id) || []}
         />
       ))}
     </div>

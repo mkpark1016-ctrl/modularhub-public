@@ -302,6 +302,23 @@ export function getCompanyResearchGapCount(company) {
   return Array.isArray(company?.research_gaps) ? company.research_gaps.length : 0;
 }
 
+export function getCompanyDataGapCount(company, reportInsight = null) {
+  let count = getCompanyResearchGapCount(company);
+  const summary = productionSummary(company);
+  if (summary.reported_capacity_available === false || summary.verification_status === "research_exhausted") count += 1;
+  if (reportInsight?.data_quality?.manual_page_check_required) count += 1;
+  if (reportInsight?.attribution?.modular_segment_revenue_disclosed === false) count += 1;
+  if (!company?.website_url) count += 1;
+  return count;
+}
+
+export function getCompanyCompactSummary(company) {
+  const summary = getKoreanCompanySummary(company);
+  if (summary && !summary.includes("추가 조사 중")) return summary;
+  const highlights = getCompanyHighlights(company);
+  return highlights.length ? highlights.join(" · ") : "공개자료 기준 핵심 정보 정리 중";
+}
+
 export function getProjectRoleLabel(project) {
   return labelFromMap(PROJECT_ROLE_LABELS, project?.company_role || "unknown");
 }

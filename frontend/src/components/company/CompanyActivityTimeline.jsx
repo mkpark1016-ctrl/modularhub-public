@@ -8,13 +8,13 @@ import {
 } from "../../companyActivities";
 import { formatDate } from "./companyDetailHelpers";
 
-const INITIAL_VISIBLE_COUNT = 10;
+const INITIAL_VISIBLE_COUNT = 5;
 
 function ActivityMeta({ activity }) {
   const meta = [
     formatDate(activity.publishedAt),
     activity.sourceName,
-    activity.status,
+    activity.status ? "관련 보도" : "",
   ].filter(Boolean);
   return <span>{meta.join(" · ")}</span>;
 }
@@ -35,8 +35,8 @@ export default function CompanyActivityTimeline({ activities = [] }) {
   return (
     <div className="company-subsection company-activity-timeline">
       <div className="company-subsection-heading">
-        <h3>최근 활동 및 시장 신호</h3>
-        <span>{validActivities.length.toLocaleString("ko-KR")}건</span>
+        <h3>최근 90일 변화</h3>
+        <span>관련 보도 {validActivities.length.toLocaleString("ko-KR")}건</span>
       </div>
       <div className="company-activity-filters" aria-label="최근 활동 필터">
         {COMPANY_ACTIVITY_FILTERS.map((option) => (

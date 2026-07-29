@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { detailModel, formatDate, labelValue } from "./companyDetailHelpers";
+import { buildCompanyItemEvidence } from "../../companyEvidence";
 
 const PAGE_SIZE = 8;
 
@@ -7,31 +8,55 @@ function normalize(value) {
   return String(value || "").normalize("NFC").toLowerCase();
 }
 
-export default function CompanyTechnologyTab({ company }) {
+function technologyField(item) {
+  const text = normalize([item.name, item.technology_area, item.summary].join(" "));
+  if (/(접합|체결|연결|구조)/.test(text)) return "구조·접합";
+  if (/(고층|적층|층간)/.test(text)) return "고층화";
+  if (/(시공|안전|고소작업|공기)/.test(text)) return "시공성·안전";
+  if (/(외장|기밀|수밀|단열)/.test(text)) return "외장·기밀";
+  if (/(신기술|공법|인증)/.test(text)) return "공법·건설신기술";
+  return "기타";
+}
+
+function technologyNumber(item) {
+  return item.registration_number || item.application_number || item.patent_number || "번호 확인 중";
+}
+
+function technologyDate(item, key) {
+  return key === "filed"
+    ? formatDate(item.application_date || item.filed_at || item.filed_date)
+    : formatDate(item.registration_date || item.registered_at);
+}
+
+export default function CompanyTechnologyTab({ company, onShowEvidence }) {
   const model = detailModel(company);
   const items = model.technologyItems;
   const [query, setQuery] = useState("");
   const [recordType, setRecordType] = useState("all");
   const [status, setStatus] = useState("all");
+  const [field, setField] = useState("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const recordTypes = useMemo(() => [...new Set(items.map((item) => item.record_type || item.group).filter(Boolean))], [items]);
   const statuses = useMemo(() => [...new Set(items.map((item) => item.status).filter(Boolean))], [items]);
+  const fields = useMemo(() => [...new Set(items.map((item) => technologyField(item)))], [items]);
   const filtered = useMemo(() => {
     const term = normalize(query);
     return items.filter((item) => {
       if (recordType !== "all" && (item.record_type || item.group) !== recordType) return false;
       if (status !== "all" && item.status !== status) return false;
+      if (field !== "all" && technologyField(item) !== field) return false;
       if (!term) return true;
       return normalize([
         item.name,
         item.registration_number,
         item.application_number,
+        item.patent_number,
         item.technology_area,
         item.summary,
       ].join(" ")).includes(term);
     });
-  }, [items, query, recordType, status]);
+  }, [field, items, query, recordType, status]);
   const visible = filtered.slice(0, visibleCount);
 
   const resetPaging = (setter) => (value) => {
@@ -61,19 +86,31 @@ export default function CompanyTechnologyTab({ company }) {
                 {statuses.map((itemStatus) => <option key={itemStatus} value={itemStatus}>{labelValue(itemStatus, itemStatus)}</option>)}
               </select>
             </label>
+            <label>기술 분야
+              <select value={field} onChange={(event) => resetPaging(setField)(event.target.value)}>
+                <option value="all">전체 분야</option>
+                {fields.map((itemField) => <option key={itemField} value={itemField}>{itemField}</option>)}
+              </select>
+            </label>
           </div>
           <div className="company-section-list technology-list">
             {visible.map((item, index) => (
               <div key={item.technology_id || item.registration_number || item.application_number || `${item.name}-${index}`}>
                 <strong>{item.name || item.registration_number || item.application_number || "기술명 확인 중"}</strong>
+                {(!item.application_date && !item.filed_at) || (!item.registration_date && !item.registered_at) ? <span className="mini-status-badge">정보 보완 필요</span> : null}
                 <span>{[
                   labelValue(item.record_type || item.group, null),
-                  item.registration_number || item.application_number,
+                  technologyNumber(item),
                   labelValue(item.status, null),
-                  labelValue(item.technology_area, null),
+                  item.technology_area ? labelValue(item.technology_area, item.technology_area) : technologyField(item),
                 ].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
-                <span>출원일 {formatDate(item.application_date)} · 등록일 {formatDate(item.registration_date)}</span>
+                <span>출원일 {technologyDate(item, "filed")} · 등록일 {technologyDate(item, "registered")}</span>
                 {item.summary && <span>{item.summary}</span>}
+                {onShowEvidence && (
+                  <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(buildCompanyItemEvidence(company, item.name || technologyNumber(item), technologyNumber(item), item.source_ids, technologyField(item)))}>
+                    근거보기
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -84,7 +121,7 @@ export default function CompanyTechnologyTab({ company }) {
           )}
         </>
       ) : (
-        <p>현재 공개자료를 추가 조사 중입니다.</p>
+        <p>검증 가능한 기술·특허 자료가 없습니다.</p>
       )}
     </section>
   );

@@ -24,7 +24,7 @@ import {
 } from "../../companyInsights.js";
 
 export const COMPANY_DETAIL_TABS = [
-  { value: "overview", label: "개요" },
+  { value: "overview", label: "종합분석" },
   { value: "financial", label: "재무" },
   { value: "production", label: "생산시설" },
   { value: "projects", label: "프로젝트" },
@@ -125,7 +125,10 @@ const VALUE_LABELS = {
   technology_provider: "기술 제공",
   structural_engineer: "구조 엔지니어링",
   role_unknown: "수행 역할 미확인",
+  school_modular: "학교 모듈러",
   military_modular: "군 모듈러",
+  public_housing_modular: "공공주택 모듈러",
+  large_modular: "대형 모듈러",
   large_scale_modular: "대형 모듈러",
   school: "학교",
   military: "군 시설",
