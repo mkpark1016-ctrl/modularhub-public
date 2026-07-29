@@ -91,6 +91,21 @@ assert.ok(componentFiles.includes("hasEvidenceDisplayValue(evidence.value)"), "e
 assert.equal(componentFiles.includes("sourceTypeSummary(sourceRows)"), false, "evidence matrix should not repeat a global source summary for every domain");
 assert.ok(componentFiles.includes("sourceTypeSummaryForDomain"), "evidence matrix should use domain-scoped source summaries");
 assert.ok(componentFiles.includes("row.metricKey"), "financial mini-chart rows should use metric keys to avoid duplicate React keys");
+assert.ok(componentFiles.includes("매출 추이"), "revenue trend should render as a separate chart");
+assert.ok(componentFiles.includes("영업이익 추이"), "operating profit trend should render as a separate chart");
+assert.equal(componentFiles.includes("title=\"매출과 영업이익\""), false, "revenue and operating profit should not share one mini-chart title");
+assert.ok(componentFiles.includes("financial-chart-legend"), "grouped financial chart should include a visible legend");
+assert.ok(componentFiles.includes("총차입금") && componentFiles.includes("매출채권 합계"), "borrowings and receivables legend labels should exist");
+assert.ok(componentFiles.includes("financial-zero-line"), "cash-flow chart should render an explicit zero baseline");
+assert.ok(componentFiles.includes("financial-cash-flow-zone negative"), "cash-flow chart should include a negative value lane");
+assert.ok(componentFiles.includes("financial-cash-flow-zone positive"), "cash-flow chart should include a positive value lane");
+assert.ok(componentFiles.includes("cash-flow-direction-positive"), "cash-flow chart should mark positive rows");
+assert.ok(componentFiles.includes("cash-flow-direction-negative"), "cash-flow chart should mark negative rows");
+assert.ok(componentFiles.includes("financial-zero-marker"), "cash-flow chart should preserve a visible zero-value marker");
+assert.ok(stylesheet.includes("grid-template-columns: 44px minmax(0, 1fr) 2px minmax(0, 1fr)"), "cash-flow chart should place the zero line between symmetric lanes");
+assert.ok(stylesheet.includes("justify-content: flex-end"), "negative cash-flow bars should extend left toward the zero line");
+assert.ok(stylesheet.includes("justify-content: flex-start"), "positive cash-flow bars should extend right from the zero line");
+assert.ok(componentFiles.includes("aria-hidden=\"true\""), "decorative financial chart marks should be hidden from assistive tech");
 assert.equal(labelValue("school_modular"), "학교 모듈러");
 assert.equal(labelValue("large_modular"), "대형 모듈러");
 
@@ -152,6 +167,12 @@ assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "operatin
 assert.equal(metricToneClass(reportMetricByYear(yuchangReport, 2025, "operating_cash_flow")), "is-negative");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "total_borrowings")), "1,121.3억원");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "receivables_total")), "1,157.9억원");
+for (const year of [2023, 2024, 2025]) {
+  for (const metricKey of ["revenue", "operating_profit", "operating_cash_flow", "total_borrowings", "receivables_total"]) {
+    assert.notEqual(metricDisplayText(reportMetricByYear(yuchangReport, year, metricKey)), "확인되지 않음", `${metricKey} ${year} should have a direct label`);
+  }
+  assert.notEqual(metricDisplayText(reportRatioByYear(yuchangReport, year, "operating_margin_pct")), "확인되지 않음", `operating margin ${year} should have a direct label`);
+}
 assert.ok(yuchangReport.disclosure_warnings.some((warning) => warning.code === "pending_manual_page_check"));
 assert.ok(yuchangReport.disclosure_warnings.some((warning) => warning.code === "related_entity_results_not_combined"));
 assert.equal(yuchangReport.source_summary.pending_location_count, 45);
