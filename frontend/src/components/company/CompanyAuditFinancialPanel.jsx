@@ -45,6 +45,20 @@ function metricWidth(value, max) {
   return Number.isFinite(value) ? Math.max(8, Math.min(100, (Math.abs(value) / max) * 100)) : 0;
 }
 
+function cashFlowWidth(value, max) {
+  if (!Number.isFinite(value) || value === 0) return 0;
+  return Math.max(8, Math.min(100, (Math.abs(value) / max) * 100));
+}
+
+function signedMetricDisplayText(metric) {
+  const value = metricNumber(metric);
+  const text = metricDisplayText(metric);
+  if (!Number.isFinite(value) || value <= 0 || text.startsWith("+") || text.startsWith("-")) {
+    return text;
+  }
+  return `+${text}`;
+}
+
 function SingleMetricTrend({ title, rows, variant = "primary", subtitle = "감사보고서 표시 금액" }) {
   const values = rows.map((row) => metricNumber(row.metric)).filter((value) => Number.isFinite(value));
   const max = Math.max(...values.map((value) => Math.abs(value)), 1);
@@ -80,15 +94,32 @@ function CashFlowTrend({ rows }) {
         <span>0 기준선 기준 양수·음수 구분</span>
       </div>
       <div className="financial-cash-flow-bars">
-        <span className="financial-zero-line" aria-hidden="true" />
         {rows.map((row) => {
           const value = metricNumber(row.metric);
           const negative = Number.isFinite(value) && value < 0;
+          const positive = Number.isFinite(value) && value > 0;
+          const zero = Number.isFinite(value) && value === 0;
+          const directionClass = negative
+            ? "cash-flow-direction-negative"
+            : positive
+              ? "cash-flow-direction-positive"
+              : zero
+                ? "cash-flow-direction-zero"
+                : "cash-flow-direction-unknown";
+          const displayText = signedMetricDisplayText(row.metric);
           return (
-            <span className={`financial-cash-flow-row ${negative ? "negative" : "positive"}`} key={`cash-flow-${row.year}`} aria-label={metricDisplayLabel(row, "영업현금흐름")}>
+            <span className={`financial-cash-flow-row ${directionClass}`} key={`cash-flow-${row.year}`} aria-label={`${row.year}년 영업현금흐름 ${displayText}`}>
               <b>{row.year}</b>
-              <i style={{ width: `${metricWidth(value, max)}%` }} aria-hidden="true" />
-              <em>{metricDisplayText(row.metric)}</em>
+              <span className="financial-cash-flow-zone negative" aria-hidden="true">
+                {negative && <i className="financial-cash-flow-bar negative" style={{ width: `${cashFlowWidth(value, max)}%` }} />}
+              </span>
+              <span className="financial-zero-line" aria-hidden="true">
+                {zero && <i className="financial-zero-marker" />}
+              </span>
+              <span className="financial-cash-flow-zone positive" aria-hidden="true">
+                {positive && <i className="financial-cash-flow-bar positive" style={{ width: `${cashFlowWidth(value, max)}%` }} />}
+              </span>
+              <em>{displayText}</em>
             </span>
           );
         })}

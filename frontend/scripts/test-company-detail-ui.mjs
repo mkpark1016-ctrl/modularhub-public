@@ -97,6 +97,14 @@ assert.equal(componentFiles.includes("title=\"매출과 영업이익\""), false,
 assert.ok(componentFiles.includes("financial-chart-legend"), "grouped financial chart should include a visible legend");
 assert.ok(componentFiles.includes("총차입금") && componentFiles.includes("매출채권 합계"), "borrowings and receivables legend labels should exist");
 assert.ok(componentFiles.includes("financial-zero-line"), "cash-flow chart should render an explicit zero baseline");
+assert.ok(componentFiles.includes("financial-cash-flow-zone negative"), "cash-flow chart should include a negative value lane");
+assert.ok(componentFiles.includes("financial-cash-flow-zone positive"), "cash-flow chart should include a positive value lane");
+assert.ok(componentFiles.includes("cash-flow-direction-positive"), "cash-flow chart should mark positive rows");
+assert.ok(componentFiles.includes("cash-flow-direction-negative"), "cash-flow chart should mark negative rows");
+assert.ok(componentFiles.includes("financial-zero-marker"), "cash-flow chart should preserve a visible zero-value marker");
+assert.ok(stylesheet.includes("grid-template-columns: 44px minmax(0, 1fr) 2px minmax(0, 1fr)"), "cash-flow chart should place the zero line between symmetric lanes");
+assert.ok(stylesheet.includes("justify-content: flex-end"), "negative cash-flow bars should extend left toward the zero line");
+assert.ok(stylesheet.includes("justify-content: flex-start"), "positive cash-flow bars should extend right from the zero line");
 assert.ok(componentFiles.includes("aria-hidden=\"true\""), "decorative financial chart marks should be hidden from assistive tech");
 assert.equal(labelValue("school_modular"), "학교 모듈러");
 assert.equal(labelValue("large_modular"), "대형 모듈러");
