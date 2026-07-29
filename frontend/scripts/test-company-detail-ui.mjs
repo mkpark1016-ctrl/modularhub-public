@@ -26,6 +26,7 @@ import { getCompanyItems, getCompanyEvents } from "../src/companyInsights.js";
 import {
   buildCompanyItemEvidence,
   buildSourceRows,
+  hasEvidenceDisplayValue,
   sourceTypeSummaryForDomain,
   sourcesForDomain,
 } from "../src/companyEvidence.js";
@@ -85,6 +86,8 @@ assert.ok(componentFiles.includes("FOCUSABLE_SELECTOR"), "evidence drawer should
 assert.ok(componentFiles.includes("event.key !== \"Tab\""), "evidence drawer should trap Tab navigation");
 assert.ok(componentFiles.includes("event.shiftKey"), "evidence drawer should support reverse Tab navigation");
 assert.ok(componentFiles.includes("previousFocus"), "evidence drawer should restore the trigger focus");
+assert.equal(componentFiles.includes("evidence.value &&"), false, "evidence drawer should not hide numeric zero values with truthy checks");
+assert.ok(componentFiles.includes("hasEvidenceDisplayValue(evidence.value)"), "evidence drawer should use explicit display-value checks");
 assert.equal(componentFiles.includes("sourceTypeSummary(sourceRows)"), false, "evidence matrix should not repeat a global source summary for every domain");
 assert.ok(componentFiles.includes("sourceTypeSummaryForDomain"), "evidence matrix should use domain-scoped source summaries");
 assert.ok(componentFiles.includes("row.metricKey"), "financial mini-chart rows should use metric keys to avoid duplicate React keys");
@@ -114,6 +117,13 @@ for (const company of companies) {
 const yuchangReport = getCompanyReportInsight(reportPayload, "yuchang-enc");
 assert.ok(yuchangReport, "yuchang-enc report insight must load");
 assert.equal(getCompanyReportInsight(reportPayload, "gs-ec"), null, "companies without report insights should fall back to legacy financial UI");
+assert.equal(hasEvidenceDisplayValue(0), true);
+assert.equal(hasEvidenceDisplayValue(-1), true);
+assert.equal(hasEvidenceDisplayValue("0"), true);
+assert.equal(hasEvidenceDisplayValue("확인값"), true);
+assert.equal(hasEvidenceDisplayValue(null), false);
+assert.equal(hasEvidenceDisplayValue(undefined), false);
+assert.equal(hasEvidenceDisplayValue(""), false);
 const yuchang = byId("yuchang-enc");
 const missingEvidence = buildCompanyItemEvidence(yuchang, "직접 출처 미정리 항목", 0, ["missing-source-id"]);
 assert.equal(missingEvidence.value, 0, "zero values should be preserved in evidence payloads");

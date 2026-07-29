@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ExternalLink, X } from "lucide-react";
-import { formatSourceDate, sourceHasPublicUrl } from "../../companyEvidence";
+import { formatSourceDate, hasEvidenceDisplayValue, sourceHasPublicUrl } from "../../companyEvidence";
 
 const FOCUSABLE_SELECTOR = [
   "a[href]",
@@ -67,7 +67,7 @@ export default function EvidenceDrawer({ evidence, onClose }) {
           <div>
             <p className="eyebrow">EVIDENCE</p>
             <h2 id="evidence-drawer-title">{evidence.title || "근거 보기"}</h2>
-            {evidence.value && <p>{evidence.value}</p>}
+            {hasEvidenceDisplayValue(evidence.value) && <p>{String(evidence.value)}</p>}
           </div>
           <button ref={closeRef} type="button" className="icon-button" onClick={onClose} aria-label="근거 Drawer 닫기">
             <X size={18} />

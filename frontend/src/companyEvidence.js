@@ -45,6 +45,10 @@ export function sourceHasPublicUrl(source) {
   return /^https?:\/\//.test(String(url));
 }
 
+export function hasEvidenceDisplayValue(value) {
+  return value !== null && value !== undefined && value !== "";
+}
+
 export function flattenCompanySources(company) {
   const groups = Array.isArray(company?.intelligence_v2?.source_groups)
     ? company.intelligence_v2.source_groups
