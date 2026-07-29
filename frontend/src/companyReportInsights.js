@@ -15,7 +15,7 @@ export const REPORT_AMOUNT_ROWS = [
   { key: "net_income", label: "순이익" },
   { key: "operating_cash_flow", label: "영업현금흐름" },
   { key: "total_borrowings", label: "총차입금" },
-  { key: "receivables_total", label: "매출채권 합계" },
+  { key: "receivables_total", label: "채권 합계" },
   { key: "inventory", label: "재고자산" },
 ];
 
@@ -27,7 +27,7 @@ export const REPORT_RATIO_ROWS = [
   { key: "current_ratio_pct", label: "유동비율" },
   { key: "liabilities_to_equity_pct", label: "부채비율" },
   { key: "borrowings_to_equity_pct", label: "차입금비율" },
-  { key: "receivables_to_revenue_pct", label: "매출채권/매출 비율" },
+  { key: "receivables_to_revenue_pct", label: "채권/매출 비율" },
   { key: "inventory_to_revenue_pct", label: "재고/매출 비율" },
 ];
 

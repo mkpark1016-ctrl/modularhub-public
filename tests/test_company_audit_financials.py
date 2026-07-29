@@ -160,6 +160,8 @@ def test_json_schema_contract_is_complete() -> None:
     assert defs["incomeStatement"]["properties"]["revenue"]["$ref"] == "#/$defs/reportedAmount"
     assert "source_locations" in defs["reportedAmount"]["properties"]
     assert defs["reportedAmount"]["additionalProperties"] is False
+    assert "auditor_report_date_verification_status" in defs["auditOpinion"]["properties"]
+    assert "auditor_report_date_verification_status" in defs["sourceDocument"]["properties"]
     assert defs["entityAttribution"]["properties"]["financial_scope"]["enum"] == ["standalone", "consolidated", "standalone_and_consolidated"]
     assert "specialEvent" in defs
     assert "validationPolicy" in defs
@@ -417,6 +419,27 @@ def test_kumkang_2024_corrected_report_has_priority() -> None:
     assert priority["cross_check_source_refs"] == ["kumkang_annual_report_2026_03_12"]
 
 
+def test_kumkang_2023_primary_source_matches_source_priority() -> None:
+    priority = load_kumkang_payload()["source_priority"]["2023"]
+    assert priority["primary_source_ref"] == "kumkang_annual_report_2024_03_14"
+    assert priority["basis"] == "current_year_financial_statements"
+    assert priority["cross_check_source_refs"] == [
+        "kumkang_corrected_annual_report_2025_03_19",
+        "kumkang_annual_report_2026_03_12",
+    ]
+
+
+def test_kumkang_auditor_report_date_is_not_copied_from_report_date() -> None:
+    payload = load_kumkang_payload()
+    for opinion in payload["audit_opinions"]:
+        document = payload["source_documents"][opinion["source_ref"]]
+        assert opinion["auditor_report_date"] is None
+        assert document["auditor_report_date"] is None
+        assert opinion["auditor_report_date_verification_status"] == "not_located_in_attached_business_report_pdf"
+        assert document["auditor_report_date_verification_status"] == "not_located_in_attached_business_report_pdf"
+        assert document["report_date"] is not None
+
+
 def test_kumkang_reported_checkpoint_values_are_preserved() -> None:
     payload = load_kumkang_payload()
     derived = calculate_derived_metrics(payload)
@@ -459,7 +482,8 @@ def test_kumkang_source_locations_are_present_without_unknown_fields() -> None:
         for location in amount_record.get("source_locations", [])
     ]
     assert len(locations) == 84
-    assert all(location["verification_status"] == "pending_manual_page_check" for location in locations)
+    assert all(location["verification_status"] == "verified_section_range" for location in locations)
+    assert all(location.get("page_range") for location in locations)
     assert all(location["section"] in SOURCE_SECTION_CODES for location in locations)
     assert not contains_key(payload, "source_type")
     assert not contains_key(payload, "financial_statement_scope")

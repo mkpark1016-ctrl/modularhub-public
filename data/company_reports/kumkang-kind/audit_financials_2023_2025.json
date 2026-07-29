@@ -1,1375 +1,50 @@
 {
-  "schema_version": "company_audit_financials_v1",
-  "company_id": "kumkang-kind",
-  "company_name": "금강공업",
-  "reporting_entity": "금강공업 주식회사 및 연결종속기업",
   "accounting_standard": {
     "code": "k_ifrs",
-    "label_ko": "한국채택국제회계기준",
-    "label_en": "K-IFRS"
+    "label_en": "K-IFRS",
+    "label_ko": "한국채택국제회계기준"
   },
-  "currency": "KRW",
-  "unit": "won",
   "audit_opinions": [
     {
-      "source_ref": "kumkang_annual_report_2026_03_12",
-      "opinion": "unqualified",
-      "opinion_label_ko": "적정의견",
+      "auditor": "안경회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, 사업보고서 제출일로 대체하지 않는다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
       "covered_years": [
         2025
       ],
-      "auditor": "안경회계법인",
-      "auditor_report_date": "2026-03-12"
-    },
-    {
-      "source_ref": "kumkang_corrected_annual_report_2025_03_19",
       "opinion": "unqualified",
       "opinion_label_ko": "적정의견",
+      "source_ref": "kumkang_annual_report_2026_03_12"
+    },
+    {
+      "auditor": "안경회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, 사업보고서 제출일로 대체하지 않는다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
       "covered_years": [
         2024
       ],
-      "auditor": "안경회계법인",
-      "auditor_report_date": "2025-03-19"
-    },
-    {
-      "source_ref": "kumkang_annual_report_2024_03_14",
       "opinion": "unqualified",
       "opinion_label_ko": "적정의견",
+      "source_ref": "kumkang_corrected_annual_report_2025_03_19"
+    },
+    {
+      "auditor": "안경회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, 사업보고서 제출일로 대체하지 않는다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
       "covered_years": [
         2023
       ],
-      "auditor": "안경회계법인",
-      "auditor_report_date": "2024-03-14"
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "kumkang_annual_report_2024_03_14"
     }
   ],
-  "source_documents": {
-    "kumkang_annual_report_2026_03_12": {
-      "filename": "[금강공업]사업보고서(2026.03.12).pdf",
-      "report_date": "2026-03-12",
-      "covered_years": [
-        2025,
-        2024,
-        2023
-      ],
-      "auditor": "안경회계법인",
-      "auditor_report_date": "2026-03-12",
-      "audit_opinion": "적정의견",
-      "source_role": "primary_2025_and_comparative_cross_check"
-    },
-    "kumkang_corrected_annual_report_2025_03_19": {
-      "filename": "[금강공업][정정]사업보고서(2025.03.19).pdf",
-      "report_date": "2025-03-19",
-      "covered_years": [
-        2024,
-        2023
-      ],
-      "auditor": "안경회계법인",
-      "auditor_report_date": "2025-03-19",
-      "audit_opinion": "적정의견",
-      "source_role": "primary_2024_corrected_and_2023_cross_check",
-      "usage": "2025-03-13 최초 제출본의 정정보고서로 2024년 최우선 출처"
-    },
-    "kumkang_annual_report_2024_03_14": {
-      "filename": "[금강공업]사업보고서(2024.03.14).pdf",
-      "report_date": "2024-03-14",
-      "covered_years": [
-        2023
-      ],
-      "auditor": "안경회계법인",
-      "auditor_report_date": "2024-03-14",
-      "audit_opinion": "적정의견",
-      "source_role": "primary_2023"
-    }
-  },
-  "source_priority": {
-    "2023": {
-      "primary_source_ref": "kumkang_annual_report_2024_03_14",
-      "basis": "current_year_financial_statements",
-      "cross_check_source_refs": [
-        "kumkang_corrected_annual_report_2025_03_19",
-        "kumkang_annual_report_2026_03_12"
-      ]
-    },
-    "2024": {
-      "primary_source_ref": "kumkang_corrected_annual_report_2025_03_19",
-      "basis": "current_year_financial_statements",
-      "cross_check_source_refs": [
-        "kumkang_annual_report_2026_03_12"
-      ]
-    },
-    "2025": {
-      "primary_source_ref": "kumkang_annual_report_2026_03_12",
-      "basis": "current_year_financial_statements"
-    }
-  },
-  "financial_years": {
-    "2023": {
-      "income_statement": {
-        "revenue": {
-          "reported": 856892700510,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "gross_profit": {
-          "reported": 158067345706,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "operating_profit": {
-          "reported": 66582089210,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "net_income": {
-          "reported": 44788076295,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "balance_sheet": {
-        "total_assets": {
-          "reported": 1130467709471,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "total_liabilities": {
-          "reported": 652973754367,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "total_equity": {
-          "reported": 477493955104,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_assets": {
-          "reported": 455179398404,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_liabilities": {
-          "reported": 529800865935,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "cash_flow": {
-        "operating_cash_flow": {
-          "reported": 49382174440,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "investing_cash_flow": {
-          "reported": -24772943419,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "financing_cash_flow": {
-          "reported": -12637336466,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "ending_cash": {
-          "reported": 102115482662,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "revenue_breakdown": {
-        "goods_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "product_revenue": {
-          "reported": 855924160978,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "고객과의 계약에서 생기는 수익 전체이며 모듈러 매출로 해석하지 않는다."
-        },
-        "construction_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "rental_revenue": {
-          "reported": 968539532,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "other_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "working_capital": {
-        "trade_receivables_gross": {
-          "reported": 142670856935,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "construction_receivables_gross": {
-          "reported": 51873046825,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "공통 스키마의 receivables_total 계산을 위해 매출채권 외 기타채권 총장부금액을 보존한다. 공사미수금으로 해석하지 않는다."
-        },
-        "inventory": {
-          "reported": 186757604310,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "work_in_progress": {
-          "reported": 36978563531,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "borrowings": {
-        "short_term_borrowings": {
-          "reported": 368173959871,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_portion_long_term_borrowings": {
-          "reported": 15016290000,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "long_term_borrowings": {
-          "reported": 82131079780,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "investment_signals": {
-        "construction_in_progress": {
-          "reported": 28009223521,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "industrial_property_rights": {
-          "reported": 255697493,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "금강공업 연결 주석은 산업재산권을 별도 표시하지 않아 기타무형자산 장부금액을 공통 투자 신호 필드에 보존한다."
-        },
-        "research_and_development_expense": {
-          "reported": 554081163,
-          "source_refs": [
-            "kumkang_annual_report_2024_03_14",
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2024_03_14",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "source_refs": [
-        "kumkang_annual_report_2024_03_14",
-        "kumkang_corrected_annual_report_2025_03_19",
-        "kumkang_annual_report_2026_03_12"
-      ]
-    },
-    "2024": {
-      "income_statement": {
-        "revenue": {
-          "reported": 801352012454,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "gross_profit": {
-          "reported": 126755039109,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "operating_profit": {
-          "reported": 33048202059,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "net_income": {
-          "reported": 16844230742,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "balance_sheet": {
-        "total_assets": {
-          "reported": 1161899245538,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "total_liabilities": {
-          "reported": 662560902622,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "total_equity": {
-          "reported": 499338342916,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_assets": {
-          "reported": 453123569511,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_liabilities": {
-          "reported": 512506283004,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "cash_flow": {
-        "operating_cash_flow": {
-          "reported": 13010958488,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "investing_cash_flow": {
-          "reported": -62216284649,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "financing_cash_flow": {
-          "reported": 34598538984,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "ending_cash": {
-          "reported": 87456761914,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "revenue_breakdown": {
-        "goods_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "product_revenue": {
-          "reported": 800403144237,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "고객과의 계약에서 생기는 수익 전체이며 모듈러 매출로 해석하지 않는다."
-        },
-        "construction_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "rental_revenue": {
-          "reported": 948868217,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "other_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "working_capital": {
-        "trade_receivables_gross": {
-          "reported": 154093751180,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "construction_receivables_gross": {
-          "reported": 58593913496,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "공통 스키마의 receivables_total 계산을 위해 매출채권 외 기타채권 총장부금액을 보존한다. 공사미수금으로 해석하지 않는다."
-        },
-        "inventory": {
-          "reported": 165316923664,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "work_in_progress": {
-          "reported": 31305304146,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "borrowings": {
-        "short_term_borrowings": {
-          "reported": 318960269920,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_portion_long_term_borrowings": {
-          "reported": 72046508536,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "long_term_borrowings": {
-          "reported": 111250681123,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "investment_signals": {
-        "construction_in_progress": {
-          "reported": 8308515805,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "industrial_property_rights": {
-          "reported": 362735628,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "금강공업 연결 주석은 산업재산권을 별도 표시하지 않아 기타무형자산 장부금액을 공통 투자 신호 필드에 보존한다."
-        },
-        "research_and_development_expense": {
-          "reported": 582225323,
-          "source_refs": [
-            "kumkang_corrected_annual_report_2025_03_19",
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "source_refs": [
-        "kumkang_corrected_annual_report_2025_03_19",
-        "kumkang_annual_report_2026_03_12"
-      ]
-    },
-    "2025": {
-      "income_statement": {
-        "revenue": {
-          "reported": 802156014802,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "gross_profit": {
-          "reported": 122216321060,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "operating_profit": {
-          "reported": 10497395028,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "net_income": {
-          "reported": -37353541440,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.income_statement",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "balance_sheet": {
-        "total_assets": {
-          "reported": 1187991581329,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "total_liabilities": {
-          "reported": 689840040135,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "total_equity": {
-          "reported": 498151541194,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_assets": {
-          "reported": 461072941773,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_liabilities": {
-          "reported": 481770625105,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.balance_sheet",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "cash_flow": {
-        "operating_cash_flow": {
-          "reported": 21874636165,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "investing_cash_flow": {
-          "reported": -13997993716,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "financing_cash_flow": {
-          "reported": 12982254047,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "ending_cash": {
-          "reported": 107221323915,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "statement.cash_flow",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "revenue_breakdown": {
-        "goods_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "product_revenue": {
-          "reported": 800945130687,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "고객과의 계약에서 생기는 수익 전체이며 모듈러 매출로 해석하지 않는다."
-        },
-        "construction_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "rental_revenue": {
-          "reported": 1210884115,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "other_revenue": {
-          "reported": 0,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.revenue_breakdown",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "working_capital": {
-        "trade_receivables_gross": {
-          "reported": 150430873249,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "construction_receivables_gross": {
-          "reported": 35490712675,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "공통 스키마의 receivables_total 계산을 위해 매출채권 외 기타채권 총장부금액을 보존한다. 공사미수금으로 해석하지 않는다."
-        },
-        "inventory": {
-          "reported": 176610814956,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "work_in_progress": {
-          "reported": 31098587158,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.working_capital",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "borrowings": {
-        "short_term_borrowings": {
-          "reported": 304530895091,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "current_portion_long_term_borrowings": {
-          "reported": 41668610000,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "long_term_borrowings": {
-          "reported": 167562818862,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.borrowings",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "investment_signals": {
-        "construction_in_progress": {
-          "reported": 9766722839,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        },
-        "industrial_property_rights": {
-          "reported": 203348578,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ],
-          "notes": "금강공업 연결 주석은 산업재산권을 별도 표시하지 않아 기타무형자산 장부금액을 공통 투자 신호 필드에 보존한다."
-        },
-        "research_and_development_expense": {
-          "reported": 578484903,
-          "source_refs": [
-            "kumkang_annual_report_2026_03_12"
-          ],
-          "source_locations": [
-            {
-              "source_ref": "kumkang_annual_report_2026_03_12",
-              "section": "note.investment_signals",
-              "verification_status": "pending_manual_page_check"
-            }
-          ]
-        }
-      },
-      "source_refs": [
-        "kumkang_annual_report_2026_03_12"
-      ]
-    }
-  },
-  "entity_attribution": {
-    "reporting_entity": "금강공업 주식회사 및 연결종속기업",
-    "financial_scope": "consolidated",
-    "related_entity_attribution_required": true,
-    "modular_segment_revenue_disclosed": true,
-    "attribution_warning": "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있으며, 제품과 용역 매출 또는 연결 총매출을 모듈러 사업 매출로 자동 해석하지 않는다.",
-    "special_events": [
-      {
-        "event_type": "post_balance_sheet_factory_purchase_contract",
-        "effective_date": "2026-03-11",
-        "description": "모듈러사업부 수주 및 계약 확대에 따라 충청북도 보은 일반산업단지 내 공장 매입계약을 체결한 보고기간후사건이 공시되었다.",
-        "related_entities": [
-          "금강공업 주식회사"
-        ],
-        "source_refs": [
-          "kumkang_annual_report_2026_03_12"
-        ],
-        "attribution_effect": "2025년 연결 재무제표 수치에는 보고기간후사건으로만 반영되며 운영 중 모듈러 생산시설 또는 2025년 생산능력으로 자동 판정하지 않는다."
-      }
-    ]
-  },
+  "company_id": "kumkang-kind",
+  "company_name": "금강공업",
+  "currency": "KRW",
   "disclosure_limitations": [
     "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있다.",
     "제품과 용역 매출 및 연결 총매출을 모듈러 매출로 해석하지 않는다.",
@@ -1377,18 +52,1468 @@
     "매출채권 총액과 전체 채권 합계는 서로 다른 값이다.",
     "보은공장 매입계약은 보고기간후사건이며 운영 중 생산시설로 자동 판정하지 않는다."
   ],
+  "entity_attribution": {
+    "attribution_warning": "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있으며, 제품과 용역 매출 또는 연결 총매출을 모듈러 사업 매출로 자동 해석하지 않는다.",
+    "financial_scope": "consolidated",
+    "modular_segment_revenue_disclosed": true,
+    "related_entity_attribution_required": true,
+    "reporting_entity": "금강공업 주식회사 및 연결종속기업",
+    "special_events": [
+      {
+        "attribution_effect": "2025년 연결 재무제표 수치에는 보고기간후사건으로만 반영되며 운영 중 모듈러 생산시설 또는 2025년 생산능력으로 자동 판정하지 않는다.",
+        "description": "모듈러사업부 수주 및 계약 확대에 따라 충청북도 보은 일반산업단지 내 공장 매입계약을 체결한 보고기간후사건이 공시되었다.",
+        "effective_date": "2026-03-11",
+        "event_type": "post_balance_sheet_factory_purchase_contract",
+        "related_entities": [
+          "금강공업 주식회사"
+        ],
+        "source_refs": [
+          "kumkang_annual_report_2026_03_12"
+        ]
+      }
+    ]
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "reported": 455179398404,
+          "source_locations": [
+            {
+              "page_range": "pp.44-45",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "current_liabilities": {
+          "reported": 529800865935,
+          "source_locations": [
+            {
+              "page_range": "pp.44-45",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_assets": {
+          "reported": 1130467709471,
+          "source_locations": [
+            {
+              "page_range": "pp.44-45",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_equity": {
+          "reported": 477493955104,
+          "source_locations": [
+            {
+              "page_range": "pp.44-45",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_liabilities": {
+          "reported": 652973754367,
+          "source_locations": [
+            {
+              "page_range": "pp.44-45",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "reported": 15016290000,
+          "source_locations": [
+            {
+              "page_range": "pp.102-103",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 82131079780,
+          "source_locations": [
+            {
+              "page_range": "pp.102-103",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "short_term_borrowings": {
+          "reported": 368173959871,
+          "source_locations": [
+            {
+              "page_range": "pp.102-103",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "reported": 102115482662,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": -12637336466,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -24772943419,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_cash_flow": {
+          "reported": 49382174440,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "reported": 158067345706,
+          "source_locations": [
+            {
+              "page_range": "p.45",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "net_income": {
+          "reported": 44788076295,
+          "source_locations": [
+            {
+              "page_range": "p.45",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_profit": {
+          "reported": 66582089210,
+          "source_locations": [
+            {
+              "page_range": "p.45",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "revenue": {
+          "reported": 856892700510,
+          "source_locations": [
+            {
+              "page_range": "p.45",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 28009223521,
+          "source_locations": [
+            {
+              "page_range": "pp.90-91",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "industrial_property_rights": {
+          "notes": "금강공업 연결 주석은 산업재산권을 별도 표시하지 않아 기타무형자산 장부금액을 공통 투자 신호 필드에 보존한다.",
+          "reported": 255697493,
+          "source_locations": [
+            {
+              "page_range": "p.94",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 554081163,
+          "source_locations": [
+            {
+              "page_range": "p.113",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.111-112",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "goods_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.111-112",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "other_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.111-112",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "product_revenue": {
+          "notes": "고객과의 계약에서 생기는 수익 전체이며 모듈러 매출로 해석하지 않는다.",
+          "reported": 855924160978,
+          "source_locations": [
+            {
+              "page_range": "pp.111-112",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "rental_revenue": {
+          "reported": 968539532,
+          "source_locations": [
+            {
+              "page_range": "pp.111-112",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "source_refs": [
+        "kumkang_annual_report_2024_03_14",
+        "kumkang_corrected_annual_report_2025_03_19",
+        "kumkang_annual_report_2026_03_12"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "notes": "공통 스키마의 receivables_total 계산을 위해 매출채권 외 기타채권 총장부금액을 보존한다. 공사미수금으로 해석하지 않는다.",
+          "reported": 51873046825,
+          "source_locations": [
+            {
+              "page_range": "pp.85-86",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "inventory": {
+          "reported": 186757604310,
+          "source_locations": [
+            {
+              "page_range": "pp.87-88",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "trade_receivables_gross": {
+          "reported": 142670856935,
+          "source_locations": [
+            {
+              "page_range": "pp.85-86",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "work_in_progress": {
+          "reported": 36978563531,
+          "source_locations": [
+            {
+              "page_range": "pp.87-88",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2024_03_14",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "reported": 453123569511,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "current_liabilities": {
+          "reported": 512506283004,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_assets": {
+          "reported": 1161899245538,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_equity": {
+          "reported": 499338342916,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_liabilities": {
+          "reported": 662560902622,
+          "source_locations": [
+            {
+              "page_range": "pp.48-49",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "reported": 72046508536,
+          "source_locations": [
+            {
+              "page_range": "pp.119-124",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 111250681123,
+          "source_locations": [
+            {
+              "page_range": "pp.119-124",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "short_term_borrowings": {
+          "reported": 318960269920,
+          "source_locations": [
+            {
+              "page_range": "pp.119-124",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "reported": 87456761914,
+          "source_locations": [
+            {
+              "page_range": "pp.52-53",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 34598538984,
+          "source_locations": [
+            {
+              "page_range": "pp.52-53",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -62216284649,
+          "source_locations": [
+            {
+              "page_range": "pp.52-53",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_cash_flow": {
+          "reported": 13010958488,
+          "source_locations": [
+            {
+              "page_range": "pp.52-53",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "reported": 126755039109,
+          "source_locations": [
+            {
+              "page_range": "p.49",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "net_income": {
+          "reported": 16844230742,
+          "source_locations": [
+            {
+              "page_range": "p.49",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_profit": {
+          "reported": 33048202059,
+          "source_locations": [
+            {
+              "page_range": "p.49",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "revenue": {
+          "reported": 801352012454,
+          "source_locations": [
+            {
+              "page_range": "p.49",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 8308515805,
+          "source_locations": [
+            {
+              "page_range": "pp.102-104",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "industrial_property_rights": {
+          "notes": "금강공업 연결 주석은 산업재산권을 별도 표시하지 않아 기타무형자산 장부금액을 공통 투자 신호 필드에 보존한다.",
+          "reported": 362735628,
+          "source_locations": [
+            {
+              "page_range": "p.109",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 582225323,
+          "source_locations": [
+            {
+              "page_range": "p.142",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.139-140",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "goods_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.139-140",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "other_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.139-140",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "product_revenue": {
+          "notes": "고객과의 계약에서 생기는 수익 전체이며 모듈러 매출로 해석하지 않는다.",
+          "reported": 800403144237,
+          "source_locations": [
+            {
+              "page_range": "pp.139-140",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "rental_revenue": {
+          "reported": 948868217,
+          "source_locations": [
+            {
+              "page_range": "pp.139-140",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "source_refs": [
+        "kumkang_corrected_annual_report_2025_03_19",
+        "kumkang_annual_report_2026_03_12"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "notes": "공통 스키마의 receivables_total 계산을 위해 매출채권 외 기타채권 총장부금액을 보존한다. 공사미수금으로 해석하지 않는다.",
+          "reported": 58593913496,
+          "source_locations": [
+            {
+              "page_range": "pp.95-96",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "inventory": {
+          "reported": 165316923664,
+          "source_locations": [
+            {
+              "page_range": "pp.97-98",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "trade_receivables_gross": {
+          "reported": 154093751180,
+          "source_locations": [
+            {
+              "page_range": "pp.95-96",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "work_in_progress": {
+          "reported": 31305304146,
+          "source_locations": [
+            {
+              "page_range": "pp.97-98",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_corrected_annual_report_2025_03_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_corrected_annual_report_2025_03_19",
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "reported": 461072941773,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "current_liabilities": {
+          "reported": 481770625105,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_assets": {
+          "reported": 1187991581329,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_equity": {
+          "reported": 498151541194,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_liabilities": {
+          "reported": 689840040135,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "reported": 41668610000,
+          "source_locations": [
+            {
+              "page_range": "pp.137-140",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 167562818862,
+          "source_locations": [
+            {
+              "page_range": "pp.137-140",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "short_term_borrowings": {
+          "reported": 304530895091,
+          "source_locations": [
+            {
+              "page_range": "pp.137-140",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "reported": 107221323915,
+          "source_locations": [
+            {
+              "page_range": "pp.61-62",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 12982254047,
+          "source_locations": [
+            {
+              "page_range": "pp.61-62",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -13997993716,
+          "source_locations": [
+            {
+              "page_range": "pp.61-62",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_cash_flow": {
+          "reported": 21874636165,
+          "source_locations": [
+            {
+              "page_range": "pp.61-62",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "reported": 122216321060,
+          "source_locations": [
+            {
+              "page_range": "p.56",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "net_income": {
+          "reported": -37353541440,
+          "source_locations": [
+            {
+              "page_range": "p.56",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_profit": {
+          "reported": 10497395028,
+          "source_locations": [
+            {
+              "page_range": "p.56",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "revenue": {
+          "reported": 802156014802,
+          "source_locations": [
+            {
+              "page_range": "p.56",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 9766722839,
+          "source_locations": [
+            {
+              "page_range": "pp.123-124",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "industrial_property_rights": {
+          "notes": "금강공업 연결 주석은 산업재산권을 별도 표시하지 않아 기타무형자산 장부금액을 공통 투자 신호 필드에 보존한다.",
+          "reported": 203348578,
+          "source_locations": [
+            {
+              "page_range": "pp.130-131",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 578484903,
+          "source_locations": [
+            {
+              "page_range": "p.163",
+              "section": "note.investment_signals",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.159-160",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "goods_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.159-160",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "other_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.159-160",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "product_revenue": {
+          "notes": "고객과의 계약에서 생기는 수익 전체이며 모듈러 매출로 해석하지 않는다.",
+          "reported": 800945130687,
+          "source_locations": [
+            {
+              "page_range": "pp.159-160",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "rental_revenue": {
+          "reported": 1210884115,
+          "source_locations": [
+            {
+              "page_range": "pp.159-160",
+              "section": "note.revenue_breakdown",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
+      "source_refs": [
+        "kumkang_annual_report_2026_03_12"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "notes": "공통 스키마의 receivables_total 계산을 위해 매출채권 외 기타채권 총장부금액을 보존한다. 공사미수금으로 해석하지 않는다.",
+          "reported": 35490712675,
+          "source_locations": [
+            {
+              "page_range": "pp.110-112",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "inventory": {
+          "reported": 176610814956,
+          "source_locations": [
+            {
+              "page_range": "pp.116-118",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "trade_receivables_gross": {
+          "reported": 150430873249,
+          "source_locations": [
+            {
+              "page_range": "pp.110-112",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "work_in_progress": {
+          "reported": 31098587158,
+          "source_locations": [
+            {
+              "page_range": "pp.116-118",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "금강공업 주식회사 및 연결종속기업",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "kumkang_annual_report_2024_03_14": {
+      "audit_opinion": "적정의견",
+      "audit_opinion_pages": "pp.219-220",
+      "auditor": "안경회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, report_date와 구분하여 null로 둔다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
+      "balance_sheet_pages": "pp.44-45",
+      "cash_flow_pages": "pp.48-49",
+      "covered_years": [
+        2023
+      ],
+      "filename": "[금강공업]사업보고서(2024.03.14).pdf",
+      "income_statement_pages": "p.45",
+      "report_date": "2024-03-14",
+      "source_role": "primary_2023"
+    },
+    "kumkang_annual_report_2026_03_12": {
+      "audit_opinion": "적정의견",
+      "audit_opinion_pages": "pp.306-307",
+      "auditor": "안경회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, report_date와 구분하여 null로 둔다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
+      "balance_sheet_pages": "pp.54-55",
+      "cash_flow_pages": "pp.61-62",
+      "covered_years": [
+        2025,
+        2024,
+        2023
+      ],
+      "filename": "[금강공업]사업보고서(2026.03.12).pdf",
+      "income_statement_pages": "p.56",
+      "report_date": "2026-03-12",
+      "source_role": "primary_2025_and_2023_2024_cross_check"
+    },
+    "kumkang_corrected_annual_report_2025_03_19": {
+      "audit_opinion": "적정의견",
+      "audit_opinion_pages": "pp.281-282",
+      "auditor": "안경회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, report_date와 구분하여 null로 둔다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
+      "balance_sheet_pages": "pp.48-49",
+      "cash_flow_pages": "pp.52-53",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "filename": "[금강공업][정정]사업보고서(2025.03.19).pdf",
+      "income_statement_pages": "p.49",
+      "report_date": "2025-03-19",
+      "source_role": "primary_2024_corrected_and_2023_cross_check",
+      "usage": "2025-03-13 최초 제출본의 정정보고서로 2024년 최우선 출처"
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "kumkang_corrected_annual_report_2025_03_19",
+        "kumkang_annual_report_2026_03_12"
+      ],
+      "primary_source_ref": "kumkang_annual_report_2024_03_14"
+    },
+    "2024": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "kumkang_annual_report_2026_03_12"
+      ],
+      "primary_source_ref": "kumkang_corrected_annual_report_2025_03_19"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "kumkang_annual_report_2026_03_12"
+    }
+  },
+  "unit": "won",
   "validation_metadata": {
-    "created_for": "Phase 6B-1 Kumkang Kind consolidated company report financials",
     "amount_storage": "Reported amounts are stored as integer Korean won values when the report discloses won units.",
+    "created_for": "Phase 6B-1 Kumkang Kind consolidated company report financials",
     "derived_metrics_storage": "Ratios, margins, total borrowings, and receivables totals are calculated by scripts/build_company_report_insights.py.",
-    "pdf_handling": "PDF source files were not copied into the repository; unavailable local PDFs were cross-checked against official KRX/DART HTML disclosures where accessible.",
-    "public_ui_impact": "No JSX or CSS changes are required; existing company report insight UI reads this company by company_id.",
     "expected_years": [
       2023,
       2024,
       2025
     ],
+    "pdf_handling": "PDF source files were not copied into the repository; unavailable local PDFs were cross-checked against official KRX/DART HTML disclosures where accessible.",
+    "public_ui_impact": "No JSX or CSS changes are required; existing company report insight UI reads this company by company_id.",
     "validation_policy": {
+      "expected_cash_flow_signs": {
+        "2023": {
+          "financing_cash_flow": "negative",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        },
+        "2024": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        },
+        "2025": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        }
+      },
       "forbidden_field_names": [
         "modular_revenue",
         "modular_revenue_ratio",
@@ -1404,24 +1529,7 @@
       "required_disclosure_limitations": [
         "제품과 용역 매출 및 연결 총매출을 모듈러 매출로 해석하지 않는다.",
         "매출채권 총액과 전체 채권 합계는 서로 다른 값이다."
-      ],
-      "expected_cash_flow_signs": {
-        "2023": {
-          "operating_cash_flow": "positive",
-          "investing_cash_flow": "negative",
-          "financing_cash_flow": "negative"
-        },
-        "2024": {
-          "operating_cash_flow": "positive",
-          "investing_cash_flow": "negative",
-          "financing_cash_flow": "positive"
-        },
-        "2025": {
-          "operating_cash_flow": "positive",
-          "investing_cash_flow": "negative",
-          "financing_cash_flow": "positive"
-        }
-      }
+      ]
     }
   }
 }

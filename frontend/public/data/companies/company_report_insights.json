@@ -31,9 +31,9 @@
       "company_name": "금강공업",
       "currency": "KRW",
       "data_quality": {
-        "manual_page_check_required": true,
+        "manual_page_check_required": false,
         "modular_segment_revenue_disclosed": true,
-        "pending_manual_page_check_count": 84,
+        "pending_manual_page_check_count": 0,
         "source_location_count": 84,
         "source_validator_status": "passed"
       },
@@ -272,11 +272,6 @@
       },
       "disclosure_warnings": [
         {
-          "code": "modular_segment_revenue_not_disclosed",
-          "level": "warning",
-          "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다."
-        },
-        {
           "code": "product_revenue_not_modular_revenue",
           "level": "warning",
           "message": "제품매출을 모듈러 매출로 간주할 수 없다."
@@ -290,11 +285,6 @@
           "code": "related_entity_results_not_combined",
           "level": "warning",
           "message": "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있으며, 제품과 용역 매출 또는 연결 총매출을 모듈러 사업 매출로 자동 해석하지 않는다."
-        },
-        {
-          "code": "pending_manual_page_check",
-          "level": "info",
-          "message": "주석 기반 수치 84건은 정확한 페이지 수동 확인이 남아 있다."
         }
       ],
       "financial_scope": "consolidated",
@@ -308,9 +298,10 @@
               "raw_krw": 455179398404,
               "source_locations": [
                 {
+                  "page_range": "pp.44-45",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -326,9 +317,10 @@
               "raw_krw": 529800865935,
               "source_locations": [
                 {
+                  "page_range": "pp.44-45",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -344,9 +336,10 @@
               "raw_krw": 158067345706,
               "source_locations": [
                 {
+                  "page_range": "p.45",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -362,9 +355,10 @@
               "raw_krw": 186757604310,
               "source_locations": [
                 {
+                  "page_range": "pp.87-88",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -380,9 +374,10 @@
               "raw_krw": 44788076295,
               "source_locations": [
                 {
+                  "page_range": "p.45",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -398,9 +393,10 @@
               "raw_krw": 49382174440,
               "source_locations": [
                 {
+                  "page_range": "pp.48-49",
                   "section": "statement.cash_flow",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -416,9 +412,10 @@
               "raw_krw": 66582089210,
               "source_locations": [
                 {
+                  "page_range": "p.45",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -434,14 +431,16 @@
               "raw_krw": 194543903760,
               "source_locations": [
                 {
+                  "page_range": "pp.85-86",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.85-86",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -457,9 +456,10 @@
               "raw_krw": 856892700510,
               "source_locations": [
                 {
+                  "page_range": "p.45",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -475,9 +475,10 @@
               "raw_krw": 1130467709471,
               "source_locations": [
                 {
+                  "page_range": "pp.44-45",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -493,19 +494,22 @@
               "raw_krw": 465321329651,
               "source_locations": [
                 {
+                  "page_range": "pp.102-103",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.102-103",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.102-103",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -521,9 +525,10 @@
               "raw_krw": 477493955104,
               "source_locations": [
                 {
+                  "page_range": "pp.44-45",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -539,9 +544,10 @@
               "raw_krw": 652973754367,
               "source_locations": [
                 {
+                  "page_range": "pp.44-45",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2024_03_14",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -562,9 +568,10 @@
               "raw_krw": 453123569511,
               "source_locations": [
                 {
+                  "page_range": "pp.48-49",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -579,9 +586,10 @@
               "raw_krw": 512506283004,
               "source_locations": [
                 {
+                  "page_range": "pp.48-49",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -596,9 +604,10 @@
               "raw_krw": 126755039109,
               "source_locations": [
                 {
+                  "page_range": "p.49",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -613,9 +622,10 @@
               "raw_krw": 165316923664,
               "source_locations": [
                 {
+                  "page_range": "pp.97-98",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -630,9 +640,10 @@
               "raw_krw": 16844230742,
               "source_locations": [
                 {
+                  "page_range": "p.49",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -647,9 +658,10 @@
               "raw_krw": 13010958488,
               "source_locations": [
                 {
+                  "page_range": "pp.52-53",
                   "section": "statement.cash_flow",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -664,9 +676,10 @@
               "raw_krw": 33048202059,
               "source_locations": [
                 {
+                  "page_range": "p.49",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -681,14 +694,16 @@
               "raw_krw": 212687664676,
               "source_locations": [
                 {
+                  "page_range": "pp.95-96",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.95-96",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -703,9 +718,10 @@
               "raw_krw": 801352012454,
               "source_locations": [
                 {
+                  "page_range": "p.49",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -720,9 +736,10 @@
               "raw_krw": 1161899245538,
               "source_locations": [
                 {
+                  "page_range": "pp.48-49",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -737,19 +754,22 @@
               "raw_krw": 502257459579,
               "source_locations": [
                 {
+                  "page_range": "pp.119-124",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.119-124",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.119-124",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -764,9 +784,10 @@
               "raw_krw": 499338342916,
               "source_locations": [
                 {
+                  "page_range": "pp.48-49",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -781,9 +802,10 @@
               "raw_krw": 662560902622,
               "source_locations": [
                 {
+                  "page_range": "pp.48-49",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_corrected_annual_report_2025_03_19",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -803,9 +825,10 @@
               "raw_krw": 461072941773,
               "source_locations": [
                 {
+                  "page_range": "pp.54-55",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -819,9 +842,10 @@
               "raw_krw": 481770625105,
               "source_locations": [
                 {
+                  "page_range": "pp.54-55",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -835,9 +859,10 @@
               "raw_krw": 122216321060,
               "source_locations": [
                 {
+                  "page_range": "p.56",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -851,9 +876,10 @@
               "raw_krw": 176610814956,
               "source_locations": [
                 {
+                  "page_range": "pp.116-118",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -867,9 +893,10 @@
               "raw_krw": -37353541440,
               "source_locations": [
                 {
+                  "page_range": "p.56",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -883,9 +910,10 @@
               "raw_krw": 21874636165,
               "source_locations": [
                 {
+                  "page_range": "pp.61-62",
                   "section": "statement.cash_flow",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -899,9 +927,10 @@
               "raw_krw": 10497395028,
               "source_locations": [
                 {
+                  "page_range": "p.56",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -915,14 +944,16 @@
               "raw_krw": 185921585924,
               "source_locations": [
                 {
+                  "page_range": "pp.110-112",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.110-112",
                   "section": "note.working_capital",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -936,9 +967,10 @@
               "raw_krw": 802156014802,
               "source_locations": [
                 {
+                  "page_range": "p.56",
                   "section": "statement.income_statement",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -952,9 +984,10 @@
               "raw_krw": 1187991581329,
               "source_locations": [
                 {
+                  "page_range": "pp.54-55",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -968,19 +1001,22 @@
               "raw_krw": 513762323953,
               "source_locations": [
                 {
+                  "page_range": "pp.137-140",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.137-140",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 },
                 {
+                  "page_range": "pp.137-140",
                   "section": "note.borrowings",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -994,9 +1030,10 @@
               "raw_krw": 498151541194,
               "source_locations": [
                 {
+                  "page_range": "pp.54-55",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -1010,9 +1047,10 @@
               "raw_krw": 689840040135,
               "source_locations": [
                 {
+                  "page_range": "pp.54-55",
                   "section": "statement.balance_sheet",
                   "source_ref": "kumkang_annual_report_2026_03_12",
-                  "verification_status": "pending_manual_page_check"
+                  "verification_status": "verified_section_range"
                 }
               ],
               "source_refs": [
@@ -1031,9 +1069,10 @@
           "raw_krw": 122216321060,
           "source_locations": [
             {
+              "page_range": "p.56",
               "section": "statement.income_statement",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1047,9 +1086,10 @@
           "raw_krw": 176610814956,
           "source_locations": [
             {
+              "page_range": "pp.116-118",
               "section": "note.working_capital",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1063,9 +1103,10 @@
           "raw_krw": -37353541440,
           "source_locations": [
             {
+              "page_range": "p.56",
               "section": "statement.income_statement",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1079,9 +1120,10 @@
           "raw_krw": 21874636165,
           "source_locations": [
             {
+              "page_range": "pp.61-62",
               "section": "statement.cash_flow",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1095,9 +1137,10 @@
           "raw_krw": 10497395028,
           "source_locations": [
             {
+              "page_range": "p.56",
               "section": "statement.income_statement",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1111,14 +1154,16 @@
           "raw_krw": 185921585924,
           "source_locations": [
             {
+              "page_range": "pp.110-112",
               "section": "note.working_capital",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             },
             {
+              "page_range": "pp.110-112",
               "section": "note.working_capital",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1132,9 +1177,10 @@
           "raw_krw": 802156014802,
           "source_locations": [
             {
+              "page_range": "p.56",
               "section": "statement.income_statement",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1148,9 +1194,10 @@
           "raw_krw": 1187991581329,
           "source_locations": [
             {
+              "page_range": "pp.54-55",
               "section": "statement.balance_sheet",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1164,19 +1211,22 @@
           "raw_krw": 513762323953,
           "source_locations": [
             {
+              "page_range": "pp.137-140",
               "section": "note.borrowings",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             },
             {
+              "page_range": "pp.137-140",
               "section": "note.borrowings",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             },
             {
+              "page_range": "pp.137-140",
               "section": "note.borrowings",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1190,9 +1240,10 @@
           "raw_krw": 498151541194,
           "source_locations": [
             {
+              "page_range": "pp.54-55",
               "section": "statement.balance_sheet",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1206,9 +1257,10 @@
           "raw_krw": 689840040135,
           "source_locations": [
             {
+              "page_range": "pp.54-55",
               "section": "statement.balance_sheet",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1222,9 +1274,10 @@
           "raw_krw": 31098587158,
           "source_locations": [
             {
+              "page_range": "pp.116-118",
               "section": "note.working_capital",
               "source_ref": "kumkang_annual_report_2026_03_12",
-              "verification_status": "pending_manual_page_check"
+              "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
@@ -1239,7 +1292,9 @@
         "audit_opinions": [
           {
             "auditor": "안경회계법인",
-            "auditor_report_date": "2026-03-12",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, 사업보고서 제출일로 대체하지 않는다.",
+            "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
             "covered_years": [
               2025
             ],
@@ -1249,7 +1304,9 @@
           },
           {
             "auditor": "안경회계법인",
-            "auditor_report_date": "2025-03-19",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, 사업보고서 제출일로 대체하지 않는다.",
+            "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
             "covered_years": [
               2024
             ],
@@ -1259,7 +1316,9 @@
           },
           {
             "auditor": "안경회계법인",
-            "auditor_report_date": "2024-03-14",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "첨부 사업보고서 PDF에서 독립감사인의 감사보고서 작성일을 별도로 확인하지 못했으므로, 사업보고서 제출일로 대체하지 않는다.",
+            "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
             "covered_years": [
               2023
             ],
@@ -1272,7 +1331,7 @@
           "안경회계법인"
         ],
         "latest_report_date": "2026-03-12",
-        "pending_location_count": 84,
+        "pending_location_count": 0,
         "primary_documents": [
           {
             "filename": "[금강공업]사업보고서(2024.03.14).pdf",
@@ -1284,7 +1343,7 @@
             "filename": "[금강공업]사업보고서(2026.03.12).pdf",
             "report_date": "2026-03-12",
             "source_ref": "kumkang_annual_report_2026_03_12",
-            "source_role": "primary_2025_and_comparative_cross_check"
+            "source_role": "primary_2025_and_2023_2024_cross_check"
           },
           {
             "filename": "[금강공업][정정]사업보고서(2025.03.19).pdf",
@@ -1314,7 +1373,7 @@
             "primary_source_ref": "kumkang_annual_report_2026_03_12"
           }
         },
-        "verified_location_count": 0
+        "verified_location_count": 84
       },
       "trend_signals": [
         {

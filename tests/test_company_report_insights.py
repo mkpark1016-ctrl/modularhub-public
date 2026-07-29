@@ -82,8 +82,26 @@ def test_kumkang_common_calculations_and_source_locations() -> None:
     assert company["financial_series"][2]["metrics"]["receivables_total"]["raw_krw"] == 185921585924
     assert company["financial_series"][2]["metrics"]["receivables_total"]["raw_krw"] != company["financial_series"][2]["metrics"]["inventory"]["raw_krw"]
     assert company["data_quality"]["source_location_count"] == 84
-    assert company["data_quality"]["pending_manual_page_check_count"] == 84
-    assert company["source_summary"]["verified_location_count"] == 0
+    assert company["data_quality"]["pending_manual_page_check_count"] == 0
+    assert company["source_summary"]["verified_location_count"] == 84
+    assert company["source_summary"]["pending_location_count"] == 0
+
+
+def test_kumkang_modular_segment_disclosure_does_not_emit_not_disclosed_warning() -> None:
+    company = kumkang_company(load_output())
+    warning_codes = [warning["code"] for warning in company["disclosure_warnings"]]
+    assert company["attribution"]["modular_segment_revenue_disclosed"] is True
+    assert "modular_segment_revenue_not_disclosed" not in warning_codes
+    assert "product_revenue_not_modular_revenue" in warning_codes
+
+
+def test_kumkang_auditor_report_dates_are_not_submission_dates() -> None:
+    company = kumkang_company(load_output())
+    assert [opinion["auditor_report_date"] for opinion in company["source_summary"]["audit_opinions"]] == [None, None, None]
+    assert {
+        opinion["auditor_report_date_verification_status"]
+        for opinion in company["source_summary"]["audit_opinions"]
+    } == {"not_located_in_attached_business_report_pdf"}
 
 
 def test_yuchang_item_is_semantically_unchanged_from_main() -> None:

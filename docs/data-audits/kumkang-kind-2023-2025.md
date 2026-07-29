@@ -10,7 +10,7 @@ This audit adds consolidated financial statement data for `kumkang-kind` using t
 - `[금강공업][정정]사업보고서(2025.03.19).pdf`: 46th period corrected business report, primary source for 2024 and cross-check source for 2023.
 - `[금강공업]사업보고서(2024.03.14).pdf`: 45th period business report, primary source for 2023.
 
-The PDF files were not copied into the repository. The local attachment paths were not available in this worktree during implementation, so page-level locations remain `pending_manual_page_check`. Official KRX/DART HTML disclosures were used to cross-check the reported won amounts and auditor tables where accessible.
+The PDF files were not copied into the repository. Source page ranges were checked against the user-provided local PDFs for this follow-up pass, and all 84 source locations were upgraded to `verified_section_range` without changing reported won amounts.
 
 ## Financial Statement Basis
 
@@ -18,7 +18,7 @@ The PDF files were not copied into the repository. The local attachment paths we
 - Accounting standard: K-IFRS.
 - Currency and unit: KRW integer won.
 - 2024 source priority: the corrected 2025-03-19 business report is preferred over the original 2025-03-13 filing.
-- 2023 source priority: the 2024-03-14 business report is primary; later comparative disclosures are cross-checks.
+- 2023 source priority: the 2024-03-14 business report is primary; the 2025-03-19 corrected report and 2026-03-12 report are cross-checks.
 
 ## Metrics Entered
 
@@ -46,6 +46,8 @@ The PDF files were not copied into the repository. The local attachment paths we
 | 2024 | 안경회계법인 | 적정의견 | 매출채권의 손상 |
 | 2025 | 안경회계법인 | 적정의견 | 현금창출단위 손상검사 |
 
+`report_date` is the business report submission date. A separate independent auditor report date was not located in the attached business report PDFs, so `auditor_report_date` is stored as `null` with `auditor_report_date_verification_status: not_located_in_attached_business_report_pdf`. The corrected business report submission date is not copied into `auditor_report_date`.
+
 ## Receivables Distinction
 
 `trade_receivables_gross` stores gross trade receivables before allowance. The public View Model's `receivables_total` is calculated separately from trade receivables plus the other receivables gross amount needed by the current common schema. This prevents treating the broader receivables total as trade receivables.
@@ -61,9 +63,13 @@ The business reports disclose modular revenue and Jincheon modular production pe
 
 These are not module counts. Product and service revenue, rental revenue, and consolidated revenue are not modular revenue.
 
-## Pending Manual Page Checks
+## Verified Source Page Ranges
 
-All 84 source locations are present but marked `pending_manual_page_check` because the local PDFs named in the task were not readable from the workspace. The values were cross-checked against official disclosure HTML, but page numbers should be confirmed from the PDFs before upgrading any location to `verified` or `verified_section_range`.
+All 84 source locations have PDF page ranges:
+
+- 2026-03-12 business report: balance sheet pp.54-55, income statement p.56, cash flow pp.61-62, working capital pp.110-112 and pp.116-118, borrowings pp.137-140, revenue breakdown pp.159-160, investment signals pp.123-124, pp.130-131, and p.163, audit opinion summary pp.306-307.
+- 2025-03-19 corrected business report: balance sheet pp.48-49, income statement p.49, cash flow pp.52-53, working capital pp.95-96 and pp.97-98, borrowings pp.119-124, revenue breakdown pp.139-140, investment signals pp.102-104, p.109, and p.142, audit opinion summary pp.281-282.
+- 2024-03-14 business report: balance sheet pp.44-45, income statement p.45, cash flow pp.48-49, working capital pp.85-86 and pp.87-88, borrowings pp.102-103, revenue breakdown pp.111-112, investment signals pp.90-91, p.94, and p.113, audit opinion summary pp.219-220.
 
 ## Deferred Items
 

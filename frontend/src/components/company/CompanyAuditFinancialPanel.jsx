@@ -19,7 +19,7 @@ const KPI_CARDS = [
   { key: "operating_profit", label: "영업이익", ratioKey: "operating_margin_pct", ratioLabel: "영업이익률" },
   { key: "operating_cash_flow", label: "영업현금흐름" },
   { key: "total_borrowings", label: "총차입금" },
-  { key: "receivables_total", label: "매출채권 합계" },
+  { key: "receivables_total", label: "채권 합계" },
 ];
 
 function latestRatio(insight, key) {
@@ -59,7 +59,7 @@ function signedMetricDisplayText(metric) {
   return `+${text}`;
 }
 
-function SingleMetricTrend({ title, rows, variant = "primary", subtitle = "감사보고서 표시 금액" }) {
+function SingleMetricTrend({ title, rows, variant = "primary", subtitle = "공식 공시문서의 감사받은 재무제표 금액" }) {
   const values = rows.map((row) => metricNumber(row.metric)).filter((value) => Number.isFinite(value));
   const max = Math.max(...values.map((value) => Math.abs(value)), 1);
   return (
@@ -206,7 +206,7 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
   return (
     <>
       <p className="finance-note">
-        감사보고서에 공시된 최근 재무정보입니다. 모듈러 부문 별도 매출이 공시되지 않은 경우 회사 전체 재무와 구분해 해석합니다.
+        공식 공시문서에 포함된 감사받은 재무제표 기준 정보입니다. 모듈러 부문 별도 매출 공개 여부에 따라 회사 전체 재무와 구분해 해석합니다.
       </p>
 
       <div className="company-report-kpi-grid" aria-label="감사보고서 핵심 재무 지표">
@@ -240,11 +240,11 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
           <SingleMetricTrend title="영업이익 추이" rows={chartRows("operating_profit")} variant="operating-profit" />
           <CashFlowTrend rows={chartRows("operating_cash_flow")} />
           <GroupedMetricTrend
-            title="차입금과 매출채권"
+            title="차입금과 채권"
             years={years}
             series={[
               { key: "total_borrowings", label: "총차입금", variant: "borrowings", rows: chartRows("total_borrowings") },
-              { key: "receivables_total", label: "매출채권 합계", variant: "receivables", rows: chartRows("receivables_total") },
+              { key: "receivables_total", label: "채권 합계", variant: "receivables", rows: chartRows("receivables_total") },
             ]}
           />
           <SingleMetricTrend title="영업이익률" rows={ratioRows("operating_margin_pct")} variant="operating-margin" subtitle="감사보고서 기반 파생 비율" />
@@ -326,8 +326,6 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
         </dl>
         <p className="finance-note">
           {insight.attribution?.attribution_warning}
-          {" "}
-          제품매출과 공사매출은 모듈러 매출로 자동 해석하지 않으며, 유창엠앤씨 등 관계사 실적도 유창이앤씨 별도 실적으로 합산하지 않습니다.
         </p>
         {warningCount > 0 && (
           <details className="company-report-details">

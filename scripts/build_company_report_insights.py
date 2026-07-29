@@ -263,12 +263,14 @@ def all_source_locations(source_payload: dict[str, Any]) -> list[dict[str, Any]]
 
 
 def build_disclosure_warnings(source_payload: dict[str, Any], pending_location_count: int) -> list[dict[str, str]]:
-    warnings = [
-        {"code": "modular_segment_revenue_not_disclosed", "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다.", "level": "warning"},
+    warnings = []
+    if source_payload["entity_attribution"].get("modular_segment_revenue_disclosed") is False:
+        warnings.append({"code": "modular_segment_revenue_not_disclosed", "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다.", "level": "warning"})
+    warnings.extend([
         {"code": "product_revenue_not_modular_revenue", "message": "제품매출을 모듈러 매출로 간주할 수 없다.", "level": "warning"},
         {"code": "construction_revenue_not_modular_revenue", "message": "공사매출을 모듈러 매출로 간주할 수 없다.", "level": "warning"},
         {"code": "related_entity_results_not_combined", "message": source_payload["entity_attribution"]["attribution_warning"], "level": "warning"},
-    ]
+    ])
     if pending_location_count:
         warnings.append({"code": "pending_manual_page_check", "message": f"주석 기반 수치 {pending_location_count}건은 정확한 페이지 수동 확인이 남아 있다.", "level": "info"})
     return warnings
