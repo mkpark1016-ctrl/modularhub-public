@@ -48,7 +48,7 @@ function MiniTrend({ title, rows }) {
           const value = metricNumber(row.metric);
           const width = Number.isFinite(value) ? Math.max(8, Math.min(100, (Math.abs(value) / max) * 100)) : 0;
           return (
-            <span key={`${title}-${row.year}`}>
+            <span key={`${title}-${row.metricKey || "metric"}-${row.year}`}>
               <b>{row.year}</b>
               <i className={value < 0 ? "negative" : ""} style={{ width: `${width}%` }} />
               <em>{metricDisplayText(row.metric)}</em>
@@ -94,8 +94,8 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
   const sourceSummary = insight.source_summary || {};
   const latestOpinion = latestAuditOpinion(insight);
   const sectionCounts = sourceSectionCounts(insight).filter((item) => item.count > 0);
-  const chartRows = (metricKey) => years.map((year) => ({ year, metric: reportMetricByYear(insight, year, metricKey) }));
-  const ratioRows = (metricKey) => years.map((year) => ({ year, metric: reportRatioByYear(insight, year, metricKey) }));
+  const chartRows = (metricKey) => years.map((year) => ({ year, metricKey, metric: reportMetricByYear(insight, year, metricKey) }));
+  const ratioRows = (metricKey) => years.map((year) => ({ year, metricKey, metric: reportRatioByYear(insight, year, metricKey) }));
   const warningCount = insight.disclosure_warnings?.length || 0;
 
   return (

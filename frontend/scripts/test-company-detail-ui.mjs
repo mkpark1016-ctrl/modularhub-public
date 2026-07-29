@@ -87,6 +87,7 @@ assert.ok(componentFiles.includes("event.shiftKey"), "evidence drawer should sup
 assert.ok(componentFiles.includes("previousFocus"), "evidence drawer should restore the trigger focus");
 assert.equal(componentFiles.includes("sourceTypeSummary(sourceRows)"), false, "evidence matrix should not repeat a global source summary for every domain");
 assert.ok(componentFiles.includes("sourceTypeSummaryForDomain"), "evidence matrix should use domain-scoped source summaries");
+assert.ok(componentFiles.includes("row.metricKey"), "financial mini-chart rows should use metric keys to avoid duplicate React keys");
 assert.equal(labelValue("school_modular"), "학교 모듈러");
 assert.equal(labelValue("large_modular"), "대형 모듈러");
 
