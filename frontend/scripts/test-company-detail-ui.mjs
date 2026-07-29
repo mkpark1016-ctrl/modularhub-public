@@ -76,8 +76,10 @@ assert.ok(componentFiles.includes("재무 해석 범위"), "financial warnings s
 assert.ok(componentFiles.includes("상세 재무표 보기"), "financial detailed tables should be collapsible");
 assert.ok(componentFiles.includes("EvidenceDrawer"), "detail UI should provide common evidence drawer");
 assert.equal(componentFiles.includes("<h3>2023~2025년 재무 추이</h3>"), false, "financial report heading should come from available years");
-assert.ok(componentFiles.includes("제품매출과 공사매출은 모듈러 매출로 자동 해석하지 않으며"), "financial tab should prevent modular revenue overstatement");
-assert.ok(componentFiles.includes("유창엠앤씨 등 관계사 실적도 유창이앤씨 별도 실적으로 합산하지 않습니다"), "financial tab should prevent related-entity aggregation");
+assert.ok(componentFiles.includes("공식 공시문서에 포함된 감사받은 재무제표 기준 정보"), "financial report copy should describe the common disclosure basis");
+assert.ok(componentFiles.includes("attribution_warning"), "financial tab should render per-company attribution warnings from data");
+assert.equal(componentFiles.includes("제품매출과 공사매출은 모듈러 매출로 자동 해석하지 않으며"), false, "financial tab should not hardcode product/construction attribution warnings");
+assert.equal(componentFiles.includes("유창엠앤씨 등 관계사 실적도 유창이앤씨 별도 실적으로 합산하지 않습니다"), false, "financial tab should not hardcode Yuchang related-entity wording");
 assert.ok(stylesheet.includes(".company-report-table { min-width: 760px; }"), "financial report tables should use contained horizontal scrolling");
 assert.ok(stylesheet.includes(".company-report-kpi-grid") && stylesheet.includes("grid-template-columns: 1fr"), "financial report layout should collapse on mobile");
 assert.ok(stylesheet.includes(".responsive-card-list") && stylesheet.includes(".responsive-table-wrap { display: none; }"), "facility/project tables should switch to cards on mobile");
@@ -95,7 +97,7 @@ assert.ok(componentFiles.includes("매출 추이"), "revenue trend should render
 assert.ok(componentFiles.includes("영업이익 추이"), "operating profit trend should render as a separate chart");
 assert.equal(componentFiles.includes("title=\"매출과 영업이익\""), false, "revenue and operating profit should not share one mini-chart title");
 assert.ok(componentFiles.includes("financial-chart-legend"), "grouped financial chart should include a visible legend");
-assert.ok(componentFiles.includes("총차입금") && componentFiles.includes("매출채권 합계"), "borrowings and receivables legend labels should exist");
+assert.ok(componentFiles.includes("총차입금") && componentFiles.includes("채권 합계"), "borrowings and receivables legend labels should exist");
 assert.ok(componentFiles.includes("financial-zero-line"), "cash-flow chart should render an explicit zero baseline");
 assert.ok(componentFiles.includes("financial-cash-flow-zone negative"), "cash-flow chart should include a negative value lane");
 assert.ok(componentFiles.includes("financial-cash-flow-zone positive"), "cash-flow chart should include a positive value lane");
@@ -131,6 +133,8 @@ for (const company of companies) {
 
 const yuchangReport = getCompanyReportInsight(reportPayload, "yuchang-enc");
 assert.ok(yuchangReport, "yuchang-enc report insight must load");
+const kumkangReport = getCompanyReportInsight(reportPayload, "kumkang-kind");
+assert.ok(kumkangReport, "kumkang-kind report insight must load");
 assert.equal(getCompanyReportInsight(reportPayload, "gs-ec"), null, "companies without report insights should fall back to legacy financial UI");
 assert.equal(hasEvidenceDisplayValue(0), true);
 assert.equal(hasEvidenceDisplayValue(-1), true);
@@ -167,6 +171,12 @@ assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "operatin
 assert.equal(metricToneClass(reportMetricByYear(yuchangReport, 2025, "operating_cash_flow")), "is-negative");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "total_borrowings")), "1,121.3억원");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "receivables_total")), "1,157.9억원");
+assert.equal(metricDisplayText(reportMetricByYear(kumkangReport, 2025, "revenue")), "8,021.6억원");
+assert.equal(kumkangReport.source_summary.verified_location_count, 84);
+assert.equal(kumkangReport.source_summary.pending_location_count, 0);
+assert.equal(kumkangReport.source_summary.audit_opinions.every((opinion) => opinion.auditor_report_date === null), true);
+assert.equal(kumkangReport.disclosure_warnings.some((warning) => warning.code === "modular_segment_revenue_not_disclosed"), false);
+assert.ok(kumkangReport.disclosure_warnings.some((warning) => warning.code === "product_revenue_not_modular_revenue"));
 for (const year of [2023, 2024, 2025]) {
   for (const metricKey of ["revenue", "operating_profit", "operating_cash_flow", "total_borrowings", "receivables_total"]) {
     assert.notEqual(metricDisplayText(reportMetricByYear(yuchangReport, year, metricKey)), "확인되지 않음", `${metricKey} ${year} should have a direct label`);

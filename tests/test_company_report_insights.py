@@ -21,6 +21,10 @@ def yuchang_company(payload: dict) -> dict:
     return next(company for company in payload["companies"] if company["company_id"] == "yuchang-enc")
 
 
+def kumkang_company(payload: dict) -> dict:
+    return next(company for company in payload["companies"] if company["company_id"] == "kumkang-kind")
+
+
 def contains_key(value: object, target: str) -> bool:
     if isinstance(value, dict):
         return any(key == target or contains_key(child, target) for key, child in value.items())
@@ -47,6 +51,67 @@ def test_yuchang_years_and_latest_metrics() -> None:
     assert company["latest_metrics"]["revenue"]["raw_krw"] == 307684467052
     assert company["latest_metrics"]["revenue"]["display_eok"] == 3076.8
     assert company["latest_metrics"]["revenue"]["display_text"] == "3,076.8억원"
+
+
+def test_view_model_contains_yuchang_and_kumkang() -> None:
+    payload = load_output()
+    assert [company["company_id"] for company in payload["companies"]] == ["kumkang-kind", "yuchang-enc"]
+
+
+def test_kumkang_years_scope_and_latest_metrics() -> None:
+    company = kumkang_company(load_output())
+    assert company["available_years"] == [2023, 2024, 2025]
+    assert company["latest_year"] == 2025
+    assert company["financial_scope"] == "consolidated"
+    assert company["latest_metrics"]["revenue"]["raw_krw"] == 802156014802
+    assert company["latest_metrics"]["revenue"]["display_eok"] == 8021.6
+    assert company["latest_metrics"]["operating_profit"]["raw_krw"] == 10497395028
+    assert company["latest_metrics"]["net_income"]["raw_krw"] == -37353541440
+    assert company["latest_metrics"]["operating_cash_flow"]["raw_krw"] == 21874636165
+
+
+def test_kumkang_common_calculations_and_source_locations() -> None:
+    company = kumkang_company(load_output())
+    assert company["derived_metrics"]["2023"]["operating_margin_pct"]["display_text"] == "7.8%"
+    assert company["derived_metrics"]["2024"]["operating_margin_pct"]["display_text"] == "4.1%"
+    assert company["derived_metrics"]["2025"]["operating_margin_pct"]["display_text"] == "1.3%"
+    assert company["derived_metrics"]["2025"]["net_margin_pct"]["display_text"] == "-4.7%"
+    assert company["financial_series"][0]["metrics"]["total_borrowings"]["raw_krw"] == 465321329651
+    assert company["financial_series"][1]["metrics"]["total_borrowings"]["raw_krw"] == 502257459579
+    assert company["financial_series"][2]["metrics"]["total_borrowings"]["raw_krw"] == 513762323953
+    assert company["financial_series"][2]["metrics"]["receivables_total"]["raw_krw"] == 185921585924
+    assert company["financial_series"][2]["metrics"]["receivables_total"]["raw_krw"] != company["financial_series"][2]["metrics"]["inventory"]["raw_krw"]
+    assert company["data_quality"]["source_location_count"] == 84
+    assert company["data_quality"]["pending_manual_page_check_count"] == 0
+    assert company["source_summary"]["verified_location_count"] == 84
+    assert company["source_summary"]["pending_location_count"] == 0
+
+
+def test_kumkang_modular_segment_disclosure_does_not_emit_not_disclosed_warning() -> None:
+    company = kumkang_company(load_output())
+    warning_codes = [warning["code"] for warning in company["disclosure_warnings"]]
+    assert company["attribution"]["modular_segment_revenue_disclosed"] is True
+    assert "modular_segment_revenue_not_disclosed" not in warning_codes
+    assert "product_revenue_not_modular_revenue" in warning_codes
+
+
+def test_kumkang_auditor_report_dates_are_not_submission_dates() -> None:
+    company = kumkang_company(load_output())
+    assert [opinion["auditor_report_date"] for opinion in company["source_summary"]["audit_opinions"]] == [None, None, None]
+    assert {
+        opinion["auditor_report_date_verification_status"]
+        for opinion in company["source_summary"]["audit_opinions"]
+    } == {"not_located_in_attached_business_report_pdf"}
+
+
+def test_yuchang_item_is_semantically_unchanged_from_main() -> None:
+    old_text = subprocess.check_output(
+        ["git", "show", "origin/main:frontend/public/data/companies/company_report_insights.json"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+    )
+    assert yuchang_company(load_output()) == yuchang_company(json.loads(old_text))
 
 
 def test_calculated_money_metrics_preserve_raw_krw() -> None:

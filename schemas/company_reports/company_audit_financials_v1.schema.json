@@ -71,7 +71,16 @@
           "minItems": 1
         },
         "auditor": { "type": "string", "minLength": 1 },
-        "auditor_report_date": { "type": "string", "format": "date" }
+        "auditor_report_date": {
+          "anyOf": [
+            { "type": "string", "format": "date" },
+            { "type": "null" }
+          ]
+        },
+        "auditor_report_date_verification_status": {
+          "enum": ["verified", "pending_manual_page_check", "not_located_in_attached_business_report_pdf"]
+        },
+        "auditor_report_date_note": { "type": "string" }
       },
       "additionalProperties": false
     },
@@ -95,11 +104,21 @@
           "minItems": 1
         },
         "auditor": { "type": "string", "minLength": 1 },
-        "auditor_report_date": { "type": "string", "format": "date" },
+        "auditor_report_date": {
+          "anyOf": [
+            { "type": "string", "format": "date" },
+            { "type": "null" }
+          ]
+        },
+        "auditor_report_date_verification_status": {
+          "enum": ["verified", "pending_manual_page_check", "not_located_in_attached_business_report_pdf"]
+        },
+        "auditor_report_date_note": { "type": "string" },
         "audit_opinion": { "type": "string", "minLength": 1 },
         "balance_sheet_pages": { "type": "string" },
         "income_statement_pages": { "type": "string" },
         "cash_flow_pages": { "type": "string" },
+        "audit_opinion_pages": { "type": "string" },
         "company_overview_page": { "type": "string" },
         "source_role": { "type": "string", "minLength": 1 },
         "usage": { "type": "string" }

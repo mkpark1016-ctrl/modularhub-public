@@ -23,6 +23,7 @@ from scripts.validate_company_audit_financials import (
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "company_reports" / "company_audit_financials_v1.schema.json"
+KUMKANG_INPUT = ROOT / "data" / "company_reports" / "kumkang-kind" / "audit_financials_2023_2025.json"
 EXPECTED_REPORTED_VALUES = {
     "2023": {
         "revenue": 419041119841,
@@ -52,10 +53,46 @@ EXPECTED_REPORTED_VALUES = {
         "total_equity": 70598889031,
     },
 }
+KUMKANG_EXPECTED_REPORTED_VALUES = {
+    "2023": {
+        "revenue": 856892700510,
+        "gross_profit": 158067345706,
+        "operating_profit": 66582089210,
+        "net_income": 44788076295,
+        "operating_cash_flow": 49382174440,
+        "total_borrowings": 465321329651,
+        "trade_receivables_gross": 142670856935,
+        "receivables_total": 194543903760,
+    },
+    "2024": {
+        "revenue": 801352012454,
+        "gross_profit": 126755039109,
+        "operating_profit": 33048202059,
+        "net_income": 16844230742,
+        "operating_cash_flow": 13010958488,
+        "total_borrowings": 502257459579,
+        "trade_receivables_gross": 154093751180,
+        "receivables_total": 212687664676,
+    },
+    "2025": {
+        "revenue": 802156014802,
+        "gross_profit": 122216321060,
+        "operating_profit": 10497395028,
+        "net_income": -37353541440,
+        "operating_cash_flow": 21874636165,
+        "total_borrowings": 513762323953,
+        "trade_receivables_gross": 150430873249,
+        "receivables_total": 185921585924,
+    },
+}
 
 
 def load_payload() -> dict:
     return json.loads(DEFAULT_INPUT.read_text(encoding="utf-8"))
+
+
+def load_kumkang_payload() -> dict:
+    return json.loads(KUMKANG_INPUT.read_text(encoding="utf-8"))
 
 
 def load_schema() -> dict:
@@ -123,6 +160,8 @@ def test_json_schema_contract_is_complete() -> None:
     assert defs["incomeStatement"]["properties"]["revenue"]["$ref"] == "#/$defs/reportedAmount"
     assert "source_locations" in defs["reportedAmount"]["properties"]
     assert defs["reportedAmount"]["additionalProperties"] is False
+    assert "auditor_report_date_verification_status" in defs["auditOpinion"]["properties"]
+    assert "auditor_report_date_verification_status" in defs["sourceDocument"]["properties"]
     assert defs["entityAttribution"]["properties"]["financial_scope"]["enum"] == ["standalone", "consolidated", "standalone_and_consolidated"]
     assert "specialEvent" in defs
     assert "validationPolicy" in defs
@@ -361,3 +400,90 @@ def test_existing_yuchang_reported_values_remain_unchanged() -> None:
         assert reported(record, "balance_sheet", "total_assets") == expected["total_assets"]
         assert reported(record, "balance_sheet", "total_liabilities") == expected["total_liabilities"]
         assert reported(record, "balance_sheet", "total_equity") == expected["total_equity"]
+
+
+def test_kumkang_dataset_matches_schema_and_validator() -> None:
+    payload = load_kumkang_payload()
+    assert payload["company_id"] == "kumkang-kind"
+    assert payload["entity_attribution"]["financial_scope"] == "consolidated"
+    assert schema_errors(payload) == []
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert result["financial_years_loaded"] == ["2023", "2024", "2025"]
+
+
+def test_kumkang_2024_corrected_report_has_priority() -> None:
+    priority = load_kumkang_payload()["source_priority"]["2024"]
+    assert priority["primary_source_ref"] == "kumkang_corrected_annual_report_2025_03_19"
+    assert priority["basis"] == "current_year_financial_statements"
+    assert priority["cross_check_source_refs"] == ["kumkang_annual_report_2026_03_12"]
+
+
+def test_kumkang_2023_primary_source_matches_source_priority() -> None:
+    priority = load_kumkang_payload()["source_priority"]["2023"]
+    assert priority["primary_source_ref"] == "kumkang_annual_report_2024_03_14"
+    assert priority["basis"] == "current_year_financial_statements"
+    assert priority["cross_check_source_refs"] == [
+        "kumkang_corrected_annual_report_2025_03_19",
+        "kumkang_annual_report_2026_03_12",
+    ]
+
+
+def test_kumkang_auditor_report_date_is_not_copied_from_report_date() -> None:
+    payload = load_kumkang_payload()
+    for opinion in payload["audit_opinions"]:
+        document = payload["source_documents"][opinion["source_ref"]]
+        assert opinion["auditor_report_date"] is None
+        assert document["auditor_report_date"] is None
+        assert opinion["auditor_report_date_verification_status"] == "not_located_in_attached_business_report_pdf"
+        assert document["auditor_report_date_verification_status"] == "not_located_in_attached_business_report_pdf"
+        assert document["report_date"] is not None
+
+
+def test_kumkang_reported_checkpoint_values_are_preserved() -> None:
+    payload = load_kumkang_payload()
+    derived = calculate_derived_metrics(payload)
+    for year, expected in KUMKANG_EXPECTED_REPORTED_VALUES.items():
+        record = payload["financial_years"][year]
+        assert reported(record, "income_statement", "revenue") == expected["revenue"]
+        assert reported(record, "income_statement", "gross_profit") == expected["gross_profit"]
+        assert reported(record, "income_statement", "operating_profit") == expected["operating_profit"]
+        assert reported(record, "income_statement", "net_income") == expected["net_income"]
+        assert reported(record, "cash_flow", "operating_cash_flow") == expected["operating_cash_flow"]
+        assert derived[year]["total_borrowings"] == expected["total_borrowings"]
+        assert reported(record, "working_capital", "trade_receivables_gross") == expected["trade_receivables_gross"]
+        assert derived[year]["receivables_total"] == expected["receivables_total"]
+
+
+def test_kumkang_negative_2025_net_income_and_positive_cash_flows_are_preserved() -> None:
+    payload = load_kumkang_payload()
+    assert reported(payload["financial_years"]["2025"], "income_statement", "net_income") < 0
+    for year in ["2023", "2024", "2025"]:
+        assert reported(payload["financial_years"][year], "cash_flow", "operating_cash_flow") > 0
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+
+
+def test_kumkang_trade_receivables_are_distinct_from_receivables_total() -> None:
+    payload = load_kumkang_payload()
+    derived = calculate_derived_metrics(payload)
+    for year, expected in KUMKANG_EXPECTED_REPORTED_VALUES.items():
+        trade_receivables = reported(payload["financial_years"][year], "working_capital", "trade_receivables_gross")
+        assert trade_receivables == expected["trade_receivables_gross"]
+        assert derived[year]["receivables_total"] == expected["receivables_total"]
+        assert trade_receivables != derived[year]["receivables_total"]
+
+
+def test_kumkang_source_locations_are_present_without_unknown_fields() -> None:
+    payload = load_kumkang_payload()
+    locations = [
+        location
+        for _, amount_record in validator_module.money_paths(payload["financial_years"])
+        for location in amount_record.get("source_locations", [])
+    ]
+    assert len(locations) == 84
+    assert all(location["verification_status"] == "verified_section_range" for location in locations)
+    assert all(location.get("page_range") for location in locations)
+    assert all(location["section"] in SOURCE_SECTION_CODES for location in locations)
+    assert not contains_key(payload, "source_type")
+    assert not contains_key(payload, "financial_statement_scope")
