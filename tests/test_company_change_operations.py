@@ -147,6 +147,14 @@ def make_root(tmp_path: Path, *, queue: dict | None = None, audit: dict | None =
     return root
 
 
+def make_identity_root(tmp_path: Path) -> Path:
+    root = tmp_path
+    identities = root / "config/company_change_monitoring/company_identities.json"
+    identities.parent.mkdir(parents=True, exist_ok=True)
+    identities.write_text(json.dumps({"companies": [{"companyId": company_id} for company_id in IDS]}), encoding="utf-8")
+    return root
+
+
 def test_healthy_11_company_run_is_healthy(tmp_path: Path) -> None:
     root = make_root(tmp_path)
     evaluation = evaluate_operations(root=root, policy=policy())
@@ -211,6 +219,77 @@ def test_missing_artifact_fails(tmp_path: Path) -> None:
     evaluation = evaluate_operations(root=root, policy=policy())
     assert evaluation["state"] == FAILED
     assert any(item["code"] == "artifact_invalid" for item in evaluation["failures"])
+
+
+def test_artifact_paths_none_uses_default_required_artifacts(tmp_path: Path) -> None:
+    root = make_identity_root(tmp_path)
+    evaluation = evaluate_operations(
+        root=root,
+        policy=policy(),
+        queue=queue_payload(),
+        audit=audit_payload(),
+        diagnostics={},
+        raw_summary={},
+        normalized={},
+        digest={},
+        artifact_paths=None,
+    )
+    assert set(evaluation["artifacts"]) == set(REQUIRED_ARTIFACTS)
+    assert evaluation["state"] == FAILED
+    assert any(item["code"] == "artifact_invalid" for item in evaluation["failures"])
+
+
+def test_artifact_paths_empty_map_disables_artifact_checking(tmp_path: Path) -> None:
+    root = make_identity_root(tmp_path)
+    evaluation = evaluate_operations(
+        root=root,
+        policy=policy(),
+        queue=queue_payload(),
+        audit=audit_payload(),
+        diagnostics={},
+        raw_summary={},
+        normalized={},
+        digest={},
+        artifact_paths={},
+    )
+    assert evaluation["artifacts"] == {}
+    assert not any(item["code"] == "artifact_invalid" for item in evaluation["failures"])
+    assert evaluation["state"] == HEALTHY
+
+
+def test_custom_artifact_paths_check_only_custom_map(tmp_path: Path) -> None:
+    root = make_identity_root(tmp_path)
+    custom_audit = root / "custom/audit.json"
+    custom_audit.parent.mkdir(parents=True, exist_ok=True)
+    custom_audit.write_text(json.dumps(audit_payload()), encoding="utf-8")
+    evaluation = evaluate_operations(
+        root=root,
+        policy=policy(),
+        queue=queue_payload(),
+        audit=audit_payload(),
+        diagnostics={},
+        raw_summary={},
+        normalized={},
+        digest={},
+        artifact_paths={"audit": "custom/audit.json"},
+    )
+    assert set(evaluation["artifacts"]) == {"audit"}
+    assert evaluation["artifacts"]["audit"]["parseable"] is True
+    assert not any(item["code"] == "artifact_invalid" for item in evaluation["failures"])
+
+    missing = evaluate_operations(
+        root=root,
+        policy=policy(),
+        queue=queue_payload(),
+        audit=audit_payload(),
+        diagnostics={},
+        raw_summary={},
+        normalized={},
+        digest={},
+        artifact_paths={"audit": "custom/missing-audit.json"},
+    )
+    assert set(missing["artifacts"]) == {"audit"}
+    assert any(item["code"] == "artifact_invalid" and item["artifact"] == "audit" for item in missing["failures"])
 
 
 def test_status_conservation_failure_fails(tmp_path: Path) -> None:
