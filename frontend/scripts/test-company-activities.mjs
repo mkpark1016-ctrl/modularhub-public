@@ -41,7 +41,9 @@ const overviewSource = readFileSync(new URL("../src/components/company/CompanyOv
 const timelineSource = readFileSync(new URL("../src/components/company/CompanyActivityTimeline.jsx", import.meta.url), "utf8");
 assert.match(detailViewSource, /activities=\{activities\}/);
 assert.match(overviewSource, /CompanyActivityTimeline/);
-assert.match(timelineSource, /최근 활동 및 시장 신호/);
+assert.match(timelineSource, /최근 90일 변화/);
+assert.match(timelineSource, /INITIAL_VISIBLE_COUNT = 5/);
+assert.match(timelineSource, /관련 보도/);
 assert.match(timelineSource, /aria-pressed/);
 assert.match(timelineSource, /최근 확인된 공개 활동이 없습니다/);
 

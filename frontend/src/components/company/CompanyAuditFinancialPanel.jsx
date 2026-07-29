@@ -5,7 +5,6 @@ import {
   metricToneClass,
   REPORT_AMOUNT_ROWS,
   REPORT_RATIO_ROWS,
-  reportFinancialHeading,
   reportMetricByYear,
   reportRatioByYear,
   reportSectionLabel,
@@ -13,6 +12,7 @@ import {
   sourceSectionCounts,
   verificationStatusLabel,
 } from "../../companyReportInsights";
+import { buildReportMetricEvidence } from "../../companyEvidence";
 
 const KPI_CARDS = [
   { key: "revenue", label: "최근 매출" },
@@ -28,6 +28,48 @@ function latestRatio(insight, key) {
 
 function formatDate(value) {
   return value || "확인되지 않음";
+}
+
+function metricNumber(metric) {
+  if (metric?.display_eok !== null && metric?.display_eok !== undefined) return Number(metric.display_eok);
+  if (metric?.raw_krw !== null && metric?.raw_krw !== undefined) return Number(metric.raw_krw) / 100_000_000;
+  if (metric?.value !== null && metric?.value !== undefined) return Number(metric.value);
+  return null;
+}
+
+function MiniTrend({ title, rows }) {
+  const values = rows.map((row) => metricNumber(row.metric)).filter((value) => Number.isFinite(value));
+  const max = Math.max(...values.map((value) => Math.abs(value)), 1);
+  return (
+    <article className="financial-mini-chart" aria-label={title}>
+      <strong>{title}</strong>
+      <div>
+        {rows.map((row) => {
+          const value = metricNumber(row.metric);
+          const width = Number.isFinite(value) ? Math.max(8, Math.min(100, (Math.abs(value) / max) * 100)) : 0;
+          return (
+            <span key={`${title}-${row.year}`}>
+              <b>{row.year}</b>
+              <i className={value < 0 ? "negative" : ""} style={{ width: `${width}%` }} />
+              <em>{metricDisplayText(row.metric)}</em>
+            </span>
+          );
+        })}
+      </div>
+    </article>
+  );
+}
+
+function groupedSignals(signals = []) {
+  const groups = [
+    { key: "growth", title: "성장성", match: ["revenue", "receivables", "inventory"] },
+    { key: "profitability", title: "수익성", match: ["margin", "profit"] },
+    { key: "stability", title: "재무안정성", match: ["cash_flow", "borrowings", "ratio"] },
+  ];
+  return groups.map((group) => ({
+    ...group,
+    signals: signals.filter((signal) => group.match.some((token) => String(signal.code || "").includes(token))),
+  })).filter((group) => group.signals.length);
 }
 
 function SourceLocationList({ metric }) {
@@ -47,16 +89,19 @@ function SourceLocationList({ metric }) {
   );
 }
 
-export default function CompanyAuditFinancialPanel({ insight }) {
+export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) {
   const years = reportYears(insight);
   const sourceSummary = insight.source_summary || {};
   const latestOpinion = latestAuditOpinion(insight);
-  const sectionCounts = sourceSectionCounts(insight);
+  const sectionCounts = sourceSectionCounts(insight).filter((item) => item.count > 0);
+  const chartRows = (metricKey) => years.map((year) => ({ year, metric: reportMetricByYear(insight, year, metricKey) }));
+  const ratioRows = (metricKey) => years.map((year) => ({ year, metric: reportRatioByYear(insight, year, metricKey) }));
+  const warningCount = insight.disclosure_warnings?.length || 0;
 
   return (
     <>
       <p className="finance-note">
-        감사보고서 View Model 기준 3개년 재무입니다. 금액 계산은 `raw_krw`를 기준으로 하고, 화면에는 공개 View Model의 `display_text`를 표시합니다.
+        감사보고서에 공시된 최근 재무정보입니다. 모듈러 부문 별도 매출이 공시되지 않은 경우 회사 전체 재무와 구분해 해석합니다.
       </p>
 
       <div className="company-report-kpi-grid" aria-label="감사보고서 핵심 재무 지표">
@@ -69,91 +114,95 @@ export default function CompanyAuditFinancialPanel({ insight }) {
               <strong className={metricToneClass(metric)}>{metricDisplayText(metric)}</strong>
               {ratio && <small>{item.ratioLabel} {metricDisplayText(ratio)}</small>}
               <small>{insight.latest_year}년 기준</small>
+              {onShowEvidence && (
+                <button
+                  type="button"
+                  className="text-button evidence-inline-button"
+                  onClick={() => onShowEvidence(buildReportMetricEvidence(insight, `${insight.latest_year}년 ${item.label}`, metric))}
+                >
+                  근거보기
+                </button>
+              )}
             </div>
           );
         })}
       </div>
 
       <div className="company-subsection">
-        <h3>{reportFinancialHeading(insight)}</h3>
-        <div className="company-table-wrap">
-          <table className="company-financial-table company-report-table">
-            <thead>
-              <tr>
-                <th scope="col">항목</th>
-                {years.map((year) => <th scope="col" key={year}>{year}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {REPORT_AMOUNT_ROWS.map((row) => (
-                <tr key={row.key}>
-                  <th scope="row">{row.label}</th>
-                  {years.map((year) => {
-                    const metric = reportMetricByYear(insight, year, row.key);
-                    return <td className={metricToneClass(metric)} key={`${row.key}-${year}`}>{metricDisplayText(metric)}</td>;
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <h3>재무 추세</h3>
+        <div className="financial-mini-chart-grid">
+          <MiniTrend title="매출과 영업이익" rows={[...chartRows("revenue"), ...chartRows("operating_profit")]} />
+          <MiniTrend title="영업현금흐름" rows={chartRows("operating_cash_flow")} />
+          <MiniTrend title="차입금과 매출채권" rows={[...chartRows("total_borrowings"), ...chartRows("receivables_total")]} />
+          <MiniTrend title="영업이익률" rows={ratioRows("operating_margin_pct")} />
         </div>
       </div>
 
       <div className="company-subsection">
-        <h3>핵심 재무비율</h3>
-        <div className="company-table-wrap">
-          <table className="company-financial-table company-report-table">
-            <thead>
-              <tr>
-                <th scope="col">항목</th>
-                {years.map((year) => <th scope="col" key={year}>{year}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {REPORT_RATIO_ROWS.map((row) => (
-                <tr key={row.key}>
-                  <th scope="row">{row.label}</th>
-                  {years.map((year) => {
-                    const metric = reportRatioByYear(insight, year, row.key);
-                    return <td className={metricToneClass(metric)} key={`${row.key}-${year}`}>{metricDisplayText(metric)}</td>;
-                  })}
+        <details className="company-report-details">
+          <summary>상세 재무표 보기</summary>
+          <div className="company-table-wrap">
+            <table className="company-financial-table company-report-table">
+              <thead>
+                <tr>
+                  <th scope="col">항목</th>
+                  {years.map((year) => <th scope="col" key={year}>{year}</th>)}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {REPORT_AMOUNT_ROWS.map((row) => (
+                  <tr key={row.key}>
+                    <th scope="row">{row.label}</th>
+                    {years.map((year) => {
+                      const metric = reportMetricByYear(insight, year, row.key);
+                      return <td className={metricToneClass(metric)} key={`${row.key}-${year}`}>{metricDisplayText(metric)}</td>;
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>핵심 재무비율</h3>
+          <div className="company-table-wrap">
+            <table className="company-financial-table company-report-table">
+              <thead>
+                <tr>
+                  <th scope="col">항목</th>
+                  {years.map((year) => <th scope="col" key={year}>{year}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {REPORT_RATIO_ROWS.map((row) => (
+                  <tr key={row.key}>
+                    <th scope="row">{row.label}</th>
+                    {years.map((year) => {
+                      const metric = reportRatioByYear(insight, year, row.key);
+                      return <td className={metricToneClass(metric)} key={`${row.key}-${year}`}>{metricDisplayText(metric)}</td>;
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
 
       <div className="company-subsection">
-        <h3>자동 인사이트</h3>
+        <h3>재무 인사이트</h3>
         <div className="company-report-signal-grid">
-          {(insight.trend_signals || []).map((signal) => (
-            <article className={`company-report-signal ${signal.level || "info"}`} key={signal.code}>
-              <span>{signal.level === "watch" ? "관찰 필요" : "참고"}</span>
-              <strong>{signal.title}</strong>
-              <p>{signal.description}</p>
+          {groupedSignals(insight.trend_signals).map((group) => (
+            <article className={`company-report-signal ${group.signals.some((signal) => signal.level === "watch") ? "watch" : "info"}`} key={group.key}>
+              <span>{group.signals.some((signal) => signal.level === "watch") ? "관찰 필요" : "참고"}</span>
+              <strong>{group.title}</strong>
+              {group.signals.slice(0, 2).map((signal) => <p key={signal.code}>{signal.description}</p>)}
             </article>
           ))}
         </div>
       </div>
 
       <div className="company-subsection">
-        <h3>공시 해석 주의사항</h3>
-        <div className="company-section-list">
-          {(insight.disclosure_warnings || []).map((warning) => (
-            <details className="company-report-warning" key={warning.code}>
-              <summary>{warning.message}</summary>
-              <p>
-                이 항목은 {warning.level === "warning" ? "해석상 주의가 필요한 공시 제약" : "검증 보조 안내"}입니다.
-                제품매출과 공사매출은 모듈러 매출로 자동 해석하지 않으며, 유창엠앤씨 등 관계사 실적도 유창이앤씨 별도 실적으로 합산하지 않습니다.
-              </p>
-            </details>
-          ))}
-        </div>
-      </div>
-
-      <div className="company-subsection">
-        <h3>출처 요약</h3>
+        <h3>재무 해석 범위</h3>
         <dl className="company-report-source-summary">
           <div><dt>재무제표 기준</dt><dd>{financialScopeLabel(insight.financial_scope || insight.attribution?.financial_scope)}</dd></div>
           <div><dt>감사의견</dt><dd>{latestOpinion?.opinion_label_ko || "확인되지 않음"}</dd></div>
@@ -162,10 +211,27 @@ export default function CompanyAuditFinancialPanel({ insight }) {
           <div><dt>검증된 출처 위치</dt><dd>{sourceSummary.verified_location_count ?? insight.data_quality?.source_location_count ?? "확인되지 않음"}건</dd></div>
           <div><dt>페이지 수동 확인 필요</dt><dd>{sourceSummary.pending_location_count ?? insight.data_quality?.pending_manual_page_check_count ?? "확인되지 않음"}건</dd></div>
         </dl>
-        <p className="finance-note">{insight.attribution?.attribution_warning}</p>
+        <p className="finance-note">
+          {insight.attribution?.attribution_warning}
+          {" "}
+          제품매출과 공사매출은 모듈러 매출로 자동 해석하지 않으며, 유창엠앤씨 등 관계사 실적도 유창이앤씨 별도 실적으로 합산하지 않습니다.
+        </p>
+        {warningCount > 0 && (
+          <details className="company-report-details">
+            <summary>공시 해석 주의사항 {warningCount}건</summary>
+            <div className="company-section-list">
+              {(insight.disclosure_warnings || []).map((warning) => (
+                <div className="company-report-warning" key={warning.code}>
+                  <strong>{warning.message}</strong>
+                  <span>{warning.level === "warning" ? "해석상 주의가 필요한 공시 제약" : "검증 보조 안내"}</span>
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
       </div>
 
-      <div className="company-subsection">
+      {sectionCounts.length > 0 && <div className="company-subsection">
         <div className="company-subsection-heading">
           <h3>출처 섹션 표시</h3>
           <span>코드는 UI에서 한국어로 변환됩니다.</span>
@@ -175,7 +241,7 @@ export default function CompanyAuditFinancialPanel({ insight }) {
             <span key={item.section}>{item.label} <small>{item.count}건</small></span>
           ))}
         </div>
-      </div>
+      </div>}
 
       <div className="company-subsection">
         <h3>주요 수치 출처</h3>
@@ -186,6 +252,15 @@ export default function CompanyAuditFinancialPanel({ insight }) {
               <div key={`source-${item.key}`}>
                 <strong>{item.label} · {metricDisplayText(metric)}</strong>
                 <SourceLocationList metric={metric} />
+                {onShowEvidence && (
+                  <button
+                    type="button"
+                    className="text-button evidence-inline-button"
+                    onClick={() => onShowEvidence(buildReportMetricEvidence(insight, `${insight.latest_year}년 ${item.label}`, metric))}
+                  >
+                    근거보기
+                  </button>
+                )}
               </div>
             );
           })}

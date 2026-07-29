@@ -24,6 +24,7 @@ export const MIN_COMPARISON_COMPANIES = 2;
 
 export const COMPANY_COMPARISON_SORT_OPTIONS = [
   { value: "tier", label: "분석 우선순위" },
+  { value: "recent_activity", label: "최근 활동순" },
   { value: "name", label: "기업명" },
   { value: "revenue", label: "최근 매출 높은 순" },
   { value: "operating_margin", label: "영업이익률 높은 순" },

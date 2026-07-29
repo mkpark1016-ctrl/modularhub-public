@@ -19,6 +19,7 @@ import {
   compareCompanies,
   companyMatchesFilters,
   companyRoleOptions,
+  getCompanyDataGapCount,
   getCompanyItems,
   getCompanySummary,
   getCanonicalCompanyRoleLabel,
@@ -36,7 +37,7 @@ import {
 } from "./companyComparison";
 import { getCompanyReportInsight } from "./companyReportInsights";
 import { COMPANY_SORT_VALUES, sanitizeCompanySearchParams } from "./companyUrlParams";
-import { getCompanyActivities } from "./companyActivities";
+import { getCompanyActivities, isValidActivity } from "./companyActivities";
 import {
   compareBusinessByPriority,
   compareBusinessBySort,
@@ -766,11 +767,30 @@ function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, ti
 
 function CompanyListingPage() {
   const { loading, error, data } = useDataset("companies/companies");
+  const activityState = useDataset("companies/company-activities");
   const [searchParams, setSearchParams] = useSearchParams();
   const [comparisonOpen, setComparisonOpen] = useState(false);
   const compareButtonRef = useRef(null);
   const items = getCompanyItems(data);
+  const activitiesByCompany = useMemo(() => {
+    const rows = new Map();
+    for (const company of items) {
+      rows.set(company.company_id, getCompanyActivities(activityState.data, company.company_id).filter(isValidActivity));
+    }
+    return rows;
+  }, [activityState.data, items]);
   const summary = useMemo(() => getCompanySummary(items), [items]);
+  const decisionSummary = useMemo(() => {
+    const now = new Date();
+    const cutoff = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+    return {
+      recentActive: items.filter((company) => (activitiesByCompany.get(company.company_id) || []).some((activity) => {
+        const date = new Date(activity.publishedAt);
+        return !Number.isNaN(date.getTime()) && date >= cutoff;
+      })).length,
+      dataGapCompanies: items.filter((company) => getCompanyDataGapCount(company) > 0).length,
+    };
+  }, [activitiesByCompany, items]);
   const roleOptions = useMemo(() => companyRoleOptions(items), [items]);
   const relationshipOptions = useMemo(() => optionCounts(items, "competitive_role", COMPETITIVE_ROLE_LABELS), [items]);
   const tierOptions = useMemo(() => optionCounts(items, "analysis_tier", TIER_LABELS), [items]);
@@ -837,7 +857,13 @@ function CompanyListingPage() {
 
   const filtered = useMemo(() => items
     .filter((company) => companyMatchesFilters(company, values))
-    .sort((a, b) => compareCompaniesForMvp(a, b, values.sort, compareCompanies)), [items, values]);
+    .sort((a, b) => {
+      if (values.sort === "recent_activity") {
+        const latest = (company) => (activitiesByCompany.get(company.company_id) || [])[0]?.publishedAt || "";
+        return String(latest(b)).localeCompare(String(latest(a))) || compareCompanies(a, b, "name");
+      }
+      return compareCompaniesForMvp(a, b, values.sort, compareCompanies);
+    }), [activitiesByCompany, items, values]);
 
   const chips = [
     { key: "q", active: Boolean(values.q), label: `검색어: ${values.q}`, onRemove: () => setParam("q", "") },
@@ -856,9 +882,9 @@ function CompanyListingPage() {
       </section>
       <section className="summary-strip company-summary-strip" aria-label="기업정보 요약">
         <SummaryItem label="전체 기업" value={summary.total} suffix="개사" />
-        <SummaryItem label="건설사" value={items.filter((company) => company.company_type === "general_contractor").length} suffix="개사" />
-        <SummaryItem label="모듈러 제작 전문 업체" value={items.filter(isModularSpecialistCompany).length} suffix="개사" />
-        <SummaryItem label="생산시설 확인 기업" value={summary.facilityConfirmed} suffix="개사" />
+        <SummaryItem label="직접 경쟁사" value={summary.directCompetitors} suffix="개사" />
+        <SummaryItem label="최근 90일 활동" value={decisionSummary.recentActive} suffix="개사" />
+        <SummaryItem label="데이터 보완 필요" value={decisionSummary.dataGapCompanies} suffix="개사" />
       </section>
       <div className="content-layout">
         <CompanyFilters
@@ -874,7 +900,7 @@ function CompanyListingPage() {
         />
         <section className="results" aria-live="polite">
           <div className="source-status lifecycle-summary">
-            <p>전체 {summary.total.toLocaleString("ko-KR")}개사 · 직접 경쟁사 {summary.directCompetitors.toLocaleString("ko-KR")}개사 · 핵심 정보 검증 {summary.coreVerified.toLocaleString("ko-KR")}개사</p>
+            <p>검색 결과 {filtered.length.toLocaleString("ko-KR")}개사 · 건설사 {items.filter((company) => company.company_type === "general_contractor").length.toLocaleString("ko-KR")}개사 · 전문 제작사 {items.filter(isModularSpecialistCompany).length.toLocaleString("ko-KR")}개사</p>
             <div className="mini-bars" aria-label="기업 역할별 분포">
               {summary.roleCounts.slice(0, 5).map((option) => (
                 <div key={option.value}><span>{option.label}</span><b style={{ width: `${Math.max(8, (option.count / Math.max(summary.total, 1)) * 100)}%` }} /> <em>{option.count}</em></div>
@@ -885,7 +911,7 @@ function CompanyListingPage() {
           {error && <div className="state error">기업정보 데이터를 불러오지 못했습니다.</div>}
           {!loading && !error && items.length === 0 && <div className="state">등록된 기업정보가 없습니다.</div>}
           {!loading && !error && items.length > 0 && filtered.length === 0 && <div className="state">현재 검색조건에 맞는 기업정보가 없습니다.</div>}
-          <CompanyCardGrid companies={filtered} selectedIds={selectedIds} onToggleCompare={toggleCompare} />
+          <CompanyCardGrid companies={filtered} selectedIds={selectedIds} onToggleCompare={toggleCompare} activitiesByCompany={activitiesByCompany} />
         </section>
       </div>
       <CompanyComparisonPanel

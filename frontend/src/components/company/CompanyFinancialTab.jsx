@@ -8,7 +8,7 @@ import {
 } from "./companyDetailHelpers";
 import CompanyAuditFinancialPanel from "./CompanyAuditFinancialPanel";
 
-export default function CompanyFinancialTab({ company, reportInsight = null }) {
+export default function CompanyFinancialTab({ company, reportInsight = null, onShowEvidence }) {
   const model = detailModel(company);
   const { financials, latestAudit } = model;
   const extraRows = financials.filter((item) => metricValue(item.net_income) !== null || metricValue(item.operating_cash_flow) !== null);
@@ -22,7 +22,7 @@ export default function CompanyFinancialTab({ company, reportInsight = null }) {
     <section className="summary company-tab-panel" id="company-tab-panel-financial" role="tabpanel" aria-labelledby="company-tab-financial">
       <h2>최근 3개년 재무</h2>
       {reportInsight ? (
-        <CompanyAuditFinancialPanel insight={reportInsight} />
+        <CompanyAuditFinancialPanel insight={reportInsight} onShowEvidence={onShowEvidence} />
       ) : (
         <>
       {financials.length ? (
