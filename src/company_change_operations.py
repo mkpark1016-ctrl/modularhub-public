@@ -72,7 +72,8 @@ def retention_days_for_run_kind(run_kind: str, policy: dict[str, Any]) -> int:
 
 
 def _artifact_statuses(root: Path, artifact_paths: dict[str, str] | None = None) -> dict[str, dict[str, Any]]:
-    artifact_paths = artifact_paths or REQUIRED_ARTIFACTS
+    if artifact_paths is None:
+        artifact_paths = REQUIRED_ARTIFACTS
     statuses: dict[str, dict[str, Any]] = {}
     for name, rel in artifact_paths.items():
         path = root / rel
@@ -178,7 +179,9 @@ def evaluate_operations(
     source_coverage_artifacts = _artifact_statuses(root, SOURCE_COVERAGE_ARTIFACTS)
 
     def load_optional(name: str) -> dict[str, Any]:
-        status = artifacts[name]
+        status = artifacts.get(name)
+        if status is None:
+            return {}
         if status["exists"] and status["parseable"] and status["fileType"] == "json":
             return read_json(root / status["path"])
         return {}
