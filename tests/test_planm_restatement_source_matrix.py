@@ -137,16 +137,100 @@ def test_pending_manual_page_check_is_explicitly_recorded() -> None:
 def test_restatement_events_capture_required_adjustments() -> None:
     events = {event["event_id"]: event for event in load_matrix()["restatement_events"]}
     assert events["planm_2023_prior_period_error_correction"]["adjustment_amount"] == 8153938000
-    assert events["planm_2024_period_attribution_error"]["adjustment_amount"] == 4306868000
+    assert events["planm_2024_period_attribution_error"]["adjustment_amount"] == 3529017000
+    assert events["planm_2024_cumulative_deficit_correction"]["adjustment_amount"] == 4306868000
     assert events["planm_2023_additional_opening_restatement_cross_check"]["adjustment_amount"] == 777851000
     assert events["planm_revenue_recognition_timing_change"]["adjustment_amount"] == 5912897000
     assert events["planm_rental_asset_useful_life_policy_change"]["adjustment_amount"] == 26665058000
 
 
+def test_2024_restatement_events_are_tied_to_correct_metrics() -> None:
+    events = {event["event_id"]: event for event in load_matrix()["restatement_events"]}
+    equity_event = events["planm_2024_cumulative_deficit_correction"]
+    income_event = events["planm_2024_period_attribution_error"]
+
+    assert equity_event["event_kind"] == "net_asset_error_correction"
+    assert equity_event["affected_metrics"] == ["total_equity"]
+    assert equity_event["source_table_amount"] == -4306868000
+    assert equity_event["normalized_adjustment_amount"] == 4306868000
+    assert equity_event["normalized_direction"] == "decrease_total_equity"
+    assert equity_event["accounting_policy_effect_included"] is False
+
+    assert income_event["event_kind"] == "net_income_error_correction"
+    assert "net_income" in income_event["affected_metrics"]
+    assert "total_equity" not in income_event["affected_metrics"]
+    assert income_event["source_table_amount"] == -3529017000
+    assert income_event["normalized_adjustment_amount"] == 3529017000
+    assert income_event["normalized_direction"] == "decrease_net_income"
+    assert income_event["accounting_policy_effect_included"] is False
+
+
+def test_accounting_policy_effect_is_separate_from_error_correction() -> None:
+    policy_event = {
+        event["event_id"]: event for event in load_matrix()["restatement_events"]
+    }["planm_rental_asset_useful_life_policy_change"]
+    assert policy_event["event_kind"] == "accounting_policy_change"
+    assert policy_event["source_table_amount"] == 26665058000
+    assert policy_event["normalized_adjustment_amount"] == 26665058000
+    assert policy_event["normalized_direction"] == "decrease_cost_of_sales_and_increase_net_income"
+    assert policy_event["balance_sheet_policy_effect_amount"] == 38660234000
+    assert policy_event["accounting_policy_effect_included"] is True
+    assert policy_event["tax_effect_included"] is False
+
+
+def test_2023_total_equity_is_blocked_from_public_application_until_resolved() -> None:
+    payload = load_matrix()
+    total_equity = final_metric(payload, "2023", "total_equity")
+    blocking_ids = total_equity["blocking_unresolved_item_ids"]
+    unresolved = {item["item_id"]: item for item in payload["unresolved_items"]}
+    assert total_equity["amount_krw"] == 20467046841
+    assert total_equity["public_application_eligible"] is False
+    assert total_equity["restatement_completeness"] == "partial"
+    assert blocking_ids == ["planm_2023_additional_opening_restatement_cross_check"]
+    assert blocking_ids[0] in unresolved
+    assert unresolved[blocking_ids[0]]["blocks_public_application"] is True
+    assert unresolved[blocking_ids[0]]["affected_years"] == [2023]
+    assert unresolved[blocking_ids[0]]["affected_metrics"] == ["total_equity"]
+
+
+def test_unresolved_items_are_linked_to_affected_metrics() -> None:
+    for item in load_matrix()["unresolved_items"]:
+        assert item["affected_years"], item["item_id"]
+        assert item["affected_metrics"], item["item_id"]
+        assert isinstance(item["blocks_public_application"], bool), item["item_id"]
+        assert item["resolution_required"], item["item_id"]
+
+
+def test_requested_3529782000_amount_is_not_mistaken_for_pdf_amount() -> None:
+    payload = load_matrix()
+    events = {event["event_id"]: event for event in payload["restatement_events"]}
+    amounts = {event["adjustment_amount"] for event in events.values()}
+    assert 3529782000 not in amounts
+    unresolved = {item["item_id"]: item for item in payload["unresolved_items"]}
+    assert "planm_requested_amount_3529782000_not_found" in unresolved
+    assert "3,529,017,000" in unresolved["planm_requested_amount_3529782000_not_found"]["resolution_required"]
+
+
+def test_existing_company_audit_report_sources_are_unchanged() -> None:
+    existing_company_paths = [
+        "data/company_reports/yuchang-enc/audit_financials_2023_2025.json",
+        "data/company_reports/kumkang-kind/audit_financials_2023_2025.json",
+        "data/company_reports/daeseung-engineering/audit_financials_2023_2025.json",
+    ]
+    result = subprocess.run(
+        ["git", "diff", "--name-only", "origin/main...HEAD", "--", *existing_company_paths],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.stdout.strip() == ""
+
+
 def test_existing_company_report_insights_and_public_json_are_unchanged() -> None:
     protected = [str(path.relative_to(ROOT)) for path in PROTECTED_PUBLIC_FILES if path.exists()]
     result = subprocess.run(
-        ["git", "diff", "--name-only", "--", *protected],
+        ["git", "diff", "--name-only", "origin/main...HEAD", "--", *protected],
         cwd=ROOT,
         text=True,
         capture_output=True,
