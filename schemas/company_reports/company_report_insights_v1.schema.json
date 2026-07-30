@@ -112,9 +112,9 @@
           "type": "array",
           "items": { "$ref": "#/$defs/sourceLocation" }
         },
-        "calculation_basis": { "enum": ["reported", "derived_from_reported", "not_disclosed", "not_applicable"] },
+        "calculation_basis": { "enum": ["reported", "derived_from_reported", "not_disclosed", "not_applicable", "verification_pending"] },
         "disclosure_status": {
-          "enum": ["reported", "not_disclosed", "not_applicable"]
+          "enum": ["reported", "not_disclosed", "not_applicable", "verification_pending"]
         }
       },
       "allOf": [
@@ -127,8 +127,8 @@
             "required": ["disclosure_status"],
             "properties": {
               "display_eok": { "type": "null" },
-              "calculation_basis": { "enum": ["not_disclosed", "not_applicable"] },
-              "disclosure_status": { "enum": ["not_disclosed", "not_applicable"] }
+              "calculation_basis": { "enum": ["not_disclosed", "not_applicable", "verification_pending"] },
+              "disclosure_status": { "enum": ["not_disclosed", "not_applicable", "verification_pending"] }
             }
           }
         },

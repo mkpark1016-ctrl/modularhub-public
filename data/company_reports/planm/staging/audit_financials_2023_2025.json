@@ -1,0 +1,1644 @@
+{
+  "accounting_standard": {
+    "code": "korean_general_enterprise_accounting_standards",
+    "label_en": "Korean General Enterprise Accounting Standards",
+    "label_ko": "????????"
+  },
+  "audit_opinions": [
+    {
+      "auditor": "회계법인 서정",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "2023년 최초 보고 재무제표 원천. 독립감사인 서명일은 PDF 본문에서 별도 날짜로 확인되지 않아 제출일을 자동 복사하지 않았다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2022,
+        2023
+      ],
+      "opinion": "unknown",
+      "opinion_label_ko": "적정",
+      "source_ref": "planm_audit_report_2024_04_15"
+    },
+    {
+      "auditor": "인덕회계법인",
+      "auditor_report_date": "2025-04-24",
+      "auditor_report_date_note": "2023년 비교 재무제표 재작성 금액의 우선 원천.",
+      "auditor_report_date_verification_status": "verified",
+      "covered_years": [
+        2023,
+        2024
+      ],
+      "opinion": "unknown",
+      "opinion_label_ko": "적정",
+      "source_ref": "planm_audit_report_2025_04_24"
+    },
+    {
+      "auditor": "인덕회계법인",
+      "auditor_report_date": "2026-06-23",
+      "auditor_report_date_note": "2024년 최신 재작성 비교 재무제표와 2025년 당기 재무제표의 우선 원천.",
+      "auditor_report_date_verification_status": "verified",
+      "covered_years": [
+        2024,
+        2025
+      ],
+      "opinion": "unknown",
+      "opinion_label_ko": "적정",
+      "source_ref": "planm_audit_report_2026_06_25"
+    }
+  ],
+  "company_id": "planm",
+  "company_name": "???",
+  "currency": "KRW",
+  "disclosure_limitations": [
+    "This staging JSON is excluded from public company_report_insights discovery and must not be treated as public UI input.",
+    "2023 total_equity uses disclosure_status verification_pending because an additional 777,851,000 KRW opening equity correction requires manual cross-check.",
+    "verification_pending is different from zero, not_disclosed, and not_applicable and is excluded from derived public calculations.",
+    "Tax effects for restatement events are not separately verified; tax_effect_status is not_separately_verified where applicable.",
+    "Product, rental, service, and F&B revenue are not modular segment revenue by themselves.",
+    "The 2026-06-25 report is treated as the primary restatement basis for 2024 and 2025; wording in the 2025-04-24 report remains a manual cross-check item before public use."
+  ],
+  "entity_attribution": {
+    "attribution_warning": "??? ?? ???? ?? staging ????. ????, ????, ????, F&B??? ??? ??? ?? ???? ???. 2023 total_equity? verification_pending?? ?? ??? ????.",
+    "financial_scope": "standalone",
+    "modular_segment_revenue_disclosed": true,
+    "related_entity_attribution_required": false,
+    "reporting_entity": "???? ???",
+    "special_events": [
+      {
+        "attribution_effect": "decrease_net_income_and_equity",
+        "description": "2025-04-24 보고서는 2024-03-31자 감사보고서에 첨부된 2023년 재무제표의 순자산 및 당기순이익 8,154백만원 과대계상을 강조사항으로 공시했다.",
+        "effective_date": "2023-12-31",
+        "event_type": "prior_period_error_correction",
+        "related_entities": [
+          "???"
+        ],
+        "source_refs": [
+          "planm_audit_report_2025_04_24"
+        ],
+        "tax_effect_status": "not_separately_verified"
+      },
+      {
+        "attribution_effect": "decrease_net_income",
+        "description": "2026-06-25 보고서 주석 23의 2024년 당기순이익 행은 (가)관련 수정금액 (3,497,470천원)과 기타 수정금액 (31,547천원)을 별도 표시한다. 오류 수정 효과 합계는 3,529,017천원 감소이며, 회계정책 변경 26,665,058천원은 별도 이벤트로 분리한다.",
+        "effective_date": "2024-12-31",
+        "event_type": "net_income_error_correction",
+        "related_entities": [
+          "???"
+        ],
+        "source_refs": [
+          "planm_audit_report_2026_06_25"
+        ],
+        "tax_effect_status": "not_separately_verified"
+      },
+      {
+        "attribution_effect": "decrease_total_equity",
+        "description": "2026-06-25 보고서 주석 23의 2024년말 미처분이익잉여금 및 자본총계 행은 (가)관련 수정금액 (4,266,445천원)과 기타 수정금액 (40,423천원)을 별도 표시한다. 오류 수정 효과 합계는 4,306,868천원 감소이며, 회계정책 변경 38,660,234천원은 별도 효과다.",
+        "effective_date": "2024-12-31",
+        "event_type": "net_asset_error_correction",
+        "related_entities": [
+          "???"
+        ],
+        "source_refs": [
+          "planm_audit_report_2026_06_25"
+        ],
+        "tax_effect_status": "not_separately_verified"
+      },
+      {
+        "attribution_effect": "decrease_opening_equity",
+        "description": "2026-06-25 보고서 주석 23의 2024년초 미처분이익잉여금 오류 수정 효과 ((가)관련 768,975천원 및 기타 8,876천원)를 2023년 추가 대사 항목으로 보존한다.",
+        "effective_date": "2023-12-31",
+        "event_type": "opening_equity_cross_check",
+        "related_entities": [
+          "???"
+        ],
+        "source_refs": [
+          "planm_audit_report_2026_06_25"
+        ],
+        "tax_effect_status": "not_separately_verified"
+      },
+      {
+        "attribution_effect": "decrease_revenue",
+        "description": "2025-04-24 보고서 주석 24는 임대기간에 따른 매출 인식시점 수정으로 제4기 매출 5,913백만원 과대계상 등을 공시했다.",
+        "effective_date": "2023-12-31",
+        "event_type": "revenue_recognition_error_correction",
+        "related_entities": [
+          "???"
+        ],
+        "source_refs": [
+          "planm_audit_report_2025_04_24"
+        ],
+        "tax_effect_status": "not_separately_verified"
+      },
+      {
+        "attribution_effect": "decrease_cost_of_sales_and_increase_net_income",
+        "description": "2026-06-25 보고서 주석 23은 임대용자산 내용연수 변경을 회계정책 변경으로 공시하고, 2024년 손익계산서 매출원가 26,665백만원 과대계상을 재작성했다.",
+        "effective_date": "2024-12-31",
+        "event_type": "accounting_policy_change",
+        "related_entities": [
+          "???"
+        ],
+        "source_refs": [
+          "planm_audit_report_2026_06_25"
+        ],
+        "tax_effect_status": "not_separately_verified"
+      },
+      {
+        "attribution_effect": "unresolved_amount_not_publicly_applied",
+        "description": "3,529,782,000 KRW was requested for review but was not found in the 2026-06-25 report text extraction; the PDF-supported net income error correction remains 3,529,017,000 KRW until resolved.",
+        "effective_date": "2024-12-31",
+        "event_type": "unresolved_requested_amount_not_found",
+        "related_entities": [
+          "???"
+        ],
+        "source_refs": [
+          "planm_audit_report_2026_06_25"
+        ],
+        "tax_effect_status": "not_applicable"
+      }
+    ]
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 41961646411,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 205086175424,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 262714334529,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "verification_pending",
+          "notes": "2025-04-24 report shows 20,467,046,841 KRW, but 2026-06-25 note 23 includes an additional 777,851,000 KRW opening equity correction. Public application is blocked until the final 2023 equity basis is manually verified.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24",
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 242247287688,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "not_applicable",
+          "notes": "Current portion of long-term borrowings is not separately presented in the selected PlanM source mapping.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 14583860000,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 36685728357,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 26251388353,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "notes": "2023 cash-flow values are retained from the restatement table and require manual page cross-check before public application.",
+          "reported": 88037872000,
+          "source_locations": [
+            {
+              "page_range": "42-44",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "notes": "2023 cash-flow values are retained from the restatement table and require manual page cross-check before public application.",
+          "reported": -217644446000,
+          "source_locations": [
+            {
+              "page_range": "42-44",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "notes": "2023 cash-flow values are retained from the restatement table and require manual page cross-check before public application.",
+          "reported": 154626325000,
+          "source_locations": [
+            {
+              "page_range": "42-44",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 27843641605,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 11441451080,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 18616994565,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 59483443620,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Construction in progress is not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Industrial property rights are not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Research and development expense is not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "not_applicable",
+          "notes": "Construction revenue is not a separate PlanM line item in the selected financial statements.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "not_applicable",
+          "notes": "Goods revenue is not a separate PlanM line item in the selected financial statements.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Service revenue and F&B revenue are grouped as other_revenue for the common schema; this is not modular revenue.",
+          "reported": 81276834,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "reported",
+          "reported": 4940200557,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "reported",
+          "reported": 54461966229,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        }
+      },
+      "source_refs": [
+        "planm_audit_report_2025_04_24"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "not_applicable",
+          "notes": "Construction receivables are not separately presented for PlanM in the selected common metric set.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 5841862173,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 755523895,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "not_applicable",
+          "notes": "Work in progress is not separately presented for PlanM in the selected common metric set.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2025_04_24",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2025_04_24"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 12032430880,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 150950910641,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 281949476981,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 70222157519,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 211727319462,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "not_applicable",
+          "notes": "Current portion of long-term borrowings is not separately presented in the selected PlanM source mapping.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 28818505740,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 9079000000,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 1326261347,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -3636990183,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -57037333762,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 35749196939,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 63487848694,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 38537785703,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 52324070612,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 120797780318,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Construction in progress is not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Industrial property rights are not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Research and development expense is not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "not_applicable",
+          "notes": "Construction revenue is not a separate PlanM line item in the selected financial statements.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "not_applicable",
+          "notes": "Goods revenue is not a separate PlanM line item in the selected financial statements.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Service revenue and F&B revenue are grouped as other_revenue for the common schema; this is not modular revenue.",
+          "reported": 1039058045,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "reported",
+          "reported": 17415886581,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "reported",
+          "reported": 102342835692,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "source_refs": [
+        "planm_audit_report_2026_06_25"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "not_applicable",
+          "notes": "Construction receivables are not separately presented for PlanM in the selected common metric set.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 503618028,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 742118015,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "not_applicable",
+          "notes": "Work in progress is not separately presented for PlanM in the selected common metric set.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 18121252760,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 104229367555,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 272444816577,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 69122316452,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 203322500125,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "not_applicable",
+          "notes": "Current portion of long-term borrowings is not separately presented in the selected PlanM source mapping.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 16260382764,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 13982000000,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 10460155212,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 46614289771,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -25449008662,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -12031387244,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 13935530580,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": -9533441167,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 5091785350,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 59222859418,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Construction in progress is not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Industrial property rights are not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Research and development expense is not mapped from the PlanM restatement matrix at this staging step.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.investment_signals",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "not_applicable",
+          "notes": "Construction revenue is not a separate PlanM line item in the selected financial statements.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "not_applicable",
+          "notes": "Goods revenue is not a separate PlanM line item in the selected financial statements.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Service revenue and F&B revenue are grouped as other_revenue for the common schema; this is not modular revenue.",
+          "reported": 1112700804,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "reported",
+          "reported": 7566880379,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "reported",
+          "reported": 50543278235,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "note.revenue_breakdown",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "source_refs": [
+        "planm_audit_report_2026_06_25"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "not_applicable",
+          "notes": "Construction receivables are not separately presented for PlanM in the selected common metric set.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 932850471,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 216178471,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "not_applicable",
+          "notes": "Work in progress is not separately presented for PlanM in the selected common metric set.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "???? ???",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "planm_audit_report_2024_04_15": {
+      "audit_opinion": "적정",
+      "audit_opinion_pages": "pending_manual_page_check",
+      "auditor": "회계법인 서정",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "2023년 최초 보고 재무제표 원천. 독립감사인 서명일은 PDF 본문에서 별도 날짜로 확인되지 않아 제출일을 자동 복사하지 않았다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "balance_sheet_pages": "7-8",
+      "cash_flow_pages": "12-13",
+      "covered_years": [
+        2022,
+        2023
+      ],
+      "filename": "[플랜엠]감사보고서(2024.04.15).pdf",
+      "income_statement_pages": "9-10",
+      "report_date": "2024-04-15",
+      "source_role": "original_reported_2023",
+      "usage": "2023년 최초 보고 재무제표 원천. 독립감사인 서명일은 PDF 본문에서 별도 날짜로 확인되지 않아 제출일을 자동 복사하지 않았다."
+    },
+    "planm_audit_report_2025_04_24": {
+      "audit_opinion": "적정",
+      "audit_opinion_pages": "3",
+      "auditor": "인덕회계법인",
+      "auditor_report_date": "2025-04-24",
+      "auditor_report_date_note": "2023년 비교 재무제표 재작성 금액의 우선 원천.",
+      "auditor_report_date_verification_status": "verified",
+      "balance_sheet_pages": "7-8",
+      "cash_flow_pages": "12-13",
+      "covered_years": [
+        2023,
+        2024
+      ],
+      "filename": "[플랜엠]감사보고서(2025.04.24).pdf",
+      "income_statement_pages": "9-10",
+      "report_date": "2025-04-24",
+      "source_role": "first_restated_2023_and_original_reported_2024",
+      "usage": "2023년 비교 재무제표 재작성 금액의 우선 원천."
+    },
+    "planm_audit_report_2026_06_25": {
+      "audit_opinion": "적정",
+      "audit_opinion_pages": "3",
+      "auditor": "인덕회계법인",
+      "auditor_report_date": "2026-06-23",
+      "auditor_report_date_note": "2024년 최신 재작성 비교 재무제표와 2025년 당기 재무제표의 우선 원천.",
+      "auditor_report_date_verification_status": "verified",
+      "balance_sheet_pages": "7-8",
+      "cash_flow_pages": "12-13",
+      "covered_years": [
+        2024,
+        2025
+      ],
+      "filename": "[플랜엠]감사보고서(2026.06.25).pdf",
+      "income_statement_pages": "9-10",
+      "report_date": "2026-06-25",
+      "source_role": "latest_restated_2024_and_current_2025",
+      "usage": "2024년 최신 재작성 비교 재무제표와 2025년 당기 재무제표의 우선 원천."
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "planm_audit_report_2024_04_15",
+        "planm_audit_report_2026_06_25"
+      ],
+      "primary_source_ref": "planm_audit_report_2025_04_24"
+    },
+    "2024": {
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "planm_audit_report_2025_04_24"
+      ],
+      "primary_source_ref": "planm_audit_report_2026_06_25"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [],
+      "primary_source_ref": "planm_audit_report_2026_06_25"
+    }
+  },
+  "unit": "won",
+  "validation_metadata": {
+    "amount_storage": "integer KRW won; verification_pending values remain null and are not converted to zero",
+    "created_for": "Phase 6D-1B PlanM staged audit financial contract validation",
+    "derived_metrics_storage": "derived metrics are calculated by validator only; public View Model is not generated from this staging path",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "pdf_handling": "attached PDFs were used as source references only and were not copied into the repository",
+    "public_ui_impact": "none; staging JSON is intentionally below data/company_reports/planm/staging and excluded from discover_source_files",
+    "validation_policy": {
+      "expected_cash_flow_signs": {
+        "2023": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        },
+        "2024": {
+          "financing_cash_flow": "negative",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        },
+        "2025": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "negative"
+        }
+      },
+      "forbidden_field_names": [
+        "modular_revenue",
+        "derived",
+        "inference"
+      ],
+      "required_attribution_warning_terms": [
+        "??",
+        "??? ??",
+        "verification_pending"
+      ],
+      "required_disclosure_limitations": [
+        "This staging JSON is excluded from public company_report_insights discovery and must not be treated as public UI input."
+      ]
+    }
+  }
+}

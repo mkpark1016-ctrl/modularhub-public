@@ -229,6 +229,7 @@ def test_existing_company_audit_report_sources_are_unchanged() -> None:
 
 def test_existing_company_report_insights_and_public_json_are_unchanged() -> None:
     protected = [str(path.relative_to(ROOT)) for path in PROTECTED_PUBLIC_FILES if path.exists()]
+    protected.append("frontend/public/data/companies/company_report_insights.json")
     result = subprocess.run(
         ["git", "diff", "--name-only", "origin/main...HEAD", "--", *protected],
         cwd=ROOT,
@@ -237,3 +238,9 @@ def test_existing_company_report_insights_and_public_json_are_unchanged() -> Non
         check=False,
     )
     assert result.stdout.strip() == ""
+
+
+def test_planm_pdf_files_are_not_committed_to_repository() -> None:
+    planm_report_root = ROOT / "data" / "company_reports" / "planm"
+    committed_pdf_paths = sorted(path.relative_to(ROOT).as_posix() for path in planm_report_root.rglob("*.pdf"))
+    assert committed_pdf_paths == []

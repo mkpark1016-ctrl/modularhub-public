@@ -272,7 +272,7 @@
           ]
         },
         "disclosure_status": {
-          "enum": ["reported", "not_disclosed", "not_applicable"]
+          "enum": ["reported", "not_disclosed", "not_applicable", "verification_pending"]
         },
         "source_refs": { "$ref": "#/$defs/sourceRefs" },
         "source_locations": {
@@ -291,7 +291,7 @@
           "then": {
             "required": ["disclosure_status", "notes", "source_locations"],
             "properties": {
-              "disclosure_status": { "enum": ["not_disclosed", "not_applicable"] }
+              "disclosure_status": { "enum": ["not_disclosed", "not_applicable", "verification_pending"] }
             }
           }
         },
@@ -377,7 +377,10 @@
           "items": { "type": "string", "minLength": 1 }
         },
         "source_refs": { "$ref": "#/$defs/sourceRefs" },
-        "attribution_effect": { "type": "string", "minLength": 1 }
+        "attribution_effect": { "type": "string", "minLength": 1 },
+        "tax_effect_status": {
+          "enum": ["not_applicable", "not_separately_verified", "separately_verified"]
+        }
       },
       "additionalProperties": false
     },

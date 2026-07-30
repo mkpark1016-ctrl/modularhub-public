@@ -45,6 +45,7 @@ REQUIRED_WORKING_CAPITAL_FIELDS = {
 }
 REQUIRED_INVESTMENT_FIELDS = {"construction_in_progress", "industrial_property_rights", "research_and_development_expense"}
 SOURCE_LOCATION_STATUSES = {"verified", "verified_section_range", "pending_manual_page_check"}
+NULL_DISCLOSURE_STATUSES = {"not_disclosed", "not_applicable", "verification_pending"}
 SOURCE_SECTION_CODES = {
     "statement.income_statement",
     "statement.balance_sheet",
@@ -120,6 +121,7 @@ def amount(record: dict[str, Any], section: str, field: str) -> int | None:
 def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | None]:
     total = 0
     included_count = 0
+    has_verification_pending = False
     has_not_disclosed = False
     for part in parts:
         value = part.get("reported")
@@ -127,11 +129,16 @@ def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | Non
         if value is None:
             if status == "not_applicable":
                 continue
+            if status == "verification_pending":
+                has_verification_pending = True
+                continue
             has_not_disclosed = True
             continue
         total += int(value)
         included_count += 1
 
+    if has_verification_pending:
+        return {"reported": None, "disclosure_status": "verification_pending"}
     if has_not_disclosed:
         return {"reported": None, "disclosure_status": "not_disclosed"}
     if included_count == 0:
@@ -282,13 +289,13 @@ def validate_amount_shapes(payload: dict[str, Any], issues: list[Issue]) -> None
         reported = record.get("reported")
         disclosure_status = record.get("disclosure_status")
         if reported is None:
-            if disclosure_status not in {"not_disclosed", "not_applicable"}:
+            if disclosure_status not in NULL_DISCLOSURE_STATUSES:
                 issue(
                     issues,
                     "invalid_disclosure_status_for_null_reported",
                     f"{path}.disclosure_status",
-                    "null reported amounts require disclosure_status not_disclosed or not_applicable",
-                    ["not_disclosed", "not_applicable"],
+                    "null reported amounts require disclosure_status not_disclosed, not_applicable, or verification_pending",
+                    sorted(NULL_DISCLOSURE_STATUSES),
                     disclosure_status,
                     source="reported",
                 )
@@ -449,7 +456,7 @@ def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expec
                 issue(issues, "source_priority_unknown_cross_check_ref", f"source_priority.{year}.cross_check_source_refs", "cross-check source_ref is not defined", sorted(source_ids), cross_ref, source=year)
                 continue
             covered_years = {str(covered_year) for covered_year in (source_documents.get(cross_ref) or {}).get("covered_years", [])}
-            if year not in covered_years:
+            if year not in covered_years and cross_ref not in set(primary_refs):
                 issue(
                     issues,
                     "cross_check_source_year_mismatch",
