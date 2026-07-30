@@ -2,6 +2,1446 @@
   "companies": [
     {
       "attribution": {
+        "attribution_warning": "모듈러교실임대료수입 is separately disclosed and identifiable, but 제품매출, 공사수입금, service revenue, and equipment rental revenue are not automatically classified as modular revenue. 관계기업 and related-party financial results are not combined into 주식회사 대승엔지니어링 standalone results.",
+        "financial_scope": "standalone",
+        "modular_segment_revenue_disclosed": true,
+        "related_entity_attribution_required": true,
+        "reporting_entity": "주식회사 대승엔지니어링",
+        "special_events": [
+          {
+            "attribution_effect": "financial_series_break=false; requires_manual_review=false",
+            "description": "The company split on 2023-06-30 did not transfer an operating business segment; only capital stock and term deposits were transferred.",
+            "effective_date": "2023-06-30",
+            "event_type": "corporate_split_without_business_transfer",
+            "related_entities": [
+              "주식회사 대승이엔지"
+            ],
+            "source_refs": [
+              "daeseung_audit_report_2023_09_19",
+              "daeseung_audit_report_2024_09_19"
+            ]
+          }
+        ]
+      },
+      "available_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "daeseung-engineering",
+      "company_name": "대승엔지니어링",
+      "currency": "KRW",
+      "data_quality": {
+        "manual_page_check_required": false,
+        "modular_segment_revenue_disclosed": true,
+        "pending_manual_page_check_count": 0,
+        "source_location_count": 84,
+        "source_validator_status": "passed"
+      },
+      "derived_metrics": {
+        "2023": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "85.6%",
+            "value": 85.6
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "23.0%",
+            "value": 23.0
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "20.5%",
+            "value": 20.5
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.0%",
+            "value": 0.0
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "23.3%",
+            "value": 23.3
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "30.3%",
+            "value": 30.3
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "727.4%",
+            "value": 727.4
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "9.3%",
+            "value": 9.3
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "19.7",
+            "value": 19.697
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "12.7%",
+            "value": 12.7
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.4%",
+            "value": 1.4
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "25.0%",
+            "value": 25.0
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "8.0%",
+            "value": 8.0
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "50.5%",
+            "value": 50.5
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          }
+        },
+        "2024": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "190.0%",
+            "value": 190.0
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "7.5%",
+            "value": 7.5
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "51.5%",
+            "value": 51.5
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.0%",
+            "value": 0.0
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "18.7%",
+            "value": 18.7
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "19.8%",
+            "value": 19.8
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "435.4%",
+            "value": 435.4
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "6.2%",
+            "value": 6.2
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "5.1",
+            "value": 5.079
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "12.0%",
+            "value": 12.0
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.1%",
+            "value": 0.1
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "13.3%",
+            "value": 13.3
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "4.3%",
+            "value": 4.3
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "79.0%",
+            "value": 79.0
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "159.9%",
+            "value": 159.9
+          }
+        },
+        "2025": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "269.0%",
+            "value": 269.0
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "13.6%",
+            "value": 13.6
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "158.3%",
+            "value": 158.3
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.0%",
+            "value": 0.0
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "20.6%",
+            "value": 20.6
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "49.6%",
+            "value": 49.6
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "318.4%",
+            "value": 318.4
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "7.1%",
+            "value": 7.1
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-0.1",
+            "value": -0.079
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.3%",
+            "value": 10.3
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.2%",
+            "value": 0.2
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "45.5%",
+            "value": 45.5
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "5.5%",
+            "value": 5.5
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "40.7%",
+            "value": 40.7
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-26.6%",
+            "value": -26.6
+          }
+        }
+      },
+      "disclosure_warnings": [
+        {
+          "code": "product_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "제품매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "construction_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "공사매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "related_entity_results_not_combined",
+          "level": "warning",
+          "message": "모듈러교실임대료수입 is separately disclosed and identifiable, but 제품매출, 공사수입금, service revenue, and equipment rental revenue are not automatically classified as modular revenue. 관계기업 and related-party financial results are not combined into 주식회사 대승엔지니어링 standalone results."
+        }
+      ],
+      "financial_scope": "standalone",
+      "financial_series": [
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 137.5,
+              "display_text": "137.5억원",
+              "raw_krw": 13748119708,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 669.4,
+              "display_text": "669.4억원",
+              "raw_krw": 66935733766,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 75.3,
+              "display_text": "75.3억원",
+              "raw_krw": 7530500530,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "display_eok": 98.0,
+              "display_text": "98.0억원",
+              "raw_krw": 9797864630,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "display_eok": 30.1,
+              "display_text": "30.1억원",
+              "raw_krw": 3009792401,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "display_eok": 592.8,
+              "display_text": "592.8억원",
+              "raw_krw": 59283840033,
+              "source_locations": [
+                {
+                  "page_range": "pp.10-11",
+                  "section": "statement.cash_flow",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 41.1,
+              "display_text": "41.1억원",
+              "raw_krw": 4109790546,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 25.9,
+              "display_text": "25.9억원",
+              "raw_krw": 2589969463,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "display_eok": 323.3,
+              "display_text": "323.3억원",
+              "raw_krw": 32326080148,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 816.0,
+              "display_text": "816.0억원",
+              "raw_krw": 81604451252,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 84.4,
+              "display_text": "84.4억원",
+              "raw_krw": 8442844880,
+              "source_locations": [
+                {
+                  "page_range": "p.19",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "p.19",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "p.19",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "display_eok": 98.6,
+              "display_text": "98.6억원",
+              "raw_krw": 9863111329,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 717.4,
+              "display_text": "717.4억원",
+              "raw_krw": 71741339923,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2023_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2023_09_19"
+              ]
+            }
+          },
+          "year": 2023
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 240.4,
+              "display_text": "240.4억원",
+              "raw_krw": 24041763602,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 466.7,
+              "display_text": "466.7억원",
+              "raw_krw": 46674521521,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 156.9,
+              "display_text": "156.9억원",
+              "raw_krw": 15685352450,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "display_eok": 166.4,
+              "display_text": "166.4억원",
+              "raw_krw": 16641503220,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "display_eok": 52.0,
+              "display_text": "52.0억원",
+              "raw_krw": 5203952176,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "display_eok": 264.3,
+              "display_text": "264.3억원",
+              "raw_krw": 26430939883,
+              "source_locations": [
+                {
+                  "page_range": "pp.10-11",
+                  "section": "statement.cash_flow",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 100.6,
+              "display_text": "100.6억원",
+              "raw_krw": 10058636613,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 36.3,
+              "display_text": "36.3억원",
+              "raw_krw": 3632795139,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "display_eok": 840.1,
+              "display_text": "840.1억원",
+              "raw_krw": 84005687052,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 812.7,
+              "display_text": "812.7억원",
+              "raw_krw": 81271797933,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 288.4,
+              "display_text": "288.4억원",
+              "raw_krw": 28842700552,
+              "source_locations": [
+                {
+                  "page_range": "pp.18-19",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.18-19",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.18-19",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "display_eok": 151.8,
+              "display_text": "151.8억원",
+              "raw_krw": 15178972005,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 660.9,
+              "display_text": "660.9억원",
+              "raw_krw": 66092825928,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2024_09_19",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2024_09_19"
+              ]
+            }
+          },
+          "year": 2024
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 377.7,
+              "display_text": "377.7억원",
+              "raw_krw": 37768284861,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 238.6,
+              "display_text": "238.6억원",
+              "raw_krw": 23858571545,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 126.8,
+              "display_text": "126.8억원",
+              "raw_krw": 12681852632,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "display_eok": 305.9,
+              "display_text": "305.9억원",
+              "raw_krw": 30588911320,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "display_eok": 43.8,
+              "display_text": "43.8억원",
+              "raw_krw": 4376654645,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "display_eok": -3.5,
+              "display_text": "-3.5억원",
+              "raw_krw": -345400575,
+              "source_locations": [
+                {
+                  "page_range": "pp.10-11",
+                  "section": "statement.cash_flow",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "display_eok": 63.7,
+              "display_text": "63.7억원",
+              "raw_krw": 6365339970,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 34.2,
+              "display_text": "34.2억원",
+              "raw_krw": 3418283872,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.5-6",
+                  "section": "note.working_capital",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "display_eok": 616.6,
+              "display_text": "616.6억원",
+              "raw_krw": 61659861549,
+              "source_locations": [
+                {
+                  "page_range": "pp.7-8",
+                  "section": "statement.income_statement",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "display_eok": 827.0,
+              "display_text": "827.0억원",
+              "raw_krw": 82695337438,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 531.6,
+              "display_text": "531.6억원",
+              "raw_krw": 53164938435,
+              "source_locations": [
+                {
+                  "page_range": "pp.19-20",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.19-20",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.19-20",
+                  "section": "note.borrowings",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "display_eok": 197.7,
+              "display_text": "197.7억원",
+              "raw_krw": 19765713850,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "display_eok": 629.3,
+              "display_text": "629.3억원",
+              "raw_krw": 62929623588,
+              "source_locations": [
+                {
+                  "page_range": "pp.5-6",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "daeseung_audit_report_2025_09_17",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "daeseung_audit_report_2025_09_17"
+              ]
+            }
+          },
+          "year": 2025
+        }
+      ],
+      "latest_metrics": {
+        "gross_profit": {
+          "calculation_basis": "reported",
+          "display_eok": 126.8,
+          "display_text": "126.8억원",
+          "raw_krw": 12681852632,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "inventory": {
+          "calculation_basis": "reported",
+          "display_eok": 305.9,
+          "display_text": "305.9억원",
+          "raw_krw": 30588911320,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "net_income": {
+          "calculation_basis": "reported",
+          "display_eok": 43.8,
+          "display_text": "43.8억원",
+          "raw_krw": 4376654645,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "display_eok": -3.5,
+          "display_text": "-3.5억원",
+          "raw_krw": -345400575,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "display_eok": 63.7,
+          "display_text": "63.7억원",
+          "raw_krw": 6365339970,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "receivables_total": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 34.2,
+          "display_text": "34.2억원",
+          "raw_krw": 3418283872,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "display_eok": 616.6,
+          "display_text": "616.6억원",
+          "raw_krw": 61659861549,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "display_eok": 827.0,
+          "display_text": "827.0억원",
+          "raw_krw": 82695337438,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 531.6,
+          "display_text": "531.6억원",
+          "raw_krw": 53164938435,
+          "source_locations": [
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "display_eok": 197.7,
+          "display_text": "197.7억원",
+          "raw_krw": 19765713850,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "display_eok": 629.3,
+          "display_text": "629.3억원",
+          "raw_krw": 62929623588,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "work_in_progress": {
+          "calculation_basis": "reported",
+          "display_eok": 9.8,
+          "display_text": "9.8억원",
+          "raw_krw": 979638620,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
+      "latest_year": 2025,
+      "reporting_entity": "주식회사 대승엔지니어링",
+      "source_schema_version": "company_audit_financials_v1",
+      "source_summary": {
+        "audit_opinions": [
+          {
+            "auditor": "미립회계법인",
+            "auditor_report_date": "2023-09-11",
+            "auditor_report_date_verification_status": "verified",
+            "covered_years": [
+              2023
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정",
+            "source_ref": "daeseung_audit_report_2023_09_19"
+          },
+          {
+            "auditor": "미립회계법인",
+            "auditor_report_date": "2024-09-13",
+            "auditor_report_date_verification_status": "verified",
+            "covered_years": [
+              2024,
+              2023
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정",
+            "source_ref": "daeseung_audit_report_2024_09_19"
+          },
+          {
+            "auditor": "미립회계법인",
+            "auditor_report_date": "2025-09-16",
+            "auditor_report_date_verification_status": "verified",
+            "covered_years": [
+              2025,
+              2024
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정",
+            "source_ref": "daeseung_audit_report_2025_09_17"
+          }
+        ],
+        "auditors": [
+          "미립회계법인"
+        ],
+        "latest_report_date": "2025-09-17",
+        "pending_location_count": 0,
+        "primary_documents": [
+          {
+            "filename": "[대승엔지니어링]감사보고서(2023.09.19).pdf",
+            "report_date": "2023-09-19",
+            "source_ref": "daeseung_audit_report_2023_09_19",
+            "source_role": "primary_2023"
+          },
+          {
+            "filename": "[대승엔지니어링]감사보고서(2024.09.19).pdf",
+            "report_date": "2024-09-19",
+            "source_ref": "daeseung_audit_report_2024_09_19",
+            "source_role": "primary_2024_and_2023_cross_check"
+          },
+          {
+            "filename": "[대승엔지니어링]감사보고서(2025.09.17).pdf",
+            "report_date": "2025-09-17",
+            "source_ref": "daeseung_audit_report_2025_09_17",
+            "source_role": "primary_2025_and_2024_cross_check"
+          }
+        ],
+        "source_priority_by_year": {
+          "2023": {
+            "basis": "current_year_financial_statements",
+            "cross_check_source_refs": [
+              "daeseung_audit_report_2024_09_19",
+              "daeseung_audit_report_2025_09_17"
+            ],
+            "primary_source_ref": "daeseung_audit_report_2023_09_19"
+          },
+          "2024": {
+            "basis": "current_year_financial_statements",
+            "cross_check_source_refs": [
+              "daeseung_audit_report_2025_09_17"
+            ],
+            "primary_source_ref": "daeseung_audit_report_2024_09_19"
+          },
+          "2025": {
+            "basis": "current_year_financial_statements",
+            "primary_source_ref": "daeseung_audit_report_2025_09_17"
+          }
+        },
+        "verified_location_count": 84
+      },
+      "trend_signals": [
+        {
+          "based_on_years": [
+            2023,
+            2025
+          ],
+          "code": "revenue_increased",
+          "description": "2023년 대비 2025년 매출액이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 61659861549,
+            "start_raw_krw": 32326080148
+          },
+          "title": "매출 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "operating_margin_declined",
+          "description": "2024년 대비 2025년 영업이익률이 하락됐다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 10.3,
+            "previous_pct": 12.0
+          },
+          "title": "영업이익률 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "operating_cash_flow_negative",
+          "description": "2025년 영업현금흐름은 음수다.",
+          "interpretation_type": "rule_based",
+          "level": "watch",
+          "metric_values": {
+            "latest_raw_krw": -345400575
+          },
+          "title": "영업현금흐름 상태"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "borrowings_increased",
+          "description": "2024년 대비 2025년 총차입금이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 53164938435,
+            "previous_raw_krw": 28842700552
+          },
+          "title": "차입금 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "receivables_decreased",
+          "description": "2024년 대비 2025년 매출채권 합계가 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 3418283872,
+            "previous_raw_krw": 3632795139
+          },
+          "title": "매출채권 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "inventory_increased",
+          "description": "2024년 대비 2025년 재고자산이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 30588911320,
+            "previous_raw_krw": 16641503220
+          },
+          "title": "재고 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "current_ratio_above_100",
+          "description": "2025년 유동비율은 158.3%다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 158.3
+          },
+          "title": "유동비율 상태"
+        }
+      ]
+    },
+    {
+      "attribution": {
         "attribution_warning": "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있으며, 제품과 용역 매출 또는 연결 총매출을 모듈러 사업 매출로 자동 해석하지 않는다.",
         "financial_scope": "consolidated",
         "modular_segment_revenue_disclosed": true,

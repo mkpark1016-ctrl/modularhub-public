@@ -25,6 +25,10 @@ def kumkang_company(payload: dict) -> dict:
     return next(company for company in payload["companies"] if company["company_id"] == "kumkang-kind")
 
 
+def daeseung_company(payload: dict) -> dict:
+    return next(company for company in payload["companies"] if company["company_id"] == "daeseung-engineering")
+
+
 def contains_key(value: object, target: str) -> bool:
     if isinstance(value, dict):
         return any(key == target or contains_key(child, target) for key, child in value.items())
@@ -53,9 +57,9 @@ def test_yuchang_years_and_latest_metrics() -> None:
     assert company["latest_metrics"]["revenue"]["display_text"] == "3,076.8억원"
 
 
-def test_view_model_contains_yuchang_and_kumkang() -> None:
+def test_view_model_contains_yuchang_kumkang_and_daeseung() -> None:
     payload = load_output()
-    assert [company["company_id"] for company in payload["companies"]] == ["kumkang-kind", "yuchang-enc"]
+    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "yuchang-enc"]
 
 
 def test_kumkang_years_scope_and_latest_metrics() -> None:
@@ -112,6 +116,66 @@ def test_yuchang_item_is_semantically_unchanged_from_main() -> None:
         encoding="utf-8",
     )
     assert yuchang_company(load_output()) == yuchang_company(json.loads(old_text))
+
+
+def test_kumkang_item_is_semantically_unchanged_from_main() -> None:
+    old_text = subprocess.check_output(
+        ["git", "show", "origin/main:frontend/public/data/companies/company_report_insights.json"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+    )
+    assert kumkang_company(load_output()) == kumkang_company(json.loads(old_text))
+
+
+def test_daeseung_years_scope_latest_metrics_and_source_quality() -> None:
+    company = daeseung_company(load_output())
+    assert company["available_years"] == [2023, 2024, 2025]
+    assert company["latest_year"] == 2025
+    assert company["financial_scope"] == "standalone"
+    assert company["latest_metrics"]["revenue"]["raw_krw"] == 61659861549
+    assert company["latest_metrics"]["revenue"]["display_eok"] == 616.6
+    assert company["latest_metrics"]["revenue"]["display_text"] == "616.6억원"
+    assert company["latest_metrics"]["operating_cash_flow"]["raw_krw"] == -345400575
+    assert company["latest_metrics"]["operating_cash_flow"]["display_text"] == "-3.5억원"
+    assert company["latest_metrics"]["total_borrowings"]["raw_krw"] == 53164938435
+    assert company["latest_metrics"]["receivables_total"]["raw_krw"] == 3418283872
+    assert company["data_quality"]["source_location_count"] == 84
+    assert company["data_quality"]["pending_manual_page_check_count"] == 0
+    assert company["source_summary"]["verified_location_count"] == 84
+    assert company["source_summary"]["pending_location_count"] == 0
+
+
+def test_daeseung_modular_rental_metrics_and_warnings() -> None:
+    company = daeseung_company(load_output())
+    assert company["derived_metrics"]["2023"]["rental_revenue_share_pct"]["display_text"] == "50.5%"
+    assert company["derived_metrics"]["2024"]["rental_revenue_share_pct"]["display_text"] == "79.0%"
+    assert company["derived_metrics"]["2025"]["rental_revenue_share_pct"]["display_text"] == "40.7%"
+    assert company["derived_metrics"]["2025"]["revenue_yoy_pct"]["display_text"] == "-26.6%"
+    warning_codes = [warning["code"] for warning in company["disclosure_warnings"]]
+    assert company["attribution"]["modular_segment_revenue_disclosed"] is True
+    assert "modular_segment_revenue_not_disclosed" not in warning_codes
+    assert "product_revenue_not_modular_revenue" in warning_codes
+    assert "construction_revenue_not_modular_revenue" in warning_codes
+    assert "related_entity_results_not_combined" in warning_codes
+    assert "모듈러교실임대료수입" in " ".join(warning["message"] for warning in company["disclosure_warnings"])
+
+
+def test_daeseung_auditor_dates_and_source_priority_are_public() -> None:
+    company = daeseung_company(load_output())
+    assert [opinion["auditor_report_date"] for opinion in company["source_summary"]["audit_opinions"]] == [
+        "2023-09-11",
+        "2024-09-13",
+        "2025-09-16",
+    ]
+    priority = company["source_summary"]["source_priority_by_year"]
+    assert priority["2023"]["primary_source_ref"] == "daeseung_audit_report_2023_09_19"
+    assert priority["2023"]["cross_check_source_refs"] == [
+        "daeseung_audit_report_2024_09_19",
+        "daeseung_audit_report_2025_09_17",
+    ]
+    assert priority["2024"]["primary_source_ref"] == "daeseung_audit_report_2024_09_19"
+    assert priority["2025"]["primary_source_ref"] == "daeseung_audit_report_2025_09_17"
 
 
 def test_calculated_money_metrics_preserve_raw_krw() -> None:

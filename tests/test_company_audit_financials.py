@@ -24,6 +24,7 @@ from scripts.validate_company_audit_financials import (
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "company_reports" / "company_audit_financials_v1.schema.json"
 KUMKANG_INPUT = ROOT / "data" / "company_reports" / "kumkang-kind" / "audit_financials_2023_2025.json"
+DAESEUNG_INPUT = ROOT / "data" / "company_reports" / "daeseung-engineering" / "audit_financials_2023_2025.json"
 EXPECTED_REPORTED_VALUES = {
     "2023": {
         "revenue": 419041119841,
@@ -85,6 +86,41 @@ KUMKANG_EXPECTED_REPORTED_VALUES = {
         "receivables_total": 185921585924,
     },
 }
+DAESEUNG_EXPECTED_REPORTED_VALUES = {
+    "2023": {
+        "revenue": 32326080148,
+        "gross_profit": 7530500530,
+        "operating_profit": 4109790546,
+        "net_income": 3009792401,
+        "operating_cash_flow": 59283840033,
+        "total_borrowings": 8442844880,
+        "trade_receivables_gross": 1407373616,
+        "receivables_total": 2589969463,
+        "rental_revenue": 16324555370,
+    },
+    "2024": {
+        "revenue": 84005687052,
+        "gross_profit": 15685352450,
+        "operating_profit": 10058636613,
+        "net_income": 5203952176,
+        "operating_cash_flow": 26430939883,
+        "total_borrowings": 28842700552,
+        "trade_receivables_gross": 1908992362,
+        "receivables_total": 3632795139,
+        "rental_revenue": 66404136368,
+    },
+    "2025": {
+        "revenue": 61659861549,
+        "gross_profit": 12681852632,
+        "operating_profit": 6365339970,
+        "net_income": 4376654645,
+        "operating_cash_flow": -345400575,
+        "total_borrowings": 53164938435,
+        "trade_receivables_gross": 3165203872,
+        "receivables_total": 3418283872,
+        "rental_revenue": 25082978186,
+    },
+}
 
 
 def load_payload() -> dict:
@@ -93,6 +129,10 @@ def load_payload() -> dict:
 
 def load_kumkang_payload() -> dict:
     return json.loads(KUMKANG_INPUT.read_text(encoding="utf-8"))
+
+
+def load_daeseung_payload() -> dict:
+    return json.loads(DAESEUNG_INPUT.read_text(encoding="utf-8"))
 
 
 def load_schema() -> dict:
@@ -487,3 +527,112 @@ def test_kumkang_source_locations_are_present_without_unknown_fields() -> None:
     assert all(location["section"] in SOURCE_SECTION_CODES for location in locations)
     assert not contains_key(payload, "source_type")
     assert not contains_key(payload, "financial_statement_scope")
+
+
+def test_daeseung_dataset_matches_schema_and_validator() -> None:
+    payload = load_daeseung_payload()
+    assert payload["company_id"] == "daeseung-engineering"
+    assert payload["company_name"] == "대승엔지니어링"
+    assert payload["reporting_entity"] == "주식회사 대승엔지니어링"
+    assert payload["accounting_standard"]["code"] == "korean_gaap"
+    assert payload["entity_attribution"]["financial_scope"] == "standalone"
+    assert payload["validation_metadata"]["expected_years"] == [2023, 2024, 2025]
+    assert sorted(payload["financial_years"]) == ["2023", "2024", "2025"]
+    assert "2022" not in payload["financial_years"]
+    assert schema_errors(payload) == []
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert result["financial_years_loaded"] == ["2023", "2024", "2025"]
+
+
+def test_daeseung_report_dates_and_auditor_report_dates_are_distinct() -> None:
+    payload = load_daeseung_payload()
+    expected = {
+        "2023": ("2023-09-19", "2023-09-11"),
+        "2024": ("2024-09-19", "2024-09-13"),
+        "2025": ("2025-09-17", "2025-09-16"),
+    }
+    for opinion in payload["audit_opinions"]:
+        year = str(opinion["covered_years"][0])
+        document = payload["source_documents"][opinion["source_ref"]]
+        assert document["report_date"] == expected[year][0]
+        assert document["auditor_report_date"] == expected[year][1]
+        assert opinion["auditor_report_date"] == expected[year][1]
+        assert document["report_date"] != opinion["auditor_report_date"]
+        assert opinion["auditor"] == "미립회계법인"
+        assert opinion["opinion_label_ko"] == "적정"
+
+
+def test_daeseung_source_priority_and_cross_checks_are_recorded() -> None:
+    priority = load_daeseung_payload()["source_priority"]
+    assert priority["2023"]["primary_source_ref"] == "daeseung_audit_report_2023_09_19"
+    assert priority["2023"]["basis"] == "current_year_financial_statements"
+    assert priority["2023"]["cross_check_source_refs"] == [
+        "daeseung_audit_report_2024_09_19",
+        "daeseung_audit_report_2025_09_17",
+    ]
+    assert priority["2024"]["primary_source_ref"] == "daeseung_audit_report_2024_09_19"
+    assert priority["2024"]["cross_check_source_refs"] == ["daeseung_audit_report_2025_09_17"]
+    assert priority["2025"]["primary_source_ref"] == "daeseung_audit_report_2025_09_17"
+
+
+def test_daeseung_reported_checkpoint_values_are_preserved() -> None:
+    payload = load_daeseung_payload()
+    derived = calculate_derived_metrics(payload)
+    for year, expected in DAESEUNG_EXPECTED_REPORTED_VALUES.items():
+        record = payload["financial_years"][year]
+        assert reported(record, "income_statement", "revenue") == expected["revenue"]
+        assert reported(record, "income_statement", "gross_profit") == expected["gross_profit"]
+        assert reported(record, "income_statement", "operating_profit") == expected["operating_profit"]
+        assert reported(record, "income_statement", "net_income") == expected["net_income"]
+        assert reported(record, "cash_flow", "operating_cash_flow") == expected["operating_cash_flow"]
+        assert reported(record, "revenue_breakdown", "rental_revenue") == expected["rental_revenue"]
+        assert derived[year]["total_borrowings"] == expected["total_borrowings"]
+        assert reported(record, "working_capital", "trade_receivables_gross") == expected["trade_receivables_gross"]
+        assert derived[year]["receivables_total"] == expected["receivables_total"]
+
+
+def test_daeseung_cash_flow_and_modular_rental_disclosure_are_preserved() -> None:
+    payload = load_daeseung_payload()
+    derived = calculate_derived_metrics(payload)
+    assert reported(payload["financial_years"]["2025"], "cash_flow", "operating_cash_flow") < 0
+    assert derived["2023"]["rental_revenue_share_pct"] == "50.5"
+    assert derived["2024"]["rental_revenue_share_pct"] == "79.0"
+    assert derived["2025"]["rental_revenue_share_pct"] == "40.7"
+    attribution = payload["entity_attribution"]
+    assert attribution["modular_segment_revenue_disclosed"] is True
+    warning = attribution["attribution_warning"]
+    for term in ["모듈러교실임대료수입", "제품매출", "공사수입금", "관계기업"]:
+        assert term in warning
+    assert not contains_key(payload, "modular_revenue")
+    assert not contains_key(payload, "fy2022")
+
+
+def test_daeseung_modular_classroom_assets_are_documented_without_schema_extension() -> None:
+    payload = load_daeseung_payload()
+    expected_additions = {
+        "2023": 60458172626,
+        "2024": 44579274828,
+        "2025": 5314128869,
+    }
+    for year, value in expected_additions.items():
+        metric = payload["financial_years"][year]["investment_signals"]["construction_in_progress"]
+        assert metric["reported"] == value
+        assert "modular classroom" in metric["notes"]
+    limitations = " ".join(payload["disclosure_limitations"])
+    assert "FY2022" in limitations
+    assert "modular classroom rental asset" in limitations
+
+
+def test_daeseung_source_locations_are_fully_verified() -> None:
+    payload = load_daeseung_payload()
+    locations = [
+        location
+        for _, amount_record in validator_module.money_paths(payload["financial_years"])
+        for location in amount_record.get("source_locations", [])
+    ]
+    assert len(locations) == 84
+    assert all(location["verification_status"] == "verified_section_range" for location in locations)
+    assert all(location.get("page_range") or location.get("page") for location in locations)
+    assert all(location["section"] in SOURCE_SECTION_CODES for location in locations)
+    assert all("?" not in location["section"] for location in locations)

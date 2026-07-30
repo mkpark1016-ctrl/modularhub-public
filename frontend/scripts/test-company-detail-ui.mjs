@@ -135,6 +135,8 @@ const yuchangReport = getCompanyReportInsight(reportPayload, "yuchang-enc");
 assert.ok(yuchangReport, "yuchang-enc report insight must load");
 const kumkangReport = getCompanyReportInsight(reportPayload, "kumkang-kind");
 assert.ok(kumkangReport, "kumkang-kind report insight must load");
+const daeseungReport = getCompanyReportInsight(reportPayload, "daeseung-engineering");
+assert.ok(daeseungReport, "daeseung-engineering report insight must load");
 assert.equal(getCompanyReportInsight(reportPayload, "gs-ec"), null, "companies without report insights should fall back to legacy financial UI");
 assert.equal(hasEvidenceDisplayValue(0), true);
 assert.equal(hasEvidenceDisplayValue(-1), true);
@@ -177,6 +179,19 @@ assert.equal(kumkangReport.source_summary.pending_location_count, 0);
 assert.equal(kumkangReport.source_summary.audit_opinions.every((opinion) => opinion.auditor_report_date === null), true);
 assert.equal(kumkangReport.disclosure_warnings.some((warning) => warning.code === "modular_segment_revenue_not_disclosed"), false);
 assert.ok(kumkangReport.disclosure_warnings.some((warning) => warning.code === "product_revenue_not_modular_revenue"));
+assert.deepEqual(reportYears(daeseungReport), [2023, 2024, 2025]);
+assert.equal(daeseungReport.financial_scope, "standalone");
+assert.equal(metricDisplayText(reportMetricByYear(daeseungReport, 2025, "revenue")), "616.6억원");
+assert.equal(metricDisplayText(reportMetricByYear(daeseungReport, 2025, "operating_cash_flow")), "-3.5억원");
+assert.equal(metricToneClass(reportMetricByYear(daeseungReport, 2025, "operating_cash_flow")), "is-negative");
+assert.equal(metricDisplayText(reportMetricByYear(daeseungReport, 2025, "total_borrowings")), "531.6억원");
+assert.equal(metricDisplayText(reportRatioByYear(daeseungReport, 2025, "rental_revenue_share_pct")), "40.7%");
+assert.equal(daeseungReport.source_summary.verified_location_count, 84);
+assert.equal(daeseungReport.source_summary.pending_location_count, 0);
+assert.equal(daeseungReport.source_summary.audit_opinions.at(-1).auditor_report_date, "2025-09-16");
+assert.equal(daeseungReport.attribution.modular_segment_revenue_disclosed, true);
+assert.equal(daeseungReport.disclosure_warnings.some((warning) => warning.code === "modular_segment_revenue_not_disclosed"), false);
+assert.ok(daeseungReport.disclosure_warnings.some((warning) => warning.code === "product_revenue_not_modular_revenue"));
 for (const year of [2023, 2024, 2025]) {
   for (const metricKey of ["revenue", "operating_profit", "operating_cash_flow", "total_borrowings", "receivables_total"]) {
     assert.notEqual(metricDisplayText(reportMetricByYear(yuchangReport, year, metricKey)), "확인되지 않음", `${metricKey} ${year} should have a direct label`);
