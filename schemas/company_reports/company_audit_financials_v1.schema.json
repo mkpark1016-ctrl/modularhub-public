@@ -282,6 +282,31 @@
         },
         "notes": { "type": "string" }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "reported": { "type": "null" } },
+            "required": ["reported"]
+          },
+          "then": {
+            "required": ["disclosure_status", "notes", "source_locations"],
+            "properties": {
+              "disclosure_status": { "enum": ["not_disclosed", "not_applicable"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "reported": { "type": "integer" } },
+            "required": ["reported"]
+          },
+          "then": {
+            "properties": {
+              "disclosure_status": { "const": "reported" }
+            }
+          }
+        }
+      ],
       "additionalProperties": false
     },
     "sourceRefs": {

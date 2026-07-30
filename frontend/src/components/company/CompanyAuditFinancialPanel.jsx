@@ -71,10 +71,11 @@ function SingleMetricTrend({ title, rows, variant = "primary", subtitle = "공�
       <div className="financial-chart-bars">
         {rows.map((row) => {
           const value = metricNumber(row.metric);
+          const isAvailable = Number.isFinite(value);
           return (
-            <span className="financial-chart-row" key={`${title}-${row.metricKey || "metric"}-${row.year}`} aria-label={metricDisplayLabel(row, title)}>
+            <span className={`financial-chart-row ${isAvailable ? "" : "is-unavailable"}`} key={`${title}-${row.metricKey || "metric"}-${row.year}`} aria-label={metricDisplayLabel(row, title)}>
               <b>{row.year}</b>
-              <i className={`financial-chart-bar ${variant} ${value < 0 ? "negative" : ""}`} style={{ width: `${metricWidth(value, max)}%` }} aria-hidden="true" />
+              {isAvailable && <i className={`financial-chart-bar ${variant} ${value < 0 ? "negative" : ""}`} style={{ width: `${metricWidth(value, max)}%` }} aria-hidden="true" />}
               <em>{metricDisplayText(row.metric)}</em>
             </span>
           );
@@ -149,10 +150,11 @@ function GroupedMetricTrend({ title, years, series }) {
               {series.map((item) => {
                 const row = item.rows.find((entry) => entry.year === year) || {};
                 const value = metricNumber(row.metric);
+                const isAvailable = Number.isFinite(value);
                 return (
-                  <span className="financial-grouped-row" key={`${item.key}-${year}`} aria-label={`${year}년 ${item.label} ${metricDisplayText(row.metric)}`}>
+                  <span className={`financial-grouped-row ${isAvailable ? "" : "is-unavailable"}`} key={`${item.key}-${year}`} aria-label={`${year}년 ${item.label} ${metricDisplayText(row.metric)}`}>
                     <small>{item.label}</small>
-                    <i className={item.variant} style={{ width: `${metricWidth(value, max)}%` }} aria-hidden="true" />
+                    {isAvailable && <i className={item.variant} style={{ width: `${metricWidth(value, max)}%` }} aria-hidden="true" />}
                     <em>{metricDisplayText(row.metric)}</em>
                   </span>
                 );

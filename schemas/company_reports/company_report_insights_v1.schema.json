@@ -112,11 +112,40 @@
           "type": "array",
           "items": { "$ref": "#/$defs/sourceLocation" }
         },
-        "calculation_basis": { "enum": ["reported", "derived_from_reported", "not_disclosed"] },
+        "calculation_basis": { "enum": ["reported", "derived_from_reported", "not_disclosed", "not_applicable"] },
         "disclosure_status": {
           "enum": ["reported", "not_disclosed", "not_applicable"]
         }
       },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "raw_krw": { "type": "null" } },
+            "required": ["raw_krw"]
+          },
+          "then": {
+            "required": ["disclosure_status"],
+            "properties": {
+              "display_eok": { "type": "null" },
+              "calculation_basis": { "enum": ["not_disclosed", "not_applicable"] },
+              "disclosure_status": { "enum": ["not_disclosed", "not_applicable"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "raw_krw": { "type": "integer" } },
+            "required": ["raw_krw"]
+          },
+          "then": {
+            "properties": {
+              "display_eok": { "type": "number" },
+              "calculation_basis": { "enum": ["reported", "derived_from_reported"] },
+              "disclosure_status": { "const": "reported" }
+            }
+          }
+        }
+      ],
       "additionalProperties": false
     },
     "sourceLocation": {

@@ -60,7 +60,10 @@ export function reportRatioByYear(insight, year, metricKey) {
 }
 
 export function metricDisplayText(metric) {
-  return metric?.display_text || "확인되지 않음";
+  if (metric?.display_text) return metric.display_text;
+  if (metric?.disclosure_status === "not_disclosed") return "공시되지 않음";
+  if (metric?.disclosure_status === "not_applicable") return "해당 없음";
+  return "확인되지 않음";
 }
 
 export function metricToneClass(metric) {

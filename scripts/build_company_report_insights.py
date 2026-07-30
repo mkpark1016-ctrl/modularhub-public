@@ -91,16 +91,23 @@ def display_eok(raw_krw: int) -> Decimal:
 
 def money_metric(raw_krw: int | None, source_refs: list[str], source_locations: list[dict[str, Any]], basis: str = "reported", disclosure_status: str | None = None) -> dict[str, Any]:
     if raw_krw is None:
+        if disclosure_status == "not_applicable":
+            display_text = "해당 없음"
+            calculation_basis = "not_applicable"
+        elif disclosure_status == "not_disclosed":
+            display_text = "공시되지 않음"
+            calculation_basis = "not_disclosed"
+        else:
+            raise ValueError("raw_krw=None requires disclosure_status not_disclosed or not_applicable")
         metric = {
             "raw_krw": None,
             "display_eok": None,
-            "display_text": "제공되지 않음",
+            "display_text": display_text,
             "source_refs": sorted(set(source_refs)),
             "source_locations": source_locations,
-            "calculation_basis": "not_disclosed" if basis == "reported" else basis,
+            "calculation_basis": calculation_basis,
+            "disclosure_status": disclosure_status,
         }
-        if disclosure_status:
-            metric["disclosure_status"] = disclosure_status
         return metric
     eok = display_eok(raw_krw)
     metric = {
@@ -132,14 +139,35 @@ def combined_metric(raw_krw: int | None, parts: list[dict[str, Any]]) -> dict[st
     for part in parts:
         refs.extend(part.get("source_refs") or [])
         locations.extend(part.get("source_locations") or [])
-    return money_metric(raw_krw=raw_krw, source_refs=refs, source_locations=locations, basis="derived_from_reported")
+    aggregate_status = aggregate_reported(parts)["disclosure_status"] if raw_krw is None else None
+    return money_metric(raw_krw=raw_krw, source_refs=refs, source_locations=locations, basis="derived_from_reported", disclosure_status=aggregate_status)
+
+
+def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | None]:
+    total = 0
+    included_count = 0
+    has_not_disclosed = False
+    for part in parts:
+        value = part.get("reported")
+        status = part.get("disclosure_status")
+        if value is None:
+            if status == "not_applicable":
+                continue
+            has_not_disclosed = True
+            continue
+        total += int(value)
+        included_count += 1
+
+    if has_not_disclosed:
+        return {"reported": None, "disclosure_status": "not_disclosed"}
+    if included_count == 0:
+        return {"reported": None, "disclosure_status": "not_applicable"}
+    return {"reported": total, "disclosure_status": "reported"}
 
 
 def combined_raw(parts: list[dict[str, Any]]) -> int | None:
-    values = [part.get("reported") for part in parts]
-    if any(value is None for value in values):
-        return None
-    return sum(int(value) for value in values)
+    aggregate = aggregate_reported(parts)
+    return aggregate["reported"] if isinstance(aggregate["reported"], int) else None
 
 
 def metric_map(record: dict[str, Any], fields: list[str]) -> dict[str, Any]:
