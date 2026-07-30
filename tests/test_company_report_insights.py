@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from scripts.build_company_report_insights import DEFAULT_OUTPUT, aggregate_reported, build_view_model, combined_metric, money_metric, stable_json
+from scripts.build_company_report_insights import DEFAULT_OUTPUT, aggregate_reported, build_view_model, combined_metric, discover_source_files, money_metric, stable_json
 from scripts.validate_company_audit_financials import SOURCE_SECTION_CODES, load_payload, validate
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -223,6 +223,20 @@ def test_view_model_money_metric_rejects_null_without_status() -> None:
         money_metric(raw_krw=None, source_refs=["sample_report"], source_locations=[])
 
 
+def test_view_model_money_metric_accepts_verification_pending_as_null_only() -> None:
+    metric = money_metric(
+        raw_krw=None,
+        source_refs=["sample_report"],
+        source_locations=[],
+        disclosure_status="verification_pending",
+    )
+    assert metric["raw_krw"] is None
+    assert metric["display_eok"] is None
+    assert metric["display_text"] == "검증 보류"
+    assert metric["calculation_basis"] == "verification_pending"
+    assert metric["disclosure_status"] == "verification_pending"
+
+
 def test_view_model_schema_rejects_invalid_null_and_status_combinations() -> None:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     payload = load_output()
@@ -251,6 +265,23 @@ def test_view_model_combined_metric_distinguishes_not_disclosed_and_not_applicab
     all_na_metric = combined_metric(None, [not_applicable])
     assert all_na_metric["display_text"] == "해당 없음"
     assert all_na_metric["calculation_basis"] == "not_applicable"
+
+
+def test_view_model_combined_metric_keeps_verification_pending_out_of_calculations() -> None:
+    refs = ["sample_report"]
+    part = {"reported": 10, "disclosure_status": "reported", "source_refs": refs, "source_locations": []}
+    pending = {"reported": None, "disclosure_status": "verification_pending", "source_refs": refs, "source_locations": []}
+    assert aggregate_reported([part, pending]) == {"reported": None, "disclosure_status": "verification_pending"}
+    blocked_metric = combined_metric(None, [part, pending])
+    assert blocked_metric["raw_krw"] is None
+    assert blocked_metric["calculation_basis"] == "verification_pending"
+    assert blocked_metric["disclosure_status"] == "verification_pending"
+
+
+def test_public_builder_does_not_discover_planm_staging_json() -> None:
+    discovered = {path.relative_to(ROOT).as_posix() for path in discover_source_files()}
+    assert "data/company_reports/planm/staging/audit_financials_2023_2025.json" not in discovered
+    assert all("/staging/" not in path for path in discovered)
 
 
 def test_calculated_money_metrics_preserve_raw_krw() -> None:

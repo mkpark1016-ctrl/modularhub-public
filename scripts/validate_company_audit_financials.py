@@ -45,6 +45,7 @@ REQUIRED_WORKING_CAPITAL_FIELDS = {
 }
 REQUIRED_INVESTMENT_FIELDS = {"construction_in_progress", "industrial_property_rights", "research_and_development_expense"}
 SOURCE_LOCATION_STATUSES = {"verified", "verified_section_range", "pending_manual_page_check"}
+NULL_DISCLOSURE_STATUSES = {"not_disclosed", "not_applicable", "verification_pending"}
 SOURCE_SECTION_CODES = {
     "statement.income_statement",
     "statement.balance_sheet",
@@ -53,6 +54,7 @@ SOURCE_SECTION_CODES = {
     "note.working_capital",
     "note.borrowings",
     "note.investment_signals",
+    "note.restatement",
 }
 SOURCE_SECTION_BY_PARENT = {
     "income_statement": "statement.income_statement",
@@ -120,6 +122,7 @@ def amount(record: dict[str, Any], section: str, field: str) -> int | None:
 def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | None]:
     total = 0
     included_count = 0
+    has_verification_pending = False
     has_not_disclosed = False
     for part in parts:
         value = part.get("reported")
@@ -127,11 +130,16 @@ def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | Non
         if value is None:
             if status == "not_applicable":
                 continue
+            if status == "verification_pending":
+                has_verification_pending = True
+                continue
             has_not_disclosed = True
             continue
         total += int(value)
         included_count += 1
 
+    if has_verification_pending:
+        return {"reported": None, "disclosure_status": "verification_pending"}
     if has_not_disclosed:
         return {"reported": None, "disclosure_status": "not_disclosed"}
     if included_count == 0:
@@ -164,6 +172,56 @@ def contains_key(value: Any, target: str) -> bool:
     if isinstance(value, list):
         return any(contains_key(child, target) for child in value)
     return False
+
+
+def text_paths(value: Any, path: str = "") -> list[tuple[str, str]]:
+    records: list[tuple[str, str]] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            child_path = f"{path}.{key}" if path else str(key)
+            records.extend(text_paths(child, child_path))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            records.extend(text_paths(child, f"{path}[{index}]"))
+    elif isinstance(value, str):
+        records.append((path, value))
+    return records
+
+
+def allowed_cross_check_year_mismatches(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    allowed = validation_policy_for(payload).get("allowed_cross_check_year_mismatches") or []
+    return [item for item in allowed if isinstance(item, dict)]
+
+
+def source_location_matches(actual: dict[str, Any], expected: dict[str, Any]) -> bool:
+    comparable_keys = {"source_ref", "page", "page_range", "section", "verification_status"}
+    return all(actual.get(key) == expected.get(key) for key in comparable_keys if key in expected)
+
+
+def source_location_exists_for_year(payload: dict[str, Any], year: str, expected_location: dict[str, Any]) -> bool:
+    for _, record in money_paths((payload.get("financial_years") or {}).get(year, {})):
+        for location in record.get("source_locations") or []:
+            if source_location_matches(location, expected_location):
+                return True
+    return False
+
+
+def is_allowed_cross_check_year_mismatch(payload: dict[str, Any], year: str, source_ref: str) -> bool:
+    for allowed in allowed_cross_check_year_mismatches(payload):
+        if str(allowed.get("year")) != str(year) or allowed.get("source_ref") != source_ref:
+            continue
+        locations = allowed.get("source_locations") or []
+        if locations and all(source_location_exists_for_year(payload, year, location) for location in locations):
+            return True
+    return False
+
+
+def is_allowed_source_location_parent_mismatch(payload: dict[str, Any], year: str, location: dict[str, Any]) -> bool:
+    return any(
+        str(allowed.get("year")) == str(year)
+        and any(source_location_matches(location, expected) for expected in allowed.get("source_locations") or [])
+        for allowed in allowed_cross_check_year_mismatches(payload)
+    )
 
 
 def pct(numerator: int | None, denominator: int | None) -> Decimal | None:
@@ -282,13 +340,13 @@ def validate_amount_shapes(payload: dict[str, Any], issues: list[Issue]) -> None
         reported = record.get("reported")
         disclosure_status = record.get("disclosure_status")
         if reported is None:
-            if disclosure_status not in {"not_disclosed", "not_applicable"}:
+            if disclosure_status not in NULL_DISCLOSURE_STATUSES:
                 issue(
                     issues,
                     "invalid_disclosure_status_for_null_reported",
                     f"{path}.disclosure_status",
-                    "null reported amounts require disclosure_status not_disclosed or not_applicable",
-                    ["not_disclosed", "not_applicable"],
+                    "null reported amounts require disclosure_status not_disclosed, not_applicable, or verification_pending",
+                    sorted(NULL_DISCLOSURE_STATUSES),
                     disclosure_status,
                     source="reported",
                 )
@@ -354,6 +412,8 @@ def validate_source_location_parent_sections(payload: dict[str, Any], issues: li
             for metric_name, metric in (year_record.get(parent_section) or {}).items():
                 for index, location in enumerate(metric.get("source_locations") or []):
                     actual_code = location.get("section")
+                    if actual_code != expected_code and metric.get("disclosure_status") == "verification_pending" and is_allowed_source_location_parent_mismatch(payload, year, location):
+                        continue
                     if actual_code != expected_code:
                         issue(
                             issues,
@@ -449,7 +509,7 @@ def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expec
                 issue(issues, "source_priority_unknown_cross_check_ref", f"source_priority.{year}.cross_check_source_refs", "cross-check source_ref is not defined", sorted(source_ids), cross_ref, source=year)
                 continue
             covered_years = {str(covered_year) for covered_year in (source_documents.get(cross_ref) or {}).get("covered_years", [])}
-            if year not in covered_years:
+            if year not in covered_years and not is_allowed_cross_check_year_mismatch(payload, year, cross_ref):
                 issue(
                     issues,
                     "cross_check_source_year_mismatch",
@@ -493,6 +553,34 @@ def validate_no_forbidden_fields(payload: dict[str, Any], issues: list[Issue]) -
     for field_name in policy.get("forbidden_field_names") or []:
         if contains_key(payload, field_name):
             issue(issues, "forbidden_field_name", field_name, "validation policy forbids this field name")
+
+
+def validate_text_integrity(payload: dict[str, Any], issues: list[Issue]) -> None:
+    critical_paths = {
+        "company_name",
+        "reporting_entity",
+        "accounting_standard.label_ko",
+        "entity_attribution.reporting_entity",
+        "entity_attribution.attribution_warning",
+    }
+    for path, value in text_paths(payload):
+        if "???" in value or "\ufffd" in value:
+            issue(
+                issues,
+                "suspicious_text_encoding",
+                path,
+                "text contains suspicious placeholder or replacement characters",
+                "UTF-8 text without ??? or U+FFFD",
+                value,
+            )
+        if path in critical_paths and value.strip(" ?") == "":
+            issue(
+                issues,
+                "suspicious_required_text",
+                path,
+                "required company identity text must not be blank or placeholder-only",
+                actual=value,
+            )
 
 
 def validate_cash_flow_signs(payload: dict[str, Any], issues: list[Issue]) -> None:
@@ -591,6 +679,7 @@ def validate(payload: dict[str, Any], expected_year_override: list[int] | None =
         validate_source_priority(payload, issues, expected_years)
         validate_attribution(payload, issues)
         validate_no_forbidden_fields(payload, issues)
+        validate_text_integrity(payload, issues)
         validate_cash_flow_signs(payload, issues)
     protected_status = protected_public_diff_status(base_ref=base_ref)
     if protected_status["changed_files"]:

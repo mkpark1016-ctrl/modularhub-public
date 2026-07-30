@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "company_reports" / "company_audit_financials_v1.schema.json"
 KUMKANG_INPUT = ROOT / "data" / "company_reports" / "kumkang-kind" / "audit_financials_2023_2025.json"
 DAESEUNG_INPUT = ROOT / "data" / "company_reports" / "daeseung-engineering" / "audit_financials_2023_2025.json"
+PLANM_STAGING_INPUT = ROOT / "data" / "company_reports" / "planm" / "staging" / "audit_financials_2023_2025.json"
 EXPECTED_REPORTED_VALUES = {
     "2023": {
         "revenue": 419041119841,
@@ -137,6 +138,10 @@ def load_daeseung_payload() -> dict:
     return json.loads(DAESEUNG_INPUT.read_text(encoding="utf-8"))
 
 
+def load_planm_staging_payload() -> dict:
+    return json.loads(PLANM_STAGING_INPUT.read_text(encoding="utf-8"))
+
+
 def load_schema() -> dict:
     return json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
 
@@ -212,11 +217,154 @@ def test_json_schema_contract_is_complete() -> None:
     assert defs["incomeStatement"]["properties"]["revenue"]["$ref"] == "#/$defs/reportedAmount"
     assert "source_locations" in defs["reportedAmount"]["properties"]
     assert defs["reportedAmount"]["additionalProperties"] is False
+    assert "verification_pending" in defs["reportedAmount"]["properties"]["disclosure_status"]["enum"]
     assert "auditor_report_date_verification_status" in defs["auditOpinion"]["properties"]
     assert "auditor_report_date_verification_status" in defs["sourceDocument"]["properties"]
     assert defs["entityAttribution"]["properties"]["financial_scope"]["enum"] == ["standalone", "consolidated", "standalone_and_consolidated"]
     assert "specialEvent" in defs
     assert "validationPolicy" in defs
+
+
+def test_schema_accepts_verification_pending_null_amounts() -> None:
+    payload = load_planm_staging_payload()
+    metric = payload["financial_years"]["2023"]["balance_sheet"]["total_equity"]
+    assert metric["reported"] is None
+    assert metric["disclosure_status"] == "verification_pending"
+    assert metric["notes"]
+    assert metric["source_refs"]
+    assert metric["source_locations"]
+    assert schema_errors(payload) == []
+
+
+def test_planm_staging_text_integrity_and_identity_fields() -> None:
+    text = PLANM_STAGING_INPUT.read_text(encoding="utf-8")
+    payload = load_planm_staging_payload()
+    assert "???" not in text
+    assert "??" not in text
+    assert "\ufffd" not in text
+    assert payload["company_name"] == "플랜엠"
+    assert payload["reporting_entity"] == "주식회사 플랜엠"
+    assert payload["accounting_standard"]["label_ko"] == "일반기업회계기준"
+    assert payload["entity_attribution"]["reporting_entity"] == "주식회사 플랜엠"
+
+
+def test_planm_staging_modular_revenue_and_opinion_semantics() -> None:
+    payload = load_planm_staging_payload()
+    warning = payload["entity_attribution"]["attribution_warning"]
+    assert payload["entity_attribution"]["modular_segment_revenue_disclosed"] is False
+    for term in ["별도 재무제표", "모듈러 매출", "verification_pending"]:
+        assert term in warning
+        assert term in payload["validation_metadata"]["validation_policy"]["required_attribution_warning_terms"]
+    limitations = "\n".join(payload["disclosure_limitations"])
+    for term in [
+        "감사보고서에서는 모듈러 사업부문 별도 매출을 공시하지 않음",
+        "제품매출은 모듈러 매출로 자동 간주하지 않음",
+        "임대매출은 모듈러 매출로 자동 간주하지 않음",
+        "용역 및 F&B 매출은 모듈러 매출로 자동 간주하지 않음",
+    ]:
+        assert term in limitations
+    assert {opinion["opinion"] for opinion in payload["audit_opinions"]} == {"unqualified"}
+    assert {opinion["opinion_label_ko"] for opinion in payload["audit_opinions"]} == {"적정의견"}
+    assert {document["audit_opinion"] for document in payload["source_documents"].values()} == {"적정의견"}
+    assert all(event["related_entities"] == [] for event in payload["entity_attribution"]["special_events"])
+
+
+def test_schema_rejects_verification_pending_reported_zero() -> None:
+    payload = load_planm_staging_payload()
+    metric = payload["financial_years"]["2023"]["balance_sheet"]["total_equity"]
+    metric["reported"] = 0
+    errors = schema_errors(payload)
+    assert errors
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "invalid_disclosure_status_for_reported_amount" for issue in result["issues"])
+
+
+def test_verification_pending_is_distinct_from_not_disclosed_and_not_applicable() -> None:
+    assert aggregate_reported([
+        {"reported": None, "disclosure_status": "verification_pending"},
+        {"reported": 10, "disclosure_status": "reported"},
+    ]) == {"reported": None, "disclosure_status": "verification_pending"}
+    assert aggregate_reported([
+        {"reported": None, "disclosure_status": "not_disclosed"},
+        {"reported": 10, "disclosure_status": "reported"},
+    ]) == {"reported": None, "disclosure_status": "not_disclosed"}
+    assert aggregate_reported([
+        {"reported": None, "disclosure_status": "not_applicable"},
+        {"reported": 10, "disclosure_status": "reported"},
+    ]) == {"reported": 10, "disclosure_status": "reported"}
+
+
+def test_planm_staging_validator_passes_with_warning_only() -> None:
+    result = validate(load_planm_staging_payload(), base_ref=None)
+    assert result["valid"], result["issues"]
+    assert result["company_id"] == "planm"
+    assert result["financial_years_loaded"] == ["2023", "2024", "2025"]
+    assert any(issue["code"] == "accounting_equation_unavailable" and issue["severity"] == "warning" for issue in result["issues"])
+
+
+def test_planm_2023_total_equity_is_excluded_from_derived_calculations() -> None:
+    payload = load_planm_staging_payload()
+    metric = payload["financial_years"]["2023"]["balance_sheet"]["total_equity"]
+    assert metric["reported"] is None
+    assert metric["disclosure_status"] == "verification_pending"
+    derived = calculate_derived_metrics(payload)
+    assert derived["2023"]["liabilities_to_equity_pct"] is None
+    assert derived["2023"]["borrowings_to_equity_pct"] is None
+
+
+def test_planm_2023_total_equity_uses_restatement_note_cross_check_location() -> None:
+    payload = load_planm_staging_payload()
+    metric = payload["financial_years"]["2023"]["balance_sheet"]["total_equity"]
+    assert metric["reported"] is None
+    assert metric["disclosure_status"] == "verification_pending"
+    assert metric["source_locations"][1] == {
+        "source_ref": "planm_audit_report_2026_06_25",
+        "page_range": "48,50",
+        "section": "note.restatement",
+        "verification_status": "verified_section_range",
+    }
+    allowed = payload["validation_metadata"]["validation_policy"]["allowed_cross_check_year_mismatches"]
+    assert allowed == [
+        {
+            "year": 2023,
+            "source_ref": "planm_audit_report_2026_06_25",
+            "reason": "2026년 감사보고서 주석 23이 2024년 기초 이익잉여금 조정을 통해 2023년말 자본총계 검증에 영향을 주기 때문",
+            "source_locations": [metric["source_locations"][1]],
+        }
+    ]
+
+
+def test_unlisted_cross_check_year_mismatch_still_fails() -> None:
+    payload = load_planm_staging_payload()
+    payload["validation_metadata"]["validation_policy"]["allowed_cross_check_year_mismatches"] = []
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    issue_codes = {issue["code"] for issue in result["issues"]}
+    assert "cross_check_source_year_mismatch" in issue_codes
+    assert "source_location_parent_section_mismatch" in issue_codes
+
+
+def test_planm_source_priority_and_selected_values_follow_restatement_policy() -> None:
+    payload = load_planm_staging_payload()
+    priority = payload["source_priority"]
+    assert priority["2023"]["primary_source_ref"] == "planm_audit_report_2025_04_24"
+    assert priority["2023"]["basis"] == "comparative_financial_statements"
+    assert "planm_audit_report_2026_06_25" in priority["2023"]["cross_check_source_refs"]
+    assert priority["2024"] == {
+        "primary_source_ref": "planm_audit_report_2026_06_25",
+        "basis": "comparative_financial_statements",
+        "cross_check_source_refs": ["planm_audit_report_2025_04_24"],
+    }
+    assert priority["2025"] == {
+        "primary_source_ref": "planm_audit_report_2026_06_25",
+        "basis": "current_year_financial_statements",
+        "cross_check_source_refs": [],
+    }
+    assert payload["financial_years"]["2024"]["income_statement"]["net_income"]["reported"] == 38537785703
+    assert payload["financial_years"]["2024"]["balance_sheet"]["total_equity"]["reported"] == 70222157519
+    assert payload["financial_years"]["2025"]["income_statement"]["revenue"]["reported"] == 59222859418
+    assert payload["financial_years"]["2025"]["income_statement"]["net_income"]["reported"] == -9533441167
 
 
 def test_curated_dataset_matches_schema() -> None:

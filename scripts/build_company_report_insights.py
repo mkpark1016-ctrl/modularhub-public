@@ -97,8 +97,11 @@ def money_metric(raw_krw: int | None, source_refs: list[str], source_locations: 
         elif disclosure_status == "not_disclosed":
             display_text = "공시되지 않음"
             calculation_basis = "not_disclosed"
+        elif disclosure_status == "verification_pending":
+            display_text = "검증 보류"
+            calculation_basis = "verification_pending"
         else:
-            raise ValueError("raw_krw=None requires disclosure_status not_disclosed or not_applicable")
+            raise ValueError("raw_krw=None requires disclosure_status not_disclosed, not_applicable, or verification_pending")
         metric = {
             "raw_krw": None,
             "display_eok": None,
@@ -146,6 +149,7 @@ def combined_metric(raw_krw: int | None, parts: list[dict[str, Any]]) -> dict[st
 def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | None]:
     total = 0
     included_count = 0
+    has_verification_pending = False
     has_not_disclosed = False
     for part in parts:
         value = part.get("reported")
@@ -153,11 +157,16 @@ def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | Non
         if value is None:
             if status == "not_applicable":
                 continue
+            if status == "verification_pending":
+                has_verification_pending = True
+                continue
             has_not_disclosed = True
             continue
         total += int(value)
         included_count += 1
 
+    if has_verification_pending:
+        return {"reported": None, "disclosure_status": "verification_pending"}
     if has_not_disclosed:
         return {"reported": None, "disclosure_status": "not_disclosed"}
     if included_count == 0:
