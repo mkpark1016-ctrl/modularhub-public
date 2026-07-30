@@ -265,7 +265,15 @@
       "type": "object",
       "required": ["reported", "source_refs"],
       "properties": {
-        "reported": { "type": "integer" },
+        "reported": {
+          "oneOf": [
+            { "type": "integer" },
+            { "type": "null" }
+          ]
+        },
+        "disclosure_status": {
+          "enum": ["reported", "not_disclosed", "not_applicable"]
+        },
         "source_refs": { "$ref": "#/$defs/sourceRefs" },
         "source_locations": {
           "type": "array",

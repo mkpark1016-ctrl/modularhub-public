@@ -80,17 +80,30 @@ def reported(record: dict[str, Any], section: str, field: str) -> dict[str, Any]
     return record[section][field]
 
 
-def raw_value(record: dict[str, Any], section: str, field: str) -> int:
-    return int(reported(record, section, field)["reported"])
+def raw_value(record: dict[str, Any], section: str, field: str) -> int | None:
+    value = reported(record, section, field)["reported"]
+    return None if value is None else int(value)
 
 
 def display_eok(raw_krw: int) -> Decimal:
     return (Decimal(raw_krw) / Decimal(100000000)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
 
 
-def money_metric(raw_krw: int, source_refs: list[str], source_locations: list[dict[str, Any]], basis: str = "reported") -> dict[str, Any]:
+def money_metric(raw_krw: int | None, source_refs: list[str], source_locations: list[dict[str, Any]], basis: str = "reported", disclosure_status: str | None = None) -> dict[str, Any]:
+    if raw_krw is None:
+        metric = {
+            "raw_krw": None,
+            "display_eok": None,
+            "display_text": "제공되지 않음",
+            "source_refs": sorted(set(source_refs)),
+            "source_locations": source_locations,
+            "calculation_basis": "not_disclosed" if basis == "reported" else basis,
+        }
+        if disclosure_status:
+            metric["disclosure_status"] = disclosure_status
+        return metric
     eok = display_eok(raw_krw)
-    return {
+    metric = {
         "raw_krw": raw_krw,
         "display_eok": float(eok),
         "display_text": f"{eok:,.1f}억원",
@@ -98,24 +111,35 @@ def money_metric(raw_krw: int, source_refs: list[str], source_locations: list[di
         "source_locations": source_locations,
         "calculation_basis": basis,
     }
+    if disclosure_status:
+        metric["disclosure_status"] = disclosure_status
+    return metric
 
 
 def metric_from_reported(record: dict[str, Any], section: str, field: str) -> dict[str, Any]:
     source = reported(record, section, field)
     return money_metric(
-        raw_krw=int(source["reported"]),
+        raw_krw=None if source["reported"] is None else int(source["reported"]),
         source_refs=list(source["source_refs"]),
         source_locations=list(source.get("source_locations") or []),
+        disclosure_status=source.get("disclosure_status"),
     )
 
 
-def combined_metric(raw_krw: int, parts: list[dict[str, Any]]) -> dict[str, Any]:
+def combined_metric(raw_krw: int | None, parts: list[dict[str, Any]]) -> dict[str, Any]:
     refs: list[str] = []
     locations: list[dict[str, Any]] = []
     for part in parts:
         refs.extend(part.get("source_refs") or [])
         locations.extend(part.get("source_locations") or [])
     return money_metric(raw_krw=raw_krw, source_refs=refs, source_locations=locations, basis="derived_from_reported")
+
+
+def combined_raw(parts: list[dict[str, Any]]) -> int | None:
+    values = [part.get("reported") for part in parts]
+    if any(value is None for value in values):
+        return None
+    return sum(int(value) for value in values)
 
 
 def metric_map(record: dict[str, Any], fields: list[str]) -> dict[str, Any]:
@@ -141,8 +165,8 @@ def metric_map(record: dict[str, Any], fields: list[str]) -> dict[str, Any]:
         "current_liabilities": metric_from_reported(record, "balance_sheet", "current_liabilities"),
         "inventory": metric_from_reported(record, "working_capital", "inventory"),
         "work_in_progress": metric_from_reported(record, "working_capital", "work_in_progress"),
-        "total_borrowings": combined_metric(sum(int(part["reported"]) for part in borrowings), borrowings),
-        "receivables_total": combined_metric(sum(int(part["reported"]) for part in receivables), receivables),
+        "total_borrowings": combined_metric(combined_raw(borrowings), borrowings),
+        "receivables_total": combined_metric(combined_raw(receivables), receivables),
     }
     return {field: mapping[field] for field in fields}
 

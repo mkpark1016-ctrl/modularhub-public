@@ -1,0 +1,1532 @@
+{
+  "accounting_standard": {
+    "code": "korean_gaap",
+    "label_en": "Korean GAAP",
+    "label_ko": "일반기업회계기준"
+  },
+  "audit_opinions": [
+    {
+      "auditor": "미립회계법인",
+      "auditor_report_date": "2023-09-11",
+      "auditor_report_date_verification_status": "verified",
+      "covered_years": [
+        2023
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정",
+      "source_ref": "daeseung_audit_report_2023_09_19"
+    },
+    {
+      "auditor": "미립회계법인",
+      "auditor_report_date": "2024-09-13",
+      "auditor_report_date_verification_status": "verified",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정",
+      "source_ref": "daeseung_audit_report_2024_09_19"
+    },
+    {
+      "auditor": "미립회계법인",
+      "auditor_report_date": "2025-09-16",
+      "auditor_report_date_verification_status": "verified",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정",
+      "source_ref": "daeseung_audit_report_2025_09_17"
+    }
+  ],
+  "company_id": "daeseung-engineering",
+  "company_name": "대승엔지니어링",
+  "currency": "KRW",
+  "disclosure_limitations": [
+    "FY2022",
+    "FY2022 comparative financial statements in the 2023 audit report are marked unaudited and excluded from the public three-year series.",
+    "modular classroom rental asset",
+    "The common schema has no dedicated modular classroom rental asset fields; gross/net rental assets, additions, and future operating lease revenue are documented in the audit note and source audit documentation instead of adding company-specific schema fields.",
+    "Product revenue, construction revenue, service revenue, and equipment rental revenue are not automatically classified as modular revenue. Only modular classroom rental revenue is separately identifiable from the audit reports."
+  ],
+  "entity_attribution": {
+    "attribution_warning": "모듈러교실임대료수입 is separately disclosed and identifiable, but 제품매출, 공사수입금, service revenue, and equipment rental revenue are not automatically classified as modular revenue. 관계기업 and related-party financial results are not combined into 주식회사 대승엔지니어링 standalone results.",
+    "financial_scope": "standalone",
+    "modular_segment_revenue_disclosed": true,
+    "related_entity_attribution_required": true,
+    "reporting_entity": "주식회사 대승엔지니어링",
+    "special_events": [
+      {
+        "attribution_effect": "financial_series_break=false; requires_manual_review=false",
+        "description": "The company split on 2023-06-30 did not transfer an operating business segment; only capital stock and term deposits were transferred.",
+        "effective_date": "2023-06-30",
+        "event_type": "corporate_split_without_business_transfer",
+        "related_entities": [
+          "주식회사 대승이엔지"
+        ],
+        "source_refs": [
+          "daeseung_audit_report_2023_09_19",
+          "daeseung_audit_report_2024_09_19"
+        ]
+      }
+    ]
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 13748119708,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 66935733766,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 81604451252,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 9863111329,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 71741339923,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 3712165886,
+          "source_locations": [
+            {
+              "page_range": "p.19",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "notes": "Long-term borrowings are reported separately from current portions of long-term borrowings.",
+          "reported": 3638518644,
+          "source_locations": [
+            {
+              "page_range": "p.19",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "notes": "Short-term borrowings include short-term borrowings and short-term shareholder/officer/employee borrowings.",
+          "reported": 1092160350,
+          "source_locations": [
+            {
+              "page_range": "p.19",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 674128125,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 2826698241,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -61694978590,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 59283840033,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 7530500530,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 3009792401,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 4109790546,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 32326080148,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "reported",
+          "notes": "Reported modular classroom acquisition amount; preserved as an investment signal because the common schema has no dedicated modular classroom rental asset field.",
+          "reported": 60458172626,
+          "source_locations": [
+            {
+              "page_range": "pp.17, 20",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "reported",
+          "notes": "The 2023 audit report intangible-assets note explicitly shows the industrial property rights ending carrying amount as 0 won.",
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "p.18",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "reported",
+          "reported": 179307926,
+          "source_locations": [
+            {
+              "page_range": "p.7",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "reported",
+          "reported": 7447960153,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Goods revenue was not separately presented in the income statement revenue composition, so the value is recorded as 0.",
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Service revenue and equipment rental revenue are combined into other_revenue.",
+          "reported": 464930990,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "reported",
+          "reported": 8088633635,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "reported",
+          "notes": "모듈러교실임대료수입 is recorded as rental_revenue. Equipment rental revenue is included in other_revenue.",
+          "reported": 16324555370,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        }
+      },
+      "source_refs": [
+        "daeseung_audit_report_2023_09_19"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "reported",
+          "notes": "Other receivables and equipment-rental receivables are combined; construction receivables were not separately disclosed.",
+          "reported": 1182595847,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 9797864630,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 1407373616,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "reported",
+          "reported": 8160670180,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2023_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2023_09_19"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 24041763602,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 46674521521,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 81271797933,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 15178972005,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 66092825928,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 2799000000,
+          "source_locations": [
+            {
+              "page_range": "pp.18-19",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "notes": "Long-term borrowings are reported separately from current portions of long-term borrowings.",
+          "reported": 18209540202,
+          "source_locations": [
+            {
+              "page_range": "pp.18-19",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "notes": "Short-term borrowings include short-term borrowings and short-term shareholder/officer/employee borrowings.",
+          "reported": 7834160350,
+          "source_locations": [
+            {
+              "page_range": "pp.18-19",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 3641548742,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 20263831706,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -43727350972,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 26430939883,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 15685352450,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 5203952176,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 10058636613,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 84005687052,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "reported",
+          "notes": "Reported modular classroom acquisition amount; preserved as an investment signal because the common schema has no dedicated modular classroom rental asset field.",
+          "reported": 44579274828,
+          "source_locations": [
+            {
+              "page_range": "pp.18-19",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "reported",
+          "notes": "The 2024 audit report omits a separate intangible-assets line, but the 2025 audit report comparative balance sheet explicitly shows the prior-year industrial property rights carrying amount as 0 won.",
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "p.5",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "reported",
+          "reported": 20000000,
+          "source_locations": [
+            {
+              "page_range": "p.7",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "reported",
+          "reported": 6274967747,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Goods revenue was not separately presented in the income statement revenue composition, so the value is recorded as 0.",
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Service revenue and equipment rental revenue are combined into other_revenue.",
+          "reported": 122697481,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "reported",
+          "reported": 11203885456,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "reported",
+          "notes": "모듈러교실임대료수입 is recorded as rental_revenue. Equipment rental revenue is included in other_revenue.",
+          "reported": 66404136368,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        }
+      },
+      "source_refs": [
+        "daeseung_audit_report_2024_09_19"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "reported",
+          "notes": "Other receivables and equipment-rental receivables are combined; construction receivables were not separately disclosed.",
+          "reported": 1723802777,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 16641503220,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 1908992362,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "reported",
+          "reported": 1288000000,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2024_09_19",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2024_09_19"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 37768284861,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 23858571545,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 82695337438,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 19765713850,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 62929623588,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 9449991333,
+          "source_locations": [
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "notes": "Long-term borrowings are reported separately from current portions of long-term borrowings.",
+          "reported": 38312947102,
+          "source_locations": [
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "notes": "Short-term borrowings include short-term borrowings and short-term shareholder/officer/employee borrowings.",
+          "reported": 5402000000,
+          "source_locations": [
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 1605216173,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 24404997811,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -26095929805,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -345400575,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 12681852632,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 4376654645,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 6365339970,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 61659861549,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "reported",
+          "notes": "Reported modular classroom acquisition amount; preserved as an investment signal because the common schema has no dedicated modular classroom rental asset field.",
+          "reported": 5314128869,
+          "source_locations": [
+            {
+              "page_range": "pp.10, 19, 22",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "reported",
+          "notes": "The 2025 audit report balance sheet explicitly discloses industrial property rights of 3,417,840 won.",
+          "reported": 3417840,
+          "source_locations": [
+            {
+              "page_range": "p.5",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "reported",
+          "reported": 15701939,
+          "source_locations": [
+            {
+              "page_range": "p.7",
+              "section": "note.investment_signals",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "reported",
+          "reported": 8383686248,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Goods revenue was not separately presented in the income statement revenue composition, so the value is recorded as 0.",
+          "reported": 0,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "reported",
+          "notes": "Service revenue and equipment rental revenue are combined into other_revenue.",
+          "reported": 109516364,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "reported",
+          "reported": 28083680751,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "reported",
+          "notes": "모듈러교실임대료수입 is recorded as rental_revenue. Equipment rental revenue is included in other_revenue.",
+          "reported": 25082978186,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "note.revenue_breakdown",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
+      "source_refs": [
+        "daeseung_audit_report_2025_09_17"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "reported",
+          "notes": "Other receivables and equipment-rental receivables are combined; construction receivables were not separately disclosed.",
+          "reported": 253080000,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 30588911320,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 3165203872,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "reported",
+          "reported": 979638620,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "주식회사 대승엔지니어링",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "daeseung_audit_report_2023_09_19": {
+      "audit_opinion": "적정",
+      "audit_opinion_pages": "pp.2-3",
+      "auditor": "미립회계법인",
+      "auditor_report_date": "2023-09-11",
+      "auditor_report_date_verification_status": "verified",
+      "balance_sheet_pages": "pp.5-6",
+      "cash_flow_pages": "pp.10-11",
+      "company_overview_page": "pp.11-12",
+      "covered_years": [
+        2023
+      ],
+      "filename": "[대승엔지니어링]감사보고서(2023.09.19).pdf",
+      "income_statement_pages": "pp.7-8",
+      "report_date": "2023-09-19",
+      "source_role": "primary_2023",
+      "usage": "FY2023 current-year audited financial statements; FY2022 unaudited comparative figures excluded."
+    },
+    "daeseung_audit_report_2024_09_19": {
+      "audit_opinion": "적정",
+      "audit_opinion_pages": "pp.2-3",
+      "auditor": "미립회계법인",
+      "auditor_report_date": "2024-09-13",
+      "auditor_report_date_verification_status": "verified",
+      "balance_sheet_pages": "pp.5-6",
+      "cash_flow_pages": "pp.10-11",
+      "company_overview_page": "p.12",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "filename": "[대승엔지니어링]감사보고서(2024.09.19).pdf",
+      "income_statement_pages": "pp.7-8",
+      "report_date": "2024-09-19",
+      "source_role": "primary_2024_and_2023_cross_check"
+    },
+    "daeseung_audit_report_2025_09_17": {
+      "audit_opinion": "적정",
+      "audit_opinion_pages": "pp.2-3",
+      "auditor": "미립회계법인",
+      "auditor_report_date": "2025-09-16",
+      "auditor_report_date_verification_status": "verified",
+      "balance_sheet_pages": "pp.5-6",
+      "cash_flow_pages": "pp.10-11",
+      "company_overview_page": "p.12",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "filename": "[대승엔지니어링]감사보고서(2025.09.17).pdf",
+      "income_statement_pages": "pp.7-8",
+      "report_date": "2025-09-17",
+      "source_role": "primary_2025_and_2024_cross_check"
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "daeseung_audit_report_2024_09_19"
+      ],
+      "primary_source_ref": "daeseung_audit_report_2023_09_19"
+    },
+    "2024": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "daeseung_audit_report_2025_09_17"
+      ],
+      "primary_source_ref": "daeseung_audit_report_2024_09_19"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "daeseung_audit_report_2025_09_17"
+    }
+  },
+  "unit": "won",
+  "validation_metadata": {
+    "amount_storage": "KRW integer won only; display units are derived by the public View Model builder.",
+    "created_for": "Phase 6C-1 Daeseung Engineering 2023-2025 audited financial statement source data; fiscal periods end on June 30 each year.",
+    "derived_metrics_storage": "Derived ratios and total borrowings are generated by scripts/build_company_report_insights.py and are not stored as display values in this source file.",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "pdf_handling": "Attached PDF files were used only for source verification and were not copied into the repository.",
+    "public_ui_impact": "Existing CompanyAuditFinancialPanel consumes the generated View Model without company-specific JSX or CSS changes.",
+    "validation_policy": {
+      "expected_cash_flow_signs": {
+        "2025": {
+          "operating_cash_flow": "negative"
+        }
+      },
+      "forbidden_field_names": [
+        "modular_revenue",
+        "total_modular_revenue",
+        "fy2022"
+      ],
+      "required_attribution_warning_terms": [
+        "모듈러교실임대료수입",
+        "제품매출",
+        "공사수입금",
+        "관계기업"
+      ],
+      "required_disclosure_limitations": [
+        "FY2022",
+        "modular classroom rental asset"
+      ]
+    }
+  }
+}
