@@ -295,6 +295,8 @@ code { overflow-wrap: anywhere; }
 .financial-chart-bars { display: grid; gap: 8px; }
 .financial-chart-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) minmax(92px, auto); align-items: center; gap: 8px; color: #555; font-size: 12px; }
 .financial-chart-row b, .financial-grouped-year > b, .financial-cash-flow-row b { color: #333; font-weight: 900; }
+.financial-chart-row.is-unavailable, .financial-grouped-row.is-unavailable { color: #6b7280; }
+.financial-chart-row.is-unavailable em, .financial-grouped-row.is-unavailable em { font-weight: 800; }
 .financial-chart-bar { display: block; height: 11px; min-width: 8px; border-radius: 999px; border: 1px solid #174b31; background: #237349; }
 .financial-chart-bar.revenue { background: #1f5f8b; border-color: #154563; }
 .financial-chart-bar.operating-profit { background: #f8fafc; border: 2px solid #9a5b13; box-shadow: inset 0 0 0 3px #f6d08d; }

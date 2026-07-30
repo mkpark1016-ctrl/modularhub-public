@@ -113,11 +113,31 @@ def amount(record: dict[str, Any], section: str, field: str) -> int | None:
     return record[section][field]["reported"]
 
 
+def aggregate_reported(parts: list[dict[str, Any]]) -> dict[str, int | str | None]:
+    total = 0
+    included_count = 0
+    has_not_disclosed = False
+    for part in parts:
+        value = part.get("reported")
+        status = part.get("disclosure_status")
+        if value is None:
+            if status == "not_applicable":
+                continue
+            has_not_disclosed = True
+            continue
+        total += int(value)
+        included_count += 1
+
+    if has_not_disclosed:
+        return {"reported": None, "disclosure_status": "not_disclosed"}
+    if included_count == 0:
+        return {"reported": None, "disclosure_status": "not_applicable"}
+    return {"reported": total, "disclosure_status": "reported"}
+
+
 def sum_reported(parts: list[dict[str, Any]]) -> int | None:
-    values = [part.get("reported") for part in parts]
-    if any(value is None for value in values):
-        return None
-    return sum(int(value) for value in values)
+    aggregate = aggregate_reported(parts)
+    return aggregate["reported"] if isinstance(aggregate["reported"], int) else None
 
 
 def money_paths(value: Any, path: str = "") -> list[tuple[str, dict[str, Any]]]:
@@ -154,6 +174,10 @@ def ratio(numerator: int | None, denominator: int | None) -> Decimal | None:
     return (Decimal(numerator) / Decimal(denominator)).quantize(Decimal("0.001"), rounding=ROUND_HALF_UP)
 
 
+def decimal_text(value: Decimal | None) -> str | None:
+    return str(value) if value is not None else None
+
+
 def calculate_derived_metrics(payload: dict[str, Any]) -> dict[str, dict[str, str | int | None]]:
     derived: dict[str, dict[str, str | int | None]] = {}
     previous_revenue: int | None = None
@@ -177,23 +201,23 @@ def calculate_derived_metrics(payload: dict[str, Any]) -> dict[str, dict[str, st
         operating_cash_flow = amount(record, "cash_flow", "operating_cash_flow")
         revenue_breakdown = {field: amount(record, "revenue_breakdown", field) for field in REQUIRED_REVENUE_FIELDS}
         derived[year] = {
-            "revenue_yoy_pct": str(pct(revenue - previous_revenue, previous_revenue)) if previous_revenue and revenue is not None else None,
-            "gross_margin_pct": str(pct(gross_profit, revenue)),
-            "operating_margin_pct": str(pct(operating_profit, revenue)),
-            "net_margin_pct": str(pct(net_income, revenue)),
-            "liabilities_to_equity_pct": str(pct(liabilities, equity)),
-            "current_ratio_pct": str(pct(current_assets, current_liabilities)),
+            "revenue_yoy_pct": decimal_text(pct(revenue - previous_revenue, previous_revenue)) if previous_revenue is not None and revenue is not None else None,
+            "gross_margin_pct": decimal_text(pct(gross_profit, revenue)),
+            "operating_margin_pct": decimal_text(pct(operating_profit, revenue)),
+            "net_margin_pct": decimal_text(pct(net_income, revenue)),
+            "liabilities_to_equity_pct": decimal_text(pct(liabilities, equity)),
+            "current_ratio_pct": decimal_text(pct(current_assets, current_liabilities)),
             "total_borrowings": total_borrowings,
-            "borrowings_to_equity_pct": str(pct(total_borrowings, equity)),
-            "operating_cash_flow_to_net_income": str(ratio(operating_cash_flow, net_income)),
+            "borrowings_to_equity_pct": decimal_text(pct(total_borrowings, equity)),
+            "operating_cash_flow_to_net_income": decimal_text(ratio(operating_cash_flow, net_income)),
             "receivables_total": receivables_total,
-            "receivables_to_revenue_pct": str(pct(receivables_total, revenue)),
-            "inventory_to_revenue_pct": str(pct(inventory, revenue)),
-            "goods_revenue_share_pct": str(pct(revenue_breakdown["goods_revenue"], revenue)),
-            "product_revenue_share_pct": str(pct(revenue_breakdown["product_revenue"], revenue)),
-            "construction_revenue_share_pct": str(pct(revenue_breakdown["construction_revenue"], revenue)),
-            "rental_revenue_share_pct": str(pct(revenue_breakdown["rental_revenue"], revenue)),
-            "other_revenue_share_pct": str(pct(revenue_breakdown["other_revenue"], revenue)),
+            "receivables_to_revenue_pct": decimal_text(pct(receivables_total, revenue)),
+            "inventory_to_revenue_pct": decimal_text(pct(inventory, revenue)),
+            "goods_revenue_share_pct": decimal_text(pct(revenue_breakdown["goods_revenue"], revenue)),
+            "product_revenue_share_pct": decimal_text(pct(revenue_breakdown["product_revenue"], revenue)),
+            "construction_revenue_share_pct": decimal_text(pct(revenue_breakdown["construction_revenue"], revenue)),
+            "rental_revenue_share_pct": decimal_text(pct(revenue_breakdown["rental_revenue"], revenue)),
+            "other_revenue_share_pct": decimal_text(pct(revenue_breakdown["other_revenue"], revenue)),
         }
         previous_revenue = revenue
     return derived

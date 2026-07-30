@@ -4,9 +4,10 @@ import json
 import subprocess
 from pathlib import Path
 
+import pytest
 from jsonschema import Draft202012Validator
 
-from scripts.build_company_report_insights import DEFAULT_OUTPUT, build_view_model, money_metric, stable_json
+from scripts.build_company_report_insights import DEFAULT_OUTPUT, aggregate_reported, build_view_model, combined_metric, money_metric, stable_json
 from scripts.validate_company_audit_financials import SOURCE_SECTION_CODES, load_payload, validate
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -184,9 +185,72 @@ def test_view_model_money_metric_preserves_null_as_not_disclosed() -> None:
     )
     assert metric["raw_krw"] is None
     assert metric["display_eok"] is None
-    assert metric["display_text"] == "제공되지 않음"
+    assert metric["display_text"] == "공시되지 않음"
     assert metric["calculation_basis"] == "not_disclosed"
     assert metric["disclosure_status"] == "not_disclosed"
+
+
+def test_view_model_money_metric_preserves_null_as_not_applicable() -> None:
+    metric = money_metric(
+        raw_krw=None,
+        source_refs=["sample_report"],
+        source_locations=[],
+        disclosure_status="not_applicable",
+    )
+    assert metric["raw_krw"] is None
+    assert metric["display_eok"] is None
+    assert metric["display_text"] == "해당 없음"
+    assert metric["calculation_basis"] == "not_applicable"
+    assert metric["disclosure_status"] == "not_applicable"
+
+
+def test_view_model_money_metric_preserves_reported_zero() -> None:
+    metric = money_metric(
+        raw_krw=0,
+        source_refs=["sample_report"],
+        source_locations=[],
+        disclosure_status="reported",
+    )
+    assert metric["raw_krw"] == 0
+    assert metric["display_eok"] == 0.0
+    assert metric["display_text"] == "0.0억원"
+    assert metric["calculation_basis"] == "reported"
+    assert metric["disclosure_status"] == "reported"
+
+
+def test_view_model_money_metric_rejects_null_without_status() -> None:
+    with pytest.raises(ValueError):
+        money_metric(raw_krw=None, source_refs=["sample_report"], source_locations=[])
+
+
+def test_view_model_schema_rejects_invalid_null_and_status_combinations() -> None:
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    payload = load_output()
+    metric = daeseung_company(payload)["financial_series"][0]["metrics"]["revenue"]
+    metric["raw_krw"] = None
+    metric["display_eok"] = 0
+    metric["calculation_basis"] = "reported"
+    metric["disclosure_status"] = "reported"
+    errors = list(Draft202012Validator(schema).iter_errors(payload))
+    assert errors
+
+
+def test_view_model_combined_metric_distinguishes_not_disclosed_and_not_applicable() -> None:
+    refs = ["sample_report"]
+    part = {"reported": 10, "disclosure_status": "reported", "source_refs": refs, "source_locations": []}
+    not_disclosed = {"reported": None, "disclosure_status": "not_disclosed", "source_refs": refs, "source_locations": []}
+    not_applicable = {"reported": None, "disclosure_status": "not_applicable", "source_refs": refs, "source_locations": []}
+    assert aggregate_reported([part, not_applicable]) == {"reported": 10, "disclosure_status": "reported"}
+    included_metric = combined_metric(10, [part, not_applicable])
+    assert included_metric["raw_krw"] == 10
+    assert "disclosure_status" not in included_metric
+    blocked_metric = combined_metric(None, [part, not_disclosed])
+    assert blocked_metric["raw_krw"] is None
+    assert blocked_metric["display_text"] == "공시되지 않음"
+    assert blocked_metric["calculation_basis"] == "not_disclosed"
+    all_na_metric = combined_metric(None, [not_applicable])
+    assert all_na_metric["display_text"] == "해당 없음"
+    assert all_na_metric["calculation_basis"] == "not_applicable"
 
 
 def test_calculated_money_metrics_preserve_raw_krw() -> None:

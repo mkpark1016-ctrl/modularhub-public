@@ -15,6 +15,7 @@ from scripts.validate_company_audit_financials import (
     REQUIRED_BORROWING_FIELDS,
     SOURCE_SECTION_BY_PARENT,
     SOURCE_SECTION_CODES,
+    aggregate_reported,
     calculate_derived_metrics,
     contains_key,
     protected_public_diff_status,
@@ -654,6 +655,90 @@ def test_null_reported_amount_is_not_accepted_as_reported_zero() -> None:
     result = validate(payload, base_ref=None)
     assert not result["valid"]
     assert any(issue["code"] == "invalid_disclosure_status_for_null_reported" for issue in result["issues"])
+
+
+def test_schema_rejects_null_without_disclosure_status() -> None:
+    payload = load_daeseung_payload()
+    metric = payload["financial_years"]["2023"]["investment_signals"]["industrial_property_rights"]
+    metric["reported"] = None
+    metric.pop("disclosure_status", None)
+    errors = schema_errors(payload)
+    assert errors
+
+
+@pytest.mark.parametrize("status", ["not_disclosed", "not_applicable"])
+def test_validator_requires_notes_and_sources_for_null_amounts(status: str) -> None:
+    payload = load_daeseung_payload()
+    metric = payload["financial_years"]["2023"]["investment_signals"]["industrial_property_rights"]
+    metric["reported"] = None
+    metric["disclosure_status"] = status
+    metric.pop("notes", None)
+    metric.pop("source_locations", None)
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    issue_codes = {issue["code"] for issue in result["issues"]}
+    assert "missing_null_reported_note" in issue_codes
+    assert "missing_null_reported_source_location" in issue_codes
+
+
+@pytest.mark.parametrize("status", ["not_disclosed", "not_applicable"])
+def test_validator_rejects_non_reported_status_for_integer_amounts(status: str) -> None:
+    payload = load_daeseung_payload()
+    metric = payload["financial_years"]["2023"]["investment_signals"]["industrial_property_rights"]
+    assert metric["reported"] == 0
+    metric["disclosure_status"] = status
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "invalid_disclosure_status_for_reported_amount" for issue in result["issues"])
+
+
+def test_derived_metrics_keep_unavailable_values_as_json_null() -> None:
+    payload = load_daeseung_payload()
+    payload["financial_years"]["2024"]["income_statement"]["revenue"]["reported"] = None
+    payload["financial_years"]["2024"]["income_statement"]["revenue"]["disclosure_status"] = "not_disclosed"
+    payload["financial_years"]["2024"]["income_statement"]["revenue"]["notes"] = "Revenue was not disclosed in this synthetic test case."
+    derived = calculate_derived_metrics(payload)
+    assert derived["2024"]["revenue_yoy_pct"] is None
+    assert derived["2024"]["gross_margin_pct"] is None
+    assert derived["2024"]["operating_margin_pct"] is None
+    assert "None" not in json.dumps(derived, ensure_ascii=False)
+    assert "NaN" not in json.dumps(derived, ensure_ascii=False)
+    assert "Infinity" not in json.dumps(derived, ensure_ascii=False)
+
+
+def test_aggregate_reported_preserves_zero_and_distinguishes_unavailable_statuses() -> None:
+    assert aggregate_reported([
+        {"reported": 0, "disclosure_status": "reported"},
+        {"reported": 7, "disclosure_status": "reported"},
+    ]) == {"reported": 7, "disclosure_status": "reported"}
+    assert aggregate_reported([
+        {"reported": None, "disclosure_status": "not_disclosed"},
+        {"reported": 7, "disclosure_status": "reported"},
+    ]) == {"reported": None, "disclosure_status": "not_disclosed"}
+    assert aggregate_reported([
+        {"reported": None, "disclosure_status": "not_applicable"},
+        {"reported": 7, "disclosure_status": "reported"},
+    ]) == {"reported": 7, "disclosure_status": "reported"}
+    assert aggregate_reported([
+        {"reported": None, "disclosure_status": "not_applicable"},
+        {"reported": None, "disclosure_status": "not_applicable"},
+    ]) == {"reported": None, "disclosure_status": "not_applicable"}
+
+
+def test_borrowing_and_receivable_totals_follow_disclosure_status_rules() -> None:
+    payload = load_daeseung_payload()
+    record = payload["financial_years"]["2025"]
+    record["borrowings"]["current_portion_long_term_borrowings"]["reported"] = None
+    record["borrowings"]["current_portion_long_term_borrowings"]["disclosure_status"] = "not_disclosed"
+    record["borrowings"]["current_portion_long_term_borrowings"]["notes"] = "Synthetic not disclosed component."
+    record["working_capital"]["construction_receivables_gross"]["reported"] = None
+    record["working_capital"]["construction_receivables_gross"]["disclosure_status"] = "not_applicable"
+    record["working_capital"]["construction_receivables_gross"]["notes"] = "Synthetic not applicable component."
+    derived = calculate_derived_metrics(payload)
+    assert derived["2025"]["total_borrowings"] is None
+    assert derived["2025"]["borrowings_to_equity_pct"] is None
+    assert derived["2025"]["receivables_total"] == record["working_capital"]["trade_receivables_gross"]["reported"]
+    assert derived["2025"]["receivables_to_revenue_pct"] == "5.1"
 
 
 def test_daeseung_modular_classroom_assets_are_documented_without_schema_extension() -> None:
