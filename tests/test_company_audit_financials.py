@@ -13,6 +13,7 @@ from scripts.validate_company_audit_financials import (
     DEFAULT_INPUT,
     PROTECTED_PUBLIC_FILES,
     REQUIRED_BORROWING_FIELDS,
+    REQUIRED_REVENUE_FIELDS,
     SOURCE_SECTION_BY_PARENT,
     SOURCE_SECTION_CODES,
     aggregate_reported,
@@ -142,6 +143,14 @@ def load_schema() -> dict:
 
 def reported(record: dict, section: str, field: str) -> int:
     return record[section][field]["reported"]
+
+
+def set_amount_unavailable(payload: dict, year: str, section: str, field: str, status: str = "not_disclosed") -> dict:
+    metric = payload["financial_years"][year][section][field]
+    metric["reported"] = None
+    metric["disclosure_status"] = status
+    metric["notes"] = f"Synthetic {status} test case."
+    return metric
 
 
 def schema_errors(payload: dict) -> list:
@@ -739,6 +748,96 @@ def test_borrowing_and_receivable_totals_follow_disclosure_status_rules() -> Non
     assert derived["2025"]["borrowings_to_equity_pct"] is None
     assert derived["2025"]["receivables_total"] == record["working_capital"]["trade_receivables_gross"]["reported"]
     assert derived["2025"]["receivables_to_revenue_pct"] == "5.1"
+
+
+def test_accounting_equation_null_total_assets_returns_warning_not_exception() -> None:
+    payload = load_daeseung_payload()
+    set_amount_unavailable(payload, "2025", "balance_sheet", "total_assets")
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert any(issue["code"] == "accounting_equation_unavailable" and issue["severity"] == "warning" for issue in result["issues"])
+    assert not any(issue["code"] == "asset_equation_mismatch" for issue in result["issues"])
+
+
+def test_accounting_equation_null_liabilities_returns_warning_not_exception() -> None:
+    payload = load_daeseung_payload()
+    set_amount_unavailable(payload, "2025", "balance_sheet", "total_liabilities")
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert any(issue["code"] == "accounting_equation_unavailable" for issue in result["issues"])
+
+
+def test_accounting_equation_explicit_zero_uses_numeric_path() -> None:
+    payload = load_daeseung_payload()
+    record = payload["financial_years"]["2025"]["balance_sheet"]
+    record["total_liabilities"]["reported"] = 0
+    record["total_liabilities"]["disclosure_status"] = "reported"
+    record["total_equity"]["reported"] = record["total_assets"]["reported"]
+    record["total_equity"]["disclosure_status"] = "reported"
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert not any(issue["code"] == "accounting_equation_unavailable" for issue in result["issues"])
+    assert not any(issue["code"] == "asset_equation_mismatch" for issue in result["issues"])
+
+
+def test_revenue_null_returns_breakdown_warning_not_exception() -> None:
+    payload = load_daeseung_payload()
+    set_amount_unavailable(payload, "2025", "income_statement", "revenue")
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert any(issue["code"] == "revenue_breakdown_check_unavailable" and issue["severity"] == "warning" for issue in result["issues"])
+    assert not any(issue["code"] == "revenue_breakdown_mismatch" for issue in result["issues"])
+
+
+def test_revenue_component_not_disclosed_skips_breakdown_mismatch() -> None:
+    payload = load_daeseung_payload()
+    set_amount_unavailable(payload, "2025", "revenue_breakdown", "product_revenue")
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert any(issue["code"] == "revenue_breakdown_check_unavailable" for issue in result["issues"])
+    assert not any(issue["code"] == "revenue_breakdown_mismatch" for issue in result["issues"])
+
+
+def test_revenue_component_not_applicable_is_excluded_from_breakdown_sum() -> None:
+    payload = load_daeseung_payload()
+    assert payload["financial_years"]["2025"]["revenue_breakdown"]["goods_revenue"]["reported"] == 0
+    set_amount_unavailable(payload, "2025", "revenue_breakdown", "goods_revenue", status="not_applicable")
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert not any(issue["code"] == "revenue_breakdown_check_unavailable" for issue in result["issues"])
+    assert not any(issue["code"] == "revenue_breakdown_mismatch" for issue in result["issues"])
+
+
+def test_all_revenue_components_not_applicable_skips_breakdown_check() -> None:
+    payload = load_daeseung_payload()
+    for field in REQUIRED_REVENUE_FIELDS:
+        set_amount_unavailable(payload, "2025", "revenue_breakdown", field, status="not_applicable")
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert any(issue["code"] == "revenue_breakdown_check_unavailable" for issue in result["issues"])
+    assert not any(issue["code"] == "revenue_breakdown_mismatch" for issue in result["issues"])
+
+
+def test_cash_flow_sign_null_returns_warning_not_exception() -> None:
+    payload = load_daeseung_payload()
+    set_amount_unavailable(payload, "2025", "cash_flow", "operating_cash_flow")
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+    assert any(issue["code"] == "cash_flow_sign_unavailable" and issue["severity"] == "warning" for issue in result["issues"])
+    assert not any(issue["code"] == "cash_flow_sign_mismatch" for issue in result["issues"])
+
+
+def test_warning_only_results_remain_valid_but_numeric_mismatches_fail() -> None:
+    payload = load_daeseung_payload()
+    set_amount_unavailable(payload, "2025", "balance_sheet", "total_assets")
+    warning_result = validate(payload, base_ref=None)
+    assert warning_result["valid"], warning_result["issues"]
+
+    payload = load_daeseung_payload()
+    payload["financial_years"]["2025"]["balance_sheet"]["total_assets"]["reported"] += 1
+    mismatch_result = validate(payload, base_ref=None)
+    assert not mismatch_result["valid"]
+    assert any(issue["code"] == "asset_equation_mismatch" and issue["severity"] == "error" for issue in mismatch_result["issues"])
 
 
 def test_daeseung_modular_classroom_assets_are_documented_without_schema_extension() -> None:

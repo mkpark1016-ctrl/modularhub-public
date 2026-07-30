@@ -105,8 +105,12 @@ def validation_policy_for(payload: dict[str, Any]) -> dict[str, Any]:
     return policy if isinstance(policy, dict) else {}
 
 
-def issue(issues: list[Issue], code: str, path: str, message: str, expected: Any = None, actual: Any = None, source: str | None = None) -> None:
-    issues.append(Issue(code=code, path=path, message=message, expected=expected, actual=actual, source=source))
+def issue(issues: list[Issue], code: str, path: str, message: str, expected: Any = None, actual: Any = None, source: str | None = None, severity: str = "error") -> None:
+    issues.append(Issue(code=code, path=path, message=message, expected=expected, actual=actual, source=source, severity=severity))
+
+
+def warning(issues: list[Issue], code: str, path: str, message: str, expected: Any = None, actual: Any = None, source: str | None = None) -> None:
+    issue(issues, code, path, message, expected=expected, actual=actual, source=source, severity="warning")
 
 
 def amount(record: dict[str, Any], section: str, field: str) -> int | None:
@@ -364,15 +368,58 @@ def validate_source_location_parent_sections(payload: dict[str, Any], issues: li
 
 def validate_accounting(payload: dict[str, Any], issues: list[Issue]) -> None:
     for year, record in (payload.get("financial_years") or {}).items():
+        balance_sheet = record["balance_sheet"]
         assets = amount(record, "balance_sheet", "total_assets")
         liabilities = amount(record, "balance_sheet", "total_liabilities")
         equity = amount(record, "balance_sheet", "total_equity")
-        if assets != liabilities + equity:
-            issue(issues, "asset_equation_mismatch", f"financial_years.{year}.balance_sheet", "total_assets must equal liabilities plus equity", liabilities + equity, assets, source=year)
+        balance_parts = {
+            "total_assets": balance_sheet["total_assets"],
+            "total_liabilities": balance_sheet["total_liabilities"],
+            "total_equity": balance_sheet["total_equity"],
+        }
+        if all(isinstance(value, int) and not isinstance(value, bool) for value in [assets, liabilities, equity]):
+            if assets != liabilities + equity:
+                issue(issues, "asset_equation_mismatch", f"financial_years.{year}.balance_sheet", "total_assets must equal liabilities plus equity", liabilities + equity, assets, source=year)
+        else:
+            unavailable = {
+                key: {"reported": part.get("reported"), "disclosure_status": part.get("disclosure_status")}
+                for key, part in balance_parts.items()
+                if part.get("reported") is None
+            }
+            warning(
+                issues,
+                "accounting_equation_unavailable",
+                f"financial_years.{year}.balance_sheet",
+                "accounting equation check skipped because one or more balance-sheet values are unavailable",
+                "all of total_assets, total_liabilities, and total_equity reported as integers",
+                unavailable,
+                source=year,
+            )
         revenue = amount(record, "income_statement", "revenue")
-        revenue_total = sum(amount(record, "revenue_breakdown", field) for field in REQUIRED_REVENUE_FIELDS)
-        if revenue != revenue_total:
-            issue(issues, "revenue_breakdown_mismatch", f"financial_years.{year}.revenue_breakdown", "revenue breakdown must equal revenue", revenue, revenue_total, source=year)
+        revenue_components = [record["revenue_breakdown"][field] for field in REQUIRED_REVENUE_FIELDS]
+        revenue_total = aggregate_reported(revenue_components)
+        if revenue is None:
+            warning(
+                issues,
+                "revenue_breakdown_check_unavailable",
+                f"financial_years.{year}.revenue_breakdown",
+                "revenue breakdown check skipped because revenue is unavailable",
+                "income_statement.revenue reported as an integer",
+                {"revenue": record["income_statement"]["revenue"].get("disclosure_status")},
+                source=year,
+            )
+        elif revenue_total["reported"] is None:
+            warning(
+                issues,
+                "revenue_breakdown_check_unavailable",
+                f"financial_years.{year}.revenue_breakdown",
+                "revenue breakdown check skipped because one or more revenue components are unavailable",
+                "all applicable revenue components reported as integers",
+                revenue_total,
+                source=year,
+            )
+        elif revenue != revenue_total["reported"]:
+            issue(issues, "revenue_breakdown_mismatch", f"financial_years.{year}.revenue_breakdown", "revenue breakdown must equal revenue", revenue, revenue_total["reported"], source=year)
 
 
 def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expected_years: set[str]) -> None:
@@ -460,6 +507,18 @@ def validate_cash_flow_signs(payload: dict[str, Any], issues: list[Issue]) -> No
                 issue(issues, "cash_flow_sign_field_missing", f"financial_years.{year}.cash_flow.{field}", "cash-flow sign policy references a missing field", source=year)
                 continue
             value = amount(record, "cash_flow", field)
+            if value is None:
+                cash_flow_record = record["cash_flow"][field]
+                warning(
+                    issues,
+                    "cash_flow_sign_unavailable",
+                    f"financial_years.{year}.cash_flow.{field}",
+                    "cash-flow sign check skipped because the reported value is unavailable",
+                    sign,
+                    {"reported": None, "disclosure_status": cash_flow_record.get("disclosure_status")},
+                    source=year,
+                )
+                continue
             sign_matches = {
                 "positive": value > 0,
                 "negative": value < 0,
