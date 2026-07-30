@@ -7,6 +7,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = ROOT / "data" / "company_reports" / "planm" / "restatement_source_matrix_2023_2025.json"
+PLANM_STAGING_INPUT = ROOT / "data" / "company_reports" / "planm" / "staging" / "audit_financials_2023_2025.json"
+RECONCILIATION_DOC = ROOT / "docs" / "data-audits" / "planm-2023-equity-and-restatement-reconciliation.md"
 PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "companies" / "company_report_insights.json",
     ROOT / "frontend" / "public" / "data" / "companies" / "companies.json",
@@ -18,6 +20,10 @@ PROTECTED_PUBLIC_FILES = [
 
 def load_matrix() -> dict:
     return json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
+
+
+def load_planm_staging_payload() -> dict:
+    return json.loads(PLANM_STAGING_INPUT.read_text(encoding="utf-8"))
 
 
 def final_metric(payload: dict, year: str, metric: str) -> dict:
@@ -209,6 +215,74 @@ def test_requested_3529782000_amount_is_not_mistaken_for_pdf_amount() -> None:
     unresolved = {item["item_id"]: item for item in payload["unresolved_items"]}
     assert "planm_requested_amount_3529782000_not_found" in unresolved
     assert "3,529,017,000" in unresolved["planm_requested_amount_3529782000_not_found"]["resolution_required"]
+
+
+def test_manual_reconciliation_document_records_blocking_decisions() -> None:
+    text = RECONCILIATION_DOC.read_text(encoding="utf-8")
+
+    required_terms = [
+        "20,467,046,841",
+        "777,851,000",
+        "3,529,782,000",
+        "unsupported_requested_amount",
+        "3,529,017,000",
+        "verification_pending",
+        "not_separately_verified",
+        "Accounting policy change effects and error-correction effects remain separated",
+    ]
+    for term in required_terms:
+        assert term in text
+
+
+def test_planm_staging_keeps_2023_equity_manual_reconciliation_blocked() -> None:
+    payload = load_planm_staging_payload()
+    metric = payload["financial_years"]["2023"]["balance_sheet"]["total_equity"]
+
+    assert metric["reported"] is None
+    assert metric["disclosure_status"] == "verification_pending"
+    assert "777,851,000 KRW" in metric["notes"]
+    assert "20,467,046,841 KRW" in metric["notes"]
+    assert metric["source_locations"] == [
+        {
+            "page_range": "7-8",
+            "section": "statement.balance_sheet",
+            "source_ref": "planm_audit_report_2025_04_24",
+            "verification_status": "verified_section_range",
+        },
+        {
+            "page_range": "48,50",
+            "section": "note.restatement",
+            "source_ref": "planm_audit_report_2026_06_25",
+            "verification_status": "verified_section_range",
+        },
+    ]
+
+
+def test_planm_restatement_amounts_are_component_supported_not_inferred() -> None:
+    payload = load_matrix()
+    events = {event["event_id"]: event for event in payload["restatement_events"]}
+    income_event = events["planm_2024_period_attribution_error"]
+    opening_event = events["planm_2023_additional_opening_restatement_cross_check"]
+    policy_event = events["planm_rental_asset_useful_life_policy_change"]
+
+    assert income_event["adjustment_amount"] == 3_529_017_000
+    assert "3,497,470" in income_event["reason"]
+    assert "31,547" in income_event["reason"]
+    assert opening_event["adjustment_amount"] == 777_851_000
+    assert "768,975" in opening_event["reason"]
+    assert "8,876" in opening_event["reason"]
+    assert policy_event["event_kind"] == "accounting_policy_change"
+    assert policy_event["accounting_policy_effect_included"] is True
+    assert policy_event["tax_effect_included"] is False
+
+
+def test_planm_staging_tax_effect_is_not_inferred_or_zero_filled() -> None:
+    payload = load_planm_staging_payload()
+    events = payload["entity_attribution"]["special_events"]
+    tax_statuses = {event["tax_effect_status"] for event in events}
+
+    assert "not_separately_verified" in tax_statuses
+    assert all(event.get("tax_effect_amount") is None for event in events)
 
 
 def test_existing_company_audit_report_sources_are_unchanged() -> None:
