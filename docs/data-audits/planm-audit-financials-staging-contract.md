@@ -24,6 +24,33 @@ The public builder discovers only `data/company_reports/*/*.json`, so this neste
 
 The validator allows `verification_pending` only with `reported: null`, `notes`, `source_refs`, and `source_locations`.
 
+## Text Integrity
+
+The staged JSON is validated for suspicious placeholder text before it can pass. The validator blocks:
+
+- Consecutive `???` placeholders.
+- Unicode replacement characters.
+- Required company identity fields that are blank or placeholder-only.
+
+The protected fields include company name, reporting entity, Korean accounting-standard label, attribution warning, special-event related entities, and required attribution warning terms.
+
+## Modular Segment Revenue Disclosure
+
+PlanM's audit reports do not disclose a separate modular business-segment revenue amount. The staged payload therefore uses:
+
+`modular_segment_revenue_disclosed: false`
+
+The disclosure limitations also state that product revenue, rental revenue, service revenue, and F&B revenue must not be automatically treated as modular revenue.
+
+## Audit Opinion Mapping
+
+Each attached PlanM audit report is mapped as:
+
+- `opinion: unqualified`
+- `opinion_label_ko: 적정의견`
+
+The first report keeps `auditor_report_date: null` and `auditor_report_date_verification_status: pending_manual_page_check` because the auditor report date has not been independently confirmed from the PDF body.
+
 ## 2023 Total Equity Block
 
 The 2025-04-24 audit report gives 2023 total equity of `20,467,046,841` KRW in the first restated comparative financial statements.
@@ -35,6 +62,12 @@ The 2026-06-25 audit report note 23 also includes an additional `777,851,000` KR
 
 This prevents the value from being used in public leverage ratios, equity ratios, or trend calculations.
 
+The 2026 cross-check evidence for this blocked metric is tied to note 23, not the main balance sheet:
+
+- `source_ref: planm_audit_report_2026_06_25`
+- `page_range: 48,50`
+- `section: note.restatement`
+
 ## Source Priority
 
 | Year | Primary Source | Basis | Cross-checks |
@@ -42,6 +75,8 @@ This prevents the value from being used in public leverage ratios, equity ratios
 | 2023 | `planm_audit_report_2025_04_24` | comparative financial statements | 2024-04-15 original report, 2026-06-25 later restatement note |
 | 2024 | `planm_audit_report_2026_06_25` | comparative financial statements | 2025-04-24 original 2024 report |
 | 2025 | `planm_audit_report_2026_06_25` | current-year financial statements | none |
+
+The cross-check year mismatch for `2023` + `planm_audit_report_2026_06_25` is allowed only through `validation_metadata.validation_policy.allowed_cross_check_year_mismatches`. Unlisted source/year mismatches remain validator errors.
 
 ## Restatement Selection Rules
 
@@ -69,4 +104,3 @@ PlanM can be moved from staging into the public build only after:
 - Tax effect handling is reviewed and either separately verified or explicitly documented.
 - The staged payload passes `scripts/validate_company_audit_financials.py`.
 - `scripts/build_company_report_insights.py --check` remains unchanged for existing public companies.
-

@@ -257,7 +257,8 @@
         "note.revenue_breakdown",
         "note.working_capital",
         "note.borrowings",
-        "note.investment_signals"
+        "note.investment_signals",
+        "note.restatement"
       ]
     }
   }

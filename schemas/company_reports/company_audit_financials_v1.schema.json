@@ -433,6 +433,25 @@
         "required_disclosure_limitations": {
           "type": "array",
           "items": { "type": "string", "minLength": 1 }
+        },
+        "allowed_cross_check_year_mismatches": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/allowedCrossCheckYearMismatch" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "allowedCrossCheckYearMismatch": {
+      "type": "object",
+      "required": ["year", "source_ref", "reason", "source_locations"],
+      "properties": {
+        "year": { "type": "integer" },
+        "source_ref": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "source_locations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/sourceLocation" },
+          "minItems": 1
         }
       },
       "additionalProperties": false
@@ -448,7 +467,8 @@
         "note.revenue_breakdown",
         "note.working_capital",
         "note.borrowings",
-        "note.investment_signals"
+        "note.investment_signals",
+        "note.restatement"
       ]
     }
   }
