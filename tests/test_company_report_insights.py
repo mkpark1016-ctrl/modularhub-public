@@ -6,7 +6,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from scripts.build_company_report_insights import DEFAULT_OUTPUT, build_view_model, stable_json
+from scripts.build_company_report_insights import DEFAULT_OUTPUT, build_view_model, money_metric, stable_json
 from scripts.validate_company_audit_financials import SOURCE_SECTION_CODES, load_payload, validate
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -170,12 +170,23 @@ def test_daeseung_auditor_dates_and_source_priority_are_public() -> None:
     ]
     priority = company["source_summary"]["source_priority_by_year"]
     assert priority["2023"]["primary_source_ref"] == "daeseung_audit_report_2023_09_19"
-    assert priority["2023"]["cross_check_source_refs"] == [
-        "daeseung_audit_report_2024_09_19",
-        "daeseung_audit_report_2025_09_17",
-    ]
+    assert priority["2023"]["cross_check_source_refs"] == ["daeseung_audit_report_2024_09_19"]
     assert priority["2024"]["primary_source_ref"] == "daeseung_audit_report_2024_09_19"
     assert priority["2025"]["primary_source_ref"] == "daeseung_audit_report_2025_09_17"
+
+
+def test_view_model_money_metric_preserves_null_as_not_disclosed() -> None:
+    metric = money_metric(
+        raw_krw=None,
+        source_refs=["sample_report"],
+        source_locations=[],
+        disclosure_status="not_disclosed",
+    )
+    assert metric["raw_krw"] is None
+    assert metric["display_eok"] is None
+    assert metric["display_text"] == "제공되지 않음"
+    assert metric["calculation_basis"] == "not_disclosed"
+    assert metric["disclosure_status"] == "not_disclosed"
 
 
 def test_calculated_money_metrics_preserve_raw_krw() -> None:

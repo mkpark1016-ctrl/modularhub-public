@@ -109,8 +109,15 @@ def issue(issues: list[Issue], code: str, path: str, message: str, expected: Any
     issues.append(Issue(code=code, path=path, message=message, expected=expected, actual=actual, source=source))
 
 
-def amount(record: dict[str, Any], section: str, field: str) -> int:
+def amount(record: dict[str, Any], section: str, field: str) -> int | None:
     return record[section][field]["reported"]
+
+
+def sum_reported(parts: list[dict[str, Any]]) -> int | None:
+    values = [part.get("reported") for part in parts]
+    if any(value is None for value in values):
+        return None
+    return sum(int(value) for value in values)
 
 
 def money_paths(value: Any, path: str = "") -> list[tuple[str, dict[str, Any]]]:
@@ -161,13 +168,16 @@ def calculate_derived_metrics(payload: dict[str, Any]) -> dict[str, dict[str, st
         current_assets = amount(record, "balance_sheet", "current_assets")
         current_liabilities = amount(record, "balance_sheet", "current_liabilities")
         borrowings = record["borrowings"]
-        total_borrowings = sum(borrowings[field]["reported"] for field in REQUIRED_BORROWING_FIELDS)
-        receivables_total = amount(record, "working_capital", "trade_receivables_gross") + amount(record, "working_capital", "construction_receivables_gross")
+        total_borrowings = sum_reported([borrowings[field] for field in REQUIRED_BORROWING_FIELDS])
+        receivables_total = sum_reported([
+            record["working_capital"]["trade_receivables_gross"],
+            record["working_capital"]["construction_receivables_gross"],
+        ])
         inventory = amount(record, "working_capital", "inventory")
         operating_cash_flow = amount(record, "cash_flow", "operating_cash_flow")
         revenue_breakdown = {field: amount(record, "revenue_breakdown", field) for field in REQUIRED_REVENUE_FIELDS}
         derived[year] = {
-            "revenue_yoy_pct": str(pct(revenue - previous_revenue, previous_revenue)) if previous_revenue else None,
+            "revenue_yoy_pct": str(pct(revenue - previous_revenue, previous_revenue)) if previous_revenue and revenue is not None else None,
             "gross_margin_pct": str(pct(gross_profit, revenue)),
             "operating_margin_pct": str(pct(operating_profit, revenue)),
             "net_margin_pct": str(pct(net_income, revenue)),
@@ -242,8 +252,34 @@ def validate_amount_shapes(payload: dict[str, Any], issues: list[Issue]) -> None
     source_ids = set((payload.get("source_documents") or {}).keys())
     for path, record in money_paths(payload):
         reported = record.get("reported")
-        if not isinstance(reported, int) or isinstance(reported, bool):
-            issue(issues, "reported_amount_not_integer", path, "reported amount must be an integer KRW value", "integer", reported, source="reported")
+        disclosure_status = record.get("disclosure_status")
+        if reported is None:
+            if disclosure_status not in {"not_disclosed", "not_applicable"}:
+                issue(
+                    issues,
+                    "invalid_disclosure_status_for_null_reported",
+                    f"{path}.disclosure_status",
+                    "null reported amounts require disclosure_status not_disclosed or not_applicable",
+                    ["not_disclosed", "not_applicable"],
+                    disclosure_status,
+                    source="reported",
+                )
+            if not record.get("notes"):
+                issue(issues, "missing_null_reported_note", f"{path}.notes", "null reported amounts require notes explaining the disclosure status", source="reported")
+            if not record.get("source_locations"):
+                issue(issues, "missing_null_reported_source_location", f"{path}.source_locations", "null reported amounts require a source location", source="reported")
+        elif not isinstance(reported, int) or isinstance(reported, bool):
+            issue(issues, "reported_amount_not_integer", path, "reported amount must be an integer KRW value or null", "integer|null", reported, source="reported")
+        elif disclosure_status and disclosure_status != "reported":
+            issue(
+                issues,
+                "invalid_disclosure_status_for_reported_amount",
+                f"{path}.disclosure_status",
+                "integer reported amounts must use disclosure_status reported",
+                "reported",
+                disclosure_status,
+                source="reported",
+            )
         refs = record.get("source_refs")
         if not isinstance(refs, list) or not refs:
             issue(issues, "missing_source_refs", f"{path}.source_refs", "reported amount requires source_refs", "non-empty list", refs)
@@ -316,7 +352,8 @@ def validate_accounting(payload: dict[str, Any], issues: list[Issue]) -> None:
 
 
 def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expected_years: set[str]) -> None:
-    source_ids = set((payload.get("source_documents") or {}).keys())
+    source_documents = payload.get("source_documents") or {}
+    source_ids = set(source_documents.keys())
     priority = payload.get("source_priority") or {}
     priority_years = set(priority.keys())
     if priority_years != expected_years:
@@ -339,6 +376,18 @@ def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expec
         for cross_ref in actual.get("cross_check_source_refs") or []:
             if cross_ref not in source_ids:
                 issue(issues, "source_priority_unknown_cross_check_ref", f"source_priority.{year}.cross_check_source_refs", "cross-check source_ref is not defined", sorted(source_ids), cross_ref, source=year)
+                continue
+            covered_years = {str(covered_year) for covered_year in (source_documents.get(cross_ref) or {}).get("covered_years", [])}
+            if year not in covered_years:
+                issue(
+                    issues,
+                    "cross_check_source_year_mismatch",
+                    f"source_priority.{year}.cross_check_source_refs",
+                    "cross-check source_ref must cover the financial year it is validating",
+                    sorted(covered_years),
+                    cross_ref,
+                    source=year,
+                )
 
 
 def validate_attribution(payload: dict[str, Any], issues: list[Issue]) -> None:

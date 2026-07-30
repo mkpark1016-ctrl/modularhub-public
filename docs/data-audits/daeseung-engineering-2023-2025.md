@@ -2,13 +2,15 @@
 
 ## Scope
 
-This audit adds standalone financial statement data for `daeseung-engineering` using the existing `company_audit_financials_v1` schema. The source documents are audit reports for 주식회사 대승엔지니어링. The attached PDFs were used only to verify amounts, auditor metadata, report dates, source page ranges, and entity attribution; the PDFs were not copied into the repository.
+This audit adds standalone financial statement data for `daeseung-engineering` using the existing `company_audit_financials_v1` schema. The source documents are Daeseung Engineering audit reports. The attached PDFs were used only to verify amounts, auditor metadata, report dates, source page ranges, and entity attribution; the PDFs were not copied into the repository.
 
 ## Source Documents
 
-- `[대승엔지니어링]감사보고서(2023.09.19).pdf`: primary source for 2023. FY2022 comparative statements are marked unaudited and are excluded.
-- `[대승엔지니어링]감사보고서(2024.09.19).pdf`: primary source for 2024 and cross-check source for 2023.
-- `[대승엔지니어링]감사보고서(2025.09.17).pdf`: primary source for 2025 and cross-check source for 2024 and 2023.
+- 2023-09-19 audit report: primary source for FY2023. FY2022 comparative statements are marked unaudited and are excluded.
+- 2024-09-19 audit report: primary source for FY2024 and cross-check source for FY2023.
+- 2025-09-17 audit report: primary source for FY2025 and cross-check source for FY2024.
+
+FY2023 no longer uses the 2025-09-17 report as a cross-check because that report covers FY2025 and FY2024 only. The 2025 report remains in the corporate split special-event evidence list because it helps confirm continuity after the 2023-06-30 split.
 
 ## Financial Statement Basis
 
@@ -30,13 +32,25 @@ This audit adds standalone financial statement data for `daeseung-engineering` u
 
 | Year | Auditor | Opinion | Auditor Report Date |
 | --- | --- | --- | --- |
-| 2023 | 미립회계법인 | 적정 | 2023-09-11 |
-| 2024 | 미립회계법인 | 적정 | 2024-09-13 |
-| 2025 | 미립회계법인 | 적정 | 2025-09-16 |
+| 2023 | Mirip Accounting Corporation | Unqualified | 2023-09-11 |
+| 2024 | Mirip Accounting Corporation | Unqualified | 2024-09-13 |
+| 2025 | Mirip Accounting Corporation | Unqualified | 2025-09-16 |
+
+## Industrial Property Rights Semantics
+
+The source JSON now distinguishes actual zero amounts from non-disclosure through `disclosure_status`.
+
+| Year | Reported KRW | Disclosure Status | Evidence |
+| --- | ---: | --- | --- |
+| 2023 | 0 | reported | The 2023 audit report intangible-assets note explicitly shows the industrial property rights ending carrying amount as zero. |
+| 2024 | 0 | reported | The 2024 audit report omits a separate intangible-assets line, but the 2025 audit report comparative balance sheet explicitly shows the prior-year industrial property rights carrying amount as zero. |
+| 2025 | 3,417,840 | reported | The 2025 audit report balance sheet explicitly discloses industrial property rights of 3,417,840 KRW. |
+
+No industrial property rights value is treated as `not_disclosed` after the PDF re-check. The validator now supports `reported: null` with `disclosure_status: not_disclosed` or `not_applicable` for future companies, and rejects null values marked as reported.
 
 ## Modular Disclosure Limits
 
-The audit reports separately disclose 모듈러교실임대료수입. This value is stored in the existing generic `rental_revenue` field and is used to calculate rental revenue share:
+The audit reports separately disclose modular classroom rental revenue. This value is stored in the existing generic `rental_revenue` field and is used to calculate rental revenue share:
 
 - 2023: 50.5% of revenue.
 - 2024: 79.0% of revenue.
@@ -50,13 +64,13 @@ The reports also disclose modular classroom rental asset values and additions, b
 
 All 84 source locations are recorded as `verified_section_range`.
 
-- 2023 audit report: balance sheet pp.5-6, income statement pp.7-8, cash flow pp.10-11, modular classroom and investment notes pp.17 and 20, borrowings p.19.
+- 2023 audit report: balance sheet pp.5-6, income statement pp.7-8, cash flow pp.10-11, intangible-assets note p.18, modular classroom and investment notes pp.17 and 20, borrowings p.19.
 - 2024 audit report: balance sheet pp.5-6, income statement pp.7-8, cash flow pp.10-11, modular classroom and operating lease notes pp.19-20, borrowings pp.18-19.
 - 2025 audit report: balance sheet pp.5-6, income statement pp.7-8, cash flow pp.10-11, borrowings pp.19-20, modular classroom rental asset and operating lease notes pp.22 and 25.
 
 ## Entity Attribution
 
-The company split effective 2023-06-30 did not transfer an operating business segment. The audit note indicates only capital stock and term deposits were transferred to 주식회사 대승이엔지, so the 2023-2025 standalone financial series is not treated as broken by the split. This is recorded as a special event but does not trigger automatic aggregation or restatement.
+The company split effective 2023-06-30 did not transfer an operating business segment. The audit note indicates only capital stock and term deposits were transferred to Daeseung ENG, so the 2023-2025 standalone financial series is not treated as broken by the split. This is recorded as a special event but does not trigger automatic aggregation or restatement.
 
 ## Deferred Items
 

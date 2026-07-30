@@ -77,6 +77,7 @@
     "2023": {
       "balance_sheet": {
         "current_assets": {
+          "disclosure_status": "reported",
           "reported": 13748119708,
           "source_locations": [
             {
@@ -91,6 +92,7 @@
           ]
         },
         "current_liabilities": {
+          "disclosure_status": "reported",
           "reported": 66935733766,
           "source_locations": [
             {
@@ -105,6 +107,7 @@
           ]
         },
         "total_assets": {
+          "disclosure_status": "reported",
           "reported": 81604451252,
           "source_locations": [
             {
@@ -119,6 +122,7 @@
           ]
         },
         "total_equity": {
+          "disclosure_status": "reported",
           "reported": 9863111329,
           "source_locations": [
             {
@@ -133,6 +137,7 @@
           ]
         },
         "total_liabilities": {
+          "disclosure_status": "reported",
           "reported": 71741339923,
           "source_locations": [
             {
@@ -149,6 +154,7 @@
       },
       "borrowings": {
         "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
           "reported": 3712165886,
           "source_locations": [
             {
@@ -163,6 +169,7 @@
           ]
         },
         "long_term_borrowings": {
+          "disclosure_status": "reported",
           "notes": "Long-term borrowings are reported separately from current portions of long-term borrowings.",
           "reported": 3638518644,
           "source_locations": [
@@ -178,6 +185,7 @@
           ]
         },
         "short_term_borrowings": {
+          "disclosure_status": "reported",
           "notes": "Short-term borrowings include short-term borrowings and short-term shareholder/officer/employee borrowings.",
           "reported": 1092160350,
           "source_locations": [
@@ -195,6 +203,7 @@
       },
       "cash_flow": {
         "ending_cash": {
+          "disclosure_status": "reported",
           "reported": 674128125,
           "source_locations": [
             {
@@ -209,6 +218,7 @@
           ]
         },
         "financing_cash_flow": {
+          "disclosure_status": "reported",
           "reported": 2826698241,
           "source_locations": [
             {
@@ -223,6 +233,7 @@
           ]
         },
         "investing_cash_flow": {
+          "disclosure_status": "reported",
           "reported": -61694978590,
           "source_locations": [
             {
@@ -237,6 +248,7 @@
           ]
         },
         "operating_cash_flow": {
+          "disclosure_status": "reported",
           "reported": 59283840033,
           "source_locations": [
             {
@@ -253,6 +265,7 @@
       },
       "income_statement": {
         "gross_profit": {
+          "disclosure_status": "reported",
           "reported": 7530500530,
           "source_locations": [
             {
@@ -267,6 +280,7 @@
           ]
         },
         "net_income": {
+          "disclosure_status": "reported",
           "reported": 3009792401,
           "source_locations": [
             {
@@ -281,6 +295,7 @@
           ]
         },
         "operating_profit": {
+          "disclosure_status": "reported",
           "reported": 4109790546,
           "source_locations": [
             {
@@ -295,6 +310,7 @@
           ]
         },
         "revenue": {
+          "disclosure_status": "reported",
           "reported": 32326080148,
           "source_locations": [
             {
@@ -311,6 +327,7 @@
       },
       "investment_signals": {
         "construction_in_progress": {
+          "disclosure_status": "reported",
           "notes": "Reported modular classroom acquisition amount; preserved as an investment signal because the common schema has no dedicated modular classroom rental asset field.",
           "reported": 60458172626,
           "source_locations": [
@@ -326,11 +343,12 @@
           ]
         },
         "industrial_property_rights": {
-          "notes": "Industrial property rights carrying amount was not separately disclosed, so the value is recorded as 0.",
+          "disclosure_status": "reported",
+          "notes": "The 2023 audit report intangible-assets note explicitly shows the industrial property rights ending carrying amount as 0 won.",
           "reported": 0,
           "source_locations": [
             {
-              "page_range": "pp.17, 20",
+              "page_range": "p.18",
               "section": "note.investment_signals",
               "source_ref": "daeseung_audit_report_2023_09_19",
               "verification_status": "verified_section_range"
@@ -341,6 +359,7 @@
           ]
         },
         "research_and_development_expense": {
+          "disclosure_status": "reported",
           "reported": 179307926,
           "source_locations": [
             {
@@ -357,6 +376,7 @@
       },
       "revenue_breakdown": {
         "construction_revenue": {
+          "disclosure_status": "reported",
           "reported": 7447960153,
           "source_locations": [
             {
@@ -371,6 +391,7 @@
           ]
         },
         "goods_revenue": {
+          "disclosure_status": "reported",
           "notes": "Goods revenue was not separately presented in the income statement revenue composition, so the value is recorded as 0.",
           "reported": 0,
           "source_locations": [
@@ -386,6 +407,7 @@
           ]
         },
         "other_revenue": {
+          "disclosure_status": "reported",
           "notes": "Service revenue and equipment rental revenue are combined into other_revenue.",
           "reported": 464930990,
           "source_locations": [
@@ -401,6 +423,7 @@
           ]
         },
         "product_revenue": {
+          "disclosure_status": "reported",
           "reported": 8088633635,
           "source_locations": [
             {
@@ -415,6 +438,7 @@
           ]
         },
         "rental_revenue": {
+          "disclosure_status": "reported",
           "notes": "모듈러교실임대료수입 is recorded as rental_revenue. Equipment rental revenue is included in other_revenue.",
           "reported": 16324555370,
           "source_locations": [
@@ -435,6 +459,7 @@
       ],
       "working_capital": {
         "construction_receivables_gross": {
+          "disclosure_status": "reported",
           "notes": "Other receivables and equipment-rental receivables are combined; construction receivables were not separately disclosed.",
           "reported": 1182595847,
           "source_locations": [
@@ -450,6 +475,7 @@
           ]
         },
         "inventory": {
+          "disclosure_status": "reported",
           "reported": 9797864630,
           "source_locations": [
             {
@@ -464,6 +490,7 @@
           ]
         },
         "trade_receivables_gross": {
+          "disclosure_status": "reported",
           "reported": 1407373616,
           "source_locations": [
             {
@@ -478,6 +505,7 @@
           ]
         },
         "work_in_progress": {
+          "disclosure_status": "reported",
           "reported": 8160670180,
           "source_locations": [
             {
@@ -496,6 +524,7 @@
     "2024": {
       "balance_sheet": {
         "current_assets": {
+          "disclosure_status": "reported",
           "reported": 24041763602,
           "source_locations": [
             {
@@ -510,6 +539,7 @@
           ]
         },
         "current_liabilities": {
+          "disclosure_status": "reported",
           "reported": 46674521521,
           "source_locations": [
             {
@@ -524,6 +554,7 @@
           ]
         },
         "total_assets": {
+          "disclosure_status": "reported",
           "reported": 81271797933,
           "source_locations": [
             {
@@ -538,6 +569,7 @@
           ]
         },
         "total_equity": {
+          "disclosure_status": "reported",
           "reported": 15178972005,
           "source_locations": [
             {
@@ -552,6 +584,7 @@
           ]
         },
         "total_liabilities": {
+          "disclosure_status": "reported",
           "reported": 66092825928,
           "source_locations": [
             {
@@ -568,6 +601,7 @@
       },
       "borrowings": {
         "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
           "reported": 2799000000,
           "source_locations": [
             {
@@ -582,6 +616,7 @@
           ]
         },
         "long_term_borrowings": {
+          "disclosure_status": "reported",
           "notes": "Long-term borrowings are reported separately from current portions of long-term borrowings.",
           "reported": 18209540202,
           "source_locations": [
@@ -597,6 +632,7 @@
           ]
         },
         "short_term_borrowings": {
+          "disclosure_status": "reported",
           "notes": "Short-term borrowings include short-term borrowings and short-term shareholder/officer/employee borrowings.",
           "reported": 7834160350,
           "source_locations": [
@@ -614,6 +650,7 @@
       },
       "cash_flow": {
         "ending_cash": {
+          "disclosure_status": "reported",
           "reported": 3641548742,
           "source_locations": [
             {
@@ -628,6 +665,7 @@
           ]
         },
         "financing_cash_flow": {
+          "disclosure_status": "reported",
           "reported": 20263831706,
           "source_locations": [
             {
@@ -642,6 +680,7 @@
           ]
         },
         "investing_cash_flow": {
+          "disclosure_status": "reported",
           "reported": -43727350972,
           "source_locations": [
             {
@@ -656,6 +695,7 @@
           ]
         },
         "operating_cash_flow": {
+          "disclosure_status": "reported",
           "reported": 26430939883,
           "source_locations": [
             {
@@ -672,6 +712,7 @@
       },
       "income_statement": {
         "gross_profit": {
+          "disclosure_status": "reported",
           "reported": 15685352450,
           "source_locations": [
             {
@@ -686,6 +727,7 @@
           ]
         },
         "net_income": {
+          "disclosure_status": "reported",
           "reported": 5203952176,
           "source_locations": [
             {
@@ -700,6 +742,7 @@
           ]
         },
         "operating_profit": {
+          "disclosure_status": "reported",
           "reported": 10058636613,
           "source_locations": [
             {
@@ -714,6 +757,7 @@
           ]
         },
         "revenue": {
+          "disclosure_status": "reported",
           "reported": 84005687052,
           "source_locations": [
             {
@@ -730,6 +774,7 @@
       },
       "investment_signals": {
         "construction_in_progress": {
+          "disclosure_status": "reported",
           "notes": "Reported modular classroom acquisition amount; preserved as an investment signal because the common schema has no dedicated modular classroom rental asset field.",
           "reported": 44579274828,
           "source_locations": [
@@ -745,21 +790,23 @@
           ]
         },
         "industrial_property_rights": {
-          "notes": "Industrial property rights carrying amount was not separately disclosed, so the value is recorded as 0.",
+          "disclosure_status": "reported",
+          "notes": "The 2024 audit report omits a separate intangible-assets line, but the 2025 audit report comparative balance sheet explicitly shows the prior-year industrial property rights carrying amount as 0 won.",
           "reported": 0,
           "source_locations": [
             {
-              "page_range": "pp.18-19",
+              "page_range": "p.5",
               "section": "note.investment_signals",
-              "source_ref": "daeseung_audit_report_2024_09_19",
+              "source_ref": "daeseung_audit_report_2025_09_17",
               "verification_status": "verified_section_range"
             }
           ],
           "source_refs": [
-            "daeseung_audit_report_2024_09_19"
+            "daeseung_audit_report_2025_09_17"
           ]
         },
         "research_and_development_expense": {
+          "disclosure_status": "reported",
           "reported": 20000000,
           "source_locations": [
             {
@@ -776,6 +823,7 @@
       },
       "revenue_breakdown": {
         "construction_revenue": {
+          "disclosure_status": "reported",
           "reported": 6274967747,
           "source_locations": [
             {
@@ -790,6 +838,7 @@
           ]
         },
         "goods_revenue": {
+          "disclosure_status": "reported",
           "notes": "Goods revenue was not separately presented in the income statement revenue composition, so the value is recorded as 0.",
           "reported": 0,
           "source_locations": [
@@ -805,6 +854,7 @@
           ]
         },
         "other_revenue": {
+          "disclosure_status": "reported",
           "notes": "Service revenue and equipment rental revenue are combined into other_revenue.",
           "reported": 122697481,
           "source_locations": [
@@ -820,6 +870,7 @@
           ]
         },
         "product_revenue": {
+          "disclosure_status": "reported",
           "reported": 11203885456,
           "source_locations": [
             {
@@ -834,6 +885,7 @@
           ]
         },
         "rental_revenue": {
+          "disclosure_status": "reported",
           "notes": "모듈러교실임대료수입 is recorded as rental_revenue. Equipment rental revenue is included in other_revenue.",
           "reported": 66404136368,
           "source_locations": [
@@ -854,6 +906,7 @@
       ],
       "working_capital": {
         "construction_receivables_gross": {
+          "disclosure_status": "reported",
           "notes": "Other receivables and equipment-rental receivables are combined; construction receivables were not separately disclosed.",
           "reported": 1723802777,
           "source_locations": [
@@ -869,6 +922,7 @@
           ]
         },
         "inventory": {
+          "disclosure_status": "reported",
           "reported": 16641503220,
           "source_locations": [
             {
@@ -883,6 +937,7 @@
           ]
         },
         "trade_receivables_gross": {
+          "disclosure_status": "reported",
           "reported": 1908992362,
           "source_locations": [
             {
@@ -897,6 +952,7 @@
           ]
         },
         "work_in_progress": {
+          "disclosure_status": "reported",
           "reported": 1288000000,
           "source_locations": [
             {
@@ -915,6 +971,7 @@
     "2025": {
       "balance_sheet": {
         "current_assets": {
+          "disclosure_status": "reported",
           "reported": 37768284861,
           "source_locations": [
             {
@@ -929,6 +986,7 @@
           ]
         },
         "current_liabilities": {
+          "disclosure_status": "reported",
           "reported": 23858571545,
           "source_locations": [
             {
@@ -943,6 +1001,7 @@
           ]
         },
         "total_assets": {
+          "disclosure_status": "reported",
           "reported": 82695337438,
           "source_locations": [
             {
@@ -957,6 +1016,7 @@
           ]
         },
         "total_equity": {
+          "disclosure_status": "reported",
           "reported": 19765713850,
           "source_locations": [
             {
@@ -971,6 +1031,7 @@
           ]
         },
         "total_liabilities": {
+          "disclosure_status": "reported",
           "reported": 62929623588,
           "source_locations": [
             {
@@ -987,6 +1048,7 @@
       },
       "borrowings": {
         "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
           "reported": 9449991333,
           "source_locations": [
             {
@@ -1001,6 +1063,7 @@
           ]
         },
         "long_term_borrowings": {
+          "disclosure_status": "reported",
           "notes": "Long-term borrowings are reported separately from current portions of long-term borrowings.",
           "reported": 38312947102,
           "source_locations": [
@@ -1016,6 +1079,7 @@
           ]
         },
         "short_term_borrowings": {
+          "disclosure_status": "reported",
           "notes": "Short-term borrowings include short-term borrowings and short-term shareholder/officer/employee borrowings.",
           "reported": 5402000000,
           "source_locations": [
@@ -1033,6 +1097,7 @@
       },
       "cash_flow": {
         "ending_cash": {
+          "disclosure_status": "reported",
           "reported": 1605216173,
           "source_locations": [
             {
@@ -1047,6 +1112,7 @@
           ]
         },
         "financing_cash_flow": {
+          "disclosure_status": "reported",
           "reported": 24404997811,
           "source_locations": [
             {
@@ -1061,6 +1127,7 @@
           ]
         },
         "investing_cash_flow": {
+          "disclosure_status": "reported",
           "reported": -26095929805,
           "source_locations": [
             {
@@ -1075,6 +1142,7 @@
           ]
         },
         "operating_cash_flow": {
+          "disclosure_status": "reported",
           "reported": -345400575,
           "source_locations": [
             {
@@ -1091,6 +1159,7 @@
       },
       "income_statement": {
         "gross_profit": {
+          "disclosure_status": "reported",
           "reported": 12681852632,
           "source_locations": [
             {
@@ -1105,6 +1174,7 @@
           ]
         },
         "net_income": {
+          "disclosure_status": "reported",
           "reported": 4376654645,
           "source_locations": [
             {
@@ -1119,6 +1189,7 @@
           ]
         },
         "operating_profit": {
+          "disclosure_status": "reported",
           "reported": 6365339970,
           "source_locations": [
             {
@@ -1133,6 +1204,7 @@
           ]
         },
         "revenue": {
+          "disclosure_status": "reported",
           "reported": 61659861549,
           "source_locations": [
             {
@@ -1149,6 +1221,7 @@
       },
       "investment_signals": {
         "construction_in_progress": {
+          "disclosure_status": "reported",
           "notes": "Reported modular classroom acquisition amount; preserved as an investment signal because the common schema has no dedicated modular classroom rental asset field.",
           "reported": 5314128869,
           "source_locations": [
@@ -1164,11 +1237,12 @@
           ]
         },
         "industrial_property_rights": {
-          "notes": "Industrial property rights carrying amount is disclosed and preserved as an investment signal.",
+          "disclosure_status": "reported",
+          "notes": "The 2025 audit report balance sheet explicitly discloses industrial property rights of 3,417,840 won.",
           "reported": 3417840,
           "source_locations": [
             {
-              "page_range": "pp.10, 19, 22",
+              "page_range": "p.5",
               "section": "note.investment_signals",
               "source_ref": "daeseung_audit_report_2025_09_17",
               "verification_status": "verified_section_range"
@@ -1179,6 +1253,7 @@
           ]
         },
         "research_and_development_expense": {
+          "disclosure_status": "reported",
           "reported": 15701939,
           "source_locations": [
             {
@@ -1195,6 +1270,7 @@
       },
       "revenue_breakdown": {
         "construction_revenue": {
+          "disclosure_status": "reported",
           "reported": 8383686248,
           "source_locations": [
             {
@@ -1209,6 +1285,7 @@
           ]
         },
         "goods_revenue": {
+          "disclosure_status": "reported",
           "notes": "Goods revenue was not separately presented in the income statement revenue composition, so the value is recorded as 0.",
           "reported": 0,
           "source_locations": [
@@ -1224,6 +1301,7 @@
           ]
         },
         "other_revenue": {
+          "disclosure_status": "reported",
           "notes": "Service revenue and equipment rental revenue are combined into other_revenue.",
           "reported": 109516364,
           "source_locations": [
@@ -1239,6 +1317,7 @@
           ]
         },
         "product_revenue": {
+          "disclosure_status": "reported",
           "reported": 28083680751,
           "source_locations": [
             {
@@ -1253,6 +1332,7 @@
           ]
         },
         "rental_revenue": {
+          "disclosure_status": "reported",
           "notes": "모듈러교실임대료수입 is recorded as rental_revenue. Equipment rental revenue is included in other_revenue.",
           "reported": 25082978186,
           "source_locations": [
@@ -1273,6 +1353,7 @@
       ],
       "working_capital": {
         "construction_receivables_gross": {
+          "disclosure_status": "reported",
           "notes": "Other receivables and equipment-rental receivables are combined; construction receivables were not separately disclosed.",
           "reported": 253080000,
           "source_locations": [
@@ -1288,6 +1369,7 @@
           ]
         },
         "inventory": {
+          "disclosure_status": "reported",
           "reported": 30588911320,
           "source_locations": [
             {
@@ -1302,6 +1384,7 @@
           ]
         },
         "trade_receivables_gross": {
+          "disclosure_status": "reported",
           "reported": 3165203872,
           "source_locations": [
             {
@@ -1316,6 +1399,7 @@
           ]
         },
         "work_in_progress": {
+          "disclosure_status": "reported",
           "reported": 979638620,
           "source_locations": [
             {
@@ -1394,8 +1478,7 @@
     "2023": {
       "basis": "current_year_financial_statements",
       "cross_check_source_refs": [
-        "daeseung_audit_report_2024_09_19",
-        "daeseung_audit_report_2025_09_17"
+        "daeseung_audit_report_2024_09_19"
       ],
       "primary_source_ref": "daeseung_audit_report_2023_09_19"
     },

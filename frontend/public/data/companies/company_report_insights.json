@@ -294,6 +294,7 @@
           "metrics": {
             "current_assets": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 137.5,
               "display_text": "137.5억원",
               "raw_krw": 13748119708,
@@ -311,6 +312,7 @@
             },
             "current_liabilities": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 669.4,
               "display_text": "669.4억원",
               "raw_krw": 66935733766,
@@ -328,6 +330,7 @@
             },
             "gross_profit": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 75.3,
               "display_text": "75.3억원",
               "raw_krw": 7530500530,
@@ -345,6 +348,7 @@
             },
             "inventory": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 98.0,
               "display_text": "98.0억원",
               "raw_krw": 9797864630,
@@ -362,6 +366,7 @@
             },
             "net_income": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 30.1,
               "display_text": "30.1억원",
               "raw_krw": 3009792401,
@@ -379,6 +384,7 @@
             },
             "operating_cash_flow": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 592.8,
               "display_text": "592.8억원",
               "raw_krw": 59283840033,
@@ -396,6 +402,7 @@
             },
             "operating_profit": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 41.1,
               "display_text": "41.1억원",
               "raw_krw": 4109790546,
@@ -436,6 +443,7 @@
             },
             "revenue": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 323.3,
               "display_text": "323.3억원",
               "raw_krw": 32326080148,
@@ -453,6 +461,7 @@
             },
             "total_assets": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 816.0,
               "display_text": "816.0억원",
               "raw_krw": 81604451252,
@@ -499,6 +508,7 @@
             },
             "total_equity": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 98.6,
               "display_text": "98.6억원",
               "raw_krw": 9863111329,
@@ -516,6 +526,7 @@
             },
             "total_liabilities": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 717.4,
               "display_text": "717.4억원",
               "raw_krw": 71741339923,
@@ -538,6 +549,7 @@
           "metrics": {
             "current_assets": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 240.4,
               "display_text": "240.4억원",
               "raw_krw": 24041763602,
@@ -555,6 +567,7 @@
             },
             "current_liabilities": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 466.7,
               "display_text": "466.7억원",
               "raw_krw": 46674521521,
@@ -572,6 +585,7 @@
             },
             "gross_profit": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 156.9,
               "display_text": "156.9억원",
               "raw_krw": 15685352450,
@@ -589,6 +603,7 @@
             },
             "inventory": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 166.4,
               "display_text": "166.4억원",
               "raw_krw": 16641503220,
@@ -606,6 +621,7 @@
             },
             "net_income": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 52.0,
               "display_text": "52.0억원",
               "raw_krw": 5203952176,
@@ -623,6 +639,7 @@
             },
             "operating_cash_flow": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 264.3,
               "display_text": "264.3억원",
               "raw_krw": 26430939883,
@@ -640,6 +657,7 @@
             },
             "operating_profit": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 100.6,
               "display_text": "100.6억원",
               "raw_krw": 10058636613,
@@ -680,6 +698,7 @@
             },
             "revenue": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 840.1,
               "display_text": "840.1억원",
               "raw_krw": 84005687052,
@@ -697,6 +716,7 @@
             },
             "total_assets": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 812.7,
               "display_text": "812.7억원",
               "raw_krw": 81271797933,
@@ -743,6 +763,7 @@
             },
             "total_equity": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 151.8,
               "display_text": "151.8억원",
               "raw_krw": 15178972005,
@@ -760,6 +781,7 @@
             },
             "total_liabilities": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 660.9,
               "display_text": "660.9억원",
               "raw_krw": 66092825928,
@@ -782,6 +804,7 @@
           "metrics": {
             "current_assets": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 377.7,
               "display_text": "377.7억원",
               "raw_krw": 37768284861,
@@ -799,6 +822,7 @@
             },
             "current_liabilities": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 238.6,
               "display_text": "238.6억원",
               "raw_krw": 23858571545,
@@ -816,6 +840,7 @@
             },
             "gross_profit": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 126.8,
               "display_text": "126.8억원",
               "raw_krw": 12681852632,
@@ -833,6 +858,7 @@
             },
             "inventory": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 305.9,
               "display_text": "305.9억원",
               "raw_krw": 30588911320,
@@ -850,6 +876,7 @@
             },
             "net_income": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 43.8,
               "display_text": "43.8억원",
               "raw_krw": 4376654645,
@@ -867,6 +894,7 @@
             },
             "operating_cash_flow": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": -3.5,
               "display_text": "-3.5억원",
               "raw_krw": -345400575,
@@ -884,6 +912,7 @@
             },
             "operating_profit": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 63.7,
               "display_text": "63.7억원",
               "raw_krw": 6365339970,
@@ -924,6 +953,7 @@
             },
             "revenue": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 616.6,
               "display_text": "616.6억원",
               "raw_krw": 61659861549,
@@ -941,6 +971,7 @@
             },
             "total_assets": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 827.0,
               "display_text": "827.0억원",
               "raw_krw": 82695337438,
@@ -987,6 +1018,7 @@
             },
             "total_equity": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 197.7,
               "display_text": "197.7억원",
               "raw_krw": 19765713850,
@@ -1004,6 +1036,7 @@
             },
             "total_liabilities": {
               "calculation_basis": "reported",
+              "disclosure_status": "reported",
               "display_eok": 629.3,
               "display_text": "629.3억원",
               "raw_krw": 62929623588,
@@ -1026,6 +1059,7 @@
       "latest_metrics": {
         "gross_profit": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 126.8,
           "display_text": "126.8억원",
           "raw_krw": 12681852632,
@@ -1043,6 +1077,7 @@
         },
         "inventory": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 305.9,
           "display_text": "305.9억원",
           "raw_krw": 30588911320,
@@ -1060,6 +1095,7 @@
         },
         "net_income": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 43.8,
           "display_text": "43.8억원",
           "raw_krw": 4376654645,
@@ -1077,6 +1113,7 @@
         },
         "operating_cash_flow": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": -3.5,
           "display_text": "-3.5억원",
           "raw_krw": -345400575,
@@ -1094,6 +1131,7 @@
         },
         "operating_profit": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 63.7,
           "display_text": "63.7억원",
           "raw_krw": 6365339970,
@@ -1134,6 +1172,7 @@
         },
         "revenue": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 616.6,
           "display_text": "616.6억원",
           "raw_krw": 61659861549,
@@ -1151,6 +1190,7 @@
         },
         "total_assets": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 827.0,
           "display_text": "827.0억원",
           "raw_krw": 82695337438,
@@ -1197,6 +1237,7 @@
         },
         "total_equity": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 197.7,
           "display_text": "197.7억원",
           "raw_krw": 19765713850,
@@ -1214,6 +1255,7 @@
         },
         "total_liabilities": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 629.3,
           "display_text": "629.3억원",
           "raw_krw": 62929623588,
@@ -1231,6 +1273,7 @@
         },
         "work_in_progress": {
           "calculation_basis": "reported",
+          "disclosure_status": "reported",
           "display_eok": 9.8,
           "display_text": "9.8억원",
           "raw_krw": 979638620,
@@ -1317,8 +1360,7 @@
           "2023": {
             "basis": "current_year_financial_statements",
             "cross_check_source_refs": [
-              "daeseung_audit_report_2024_09_19",
-              "daeseung_audit_report_2025_09_17"
+              "daeseung_audit_report_2024_09_19"
             ],
             "primary_source_ref": "daeseung_audit_report_2023_09_19"
           },

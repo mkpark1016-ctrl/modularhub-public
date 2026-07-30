@@ -163,6 +163,8 @@ def synthetic_company_payload() -> dict:
         "2025": payload["source_priority"]["2024"],
         "2026": payload["source_priority"]["2025"],
     }
+    for priority in payload["source_priority"].values():
+        priority.pop("cross_check_source_refs", None)
     payload["financial_years"]["2026"]["cash_flow"]["operating_cash_flow"]["reported"] = 30830315410
     payload["entity_attribution"] = {
         "reporting_entity": "Sample Company",
@@ -310,6 +312,17 @@ def test_source_priority_years_must_match_expected_years() -> None:
     result = validate(payload, base_ref=None)
     assert not result["valid"]
     assert any(issue["code"] == "source_priority_years_mismatch" for issue in result["issues"])
+
+
+def test_cross_check_source_must_cover_the_financial_year() -> None:
+    payload = load_daeseung_payload()
+    payload["source_priority"]["2023"]["cross_check_source_refs"] = [
+        "daeseung_audit_report_2024_09_19",
+        "daeseung_audit_report_2025_09_17",
+    ]
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "cross_check_source_year_mismatch" and issue["source"] == "2023" for issue in result["issues"])
 
 
 def test_base_ref_missing_returns_explicit_warning() -> None:
@@ -567,10 +580,7 @@ def test_daeseung_source_priority_and_cross_checks_are_recorded() -> None:
     priority = load_daeseung_payload()["source_priority"]
     assert priority["2023"]["primary_source_ref"] == "daeseung_audit_report_2023_09_19"
     assert priority["2023"]["basis"] == "current_year_financial_statements"
-    assert priority["2023"]["cross_check_source_refs"] == [
-        "daeseung_audit_report_2024_09_19",
-        "daeseung_audit_report_2025_09_17",
-    ]
+    assert priority["2023"]["cross_check_source_refs"] == ["daeseung_audit_report_2024_09_19"]
     assert priority["2024"]["primary_source_ref"] == "daeseung_audit_report_2024_09_19"
     assert priority["2024"]["cross_check_source_refs"] == ["daeseung_audit_report_2025_09_17"]
     assert priority["2025"]["primary_source_ref"] == "daeseung_audit_report_2025_09_17"
@@ -606,6 +616,44 @@ def test_daeseung_cash_flow_and_modular_rental_disclosure_are_preserved() -> Non
         assert term in warning
     assert not contains_key(payload, "modular_revenue")
     assert not contains_key(payload, "fy2022")
+
+
+def test_daeseung_industrial_property_rights_zero_and_reported_amounts_are_preserved() -> None:
+    payload = load_daeseung_payload()
+    expected = {"2023": 0, "2024": 0, "2025": 3417840}
+    expected_refs = {
+        "2023": ["daeseung_audit_report_2023_09_19"],
+        "2024": ["daeseung_audit_report_2025_09_17"],
+        "2025": ["daeseung_audit_report_2025_09_17"],
+    }
+    for year, amount_value in expected.items():
+        metric = payload["financial_years"][year]["investment_signals"]["industrial_property_rights"]
+        assert metric["reported"] == amount_value
+        assert metric["disclosure_status"] == "reported"
+        assert metric["source_refs"] == expected_refs[year]
+    assert "explicitly shows" in payload["financial_years"]["2023"]["investment_signals"]["industrial_property_rights"]["notes"]
+    assert "comparative balance sheet" in payload["financial_years"]["2024"]["investment_signals"]["industrial_property_rights"]["notes"]
+
+
+def test_null_reported_amount_requires_not_disclosed_semantics() -> None:
+    payload = load_daeseung_payload()
+    metric = payload["financial_years"]["2023"]["investment_signals"]["industrial_property_rights"]
+    metric["reported"] = None
+    metric["disclosure_status"] = "not_disclosed"
+    metric["notes"] = "Industrial property rights were not disclosed in this source."
+    assert schema_errors(payload) == []
+    result = validate(payload, base_ref=None)
+    assert result["valid"], result["issues"]
+
+
+def test_null_reported_amount_is_not_accepted_as_reported_zero() -> None:
+    payload = load_daeseung_payload()
+    metric = payload["financial_years"]["2023"]["investment_signals"]["industrial_property_rights"]
+    metric["reported"] = None
+    metric["disclosure_status"] = "reported"
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "invalid_disclosure_status_for_null_reported" for issue in result["issues"])
 
 
 def test_daeseung_modular_classroom_assets_are_documented_without_schema_extension() -> None:
