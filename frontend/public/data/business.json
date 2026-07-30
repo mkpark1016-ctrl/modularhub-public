@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-07-30T07:54:57+09:00",
-  "procurement_plan_count": 35,
+  "generated_at": "2026-07-31T08:05:27+09:00",
+  "procurement_plan_count": 36,
   "procurement_plan_collection_status": "success",
   "procurement_plan_source_status": {
     "나라장터": "success"
   },
-  "procurement_plan_last_collected_at": "2026-07-30T07:48:45",
+  "procurement_plan_last_collected_at": "2026-07-31T07:58:38",
   "g2b_order_plan_status": "success",
-  "g2b_order_plan_message": "정상 호출되어 35건을 공개 데이터에 반영했습니다.",
+  "g2b_order_plan_message": "정상 호출되어 36건을 공개 데이터에 반영했습니다.",
   "d2b_status": "disabled_stopped",
   "d2b_message": "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다.",
   "d2b_legacy_status": "disabled_stopped",
   "d2b_gw_migration_required": true,
   "lh_contest_status": "success",
   "lh_contest_message": "LH 민간참여 공공주택 공모 10건을 공개 사업정보에 반영했습니다.",
-  "lh_contest_last_attempt": "2026-07-30T07:50:06+09:00",
-  "lh_contest_last_success": "2026-07-30T07:50:06+09:00",
+  "lh_contest_last_attempt": "2026-07-31T08:00:00+09:00",
+  "lh_contest_last_success": "2026-07-31T08:00:00+09:00",
   "lh_contest_scanned_count": 100,
-  "lh_contest_matched_count": 18,
-  "lh_contest_inserted_count": 18,
+  "lh_contest_matched_count": 19,
+  "lh_contest_inserted_count": 19,
   "lh_contest_updated_count": 0,
   "lh_contest_public_count": 10,
   "lh_contest_exact_link_count": 10,
   "lh_contest_failure_reason": "",
   "gh_contest_status": "success",
   "gh_contest_message": "GH 공모 관련사항 14건을 공개 사업정보에 반영했습니다.",
-  "gh_contest_last_attempt": "2026-07-30T07:51:29+09:00",
-  "gh_contest_last_success": "2026-07-30T07:51:29+09:00",
+  "gh_contest_last_attempt": "2026-07-31T08:01:23+09:00",
+  "gh_contest_last_success": "2026-07-31T08:01:23+09:00",
   "gh_contest_scanned_count": 100,
   "gh_contest_matched_count": 23,
   "gh_contest_opportunity_count": 14,
@@ -38,8 +38,8 @@
   "gh_contest_failure_reason": "",
   "ih_contest_status": "success",
   "ih_contest_message": "iH 공지사항 4건을 공개 사업정보에 반영했습니다.",
-  "ih_contest_last_attempt": "2026-07-30T07:53:44+09:00",
-  "ih_contest_last_success": "2026-07-30T07:53:44+09:00",
+  "ih_contest_last_attempt": "2026-07-31T08:03:41+09:00",
+  "ih_contest_last_success": "2026-07-31T08:03:41+09:00",
   "ih_contest_scanned_count": 0,
   "ih_contest_matched_count": 0,
   "ih_contest_opportunity_count": 0,
@@ -48,7 +48,7 @@
   "ih_contest_public_count": 4,
   "ih_contest_exact_link_count": 4,
   "ih_contest_attachment_count": 0,
-  "ih_contest_failure_reason": "list page 1: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/customer/notification/notice.jsp (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7f74bc846b10>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4191: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4191&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7f74bc85c890>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4152: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4152&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7f74bc85e550>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)'))",
+  "ih_contest_failure_reason": "list page 1: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/customer/notification/notice.jsp (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7fea6e947050>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4191: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4191&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7fea6e95cdd0>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4152: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4152&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7fea6e95ea90>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)'))",
   "sh_contest_status": "not_collected",
   "sh_contest_message": "SH 사업발주·공지 수집 기록이 아직 없습니다.",
   "sh_contest_last_attempt": "",
@@ -66,23 +66,23 @@
   "warnings": [
     "D2B: 방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
   ],
-  "previous_business_count": 198,
-  "current_business_count": 136,
-  "merged_business_count": 199,
-  "previous_news_count": 1552,
-  "current_news_count": 250,
-  "merged_news_count": 1571,
-  "news_before_global_dedup_count": 1574,
-  "news_after_global_dedup_count": 1572,
+  "previous_business_count": 199,
+  "current_business_count": 137,
+  "merged_business_count": 200,
+  "previous_news_count": 1571,
+  "current_news_count": 206,
+  "merged_news_count": 1587,
+  "news_before_global_dedup_count": 1590,
+  "news_after_global_dedup_count": 1588,
   "news_global_duplicate_removed_count": 2,
-  "news_before_publish_filter_count": 1572,
-  "news_after_publish_filter_count": 1571,
+  "news_before_publish_filter_count": 1588,
+  "news_after_publish_filter_count": 1587,
   "news_excluded_removed_count": 1,
   "news_policy_removed_count": 3,
   "news_policy_version": "unified-v2-publication-v1",
-  "latest_public_news_published_at": "2026-07-30T00:00:00+00:00",
+  "latest_public_news_published_at": "2026-07-31T00:00:00+00:00",
   "latest_direct_news_published_at": "2026-07-30T00:00:00+00:00",
-  "latest_adjacent_news_published_at": "2026-07-30T00:00:00+00:00",
+  "latest_adjacent_news_published_at": "2026-07-31T00:00:00+00:00",
   "public_news_freshness_state": "fresh",
   "news_source_statuses": [
     {
@@ -90,11 +90,11 @@
       "name": "NAVER API HUB",
       "source_name": "네이버뉴스",
       "source_type": "news",
-      "last_attempted_at": "2026-07-30T07:47:49",
-      "last_successful_at": "2026-07-30T07:48:17",
-      "latest_item_published_at": "2026-07-30T00:00:00+00:00",
-      "fetched_count": 227,
-      "accepted_count": 1461,
+      "last_attempted_at": "2026-07-31T07:57:45",
+      "last_successful_at": "2026-07-31T07:58:14",
+      "latest_item_published_at": "2026-07-31T00:00:00+00:00",
+      "fetched_count": 186,
+      "accepted_count": 1470,
       "rejected_count": 0,
       "duplicate_count": 0,
       "http_status": "",
@@ -108,9 +108,9 @@
       "source_type": "news",
       "last_attempted_at": "",
       "last_successful_at": "",
-      "latest_item_published_at": "2026-07-29T00:00:00+00:00",
+      "latest_item_published_at": "2026-07-30T00:00:00+00:00",
       "fetched_count": 0,
-      "accepted_count": 110,
+      "accepted_count": 117,
       "rejected_count": 0,
       "duplicate_count": 0,
       "http_status": "",
@@ -118,16 +118,16 @@
       "safe_error_category": "none"
     }
   ],
-  "overseas_rss_before_dedup_count": 112,
-  "overseas_rss_after_dedup_count": 110,
-  "overseas_rss_duplicate_removed_count": 2,
+  "overseas_rss_before_dedup_count": 118,
+  "overseas_rss_after_dedup_count": 117,
+  "overseas_rss_duplicate_removed_count": 1,
   "score_version": "unified-v2",
-  "news_score_total_count": 1571,
-  "news_score_domestic_count": 1461,
-  "news_score_overseas_count": 110,
+  "news_score_total_count": 1587,
+  "news_score_domestic_count": 1470,
+  "news_score_overseas_count": 117,
   "news_score_level_counts": {
-    "direct": 391,
-    "adjacent": 1179,
+    "direct": 398,
+    "adjacent": 1188,
     "reference": 1,
     "excluded": 0
   },
@@ -138,30 +138,84 @@
   },
   "news_score_overseas_score_stats": {
     "min": 40,
-    "median": 65,
+    "median": 70,
     "max": 95
   },
   "news_score_range_violation_count": 0,
   "news_score_missing_level_count": 0,
   "news_score_missing_version_count": 0,
-  "news_score_existing_id_retained_count": 1571,
+  "news_score_existing_id_retained_count": 1587,
   "news_score_existing_id_missing_count": 0,
   "public_data_guard_status": "passed",
-  "public_data_guard_message": "Cumulative merge protected public data: business 198 -> 199, news 1552 -> 1571.",
+  "public_data_guard_message": "Cumulative merge protected public data: business 199 -> 200, news 1571 -> 1587.",
   "data_policy": "cumulative_verified",
-  "business_total": 199,
-  "business_active": 16,
-  "business_closed": 155,
+  "business_total": 200,
+  "business_active": 14,
+  "business_closed": 158,
   "business_unknown": 28,
   "bid_total": 136,
-  "procurement_plan_total": 35,
+  "procurement_plan_total": 36,
   "public_agency_contest_total": 28,
   "lh_public_count": 10,
   "gh_public_count": 14,
   "ih_public_count": 4,
   "sh_public_count": 0,
-  "last_updated_at": "2026-07-30T07:54:57+09:00",
+  "last_updated_at": "2026-07-31T08:05:27+09:00",
   "items": [
+    {
+      "id": 420,
+      "source": "나라장터",
+      "source_name": "나라장터",
+      "source_type": "procurement_plan",
+      "type": "발주계획",
+      "title": "경주여자정보고등학교 임시교실 모듈러설치 부대 토목공사",
+      "organization": "경상북도교육청 경주여자정보고등학교",
+      "demand_org": "경상북도교육청",
+      "business_type": "공사",
+      "business_subtype": "신규(단기)",
+      "notice_status": "발주계획",
+      "notice_stage": "발주계획",
+      "source_record_id": "R26DD20833544",
+      "source_record_no": "0",
+      "plan_no": "R26DD20833544",
+      "bid_no": "R26DD20833544",
+      "bid_order": "0",
+      "posted_at": "2026-07-30",
+      "due_at": "2026-07-01",
+      "amount": 21080000,
+      "region": "경상북도",
+      "summary": "발주계획번호: R26DD20833544; 발주예정: 202607; 업무구분: 공사; 계약방법: 제한경쟁; 입찰방법: 자체조달; 발주기관: 경상북도교육청 경주여자정보고등학교; 수요기관: 경상북도교육청; 예산액: 21080000",
+      "keywords": "모듈러;임시;학교;임시교실",
+      "relevance_score": 12,
+      "is_known_important": false,
+      "is_operating_scope": true,
+      "display_type": "발주계획",
+      "modular_relevance": "",
+      "modular_evidence": [],
+      "project_name": "",
+      "project_sites": [],
+      "project_blocks": [],
+      "application_schedule_text": "",
+      "household_count": null,
+      "housing_type": "",
+      "attachments": [],
+      "related_group_key": "",
+      "exact_link_verified": false,
+      "external_original_url": null,
+      "manual_check": {
+        "site_name": "나라장터",
+        "site_url": "https://www.g2b.go.kr",
+        "search_text": "R26DD20833544 0 경주여자정보고등학교 임시교실 모듈러설치 부대 토목공사 경상북도교육청 경주여자정보고등학교",
+        "guide_text": "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
+      },
+      "detail": null,
+      "opportunity_status": "closed",
+      "is_closed": true,
+      "days_until_deadline": -30,
+      "closed_at": "2026-07-01",
+      "last_seen_at": "2026-07-30",
+      "lifecycle_reason": "deadline_passed"
+    },
     {
       "id": 5785,
       "source": "나라장터",
@@ -211,7 +265,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 4,
+      "days_until_deadline": 3,
       "closed_at": null,
       "last_seen_at": "2026-07-29",
       "lifecycle_reason": "deadline_today_or_future"
@@ -265,7 +319,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 11,
+      "days_until_deadline": 10,
       "closed_at": null,
       "last_seen_at": "2026-07-28",
       "lifecycle_reason": "deadline_today_or_future"
@@ -280,7 +334,7 @@
       "organization": "울산광역시교육청 울산광역시강남교육지원청",
       "demand_org": "울산광역시교육청",
       "business_type": "용역",
-      "business_subtype": "신규",
+      "business_subtype": "신규(단기)",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20831304",
@@ -319,7 +373,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 2,
+      "days_until_deadline": 1,
       "closed_at": null,
       "last_seen_at": "2026-07-28",
       "lifecycle_reason": "deadline_today_or_future"
@@ -371,12 +425,12 @@
         "guide_text": "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
       },
       "detail": null,
-      "opportunity_status": "active",
-      "is_closed": false,
-      "days_until_deadline": 0,
-      "closed_at": null,
+      "opportunity_status": "closed",
+      "is_closed": true,
+      "days_until_deadline": -1,
+      "closed_at": "2026-07-30",
       "last_seen_at": "2026-07-27",
-      "lifecycle_reason": "deadline_today_or_future"
+      "lifecycle_reason": "deadline_passed"
     },
     {
       "id": 5783,
@@ -427,7 +481,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 1,
+      "days_until_deadline": 0,
       "closed_at": null,
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_today_or_future"
@@ -481,7 +535,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 4,
+      "days_until_deadline": 3,
       "closed_at": null,
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_today_or_future"
@@ -535,7 +589,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 4,
+      "days_until_deadline": 3,
       "closed_at": null,
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_today_or_future"
@@ -589,7 +643,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 4,
+      "days_until_deadline": 3,
       "closed_at": null,
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_today_or_future"
@@ -643,7 +697,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 8,
+      "days_until_deadline": 7,
       "closed_at": null,
       "last_seen_at": "2026-07-24",
       "lifecycle_reason": "deadline_today_or_future"
@@ -695,12 +749,12 @@
         "guide_text": "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
       },
       "detail": null,
-      "opportunity_status": "active",
-      "is_closed": false,
-      "days_until_deadline": 0,
-      "closed_at": null,
+      "opportunity_status": "closed",
+      "is_closed": true,
+      "days_until_deadline": -1,
+      "closed_at": "2026-07-30",
       "last_seen_at": "2026-07-24",
-      "lifecycle_reason": "deadline_today_or_future"
+      "lifecycle_reason": "deadline_passed"
     },
     {
       "id": 336,
@@ -712,7 +766,7 @@
       "organization": "충청남도교육청 충청남도천안교육지원청",
       "demand_org": "충청남도교육청",
       "business_type": "물품",
-      "business_subtype": "해당없음",
+      "business_subtype": "발주계획",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20829263",
@@ -751,7 +805,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-24",
       "lifecycle_reason": "deadline_passed"
@@ -766,9 +820,9 @@
       "organization": "대구광역시교육청 경상공업고등학교",
       "demand_org": "대구광역시교육청",
       "business_type": "공사",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20827414",
       "source_record_no": "0",
       "plan_no": "R26DD20827414",
@@ -805,7 +859,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-23",
       "lifecycle_reason": "deadline_passed"
@@ -820,9 +874,9 @@
       "organization": "울산광역시교육청 울산광역시강남교육지원청",
       "demand_org": "울산광역시교육청",
       "business_type": "용역",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20827677",
       "source_record_no": "0",
       "plan_no": "R26DD20827677",
@@ -859,7 +913,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-23",
       "lifecycle_reason": "deadline_passed"
@@ -874,9 +928,9 @@
       "organization": "부산광역시교육청 부산광역시서부교육지원청",
       "demand_org": "부산광역시교육청",
       "business_type": "공사",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20826053",
       "source_record_no": "0",
       "plan_no": "R26DD20826053",
@@ -913,7 +967,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-22",
       "lifecycle_reason": "deadline_passed"
@@ -967,7 +1021,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -3,
+      "days_until_deadline": -4,
       "closed_at": "2026-07-27",
       "last_seen_at": "2026-07-21",
       "lifecycle_reason": "deadline_passed"
@@ -982,9 +1036,9 @@
       "organization": "서울특별시교육청 서울특별시동작관악교육지원청",
       "demand_org": "서울특별시교육청",
       "business_type": "용역",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20825081",
       "source_record_no": "0",
       "plan_no": "R26DD20825081",
@@ -1021,7 +1075,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-21",
       "lifecycle_reason": "deadline_passed"
@@ -1075,7 +1129,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 1,
+      "days_until_deadline": 0,
       "closed_at": null,
       "last_seen_at": "2026-07-20",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1129,7 +1183,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 6,
+      "days_until_deadline": 5,
       "closed_at": null,
       "last_seen_at": "2026-07-16",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1144,7 +1198,7 @@
       "organization": "경찰청 전남경찰청",
       "demand_org": "경찰청",
       "business_type": "용역",
-      "business_subtype": "신규",
+      "business_subtype": "신규(단기)",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20822819",
@@ -1183,7 +1237,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 2,
+      "days_until_deadline": 1,
       "closed_at": null,
       "last_seen_at": "2026-07-16",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1237,7 +1291,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -3,
+      "days_until_deadline": -4,
       "closed_at": "2026-07-27",
       "last_seen_at": "2026-07-15",
       "lifecycle_reason": "deadline_passed"
@@ -1291,7 +1345,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -3,
+      "days_until_deadline": -4,
       "closed_at": "2026-07-27",
       "last_seen_at": "2026-07-14",
       "lifecycle_reason": "deadline_passed"
@@ -1345,7 +1399,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -9,
+      "days_until_deadline": -10,
       "closed_at": "2026-07-21",
       "last_seen_at": "2026-07-14",
       "lifecycle_reason": "deadline_passed"
@@ -1360,9 +1414,9 @@
       "organization": "대구광역시교육청 대구광역시동부교육지원청",
       "demand_org": "대구광역시교육청",
       "business_type": "물품",
-      "business_subtype": "해당없음",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "발주계획",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20820339",
       "source_record_no": "0",
       "plan_no": "R26DD20820339",
@@ -1399,7 +1453,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-14",
       "lifecycle_reason": "deadline_passed"
@@ -1414,9 +1468,9 @@
       "organization": "울산광역시교육청 울산광역시강남교육지원청",
       "demand_org": "울산광역시교육청",
       "business_type": "용역",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20818153",
       "source_record_no": "0",
       "plan_no": "R26DD20818153",
@@ -1453,7 +1507,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-13",
       "lifecycle_reason": "deadline_passed"
@@ -1468,9 +1522,9 @@
       "organization": "부산광역시교육청",
       "demand_org": "부산광역시교육청",
       "business_type": "공사",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20817204",
       "source_record_no": "0",
       "plan_no": "R26DD20817204",
@@ -1507,7 +1561,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-10",
       "lifecycle_reason": "deadline_passed"
@@ -1522,7 +1576,7 @@
       "organization": "부산광역시교육청",
       "demand_org": "부산광역시교육청",
       "business_type": "공사",
-      "business_subtype": "신규",
+      "business_subtype": "신규(단기)",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20817151",
@@ -1561,7 +1615,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-10",
       "lifecycle_reason": "deadline_passed"
@@ -1576,7 +1630,7 @@
       "organization": "경상북도교육청",
       "demand_org": "경상북도교육청",
       "business_type": "물품",
-      "business_subtype": "해당없음",
+      "business_subtype": "발주계획",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20817174",
@@ -1615,7 +1669,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-10",
       "lifecycle_reason": "deadline_passed"
@@ -1630,7 +1684,7 @@
       "organization": "경기도교육청 오산고등학교",
       "demand_org": "경기도교육청",
       "business_type": "공사",
-      "business_subtype": "신규",
+      "business_subtype": "신규(단기)",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20815877",
@@ -1669,7 +1723,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-09",
       "lifecycle_reason": "deadline_passed"
@@ -1684,7 +1738,7 @@
       "organization": "경기도교육청 오산고등학교",
       "demand_org": "경기도교육청",
       "business_type": "공사",
-      "business_subtype": "신규",
+      "business_subtype": "신규(단기)",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20815881",
@@ -1723,7 +1777,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-09",
       "lifecycle_reason": "deadline_passed"
@@ -1738,9 +1792,9 @@
       "organization": "경상남도교육청 남해해성고등학교",
       "demand_org": "경상남도교육청",
       "business_type": "물품",
-      "business_subtype": "해당없음",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "발주계획",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20815991",
       "source_record_no": "0",
       "plan_no": "R26DD20815991",
@@ -1777,7 +1831,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-09",
       "lifecycle_reason": "deadline_passed"
@@ -1831,7 +1885,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -21,
+      "days_until_deadline": -22,
       "closed_at": "2026-07-09",
       "last_seen_at": "2026-07-08",
       "lifecycle_reason": "deadline_passed"
@@ -1846,9 +1900,9 @@
       "organization": "한국광기술원",
       "demand_org": "한국광기술원",
       "business_type": "용역",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20815233",
       "source_record_no": "0",
       "plan_no": "R26DD20815233",
@@ -1885,7 +1939,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-08",
       "lifecycle_reason": "deadline_passed"
@@ -1939,7 +1993,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -16,
+      "days_until_deadline": -17,
       "closed_at": "2026-07-14",
       "last_seen_at": "2026-07-03",
       "lifecycle_reason": "deadline_passed"
@@ -1954,7 +2008,7 @@
       "organization": "한국광기술원",
       "demand_org": "한국광기술원",
       "business_type": "용역",
-      "business_subtype": "신규",
+      "business_subtype": "신규(단기)",
       "notice_status": "발주계획",
       "notice_stage": "발주계획",
       "source_record_id": "R26DD20811182",
@@ -1993,7 +2047,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-03",
       "lifecycle_reason": "deadline_passed"
@@ -2047,7 +2101,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -22,
+      "days_until_deadline": -23,
       "closed_at": "2026-07-08",
       "last_seen_at": "2026-07-02",
       "lifecycle_reason": "deadline_passed"
@@ -2101,7 +2155,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -22,
+      "days_until_deadline": -23,
       "closed_at": "2026-07-08",
       "last_seen_at": "2026-07-02",
       "lifecycle_reason": "deadline_passed"
@@ -2155,7 +2209,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -23,
+      "days_until_deadline": -24,
       "closed_at": "2026-07-07",
       "last_seen_at": "2026-07-01",
       "lifecycle_reason": "deadline_passed"
@@ -2209,7 +2263,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -23,
+      "days_until_deadline": -24,
       "closed_at": "2026-07-07",
       "last_seen_at": "2026-06-26",
       "lifecycle_reason": "deadline_passed"
@@ -2263,7 +2317,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -28,
+      "days_until_deadline": -29,
       "closed_at": "2026-07-02",
       "last_seen_at": "2026-06-26",
       "lifecycle_reason": "deadline_passed"
@@ -2317,7 +2371,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-25",
       "lifecycle_reason": "deadline_passed"
@@ -2371,7 +2425,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 5,
+      "days_until_deadline": 4,
       "closed_at": null,
       "last_seen_at": "2026-06-24",
       "lifecycle_reason": "deadline_today_or_future"
@@ -2425,7 +2479,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-24",
       "lifecycle_reason": "deadline_passed"
@@ -2479,7 +2533,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -29,
+      "days_until_deadline": -30,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-06-23",
       "lifecycle_reason": "deadline_passed"
@@ -2533,7 +2587,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -31,
+      "days_until_deadline": -32,
       "closed_at": "2026-06-29",
       "last_seen_at": "2026-06-23",
       "lifecycle_reason": "deadline_passed"
@@ -2577,7 +2631,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -22,
+      "days_until_deadline": -23,
       "closed_at": "2026-07-08",
       "last_seen_at": "2026-06-17",
       "lifecycle_reason": "deadline_passed"
@@ -2621,7 +2675,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-17",
       "lifecycle_reason": "deadline_passed"
@@ -2665,7 +2719,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -23,
+      "days_until_deadline": -24,
       "closed_at": "2026-07-07",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -2709,7 +2763,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -31,
+      "days_until_deadline": -32,
       "closed_at": "2026-06-29",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -2753,7 +2807,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -2797,7 +2851,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -2841,7 +2895,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -34,
+      "days_until_deadline": -35,
       "closed_at": "2026-06-26",
       "last_seen_at": "2026-06-15",
       "lifecycle_reason": "deadline_passed"
@@ -2885,7 +2939,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-15",
       "lifecycle_reason": "deadline_passed"
@@ -2929,7 +2983,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-15",
       "lifecycle_reason": "deadline_passed"
@@ -2973,7 +3027,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -37,
+      "days_until_deadline": -38,
       "closed_at": "2026-06-23",
       "last_seen_at": "2026-06-12",
       "lifecycle_reason": "deadline_passed"
@@ -3017,7 +3071,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -37,
+      "days_until_deadline": -38,
       "closed_at": "2026-06-23",
       "last_seen_at": "2026-06-12",
       "lifecycle_reason": "deadline_passed"
@@ -3061,7 +3115,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -30,
+      "days_until_deadline": -31,
       "closed_at": "2026-06-30",
       "last_seen_at": "2026-06-10",
       "lifecycle_reason": "deadline_passed"
@@ -3105,7 +3159,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -30,
+      "days_until_deadline": -31,
       "closed_at": "2026-06-30",
       "last_seen_at": "2026-06-09",
       "lifecycle_reason": "deadline_passed"
@@ -3213,7 +3267,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:49:39+09:00",
+        "collected_at": "2026-07-31T07:59:33+09:00",
         "fingerprint": "bd3575f7f28524517a9b539fe5a937ed7bec64b2ec0c1d11d374496b02d31547",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -3275,7 +3329,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-09",
       "lifecycle_reason": "deadline_passed"
@@ -3319,7 +3373,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-09",
       "lifecycle_reason": "deadline_passed"
@@ -3363,7 +3417,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-08",
       "lifecycle_reason": "deadline_passed"
@@ -3615,7 +3669,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:49:41+09:00",
+        "collected_at": "2026-07-31T07:59:36+09:00",
         "fingerprint": "f48ef9dcb4ba3f2f7d2d5d48ede9a221d56a294aabde1596a97475551c5df87f",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -3741,7 +3795,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:49:44+09:00",
+        "collected_at": "2026-07-31T07:59:38+09:00",
         "fingerprint": "d2cb2c49849e146a5306fd5d12cbe4095cb340fff3a460e05813b47721663f5b",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -3803,7 +3857,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -51,
+      "days_until_deadline": -52,
       "closed_at": "2026-06-09",
       "last_seen_at": "2026-06-02",
       "lifecycle_reason": "deadline_passed"
@@ -3847,7 +3901,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-02",
       "lifecycle_reason": "deadline_passed"
@@ -3992,7 +4046,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:50:35+09:00",
+        "collected_at": "2026-07-31T08:00:29+09:00",
         "fingerprint": "4711fa1cc552a5b550aeb482fd4283c53001a9d922300c46e56948185fd6ca88",
         "related_group_key": "경기주택도시공사|고양창릉 S16블록, 남양주왕숙2 A8, A12블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|S16블록",
         "exact_link_verified": true,
@@ -4127,7 +4181,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:49:49+09:00",
+        "collected_at": "2026-07-31T07:59:44+09:00",
         "fingerprint": "2beb4dfaa957852672ae4979fc0223c94b0e9a133ebe37bfa9be4a3779279745",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -4253,7 +4307,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:49:47+09:00",
+        "collected_at": "2026-07-31T07:59:41+09:00",
         "fingerprint": "baf3094c0185026204978c0ab9c2de2086c1764068094e9469ec7b791d31c908",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -4315,7 +4369,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -55,
+      "days_until_deadline": -56,
       "closed_at": "2026-06-05",
       "last_seen_at": "2026-05-28",
       "lifecycle_reason": "deadline_passed"
@@ -4359,7 +4413,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -58,
+      "days_until_deadline": -59,
       "closed_at": "2026-06-02",
       "last_seen_at": "2026-05-26",
       "lifecycle_reason": "deadline_passed"
@@ -4403,7 +4457,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -58,
+      "days_until_deadline": -59,
       "closed_at": "2026-06-02",
       "last_seen_at": "2026-05-26",
       "lifecycle_reason": "deadline_passed"
@@ -4447,7 +4501,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -48,
+      "days_until_deadline": -49,
       "closed_at": "2026-06-12",
       "last_seen_at": "2026-05-21",
       "lifecycle_reason": "deadline_passed"
@@ -4491,7 +4545,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -50,
+      "days_until_deadline": -51,
       "closed_at": "2026-06-10",
       "last_seen_at": "2026-05-18",
       "lifecycle_reason": "deadline_passed"
@@ -4535,7 +4589,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-05-26",
       "last_seen_at": "2026-05-13",
       "lifecycle_reason": "deadline_passed"
@@ -4579,7 +4633,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-13",
       "lifecycle_reason": "deadline_passed"
@@ -4623,7 +4677,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -79,
+      "days_until_deadline": -80,
       "closed_at": "2026-05-12",
       "last_seen_at": "2026-05-12",
       "lifecycle_reason": "deadline_passed"
@@ -4667,7 +4721,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -70,
+      "days_until_deadline": -71,
       "closed_at": "2026-05-21",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -4711,7 +4765,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -4755,7 +4809,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -73,
+      "days_until_deadline": -74,
       "closed_at": "2026-05-18",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -119238,7 +119292,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -119281,7 +119335,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -73,
+      "days_until_deadline": -74,
       "closed_at": "2026-05-18",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -119325,7 +119379,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-08",
       "lifecycle_reason": "deadline_passed"
@@ -119369,7 +119423,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-08",
       "lifecycle_reason": "deadline_passed"
@@ -119413,7 +119467,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-08",
       "lifecycle_reason": "deadline_passed"
@@ -119457,7 +119511,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-07",
       "lifecycle_reason": "deadline_passed"
@@ -119501,7 +119555,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -78,
+      "days_until_deadline": -79,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-05-07",
       "lifecycle_reason": "deadline_passed"
@@ -119545,7 +119599,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -76,
+      "days_until_deadline": -77,
       "closed_at": "2026-05-15",
       "last_seen_at": "2026-05-04",
       "lifecycle_reason": "deadline_passed"
@@ -119588,7 +119642,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -76,
+      "days_until_deadline": -77,
       "closed_at": "2026-05-15",
       "last_seen_at": "2026-05-04",
       "lifecycle_reason": "deadline_passed"
@@ -119632,7 +119686,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -80,
+      "days_until_deadline": -81,
       "closed_at": "2026-05-11",
       "last_seen_at": "2026-04-27",
       "lifecycle_reason": "deadline_passed"
@@ -119676,7 +119730,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -83,
+      "days_until_deadline": -84,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-27",
       "lifecycle_reason": "deadline_passed"
@@ -119719,7 +119773,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -83,
+      "days_until_deadline": -84,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-27",
       "lifecycle_reason": "deadline_passed"
@@ -119763,7 +119817,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -94,
+      "days_until_deadline": -95,
       "closed_at": "2026-04-27",
       "last_seen_at": "2026-04-24",
       "lifecycle_reason": "deadline_passed"
@@ -119807,7 +119861,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -83,
+      "days_until_deadline": -84,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-23",
       "lifecycle_reason": "deadline_passed"
@@ -119851,7 +119905,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -83,
+      "days_until_deadline": -84,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-23",
       "lifecycle_reason": "deadline_passed"
@@ -119895,7 +119949,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -85,
+      "days_until_deadline": -86,
       "closed_at": "2026-05-06",
       "last_seen_at": "2026-04-23",
       "lifecycle_reason": "deadline_passed"
@@ -119939,7 +119993,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -78,
+      "days_until_deadline": -79,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-04-22",
       "lifecycle_reason": "deadline_passed"
@@ -119983,7 +120037,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -87,
+      "days_until_deadline": -88,
       "closed_at": "2026-05-04",
       "last_seen_at": "2026-04-22",
       "lifecycle_reason": "deadline_passed"
@@ -120027,7 +120081,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -83,
+      "days_until_deadline": -84,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-22",
       "lifecycle_reason": "deadline_passed"
@@ -120090,7 +120144,7 @@
       ],
       "related_group_key": "한국토지주택공사|2026년 제2 2차 민간참여 공공주택 건설사업 민간사업자 공모|도시조성사업 신도시",
       "exact_link_verified": true,
-      "external_original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731940&tag=&nPage=7",
+      "external_original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731940&tag=&nPage=8",
       "manual_check": {
         "site_name": "LH 공모안내",
         "site_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
@@ -120119,7 +120173,7 @@
         ],
         "project_blocks": [],
         "body_summary": "[재공고]2026년 제2-2차 민간참여 공공주택 건설사업 민간사업자 공모 | 공모안내 | 공지ㆍ공모 | 새소식 : 한국토지주택공사 본문으로 바로가기 / 공지ㆍ공모 공지사항 / 공모안내 / 국민참여 혁신안 제출",
-        "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731940&tag=&nPage=7",
+        "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731940&tag=&nPage=8",
         "board_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
         "attachments": [
           {
@@ -120145,7 +120199,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:49:55+09:00",
+        "collected_at": "2026-07-31T07:59:49+09:00",
         "fingerprint": "ad7b8491f7a05e035331231a8f2b1b89bb5b41eecc9283ebabd7c17dc7e19713",
         "related_group_key": "한국토지주택공사|2026년 제2 2차 민간참여 공공주택 건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -120160,7 +120214,7 @@
       "is_operating_scope": true,
       "source_code": "LH_CONTEST",
       "link_verified": true,
-      "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731940&tag=&nPage=7",
+      "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731940&tag=&nPage=8",
       "opportunity_status": "unknown",
       "is_closed": false,
       "days_until_deadline": null,
@@ -120207,7 +120261,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -91,
+      "days_until_deadline": -92,
       "closed_at": "2026-04-30",
       "last_seen_at": "2026-04-20",
       "lifecycle_reason": "deadline_passed"
@@ -120251,7 +120305,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -104,
+      "days_until_deadline": -105,
       "closed_at": "2026-04-17",
       "last_seen_at": "2026-04-13",
       "lifecycle_reason": "deadline_passed"
@@ -120295,7 +120349,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -101,
+      "days_until_deadline": -102,
       "closed_at": "2026-04-20",
       "last_seen_at": "2026-04-09",
       "lifecycle_reason": "deadline_passed"
@@ -120363,7 +120417,7 @@
       ],
       "related_group_key": "한국토지주택공사|2026년 제2 2차 민간참여 공공주택 건설사업 민간사업자 공모|도시조성사업 신도시",
       "exact_link_verified": true,
-      "external_original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731709&tag=&nPage=8",
+      "external_original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731709&tag=&nPage=9",
       "manual_check": {
         "site_name": "LH 공모안내",
         "site_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
@@ -120392,7 +120446,7 @@
         ],
         "project_blocks": [],
         "body_summary": "[본공고] 2026년 제2-2차 민간참여 공공주택 건설사업 민간사업자 공모 | 공모안내 | 공지ㆍ공모 | 새소식 : 한국토지주택공사 본문으로 바로가기 / 공지ㆍ공모 공지사항 / 공모안내 / 국민참여 혁신안 제출",
-        "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731709&tag=&nPage=8",
+        "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731709&tag=&nPage=9",
         "board_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
         "attachments": [
           {
@@ -120423,7 +120477,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:50:00+09:00",
+        "collected_at": "2026-07-31T07:59:55+09:00",
         "fingerprint": "ed87b66b9f17e9962db43e5e6fdf805427ca44dedbf4a02df9b77b08e3e84139",
         "related_group_key": "한국토지주택공사|2026년 제2 2차 민간참여 공공주택 건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -120438,7 +120492,7 @@
       "is_operating_scope": true,
       "source_code": "LH_CONTEST",
       "link_verified": true,
-      "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731709&tag=&nPage=8",
+      "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=731709&tag=&nPage=9",
       "opportunity_status": "unknown",
       "is_closed": false,
       "days_until_deadline": null,
@@ -120485,7 +120539,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -111,
+      "days_until_deadline": -112,
       "closed_at": "2026-04-10",
       "last_seen_at": "2026-04-06",
       "lifecycle_reason": "deadline_passed"
@@ -120605,7 +120659,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:50:06+09:00",
+        "collected_at": "2026-07-31T08:00:00+09:00",
         "fingerprint": "b606ec09c2296b62e9490c8aded5019c707e6371e116309230d7dd55f960fb24",
         "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모|도시조성사업 신도시",
         "exact_link_verified": true,
@@ -120667,7 +120721,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -111,
+      "days_until_deadline": -112,
       "closed_at": "2026-04-10",
       "last_seen_at": "2026-03-30",
       "lifecycle_reason": "deadline_passed"
@@ -120710,7 +120764,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -111,
+      "days_until_deadline": -112,
       "closed_at": "2026-04-10",
       "last_seen_at": "2026-03-30",
       "lifecycle_reason": "deadline_passed"
@@ -120754,7 +120808,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -121,
+      "days_until_deadline": -122,
       "closed_at": "2026-03-31",
       "last_seen_at": "2026-03-25",
       "lifecycle_reason": "deadline_passed"
@@ -120942,7 +120996,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -115,
+      "days_until_deadline": -116,
       "closed_at": "2026-04-06",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -120986,7 +121040,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -78,
+      "days_until_deadline": -79,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -121030,7 +121084,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -78,
+      "days_until_deadline": -79,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -121074,7 +121128,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -78,
+      "days_until_deadline": -79,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -121118,7 +121172,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -123,
+      "days_until_deadline": -124,
       "closed_at": "2026-03-29",
       "last_seen_at": "2026-03-23",
       "lifecycle_reason": "deadline_passed"
@@ -121161,7 +121215,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -123,
+      "days_until_deadline": -124,
       "closed_at": "2026-03-29",
       "last_seen_at": "2026-03-23",
       "lifecycle_reason": "deadline_passed"
@@ -121205,7 +121259,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -118,
+      "days_until_deadline": -119,
       "closed_at": "2026-04-03",
       "last_seen_at": "2026-03-20",
       "lifecycle_reason": "deadline_passed"
@@ -121249,7 +121303,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-03-25",
       "last_seen_at": "2026-03-19",
       "lifecycle_reason": "deadline_passed"
@@ -121293,7 +121347,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -83,
+      "days_until_deadline": -84,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-03-19",
       "lifecycle_reason": "deadline_passed"
@@ -121337,7 +121391,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -128,
+      "days_until_deadline": -129,
       "closed_at": "2026-03-24",
       "last_seen_at": "2026-03-18",
       "lifecycle_reason": "deadline_passed"
@@ -121381,7 +121435,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -132,
+      "days_until_deadline": -133,
       "closed_at": "2026-03-20",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -121425,7 +121479,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -125,
+      "days_until_deadline": -126,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -121469,7 +121523,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -125,
+      "days_until_deadline": -126,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -121512,7 +121566,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -125,
+      "days_until_deadline": -126,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -121556,7 +121610,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -125,
+      "days_until_deadline": -126,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-13",
       "lifecycle_reason": "deadline_passed"
@@ -121600,7 +121654,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -128,
+      "days_until_deadline": -129,
       "closed_at": "2026-03-24",
       "last_seen_at": "2026-03-13",
       "lifecycle_reason": "deadline_passed"
@@ -121644,7 +121698,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -137,
+      "days_until_deadline": -138,
       "closed_at": "2026-03-15",
       "last_seen_at": "2026-03-13",
       "lifecycle_reason": "deadline_passed"
@@ -121688,7 +121742,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -139,
+      "days_until_deadline": -140,
       "closed_at": "2026-03-13",
       "last_seen_at": "2026-03-11",
       "lifecycle_reason": "deadline_passed"
@@ -121732,7 +121786,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -132,
+      "days_until_deadline": -133,
       "closed_at": "2026-03-20",
       "last_seen_at": "2026-03-11",
       "lifecycle_reason": "deadline_passed"
@@ -121776,7 +121830,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -98,
+      "days_until_deadline": -99,
       "closed_at": "2026-04-23",
       "last_seen_at": "2026-03-11",
       "lifecycle_reason": "deadline_passed"
@@ -121820,7 +121874,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -139,
+      "days_until_deadline": -140,
       "closed_at": "2026-03-13",
       "last_seen_at": "2026-03-09",
       "lifecycle_reason": "deadline_passed"
@@ -121864,7 +121918,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -105,
+      "days_until_deadline": -106,
       "closed_at": "2026-04-16",
       "last_seen_at": "2026-03-05",
       "lifecycle_reason": "deadline_passed"
@@ -121908,7 +121962,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -105,
+      "days_until_deadline": -106,
       "closed_at": "2026-04-16",
       "last_seen_at": "2026-03-05",
       "lifecycle_reason": "deadline_passed"
@@ -121952,7 +122006,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -105,
+      "days_until_deadline": -106,
       "closed_at": "2026-04-16",
       "last_seen_at": "2026-03-05",
       "lifecycle_reason": "deadline_passed"
@@ -121996,7 +122050,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -126,
+      "days_until_deadline": -127,
       "closed_at": "2026-03-26",
       "last_seen_at": "2026-03-04",
       "lifecycle_reason": "deadline_passed"
@@ -122040,7 +122094,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -142,
+      "days_until_deadline": -143,
       "closed_at": "2026-03-10",
       "last_seen_at": "2026-03-04",
       "lifecycle_reason": "deadline_passed"
@@ -122084,7 +122138,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -136,
+      "days_until_deadline": -137,
       "closed_at": "2026-03-16",
       "last_seen_at": "2026-03-03",
       "lifecycle_reason": "deadline_passed"
@@ -122128,7 +122182,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -136,
+      "days_until_deadline": -137,
       "closed_at": "2026-03-16",
       "last_seen_at": "2026-03-03",
       "lifecycle_reason": "deadline_passed"
@@ -122171,7 +122225,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -136,
+      "days_until_deadline": -137,
       "closed_at": "2026-03-16",
       "last_seen_at": "2026-03-03",
       "lifecycle_reason": "deadline_passed"
@@ -122215,7 +122269,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -148,
+      "days_until_deadline": -149,
       "closed_at": "2026-03-04",
       "last_seen_at": "2026-02-27",
       "lifecycle_reason": "deadline_passed"
@@ -122259,7 +122313,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -142,
+      "days_until_deadline": -143,
       "closed_at": "2026-03-10",
       "last_seen_at": "2026-02-20",
       "lifecycle_reason": "deadline_passed"
@@ -122303,7 +122357,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -133,
+      "days_until_deadline": -134,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-02-10",
       "lifecycle_reason": "deadline_passed"
@@ -122347,7 +122401,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -133,
+      "days_until_deadline": -134,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-02-10",
       "lifecycle_reason": "deadline_passed"
@@ -122391,7 +122445,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -133,
+      "days_until_deadline": -134,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-02-10",
       "lifecycle_reason": "deadline_passed"
@@ -122435,7 +122489,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -167,
+      "days_until_deadline": -168,
       "closed_at": "2026-02-13",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -122595,7 +122649,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -122639,7 +122693,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -122683,7 +122737,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -122727,7 +122781,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -175,
+      "days_until_deadline": -176,
       "closed_at": "2026-02-05",
       "last_seen_at": "2026-02-05",
       "lifecycle_reason": "deadline_passed"
@@ -122771,7 +122825,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -171,
+      "days_until_deadline": -172,
       "closed_at": "2026-02-09",
       "last_seen_at": "2026-02-03",
       "lifecycle_reason": "deadline_passed"
@@ -122971,7 +123025,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -176,
+      "days_until_deadline": -177,
       "closed_at": "2026-02-04",
       "last_seen_at": "2026-01-29",
       "lifecycle_reason": "deadline_passed"
@@ -123015,7 +123069,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -177,
+      "days_until_deadline": -178,
       "closed_at": "2026-02-03",
       "last_seen_at": "2026-01-27",
       "lifecycle_reason": "deadline_passed"
@@ -123059,7 +123113,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -177,
+      "days_until_deadline": -178,
       "closed_at": "2026-02-03",
       "last_seen_at": "2026-01-27",
       "lifecycle_reason": "deadline_passed"
@@ -123103,7 +123157,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -177,
+      "days_until_deadline": -178,
       "closed_at": "2026-02-03",
       "last_seen_at": "2026-01-27",
       "lifecycle_reason": "deadline_passed"
@@ -123147,7 +123201,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -133,
+      "days_until_deadline": -134,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-01-26",
       "lifecycle_reason": "deadline_passed"
@@ -123191,7 +123245,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -133,
+      "days_until_deadline": -134,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-01-26",
       "lifecycle_reason": "deadline_passed"
@@ -123235,7 +123289,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -133,
+      "days_until_deadline": -134,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-01-26",
       "lifecycle_reason": "deadline_passed"
@@ -123279,7 +123333,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -178,
+      "days_until_deadline": -179,
       "closed_at": "2026-02-02",
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_passed"
@@ -123294,8 +123348,8 @@
       "organization": "충청북도교육청 충청북도청주교육지원청",
       "demand_org": "충청북도교육청",
       "business_type": "공사",
-      "business_subtype": "신규",
-      "notice_status": "발주계획",
+      "business_subtype": "신규(단기)",
+      "notice_status": "입찰공고연계",
       "plan_no": "R26DD20585230",
       "bid_no": "R26DD20585230",
       "bid_order": "0",
@@ -123315,7 +123369,7 @@
         "guide_text": "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
       },
       "detail": null,
-      "notice_stage": "발주계획",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20585230",
       "source_record_no": "0",
       "display_type": "발주계획",
@@ -123323,7 +123377,7 @@
       "is_operating_scope": true,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 94,
+      "days_until_deadline": 93,
       "closed_at": null,
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_today_or_future"
@@ -123367,7 +123421,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_passed"
@@ -123382,7 +123436,7 @@
       "organization": "경기도교육청 경기도이천교육지원청",
       "demand_org": "경기도교육청",
       "business_type": "용역",
-      "business_subtype": "신규",
+      "business_subtype": "신규(단기)",
       "notice_status": "발주계획",
       "plan_no": "R26DD20576100",
       "bid_no": "R26DD20576100",
@@ -123411,7 +123465,7 @@
       "is_operating_scope": true,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 63,
+      "days_until_deadline": 62,
       "closed_at": null,
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_today_or_future"
@@ -123455,7 +123509,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-01-19",
       "lifecycle_reason": "deadline_passed"
@@ -123499,7 +123553,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -175,
+      "days_until_deadline": -176,
       "closed_at": "2026-02-05",
       "last_seen_at": "2026-01-15",
       "lifecycle_reason": "deadline_passed"
@@ -123543,7 +123597,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -191,
+      "days_until_deadline": -192,
       "closed_at": "2026-01-20",
       "last_seen_at": "2026-01-14",
       "lifecycle_reason": "deadline_passed"
@@ -123587,7 +123641,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -195,
+      "days_until_deadline": -196,
       "closed_at": "2026-01-16",
       "last_seen_at": "2026-01-12",
       "lifecycle_reason": "deadline_passed"
@@ -123631,7 +123685,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -198,
+      "days_until_deadline": -199,
       "closed_at": "2026-01-13",
       "last_seen_at": "2026-01-12",
       "lifecycle_reason": "deadline_passed"
@@ -123871,7 +123925,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -195,
+      "days_until_deadline": -196,
       "closed_at": "2026-01-16",
       "last_seen_at": "2026-01-05",
       "lifecycle_reason": "deadline_passed"
@@ -123915,7 +123969,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -195,
+      "days_until_deadline": -196,
       "closed_at": "2026-01-16",
       "last_seen_at": "2026-01-05",
       "lifecycle_reason": "deadline_passed"
@@ -123959,7 +124013,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -202,
+      "days_until_deadline": -203,
       "closed_at": "2026-01-09",
       "last_seen_at": "2026-01-05",
       "lifecycle_reason": "deadline_passed"
@@ -124003,7 +124057,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -199,
+      "days_until_deadline": -200,
       "closed_at": "2026-01-12",
       "last_seen_at": "2026-01-02",
       "lifecycle_reason": "deadline_passed"
@@ -124047,7 +124101,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -202,
+      "days_until_deadline": -203,
       "closed_at": "2026-01-09",
       "last_seen_at": "2025-12-26",
       "lifecycle_reason": "deadline_passed"
@@ -124101,7 +124155,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-23",
       "lifecycle_reason": "deadline_passed"
@@ -124155,7 +124209,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-23",
       "lifecycle_reason": "deadline_passed"
@@ -124209,7 +124263,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-16",
       "lifecycle_reason": "deadline_passed"
@@ -124263,7 +124317,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -223,
+      "days_until_deadline": -224,
       "closed_at": "2025-12-19",
       "last_seen_at": "2025-12-15",
       "lifecycle_reason": "deadline_passed"
@@ -124317,7 +124371,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -124371,7 +124425,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -124425,7 +124479,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -124479,7 +124533,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -124533,7 +124587,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -220,
+      "days_until_deadline": -221,
       "closed_at": "2025-12-22",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -124587,7 +124641,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -220,
+      "days_until_deadline": -221,
       "closed_at": "2025-12-22",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -124641,7 +124695,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -225,
+      "days_until_deadline": -226,
       "closed_at": "2025-12-17",
       "last_seen_at": "2025-12-11",
       "lifecycle_reason": "deadline_passed"
@@ -124970,7 +125024,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:50:40+09:00",
+        "collected_at": "2026-07-31T08:00:34+09:00",
         "fingerprint": "67641214f472e780c4b46ec7e4cca18e75bd3ed9f55f250fd28ef1cb272ae4d1",
         "related_group_key": "경기주택도시공사|하남교산 S1블록 민간참여 공공주택사업 민간사업자 재공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|S1블록",
         "exact_link_verified": true,
@@ -125120,7 +125174,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:50:42+09:00",
+        "collected_at": "2026-07-31T08:00:36+09:00",
         "fingerprint": "14a66e2efd8c1bc64d5ee862c1bf0bd3509121da5e2fc9260c96368cf937a175",
         "related_group_key": "경기주택도시공사|하남교산 S1블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|S1블록",
         "exact_link_verified": true,
@@ -125262,7 +125316,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:50:52+09:00",
+        "collected_at": "2026-07-31T08:00:46+09:00",
         "fingerprint": "4d8a38d89b2b3bd27c91eca97036ba39c35d17c7acce543184243360e1fa8c2f",
         "related_group_key": "경기주택도시공사|광교 A17블록 및 교산 A1블록 민간참여공공주택사업 민간사업자 재공모 제안서 평가 세부사항 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A17블록",
         "exact_link_verified": true,
@@ -125339,7 +125393,7 @@
       ],
       "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 사업계획서 평가 관련 세부사항 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
       "exact_link_verified": true,
-      "external_original_url": "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo=63927&article.offset=30&articleLimit=10",
+      "external_original_url": "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo=63927&article.offset=40&articleLimit=10",
       "manual_check": {
         "site_name": "GH 공모 관련사항",
         "site_url": "https://www.gh.or.kr/gh/bid-announcement.do",
@@ -125374,7 +125428,7 @@
           "A-3BL"
         ],
         "body_summary": "GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 사업계획서 평가 관련 세부사항 공지 | GH 경기주택도시공사 / 사업정보 도시조성사업 2기 신도시사업 동탄2 신도시 / 3기 신도시사업 과천과천 / 광명학온 공공주택지구",
-        "original_url": "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo=63927&article.offset=30&articleLimit=10",
+        "original_url": "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo=63927&article.offset=40&articleLimit=10",
         "board_url": "https://www.gh.or.kr/gh/bid-announcement.do",
         "attachments": [
           {
@@ -125390,7 +125444,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:00+09:00",
+        "collected_at": "2026-07-31T08:00:54+09:00",
         "fingerprint": "d2ea4e0c4977e24b64e9dfd7237d1f89447a7c6bcd2c87f98b9def5230ed41f7",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 사업계획서 평가 관련 세부사항 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -125404,7 +125458,7 @@
       },
       "source_code": "GH_CONTEST",
       "link_verified": true,
-      "original_url": "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo=63927&article.offset=30&articleLimit=10",
+      "original_url": "https://www.gh.or.kr/gh/bid-announcement.do?mode=view&articleNo=63927&article.offset=40&articleLimit=10",
       "opportunity_status": "unknown",
       "is_closed": false,
       "days_until_deadline": null,
@@ -125542,7 +125596,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:05+09:00",
+        "collected_at": "2026-07-31T08:00:59+09:00",
         "fingerprint": "bc702091caa7b69f34cfbadc9dd37c6b2399547f10f45b7b1338066dc1908189",
         "related_group_key": "경기주택도시공사|광교 A17블록 및 교산 A1블록 민간참여 공공주택사업 민간사업자 재공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A17블록",
         "exact_link_verified": true,
@@ -125670,7 +125724,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:02+09:00",
+        "collected_at": "2026-07-31T08:00:56+09:00",
         "fingerprint": "dcbaf1d1dd2af67fac20487ecd707c30f9741e1dd6f8e4e042f71399db611731",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 공모지침서 정정사항 안내|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -125798,7 +125852,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:07+09:00",
+        "collected_at": "2026-07-31T08:01:01+09:00",
         "fingerprint": "3a98f51c89bb05c84a21e597b64c83bf9a3765588d533c2d3475bc0490f36280",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 관련 질의 답변 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -125956,7 +126010,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:09+09:00",
+        "collected_at": "2026-07-31T08:01:04+09:00",
         "fingerprint": "d3cc0d32dcdf57aefb73043512b302884b04d65cfa8796cdb30310b1e1cf1da2",
         "related_group_key": "경기주택도시공사|GH 공공주택 커뮤니티 혁신모델 시범사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A-3BL",
         "exact_link_verified": true,
@@ -126108,7 +126162,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:12+09:00",
+        "collected_at": "2026-07-31T08:01:06+09:00",
         "fingerprint": "8d3c3c364d6fc58650a6f468ee19e95c8a0b7988c5cbd05b7c97f58e22cce585",
         "related_group_key": "경기주택도시공사|광교 A17블록 및 교산 A1블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A17블록",
         "exact_link_verified": true,
@@ -126248,7 +126302,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:22+09:00",
+        "collected_at": "2026-07-31T08:01:16+09:00",
         "fingerprint": "858a4c32cfb08f4a555bbf0baab28a08f8c554a8a63062c90a7656d376712f02",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 재공모 제안서 평가 세부사항 공지|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,
@@ -126398,7 +126452,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:24+09:00",
+        "collected_at": "2026-07-31T08:01:18+09:00",
         "fingerprint": "7748141485e340ba301c3602f4e9faee4f382826f2c52bb386856c5946df5102",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 재공모|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,
@@ -126548,7 +126602,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:27+09:00",
+        "collected_at": "2026-07-31T08:01:21+09:00",
         "fingerprint": "60eff4f0b87c08a00d85064d3b8187accdf50eb843d8a70b6a18fe200306a0ea",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 재공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,
@@ -126698,7 +126752,7 @@
         "modular_evidence": [
           "민간참여 공공주택 공모"
         ],
-        "collected_at": "2026-07-30T07:51:29+09:00",
+        "collected_at": "2026-07-31T08:01:23+09:00",
         "fingerprint": "e0a79ea0312ec65bf6006a3ebfd4aea52a90eae7813ad9d3a589b168f08a487c",
         "related_group_key": "경기주택도시공사|하남교산 A3블록 민간참여 공공주택사업 민간사업자 공모 공고|사업정보 도시조성사업 2기 신도시사업 동탄2 신도시|A3블록",
         "exact_link_verified": true,
