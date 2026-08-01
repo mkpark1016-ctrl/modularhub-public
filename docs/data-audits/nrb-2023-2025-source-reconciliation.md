@@ -17,7 +17,7 @@ The attached PDFs were used only as source references. They were not copied into
 | Source ref | File | Role |
 | --- | --- | --- |
 | `nrb_annual_report_2026_03_18` | `[엔알비]사업보고서(2026.03.18).pdf` | Primary source for 2025 current-year standalone values and latest 2023-2024 comparative standalone values |
-| `nrb_audit_report_2025_04_01` | `[엔알비]감사보고서(2025.04.01).pdf` | Cross-check for 2024 and 2023 comparative values |
+| `nrb_audit_report_2025_04_01` | `[엔알비]감사보고서(2025.04.01).pdf` | Cross-check for 2024 and 2023 comparative values; source for 2023 standalone revenue breakdown |
 | `nrb_audit_report_2024_04_08` | `[엔알비]감사보고서(2024.04.08).pdf` | Cross-check for 2023 original values and K-IFRS first adoption emphasis |
 
 ## Source Priority
@@ -28,40 +28,66 @@ The attached PDFs were used only as source references. They were not copied into
 | 2024 | `nrb_annual_report_2026_03_18` | Latest comparative standalone statements | `nrb_audit_report_2025_04_01` |
 | 2025 | `nrb_annual_report_2026_03_18` | Current-year standalone statements | none |
 
-## 2023 Current-Liability Restatement
+## 2023 Current-Liability Reclassification
 
-The staged payload uses the latest comparative 2023 current-liability value from the 2026-03-18 business report:
+The 2025-04-01 audit report explains a retrospective K-IFRS 1001 liability classification change. Redeemable convertible preferred-share liabilities exercisable within 12 months after the reporting period are classified as current liabilities.
+
+The staged payload uses the resolved latest comparative 2023 current-liability value:
 
 - `81,185,943,632` KRW
 
-The 2024-04-08 audit report shows the earlier current-liability classification:
+The pre-reclassification amount was:
 
 - `48,527,580,433` KRW
 
-The earlier value is retained only as cross-check evidence. It is not used as the staged reported value.
+The reclassification effect was:
 
-## 2024 Operating Cash Flow Mismatch
+- `32,658,363,199` KRW
 
-The 2025-04-01 audit report shows 2024 operating cash flow as:
+This is no longer treated as an unresolved mismatch or public-promotion blocker.
 
-- `-2,611,715,083` KRW
+## 2024 Operating Cash Flow Presentation Change
 
-The 2026-03-18 business report latest standalone comparative cash-flow statement shows 2024 operating cash flow as:
+The 2026-03-18 business report note 2.2.1 explains a retrospective K-IFRS 1008 cash-flow presentation policy change. Cash flows from modular fixed assets held for rental purposes were reclassified between operating and investing cash flows.
 
-- `20,142,350,922` KRW
+The note states that the change affects only the cash-flow statement and does not affect the statement of financial position, income statement, or statement of changes in equity.
 
-The staging file uses the latest comparative value and preserves the earlier amount in `allowed_cross_check_year_mismatches`. The source documents do not yet provide enough explanation to treat the mismatch as resolved for public promotion.
+For 2024, the note gives the following thousand-KRW table:
 
-## Standalone and Consolidated Guard
+| Metric | Before | After | Effect |
+| --- | ---: | ---: | ---: |
+| Operating cash flow | `(2,611,715)` | `20,142,351` | `22,754,066` |
+| Investing cash flow | `(2,956,754)` | `(25,710,820)` | `(22,754,066)` |
 
-The 2026-03-18 business report includes consolidated disclosures and a consolidated revenue breakdown table. Those values are not copied into `financial_years`.
+The staging file stores the after-policy-change standalone KRW values:
 
-The staging payload intentionally keeps standalone revenue breakdown fields as:
+- `operating_cash_flow: 20,142,350,922`
+- `investing_cash_flow: -25,710,819,575`
 
-- `reported: null`
-- `disclosure_status: not_disclosed`
+The before-policy-change amount is retained only in the event description as historical evidence. It is not listed in `allowed_cross_check_year_mismatches`.
 
-This prevents product, rental, service, construction, or other revenue labels in the consolidated table from being interpreted as standalone modular revenue.
+## Standalone Revenue Breakdown
+
+Standalone revenue breakdown is disclosed in thousand KRW:
+
+- 2023 and 2024: 2025-04-01 audit report note 26.1, p.77
+- 2024 and 2025: 2026-03-18 business report note 27.1, p.208
+
+The staging contract converts disclosed thousand-KRW amounts to integer KRW. Because the financial statements carry source values in thousand KRW, the validator allows a maximum `999` KRW rounding difference between revenue and the sum of disclosed revenue components.
+
+| Year | Product | Rental | Service | Construction | Other | Disclosed total |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 2023 | 14,334,820 | 23,313,498 | 13,381,205 | not applicable | 503,093 | 51,532,616 |
+| 2024 | 9,567,358 | 31,289,418 | 11,622,765 | not applicable | 321,520 | 52,801,061 |
+| 2025 | 14,800,741 | 24,586,780 | 12,270,351 | 7,667,780 | 155,893 | 59,481,545 |
+
+The schema now allows optional `service_revenue`. Existing companies are not required to provide it.
+
+`goods_revenue` remains `not_applicable` for NRB because no goods-revenue caption is disclosed. It is not filled with zero.
+
+## Modular Attribution
+
+The business description says NRB's revenue arises from modular items, but the revenue breakdown captions themselves are not a separate modular segment disclosure. Product, rental, service, construction, and other revenue are therefore not automatically interpreted as separate modular segment revenue.
 
 ## Borrowings Scope
 
@@ -73,18 +99,18 @@ This prevents product, rental, service, construction, or other revenue labels in
 
 Convertible bonds, bonds, derivative liabilities, and redeemable preferred-share liabilities are not added to this borrowing total in this phase.
 
-## Existing Public Summary Difference
+## Public View Model
 
-The existing public company summary has an operating margin around `7.6%`. The staged standalone audited calculation for 2025 is about `7.5%`.
+This phase does not change public company data. NRB remains excluded from `frontend/public/data/companies/company_report_insights.json`.
 
-This phase does not change public company data. The difference is recorded as a public-promotion blocker.
+The existing public company summary has an operating margin around `7.6%`. The staged standalone audited calculation for 2025 is about `7.5%`. That public summary delta remains documented for a later public-promotion decision.
 
-## Promotion Blockers
+## Remaining Public Promotion Conditions
 
-NRB should not be promoted into `frontend/public/data/companies/company_report_insights.json` until:
+NRB can be considered for public financial View Model promotion only after:
 
-- the 2024 operating cash-flow mismatch is reviewed and resolved or explicitly accepted,
-- the 2023 current-liability restatement is reviewed for presentation scope,
-- the standalone/consolidated revenue scope guard is accepted,
-- public summary differences are reconciled or documented,
-- the staged file passes `scripts/validate_company_audit_financials.py`.
+- the staging contract is explicitly approved for public use,
+- the public summary operating-margin delta is reconciled or documented in the UI copy,
+- the standalone/modular attribution wording is approved,
+- the staged file passes `scripts/validate_company_audit_financials.py`,
+- `scripts/build_company_report_insights.py --check` remains unchanged for existing public companies.

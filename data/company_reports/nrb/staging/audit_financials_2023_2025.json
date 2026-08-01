@@ -52,16 +52,17 @@
     "This NRB file is a staging-only audit financial contract and must not be promoted into frontend/public/data/companies/company_report_insights.json in this phase.",
     "All reported amounts are stored as integer KRW won and no derived ratios are stored in the source JSON.",
     "2026-03-18 business report standalone statements are the latest primary source for 2023, 2024, and 2025 values.",
-    "The 2024 operating cash flow mismatch is preserved as a cross-check issue; the 2025-04-01 audit report amount is not silently merged with the latest comparative value.",
-    "The 2023 current-liability reclassification uses the latest comparative balance sheet; the earlier current-liability classification is not used as the final staging amount.",
+    "The 2024 operating cash flow difference is treated as a resolved K-IFRS 1008 retrospective cash-flow presentation policy change; the pre-policy-change amount is retained only as historical evidence.",
+    "The 2023 current-liability difference is treated as a resolved K-IFRS 1001 retrospective classification change for redeemable convertible preferred-share liabilities.",
     "Consolidated statement values and subsidiary results are excluded from financial_years.",
-    "The consolidated revenue breakdown table is not copied into standalone revenue_breakdown.",
-    "Product, rental, service, construction, and other revenue labels are not interpreted as standalone modular revenue without a standalone disclosure.",
+    "Standalone revenue breakdown is disclosed in thousand KRW and converted to integer KRW with a maximum 999 KRW rounding tolerance against income_statement.revenue.",
+    "The disclosed product, rental, service, construction, and other revenue labels are not interpreted as separate modular segment revenue without additional segment disclosure.",
+    "Goods revenue is not a disclosed NRB standalone revenue caption and remains not_applicable instead of being filled with zero.",
     "Convertible bonds, bonds, derivative liabilities, and redeemable preferred-share liabilities are not added to the existing borrowings fields unless the schema definition is expanded in a later phase.",
     "The existing public company card operating margin of 7.6% differs from the audited standalone calculation of approximately 7.5%; protected public company data is not changed in this staging phase."
   ],
   "entity_attribution": {
-    "attribution_warning": "이 staging 파일은 엔알비 별도재무제표 기준이다. 연결재무제표 및 종속기업 수치는 financial_years에 포함하지 않는다. 연결 기준 매출 구성 표는 별도 모듈러 매출로 자동 해석하지 않으며, 기존 공개 요약 영업이익률과 감사받은 별도 재무제표 산출값의 차이는 후속 검토가 필요하다.",
+    "attribution_warning": "This staging file uses NRB standalone financial statements. Consolidated statements and subsidiary values are excluded from financial_years. Standalone revenue breakdown captions were cross-checked from notes 26.1 and 27.1, but product, rental, service, construction, and other revenue are not automatically treated as separate modular segment revenue. The 2024 operating cash flow and 2023 current-liability differences are documented as resolved retrospective presentation/classification changes.",
     "financial_scope": "standalone",
     "modular_segment_revenue_disclosed": true,
     "related_entity_attribution_required": false,
@@ -79,28 +80,27 @@
         "tax_effect_status": "not_applicable"
       },
       {
-        "attribution_effect": "latest_comparative_classification_used",
-        "description": "2026 사업보고서 최신 비교 재무제표는 2023 유동부채를 81,185,943,632원으로 표시한다. 2024 감사보고서의 48,527,580,433원은 최종 staging 값으로 사용하지 않는다. 원인과 표시 재분류 성격은 후속 검토 대상이다.",
+        "event_type": "current_liability_policy_reclassification",
         "effective_date": "2023-12-31",
-        "event_type": "current_liability_reclassification",
+        "description": "K-IFRS 1001 liability classification amendments were applied retrospectively. Redeemable convertible preferred-share liabilities that can be exercised within 12 months after the reporting period were classified as current liabilities. The 2023 current-liability amount after reclassification is 81,185,943,632 KRW; the pre-reclassification amount was 48,527,580,433 KRW and the reclassification effect was 32,658,363,199 KRW.",
         "related_entities": [],
         "source_refs": [
-          "nrb_annual_report_2026_03_18",
           "nrb_audit_report_2025_04_01",
-          "nrb_audit_report_2024_04_08"
+          "nrb_annual_report_2026_03_18"
         ],
+        "attribution_effect": "resolved_retrospective_current_liability_reclassification",
         "tax_effect_status": "not_applicable"
       },
       {
-        "attribution_effect": "latest_comparative_cash_flow_used",
-        "description": "2025-04-01 감사보고서는 2024 영업현금흐름을 -2,611,715,083원으로 표시하지만, 2026-03-18 사업보고서 최신 별도 비교 현금흐름표는 20,142,350,922원으로 표시한다. 이 파일은 최신 비교값을 staging reported 값으로 사용하고, 차이는 cross-check mismatch로 보존한다.",
+        "event_type": "cash_flow_presentation_policy_change",
         "effective_date": "2024-12-31",
-        "event_type": "operating_cash_flow_comparative_revision",
+        "description": "The 2026-03-18 business report note 2.2.1 explains that cash flows from modular fixed assets held for rental purposes were reclassified between operating and investing cash flows and applied retrospectively under K-IFRS 1008. The change affects only the cash-flow statement and does not affect the statement of financial position, income statement, or statement of changes in equity. For 2024, operating cash flow changed from -2,611,715 thousand KRW to 20,142,351 thousand KRW and investing cash flow changed from -2,956,754 thousand KRW to -25,710,820 thousand KRW.",
         "related_entities": [],
         "source_refs": [
           "nrb_annual_report_2026_03_18",
           "nrb_audit_report_2025_04_01"
         ],
+        "attribution_effect": "resolved_retrospective_cash_flow_presentation_change",
         "tax_effect_status": "not_applicable"
       },
       {
@@ -455,84 +455,100 @@
       },
       "revenue_breakdown": {
         "construction_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone construction revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
           "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "nrb_audit_report_2025_04_01"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
+              "source_ref": "nrb_audit_report_2025_04_01",
+              "page_range": "p.77",
               "section": "note.revenue_breakdown",
-              "source_ref": "nrb_annual_report_2026_03_18",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "NRB standalone revenue breakdown for this year does not disclose a construction revenue caption; this is not filled with zero."
         },
         "goods_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone goods revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
           "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "nrb_audit_report_2025_04_01"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
+              "source_ref": "nrb_audit_report_2025_04_01",
+              "page_range": "p.77",
               "section": "note.revenue_breakdown",
-              "source_ref": "nrb_annual_report_2026_03_18",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "NRB standalone revenue breakdown does not disclose a goods revenue caption; this is not filled with zero."
         },
         "other_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone other revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 503093000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_audit_report_2025_04_01"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
+              "source_ref": "nrb_audit_report_2025_04_01",
+              "page_range": "p.77",
               "section": "note.revenue_breakdown",
-              "source_ref": "nrb_annual_report_2026_03_18",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         },
         "product_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone product revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 14334820000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_audit_report_2025_04_01"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
+              "source_ref": "nrb_audit_report_2025_04_01",
+              "page_range": "p.77",
               "section": "note.revenue_breakdown",
-              "source_ref": "nrb_annual_report_2026_03_18",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         },
         "rental_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone rental revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 23313498000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_audit_report_2025_04_01"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
+              "source_ref": "nrb_audit_report_2025_04_01",
+              "page_range": "p.77",
               "section": "note.revenue_breakdown",
-              "source_ref": "nrb_annual_report_2026_03_18",
               "verification_status": "verified_section_range"
             }
           ],
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
+        },
+        "service_revenue": {
+          "reported": 13381205000,
+          "disclosure_status": "reported",
           "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+            "nrb_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "nrb_audit_report_2025_04_01",
+              "page_range": "p.77",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         }
       },
       "source_refs": [
@@ -926,84 +942,100 @@
       },
       "revenue_breakdown": {
         "construction_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone construction revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
           "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "NRB standalone revenue breakdown for this year does not disclose a construction revenue caption; this is not filled with zero."
         },
         "goods_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone goods revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
           "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "NRB standalone revenue breakdown does not disclose a goods revenue caption; this is not filled with zero."
         },
         "other_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone other revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 321520000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         },
         "product_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone product revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 9567358000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         },
         "rental_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone rental revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 31289418000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
+        },
+        "service_revenue": {
+          "reported": 11622765000,
+          "disclosure_status": "reported",
           "source_refs": [
             "nrb_annual_report_2026_03_18"
-          ]
+          ],
+          "source_locations": [
+            {
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         }
       },
       "source_refs": [
@@ -1375,84 +1407,100 @@
       },
       "revenue_breakdown": {
         "construction_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone construction revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 7667780000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         },
         "goods_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone goods revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
           "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "NRB standalone revenue breakdown does not disclose a goods revenue caption; this is not filled with zero."
         },
         "other_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone other revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 155893000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         },
         "product_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone product revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 14800741000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
-          "source_refs": [
-            "nrb_annual_report_2026_03_18"
-          ]
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         },
         "rental_revenue": {
-          "disclosure_status": "not_disclosed",
-          "notes": "Standalone rental revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
-          "reported": null,
+          "reported": 24586780000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ],
           "source_locations": [
             {
-              "page_range": "p.136",
-              "section": "note.revenue_breakdown",
               "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
               "verification_status": "verified_section_range"
             }
           ],
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
+        },
+        "service_revenue": {
+          "reported": 12270351000,
+          "disclosure_status": "reported",
           "source_refs": [
             "nrb_annual_report_2026_03_18"
-          ]
+          ],
+          "source_locations": [
+            {
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "page_range": "p.208",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Source table is disclosed in thousand KRW; value is multiplied by 1,000 and may differ from income_statement.revenue by up to 999 KRW due to source rounding."
         }
       },
       "source_refs": [
@@ -1622,34 +1670,7 @@
     "pdf_handling": "Attached PDFs were read as source references only and were not copied into the repository.",
     "public_ui_impact": "None. This file lives under staging and is excluded from public View Model discovery.",
     "validation_policy": {
-      "allowed_cross_check_year_mismatches": [
-        {
-          "reason": "Original 2023 audit report classifies current liabilities before the latest comparative reclassification of redeemable preferred-share liabilities; latest 2026 comparative balance sheet is used.",
-          "source_locations": [
-            {
-              "page_range": "pp.8-9",
-              "section": "statement.balance_sheet",
-              "source_ref": "nrb_audit_report_2024_04_08",
-              "verification_status": "verified_section_range"
-            }
-          ],
-          "source_ref": "nrb_audit_report_2024_04_08",
-          "year": 2023
-        },
-        {
-          "reason": "2025-04-01 audit report shows 2024 operating cash flow of -2,611,715,083 KRW, while the 2026-03-18 latest standalone comparative cash-flow statement shows 20,142,350,922 KRW. Latest comparative value is used for staging pending Phase 6E-1B review.",
-          "source_locations": [
-            {
-              "page_range": "p.11",
-              "section": "statement.cash_flow",
-              "source_ref": "nrb_audit_report_2025_04_01",
-              "verification_status": "verified_section_range"
-            }
-          ],
-          "source_ref": "nrb_audit_report_2025_04_01",
-          "year": 2024
-        }
-      ],
+      "allowed_cross_check_year_mismatches": [],
       "expected_cash_flow_signs": {
         "2023": {
           "financing_cash_flow": "positive",
@@ -1675,14 +1696,15 @@
         "consolidated_operating_cash_flow"
       ],
       "required_attribution_warning_terms": [
-        "별도재무제표",
-        "연결재무제표",
-        "종속기업"
+        "standalone financial statements",
+        "Standalone revenue breakdown",
+        "retrospective"
       ],
       "required_disclosure_limitations": [
         "Consolidated statement values and subsidiary results are excluded from financial_years.",
-        "The consolidated revenue breakdown table is not copied into standalone revenue_breakdown."
-      ]
+        "Standalone revenue breakdown is disclosed in thousand KRW and converted to integer KRW with a maximum 999 KRW rounding tolerance against income_statement.revenue."
+      ],
+      "revenue_breakdown_rounding_tolerance_krw": 999
     }
   }
 }

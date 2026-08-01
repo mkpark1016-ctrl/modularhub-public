@@ -1,6 +1,6 @@
 # NRB Audit Financials Staging Contract
 
-This staging contract keeps NRB's 2023-2025 standalone audit financial values in an internal validation path while the remaining source mismatches are reviewed.
+This staging contract keeps NRB's 2023-2025 standalone audit financial values in an internal validation path until the team explicitly promotes them to the public View Model.
 
 ## Staging Path
 
@@ -14,7 +14,8 @@ The public builder discovers `data/company_reports/*/*.json`. The nested `stagin
 - Derived ratios are calculated by validators/builders, not stored in the source JSON.
 - Null values are not converted to zero.
 - Consolidated statement values are excluded from `financial_years`.
-- The consolidated revenue breakdown table is not copied into standalone `revenue_breakdown`.
+- Standalone revenue breakdown is disclosed and converted from thousand KRW to integer KRW.
+- Optional `service_revenue` is allowed but is not required for existing companies.
 - Public JSON files are unchanged in this phase.
 
 ## Audit Opinion and Report Dates
@@ -26,18 +27,40 @@ The 2024 and 2025 audit reports have verified independent auditor report dates:
 
 The 2026 business report identifies the auditor and opinion in the auditor table, but the independent auditor report date was not separately located in the attached PDF. The business report filing date is not copied into `auditor_report_date`.
 
-## Staging Mismatch Policy
+## Resolved Source Reconciliations
 
-The staging payload may include cross-check differences only through:
+### 2024 cash-flow presentation
 
-`validation_metadata.validation_policy.allowed_cross_check_year_mismatches`
+The 2026-03-18 business report note 2.2.1 resolves the earlier 2024 operating cash-flow difference as a K-IFRS 1008 retrospective presentation policy change.
 
-For NRB this is used for:
+The before-policy-change values remain historical evidence only. The after-policy-change values are used in staging:
 
-- 2023 current-liability classification difference,
-- 2024 operating cash-flow difference.
+- `operating_cash_flow: 20,142,350,922`
+- `investing_cash_flow: -25,710,819,575`
 
-The 2024 operating cash-flow difference remains a blocker for public promotion.
+### 2023 current-liability classification
+
+The 2025-04-01 audit report resolves the 2023 current-liability difference as a retrospective K-IFRS 1001 classification change for redeemable convertible preferred-share liabilities.
+
+The after-reclassification 2023 current-liability value is:
+
+- `81,185,943,632`
+
+The pre-reclassification value `48,527,580,433` is retained only in documentation and the event description.
+
+## Revenue Breakdown Rounding Contract
+
+NRB source revenue breakdown is disclosed in thousand KRW. The source JSON stores amounts in won after multiplying by 1,000.
+
+The validator supports:
+
+`validation_metadata.validation_policy.revenue_breakdown_rounding_tolerance_krw`
+
+For NRB this is set to:
+
+`999`
+
+Differences of `1,000` KRW or more remain validator failures.
 
 ## Public Promotion Rule
 
@@ -46,7 +69,7 @@ This file is valid for internal review and tests, but public promotion requires 
 - do not add `nrb` to public `company_report_insights.json`,
 - do not change `companies.json` financial summaries from this staging file,
 - do not show NRB audit financial cards in the frontend,
-- do not treat consolidated revenue categories as modular segment revenue.
+- do not interpret product, rental, service, construction, or other revenue captions as separate modular segment revenue.
 
 ## Validation
 
@@ -56,4 +79,4 @@ The staging payload must pass:
 python scripts/validate_company_audit_financials.py --input data/company_reports/nrb/staging/audit_financials_2023_2025.json --expected-years 2023 2024 2025 --base-ref origin/main
 ```
 
-The expected validator result is `valid: true` with revenue-breakdown availability warnings only.
+The expected validator result is `valid: true` with zero issues.

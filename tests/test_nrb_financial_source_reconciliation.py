@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 from pathlib import Path
 
@@ -17,6 +18,14 @@ def load_staging() -> dict:
 
 def reported(payload: dict, year: str, section: str, field: str) -> int | None:
     return payload["financial_years"][year][section][field]["reported"]
+
+
+def revenue_breakdown_total(payload: dict, year: str) -> int:
+    total = 0
+    for metric in payload["financial_years"][year]["revenue_breakdown"].values():
+        if isinstance(metric["reported"], int):
+            total += metric["reported"]
+    return total
 
 
 def walk(value: object):
@@ -40,14 +49,19 @@ def test_nrb_uses_existing_company_id_and_stays_in_staging() -> None:
     assert payload["entity_attribution"]["financial_scope"] == "standalone"
 
     public_companies = json.loads(DEFAULT_OUTPUT.read_text(encoding="utf-8"))["companies"]
-    assert "nrb" not in {company["company_id"] for company in public_companies}
+    assert {company["company_id"] for company in public_companies} == {
+        "daeseung-engineering",
+        "kumkang-kind",
+        "planm",
+        "yuchang-enc",
+    }
     assert STAGING_PATH not in discover_source_files(DEFAULT_INPUT_ROOT)
 
 
-def test_nrb_staging_validator_passes_with_revenue_breakdown_warnings_only() -> None:
+def test_nrb_staging_validator_passes_without_revenue_breakdown_warnings() -> None:
     result = validate(load_staging(), base_ref="origin/main")
     assert result["valid"], result["issues"]
-    assert {issue["code"] for issue in result["issues"]} == {"revenue_breakdown_check_unavailable"}
+    assert result["issues"] == []
     assert result["protected_public_diff"]["changed_files"] == []
 
 
@@ -76,20 +90,26 @@ def test_nrb_restated_2023_current_liabilities_are_preserved() -> None:
     assert reported(payload, "2023", "balance_sheet", "current_liabilities") != 48527580433
 
     mismatches = payload["validation_metadata"]["validation_policy"]["allowed_cross_check_year_mismatches"]
-    current_liability_mismatch = next(item for item in mismatches if item["year"] == 2023)
-    assert current_liability_mismatch["source_ref"] == "nrb_audit_report_2024_04_08"
+    assert all(item.get("year") != 2023 for item in mismatches)
+    event = next(item for item in payload["entity_attribution"]["special_events"] if item["event_type"] == "current_liability_policy_reclassification")
+    assert event["attribution_effect"] == "resolved_retrospective_current_liability_reclassification"
+    assert "K-IFRS 1001" in event["description"]
+    assert "32,658,363,199" in event["description"]
     assert "48,527,580,433" not in json.dumps(payload["financial_years"]["2023"], ensure_ascii=False)
 
 
-def test_nrb_2024_operating_cash_flow_mismatch_blocks_public_promotion() -> None:
+def test_nrb_2024_operating_cash_flow_policy_change_is_resolved() -> None:
     payload = load_staging()
     assert reported(payload, "2024", "cash_flow", "operating_cash_flow") == 20142350922
 
     mismatches = payload["validation_metadata"]["validation_policy"]["allowed_cross_check_year_mismatches"]
-    cash_flow_mismatch = next(item for item in mismatches if item["year"] == 2024)
-    assert cash_flow_mismatch["source_ref"] == "nrb_audit_report_2025_04_01"
-    assert "-2,611,715,083" in cash_flow_mismatch["reason"]
-    assert any("operating cash flow mismatch" in limitation for limitation in payload["disclosure_limitations"])
+    assert all(item.get("year") != 2024 for item in mismatches)
+    event = next(item for item in payload["entity_attribution"]["special_events"] if item["event_type"] == "cash_flow_presentation_policy_change")
+    assert event["attribution_effect"] == "resolved_retrospective_cash_flow_presentation_change"
+    assert "K-IFRS 1008" in event["description"]
+    assert "-2,611,715 thousand KRW" in event["description"]
+    assert "20,142,351 thousand KRW" in event["description"]
+    assert not any("operating cash flow mismatch" in limitation for limitation in payload["disclosure_limitations"])
 
 
 def test_nrb_2025_standalone_values_and_public_margin_difference() -> None:
@@ -118,15 +138,65 @@ def test_nrb_borrowings_scope_excludes_other_financing_classes() -> None:
     assert any("Convertible bonds" in limitation for limitation in payload["disclosure_limitations"])
 
 
-def test_nrb_revenue_breakdown_is_not_copied_from_consolidated_table() -> None:
+def test_nrb_standalone_revenue_breakdown_is_disclosed_with_service_revenue() -> None:
     payload = load_staging()
     assert payload["entity_attribution"]["modular_segment_revenue_disclosed"] is True
 
-    for year, record in payload["financial_years"].items():
-        for field, metric in record["revenue_breakdown"].items():
-            assert metric["reported"] is None, f"{year} {field} must not copy consolidated revenue"
-            assert metric["disclosure_status"] == "not_disclosed"
-            assert "consolidated" in metric["notes"]
+    expected = {
+        "2023": {
+            "product_revenue": 14334820000,
+            "rental_revenue": 23313498000,
+            "service_revenue": 13381205000,
+            "construction_revenue": None,
+            "other_revenue": 503093000,
+            "source_ref": "nrb_audit_report_2025_04_01",
+            "page_range": "p.77",
+        },
+        "2024": {
+            "product_revenue": 9567358000,
+            "rental_revenue": 31289418000,
+            "service_revenue": 11622765000,
+            "construction_revenue": None,
+            "other_revenue": 321520000,
+            "source_ref": "nrb_annual_report_2026_03_18",
+            "page_range": "p.208",
+        },
+        "2025": {
+            "product_revenue": 14800741000,
+            "rental_revenue": 24586780000,
+            "service_revenue": 12270351000,
+            "construction_revenue": 7667780000,
+            "other_revenue": 155893000,
+            "source_ref": "nrb_annual_report_2026_03_18",
+            "page_range": "p.208",
+        },
+    }
+    for year, values in expected.items():
+        breakdown = payload["financial_years"][year]["revenue_breakdown"]
+        assert breakdown["goods_revenue"]["reported"] is None
+        assert breakdown["goods_revenue"]["disclosure_status"] == "not_applicable"
+        for field in ["product_revenue", "rental_revenue", "service_revenue", "other_revenue"]:
+            assert breakdown[field]["reported"] == values[field]
+        if values["construction_revenue"] is None:
+            assert breakdown["construction_revenue"]["reported"] is None
+            assert breakdown["construction_revenue"]["disclosure_status"] == "not_applicable"
+        else:
+            assert breakdown["construction_revenue"]["reported"] == values["construction_revenue"]
+        for metric in breakdown.values():
+            assert metric["source_refs"] == [values["source_ref"]]
+            assert metric["source_locations"][0]["page_range"] == values["page_range"]
+            assert metric["source_locations"][0]["section"] == "note.revenue_breakdown"
+        revenue = reported(payload, year, "income_statement", "revenue")
+        assert abs(revenue - revenue_breakdown_total(payload, year)) <= 999
+
+
+def test_nrb_revenue_breakdown_over_tolerance_fails() -> None:
+    payload = deepcopy(load_staging())
+    payload["financial_years"]["2025"]["revenue_breakdown"]["other_revenue"]["reported"] += 1000
+
+    result = validate(payload, base_ref=None)
+    assert not result["valid"]
+    assert any(issue["code"] == "revenue_breakdown_mismatch" and issue["source"] == "2025" for issue in result["issues"])
 
 
 def test_nrb_source_locations_are_complete_and_refs_exist() -> None:

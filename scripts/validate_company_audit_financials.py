@@ -36,6 +36,7 @@ REQUIRED_INCOME_FIELDS = {"revenue", "gross_profit", "operating_profit", "net_in
 REQUIRED_BALANCE_FIELDS = {"total_assets", "total_liabilities", "total_equity", "current_assets", "current_liabilities"}
 REQUIRED_CASH_FLOW_FIELDS = {"operating_cash_flow", "investing_cash_flow", "financing_cash_flow", "ending_cash"}
 REQUIRED_REVENUE_FIELDS = {"goods_revenue", "product_revenue", "construction_revenue", "rental_revenue", "other_revenue"}
+OPTIONAL_REVENUE_FIELDS = {"service_revenue"}
 REQUIRED_BORROWING_FIELDS = {"short_term_borrowings", "current_portion_long_term_borrowings", "long_term_borrowings"}
 REQUIRED_WORKING_CAPITAL_FIELDS = {
     "trade_receivables_gross",
@@ -457,7 +458,9 @@ def validate_accounting(payload: dict[str, Any], issues: list[Issue]) -> None:
             )
         revenue = amount(record, "income_statement", "revenue")
         revenue_components = [record["revenue_breakdown"][field] for field in REQUIRED_REVENUE_FIELDS]
+        revenue_components.extend(record["revenue_breakdown"][field] for field in OPTIONAL_REVENUE_FIELDS if field in record["revenue_breakdown"])
         revenue_total = aggregate_reported(revenue_components)
+        rounding_tolerance = int(validation_policy_for(payload).get("revenue_breakdown_rounding_tolerance_krw") or 0)
         if revenue is None:
             warning(
                 issues,
@@ -478,8 +481,16 @@ def validate_accounting(payload: dict[str, Any], issues: list[Issue]) -> None:
                 revenue_total,
                 source=year,
             )
-        elif revenue != revenue_total["reported"]:
-            issue(issues, "revenue_breakdown_mismatch", f"financial_years.{year}.revenue_breakdown", "revenue breakdown must equal revenue", revenue, revenue_total["reported"], source=year)
+        elif abs(revenue - revenue_total["reported"]) > rounding_tolerance:
+            issue(
+                issues,
+                "revenue_breakdown_mismatch",
+                f"financial_years.{year}.revenue_breakdown",
+                "revenue breakdown must equal revenue within configured rounding tolerance",
+                {"revenue": revenue, "tolerance_krw": rounding_tolerance},
+                revenue_total["reported"],
+                source=year,
+            )
 
 
 def validate_source_priority(payload: dict[str, Any], issues: list[Issue], expected_years: set[str]) -> None:
