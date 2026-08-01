@@ -325,6 +325,14 @@ def all_source_locations(source_payload: dict[str, Any]) -> list[dict[str, Any]]
 
 def build_disclosure_warnings(source_payload: dict[str, Any], pending_location_count: int) -> list[dict[str, str]]:
     warnings = []
+    for year, record in sorted(source_payload["financial_years"].items()):
+        total_equity = record.get("balance_sheet", {}).get("total_equity", {})
+        if total_equity.get("disclosure_status") == "verification_pending":
+            warnings.append({
+                "code": "verification_pending_total_equity",
+                "message": f"{year}년 자본총계 검증 보류: 해당 자본 관련 비율은 계산에서 제외됩니다.",
+                "level": "info",
+            })
     if source_payload["entity_attribution"].get("modular_segment_revenue_disclosed") is False:
         warnings.append({"code": "modular_segment_revenue_not_disclosed", "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다.", "level": "warning"})
     warnings.extend([
@@ -360,6 +368,16 @@ def build_source_summary(source_payload: dict[str, Any], locations: list[dict[st
     }
 
 
+def public_attribution(source_payload: dict[str, Any]) -> dict[str, Any]:
+    attribution = dict(source_payload["entity_attribution"])
+    attribution["special_events"] = [
+        event
+        for event in attribution.get("special_events", [])
+        if event.get("event_type") != "unresolved_requested_amount_not_found"
+    ]
+    return attribution
+
+
 def build_company_insight(source_payload: dict[str, Any]) -> dict[str, Any]:
     years = sorted(int(year) for year in source_payload["financial_years"])
     financial_series = [
@@ -385,7 +403,7 @@ def build_company_insight(source_payload: dict[str, Any]) -> dict[str, Any]:
         "derived_metrics": derived,
         "trend_signals": build_trend_signals(source_payload, financial_series, derived),
         "disclosure_warnings": build_disclosure_warnings(source_payload, source_summary["pending_location_count"]),
-        "attribution": source_payload["entity_attribution"],
+        "attribution": public_attribution(source_payload),
         "source_summary": source_summary,
         "data_quality": {
             "source_validator_status": "passed",

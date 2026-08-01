@@ -204,12 +204,26 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
   const chartRows = (metricKey) => years.map((year) => ({ year, metricKey, metric: reportMetricByYear(insight, year, metricKey) }));
   const ratioRows = (metricKey) => years.map((year) => ({ year, metricKey, metric: reportRatioByYear(insight, year, metricKey) }));
   const warningCount = insight.disclosure_warnings?.length || 0;
+  const visibleDisclosureWarnings = (insight.disclosure_warnings || []).filter((warning) => (
+    String(warning.code || "").startsWith("verification_pending") || warning.code === "modular_segment_revenue_not_disclosed"
+  ));
 
   return (
     <>
       <p className="finance-note">
         공식 공시문서에 포함된 감사받은 재무제표 기준 정보입니다. 모듈러 부문 별도 매출 공개 여부에 따라 회사 전체 재무와 구분해 해석합니다.
       </p>
+
+      {visibleDisclosureWarnings.length > 0 && (
+        <div className="company-report-pending-callouts" aria-label="검증 보류 및 공시 한계 안내">
+          {visibleDisclosureWarnings.map((warning) => (
+            <p key={warning.code}>
+              <strong>{warning.level === "warning" ? "공시 한계" : "검증 보류"}</strong>
+              <span>{warning.message}</span>
+            </p>
+          ))}
+        </div>
+      )}
 
       <div className="company-report-kpi-grid" aria-label="감사보고서 핵심 재무 지표">
         {KPI_CARDS.map((item) => {

@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = ROOT / "data" / "company_reports" / "planm" / "restatement_source_matrix_2023_2025.json"
-PLANM_STAGING_INPUT = ROOT / "data" / "company_reports" / "planm" / "staging" / "audit_financials_2023_2025.json"
+PLANM_INPUT = ROOT / "data" / "company_reports" / "planm" / "audit_financials_2023_2025.json"
 RECONCILIATION_DOC = ROOT / "docs" / "data-audits" / "planm-2023-equity-and-restatement-reconciliation.md"
 PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "companies" / "company_report_insights.json",
@@ -23,7 +23,7 @@ def load_matrix() -> dict:
 
 
 def load_planm_staging_payload() -> dict:
-    return json.loads(PLANM_STAGING_INPUT.read_text(encoding="utf-8"))
+    return json.loads(PLANM_INPUT.read_text(encoding="utf-8"))
 
 
 def final_metric(payload: dict, year: str, metric: str) -> dict:

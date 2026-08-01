@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "company_reports" / "company_audit_financials_v1.schema.json"
 KUMKANG_INPUT = ROOT / "data" / "company_reports" / "kumkang-kind" / "audit_financials_2023_2025.json"
 DAESEUNG_INPUT = ROOT / "data" / "company_reports" / "daeseung-engineering" / "audit_financials_2023_2025.json"
-PLANM_STAGING_INPUT = ROOT / "data" / "company_reports" / "planm" / "staging" / "audit_financials_2023_2025.json"
+PLANM_INPUT = ROOT / "data" / "company_reports" / "planm" / "audit_financials_2023_2025.json"
 EXPECTED_REPORTED_VALUES = {
     "2023": {
         "revenue": 419041119841,
@@ -139,7 +139,7 @@ def load_daeseung_payload() -> dict:
 
 
 def load_planm_staging_payload() -> dict:
-    return json.loads(PLANM_STAGING_INPUT.read_text(encoding="utf-8"))
+    return json.loads(PLANM_INPUT.read_text(encoding="utf-8"))
 
 
 def load_schema() -> dict:
@@ -237,7 +237,7 @@ def test_schema_accepts_verification_pending_null_amounts() -> None:
 
 
 def test_planm_staging_text_integrity_and_identity_fields() -> None:
-    text = PLANM_STAGING_INPUT.read_text(encoding="utf-8")
+    text = PLANM_INPUT.read_text(encoding="utf-8")
     payload = load_planm_staging_payload()
     assert "???" not in text
     assert "??" not in text

@@ -49,7 +49,7 @@
   "company_name": "플랜엠",
   "currency": "KRW",
   "disclosure_limitations": [
-    "This staging JSON is excluded from public company_report_insights discovery and must not be treated as public UI input.",
+    "This PlanM audit financial JSON is a public company_report_insights source, but verification_pending values remain excluded from public calculations.",
     "2023 total_equity uses disclosure_status verification_pending because an additional 777,851,000 KRW opening equity correction requires manual cross-check.",
     "verification_pending is different from zero, not_disclosed, and not_applicable and is excluded from derived public calculations.",
     "Tax effects for restatement events are not separately verified; tax_effect_status is not_separately_verified where applicable.",
@@ -1589,15 +1589,15 @@
   "unit": "won",
   "validation_metadata": {
     "amount_storage": "integer KRW won; verification_pending values remain null and are not converted to zero",
-    "created_for": "Phase 6D-1B PlanM staged audit financial contract validation",
-    "derived_metrics_storage": "derived metrics are calculated by validator only; public View Model is not generated from this staging path",
+    "created_for": "Phase 6D-2 PlanM controlled public financial promotion",
+    "derived_metrics_storage": "derived metrics are calculated by validator and public View Model builder; verification_pending values remain null and are excluded from affected calculations",
     "expected_years": [
       2023,
       2024,
       2025
     ],
     "pdf_handling": "attached PDFs were used as source references only and were not copied into the repository",
-    "public_ui_impact": "none; staging JSON is intentionally below data/company_reports/planm/staging and excluded from discover_source_files",
+    "public_ui_impact": "PlanM is intentionally included in public company_report_insights with 2023 total_equity displayed as verification_pending",
     "validation_policy": {
       "allowed_cross_check_year_mismatches": [
         {
@@ -1642,7 +1642,7 @@
         "verification_pending"
       ],
       "required_disclosure_limitations": [
-        "This staging JSON is excluded from public company_report_insights discovery and must not be treated as public UI input."
+        "This PlanM audit financial JSON is a public company_report_insights source, but verification_pending values remain excluded from public calculations."
       ]
     }
   }
