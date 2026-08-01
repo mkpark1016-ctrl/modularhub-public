@@ -48,6 +48,14 @@ SERIES_METRIC_FIELDS = [
     "total_liabilities",
     "total_equity",
 ]
+REVENUE_BREAKDOWN_METRIC_FIELDS = [
+    "goods_revenue",
+    "product_revenue",
+    "rental_revenue",
+    "service_revenue",
+    "construction_revenue",
+    "other_revenue",
+]
 DERIVED_METRIC_FIELDS = [
     "revenue_yoy_pct",
     "gross_margin_pct",
@@ -64,6 +72,9 @@ DERIVED_METRIC_FIELDS = [
     "construction_revenue_share_pct",
     "rental_revenue_share_pct",
     "other_revenue_share_pct",
+]
+OPTIONAL_DERIVED_METRIC_FIELDS = [
+    "service_revenue_share_pct",
 ]
 
 
@@ -205,7 +216,10 @@ def metric_map(record: dict[str, Any], fields: list[str]) -> dict[str, Any]:
         "total_borrowings": combined_metric(combined_raw(borrowings), borrowings),
         "receivables_total": combined_metric(combined_raw(receivables), receivables),
     }
-    return {field: mapping[field] for field in fields}
+    for field in REVENUE_BREAKDOWN_METRIC_FIELDS:
+        if field in record.get("revenue_breakdown", {}):
+            mapping[field] = metric_from_reported(record, "revenue_breakdown", field)
+    return {field: mapping[field] for field in fields if field in mapping}
 
 
 def derived_metric(value: str | int | None, suffix: str = "%") -> dict[str, Any]:
@@ -217,18 +231,33 @@ def derived_metric(value: str | int | None, suffix: str = "%") -> dict[str, Any]
 
 def build_derived_metrics(source_payload: dict[str, Any]) -> dict[str, Any]:
     calculated = calculate_derived_metrics(source_payload)
+    derived_fields = list(DERIVED_METRIC_FIELDS)
+    if any(calculated[year].get(field) is not None for year in calculated for field in OPTIONAL_DERIVED_METRIC_FIELDS):
+        derived_fields.extend(OPTIONAL_DERIVED_METRIC_FIELDS)
     output: dict[str, Any] = {}
     for year in sorted(calculated):
-        output[year] = {field: derived_metric(calculated[year].get(field), "" if field == "operating_cash_flow_to_net_income" else "%") for field in DERIVED_METRIC_FIELDS}
+        output[year] = {field: derived_metric(calculated[year].get(field), "" if field == "operating_cash_flow_to_net_income" else "%") for field in derived_fields}
     return output
 
 
-def direction_code(current: int, previous: int, metric: str) -> str:
+def direction_code(current: int | None, previous: int | None, metric: str) -> str:
+    if current is None or previous is None:
+        return f"{metric}_unknown"
     if current > previous:
         return f"{metric}_increased"
     if current < previous:
         return f"{metric}_decreased"
     return f"{metric}_flat"
+
+
+def direction_phrase_ko(code: str) -> str:
+    if code.endswith("increased"):
+        return "증가했다"
+    if code.endswith("decreased"):
+        return "감소했다"
+    if code.endswith("flat"):
+        return "유지했다"
+    return "확인되지 않았다"
 
 
 def trend_signal(code: str, title: str, description: str, years: list[int], metric_values: dict[str, Any], level: str = "info") -> dict[str, Any]:
@@ -263,7 +292,7 @@ def build_trend_signals(source_payload: dict[str, Any], series: list[dict[str, A
         trend_signal(
             revenue_code,
             "매출 방향",
-            f"{years[0]}년 대비 {latest_year}년 매출액이 {'증가' if revenue_code.endswith('increased') else '감소' if revenue_code.endswith('decreased') else '유지'}했다.",
+            f"{years[0]}년 대비 {latest_year}년 매출액이 {direction_phrase_ko(revenue_code)}.",
             [years[0], latest_year],
             {"start_raw_krw": first["revenue"]["raw_krw"], "latest_raw_krw": latest["revenue"]["raw_krw"]},
         ),
@@ -285,21 +314,21 @@ def build_trend_signals(source_payload: dict[str, Any], series: list[dict[str, A
         trend_signal(
             borrowing_code,
             "차입금 방향",
-            f"{previous_year}년 대비 {latest_year}년 총차입금이 {'증가' if borrowing_code.endswith('increased') else '감소' if borrowing_code.endswith('decreased') else '유지'}했다.",
+            f"{previous_year}년 대비 {latest_year}년 총차입금이 {direction_phrase_ko(borrowing_code)}.",
             [previous_year, latest_year],
             {"previous_raw_krw": previous["total_borrowings"]["raw_krw"], "latest_raw_krw": latest["total_borrowings"]["raw_krw"]},
         ),
         trend_signal(
             receivables_code,
             "매출채권 방향",
-            f"{previous_year}년 대비 {latest_year}년 매출채권 합계가 {'증가' if receivables_code.endswith('increased') else '감소' if receivables_code.endswith('decreased') else '유지'}했다.",
+            f"{previous_year}년 대비 {latest_year}년 매출채권 합계가 {direction_phrase_ko(receivables_code)}.",
             [previous_year, latest_year],
             {"previous_raw_krw": previous["receivables_total"]["raw_krw"], "latest_raw_krw": latest["receivables_total"]["raw_krw"]},
         ),
         trend_signal(
             inventory_code,
             "재고 방향",
-            f"{previous_year}년 대비 {latest_year}년 재고자산이 {'증가' if inventory_code.endswith('increased') else '감소' if inventory_code.endswith('decreased') else '유지'}했다.",
+            f"{previous_year}년 대비 {latest_year}년 재고자산이 {direction_phrase_ko(inventory_code)}.",
             [previous_year, latest_year],
             {"previous_raw_krw": previous["inventory"]["raw_krw"], "latest_raw_krw": latest["inventory"]["raw_krw"]},
         ),
@@ -378,10 +407,15 @@ def public_attribution(source_payload: dict[str, Any]) -> dict[str, Any]:
     return attribution
 
 
+def has_service_revenue(source_payload: dict[str, Any]) -> bool:
+    return any("service_revenue" in record.get("revenue_breakdown", {}) for record in source_payload["financial_years"].values())
+
+
 def build_company_insight(source_payload: dict[str, Any]) -> dict[str, Any]:
     years = sorted(int(year) for year in source_payload["financial_years"])
+    series_fields = SERIES_METRIC_FIELDS + (REVENUE_BREAKDOWN_METRIC_FIELDS if has_service_revenue(source_payload) else [])
     financial_series = [
-        {"year": year, "metrics": metric_map(source_payload["financial_years"][str(year)], SERIES_METRIC_FIELDS)}
+        {"year": year, "metrics": metric_map(source_payload["financial_years"][str(year)], series_fields)}
         for year in years
     ]
     latest_year = years[-1]

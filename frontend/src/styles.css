@@ -339,6 +339,12 @@ code { overflow-wrap: anywhere; }
 .company-report-signal.watch span { color: #92400e; border-color: #fcd34d; background: #fffbeb; }
 .company-report-signal strong { font-size: 14px; }
 .company-report-signal p, .company-report-warning p { margin: 0; color: #666; font-size: 13px; line-height: 1.55; }
+.company-report-interpretation-card { display: grid; gap: 8px; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fbfbf8; }
+.company-report-interpretation-card strong { font-size: 14px; }
+.company-report-interpretation-card ul { margin: 0; padding-left: 18px; color: #555; font-size: 13px; line-height: 1.55; }
+.company-revenue-breakdown-table td { vertical-align: top; }
+.company-revenue-breakdown-table td span, .company-revenue-breakdown-table td small { display: block; }
+.finance-ratio-note { margin-top: 3px; color: #666; font-size: 12px; font-weight: 700; }
 .company-report-warning summary { cursor: pointer; font-weight: 800; line-height: 1.5; }
 .company-report-source-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
 .company-report-source-summary div { min-width: 0; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
@@ -464,6 +470,9 @@ code { overflow-wrap: anywhere; }
 
 @media (max-width: 520px) {
   .company-kpi-grid, .company-report-kpi-grid, .company-report-signal-grid, .company-report-source-summary, .company-toolbar, .company-row-detail dl { grid-template-columns: 1fr; }
+  .company-report-table { min-width: 0; width: 100%; table-layout: fixed; }
+  .company-report-table th, .company-report-table td { overflow-wrap: anywhere; padding: 10px 8px; }
+  .company-revenue-breakdown-table .evidence-inline-button { padding: 0 6px; }
   .monitor-kpi-grid, .monitor-controls, .monitor-card dl { grid-template-columns: 1fr; }
   .monitor-table-wrap { display: none; }
   .monitor-card-list { display: grid; }

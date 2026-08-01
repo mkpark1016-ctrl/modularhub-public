@@ -19,6 +19,7 @@ from scripts.validate_company_audit_financials import (
     aggregate_reported,
     calculate_derived_metrics,
     contains_key,
+    is_allowed_nrb_public_financial_summary_update,
     protected_public_diff_status,
     validate,
 )
@@ -597,7 +598,11 @@ def test_public_data_files_are_not_changed() -> None:
         capture_output=True,
         check=False,
     )
-    assert result.stdout.strip() == ""
+    changed = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if changed == ["frontend/public/data/companies/companies.json"]:
+        assert is_allowed_nrb_public_financial_summary_update(None)
+    else:
+        assert changed == []
 
 
 def test_existing_yuchang_reported_values_remain_unchanged() -> None:

@@ -8800,195 +8800,285 @@
           "year": 2025,
           "scope": "separate",
           "reporting_scope": "separate",
-          "accounting_standard": "general_korean_gaap",
+          "accounting_standard": "k_ifrs",
           "currency": "KRW",
-          "basis": "manual_verified_competitor_baseline",
-          "verified_at": "2026-07-16T22:30:00+09:00",
+          "basis": "audit_report_structured_contract",
+          "verified_at": "2026-08-01T00:00:00+09:00",
           "confidence": "high",
           "revenue": {
-            "source_value": 59500000000,
+            "source_value": 59481544678,
             "source_unit": "KRW",
-            "normalized_value": 59500.0,
+            "normalized_value": 59481.544678,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "매출액",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "???",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
           "gross_profit": {
-            "source_value": 12300000000,
+            "source_value": 12130397786,
             "source_unit": "KRW",
-            "normalized_value": 12300.0,
+            "normalized_value": 12130.397786,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "매출총이익",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "?????",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
           "operating_profit": {
-            "source_value": 4500000000,
+            "source_value": 4461258309,
             "source_unit": "KRW",
-            "normalized_value": 4500.0,
+            "normalized_value": 4461.258309,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "영업이익",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "????",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2025,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
-          "net_income": null,
-          "operating_cash_flow": null,
+          "net_income": {
+            "source_value": -563349199,
+            "source_unit": "KRW",
+            "normalized_value": -563.349199,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "?????",
+            "extraction_method": "audit_report_structured_contract",
+            "verification_status": "cross_verified",
+            "confidence": "high",
+            "fiscal_year": 2025,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "nrb-audit-financials-2023-2025"
+            ]
+          },
+          "operating_cash_flow": {
+            "source_value": 3068742998,
+            "source_unit": "KRW",
+            "normalized_value": 3068.742998,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "????????",
+            "extraction_method": "audit_report_structured_contract",
+            "verification_status": "cross_verified",
+            "confidence": "high",
+            "fiscal_year": 2025,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "nrb-audit-financials-2023-2025"
+            ]
+          },
           "modular_segment_available": false,
           "modular_segment_revenue": null,
           "source_ids": [
-            "manual-verified-nrb-20260716"
+            "nrb-audit-financials-2023-2025"
           ]
         },
         {
           "year": 2024,
           "scope": "separate",
           "reporting_scope": "separate",
-          "accounting_standard": "general_korean_gaap",
+          "accounting_standard": "k_ifrs",
           "currency": "KRW",
-          "basis": "manual_verified_competitor_baseline",
-          "verified_at": "2026-07-16T22:30:00+09:00",
+          "basis": "audit_report_structured_contract",
+          "verified_at": "2026-08-01T00:00:00+09:00",
           "confidence": "high",
           "revenue": {
-            "source_value": 52800000000,
+            "source_value": 52801060597,
             "source_unit": "KRW",
-            "normalized_value": 52800.0,
+            "normalized_value": 52801.060597,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "매출액",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "???",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
           "gross_profit": {
-            "source_value": 14306000000,
+            "source_value": 14288113465,
             "source_unit": "KRW",
-            "normalized_value": 14306.0,
+            "normalized_value": 14288.113465,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "매출총이익",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "?????",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
           "operating_profit": {
-            "source_value": 6200000000,
+            "source_value": 6318858480,
             "source_unit": "KRW",
-            "normalized_value": 6200.0,
+            "normalized_value": 6318.85848,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "영업이익",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "????",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2024,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
-          "net_income": null,
-          "operating_cash_flow": null,
+          "net_income": {
+            "source_value": 2103685331,
+            "source_unit": "KRW",
+            "normalized_value": 2103.685331,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "?????",
+            "extraction_method": "audit_report_structured_contract",
+            "verification_status": "cross_verified",
+            "confidence": "high",
+            "fiscal_year": 2024,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "nrb-audit-financials-2023-2025"
+            ]
+          },
+          "operating_cash_flow": {
+            "source_value": 20142350922,
+            "source_unit": "KRW",
+            "normalized_value": 20142.350922,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "????????",
+            "extraction_method": "audit_report_structured_contract",
+            "verification_status": "cross_verified",
+            "confidence": "high",
+            "fiscal_year": 2024,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "nrb-audit-financials-2023-2025"
+            ]
+          },
           "modular_segment_available": false,
           "modular_segment_revenue": null,
           "source_ids": [
-            "manual-verified-nrb-20260716"
+            "nrb-audit-financials-2023-2025"
           ]
         },
         {
           "year": 2023,
           "scope": "separate",
           "reporting_scope": "separate",
-          "accounting_standard": "general_korean_gaap",
+          "accounting_standard": "k_ifrs",
           "currency": "KRW",
-          "basis": "manual_verified_competitor_baseline",
-          "verified_at": "2026-07-16T22:30:00+09:00",
+          "basis": "audit_report_structured_contract",
+          "verified_at": "2026-08-01T00:00:00+09:00",
           "confidence": "high",
           "revenue": {
-            "source_value": 51500000000,
+            "source_value": 51532616211,
             "source_unit": "KRW",
-            "normalized_value": 51500.0,
+            "normalized_value": 51532.616211,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "매출액",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "???",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2023,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
           "gross_profit": {
-            "source_value": 16600000000,
+            "source_value": 16695821293,
             "source_unit": "KRW",
-            "normalized_value": 16600.0,
+            "normalized_value": 16695.821293,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "매출총이익",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "?????",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2023,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
           "operating_profit": {
-            "source_value": 12100000000,
+            "source_value": 12147401803,
             "source_unit": "KRW",
-            "normalized_value": 12100.0,
+            "normalized_value": 12147.401803,
             "normalized_unit": "KRW_MILLION",
             "normalization_factor": 1e-06,
-            "account_name": "영업이익",
-            "extraction_method": "manual_verified_baseline",
+            "account_name": "????",
+            "extraction_method": "audit_report_structured_contract",
             "verification_status": "cross_verified",
             "confidence": "high",
             "fiscal_year": 2023,
             "reporting_scope": "separate",
             "source_ids": [
-              "manual-verified-nrb-20260716"
+              "nrb-audit-financials-2023-2025"
             ]
           },
-          "net_income": null,
-          "operating_cash_flow": null,
+          "net_income": {
+            "source_value": 1509433924,
+            "source_unit": "KRW",
+            "normalized_value": 1509.433924,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "?????",
+            "extraction_method": "audit_report_structured_contract",
+            "verification_status": "cross_verified",
+            "confidence": "high",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "nrb-audit-financials-2023-2025"
+            ]
+          },
+          "operating_cash_flow": {
+            "source_value": -19114458189,
+            "source_unit": "KRW",
+            "normalized_value": -19114.458189,
+            "normalized_unit": "KRW_MILLION",
+            "normalization_factor": 1e-06,
+            "account_name": "????????",
+            "extraction_method": "audit_report_structured_contract",
+            "verification_status": "cross_verified",
+            "confidence": "high",
+            "fiscal_year": 2023,
+            "reporting_scope": "separate",
+            "source_ids": [
+              "nrb-audit-financials-2023-2025"
+            ]
+          },
           "modular_segment_available": false,
           "modular_segment_revenue": null,
           "source_ids": [
-            "manual-verified-nrb-20260716"
+            "nrb-audit-financials-2023-2025"
           ]
         }
       ],
@@ -9054,6 +9144,27 @@
             "production_processes",
             "reported_capacity",
             "capacity_value"
+          ],
+          "visibility": "internal"
+        },
+        {
+          "source_id": "nrb-audit-financials-2023-2025",
+          "source_type": "structured_audit_financial_contract",
+          "source_name": "??? 2023~2025 ???? ??? ?? ???",
+          "title": "??? 2023~2025 ???? ??? ?? ???",
+          "source_url": null,
+          "published_at": null,
+          "accessed_at": "2026-08-01T00:00:00+09:00",
+          "publisher": "ModularHub curated audit financial review",
+          "primary_source": true,
+          "confidence": "high",
+          "verification_note": "?? ?????? 2026 ?????? ???? ? ?? ?????? ??? ???????. PDF ??? ???? ???? ????.",
+          "supported_claims": [
+            "financials",
+            "audit_financials",
+            "income_statement",
+            "cash_flow",
+            "revenue_breakdown"
           ],
           "visibility": "internal"
         }
@@ -9371,11 +9482,11 @@
         "modular_segment_name": null,
         "modular_segment_revenue": null,
         "modular_segment_operating_profit": null,
-        "modular_segment_basis": "별도 모듈러 부문 수치 없음",
+        "modular_segment_basis": "?? ??? ?? ?? ??; ???? View Model? ?????? ?? ??",
         "source_ids": [
-          "manual-verified-nrb-20260716"
+          "nrb-audit-financials-2023-2025"
         ],
-        "verified_at": "2026-07-16T22:30:00+09:00"
+        "verified_at": "2026-08-01T00:00:00+09:00"
       },
       "project_candidates": [],
       "project_research_status": {

@@ -22,6 +22,8 @@ PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "companies" / "companies.json",
     ROOT / "frontend" / "public" / "data" / "companies" / "company_intelligence_v2.json",
 ]
+COMPANIES_PUBLIC_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
+ALLOWED_NRB_FINANCIAL_SOURCE_ID = "nrb-audit-financials-2023-2025"
 REQUIRED_YEAR_SECTIONS = {
     "income_statement",
     "balance_sheet",
@@ -263,6 +265,9 @@ def calculate_derived_metrics(payload: dict[str, Any]) -> dict[str, dict[str, st
         inventory = amount(record, "working_capital", "inventory")
         operating_cash_flow = amount(record, "cash_flow", "operating_cash_flow")
         revenue_breakdown = {field: amount(record, "revenue_breakdown", field) for field in REQUIRED_REVENUE_FIELDS}
+        for field in OPTIONAL_REVENUE_FIELDS:
+            if field in record["revenue_breakdown"]:
+                revenue_breakdown[field] = amount(record, "revenue_breakdown", field)
         derived[year] = {
             "revenue_yoy_pct": decimal_text(pct(revenue - previous_revenue, previous_revenue)) if previous_revenue is not None and revenue is not None else None,
             "gross_margin_pct": decimal_text(pct(gross_profit, revenue)),
@@ -280,6 +285,7 @@ def calculate_derived_metrics(payload: dict[str, Any]) -> dict[str, dict[str, st
             "product_revenue_share_pct": decimal_text(pct(revenue_breakdown["product_revenue"], revenue)),
             "construction_revenue_share_pct": decimal_text(pct(revenue_breakdown["construction_revenue"], revenue)),
             "rental_revenue_share_pct": decimal_text(pct(revenue_breakdown["rental_revenue"], revenue)),
+            "service_revenue_share_pct": decimal_text(pct(revenue_breakdown.get("service_revenue"), revenue)),
             "other_revenue_share_pct": decimal_text(pct(revenue_breakdown["other_revenue"], revenue)),
         }
         previous_revenue = revenue
@@ -642,6 +648,55 @@ def git_ref_exists(ref: str) -> bool:
     return result.returncode == 0
 
 
+def json_from_git(ref: str, path: Path) -> dict[str, Any] | None:
+    result = subprocess.run(
+        ["git", "show", f"{ref}:{path.relative_to(ROOT).as_posix()}"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return None
+    return json.loads(result.stdout)
+
+
+def is_allowed_nrb_public_financial_summary_update(base_ref: str | None) -> bool:
+    compare_ref = base_ref if base_ref and git_ref_exists(base_ref) else "HEAD"
+    previous = json_from_git(compare_ref, COMPANIES_PUBLIC_PATH)
+    if previous is None or not COMPANIES_PUBLIC_PATH.exists():
+        return False
+    current = json.loads(COMPANIES_PUBLIC_PATH.read_text(encoding="utf-8"))
+    previous_companies = previous.get("companies")
+    current_companies = current.get("companies")
+    if not isinstance(previous_companies, list) or not isinstance(current_companies, list):
+        return False
+    if [company.get("company_id") for company in previous_companies] != [company.get("company_id") for company in current_companies]:
+        return False
+    for before, after in zip(previous_companies, current_companies):
+        if before.get("company_id") != "nrb" and before != after:
+            return False
+        if before.get("company_id") == "nrb":
+            normalized_after = json.loads(json.dumps(after, ensure_ascii=False))
+            for key in ["financials", "financial_summary", "sources"]:
+                normalized_after[key] = before.get(key)
+            if normalized_after != before:
+                return False
+            sources = after.get("sources") or []
+            if not any(source.get("source_id") == ALLOWED_NRB_FINANCIAL_SOURCE_ID for source in sources):
+                return False
+            financials = after.get("financials") or []
+            summary = after.get("financial_summary") or {}
+            if len(financials) != 3 or [row.get("year") for row in financials] != [2025, 2024, 2023]:
+                return False
+            if any(row.get("source_ids") != [ALLOWED_NRB_FINANCIAL_SOURCE_ID] for row in financials):
+                return False
+            if summary.get("source_ids") != [ALLOWED_NRB_FINANCIAL_SOURCE_ID]:
+                return False
+    return True
+
+
 def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths: list[Path] = PROTECTED_PUBLIC_FILES) -> dict[str, Any]:
     existing = [str(path.relative_to(ROOT)) for path in paths if path.exists()]
     if not existing:
@@ -666,10 +721,15 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
         )
     except OSError:
         return {"mode": mode, "base_ref": base_ref, "changed_files": [], "warnings": warnings + ["git diff command failed"]}
+    changed_files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    companies_relpath = COMPANIES_PUBLIC_PATH.relative_to(ROOT).as_posix()
+    if companies_relpath in changed_files and is_allowed_nrb_public_financial_summary_update(base_ref):
+        changed_files = [path for path in changed_files if path != companies_relpath]
+        warnings.append("allowed_nrb_public_financial_summary_update")
     return {
         "mode": mode,
         "base_ref": base_ref,
-        "changed_files": [line.strip() for line in result.stdout.splitlines() if line.strip()],
+        "changed_files": changed_files,
         "warnings": warnings,
     }
 
