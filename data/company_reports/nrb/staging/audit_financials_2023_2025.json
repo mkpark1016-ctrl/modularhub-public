@@ -1,0 +1,1688 @@
+{
+  "accounting_standard": {
+    "code": "k_ifrs",
+    "label_en": "K-IFRS",
+    "label_ko": "한국채택국제회계기준"
+  },
+  "audit_opinions": [
+    {
+      "auditor": "삼정회계법인",
+      "auditor_report_date": "2024-03-27",
+      "auditor_report_date_note": "독립감사인의 감사보고서 작성일을 확인했다.",
+      "auditor_report_date_verification_status": "verified",
+      "covered_years": [
+        2023
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "nrb_audit_report_2024_04_08"
+    },
+    {
+      "auditor": "삼정회계법인",
+      "auditor_report_date": "2025-03-21",
+      "auditor_report_date_note": "독립감사인의 감사보고서 작성일을 확인했다.",
+      "auditor_report_date_verification_status": "verified",
+      "covered_years": [
+        2023,
+        2024
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "nrb_audit_report_2025_04_01"
+    },
+    {
+      "auditor": "삼정회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "감사의견과 감사인은 감사의견 표에서 확인했으나, 독립감사인의 감사보고서 작성일은 첨부 사업보고서 PDF에서 별도로 확인하지 못했다. 사업보고서 제출일을 감사보고서 작성일로 대체하지 않는다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
+      "covered_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "nrb_annual_report_2026_03_18"
+    }
+  ],
+  "company_id": "nrb",
+  "company_name": "엔알비",
+  "currency": "KRW",
+  "disclosure_limitations": [
+    "This NRB file is a staging-only audit financial contract and must not be promoted into frontend/public/data/companies/company_report_insights.json in this phase.",
+    "All reported amounts are stored as integer KRW won and no derived ratios are stored in the source JSON.",
+    "2026-03-18 business report standalone statements are the latest primary source for 2023, 2024, and 2025 values.",
+    "The 2024 operating cash flow mismatch is preserved as a cross-check issue; the 2025-04-01 audit report amount is not silently merged with the latest comparative value.",
+    "The 2023 current-liability reclassification uses the latest comparative balance sheet; the earlier current-liability classification is not used as the final staging amount.",
+    "Consolidated statement values and subsidiary results are excluded from financial_years.",
+    "The consolidated revenue breakdown table is not copied into standalone revenue_breakdown.",
+    "Product, rental, service, construction, and other revenue labels are not interpreted as standalone modular revenue without a standalone disclosure.",
+    "Convertible bonds, bonds, derivative liabilities, and redeemable preferred-share liabilities are not added to the existing borrowings fields unless the schema definition is expanded in a later phase.",
+    "The existing public company card operating margin of 7.6% differs from the audited standalone calculation of approximately 7.5%; protected public company data is not changed in this staging phase."
+  ],
+  "entity_attribution": {
+    "attribution_warning": "이 staging 파일은 엔알비 별도재무제표 기준이다. 연결재무제표 및 종속기업 수치는 financial_years에 포함하지 않는다. 연결 기준 매출 구성 표는 별도 모듈러 매출로 자동 해석하지 않으며, 기존 공개 요약 영업이익률과 감사받은 별도 재무제표 산출값의 차이는 후속 검토가 필요하다.",
+    "financial_scope": "standalone",
+    "modular_segment_revenue_disclosed": true,
+    "related_entity_attribution_required": false,
+    "reporting_entity": "주식회사 엔알비",
+    "special_events": [
+      {
+        "attribution_effect": "disclosure_note_only",
+        "description": "2023 감사보고서에는 한국채택국제회계기준 최초채택 강조사항이 포함되어 있다.",
+        "effective_date": "2023-12-31",
+        "event_type": "k_ifrs_first_adoption_emphasis",
+        "related_entities": [],
+        "source_refs": [
+          "nrb_audit_report_2024_04_08"
+        ],
+        "tax_effect_status": "not_applicable"
+      },
+      {
+        "attribution_effect": "latest_comparative_classification_used",
+        "description": "2026 사업보고서 최신 비교 재무제표는 2023 유동부채를 81,185,943,632원으로 표시한다. 2024 감사보고서의 48,527,580,433원은 최종 staging 값으로 사용하지 않는다. 원인과 표시 재분류 성격은 후속 검토 대상이다.",
+        "effective_date": "2023-12-31",
+        "event_type": "current_liability_reclassification",
+        "related_entities": [],
+        "source_refs": [
+          "nrb_annual_report_2026_03_18",
+          "nrb_audit_report_2025_04_01",
+          "nrb_audit_report_2024_04_08"
+        ],
+        "tax_effect_status": "not_applicable"
+      },
+      {
+        "attribution_effect": "latest_comparative_cash_flow_used",
+        "description": "2025-04-01 감사보고서는 2024 영업현금흐름을 -2,611,715,083원으로 표시하지만, 2026-03-18 사업보고서 최신 별도 비교 현금흐름표는 20,142,350,922원으로 표시한다. 이 파일은 최신 비교값을 staging reported 값으로 사용하고, 차이는 cross-check mismatch로 보존한다.",
+        "effective_date": "2024-12-31",
+        "event_type": "operating_cash_flow_comparative_revision",
+        "related_entities": [],
+        "source_refs": [
+          "nrb_annual_report_2026_03_18",
+          "nrb_audit_report_2025_04_01"
+        ],
+        "tax_effect_status": "not_applicable"
+      },
+      {
+        "attribution_effect": "consolidated_values_excluded_from_staging_financial_years",
+        "description": "2026 사업보고서의 연결재무제표와 종속기업 값은 별도재무 financial_years에서 제외한다.",
+        "effective_date": "2025-12-31",
+        "event_type": "standalone_consolidated_scope_guard",
+        "related_entities": [
+          "연결대상 종속기업"
+        ],
+        "source_refs": [
+          "nrb_annual_report_2026_03_18"
+        ],
+        "tax_effect_status": "not_applicable"
+      }
+    ]
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 26717037041,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 81185943632,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 127780799064,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": -6848075740,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 134628874804,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 7732087837,
+          "source_locations": [
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 51719777280,
+          "source_locations": [
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 6099723203,
+          "source_locations": [
+            {
+              "page_range": "pp.138,188",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 13990684395,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 31028776751,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -7918596497,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -19114458189,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 16695821293,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 1509433924,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 12147401803,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 51532616211,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "reported",
+          "reported": 8021436000,
+          "source_locations": [
+            {
+              "page_range": "pp.179-180",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "reported",
+          "reported": 16203000,
+          "source_locations": [
+            {
+              "page_range": "p.186",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "reported",
+          "reported": 1579400000,
+          "source_locations": [
+            {
+              "page_range": "pp.30-31,211",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone construction revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone goods revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone other revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone product revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone rental revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "source_refs": [
+        "nrb_annual_report_2026_03_18",
+        "nrb_audit_report_2025_04_01",
+        "nrb_audit_report_2024_04_08"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone construction receivables gross is not separately disclosed as a reusable amount; contract assets and project tables are not mapped to this field.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,237",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 5164638747,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 2831888880,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01",
+            "nrb_audit_report_2024_04_08"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone work-in-progress inventory is not separately disclosed in the located inventory summary.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 13879886380,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 73679657478,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 135739380875,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 39728837636,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 96010543239,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 37246785044,
+          "source_locations": [
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 18914849569,
+          "source_locations": [
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 5799723203,
+          "source_locations": [
+            {
+              "page_range": "pp.138,188",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 3344316596,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -5084455505,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -25710819575,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 20142350922,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 14288113465,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 2103685331,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 6318858480,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 52801060597,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "reported",
+          "reported": 8106419000,
+          "source_locations": [
+            {
+              "page_range": "pp.179-180",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "reported",
+          "reported": 35128000,
+          "source_locations": [
+            {
+              "page_range": "p.186",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "reported",
+          "reported": 1742231000,
+          "source_locations": [
+            {
+              "page_range": "pp.30-31,211",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone construction revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone goods revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone other revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone product revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone rental revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "source_refs": [
+        "nrb_annual_report_2026_03_18",
+        "nrb_audit_report_2025_04_01"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone construction receivables gross is not separately disclosed as a reusable amount; contract assets and project tables are not mapped to this field.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,237",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 3333324782,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 39060000,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone work-in-progress inventory is not separately disclosed in the located inventory summary.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 28155893525,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 67590195584,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 175316276741,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 85481316158,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 89834960583,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 22286073781,
+          "source_locations": [
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 16544032917,
+          "source_locations": [
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 5865432203,
+          "source_locations": [
+            {
+              "page_range": "pp.138,188",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 10956242297,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 43214687563,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -38671504860,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 3068742998,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 12130397786,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": -563349199,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 4461258309,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 59481544678,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "reported",
+          "reported": 24297139000,
+          "source_locations": [
+            {
+              "page_range": "pp.179-180",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "reported",
+          "reported": 57482000,
+          "source_locations": [
+            {
+              "page_range": "p.186",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "reported",
+          "reported": 1126940000,
+          "source_locations": [
+            {
+              "page_range": "pp.30-31,211",
+              "section": "note.investment_signals",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone construction revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone goods revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone other revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone product revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone rental revenue is not separately disclosed; located breakdown is consolidated and is not copied.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "p.136",
+              "section": "note.revenue_breakdown",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "source_refs": [
+        "nrb_annual_report_2026_03_18"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone construction receivables gross is not separately disclosed as a reusable amount; contract assets and project tables are not mapped to this field.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,237",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 4117565887,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "reported",
+          "reported": 4567015327,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "not_disclosed",
+          "notes": "Standalone work-in-progress inventory is not separately disclosed in the located inventory summary.",
+          "reported": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "주식회사 엔알비",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "nrb_annual_report_2026_03_18": {
+      "audit_opinion": "적정의견",
+      "audit_opinion_pages": "p.247",
+      "auditor": "삼정회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "독립감사인의 감사보고서 작성일은 첨부 사업보고서 PDF에서 별도로 확인하지 못했다. 제출일 2026-03-18은 감사보고서 작성일이 아니다.",
+      "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
+      "balance_sheet_pages": "pp.137-139",
+      "cash_flow_pages": "pp.141-142",
+      "company_overview_page": "p.6",
+      "covered_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "filename": "[엔알비]사업보고서(2026.03.18).pdf",
+      "income_statement_pages": "p.139",
+      "report_date": "2026-03-18",
+      "source_role": "Primary source for 2025 standalone statements and latest comparative standalone values for 2023 and 2024.",
+      "usage": "Primary staging basis for all three years; consolidated statements are used only as scope-guard evidence, not financial_years values."
+    },
+    "nrb_audit_report_2024_04_08": {
+      "audit_opinion": "적정의견",
+      "audit_opinion_pages": "pp.3-6",
+      "auditor": "삼정회계법인",
+      "auditor_report_date": "2024-03-27",
+      "auditor_report_date_note": "독립감사인의 감사보고서 작성일을 확인했다.",
+      "auditor_report_date_verification_status": "verified",
+      "balance_sheet_pages": "pp.8-9",
+      "cash_flow_pages": "pp.12-13",
+      "company_overview_page": "p.2",
+      "covered_years": [
+        2023
+      ],
+      "filename": "[엔알비]감사보고서(2024.04.08).pdf",
+      "income_statement_pages": "p.10",
+      "report_date": "2024-04-08",
+      "source_role": "2023 original audit report cross-check; K-IFRS first adoption emphasis and original current-liability classification source.",
+      "usage": "Cross-check only; latest 2026 comparative standalone statements override current-liability classification."
+    },
+    "nrb_audit_report_2025_04_01": {
+      "audit_opinion": "적정의견",
+      "audit_opinion_pages": "pp.3-5",
+      "auditor": "삼정회계법인",
+      "auditor_report_date": "2025-03-21",
+      "auditor_report_date_note": "독립감사인의 감사보고서 작성일을 확인했다.",
+      "auditor_report_date_verification_status": "verified",
+      "balance_sheet_pages": "pp.7-8",
+      "cash_flow_pages": "p.11",
+      "company_overview_page": "p.6",
+      "covered_years": [
+        2023,
+        2024
+      ],
+      "filename": "[엔알비]감사보고서(2025.04.01).pdf",
+      "income_statement_pages": "p.9",
+      "report_date": "2025-04-01",
+      "source_role": "2024 audit report cross-check; documents the earlier 2024 operating cash flow presentation.",
+      "usage": "Cross-check only for 2024 operating cash flow mismatch and 2023 comparative values."
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "nrb_audit_report_2025_04_01",
+        "nrb_audit_report_2024_04_08"
+      ],
+      "primary_source_ref": "nrb_annual_report_2026_03_18"
+    },
+    "2024": {
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "nrb_audit_report_2025_04_01"
+      ],
+      "primary_source_ref": "nrb_annual_report_2026_03_18"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "nrb_annual_report_2026_03_18"
+    }
+  },
+  "unit": "won",
+  "validation_metadata": {
+    "amount_storage": "All reported values are integer KRW won from source statements or explicitly null with disclosure_status.",
+    "created_for": "Phase 6E-1A NRB 2023-2025 standalone audit financial staging contract",
+    "derived_metrics_storage": "Derived ratios and display units are not stored in this source JSON.",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "pdf_handling": "Attached PDFs were read as source references only and were not copied into the repository.",
+    "public_ui_impact": "None. This file lives under staging and is excluded from public View Model discovery.",
+    "validation_policy": {
+      "allowed_cross_check_year_mismatches": [
+        {
+          "reason": "Original 2023 audit report classifies current liabilities before the latest comparative reclassification of redeemable preferred-share liabilities; latest 2026 comparative balance sheet is used.",
+          "source_locations": [
+            {
+              "page_range": "pp.8-9",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_audit_report_2024_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_ref": "nrb_audit_report_2024_04_08",
+          "year": 2023
+        },
+        {
+          "reason": "2025-04-01 audit report shows 2024 operating cash flow of -2,611,715,083 KRW, while the 2026-03-18 latest standalone comparative cash-flow statement shows 20,142,350,922 KRW. Latest comparative value is used for staging pending Phase 6E-1B review.",
+          "source_locations": [
+            {
+              "page_range": "p.11",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_audit_report_2025_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_ref": "nrb_audit_report_2025_04_01",
+          "year": 2024
+        }
+      ],
+      "expected_cash_flow_signs": {
+        "2023": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "negative"
+        },
+        "2024": {
+          "financing_cash_flow": "negative",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        },
+        "2025": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        }
+      },
+      "forbidden_field_names": [
+        "modular_revenue",
+        "derived",
+        "inference",
+        "consolidated_net_income",
+        "consolidated_operating_cash_flow"
+      ],
+      "required_attribution_warning_terms": [
+        "별도재무제표",
+        "연결재무제표",
+        "종속기업"
+      ],
+      "required_disclosure_limitations": [
+        "Consolidated statement values and subsidiary results are excluded from financial_years.",
+        "The consolidated revenue breakdown table is not copied into standalone revenue_breakdown."
+      ]
+    }
+  }
+}
