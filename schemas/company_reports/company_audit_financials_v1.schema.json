@@ -226,6 +226,7 @@
         "product_revenue": { "$ref": "#/$defs/reportedAmount" },
         "construction_revenue": { "$ref": "#/$defs/reportedAmount" },
         "rental_revenue": { "$ref": "#/$defs/reportedAmount" },
+        "service_revenue": { "$ref": "#/$defs/reportedAmount" },
         "other_revenue": { "$ref": "#/$defs/reportedAmount" }
       },
       "additionalProperties": false
@@ -437,6 +438,10 @@
         "allowed_cross_check_year_mismatches": {
           "type": "array",
           "items": { "$ref": "#/$defs/allowedCrossCheckYearMismatch" }
+        },
+        "revenue_breakdown_rounding_tolerance_krw": {
+          "type": "integer",
+          "minimum": 0
         }
       },
       "additionalProperties": false
