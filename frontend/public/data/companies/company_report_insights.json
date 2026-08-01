@@ -2963,6 +2963,1559 @@
     },
     {
       "attribution": {
+        "attribution_warning": "본 재무정보는 주식회사 플랜엠 별도 재무제표 기준이다. 제품매출, 임대매출, 용역매출 및 F&B매출은 모듈러 매출로 자동 간주하지 않는다. 2023년 자본총계는 verification_pending 상태로 공개 계산에서 제외한다.",
+        "financial_scope": "standalone",
+        "modular_segment_revenue_disclosed": false,
+        "related_entity_attribution_required": false,
+        "reporting_entity": "주식회사 플랜엠",
+        "special_events": [
+          {
+            "attribution_effect": "decrease_net_income_and_equity",
+            "description": "2025-04-24 보고서는 2024-03-31자 감사보고서에 첨부된 2023년 재무제표의 순자산 및 당기순이익 8,154백만원 과대계상을 강조사항으로 공시했다.",
+            "effective_date": "2023-12-31",
+            "event_type": "prior_period_error_correction",
+            "related_entities": [],
+            "source_refs": [
+              "planm_audit_report_2025_04_24"
+            ],
+            "tax_effect_status": "not_separately_verified"
+          },
+          {
+            "attribution_effect": "decrease_net_income",
+            "description": "2026-06-25 보고서 주석 23의 2024년 당기순이익 행은 (가)관련 수정금액 (3,497,470천원)과 기타 수정금액 (31,547천원)을 별도 표시한다. 오류 수정 효과 합계는 3,529,017천원 감소이며, 회계정책 변경 26,665,058천원은 별도 이벤트로 분리한다.",
+            "effective_date": "2024-12-31",
+            "event_type": "net_income_error_correction",
+            "related_entities": [],
+            "source_refs": [
+              "planm_audit_report_2026_06_25"
+            ],
+            "tax_effect_status": "not_separately_verified"
+          },
+          {
+            "attribution_effect": "decrease_total_equity",
+            "description": "2026-06-25 보고서 주석 23의 2024년말 미처분이익잉여금 및 자본총계 행은 (가)관련 수정금액 (4,266,445천원)과 기타 수정금액 (40,423천원)을 별도 표시한다. 오류 수정 효과 합계는 4,306,868천원 감소이며, 회계정책 변경 38,660,234천원은 별도 효과다.",
+            "effective_date": "2024-12-31",
+            "event_type": "net_asset_error_correction",
+            "related_entities": [],
+            "source_refs": [
+              "planm_audit_report_2026_06_25"
+            ],
+            "tax_effect_status": "not_separately_verified"
+          },
+          {
+            "attribution_effect": "decrease_opening_equity",
+            "description": "2026-06-25 보고서 주석 23의 2024년초 미처분이익잉여금 오류 수정 효과 ((가)관련 768,975천원 및 기타 8,876천원)를 2023년 추가 대사 항목으로 보존한다.",
+            "effective_date": "2023-12-31",
+            "event_type": "opening_equity_cross_check",
+            "related_entities": [],
+            "source_refs": [
+              "planm_audit_report_2026_06_25"
+            ],
+            "tax_effect_status": "not_separately_verified"
+          },
+          {
+            "attribution_effect": "decrease_revenue",
+            "description": "2025-04-24 보고서 주석 24는 임대기간에 따른 매출 인식시점 수정으로 제4기 매출 5,913백만원 과대계상 등을 공시했다.",
+            "effective_date": "2023-12-31",
+            "event_type": "revenue_recognition_error_correction",
+            "related_entities": [],
+            "source_refs": [
+              "planm_audit_report_2025_04_24"
+            ],
+            "tax_effect_status": "not_separately_verified"
+          },
+          {
+            "attribution_effect": "decrease_cost_of_sales_and_increase_net_income",
+            "description": "2026-06-25 보고서 주석 23은 임대용자산 내용연수 변경을 회계정책 변경으로 공시하고, 2024년 손익계산서 매출원가 26,665백만원 과대계상을 재작성했다.",
+            "effective_date": "2024-12-31",
+            "event_type": "accounting_policy_change",
+            "related_entities": [],
+            "source_refs": [
+              "planm_audit_report_2026_06_25"
+            ],
+            "tax_effect_status": "not_separately_verified"
+          }
+        ]
+      },
+      "available_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "planm",
+      "company_name": "플랜엠",
+      "currency": "KRW",
+      "data_quality": {
+        "manual_page_check_required": false,
+        "modular_segment_revenue_disclosed": false,
+        "pending_manual_page_check_count": 0,
+        "source_location_count": 85,
+        "source_validator_status": "passed"
+      },
+      "derived_metrics": {
+        "2023": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "20.5%",
+            "value": 20.5
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "46.8%",
+            "value": 46.8
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "9.8%",
+            "value": 9.8
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "19.2%",
+            "value": 19.2
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "13.5",
+            "value": 13.515
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "31.3%",
+            "value": 31.3
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.1%",
+            "value": 0.1
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "8.3%",
+            "value": 8.3
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.3%",
+            "value": 1.3
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "91.6%",
+            "value": 91.6
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          }
+        },
+        "2024": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "54.0%",
+            "value": 54.0
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "8.0%",
+            "value": 8.0
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "52.6%",
+            "value": 52.6
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.4%",
+            "value": 0.4
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "301.5%",
+            "value": 301.5
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "31.9%",
+            "value": 31.9
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.9",
+            "value": 0.928
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "43.3%",
+            "value": 43.3
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.9%",
+            "value": 0.9
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "14.4%",
+            "value": 14.4
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.6%",
+            "value": 0.6
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "84.7%",
+            "value": 84.7
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "103.1%",
+            "value": 103.1
+          }
+        },
+        "2025": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "43.8%",
+            "value": 43.8
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "17.4%",
+            "value": 17.4
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "23.5%",
+            "value": 23.5
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.6%",
+            "value": 1.6
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "294.1%",
+            "value": 294.1
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-16.1%",
+            "value": -16.1
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.3",
+            "value": 1.262
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "8.6%",
+            "value": 8.6
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.9%",
+            "value": 1.9
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "12.8%",
+            "value": 12.8
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.4%",
+            "value": 0.4
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "85.3%",
+            "value": 85.3
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-51.0%",
+            "value": -51.0
+          }
+        }
+      },
+      "disclosure_warnings": [
+        {
+          "code": "verification_pending_total_equity",
+          "level": "info",
+          "message": "2023년 자본총계 검증 보류: 해당 자본 관련 비율은 계산에서 제외됩니다."
+        },
+        {
+          "code": "modular_segment_revenue_not_disclosed",
+          "level": "warning",
+          "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다."
+        },
+        {
+          "code": "product_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "제품매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "construction_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "공사매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "related_entity_results_not_combined",
+          "level": "warning",
+          "message": "본 재무정보는 주식회사 플랜엠 별도 재무제표 기준이다. 제품매출, 임대매출, 용역매출 및 F&B매출은 모듈러 매출로 자동 간주하지 않는다. 2023년 자본총계는 verification_pending 상태로 공개 계산에서 제외한다."
+        }
+      ],
+      "financial_scope": "standalone",
+      "financial_series": [
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 419.6,
+              "display_text": "419.6억원",
+              "raw_krw": 41961646411,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2050.9,
+              "display_text": "2,050.9억원",
+              "raw_krw": 205086175424,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 278.4,
+              "display_text": "278.4억원",
+              "raw_krw": 27843641605,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 58.4,
+              "display_text": "58.4억원",
+              "raw_krw": 5841862173,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 114.4,
+              "display_text": "114.4억원",
+              "raw_krw": 11441451080,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1546.3,
+              "display_text": "1,546.3억원",
+              "raw_krw": 154626325000,
+              "source_locations": [
+                {
+                  "page_range": "42-44",
+                  "section": "statement.cash_flow",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 186.2,
+              "display_text": "186.2억원",
+              "raw_krw": 18616994565,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 7.6,
+              "display_text": "7.6억원",
+              "raw_krw": 755523895,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 594.8,
+              "display_text": "594.8억원",
+              "raw_krw": 59483443620,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2627.1,
+              "display_text": "2,627.1억원",
+              "raw_krw": 262714334529,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 512.7,
+              "display_text": "512.7억원",
+              "raw_krw": 51269588357,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "verification_pending",
+              "disclosure_status": "verification_pending",
+              "display_eok": null,
+              "display_text": "검증 보류",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "48,50",
+                  "section": "note.restatement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24",
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2422.5,
+              "display_text": "2,422.5억원",
+              "raw_krw": 242247287688,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2025_04_24",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2025_04_24"
+              ]
+            }
+          },
+          "year": 2023
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 120.3,
+              "display_text": "120.3억원",
+              "raw_krw": 12032430880,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1509.5,
+              "display_text": "1,509.5억원",
+              "raw_krw": 150950910641,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 634.9,
+              "display_text": "634.9억원",
+              "raw_krw": 63487848694,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 5.0,
+              "display_text": "5.0억원",
+              "raw_krw": 503618028,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 385.4,
+              "display_text": "385.4억원",
+              "raw_krw": 38537785703,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 357.5,
+              "display_text": "357.5억원",
+              "raw_krw": 35749196939,
+              "source_locations": [
+                {
+                  "page_range": "12-13",
+                  "section": "statement.cash_flow",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 523.2,
+              "display_text": "523.2억원",
+              "raw_krw": 52324070612,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 7.4,
+              "display_text": "7.4억원",
+              "raw_krw": 742118015,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1208.0,
+              "display_text": "1,208.0억원",
+              "raw_krw": 120797780318,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2819.5,
+              "display_text": "2,819.5억원",
+              "raw_krw": 281949476981,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 379.0,
+              "display_text": "379.0억원",
+              "raw_krw": 37897505740,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 702.2,
+              "display_text": "702.2억원",
+              "raw_krw": 70222157519,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2117.3,
+              "display_text": "2,117.3억원",
+              "raw_krw": 211727319462,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            }
+          },
+          "year": 2024
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 181.2,
+              "display_text": "181.2억원",
+              "raw_krw": 18121252760,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1042.3,
+              "display_text": "1,042.3억원",
+              "raw_krw": 104229367555,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 139.4,
+              "display_text": "139.4억원",
+              "raw_krw": 13935530580,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 9.3,
+              "display_text": "9.3억원",
+              "raw_krw": 932850471,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -95.3,
+              "display_text": "-95.3억원",
+              "raw_krw": -9533441167,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -120.3,
+              "display_text": "-120.3억원",
+              "raw_krw": -12031387244,
+              "source_locations": [
+                {
+                  "page_range": "12-13",
+                  "section": "statement.cash_flow",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 50.9,
+              "display_text": "50.9억원",
+              "raw_krw": 5091785350,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 2.2,
+              "display_text": "2.2억원",
+              "raw_krw": 216178471,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.working_capital",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 592.2,
+              "display_text": "592.2억원",
+              "raw_krw": 59222859418,
+              "source_locations": [
+                {
+                  "page_range": "9-10",
+                  "section": "statement.income_statement",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2724.4,
+              "display_text": "2,724.4억원",
+              "raw_krw": 272444816577,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 302.4,
+              "display_text": "302.4억원",
+              "raw_krw": 30242382764,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "7-8",
+                  "section": "note.borrowings",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 691.2,
+              "display_text": "691.2억원",
+              "raw_krw": 69122316452,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2033.2,
+              "display_text": "2,033.2억원",
+              "raw_krw": 203322500125,
+              "source_locations": [
+                {
+                  "page_range": "7-8",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "planm_audit_report_2026_06_25",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "planm_audit_report_2026_06_25"
+              ]
+            }
+          },
+          "year": 2025
+        }
+      ],
+      "latest_metrics": {
+        "gross_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 139.4,
+          "display_text": "139.4억원",
+          "raw_krw": 13935530580,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "inventory": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 9.3,
+          "display_text": "9.3억원",
+          "raw_krw": 932850471,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -95.3,
+          "display_text": "-95.3억원",
+          "raw_krw": -9533441167,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -120.3,
+          "display_text": "-120.3억원",
+          "raw_krw": -12031387244,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 50.9,
+          "display_text": "50.9억원",
+          "raw_krw": 5091785350,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "receivables_total": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 2.2,
+          "display_text": "2.2억원",
+          "raw_krw": 216178471,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 592.2,
+          "display_text": "592.2억원",
+          "raw_krw": 59222859418,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 2724.4,
+          "display_text": "2,724.4억원",
+          "raw_krw": 272444816577,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 302.4,
+          "display_text": "302.4억원",
+          "raw_krw": 30242382764,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 691.2,
+          "display_text": "691.2억원",
+          "raw_krw": 69122316452,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 2033.2,
+          "display_text": "2,033.2억원",
+          "raw_krw": 203322500125,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "work_in_progress": {
+          "calculation_basis": "not_applicable",
+          "disclosure_status": "not_applicable",
+          "display_eok": null,
+          "display_text": "해당 없음",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
+      "latest_year": 2025,
+      "reporting_entity": "주식회사 플랜엠",
+      "source_schema_version": "company_audit_financials_v1",
+      "source_summary": {
+        "audit_opinions": [
+          {
+            "auditor": "회계법인 서정",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "2023년 최초 보고 재무제표 원천. 독립감사인 서명일은 PDF 본문에서 별도 날짜로 확인되지 않아 제출일을 자동 복사하지 않았다.",
+            "auditor_report_date_verification_status": "pending_manual_page_check",
+            "covered_years": [
+              2022,
+              2023
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "planm_audit_report_2024_04_15"
+          },
+          {
+            "auditor": "인덕회계법인",
+            "auditor_report_date": "2025-04-24",
+            "auditor_report_date_note": "2023년 비교 재무제표 재작성 금액의 우선 원천.",
+            "auditor_report_date_verification_status": "verified",
+            "covered_years": [
+              2023,
+              2024
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "planm_audit_report_2025_04_24"
+          },
+          {
+            "auditor": "인덕회계법인",
+            "auditor_report_date": "2026-06-23",
+            "auditor_report_date_note": "2024년 최신 재작성 비교 재무제표와 2025년 당기 재무제표의 우선 원천.",
+            "auditor_report_date_verification_status": "verified",
+            "covered_years": [
+              2024,
+              2025
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "planm_audit_report_2026_06_25"
+          }
+        ],
+        "auditors": [
+          "인덕회계법인",
+          "회계법인 서정"
+        ],
+        "latest_report_date": "2026-06-25",
+        "pending_location_count": 0,
+        "primary_documents": [
+          {
+            "filename": "[플랜엠]감사보고서(2025.04.24).pdf",
+            "report_date": "2025-04-24",
+            "source_ref": "planm_audit_report_2025_04_24",
+            "source_role": "first_restated_2023_and_original_reported_2024"
+          },
+          {
+            "filename": "[플랜엠]감사보고서(2026.06.25).pdf",
+            "report_date": "2026-06-25",
+            "source_ref": "planm_audit_report_2026_06_25",
+            "source_role": "latest_restated_2024_and_current_2025"
+          }
+        ],
+        "source_priority_by_year": {
+          "2023": {
+            "basis": "comparative_financial_statements",
+            "cross_check_source_refs": [
+              "planm_audit_report_2024_04_15",
+              "planm_audit_report_2026_06_25"
+            ],
+            "primary_source_ref": "planm_audit_report_2025_04_24"
+          },
+          "2024": {
+            "basis": "comparative_financial_statements",
+            "cross_check_source_refs": [
+              "planm_audit_report_2025_04_24"
+            ],
+            "primary_source_ref": "planm_audit_report_2026_06_25"
+          },
+          "2025": {
+            "basis": "current_year_financial_statements",
+            "cross_check_source_refs": [],
+            "primary_source_ref": "planm_audit_report_2026_06_25"
+          }
+        },
+        "verified_location_count": 85
+      },
+      "trend_signals": [
+        {
+          "based_on_years": [
+            2023,
+            2025
+          ],
+          "code": "revenue_decreased",
+          "description": "2023년 대비 2025년 매출액이 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 59222859418,
+            "start_raw_krw": 59483443620
+          },
+          "title": "매출 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "operating_margin_declined",
+          "description": "2024년 대비 2025년 영업이익률이 하락됐다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 8.6,
+            "previous_pct": 43.3
+          },
+          "title": "영업이익률 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "operating_cash_flow_negative",
+          "description": "2025년 영업현금흐름은 음수다.",
+          "interpretation_type": "rule_based",
+          "level": "watch",
+          "metric_values": {
+            "latest_raw_krw": -12031387244
+          },
+          "title": "영업현금흐름 상태"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "borrowings_decreased",
+          "description": "2024년 대비 2025년 총차입금이 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 30242382764,
+            "previous_raw_krw": 37897505740
+          },
+          "title": "차입금 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "receivables_decreased",
+          "description": "2024년 대비 2025년 매출채권 합계가 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 216178471,
+            "previous_raw_krw": 742118015
+          },
+          "title": "매출채권 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "inventory_increased",
+          "description": "2024년 대비 2025년 재고자산이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 932850471,
+            "previous_raw_krw": 503618028
+          },
+          "title": "재고 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "current_ratio_below_100",
+          "description": "2025년 유동비율은 17.4%다.",
+          "interpretation_type": "rule_based",
+          "level": "watch",
+          "metric_values": {
+            "latest_pct": 17.4
+          },
+          "title": "유동비율 상태"
+        }
+      ]
+    },
+    {
+      "attribution": {
         "attribution_warning": "본 재무정보는 주식회사 유창이앤씨 별도 재무제표 기준이다. 2022년 학교 모듈러 제작업 부문 인적분할 이후 유창엠앤씨 등 관계사의 프로젝트, 생산, 매출을 유창이앤씨 단일 법인 실적으로 자동 합산하지 않는다.",
         "financial_scope": "standalone",
         "modular_segment_revenue_disclosed": false,

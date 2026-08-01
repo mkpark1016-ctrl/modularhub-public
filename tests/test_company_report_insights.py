@@ -30,6 +30,10 @@ def daeseung_company(payload: dict) -> dict:
     return next(company for company in payload["companies"] if company["company_id"] == "daeseung-engineering")
 
 
+def planm_company(payload: dict) -> dict:
+    return next(company for company in payload["companies"] if company["company_id"] == "planm")
+
+
 def contains_key(value: object, target: str) -> bool:
     if isinstance(value, dict):
         return any(key == target or contains_key(child, target) for key, child in value.items())
@@ -60,7 +64,7 @@ def test_yuchang_years_and_latest_metrics() -> None:
 
 def test_view_model_contains_yuchang_kumkang_and_daeseung() -> None:
     payload = load_output()
-    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "yuchang-enc"]
+    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "planm", "yuchang-enc"]
 
 
 def test_kumkang_years_scope_and_latest_metrics() -> None:
@@ -280,8 +284,61 @@ def test_view_model_combined_metric_keeps_verification_pending_out_of_calculatio
 
 def test_public_builder_does_not_discover_planm_staging_json() -> None:
     discovered = {path.relative_to(ROOT).as_posix() for path in discover_source_files()}
+    assert "data/company_reports/planm/audit_financials_2023_2025.json" in discovered
     assert "data/company_reports/planm/staging/audit_financials_2023_2025.json" not in discovered
     assert all("/staging/" not in path for path in discovered)
+
+
+def test_planm_public_view_model_promotes_verified_metrics_and_blocks_pending_equity() -> None:
+    company = planm_company(load_output())
+    assert company["available_years"] == [2023, 2024, 2025]
+    assert company["latest_year"] == 2025
+    assert company["financial_scope"] == "standalone"
+
+    equity_2023 = company["financial_series"][0]["metrics"]["total_equity"]
+    assert equity_2023["raw_krw"] is None
+    assert equity_2023["display_eok"] is None
+    assert equity_2023["display_text"] == "검증 보류"
+    assert equity_2023["calculation_basis"] == "verification_pending"
+    assert equity_2023["disclosure_status"] == "verification_pending"
+    assert equity_2023["source_locations"] == [
+        {
+            "page_range": "7-8",
+            "section": "statement.balance_sheet",
+            "source_ref": "planm_audit_report_2025_04_24",
+            "verification_status": "verified_section_range",
+        },
+        {
+            "page_range": "48,50",
+            "section": "note.restatement",
+            "source_ref": "planm_audit_report_2026_06_25",
+            "verification_status": "verified_section_range",
+        },
+    ]
+
+    assert company["derived_metrics"]["2023"]["liabilities_to_equity_pct"]["value"] is None
+    assert company["derived_metrics"]["2023"]["borrowings_to_equity_pct"]["value"] is None
+    for key in ["liabilities_to_equity_pct", "borrowings_to_equity_pct"]:
+        display_text = company["derived_metrics"]["2023"][key]["display_text"]
+        assert display_text not in {"0.0%", "NaN%", "Infinity%"}
+        assert "None" not in display_text
+
+    assert company["financial_series"][1]["metrics"]["total_equity"]["raw_krw"] == 70222157519
+    assert company["financial_series"][2]["metrics"]["revenue"]["raw_krw"] == 59222859418
+    warning_codes = [warning["code"] for warning in company["disclosure_warnings"]]
+    assert "verification_pending_total_equity" in warning_codes
+    assert "modular_segment_revenue_not_disclosed" in warning_codes
+    assert "product_revenue_not_modular_revenue" in warning_codes
+    assert "construction_revenue_not_modular_revenue" in warning_codes
+    assert company["attribution"]["modular_segment_revenue_disclosed"] is False
+    assert company["data_quality"]["source_location_count"] == 85
+
+
+def test_planm_public_view_model_excludes_unsupported_requested_amount() -> None:
+    rendered = json.dumps(planm_company(load_output()), ensure_ascii=False)
+    assert "3,529,782,000" not in rendered
+    assert "3529782000" not in rendered
+    assert "3,529,017" in rendered
 
 
 def test_calculated_money_metrics_preserve_raw_krw() -> None:
