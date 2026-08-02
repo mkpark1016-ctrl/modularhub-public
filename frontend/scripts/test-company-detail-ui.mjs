@@ -17,6 +17,7 @@ import {
   reportFinancialHeading,
   reportMetricByYear,
   reportRatioByYear,
+  reportRevenueShareKey,
   reportSectionLabel,
   reportYears,
   sourceSectionCounts,
@@ -104,6 +105,9 @@ assert.ok(componentFiles.includes("financial-cash-flow-zone positive"), "cash-fl
 assert.ok(componentFiles.includes("cash-flow-direction-positive"), "cash-flow chart should mark positive rows");
 assert.ok(componentFiles.includes("cash-flow-direction-negative"), "cash-flow chart should mark negative rows");
 assert.ok(componentFiles.includes("financial-zero-marker"), "cash-flow chart should preserve a visible zero-value marker");
+assert.ok(componentFiles.includes("REPORT_REVENUE_BREAKDOWN_ROWS"), "audit financial panel should support revenue breakdown rows");
+assert.ok(componentFiles.includes("용역매출"), "audit financial panel should label service revenue");
+assert.ok(componentFiles.includes("해석 범위 안내"), "audit financial panel should show interpretation scope callouts");
 assert.ok(componentFiles.includes("isAvailable && <i"), "null financial metrics should not render zero-width chart bars");
 assert.ok(componentFiles.includes("is-unavailable"), "unavailable financial metrics should have a non-chart display state");
 assert.ok(stylesheet.includes("grid-template-columns: 44px minmax(0, 1fr) 2px minmax(0, 1fr)"), "cash-flow chart should place the zero line between symmetric lanes");
@@ -141,6 +145,8 @@ const daeseungReport = getCompanyReportInsight(reportPayload, "daeseung-engineer
 assert.ok(daeseungReport, "daeseung-engineering report insight must load");
 const planmReport = getCompanyReportInsight(reportPayload, "planm");
 assert.ok(planmReport, "planm report insight must load after controlled public promotion");
+const nrbReport = getCompanyReportInsight(reportPayload, "nrb");
+assert.ok(nrbReport, "nrb report insight must load after controlled public promotion");
 assert.equal(getCompanyReportInsight(reportPayload, "gs-ec"), null, "companies without report insights should fall back to legacy financial UI");
 assert.equal(hasEvidenceDisplayValue(0), true);
 assert.equal(hasEvidenceDisplayValue(-1), true);
@@ -211,6 +217,20 @@ assert.equal(planmReport.disclosure_warnings.some((warning) => warning.code === 
 assert.equal(planmReport.disclosure_warnings.some((warning) => warning.code === "modular_segment_revenue_not_disclosed"), true);
 assert.equal(JSON.stringify(planmReport).includes("3,529,782,000"), false);
 assert.equal(JSON.stringify(planmReport).includes("3529782000"), false);
+assert.deepEqual(reportYears(nrbReport), [2023, 2024, 2025]);
+assert.equal(nrbReport.financial_scope, "standalone");
+assert.equal(metricDisplayText(reportMetricByYear(nrbReport, 2025, "revenue")), "594.8억원");
+assert.equal(metricDisplayText(reportMetricByYear(nrbReport, 2025, "operating_profit")), "44.6억원");
+assert.equal(metricDisplayText(reportMetricByYear(nrbReport, 2025, "net_income")), "-5.6억원");
+assert.equal(metricToneClass(reportMetricByYear(nrbReport, 2025, "net_income")), "is-negative");
+assert.equal(metricDisplayText(reportRatioByYear(nrbReport, 2025, "operating_margin_pct")), "7.5%");
+assert.equal(metricDisplayText(reportMetricByYear(nrbReport, 2025, "service_revenue")), "122.7억원");
+assert.equal(metricDisplayText(reportRatioByYear(nrbReport, 2025, reportRevenueShareKey("service_revenue"))), "20.6%");
+assert.equal(metricDisplayText(reportMetricByYear(nrbReport, 2023, "construction_revenue")), "해당 없음");
+assert.equal(reportMetricByYear(nrbReport, 2023, "construction_revenue").raw_krw, null);
+assert.equal(JSON.stringify(nrbReport).includes("current_liability_policy_reclassification"), true);
+assert.equal(JSON.stringify(nrbReport).includes("cash_flow_presentation_policy_change"), true);
+assert.equal(nrbReport.disclosure_warnings.some((warning) => warning.code === "modular_segment_revenue_not_disclosed"), false);
 for (const year of [2023, 2024, 2025]) {
   for (const metricKey of ["revenue", "operating_profit", "operating_cash_flow", "total_borrowings", "receivables_total"]) {
     assert.notEqual(metricDisplayText(reportMetricByYear(yuchangReport, year, metricKey)), "확인되지 않음", `${metricKey} ${year} should have a direct label`);

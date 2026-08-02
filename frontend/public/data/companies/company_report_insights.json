@@ -2963,6 +2963,1898 @@
     },
     {
       "attribution": {
+        "attribution_warning": "This staging file uses NRB standalone financial statements. Consolidated statements and subsidiary values are excluded from financial_years. Standalone revenue breakdown captions were cross-checked from notes 26.1 and 27.1, but product, rental, service, construction, and other revenue are not automatically treated as separate modular segment revenue. The 2024 operating cash flow and 2023 current-liability differences are documented as resolved retrospective presentation/classification changes.",
+        "financial_scope": "standalone",
+        "modular_segment_revenue_disclosed": true,
+        "related_entity_attribution_required": false,
+        "reporting_entity": "주식회사 엔알비",
+        "special_events": [
+          {
+            "attribution_effect": "disclosure_note_only",
+            "description": "2023 감사보고서에는 한국채택국제회계기준 최초채택 강조사항이 포함되어 있다.",
+            "effective_date": "2023-12-31",
+            "event_type": "k_ifrs_first_adoption_emphasis",
+            "related_entities": [],
+            "source_refs": [
+              "nrb_audit_report_2024_04_08"
+            ],
+            "tax_effect_status": "not_applicable"
+          },
+          {
+            "attribution_effect": "resolved_retrospective_current_liability_reclassification",
+            "description": "K-IFRS 1001 liability classification amendments were applied retrospectively. Redeemable convertible preferred-share liabilities that can be exercised within 12 months after the reporting period were classified as current liabilities. The 2023 current-liability amount after reclassification is 81,185,943,632 KRW; the pre-reclassification amount was 48,527,580,433 KRW and the reclassification effect was 32,658,363,199 KRW.",
+            "effective_date": "2023-12-31",
+            "event_type": "current_liability_policy_reclassification",
+            "related_entities": [],
+            "source_refs": [
+              "nrb_audit_report_2025_04_01",
+              "nrb_annual_report_2026_03_18"
+            ],
+            "tax_effect_status": "not_applicable"
+          },
+          {
+            "attribution_effect": "resolved_retrospective_cash_flow_presentation_change",
+            "description": "The 2026-03-18 business report note 2.2.1 explains that cash flows from modular fixed assets held for rental purposes were reclassified between operating and investing cash flows and applied retrospectively under K-IFRS 1008. The change affects only the cash-flow statement and does not affect the statement of financial position, income statement, or statement of changes in equity. For 2024, operating cash flow changed from -2,611,715 thousand KRW to 20,142,351 thousand KRW and investing cash flow changed from -2,956,754 thousand KRW to -25,710,820 thousand KRW.",
+            "effective_date": "2024-12-31",
+            "event_type": "cash_flow_presentation_policy_change",
+            "related_entities": [],
+            "source_refs": [
+              "nrb_annual_report_2026_03_18",
+              "nrb_audit_report_2025_04_01"
+            ],
+            "tax_effect_status": "not_applicable"
+          },
+          {
+            "attribution_effect": "consolidated_values_excluded_from_staging_financial_years",
+            "description": "2026 사업보고서의 연결재무제표와 종속기업 값은 별도재무 financial_years에서 제외한다.",
+            "effective_date": "2025-12-31",
+            "event_type": "standalone_consolidated_scope_guard",
+            "related_entities": [
+              "연결대상 종속기업"
+            ],
+            "source_refs": [
+              "nrb_annual_report_2026_03_18"
+            ],
+            "tax_effect_status": "not_applicable"
+          }
+        ]
+      },
+      "available_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "nrb",
+      "company_name": "엔알비",
+      "currency": "KRW",
+      "data_quality": {
+        "manual_page_check_required": false,
+        "modular_segment_revenue_disclosed": true,
+        "pending_manual_page_check_count": 0,
+        "source_location_count": 87,
+        "source_validator_status": "passed"
+      },
+      "derived_metrics": {
+        "2023": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-957.2%",
+            "value": -957.2
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "32.9%",
+            "value": 32.9
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "32.4%",
+            "value": 32.4
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.0%",
+            "value": 10.0
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-1,965.9%",
+            "value": -1965.9
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.9%",
+            "value": 2.9
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-12.7",
+            "value": -12.663
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "23.6%",
+            "value": 23.6
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.0%",
+            "value": 1.0
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "27.8%",
+            "value": 27.8
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "45.2%",
+            "value": 45.2
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "service_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "26.0%",
+            "value": 26.0
+          }
+        },
+        "2024": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "156.0%",
+            "value": 156.0
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "18.8%",
+            "value": 18.8
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "27.1%",
+            "value": 27.1
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "6.3%",
+            "value": 6.3
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "241.7%",
+            "value": 241.7
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "4.0%",
+            "value": 4.0
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "9.6",
+            "value": 9.575
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "12.0%",
+            "value": 12.0
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.6%",
+            "value": 0.6
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "18.1%",
+            "value": 18.1
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "59.3%",
+            "value": 59.3
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.5%",
+            "value": 2.5
+          },
+          "service_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "22.0%",
+            "value": 22.0
+          }
+        },
+        "2025": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "52.3%",
+            "value": 52.3
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "12.9%",
+            "value": 12.9
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "41.7%",
+            "value": 41.7
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "20.4%",
+            "value": 20.4
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "6.9%",
+            "value": 6.9
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "105.1%",
+            "value": 105.1
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-0.9%",
+            "value": -0.9
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-5.4",
+            "value": -5.447
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "7.5%",
+            "value": 7.5
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.3%",
+            "value": 0.3
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "24.9%",
+            "value": 24.9
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "41.3%",
+            "value": 41.3
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "12.7%",
+            "value": 12.7
+          },
+          "service_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "20.6%",
+            "value": 20.6
+          }
+        }
+      },
+      "disclosure_warnings": [
+        {
+          "code": "product_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "제품매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "construction_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "공사매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "related_entity_results_not_combined",
+          "level": "warning",
+          "message": "This staging file uses NRB standalone financial statements. Consolidated statements and subsidiary values are excluded from financial_years. Standalone revenue breakdown captions were cross-checked from notes 26.1 and 27.1, but product, rental, service, construction, and other revenue are not automatically treated as separate modular segment revenue. The 2024 operating cash flow and 2023 current-liability differences are documented as resolved retrospective presentation/classification changes."
+        }
+      ],
+      "financial_scope": "standalone",
+      "financial_series": [
+        {
+          "metrics": {
+            "construction_revenue": {
+              "calculation_basis": "not_applicable",
+              "disclosure_status": "not_applicable",
+              "display_eok": null,
+              "display_text": "해당 없음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "p.77",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 267.2,
+              "display_text": "267.2억원",
+              "raw_krw": 26717037041,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 811.9,
+              "display_text": "811.9억원",
+              "raw_krw": 81185943632,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "goods_revenue": {
+              "calculation_basis": "not_applicable",
+              "disclosure_status": "not_applicable",
+              "display_eok": null,
+              "display_text": "해당 없음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "p.77",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 167.0,
+              "display_text": "167.0억원",
+              "raw_krw": 16695821293,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 51.6,
+              "display_text": "51.6억원",
+              "raw_krw": 5164638747,
+              "source_locations": [
+                {
+                  "page_range": "pp.137,234-235",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 15.1,
+              "display_text": "15.1억원",
+              "raw_krw": 1509433924,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -191.1,
+              "display_text": "-191.1억원",
+              "raw_krw": -19114458189,
+              "source_locations": [
+                {
+                  "page_range": "pp.141-142",
+                  "section": "statement.cash_flow",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 121.5,
+              "display_text": "121.5억원",
+              "raw_krw": 12147401803,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "other_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 5.0,
+              "display_text": "5.0억원",
+              "raw_krw": 503093000,
+              "source_locations": [
+                {
+                  "page_range": "p.77",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "product_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 143.3,
+              "display_text": "143.3억원",
+              "raw_krw": 14334820000,
+              "source_locations": [
+                {
+                  "page_range": "p.77",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "not_disclosed",
+              "disclosure_status": "not_disclosed",
+              "display_eok": null,
+              "display_text": "공시되지 않음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "pp.137,234-235",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.137,237",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "rental_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 233.1,
+              "display_text": "233.1억원",
+              "raw_krw": 23313498000,
+              "source_locations": [
+                {
+                  "page_range": "p.77",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 515.3,
+              "display_text": "515.3억원",
+              "raw_krw": 51532616211,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "service_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 133.8,
+              "display_text": "133.8억원",
+              "raw_krw": 13381205000,
+              "source_locations": [
+                {
+                  "page_range": "p.77",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1277.8,
+              "display_text": "1,277.8억원",
+              "raw_krw": 127780799064,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 655.5,
+              "display_text": "655.5억원",
+              "raw_krw": 65551588320,
+              "source_locations": [
+                {
+                  "page_range": "pp.138,188",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.138,189-190",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.138,189-190",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -68.5,
+              "display_text": "-68.5억원",
+              "raw_krw": -6848075740,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1346.3,
+              "display_text": "1,346.3억원",
+              "raw_krw": 134628874804,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2024_04_08",
+                "nrb_audit_report_2025_04_01"
+              ]
+            }
+          },
+          "year": 2023
+        },
+        {
+          "metrics": {
+            "construction_revenue": {
+              "calculation_basis": "not_applicable",
+              "disclosure_status": "not_applicable",
+              "display_eok": null,
+              "display_text": "해당 없음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 138.8,
+              "display_text": "138.8억원",
+              "raw_krw": 13879886380,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 736.8,
+              "display_text": "736.8억원",
+              "raw_krw": 73679657478,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "goods_revenue": {
+              "calculation_basis": "not_applicable",
+              "disclosure_status": "not_applicable",
+              "display_eok": null,
+              "display_text": "해당 없음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 142.9,
+              "display_text": "142.9억원",
+              "raw_krw": 14288113465,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 33.3,
+              "display_text": "33.3억원",
+              "raw_krw": 3333324782,
+              "source_locations": [
+                {
+                  "page_range": "pp.137,234-235",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 21.0,
+              "display_text": "21.0억원",
+              "raw_krw": 2103685331,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 201.4,
+              "display_text": "201.4억원",
+              "raw_krw": 20142350922,
+              "source_locations": [
+                {
+                  "page_range": "pp.141-142",
+                  "section": "statement.cash_flow",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 63.2,
+              "display_text": "63.2억원",
+              "raw_krw": 6318858480,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "other_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 3.2,
+              "display_text": "3.2억원",
+              "raw_krw": 321520000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "product_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 95.7,
+              "display_text": "95.7억원",
+              "raw_krw": 9567358000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "not_disclosed",
+              "disclosure_status": "not_disclosed",
+              "display_eok": null,
+              "display_text": "공시되지 않음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "pp.137,234-235",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.137,237",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "rental_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 312.9,
+              "display_text": "312.9억원",
+              "raw_krw": 31289418000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 528.0,
+              "display_text": "528.0억원",
+              "raw_krw": 52801060597,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "service_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 116.2,
+              "display_text": "116.2억원",
+              "raw_krw": 11622765000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1357.4,
+              "display_text": "1,357.4억원",
+              "raw_krw": 135739380875,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 619.6,
+              "display_text": "619.6억원",
+              "raw_krw": 61961357816,
+              "source_locations": [
+                {
+                  "page_range": "pp.138,188",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.138,189-190",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.138,189-190",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 397.3,
+              "display_text": "397.3억원",
+              "raw_krw": 39728837636,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 960.1,
+              "display_text": "960.1억원",
+              "raw_krw": 96010543239,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18",
+                "nrb_audit_report_2025_04_01"
+              ]
+            }
+          },
+          "year": 2024
+        },
+        {
+          "metrics": {
+            "construction_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 76.7,
+              "display_text": "76.7억원",
+              "raw_krw": 7667780000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 281.6,
+              "display_text": "281.6억원",
+              "raw_krw": 28155893525,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 675.9,
+              "display_text": "675.9억원",
+              "raw_krw": 67590195584,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "goods_revenue": {
+              "calculation_basis": "not_applicable",
+              "disclosure_status": "not_applicable",
+              "display_eok": null,
+              "display_text": "해당 없음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 121.3,
+              "display_text": "121.3억원",
+              "raw_krw": 12130397786,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 41.2,
+              "display_text": "41.2억원",
+              "raw_krw": 4117565887,
+              "source_locations": [
+                {
+                  "page_range": "pp.137,234-235",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -5.6,
+              "display_text": "-5.6억원",
+              "raw_krw": -563349199,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 30.7,
+              "display_text": "30.7억원",
+              "raw_krw": 3068742998,
+              "source_locations": [
+                {
+                  "page_range": "pp.141-142",
+                  "section": "statement.cash_flow",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 44.6,
+              "display_text": "44.6억원",
+              "raw_krw": 4461258309,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "other_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1.6,
+              "display_text": "1.6억원",
+              "raw_krw": 155893000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "product_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 148.0,
+              "display_text": "148.0억원",
+              "raw_krw": 14800741000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "not_disclosed",
+              "disclosure_status": "not_disclosed",
+              "display_eok": null,
+              "display_text": "공시되지 않음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "pp.137,234-235",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.137,237",
+                  "section": "note.working_capital",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "rental_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 245.9,
+              "display_text": "245.9억원",
+              "raw_krw": 24586780000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 594.8,
+              "display_text": "594.8억원",
+              "raw_krw": 59481544678,
+              "source_locations": [
+                {
+                  "page_range": "p.139",
+                  "section": "statement.income_statement",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "service_revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 122.7,
+              "display_text": "122.7억원",
+              "raw_krw": 12270351000,
+              "source_locations": [
+                {
+                  "page_range": "p.208",
+                  "section": "note.revenue_breakdown",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1753.2,
+              "display_text": "1,753.2억원",
+              "raw_krw": 175316276741,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 447.0,
+              "display_text": "447.0억원",
+              "raw_krw": 44695538901,
+              "source_locations": [
+                {
+                  "page_range": "pp.138,188",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.138,189-190",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "pp.138,189-190",
+                  "section": "note.borrowings",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 854.8,
+              "display_text": "854.8억원",
+              "raw_krw": 85481316158,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 898.3,
+              "display_text": "898.3억원",
+              "raw_krw": 89834960583,
+              "source_locations": [
+                {
+                  "page_range": "pp.137-139",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "nrb_annual_report_2026_03_18",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "nrb_annual_report_2026_03_18"
+              ]
+            }
+          },
+          "year": 2025
+        }
+      ],
+      "latest_metrics": {
+        "gross_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 121.3,
+          "display_text": "121.3억원",
+          "raw_krw": 12130397786,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "inventory": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 41.2,
+          "display_text": "41.2억원",
+          "raw_krw": 4117565887,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -5.6,
+          "display_text": "-5.6억원",
+          "raw_krw": -563349199,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 30.7,
+          "display_text": "30.7억원",
+          "raw_krw": 3068742998,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 44.6,
+          "display_text": "44.6억원",
+          "raw_krw": 4461258309,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "receivables_total": {
+          "calculation_basis": "not_disclosed",
+          "disclosure_status": "not_disclosed",
+          "display_eok": null,
+          "display_text": "공시되지 않음",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.137,237",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 594.8,
+          "display_text": "594.8억원",
+          "raw_krw": 59481544678,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 1753.2,
+          "display_text": "1,753.2억원",
+          "raw_krw": 175316276741,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 447.0,
+          "display_text": "447.0억원",
+          "raw_krw": 44695538901,
+          "source_locations": [
+            {
+              "page_range": "pp.138,188",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 854.8,
+          "display_text": "854.8억원",
+          "raw_krw": 85481316158,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 898.3,
+          "display_text": "898.3억원",
+          "raw_krw": 89834960583,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "work_in_progress": {
+          "calculation_basis": "not_disclosed",
+          "disclosure_status": "not_disclosed",
+          "display_eok": null,
+          "display_text": "공시되지 않음",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
+      "latest_year": 2025,
+      "reporting_entity": "주식회사 엔알비",
+      "source_schema_version": "company_audit_financials_v1",
+      "source_summary": {
+        "audit_opinions": [
+          {
+            "auditor": "삼정회계법인",
+            "auditor_report_date": "2024-03-27",
+            "auditor_report_date_note": "독립감사인의 감사보고서 작성일을 확인했다.",
+            "auditor_report_date_verification_status": "verified",
+            "covered_years": [
+              2023
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "nrb_audit_report_2024_04_08"
+          },
+          {
+            "auditor": "삼정회계법인",
+            "auditor_report_date": "2025-03-21",
+            "auditor_report_date_note": "독립감사인의 감사보고서 작성일을 확인했다.",
+            "auditor_report_date_verification_status": "verified",
+            "covered_years": [
+              2023,
+              2024
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "nrb_audit_report_2025_04_01"
+          },
+          {
+            "auditor": "삼정회계법인",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "감사의견과 감사인은 감사의견 표에서 확인했으나, 독립감사인의 감사보고서 작성일은 첨부 사업보고서 PDF에서 별도로 확인하지 못했다. 사업보고서 제출일을 감사보고서 작성일로 대체하지 않는다.",
+            "auditor_report_date_verification_status": "not_located_in_attached_business_report_pdf",
+            "covered_years": [
+              2023,
+              2024,
+              2025
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "nrb_annual_report_2026_03_18"
+          }
+        ],
+        "auditors": [
+          "삼정회계법인"
+        ],
+        "latest_report_date": "2026-03-18",
+        "pending_location_count": 0,
+        "primary_documents": [
+          {
+            "filename": "[엔알비]사업보고서(2026.03.18).pdf",
+            "report_date": "2026-03-18",
+            "source_ref": "nrb_annual_report_2026_03_18",
+            "source_role": "Primary source for 2025 standalone statements and latest comparative standalone values for 2023 and 2024."
+          }
+        ],
+        "source_priority_by_year": {
+          "2023": {
+            "basis": "comparative_financial_statements",
+            "cross_check_source_refs": [
+              "nrb_audit_report_2025_04_01",
+              "nrb_audit_report_2024_04_08"
+            ],
+            "primary_source_ref": "nrb_annual_report_2026_03_18"
+          },
+          "2024": {
+            "basis": "comparative_financial_statements",
+            "cross_check_source_refs": [
+              "nrb_audit_report_2025_04_01"
+            ],
+            "primary_source_ref": "nrb_annual_report_2026_03_18"
+          },
+          "2025": {
+            "basis": "current_year_financial_statements",
+            "primary_source_ref": "nrb_annual_report_2026_03_18"
+          }
+        },
+        "verified_location_count": 87
+      },
+      "trend_signals": [
+        {
+          "based_on_years": [
+            2023,
+            2025
+          ],
+          "code": "revenue_increased",
+          "description": "2023년 대비 2025년 매출액이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 59481544678,
+            "start_raw_krw": 51532616211
+          },
+          "title": "매출 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "operating_margin_declined",
+          "description": "2024년 대비 2025년 영업이익률이 하락됐다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 7.5,
+            "previous_pct": 12.0
+          },
+          "title": "영업이익률 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "operating_cash_flow_positive",
+          "description": "2025년 영업현금흐름은 양수다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 3068742998
+          },
+          "title": "영업현금흐름 상태"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "borrowings_decreased",
+          "description": "2024년 대비 2025년 총차입금이 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 44695538901,
+            "previous_raw_krw": 61961357816
+          },
+          "title": "차입금 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "receivables_unknown",
+          "description": "2024년 대비 2025년 매출채권 합계가 확인되지 않았다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": null,
+            "previous_raw_krw": null
+          },
+          "title": "매출채권 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "inventory_increased",
+          "description": "2024년 대비 2025년 재고자산이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 4117565887,
+            "previous_raw_krw": 3333324782
+          },
+          "title": "재고 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "current_ratio_below_100",
+          "description": "2025년 유동비율은 41.7%다.",
+          "interpretation_type": "rule_based",
+          "level": "watch",
+          "metric_values": {
+            "latest_pct": 41.7
+          },
+          "title": "유동비율 상태"
+        }
+      ]
+    },
+    {
+      "attribution": {
         "attribution_warning": "본 재무정보는 주식회사 플랜엠 별도 재무제표 기준이다. 제품매출, 임대매출, 용역매출 및 F&B매출은 모듈러 매출로 자동 간주하지 않는다. 2023년 자본총계는 verification_pending 상태로 공개 계산에서 제외한다.",
         "financial_scope": "standalone",
         "modular_segment_revenue_disclosed": false,

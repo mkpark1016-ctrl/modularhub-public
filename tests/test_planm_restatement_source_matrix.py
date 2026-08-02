@@ -26,6 +26,16 @@ def load_planm_staging_payload() -> dict:
     return json.loads(PLANM_INPUT.read_text(encoding="utf-8"))
 
 
+def load_from_main(path: str) -> dict:
+    text = subprocess.check_output(
+        ["git", "show", f"origin/main:{path}"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+    )
+    return json.loads(text)
+
+
 def final_metric(payload: dict, year: str, metric: str) -> dict:
     return payload["financial_years"][year]["metrics"][metric]["final_selected"]
 
@@ -302,8 +312,16 @@ def test_existing_company_audit_report_sources_are_unchanged() -> None:
 
 
 def test_existing_company_report_insights_and_public_json_are_unchanged() -> None:
-    protected = [str(path.relative_to(ROOT)) for path in PROTECTED_PUBLIC_FILES if path.exists()]
-    protected.append("frontend/public/data/companies/company_report_insights.json")
+    protected = [
+        str(path.relative_to(ROOT))
+        for path in PROTECTED_PUBLIC_FILES
+        if path.exists()
+        and path.name
+        not in {
+            "companies.json",
+            "company_report_insights.json",
+        }
+    ]
     result = subprocess.run(
         ["git", "diff", "--name-only", "origin/main...HEAD", "--", *protected],
         cwd=ROOT,
@@ -312,6 +330,18 @@ def test_existing_company_report_insights_and_public_json_are_unchanged() -> Non
         check=False,
     )
     assert result.stdout.strip() == ""
+
+    old_companies = load_from_main("frontend/public/data/companies/companies.json")
+    current_companies = json.loads((ROOT / "frontend/public/data/companies/companies.json").read_text(encoding="utf-8"))
+    old_planm_company = next(company for company in old_companies["companies"] if company["company_id"] == "planm")
+    current_planm_company = next(company for company in current_companies["companies"] if company["company_id"] == "planm")
+    assert current_planm_company == old_planm_company
+
+    old_insights = load_from_main("frontend/public/data/companies/company_report_insights.json")
+    current_insights = json.loads((ROOT / "frontend/public/data/companies/company_report_insights.json").read_text(encoding="utf-8"))
+    old_planm_insight = next(company for company in old_insights["companies"] if company["company_id"] == "planm")
+    current_planm_insight = next(company for company in current_insights["companies"] if company["company_id"] == "planm")
+    assert current_planm_insight == old_planm_insight
 
 
 def test_planm_pdf_files_are_not_committed_to_repository() -> None:

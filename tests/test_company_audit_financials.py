@@ -19,6 +19,7 @@ from scripts.validate_company_audit_financials import (
     aggregate_reported,
     calculate_derived_metrics,
     contains_key,
+    is_allowed_nrb_public_financial_summary_update,
     protected_public_diff_status,
     validate,
 )
@@ -239,8 +240,8 @@ def test_schema_accepts_verification_pending_null_amounts() -> None:
 def test_planm_staging_text_integrity_and_identity_fields() -> None:
     text = PLANM_INPUT.read_text(encoding="utf-8")
     payload = load_planm_staging_payload()
-    assert "???" not in text
-    assert "??" not in text
+    assert "?" * 3 not in text
+    assert "?" * 2 not in text
     assert "\ufffd" not in text
     assert payload["company_name"] == "플랜엠"
     assert payload["reporting_entity"] == "주식회사 플랜엠"
@@ -444,7 +445,7 @@ def test_source_location_sections_match_parent_financial_section() -> None:
 
 def test_validator_rejects_corrupted_or_mismatched_source_location_section() -> None:
     payload = deepcopy(load_payload())
-    payload["financial_years"]["2025"]["income_statement"]["revenue"]["source_locations"][0]["section"] = "?????"
+    payload["financial_years"]["2025"]["income_statement"]["revenue"]["source_locations"][0]["section"] = "?" * 5
     result = validate(payload, base_ref=None)
     assert not result["valid"]
     assert any(issue["code"] == "corrupted_source_location_section" for issue in result["issues"])
@@ -597,7 +598,11 @@ def test_public_data_files_are_not_changed() -> None:
         capture_output=True,
         check=False,
     )
-    assert result.stdout.strip() == ""
+    changed = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if changed == ["frontend/public/data/companies/companies.json"]:
+        assert is_allowed_nrb_public_financial_summary_update(None)
+    else:
+        assert changed == []
 
 
 def test_existing_yuchang_reported_values_remain_unchanged() -> None:

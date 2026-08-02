@@ -34,6 +34,10 @@ def planm_company(payload: dict) -> dict:
     return next(company for company in payload["companies"] if company["company_id"] == "planm")
 
 
+def nrb_company(payload: dict) -> dict:
+    return next(company for company in payload["companies"] if company["company_id"] == "nrb")
+
+
 def contains_key(value: object, target: str) -> bool:
     if isinstance(value, dict):
         return any(key == target or contains_key(child, target) for key, child in value.items())
@@ -64,7 +68,7 @@ def test_yuchang_years_and_latest_metrics() -> None:
 
 def test_view_model_contains_yuchang_kumkang_and_daeseung() -> None:
     payload = load_output()
-    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "planm", "yuchang-enc"]
+    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "nrb", "planm", "yuchang-enc"]
 
 
 def test_kumkang_years_scope_and_latest_metrics() -> None:
@@ -286,6 +290,8 @@ def test_public_builder_does_not_discover_planm_staging_json() -> None:
     discovered = {path.relative_to(ROOT).as_posix() for path in discover_source_files()}
     assert "data/company_reports/planm/audit_financials_2023_2025.json" in discovered
     assert "data/company_reports/planm/staging/audit_financials_2023_2025.json" not in discovered
+    assert "data/company_reports/nrb/audit_financials_2023_2025.json" in discovered
+    assert "data/company_reports/nrb/staging/audit_financials_2023_2025.json" not in discovered
     assert all("/staging/" not in path for path in discovered)
 
 
@@ -341,6 +347,24 @@ def test_planm_public_view_model_excludes_unsupported_requested_amount() -> None
     assert "3,529,017" in rendered
 
 
+def test_nrb_public_view_model_uses_audited_values_and_service_revenue() -> None:
+    company = nrb_company(load_output())
+    assert company["available_years"] == [2023, 2024, 2025]
+    assert company["latest_year"] == 2025
+    assert company["financial_scope"] == "standalone"
+    assert company["latest_metrics"]["revenue"]["raw_krw"] == 59481544678
+    assert company["latest_metrics"]["operating_profit"]["raw_krw"] == 4461258309
+    assert company["latest_metrics"]["net_income"]["raw_krw"] == -563349199
+    assert company["latest_metrics"]["operating_cash_flow"]["raw_krw"] == 3068742998
+    assert company["derived_metrics"]["2025"]["operating_margin_pct"]["display_text"] == "7.5%"
+    latest_series = company["financial_series"][2]["metrics"]
+    assert latest_series["service_revenue"]["raw_krw"] == 12270351000
+    assert company["derived_metrics"]["2025"]["service_revenue_share_pct"]["display_text"] == "20.6%"
+    assert company["financial_series"][0]["metrics"]["construction_revenue"]["display_text"] == "해당 없음"
+    assert company["financial_series"][1]["metrics"]["construction_revenue"]["display_text"] == "해당 없음"
+    assert "modular_segment_revenue_not_disclosed" not in [warning["code"] for warning in company["disclosure_warnings"]]
+
+
 def test_calculated_money_metrics_preserve_raw_krw() -> None:
     latest = yuchang_company(load_output())["latest_metrics"]
     assert latest["total_borrowings"]["raw_krw"] == 112134492523
@@ -384,9 +408,8 @@ def test_deterministic_generation_matches_stored_output() -> None:
     assert generated == DEFAULT_OUTPUT.read_text(encoding="utf-8")
 
 
-def test_existing_company_public_data_files_are_not_changed() -> None:
+def test_existing_non_nrb_company_public_data_files_are_not_changed() -> None:
     protected = [
-        "frontend/public/data/companies/companies.json",
         "frontend/public/data/companies/company_intelligence_v2.json",
     ]
     result = subprocess.run(

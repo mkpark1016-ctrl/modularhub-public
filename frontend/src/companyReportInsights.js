@@ -31,6 +31,18 @@ export const REPORT_RATIO_ROWS = [
   { key: "inventory_to_revenue_pct", label: "재고/매출 비율" },
 ];
 
+export const REPORT_REVENUE_BREAKDOWN_ROWS = [
+  { key: "product_revenue", label: "제품매출" },
+  { key: "rental_revenue", label: "임대매출" },
+  { key: "service_revenue", label: "용역매출" },
+  { key: "construction_revenue", label: "공사매출" },
+  { key: "other_revenue", label: "기타매출" },
+];
+
+export function reportRevenueShareKey(metricKey) {
+  return `${metricKey}_share_pct`;
+}
+
 export function getCompanyReportInsight(payload, companyId) {
   const companies = Array.isArray(payload?.companies) ? payload.companies : [];
   return companies.find((item) => item.company_id === companyId) || null;

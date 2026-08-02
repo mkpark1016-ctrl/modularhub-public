@@ -5,8 +5,10 @@ import {
   metricToneClass,
   REPORT_AMOUNT_ROWS,
   REPORT_RATIO_ROWS,
+  REPORT_REVENUE_BREAKDOWN_ROWS,
   reportMetricByYear,
   reportRatioByYear,
+  reportRevenueShareKey,
   reportSectionLabel,
   reportYears,
   sourceSectionCounts,
@@ -179,6 +181,10 @@ function groupedSignals(signals = []) {
   })).filter((group) => group.signals.length);
 }
 
+function hasRevenueBreakdownRows(insight, years) {
+  return REPORT_REVENUE_BREAKDOWN_ROWS.some((row) => years.some((year) => reportMetricByYear(insight, year, row.key)));
+}
+
 function SourceLocationList({ metric }) {
   const locations = Array.isArray(metric?.source_locations) ? metric.source_locations : [];
   if (!locations.length) return <span>출처 위치 확인 필요</span>;
@@ -204,6 +210,8 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
   const chartRows = (metricKey) => years.map((year) => ({ year, metricKey, metric: reportMetricByYear(insight, year, metricKey) }));
   const ratioRows = (metricKey) => years.map((year) => ({ year, metricKey, metric: reportRatioByYear(insight, year, metricKey) }));
   const warningCount = insight.disclosure_warnings?.length || 0;
+  const hasRevenueBreakdown = hasRevenueBreakdownRows(insight, years);
+  const specialEvents = Array.isArray(insight.attribution?.special_events) ? insight.attribution.special_events : [];
   const visibleDisclosureWarnings = (insight.disclosure_warnings || []).filter((warning) => (
     String(warning.code || "").startsWith("verification_pending") || warning.code === "modular_segment_revenue_not_disclosed"
   ));
@@ -266,6 +274,70 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
           <SingleMetricTrend title="영업이익률" rows={ratioRows("operating_margin_pct")} variant="operating-margin" subtitle="감사보고서 기반 파생 비율" />
         </div>
       </div>
+
+      {hasRevenueBreakdown && (
+        <div className="company-subsection">
+          <div className="company-subsection-heading">
+            <h3>매출 구성</h3>
+            <span>공시 주석 금액을 원 단위로 환산한 값이며 별도 사업부문 매출로 과도하게 해석하지 않습니다.</span>
+          </div>
+          <div className="company-table-wrap">
+            <table className="company-financial-table company-report-table company-revenue-breakdown-table">
+              <thead>
+                <tr>
+                  <th scope="col">항목</th>
+                  {years.map((year) => <th scope="col" key={year}>{year}</th>)}
+                  {onShowEvidence && <th scope="col">근거</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {REPORT_REVENUE_BREAKDOWN_ROWS.map((row) => (
+                  <tr key={row.key}>
+                    <th scope="row">{row.label}</th>
+                    {years.map((year) => {
+                      const metric = reportMetricByYear(insight, year, row.key);
+                      const share = reportRatioByYear(insight, year, reportRevenueShareKey(row.key));
+                      return (
+                        <td className={metricToneClass(metric)} key={`${row.key}-${year}`}>
+                          <span>{metricDisplayText(metric)}</span>
+                          {share?.value !== null && share?.value !== undefined && (
+                            <small className="finance-ratio-note">{metricDisplayText(share)}</small>
+                          )}
+                        </td>
+                      );
+                    })}
+                    {onShowEvidence && (
+                      <td>
+                        <button
+                          type="button"
+                          className="text-button evidence-inline-button"
+                          onClick={() => onShowEvidence(buildReportMetricEvidence(insight, `${insight.latest_year} ${row.label}`, reportMetricByYear(insight, insight.latest_year, row.key)))}
+                        >
+                          근거보기
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {specialEvents.length > 0 && (
+        <div className="company-subsection">
+          <div className="company-report-interpretation-card">
+            <strong>해석 범위 안내</strong>
+            <ul>
+              <li>{financialScopeLabel(insight.financial_scope || insight.attribution?.financial_scope)} 기준입니다.</li>
+              {specialEvents.map((event) => <li key={`${event.event_type}-${event.effective_date}`}>{event.description}</li>)}
+              {hasRevenueBreakdown && <li>매출구성 주석은 천원 단위 공시값을 원 단위로 환산했습니다.</li>}
+              {hasRevenueBreakdown && <li>제품, 임대, 용역, 공사, 기타 매출 캡션은 별도 사업부문 매출로 자동 해석하지 않습니다.</li>}
+            </ul>
+          </div>
+        </div>
+      )}
 
       <div className="company-subsection">
         <details className="company-report-details">

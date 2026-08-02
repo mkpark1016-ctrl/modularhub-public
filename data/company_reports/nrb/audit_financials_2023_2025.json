@@ -49,7 +49,7 @@
   "company_name": "엔알비",
   "currency": "KRW",
   "disclosure_limitations": [
-    "This NRB file is a staging-only audit financial contract and must not be promoted into frontend/public/data/companies/company_report_insights.json in this phase.",
+    "This NRB file is promoted into frontend/public/data/companies/company_report_insights.json as a controlled public audit financial contract.",
     "All reported amounts are stored as integer KRW won and no derived ratios are stored in the source JSON.",
     "2026-03-18 business report standalone statements are the latest primary source for 2023, 2024, and 2025 values.",
     "The 2024 operating cash flow difference is treated as a resolved K-IFRS 1008 retrospective cash-flow presentation policy change; the pre-policy-change amount is retained only as historical evidence.",
@@ -59,7 +59,7 @@
     "The disclosed product, rental, service, construction, and other revenue labels are not interpreted as separate modular segment revenue without additional segment disclosure.",
     "Goods revenue is not a disclosed NRB standalone revenue caption and remains not_applicable instead of being filled with zero.",
     "Convertible bonds, bonds, derivative liabilities, and redeemable preferred-share liabilities are not added to the existing borrowings fields unless the schema definition is expanded in a later phase.",
-    "The existing public company card operating margin of 7.6% differs from the audited standalone calculation of approximately 7.5%; protected public company data is not changed in this staging phase."
+    "The existing public company card operating margin of 7.6% is reconciled to the audited standalone calculation of 7.5% through this public View Model and the NRB public company summary financials."
   ],
   "entity_attribution": {
     "attribution_warning": "This staging file uses NRB standalone financial statements. Consolidated statements and subsidiary values are excluded from financial_years. Standalone revenue breakdown captions were cross-checked from notes 26.1 and 27.1, but product, rental, service, construction, and other revenue are not automatically treated as separate modular segment revenue. The 2024 operating cash flow and 2023 current-liability differences are documented as resolved retrospective presentation/classification changes.",
@@ -1660,7 +1660,7 @@
   "unit": "won",
   "validation_metadata": {
     "amount_storage": "All reported values are integer KRW won from source statements or explicitly null with disclosure_status.",
-    "created_for": "Phase 6E-1A NRB 2023-2025 standalone audit financial staging contract",
+    "created_for": "Phase 6E-1B NRB 2023-2025 standalone audit financial public promotion contract",
     "derived_metrics_storage": "Derived ratios and display units are not stored in this source JSON.",
     "expected_years": [
       2023,
@@ -1668,7 +1668,7 @@
       2025
     ],
     "pdf_handling": "Attached PDFs were read as source references only and were not copied into the repository.",
-    "public_ui_impact": "None. This file lives under staging and is excluded from public View Model discovery.",
+    "public_ui_impact": "Included in the public company report insight View Model for the NRB financial detail tab.",
     "validation_policy": {
       "allowed_cross_check_year_mismatches": [],
       "expected_cash_flow_signs": {

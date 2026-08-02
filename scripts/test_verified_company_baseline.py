@@ -69,7 +69,7 @@ def main() -> int:
     assert by_id(v1, 'kumkang-kind')['financials'][0]['revenue']['source_value'] == 802_100_000_000
     assert by_id(v1, 'gs-ec')['financials'][0]['revenue']['source_value'] == 12_450_000_000_000
     assert by_id(v1, 'yuchang-enc')['financials'][0]['operating_profit']['source_value'] == 14_800_000_000
-    assert by_id(v1, 'nrb')['financials'][0]['revenue']['source_value'] == 59_500_000_000
+    assert by_id(v1, 'nrb')['financials'][0]['revenue']['source_value'] == 59_481_544_678
     assert by_id(v1, 'planm')['financials'][0]['revenue']['source_value'] == 59_200_000_000
     assert by_id(v1, 'sungji-steel')['financials'][0]['revenue']['source_value'] == 124_900_000_000
 
