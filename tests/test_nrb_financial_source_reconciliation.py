@@ -3,6 +3,8 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 from pathlib import Path
+import re
+import subprocess
 
 from scripts.build_company_report_insights import DEFAULT_INPUT_ROOT, DEFAULT_OUTPUT, discover_source_files
 from scripts.validate_company_audit_financials import validate
@@ -42,6 +44,17 @@ def walk(value: object):
     elif isinstance(value, list):
         for child in value:
             yield from walk(child)
+
+
+def iter_string_values(value: object):
+    if isinstance(value, dict):
+        for child in value.values():
+            yield from iter_string_values(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from iter_string_values(child)
+    elif isinstance(value, str):
+        yield value
 
 
 def test_nrb_uses_existing_company_id_and_is_publicly_discovered() -> None:
@@ -237,6 +250,53 @@ def test_nrb_public_company_summary_is_reconciled_to_audited_standalone_values()
     assert nrb["financial_summary"]["source_ids"] == [source_id]
 
 
+def test_nrb_public_company_summary_korean_text_integrity() -> None:
+    companies = json.loads(COMPANIES_PATH.read_text(encoding="utf-8"))
+    nrb = next(company for company in companies["companies"] if company["company_id"] == "nrb")
+    nrb_insight = load_public_output_company()
+
+    for payload in [nrb, nrb_insight]:
+        for value in iter_string_values(payload):
+            assert "\ufffd" not in value
+            assert not re.search(r"\?{2,}", value), value
+
+    expected_account_names = {
+        "revenue": "\ub9e4\ucd9c\uc561",
+        "gross_profit": "\ub9e4\ucd9c\ucd1d\uc774\uc775",
+        "operating_profit": "\uc601\uc5c5\uc774\uc775",
+        "net_income": "\ub2f9\uae30\uc21c\uc774\uc775",
+        "operating_cash_flow": "\uc601\uc5c5\ud65c\ub3d9\ud604\uae08\ud750\ub984",
+    }
+    for row in nrb["financials"]:
+        for metric_key, expected_label in expected_account_names.items():
+            assert row[metric_key]["account_name"] == expected_label
+
+    source = next(item for item in nrb["sources"] if item["source_id"] == "nrb-audit-financials-2023-2025")
+    expected_source_name = "\uc5d4\uc54c\ube44 2023~2025 \ubcc4\ub3c4 \uac10\uc0ac\uc7ac\ubb34 \uad6c\uc870\ud654 \ub370\uc774\ud130"
+    assert source["source_name"] == expected_source_name
+    assert source["title"] == expected_source_name
+    assert source["verification_note"]
+    assert not re.search(r"\?{2,}", source["verification_note"])
+    assert nrb["financial_summary"]["modular_segment_basis"]
+    assert not re.search(r"\?{2,}", nrb["financial_summary"]["modular_segment_basis"])
+
+
+def test_existing_non_nrb_audit_companies_are_unchanged_from_main() -> None:
+    old_text = subprocess.check_output(
+        ["git", "show", "origin/main:frontend/public/data/companies/company_report_insights.json"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+    )
+    old_payload = json.loads(old_text)
+    current = json.loads(DEFAULT_OUTPUT.read_text(encoding="utf-8"))
+
+    for company_id in ["daeseung-engineering", "kumkang-kind", "planm", "yuchang-enc"]:
+        old_company = next(company for company in old_payload["companies"] if company["company_id"] == company_id)
+        current_company = next(company for company in current["companies"] if company["company_id"] == company_id)
+        assert current_company == old_company
+
+
 def test_nrb_revenue_breakdown_over_tolerance_fails() -> None:
     payload = deepcopy(load_public_input())
     payload["financial_years"]["2025"]["revenue_breakdown"]["other_revenue"]["reported"] += 1000
@@ -265,7 +325,7 @@ def test_nrb_source_locations_are_complete_and_refs_exist() -> None:
 
 def test_nrb_payload_has_no_placeholder_or_forbidden_fields() -> None:
     text = PUBLIC_INPUT_PATH.read_text(encoding="utf-8")
-    assert "???" not in text
+    assert "?" * 3 not in text
     assert "\ufffd" not in text
 
     payload = load_public_input()

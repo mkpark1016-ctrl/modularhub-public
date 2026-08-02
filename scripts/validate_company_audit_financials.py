@@ -581,13 +581,13 @@ def validate_text_integrity(payload: dict[str, Any], issues: list[Issue]) -> Non
         "entity_attribution.attribution_warning",
     }
     for path, value in text_paths(payload):
-        if "???" in value or "\ufffd" in value:
+        if "?" * 3 in value or "\ufffd" in value:
             issue(
                 issues,
                 "suspicious_text_encoding",
                 path,
                 "text contains suspicious placeholder or replacement characters",
-                "UTF-8 text without ??? or U+FFFD",
+                "UTF-8 text without placeholder question runs or U+FFFD",
                 value,
             )
         if path in critical_paths and value.strip(" ?") == "":
