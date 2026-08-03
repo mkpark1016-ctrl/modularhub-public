@@ -14,7 +14,14 @@ import {
   recentSignalEvents,
 } from "./companyDetailHelpers";
 import { companyDataGapRows } from "../../companyDataGaps";
-import { metricDisplayText } from "../../companyReportInsights";
+import {
+  decisionStatusLabel,
+  decisionStatusTone,
+  financialScopeLabel,
+  latestSnapshotMetric,
+  metricDisplayText,
+  peerBenchmarkLabel,
+} from "../../companyReportInsights";
 
 function Field({ label, children }) {
   return (
@@ -31,6 +38,80 @@ function TagList({ items }) {
   return (
     <div className="company-tag-list">
       {values.map((item) => <span key={item}>{labelValue(item, item)}</span>)}
+    </div>
+  );
+}
+
+function CompanyIntelligenceSummary({ model, reportInsight }) {
+  if (!reportInsight) {
+    return (
+      <div className="company-intelligence-summary" aria-label="의사결정 요약">
+        <article className="company-intelligence-card muted">
+          <span>감사재무 비교 데이터 없음</span>
+          <strong>{model.header.name}</strong>
+          <p>현재 기업은 감사보고서 기반 공통 View Model이 없어 기존 기업정보와 공개 출처 중심으로 확인합니다.</p>
+        </article>
+      </div>
+    );
+  }
+
+  const snapshotRows = [
+    { key: "revenue", label: "최근 매출" },
+    { key: "operating_profit", label: "영업이익" },
+    { key: "operating_cash_flow", label: "영업현금흐름" },
+    { key: "total_borrowings", label: "총차입금" },
+    { key: "trade_receivables", label: "채권 합계" },
+  ];
+  const trendRows = Object.values(reportInsight.trends || {}).slice(0, 4);
+  const peerRows = (reportInsight.peer_benchmarks || []).slice(0, 3);
+
+  return (
+    <div className="company-intelligence-summary" aria-label="의사결정 요약">
+      <article className="company-intelligence-card wide">
+        <span>Executive Summary</span>
+        <strong>{reportInsight.latest_year}년 감사재무 기준 핵심 스냅샷</strong>
+        <p>
+          {financialScopeLabel(reportInsight.financial_scope)} · {reportInsight.available_years?.[0]}~{reportInsight.latest_year}년 ·
+          검증 위치 {reportInsight.source_summary?.verified_location_count ?? 0}건
+          {reportInsight.source_summary?.pending_location_count ? ` · 페이지 수동 확인 ${reportInsight.source_summary.pending_location_count}건` : ""}
+        </p>
+        <dl className="company-intelligence-kpi-list">
+          {snapshotRows.map((row) => (
+            <div key={row.key}>
+              <dt>{row.label}</dt>
+              <dd>{metricDisplayText(latestSnapshotMetric(reportInsight, row.key))}</dd>
+            </div>
+          ))}
+        </dl>
+      </article>
+
+      <article className="company-intelligence-card">
+        <span>3개년 변화</span>
+        <strong>최근 추세 신호</strong>
+        <div className="company-intelligence-list">
+          {trendRows.map((trend) => (
+            <p className={`decision-status ${decisionStatusTone(trend.status)}`} key={trend.headline}>
+              <b>{trend.headline}</b>
+              <span>{decisionStatusLabel(trend.status)} · {trend.explanation}</span>
+            </p>
+          ))}
+        </div>
+      </article>
+
+      <article className="company-intelligence-card">
+        <span>동료 비교</span>
+        <strong>감사재무 기업 내 비교 가능성</strong>
+        <div className="company-intelligence-list">
+          {peerRows.map((item) => (
+            <p className={`decision-status ${item.comparable ? "info" : "pending"}`} key={item.metric_id}>
+              <b>{peerBenchmarkLabel(item.metric_id)}</b>
+              <span>
+                {item.comparable ? `${item.comparison_label} · ${item.company_display}` : item.not_comparable_reason}
+              </span>
+            </p>
+          ))}
+        </div>
+      </article>
     </div>
   );
 }
@@ -99,6 +180,7 @@ export default function CompanyOverviewTab({ company, activities = [], reportIns
   return (
     <section className="summary company-tab-panel" id="company-tab-panel-overview" role="tabpanel" aria-labelledby="company-tab-overview">
       <h2>종합분석</h2>
+      <CompanyIntelligenceSummary model={model} reportInsight={reportInsight} />
       <DecisionCards company={company} model={model} reportInsight={reportInsight} activities={activities} onTabChange={onTabChange} />
 
       <div className="company-subsection">

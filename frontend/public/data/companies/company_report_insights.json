@@ -288,6 +288,102 @@
           "message": "모듈러교실임대료수입 is separately disclosed and identifiable, but 제품매출, 공사수입금, service revenue, and equipment rental revenue are not automatically classified as modular revenue. 관계기업 and related-party financial results are not combined into 주식회사 대승엔지니어링 standalone results."
         }
       ],
+      "evidence_health": [
+        {
+          "domain": "financial",
+          "latest_verified_at": "2025-09-17",
+          "pending_item_count": 0,
+          "source_count": 3,
+          "source_ids": [
+            "daeseung_audit_report_2023_09_19",
+            "daeseung_audit_report_2024_09_19",
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 84
+        },
+        {
+          "domain": "disclosure_scope",
+          "latest_verified_at": "2025-09-17",
+          "pending_item_count": 0,
+          "source_count": 3,
+          "source_ids": [
+            "daeseung_audit_report_2023_09_19",
+            "daeseung_audit_report_2024_09_19",
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 1
+        }
+      ],
+      "financial_health": {
+        "cash_generation": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업현금흐름은 -3.5억원입니다.",
+          "headline": "현금창출력",
+          "metric_ids": [
+            "operating_profit",
+            "operating_cash_flow"
+          ],
+          "source_ids": [
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "watch"
+        },
+        "disclosure_coverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "검증된 출처 위치 84건, 수동 확인 필요 0건입니다.",
+          "headline": "공시 범위",
+          "metric_ids": [
+            "source_locations"
+          ],
+          "source_ids": [],
+          "status": "info"
+        },
+        "leverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 총차입금은 531.6억원이고 부채비율은 318.4%입니다.",
+          "headline": "재무안정성",
+          "metric_ids": [
+            "total_borrowings",
+            "liabilities_to_equity_pct"
+          ],
+          "source_ids": [
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "watch"
+        },
+        "profitability": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업이익률은 10.3%입니다.",
+          "headline": "수익성",
+          "metric_ids": [
+            "revenue",
+            "operating_profit",
+            "operating_margin_pct"
+          ],
+          "source_ids": [
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "info"
+        },
+        "working_capital": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 채권/매출 비율은 5.5%입니다.",
+          "headline": "운전자본",
+          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "metric_ids": [
+            "receivables_total",
+            "receivables_to_revenue_pct"
+          ],
+          "source_ids": [
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "info"
+        }
+      },
       "financial_scope": "standalone",
       "financial_series": [
         {
@@ -1290,7 +1386,273 @@
           ]
         }
       },
+      "latest_snapshot": {
+        "latest_year": 2025,
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 43.8,
+          "display_text": "43.8억원",
+          "raw_krw": 4376654645,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -3.5,
+          "display_text": "-3.5억원",
+          "raw_krw": -345400575,
+          "source_locations": [
+            {
+              "page_range": "pp.10-11",
+              "section": "statement.cash_flow",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "operating_margin_pct": {
+          "calculation_basis": "derived_from_reported",
+          "display_text": "10.3%",
+          "value": 10.3
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 63.7,
+          "display_text": "63.7억원",
+          "raw_krw": 6365339970,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 616.6,
+          "display_text": "616.6억원",
+          "raw_krw": 61659861549,
+          "source_locations": [
+            {
+              "page_range": "pp.7-8",
+              "section": "statement.income_statement",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 827.0,
+          "display_text": "827.0억원",
+          "raw_krw": 82695337438,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 531.6,
+          "display_text": "531.6억원",
+          "raw_krw": 53164938435,
+          "source_locations": [
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.19-20",
+              "section": "note.borrowings",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 197.7,
+          "display_text": "197.7억원",
+          "raw_krw": 19765713850,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 629.3,
+          "display_text": "629.3억원",
+          "raw_krw": 62929623588,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "statement.balance_sheet",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        },
+        "trade_receivables": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 34.2,
+          "display_text": "34.2억원",
+          "raw_krw": 3418283872,
+          "source_locations": [
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.5-6",
+              "section": "note.working_capital",
+              "source_ref": "daeseung_audit_report_2025_09_17",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "daeseung_audit_report_2025_09_17"
+          ]
+        }
+      },
       "latest_year": 2025,
+      "peer_benchmarks": [
+        {
+          "best_value": 307684467052,
+          "company_display": "616.6억원",
+          "company_value": 61659861549,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 2번째",
+          "median": 60570703113.5,
+          "metric_id": "revenue",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 2
+        },
+        {
+          "best_value": 10.3,
+          "company_display": "10.3%",
+          "company_value": 10.3,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 1번째",
+          "median": 8.05,
+          "metric_id": "operating_margin_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 1
+        },
+        {
+          "best_value": 3068742998,
+          "company_display": "-3.5억원",
+          "company_value": -345400575,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 2번째",
+          "median": -6188393909.5,
+          "metric_id": "operating_cash_flow",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 2
+        },
+        {
+          "best_value": 30242382764,
+          "company_display": "531.6억원",
+          "company_value": 53164938435,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 3번째",
+          "median": 48930238668.0,
+          "metric_id": "total_borrowings",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 3
+        },
+        {
+          "best_value": 105.1,
+          "company_display": "318.4%",
+          "company_value": 318.4,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 4번째",
+          "median": 288.95000000000005,
+          "metric_id": "liabilities_to_equity_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 4
+        },
+        {
+          "best_value": 0.4,
+          "company_display": "5.5%",
+          "company_value": 5.5,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "3개 감사재무 기업 중 2번째",
+          "median": 5.5,
+          "metric_id": "receivables_to_revenue_pct",
+          "not_comparable_reason": null,
+          "peer_count": 3,
+          "rank": 2
+        }
+      ],
       "reporting_entity": "주식회사 대승엔지니어링",
       "source_schema_version": "company_audit_financials_v1",
       "source_summary": {
@@ -1480,7 +1842,122 @@
           },
           "title": "유동비율 상태"
         }
-      ]
+      ],
+      "trends": {
+        "liabilities_to_equity": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -26.9,
+          "change_value": -117.0,
+          "explanation": "총부채와 자본의 비율 변화를 확인합니다.",
+          "headline": "부채비율 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "liabilities_to_equity_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -101.3,
+          "change_value": -26776340458,
+          "explanation": "회계상 이익이 현금창출로 이어지는지 확인합니다.",
+          "headline": "영업현금흐름 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_cash_flow"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "daeseung_audit_report_2024_09_19",
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "decreased"
+        },
+        "operating_margin": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -14.2,
+          "change_value": -1.6999999999999993,
+          "explanation": "영업이익률의 전년 대비 변화폭을 확인합니다.",
+          "headline": "영업이익률 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_margin_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_profit": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -36.7,
+          "change_value": -3693296643,
+          "explanation": "영업이익의 금액 변화만 표시하며 수익성 판단은 영업이익률과 함께 봅니다.",
+          "headline": "영업이익 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_profit"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "daeseung_audit_report_2024_09_19",
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "decreased"
+        },
+        "revenue": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -26.6,
+          "change_value": -22345825503,
+          "explanation": "최근 연도 매출을 직전 연도와 비교합니다.",
+          "headline": "매출 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "revenue"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "daeseung_audit_report_2024_09_19",
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "decreased"
+        },
+        "total_borrowings": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 84.3,
+          "change_value": 24322237883,
+          "explanation": "차입금 부담의 방향만 표시하며 부실 판단은 하지 않습니다.",
+          "headline": "총차입금 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "total_borrowings"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "daeseung_audit_report_2024_09_19",
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "increased"
+        },
+        "trade_receivables": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -5.9,
+          "change_value": -214511267,
+          "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
+          "headline": "채권 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "receivables_total"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "daeseung_audit_report_2024_09_19",
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "decreased"
+        }
+      }
     },
     {
       "attribution": {
@@ -1769,6 +2246,102 @@
           "message": "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있으며, 제품과 용역 매출 또는 연결 총매출을 모듈러 사업 매출로 자동 해석하지 않는다."
         }
       ],
+      "evidence_health": [
+        {
+          "domain": "financial",
+          "latest_verified_at": "2026-03-12",
+          "pending_item_count": 0,
+          "source_count": 3,
+          "source_ids": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_annual_report_2026_03_12",
+            "kumkang_corrected_annual_report_2025_03_19"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 84
+        },
+        {
+          "domain": "disclosure_scope",
+          "latest_verified_at": "2026-03-12",
+          "pending_item_count": 0,
+          "source_count": 3,
+          "source_ids": [
+            "kumkang_annual_report_2024_03_14",
+            "kumkang_annual_report_2026_03_12",
+            "kumkang_corrected_annual_report_2025_03_19"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 1
+        }
+      ],
+      "financial_health": {
+        "cash_generation": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업현금흐름은 218.7억원입니다.",
+          "headline": "현금창출력",
+          "metric_ids": [
+            "operating_profit",
+            "operating_cash_flow"
+          ],
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12"
+          ],
+          "status": "info"
+        },
+        "disclosure_coverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "검증된 출처 위치 84건, 수동 확인 필요 0건입니다.",
+          "headline": "공시 범위",
+          "metric_ids": [
+            "source_locations"
+          ],
+          "source_ids": [],
+          "status": "info"
+        },
+        "leverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 총차입금은 5,137.6억원이고 부채비율은 138.5%입니다.",
+          "headline": "재무안정성",
+          "metric_ids": [
+            "total_borrowings",
+            "liabilities_to_equity_pct"
+          ],
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12"
+          ],
+          "status": "info"
+        },
+        "profitability": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업이익률은 1.3%입니다.",
+          "headline": "수익성",
+          "metric_ids": [
+            "revenue",
+            "operating_profit",
+            "operating_margin_pct"
+          ],
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12"
+          ],
+          "status": "info"
+        },
+        "working_capital": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 채권/매출 비율은 23.2%입니다.",
+          "headline": "운전자본",
+          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "metric_ids": [
+            "receivables_total",
+            "receivables_to_revenue_pct"
+          ],
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12"
+          ],
+          "status": "info"
+        }
+      },
       "financial_scope": "consolidated",
       "financial_series": [
         {
@@ -2767,7 +3340,266 @@
           ]
         }
       },
+      "latest_snapshot": {
+        "latest_year": 2025,
+        "net_income": {
+          "calculation_basis": "reported",
+          "display_eok": -373.5,
+          "display_text": "-373.5억원",
+          "raw_krw": -37353541440,
+          "source_locations": [
+            {
+              "page_range": "p.56",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "display_eok": 218.7,
+          "display_text": "218.7억원",
+          "raw_krw": 21874636165,
+          "source_locations": [
+            {
+              "page_range": "pp.61-62",
+              "section": "statement.cash_flow",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "operating_margin_pct": {
+          "calculation_basis": "derived_from_reported",
+          "display_text": "1.3%",
+          "value": 1.3
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "display_eok": 105.0,
+          "display_text": "105.0억원",
+          "raw_krw": 10497395028,
+          "source_locations": [
+            {
+              "page_range": "p.56",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "display_eok": 8021.6,
+          "display_text": "8,021.6억원",
+          "raw_krw": 802156014802,
+          "source_locations": [
+            {
+              "page_range": "p.56",
+              "section": "statement.income_statement",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "display_eok": 11879.9,
+          "display_text": "11,879.9억원",
+          "raw_krw": 1187991581329,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 5137.6,
+          "display_text": "5,137.6억원",
+          "raw_krw": 513762323953,
+          "source_locations": [
+            {
+              "page_range": "pp.137-140",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.137-140",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.137-140",
+              "section": "note.borrowings",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "display_eok": 4981.5,
+          "display_text": "4,981.5억원",
+          "raw_krw": 498151541194,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "display_eok": 6898.4,
+          "display_text": "6,898.4억원",
+          "raw_krw": 689840040135,
+          "source_locations": [
+            {
+              "page_range": "pp.54-55",
+              "section": "statement.balance_sheet",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        },
+        "trade_receivables": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 1859.2,
+          "display_text": "1,859.2억원",
+          "raw_krw": 185921585924,
+          "source_locations": [
+            {
+              "page_range": "pp.110-112",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.110-112",
+              "section": "note.working_capital",
+              "source_ref": "kumkang_annual_report_2026_03_12",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "kumkang_annual_report_2026_03_12"
+          ]
+        }
+      },
       "latest_year": 2025,
+      "peer_benchmarks": [
+        {
+          "best_value": null,
+          "company_display": "8,021.6억원",
+          "company_value": 802156014802,
+          "comparable": false,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "비교 조건 미충족",
+          "median": null,
+          "metric_id": "revenue",
+          "not_comparable_reason": "같은 재무제표 범위와 연도를 가진 감사재무 기업이 3개 미만입니다.",
+          "peer_count": 1,
+          "rank": null
+        },
+        {
+          "best_value": null,
+          "company_display": "1.3%",
+          "company_value": 1.3,
+          "comparable": false,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "비교 조건 미충족",
+          "median": null,
+          "metric_id": "operating_margin_pct",
+          "not_comparable_reason": "같은 재무제표 범위와 연도를 가진 감사재무 기업이 3개 미만입니다.",
+          "peer_count": 1,
+          "rank": null
+        },
+        {
+          "best_value": null,
+          "company_display": "218.7억원",
+          "company_value": 21874636165,
+          "comparable": false,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "비교 조건 미충족",
+          "median": null,
+          "metric_id": "operating_cash_flow",
+          "not_comparable_reason": "같은 재무제표 범위와 연도를 가진 감사재무 기업이 3개 미만입니다.",
+          "peer_count": 1,
+          "rank": null
+        },
+        {
+          "best_value": null,
+          "company_display": "5,137.6억원",
+          "company_value": 513762323953,
+          "comparable": false,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "비교 조건 미충족",
+          "median": null,
+          "metric_id": "total_borrowings",
+          "not_comparable_reason": "같은 재무제표 범위와 연도를 가진 감사재무 기업이 3개 미만입니다.",
+          "peer_count": 1,
+          "rank": null
+        },
+        {
+          "best_value": null,
+          "company_display": "138.5%",
+          "company_value": 138.5,
+          "comparable": false,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "비교 조건 미충족",
+          "median": null,
+          "metric_id": "liabilities_to_equity_pct",
+          "not_comparable_reason": "같은 재무제표 범위와 연도를 가진 감사재무 기업이 3개 미만입니다.",
+          "peer_count": 1,
+          "rank": null
+        },
+        {
+          "best_value": null,
+          "company_display": "23.2%",
+          "company_value": 23.2,
+          "comparable": false,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "비교 조건 미충족",
+          "median": null,
+          "metric_id": "receivables_to_revenue_pct",
+          "not_comparable_reason": "같은 재무제표 범위와 연도를 가진 감사재무 기업이 3개 미만입니다.",
+          "peer_count": 1,
+          "rank": null
+        }
+      ],
       "reporting_entity": "금강공업 주식회사 및 연결종속기업",
       "source_schema_version": "company_audit_financials_v1",
       "source_summary": {
@@ -2959,7 +3791,122 @@
           },
           "title": "유동비율 상태"
         }
-      ]
+      ],
+      "trends": {
+        "liabilities_to_equity": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 4.4,
+          "change_value": 5.800000000000011,
+          "explanation": "총부채와 자본의 비율 변화를 확인합니다.",
+          "headline": "부채비율 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "liabilities_to_equity_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "increased"
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 68.1,
+          "change_value": 8863677677,
+          "explanation": "회계상 이익이 현금창출로 이어지는지 확인합니다.",
+          "headline": "영업현금흐름 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_cash_flow"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12",
+            "kumkang_corrected_annual_report_2025_03_19"
+          ],
+          "status": "increased"
+        },
+        "operating_margin": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -68.3,
+          "change_value": -2.8,
+          "explanation": "영업이익률의 전년 대비 변화폭을 확인합니다.",
+          "headline": "영업이익률 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_margin_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_profit": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -68.2,
+          "change_value": -22550807031,
+          "explanation": "영업이익의 금액 변화만 표시하며 수익성 판단은 영업이익률과 함께 봅니다.",
+          "headline": "영업이익 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_profit"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12",
+            "kumkang_corrected_annual_report_2025_03_19"
+          ],
+          "status": "decreased"
+        },
+        "revenue": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 0.1,
+          "change_value": 804002348,
+          "explanation": "최근 연도 매출을 직전 연도와 비교합니다.",
+          "headline": "매출 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "revenue"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12",
+            "kumkang_corrected_annual_report_2025_03_19"
+          ],
+          "status": "increased"
+        },
+        "total_borrowings": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 2.3,
+          "change_value": 11504864374,
+          "explanation": "차입금 부담의 방향만 표시하며 부실 판단은 하지 않습니다.",
+          "headline": "총차입금 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "total_borrowings"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12",
+            "kumkang_corrected_annual_report_2025_03_19"
+          ],
+          "status": "increased"
+        },
+        "trade_receivables": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -12.6,
+          "change_value": -26766078752,
+          "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
+          "headline": "채권 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "receivables_total"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12",
+            "kumkang_corrected_annual_report_2025_03_19"
+          ],
+          "status": "decreased"
+        }
+      }
     },
     {
       "attribution": {
@@ -3299,6 +4246,100 @@
           "message": "This staging file uses NRB standalone financial statements. Consolidated statements and subsidiary values are excluded from financial_years. Standalone revenue breakdown captions were cross-checked from notes 26.1 and 27.1, but product, rental, service, construction, and other revenue are not automatically treated as separate modular segment revenue. The 2024 operating cash flow and 2023 current-liability differences are documented as resolved retrospective presentation/classification changes."
         }
       ],
+      "evidence_health": [
+        {
+          "domain": "financial",
+          "latest_verified_at": "2026-03-18",
+          "pending_item_count": 0,
+          "source_count": 2,
+          "source_ids": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 87
+        },
+        {
+          "domain": "disclosure_scope",
+          "latest_verified_at": "2026-03-18",
+          "pending_item_count": 0,
+          "source_count": 2,
+          "source_ids": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 1
+        }
+      ],
+      "financial_health": {
+        "cash_generation": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업현금흐름은 30.7억원입니다.",
+          "headline": "현금창출력",
+          "metric_ids": [
+            "operating_profit",
+            "operating_cash_flow"
+          ],
+          "source_ids": [
+            "nrb_annual_report_2026_03_18"
+          ],
+          "status": "info"
+        },
+        "disclosure_coverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "검증된 출처 위치 87건, 수동 확인 필요 0건입니다.",
+          "headline": "공시 범위",
+          "metric_ids": [
+            "source_locations"
+          ],
+          "source_ids": [],
+          "status": "info"
+        },
+        "leverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 총차입금은 447.0억원이고 부채비율은 105.1%입니다.",
+          "headline": "재무안정성",
+          "metric_ids": [
+            "total_borrowings",
+            "liabilities_to_equity_pct"
+          ],
+          "source_ids": [
+            "nrb_annual_report_2026_03_18"
+          ],
+          "status": "info"
+        },
+        "profitability": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업이익률은 7.5%입니다.",
+          "headline": "수익성",
+          "metric_ids": [
+            "revenue",
+            "operating_profit",
+            "operating_margin_pct"
+          ],
+          "source_ids": [
+            "nrb_annual_report_2026_03_18"
+          ],
+          "status": "info"
+        },
+        "working_capital": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
+          "headline": "운전자본",
+          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "metric_ids": [
+            "receivables_total",
+            "receivables_to_revenue_pct"
+          ],
+          "source_ids": [
+            "nrb_annual_report_2026_03_18"
+          ],
+          "status": "additional_confirmation_required"
+        }
+      },
       "financial_scope": "standalone",
       "financial_series": [
         {
@@ -4668,7 +5709,274 @@
           ]
         }
       },
+      "latest_snapshot": {
+        "latest_year": 2025,
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -5.6,
+          "display_text": "-5.6억원",
+          "raw_krw": -563349199,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 30.7,
+          "display_text": "30.7억원",
+          "raw_krw": 3068742998,
+          "source_locations": [
+            {
+              "page_range": "pp.141-142",
+              "section": "statement.cash_flow",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "operating_margin_pct": {
+          "calculation_basis": "derived_from_reported",
+          "display_text": "7.5%",
+          "value": 7.5
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 44.6,
+          "display_text": "44.6억원",
+          "raw_krw": 4461258309,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 594.8,
+          "display_text": "594.8억원",
+          "raw_krw": 59481544678,
+          "source_locations": [
+            {
+              "page_range": "p.139",
+              "section": "statement.income_statement",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 1753.2,
+          "display_text": "1,753.2억원",
+          "raw_krw": 175316276741,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 447.0,
+          "display_text": "447.0억원",
+          "raw_krw": 44695538901,
+          "source_locations": [
+            {
+              "page_range": "pp.138,188",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.138,189-190",
+              "section": "note.borrowings",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 854.8,
+          "display_text": "854.8억원",
+          "raw_krw": 85481316158,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 898.3,
+          "display_text": "898.3억원",
+          "raw_krw": 89834960583,
+          "source_locations": [
+            {
+              "page_range": "pp.137-139",
+              "section": "statement.balance_sheet",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        },
+        "trade_receivables": {
+          "calculation_basis": "not_disclosed",
+          "disclosure_status": "not_disclosed",
+          "display_eok": null,
+          "display_text": "공시되지 않음",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "page_range": "pp.137,234-235",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "pp.137,237",
+              "section": "note.working_capital",
+              "source_ref": "nrb_annual_report_2026_03_18",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "nrb_annual_report_2026_03_18"
+          ]
+        }
+      },
       "latest_year": 2025,
+      "peer_benchmarks": [
+        {
+          "best_value": 307684467052,
+          "company_display": "594.8억원",
+          "company_value": 59481544678,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 3번째",
+          "median": 60570703113.5,
+          "metric_id": "revenue",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 3
+        },
+        {
+          "best_value": 10.3,
+          "company_display": "7.5%",
+          "company_value": 7.5,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 3번째",
+          "median": 8.05,
+          "metric_id": "operating_margin_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 3
+        },
+        {
+          "best_value": 3068742998,
+          "company_display": "30.7억원",
+          "company_value": 3068742998,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 1번째",
+          "median": -6188393909.5,
+          "metric_id": "operating_cash_flow",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 1
+        },
+        {
+          "best_value": 30242382764,
+          "company_display": "447.0억원",
+          "company_value": 44695538901,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 2번째",
+          "median": 48930238668.0,
+          "metric_id": "total_borrowings",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 2
+        },
+        {
+          "best_value": 105.1,
+          "company_display": "105.1%",
+          "company_value": 105.1,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 1번째",
+          "median": 288.95000000000005,
+          "metric_id": "liabilities_to_equity_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 1
+        },
+        {
+          "best_value": null,
+          "company_display": "확인되지 않음",
+          "company_value": null,
+          "comparable": false,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "비교 조건 미충족",
+          "median": null,
+          "metric_id": "receivables_to_revenue_pct",
+          "not_comparable_reason": "현재 기업의 해당 지표 값이 확인되지 않았습니다.",
+          "peer_count": 3,
+          "rank": null
+        }
+      ],
       "reporting_entity": "주식회사 엔알비",
       "source_schema_version": "company_audit_financials_v1",
       "source_summary": {
@@ -4851,7 +6159,122 @@
           },
           "title": "유동비율 상태"
         }
-      ]
+      ],
+      "trends": {
+        "liabilities_to_equity": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -56.5,
+          "change_value": -136.6,
+          "explanation": "총부채와 자본의 비율 변화를 확인합니다.",
+          "headline": "부채비율 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "liabilities_to_equity_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -84.8,
+          "change_value": -17073607924,
+          "explanation": "회계상 이익이 현금창출로 이어지는지 확인합니다.",
+          "headline": "영업현금흐름 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_cash_flow"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ],
+          "status": "decreased"
+        },
+        "operating_margin": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -37.5,
+          "change_value": -4.5,
+          "explanation": "영업이익률의 전년 대비 변화폭을 확인합니다.",
+          "headline": "영업이익률 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_margin_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_profit": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -29.4,
+          "change_value": -1857600171,
+          "explanation": "영업이익의 금액 변화만 표시하며 수익성 판단은 영업이익률과 함께 봅니다.",
+          "headline": "영업이익 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_profit"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ],
+          "status": "decreased"
+        },
+        "revenue": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 12.7,
+          "change_value": 6680484081,
+          "explanation": "최근 연도 매출을 직전 연도와 비교합니다.",
+          "headline": "매출 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "revenue"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ],
+          "status": "increased"
+        },
+        "total_borrowings": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -27.9,
+          "change_value": -17265818915,
+          "explanation": "차입금 부담의 방향만 표시하며 부실 판단은 하지 않습니다.",
+          "headline": "총차입금 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "total_borrowings"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ],
+          "status": "decreased"
+        },
+        "trade_receivables": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": null,
+          "change_value": null,
+          "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
+          "headline": "채권 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "receivables_total"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "nrb_annual_report_2026_03_18",
+            "nrb_audit_report_2025_04_01"
+          ],
+          "status": "additional_confirmation_required"
+        }
+      }
     },
     {
       "attribution": {
@@ -5204,6 +6627,101 @@
           "message": "본 재무정보는 주식회사 플랜엠 별도 재무제표 기준이다. 제품매출, 임대매출, 용역매출 및 F&B매출은 모듈러 매출로 자동 간주하지 않는다. 2023년 자본총계는 verification_pending 상태로 공개 계산에서 제외한다."
         }
       ],
+      "evidence_health": [
+        {
+          "domain": "financial",
+          "latest_verified_at": "2026-06-25",
+          "pending_item_count": 0,
+          "source_count": 2,
+          "source_ids": [
+            "planm_audit_report_2025_04_24",
+            "planm_audit_report_2026_06_25"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 85
+        },
+        {
+          "domain": "disclosure_scope",
+          "latest_verified_at": "2026-06-25",
+          "pending_item_count": 0,
+          "source_count": 2,
+          "source_ids": [
+            "planm_audit_report_2025_04_24",
+            "planm_audit_report_2026_06_25"
+          ],
+          "unavailable_item_count": 1,
+          "verification_status": "verified",
+          "verified_item_count": 1
+        }
+      ],
+      "financial_health": {
+        "cash_generation": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업현금흐름은 -120.3억원입니다.",
+          "headline": "현금창출력",
+          "metric_ids": [
+            "operating_profit",
+            "operating_cash_flow"
+          ],
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "watch"
+        },
+        "disclosure_coverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "검증된 출처 위치 85건, 수동 확인 필요 0건입니다.",
+          "headline": "공시 범위",
+          "limitation": "모듈러 부문 별도 매출은 공시되지 않았습니다.",
+          "metric_ids": [
+            "source_locations"
+          ],
+          "source_ids": [],
+          "status": "info"
+        },
+        "leverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 총차입금은 302.4억원이고 부채비율은 294.1%입니다.",
+          "headline": "재무안정성",
+          "metric_ids": [
+            "total_borrowings",
+            "liabilities_to_equity_pct"
+          ],
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "watch"
+        },
+        "profitability": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업이익률은 8.6%입니다.",
+          "headline": "수익성",
+          "metric_ids": [
+            "revenue",
+            "operating_profit",
+            "operating_margin_pct"
+          ],
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "info"
+        },
+        "working_capital": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 채권/매출 비율은 0.4%입니다.",
+          "headline": "운전자본",
+          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "metric_ids": [
+            "receivables_total",
+            "receivables_to_revenue_pct"
+          ],
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "info"
+        }
+      },
       "financial_scope": "standalone",
       "financial_series": [
         {
@@ -6213,7 +7731,273 @@
           ]
         }
       },
+      "latest_snapshot": {
+        "latest_year": 2025,
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -95.3,
+          "display_text": "-95.3억원",
+          "raw_krw": -9533441167,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -120.3,
+          "display_text": "-120.3억원",
+          "raw_krw": -12031387244,
+          "source_locations": [
+            {
+              "page_range": "12-13",
+              "section": "statement.cash_flow",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "operating_margin_pct": {
+          "calculation_basis": "derived_from_reported",
+          "display_text": "8.6%",
+          "value": 8.6
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 50.9,
+          "display_text": "50.9억원",
+          "raw_krw": 5091785350,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 592.2,
+          "display_text": "592.2억원",
+          "raw_krw": 59222859418,
+          "source_locations": [
+            {
+              "page_range": "9-10",
+              "section": "statement.income_statement",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 2724.4,
+          "display_text": "2,724.4억원",
+          "raw_krw": 272444816577,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 302.4,
+          "display_text": "302.4억원",
+          "raw_krw": 30242382764,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "7-8",
+              "section": "note.borrowings",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 691.2,
+          "display_text": "691.2억원",
+          "raw_krw": 69122316452,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 2033.2,
+          "display_text": "2,033.2억원",
+          "raw_krw": 203322500125,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "statement.balance_sheet",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        },
+        "trade_receivables": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 2.2,
+          "display_text": "2.2억원",
+          "raw_krw": 216178471,
+          "source_locations": [
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "7-8",
+              "section": "note.working_capital",
+              "source_ref": "planm_audit_report_2026_06_25",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "planm_audit_report_2026_06_25"
+          ]
+        }
+      },
       "latest_year": 2025,
+      "peer_benchmarks": [
+        {
+          "best_value": 307684467052,
+          "company_display": "592.2억원",
+          "company_value": 59222859418,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 4번째",
+          "median": 60570703113.5,
+          "metric_id": "revenue",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 4
+        },
+        {
+          "best_value": 10.3,
+          "company_display": "8.6%",
+          "company_value": 8.6,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 2번째",
+          "median": 8.05,
+          "metric_id": "operating_margin_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 2
+        },
+        {
+          "best_value": 3068742998,
+          "company_display": "-120.3억원",
+          "company_value": -12031387244,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 3번째",
+          "median": -6188393909.5,
+          "metric_id": "operating_cash_flow",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 3
+        },
+        {
+          "best_value": 30242382764,
+          "company_display": "302.4억원",
+          "company_value": 30242382764,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 1번째",
+          "median": 48930238668.0,
+          "metric_id": "total_borrowings",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 1
+        },
+        {
+          "best_value": 105.1,
+          "company_display": "294.1%",
+          "company_value": 294.1,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 3번째",
+          "median": 288.95000000000005,
+          "metric_id": "liabilities_to_equity_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 3
+        },
+        {
+          "best_value": 0.4,
+          "company_display": "0.4%",
+          "company_value": 0.4,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "3개 감사재무 기업 중 1번째",
+          "median": 5.5,
+          "metric_id": "receivables_to_revenue_pct",
+          "not_comparable_reason": null,
+          "peer_count": 3,
+          "rank": 1
+        }
+      ],
       "reporting_entity": "주식회사 플랜엠",
       "source_schema_version": "company_audit_financials_v1",
       "source_summary": {
@@ -6404,7 +8188,117 @@
           },
           "title": "유동비율 상태"
         }
-      ]
+      ],
+      "trends": {
+        "liabilities_to_equity": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -2.5,
+          "change_value": -7.399999999999977,
+          "explanation": "총부채와 자본의 비율 변화를 확인합니다.",
+          "headline": "부채비율 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "liabilities_to_equity_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -133.7,
+          "change_value": -47780584183,
+          "explanation": "회계상 이익이 현금창출로 이어지는지 확인합니다.",
+          "headline": "영업현금흐름 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_cash_flow"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "decreased"
+        },
+        "operating_margin": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -80.1,
+          "change_value": -34.699999999999996,
+          "explanation": "영업이익률의 전년 대비 변화폭을 확인합니다.",
+          "headline": "영업이익률 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_margin_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_profit": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -90.3,
+          "change_value": -47232285262,
+          "explanation": "영업이익의 금액 변화만 표시하며 수익성 판단은 영업이익률과 함께 봅니다.",
+          "headline": "영업이익 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_profit"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "decreased"
+        },
+        "revenue": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -51.0,
+          "change_value": -61574920900,
+          "explanation": "최근 연도 매출을 직전 연도와 비교합니다.",
+          "headline": "매출 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "revenue"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "decreased"
+        },
+        "total_borrowings": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -20.2,
+          "change_value": -7655122976,
+          "explanation": "차입금 부담의 방향만 표시하며 부실 판단은 하지 않습니다.",
+          "headline": "총차입금 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "total_borrowings"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "decreased"
+        },
+        "trade_receivables": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -70.9,
+          "change_value": -525939544,
+          "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
+          "headline": "채권 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "receivables_total"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "decreased"
+        }
+      }
     },
     {
       "attribution": {
@@ -6704,6 +8598,101 @@
           "message": "주석 기반 수치 45건은 정확한 페이지 수동 확인이 남아 있다."
         }
       ],
+      "evidence_health": [
+        {
+          "domain": "financial",
+          "latest_verified_at": "2026-04-08",
+          "pending_item_count": 45,
+          "source_count": 2,
+          "source_ids": [
+            "yuchang_audit_report_2025_04_04",
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "unavailable_item_count": 0,
+          "verification_status": "pending_manual_page_check",
+          "verified_item_count": 39
+        },
+        {
+          "domain": "disclosure_scope",
+          "latest_verified_at": "2026-04-08",
+          "pending_item_count": 0,
+          "source_count": 2,
+          "source_ids": [
+            "yuchang_audit_report_2025_04_04",
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "unavailable_item_count": 1,
+          "verification_status": "verified",
+          "verified_item_count": 1
+        }
+      ],
+      "financial_health": {
+        "cash_generation": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업현금흐름은 -308.3억원입니다.",
+          "headline": "현금창출력",
+          "metric_ids": [
+            "operating_profit",
+            "operating_cash_flow"
+          ],
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "watch"
+        },
+        "disclosure_coverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "검증된 출처 위치 39건, 수동 확인 필요 45건입니다.",
+          "headline": "공시 범위",
+          "limitation": "모듈러 부문 별도 매출은 공시되지 않았습니다.",
+          "metric_ids": [
+            "source_locations"
+          ],
+          "source_ids": [],
+          "status": "watch"
+        },
+        "leverage": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 총차입금은 1,121.3억원이고 부채비율은 283.8%입니다.",
+          "headline": "재무안정성",
+          "metric_ids": [
+            "total_borrowings",
+            "liabilities_to_equity_pct"
+          ],
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "watch"
+        },
+        "profitability": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업이익률은 4.8%입니다.",
+          "headline": "수익성",
+          "metric_ids": [
+            "revenue",
+            "operating_profit",
+            "operating_margin_pct"
+          ],
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "info"
+        },
+        "working_capital": {
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 채권/매출 비율은 37.6%입니다.",
+          "headline": "운전자본",
+          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "metric_ids": [
+            "receivables_total",
+            "receivables_to_revenue_pct"
+          ],
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "watch"
+        }
+      },
       "financial_scope": "standalone",
       "financial_series": [
         {
@@ -7638,7 +9627,261 @@
           ]
         }
       },
+      "latest_snapshot": {
+        "latest_year": 2025,
+        "net_income": {
+          "calculation_basis": "reported",
+          "display_eok": 56.6,
+          "display_text": "56.6억원",
+          "raw_krw": 5662989075,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "display_eok": -308.3,
+          "display_text": "-308.3억원",
+          "raw_krw": -30830315410,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "operating_margin_pct": {
+          "calculation_basis": "derived_from_reported",
+          "display_text": "4.8%",
+          "value": 4.8
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "display_eok": 148.7,
+          "display_text": "148.7억원",
+          "raw_krw": 14867615594,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "display_eok": 3076.8,
+          "display_text": "3,076.8억원",
+          "raw_krw": 307684467052,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "display_eok": 2709.8,
+          "display_text": "2,709.8억원",
+          "raw_krw": 270984904156,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 1121.3,
+          "display_text": "1,121.3억원",
+          "raw_krw": 112134492523,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.borrowings",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.borrowings",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "display_eok": 706.0,
+          "display_text": "706.0억원",
+          "raw_krw": 70598889031,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "display_eok": 2003.9,
+          "display_text": "2,003.9억원",
+          "raw_krw": 200386015125,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        },
+        "trade_receivables": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 1157.9,
+          "display_text": "1,157.9억원",
+          "raw_krw": 115786145992,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.working_capital",
+              "source_ref": "yuchang_audit_report_2026_04_08",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "yuchang_audit_report_2026_04_08"
+          ]
+        }
+      },
       "latest_year": 2025,
+      "peer_benchmarks": [
+        {
+          "best_value": 307684467052,
+          "company_display": "3,076.8억원",
+          "company_value": 307684467052,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 1번째",
+          "median": 60570703113.5,
+          "metric_id": "revenue",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 1
+        },
+        {
+          "best_value": 10.3,
+          "company_display": "4.8%",
+          "company_value": 4.8,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 4번째",
+          "median": 8.05,
+          "metric_id": "operating_margin_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 4
+        },
+        {
+          "best_value": 3068742998,
+          "company_display": "-308.3억원",
+          "company_value": -30830315410,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "4개 감사재무 기업 중 4번째",
+          "median": -6188393909.5,
+          "metric_id": "operating_cash_flow",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 4
+        },
+        {
+          "best_value": 30242382764,
+          "company_display": "1,121.3억원",
+          "company_value": 112134492523,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 4번째",
+          "median": 48930238668.0,
+          "metric_id": "total_borrowings",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 4
+        },
+        {
+          "best_value": 105.1,
+          "company_display": "283.8%",
+          "company_value": 283.8,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "4개 감사재무 기업 중 2번째",
+          "median": 288.95000000000005,
+          "metric_id": "liabilities_to_equity_pct",
+          "not_comparable_reason": null,
+          "peer_count": 4,
+          "rank": 2
+        },
+        {
+          "best_value": 0.4,
+          "company_display": "37.6%",
+          "company_value": 37.6,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "3개 감사재무 기업 중 3번째",
+          "median": 5.5,
+          "metric_id": "receivables_to_revenue_pct",
+          "not_comparable_reason": null,
+          "peer_count": 3,
+          "rank": 3
+        }
+      ],
       "reporting_entity": "주식회사 유창이앤씨",
       "source_schema_version": "company_audit_financials_v1",
       "source_summary": {
@@ -7817,7 +10060,117 @@
           },
           "title": "유동비율 상태"
         }
-      ]
+      ],
+      "trends": {
+        "liabilities_to_equity": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 21.8,
+          "change_value": 50.80000000000001,
+          "explanation": "총부채와 자본의 비율 변화를 확인합니다.",
+          "headline": "부채비율 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "liabilities_to_equity_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "increased"
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 4.4,
+          "change_value": 1432754119,
+          "explanation": "회계상 이익이 현금창출로 이어지는지 확인합니다.",
+          "headline": "영업현금흐름 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_cash_flow"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "increased"
+        },
+        "operating_margin": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 92.0,
+          "change_value": 2.3,
+          "explanation": "영업이익률의 전년 대비 변화폭을 확인합니다.",
+          "headline": "영업이익률 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_margin_pct"
+          ],
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "increased"
+        },
+        "operating_profit": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 62.9,
+          "change_value": 5743418491,
+          "explanation": "영업이익의 금액 변화만 표시하며 수익성 판단은 영업이익률과 함께 봅니다.",
+          "headline": "영업이익 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_profit"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "increased"
+        },
+        "revenue": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": -15.5,
+          "change_value": -56340120917,
+          "explanation": "최근 연도 매출을 직전 연도와 비교합니다.",
+          "headline": "매출 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "revenue"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "decreased"
+        },
+        "total_borrowings": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 76.6,
+          "change_value": 48634492523,
+          "explanation": "차입금 부담의 방향만 표시하며 부실 판단은 하지 않습니다.",
+          "headline": "총차입금 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "total_borrowings"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "increased"
+        },
+        "trade_receivables": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_pct": 54.7,
+          "change_value": 40962569164,
+          "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
+          "headline": "채권 변화",
+          "latest_year": 2025,
+          "metric_ids": [
+            "receivables_total"
+          ],
+          "previous_year": 2024,
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "increased"
+        }
+      }
     }
   ],
   "schema_version": "company_report_insights_v1"

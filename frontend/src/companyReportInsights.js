@@ -97,7 +97,62 @@ export function verificationStatusLabel(status) {
   if (status === "verified") return "검증 완료";
   if (status === "verified_section_range") return "검증된 구간";
   if (status === "pending_manual_page_check") return "페이지 수동 확인 필요";
+  if (status === "not_disclosed") return "공시되지 않음";
+  if (status === "not_applicable") return "해당 없음";
+  if (status === "verification_pending") return "검증 보류";
   return "검증 상태 확인 필요";
+}
+
+export const DECISION_STATUS_LABELS = {
+  increased: "증가",
+  decreased: "감소",
+  flat: "변화 없음",
+  unknown: "확인 필요",
+  additional_confirmation_required: "추가 확인 필요",
+  info: "참고",
+  watch: "관찰 필요",
+};
+
+export const EVIDENCE_DOMAIN_LABELS = {
+  financial: "재무",
+  disclosure_scope: "공시 범위",
+  identity: "법인정보",
+  production: "생산시설",
+  project: "프로젝트",
+  technology: "기술·특허",
+  recent_signal: "최근 활동",
+};
+
+export const PEER_BENCHMARK_LABELS = {
+  revenue: "매출",
+  operating_margin_pct: "영업이익률",
+  operating_cash_flow: "영업현금흐름",
+  total_borrowings: "총차입금",
+  liabilities_to_equity_pct: "부채비율",
+  receivables_to_revenue_pct: "채권/매출 비율",
+};
+
+export function decisionStatusLabel(status) {
+  return DECISION_STATUS_LABELS[status] || "확인 필요";
+}
+
+export function decisionStatusTone(status) {
+  if (status === "watch" || status === "additional_confirmation_required") return "watch";
+  if (status === "decreased") return "neutral";
+  if (status === "unknown") return "pending";
+  return "info";
+}
+
+export function evidenceDomainLabel(domain) {
+  return EVIDENCE_DOMAIN_LABELS[domain] || "검증 영역";
+}
+
+export function peerBenchmarkLabel(metricId) {
+  return PEER_BENCHMARK_LABELS[metricId] || metricId;
+}
+
+export function latestSnapshotMetric(insight, metricKey) {
+  return insight?.latest_snapshot?.[metricKey] || null;
 }
 
 export function latestAuditOpinion(insight) {

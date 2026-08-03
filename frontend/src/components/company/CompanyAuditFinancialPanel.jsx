@@ -1,8 +1,11 @@
 import {
+  decisionStatusLabel,
+  decisionStatusTone,
   financialScopeLabel,
   latestAuditOpinion,
   metricDisplayText,
   metricToneClass,
+  peerBenchmarkLabel,
   REPORT_AMOUNT_ROWS,
   REPORT_RATIO_ROWS,
   REPORT_REVENUE_BREAKDOWN_ROWS,
@@ -202,6 +205,60 @@ function SourceLocationList({ metric }) {
   );
 }
 
+function FinancialDecisionSummary({ insight }) {
+  const healthItems = Object.entries(insight.financial_health || {});
+  const trendItems = Object.values(insight.trends || {}).slice(0, 4);
+  if (!healthItems.length && !trendItems.length) return null;
+  return (
+    <div className="company-subsection">
+      <div className="company-subsection-heading">
+        <h3>의사결정 요약</h3>
+        <span>공식 공시문서에 포함된 감사받은 재무제표 기준 정보</span>
+      </div>
+      <div className="company-intelligence-summary compact" aria-label="재무 의사결정 요약">
+        {healthItems.map(([key, item]) => (
+          <article className={`company-intelligence-card ${decisionStatusTone(item.status)}`} key={key}>
+            <span>{decisionStatusLabel(item.status)}</span>
+            <strong>{item.headline}</strong>
+            <p>{item.explanation}</p>
+            {item.limitation && <small>{item.limitation}</small>}
+          </article>
+        ))}
+      </div>
+      <div className="company-intelligence-trend-strip" aria-label="최근 추세 신호">
+        {trendItems.map((trend) => (
+          <span className={`decision-status ${decisionStatusTone(trend.status)}`} key={trend.headline}>
+            <b>{trend.headline}</b>
+            <em>{decisionStatusLabel(trend.status)}</em>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PeerBenchmarkPanel({ benchmarks = [] }) {
+  if (!benchmarks.length) return null;
+  return (
+    <div className="company-subsection">
+      <div className="company-subsection-heading">
+        <h3>동료 비교</h3>
+        <span>같은 연도·통화·재무제표 범위에서 3개 이상일 때만 순위를 표시합니다.</span>
+      </div>
+      <div className="company-peer-grid" aria-label="감사재무 동료 비교">
+        {benchmarks.map((item) => (
+          <article className={`company-peer-card ${item.comparable ? "is-comparable" : "is-not-comparable"}`} key={item.metric_id}>
+            <span>{peerBenchmarkLabel(item.metric_id)}</span>
+            <strong>{item.company_display}</strong>
+            <p>{item.comparable ? item.comparison_label : item.not_comparable_reason}</p>
+            <small>{item.comparable ? `비교 대상 ${item.peer_count}개 · 임의 종합점수 없음` : "임의 순위 없음"}</small>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) {
   const years = reportYears(insight);
   const sourceSummary = insight.source_summary || {};
@@ -221,6 +278,8 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
       <p className="finance-note">
         공식 공시문서에 포함된 감사받은 재무제표 기준 정보입니다. 모듈러 부문 별도 매출 공개 여부에 따라 회사 전체 재무와 구분해 해석합니다.
       </p>
+
+      <FinancialDecisionSummary insight={insight} />
 
       {visibleDisclosureWarnings.length > 0 && (
         <div className="company-report-pending-callouts" aria-label="검증 보류 및 공시 한계 안내">
@@ -274,6 +333,8 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
           <SingleMetricTrend title="영업이익률" rows={ratioRows("operating_margin_pct")} variant="operating-margin" subtitle="감사보고서 기반 파생 비율" />
         </div>
       </div>
+
+      <PeerBenchmarkPanel benchmarks={insight.peer_benchmarks} />
 
       {hasRevenueBreakdown && (
         <div className="company-subsection">

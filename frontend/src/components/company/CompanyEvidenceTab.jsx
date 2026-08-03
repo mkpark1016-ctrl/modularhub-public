@@ -7,7 +7,11 @@ import {
   labelValue,
 } from "./companyDetailHelpers";
 import { buildSourceRows, sourceHasPublicUrl, sourceTypeSummaryForDomain } from "../../companyEvidence";
-import { sourceSectionCounts } from "../../companyReportInsights";
+import {
+  evidenceDomainLabel,
+  sourceSectionCounts,
+  verificationStatusLabel,
+} from "../../companyReportInsights";
 import { companyDataGapRows, dataGapSummaryForDomain } from "../../companyDataGaps";
 
 const MATRIX_AREAS = [
@@ -18,6 +22,57 @@ const MATRIX_AREAS = [
   { key: "technology", label: "기술·특허", tab: "technology" },
   { key: "recent_signal", label: "최근 활동", tab: "overview" },
 ];
+
+function DataTrustCenter({ reportInsight, matrixRows }) {
+  const financialRows = Array.isArray(reportInsight?.evidence_health) ? reportInsight.evidence_health : [];
+  const rows = [
+    ...financialRows.map((row) => ({
+      key: row.domain,
+      label: evidenceDomainLabel(row.domain),
+      status: verificationStatusLabel(row.verification_status),
+      sourceCount: row.source_count,
+      verifiedCount: row.verified_item_count,
+      pendingCount: row.pending_item_count,
+      unavailableCount: row.unavailable_item_count,
+      latest: row.latest_verified_at,
+    })),
+    ...matrixRows
+      .filter((row) => row.key !== "financial")
+      .map((row) => ({
+        key: row.key,
+        label: row.label,
+        status: row.status,
+        sourceCount: row.sourceTypes === "출처 없음" ? 0 : row.sourceTypes.split(",").length,
+        verifiedCount: row.status === "검증 완료" ? 1 : 0,
+        pendingCount: row.gapSummary === "보완 공백 없음" ? 0 : 1,
+        unavailableCount: 0,
+        latest: row.verifiedAt,
+      })),
+  ];
+  return (
+    <div className="company-subsection">
+      <div className="company-subsection-heading">
+        <h3>Data Trust Center</h3>
+        <span>공개 화면의 판단 근거와 공백을 영역별로 구분합니다.</span>
+      </div>
+      <div className="company-trust-grid" aria-label="데이터 신뢰도 센터">
+        {rows.map((row) => (
+          <article className="company-trust-card" key={row.key}>
+            <span>{row.label}</span>
+            <strong>{row.status}</strong>
+            <dl>
+              <div><dt>출처</dt><dd>{formatNumber(row.sourceCount, "개")}</dd></div>
+              <div><dt>검증</dt><dd>{formatNumber(row.verifiedCount, "건")}</dd></div>
+              <div><dt>보류</dt><dd>{formatNumber(row.pendingCount, "건")}</dd></div>
+              <div><dt>미공시</dt><dd>{formatNumber(row.unavailableCount, "건")}</dd></div>
+            </dl>
+            <small>최신 기준 {formatDate(row.latest)}</small>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function CompanyEvidenceTab({ company, reportInsight = null, onShowEvidence, onTabChange }) {
   const model = detailModel(company);
@@ -44,6 +99,8 @@ export default function CompanyEvidenceTab({ company, reportInsight = null, onSh
         <div><dt>최근 감사보고서</dt><dd>{model.latestAudit?.receipt_number || "공개자료 없음"}</dd></div>
         <div><dt>데이터 공백</dt><dd>{formatNumber(gapRows.length, "건")}</dd></div>
       </dl>
+
+      <DataTrustCenter reportInsight={reportInsight} matrixRows={matrixRows} />
 
       <div className="company-subsection">
         <h3>영역별 검증 매트릭스</h3>

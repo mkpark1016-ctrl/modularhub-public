@@ -10,10 +10,14 @@ import {
   technologyItems,
 } from "../src/components/company/companyDetailHelpers.js";
 import {
+  decisionStatusLabel,
+  evidenceDomainLabel,
   financialScopeLabel,
   getCompanyReportInsight,
+  latestSnapshotMetric,
   metricDisplayText,
   metricToneClass,
+  peerBenchmarkLabel,
   reportFinancialHeading,
   reportMetricByYear,
   reportRatioByYear,
@@ -78,6 +82,13 @@ assert.ok(componentFiles.includes("관련 보도"), "project and activity UI sho
 assert.ok(componentFiles.includes("재무 해석 범위"), "financial warnings should be consolidated into an interpretation scope card");
 assert.ok(componentFiles.includes("상세 재무표 보기"), "financial detailed tables should be collapsible");
 assert.ok(componentFiles.includes("EvidenceDrawer"), "detail UI should provide common evidence drawer");
+assert.ok(componentFiles.includes("Executive Summary"), "overview should include an executive summary for decision use");
+assert.ok(componentFiles.includes("company-intelligence-summary"), "company overview and finance should render decision intelligence cards");
+assert.ok(componentFiles.includes("감사재무 비교 데이터 없음"), "companies without audit report insights should clearly keep a fallback state");
+assert.ok(componentFiles.includes("Data Trust Center"), "evidence tab should expose a data trust center");
+assert.ok(componentFiles.includes("동료 비교"), "financial tab should expose peer comparison");
+assert.ok(componentFiles.includes("not_comparable_reason"), "peer comparison should render non-comparable reasons instead of forced ranks");
+assert.ok(componentFiles.includes("같은 연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
 assert.ok(componentFiles.includes("CompanyEntityDrawer"), "entity detail panels should share a common drawer");
 assert.ok(componentFiles.includes("company-entity-drawer") && componentFiles.includes("aria-modal=\"true\""), "entity drawer should expose modal semantics");
 assert.ok(componentFiles.includes("createPortal"), "entity drawer should render outside the React root for modal isolation");
@@ -194,6 +205,17 @@ assert.equal(financialScopeLabel("standalone_and_consolidated"), "별도·연결
 assert.equal(verificationStatusLabel("verified"), "검증 완료");
 assert.equal(verificationStatusLabel("verified_section_range"), "검증된 구간");
 assert.equal(verificationStatusLabel("pending_manual_page_check"), "페이지 수동 확인 필요");
+assert.equal(decisionStatusLabel("watch"), "관찰 필요");
+assert.equal(decisionStatusLabel("additional_confirmation_required"), "추가 확인 필요");
+assert.equal(evidenceDomainLabel("financial"), "재무");
+assert.equal(peerBenchmarkLabel("operating_cash_flow"), "영업현금흐름");
+assert.equal(latestSnapshotMetric(yuchangReport, "revenue").raw_krw, yuchangReport.latest_metrics.revenue.raw_krw);
+assert.equal(yuchangReport.latest_snapshot.latest_year, 2025);
+assert.equal(yuchangReport.financial_health.profitability.metric_ids.includes("operating_margin_pct"), true);
+assert.equal(yuchangReport.evidence_health.some((row) => row.domain === "financial"), true);
+assert.equal(yuchangReport.peer_benchmarks.some((item) => item.comparable === true), true);
+assert.equal(kumkangReport.peer_benchmarks.every((item) => item.comparable === false), true);
+assert.ok(kumkangReport.peer_benchmarks.every((item) => item.not_comparable_reason), "single consolidated company should not receive peer ranks");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "revenue")), "3,076.8억원");
 assert.equal(metricDisplayText(reportRatioByYear(yuchangReport, 2025, "operating_margin_pct")), "4.8%");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "operating_cash_flow")), "-308.3억원");

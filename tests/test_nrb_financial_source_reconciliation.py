@@ -13,6 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_INPUT_PATH = ROOT / "data" / "company_reports" / "nrb" / "audit_financials_2023_2025.json"
 STAGING_PATH = ROOT / "data" / "company_reports" / "nrb" / "staging" / "audit_financials_2023_2025.json"
 COMPANIES_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
+DECISION_INTELLIGENCE_FIELDS = {
+    "latest_snapshot",
+    "trends",
+    "financial_health",
+    "evidence_health",
+    "peer_benchmarks",
+}
 
 
 def load_public_input() -> dict:
@@ -22,6 +29,10 @@ def load_public_input() -> dict:
 def load_public_output_company() -> dict:
     public_companies = json.loads(DEFAULT_OUTPUT.read_text(encoding="utf-8"))["companies"]
     return next(company for company in public_companies if company["company_id"] == "nrb")
+
+
+def without_decision_intelligence_fields(company: dict) -> dict:
+    return {key: value for key, value in company.items() if key not in DECISION_INTELLIGENCE_FIELDS}
 
 
 def reported(payload: dict, year: str, section: str, field: str) -> int | None:
@@ -294,7 +305,7 @@ def test_existing_non_nrb_audit_companies_are_unchanged_from_main() -> None:
     for company_id in ["daeseung-engineering", "kumkang-kind", "planm", "yuchang-enc"]:
         old_company = next(company for company in old_payload["companies"] if company["company_id"] == company_id)
         current_company = next(company for company in current["companies"] if company["company_id"] == company_id)
-        assert current_company == old_company
+        assert without_decision_intelligence_fields(current_company) == old_company
 
 
 def test_nrb_revenue_breakdown_over_tolerance_fails() -> None:

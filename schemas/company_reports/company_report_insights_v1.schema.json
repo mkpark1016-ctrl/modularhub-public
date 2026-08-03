@@ -25,8 +25,13 @@
         "available_years",
         "latest_year",
         "latest_metrics",
+        "latest_snapshot",
         "financial_series",
         "derived_metrics",
+        "trends",
+        "financial_health",
+        "evidence_health",
+        "peer_benchmarks",
         "trend_signals",
         "disclosure_warnings",
         "attribution",
@@ -47,6 +52,7 @@
         },
         "latest_year": { "type": "integer" },
         "latest_metrics": { "$ref": "#/$defs/metricMap" },
+        "latest_snapshot": { "$ref": "#/$defs/latestSnapshot" },
         "financial_series": {
           "type": "array",
           "items": { "$ref": "#/$defs/yearSeries" },
@@ -59,6 +65,22 @@
           },
           "additionalProperties": false
         },
+        "trends": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/decisionSignal" }
+        },
+        "financial_health": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/healthSignal" }
+        },
+        "evidence_health": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidenceHealth" }
+        },
+        "peer_benchmarks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/peerBenchmark" }
+        },
         "trend_signals": {
           "type": "array",
           "items": { "$ref": "#/$defs/trendSignal" }
@@ -70,6 +92,24 @@
         "attribution": { "type": "object" },
         "source_summary": { "$ref": "#/$defs/sourceSummary" },
         "data_quality": { "$ref": "#/$defs/dataQuality" }
+      },
+      "additionalProperties": false
+    },
+    "latestSnapshot": {
+      "type": "object",
+      "required": ["latest_year"],
+      "properties": {
+        "latest_year": { "type": "integer" },
+        "revenue": { "$ref": "#/$defs/moneyMetric" },
+        "operating_profit": { "$ref": "#/$defs/moneyMetric" },
+        "net_income": { "$ref": "#/$defs/moneyMetric" },
+        "operating_cash_flow": { "$ref": "#/$defs/moneyMetric" },
+        "total_borrowings": { "$ref": "#/$defs/moneyMetric" },
+        "trade_receivables": { "$ref": "#/$defs/moneyMetric" },
+        "total_assets": { "$ref": "#/$defs/moneyMetric" },
+        "total_liabilities": { "$ref": "#/$defs/moneyMetric" },
+        "total_equity": { "$ref": "#/$defs/moneyMetric" },
+        "operating_margin_pct": { "$ref": "#/$defs/derivedMetric" }
       },
       "additionalProperties": false
     },
@@ -178,6 +218,119 @@
         "value": { "type": ["number", "null"] },
         "display_text": { "type": "string" },
         "calculation_basis": { "const": "derived_from_reported" }
+      },
+      "additionalProperties": false
+    },
+    "decisionSignal": {
+      "type": "object",
+      "required": [
+        "status",
+        "headline",
+        "explanation",
+        "latest_year",
+        "previous_year",
+        "change_value",
+        "change_pct",
+        "metric_ids",
+        "source_ids",
+        "calculation_basis"
+      ],
+      "properties": {
+        "status": { "enum": ["increased", "decreased", "flat", "unknown", "additional_confirmation_required"] },
+        "headline": { "type": "string", "minLength": 1 },
+        "explanation": { "type": "string", "minLength": 1 },
+        "latest_year": { "type": "integer" },
+        "previous_year": { "type": "integer" },
+        "change_value": { "type": ["number", "integer", "null"] },
+        "change_pct": { "type": ["number", "null"] },
+        "metric_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "source_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "calculation_basis": { "const": "latest_year_vs_previous_year" }
+      },
+      "additionalProperties": false
+    },
+    "healthSignal": {
+      "type": "object",
+      "required": ["status", "headline", "explanation", "metric_ids", "source_ids", "calculation_basis"],
+      "properties": {
+        "status": { "enum": ["info", "watch", "additional_confirmation_required"] },
+        "headline": { "type": "string", "minLength": 1 },
+        "explanation": { "type": "string", "minLength": 1 },
+        "metric_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "source_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "calculation_basis": { "const": "rule_based_from_reported_metrics" },
+        "limitation": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "evidenceHealth": {
+      "type": "object",
+      "required": [
+        "domain",
+        "verified_item_count",
+        "pending_item_count",
+        "unavailable_item_count",
+        "source_count",
+        "latest_verified_at",
+        "verification_status",
+        "source_ids"
+      ],
+      "properties": {
+        "domain": { "type": "string", "minLength": 1 },
+        "verified_item_count": { "type": "integer", "minimum": 0 },
+        "pending_item_count": { "type": "integer", "minimum": 0 },
+        "unavailable_item_count": { "type": "integer", "minimum": 0 },
+        "source_count": { "type": "integer", "minimum": 0 },
+        "latest_verified_at": { "type": ["string", "null"], "format": "date" },
+        "verification_status": {
+          "enum": ["verified", "verified_section_range", "pending_manual_page_check", "not_disclosed", "not_applicable", "verification_pending"]
+        },
+        "source_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "peerBenchmark": {
+      "type": "object",
+      "required": [
+        "metric_id",
+        "company_value",
+        "company_display",
+        "peer_count",
+        "rank",
+        "median",
+        "best_value",
+        "comparison_direction",
+        "comparison_label",
+        "comparable",
+        "not_comparable_reason"
+      ],
+      "properties": {
+        "metric_id": { "type": "string", "minLength": 1 },
+        "company_value": { "type": ["number", "integer", "null"] },
+        "company_display": { "type": "string", "minLength": 1 },
+        "peer_count": { "type": "integer", "minimum": 0 },
+        "rank": { "type": ["integer", "null"], "minimum": 1 },
+        "median": { "type": ["number", "null"] },
+        "best_value": { "type": ["number", "integer", "null"] },
+        "comparison_direction": { "enum": ["higher_is_larger", "lower_is_lower_burden"] },
+        "comparison_label": { "type": "string", "minLength": 1 },
+        "comparable": { "type": "boolean" },
+        "not_comparable_reason": { "type": ["string", "null"] }
       },
       "additionalProperties": false
     },
