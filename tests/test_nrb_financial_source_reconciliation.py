@@ -305,7 +305,7 @@ def test_existing_non_nrb_audit_companies_are_unchanged_from_main() -> None:
     for company_id in ["daeseung-engineering", "kumkang-kind", "planm", "yuchang-enc"]:
         old_company = next(company for company in old_payload["companies"] if company["company_id"] == company_id)
         current_company = next(company for company in current["companies"] if company["company_id"] == company_id)
-        assert without_decision_intelligence_fields(current_company) == old_company
+        assert without_decision_intelligence_fields(current_company) == without_decision_intelligence_fields(old_company)
 
 
 def test_nrb_revenue_breakdown_over_tolerance_fails() -> None:

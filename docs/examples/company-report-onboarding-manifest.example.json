@@ -1,0 +1,53 @@
+{
+  "allowed_warning_codes": [
+    "pending_manual_page_check",
+    "optional_metric_not_disclosed"
+  ],
+  "candidate_input_path": "data/company_reports/sample-company/onboarding/candidate_audit_financials.json",
+  "company_id": "sample-company",
+  "company_name": "샘플기업",
+  "currency": "KRW",
+  "financial_scope": "standalone",
+  "optional_metrics": [
+    "service_revenue"
+  ],
+  "promotion_policy": {
+    "allow_verification_pending_required_metrics": false,
+    "require_public_change_acknowledgement": true,
+    "require_source_review_acknowledgement": true,
+    "require_zero_blockers": true
+  },
+  "public_output_path": "data/company_reports/sample-company/audit_financials_2023_2025.json",
+  "replace_existing": false,
+  "reporting_entity": "샘플기업 주식회사",
+  "required_metrics": [
+    "revenue",
+    "operating_profit",
+    "operating_cash_flow",
+    "total_assets",
+    "total_liabilities",
+    "total_equity"
+  ],
+  "schema_version": "company_report_onboarding_manifest_v1",
+  "source_priority": {
+    "2023": {
+      "cross_check_source_refs": [],
+      "primary_source_ref": "sample_report_2024"
+    },
+    "2024": {
+      "cross_check_source_refs": [],
+      "primary_source_ref": "sample_report_2025"
+    },
+    "2025": {
+      "cross_check_source_refs": [],
+      "primary_source_ref": "sample_report_2026"
+    }
+  },
+  "staging_output_path": "data/company_reports/sample-company/staging/audit_financials_2023_2025.json",
+  "target_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "unit": "won"
+}

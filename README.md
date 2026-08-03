@@ -1889,3 +1889,7 @@ HTTP 429 from the GDELT DOC API is treated as a provider rate-limit failure, not
 ### Company Source Coverage Reliability
 
 Company Change Monitor includes an offline source coverage audit for `public_news`, `naver_api_hub`, and `dart`. It writes source coverage, DART identity coverage, and public-news empty diagnostics artifacts without exposing review queue data on the public dashboard. See `docs/company-source-coverage-reliability.md`.
+
+### Company report onboarding
+
+Use [`docs/data-pipeline/company-report-onboarding.md`](docs/data-pipeline/company-report-onboarding.md) for the guarded audit/business report onboarding manifest, validation, staging, preview, and promotion workflow.

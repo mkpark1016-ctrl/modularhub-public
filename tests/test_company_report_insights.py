@@ -137,7 +137,7 @@ def test_yuchang_item_is_semantically_unchanged_from_main() -> None:
         text=True,
         encoding="utf-8",
     )
-    assert without_decision_intelligence_fields(yuchang_company(load_output())) == yuchang_company(json.loads(old_text))
+    assert without_decision_intelligence_fields(yuchang_company(load_output())) == without_decision_intelligence_fields(yuchang_company(json.loads(old_text)))
 
 
 def test_kumkang_item_is_semantically_unchanged_from_main() -> None:
@@ -147,7 +147,7 @@ def test_kumkang_item_is_semantically_unchanged_from_main() -> None:
         text=True,
         encoding="utf-8",
     )
-    assert without_decision_intelligence_fields(kumkang_company(load_output())) == kumkang_company(json.loads(old_text))
+    assert without_decision_intelligence_fields(kumkang_company(load_output())) == without_decision_intelligence_fields(kumkang_company(json.loads(old_text)))
 
 
 def test_decision_intelligence_fields_are_built_from_existing_metrics() -> None:

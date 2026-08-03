@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modularhub.local/schemas/company_report_onboarding_manifest_v1.schema.json",
+  "title": "Company Report Onboarding Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "company_id",
+    "company_name",
+    "reporting_entity",
+    "financial_scope",
+    "currency",
+    "unit",
+    "target_years",
+    "candidate_input_path",
+    "staging_output_path",
+    "public_output_path",
+    "replace_existing",
+    "source_priority",
+    "required_metrics",
+    "optional_metrics",
+    "allowed_warning_codes",
+    "promotion_policy"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "company_report_onboarding_manifest_v1"
+    },
+    "company_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "company_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reporting_entity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "financial_scope": {
+      "enum": ["standalone", "consolidated"]
+    },
+    "currency": {
+      "const": "KRW"
+    },
+    "unit": {
+      "const": "won"
+    },
+    "target_years": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "integer",
+        "minimum": 1900,
+        "maximum": 2100
+      }
+    },
+    "candidate_input_path": {
+      "$ref": "#/$defs/safeRelativePath"
+    },
+    "staging_output_path": {
+      "$ref": "#/$defs/safeRelativePath"
+    },
+    "public_output_path": {
+      "$ref": "#/$defs/safeRelativePath"
+    },
+    "replace_existing": {
+      "type": "boolean"
+    },
+    "source_priority": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["primary_source_ref", "cross_check_source_refs"],
+        "properties": {
+          "primary_source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cross_check_source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "required_metrics": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "optional_metrics": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "allowed_warning_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "promotion_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "require_zero_blockers",
+        "require_source_review_acknowledgement",
+        "require_public_change_acknowledgement",
+        "allow_verification_pending_required_metrics"
+      ],
+      "properties": {
+        "require_zero_blockers": {
+          "type": "boolean"
+        },
+        "require_source_review_acknowledgement": {
+          "type": "boolean"
+        },
+        "require_public_change_acknowledgement": {
+          "type": "boolean"
+        },
+        "allow_verification_pending_required_metrics": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "safeRelativePath": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "anyOf": [
+          { "pattern": "^[A-Za-z]:" },
+          { "pattern": "^/" },
+          { "pattern": "^\\\\" },
+          { "pattern": "(^|/)\\.\\.(/|$)" },
+          { "pattern": "\\\\" }
+        ]
+      }
+    }
+  }
+}

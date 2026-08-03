@@ -352,7 +352,9 @@ def test_existing_company_report_insights_and_public_json_are_unchanged() -> Non
     current_insights = json.loads((ROOT / "frontend/public/data/companies/company_report_insights.json").read_text(encoding="utf-8"))
     old_planm_insight = next(company for company in old_insights["companies"] if company["company_id"] == "planm")
     current_planm_insight = next(company for company in current_insights["companies"] if company["company_id"] == "planm")
-    assert without_decision_intelligence_fields(current_planm_insight) == old_planm_insight
+    assert without_decision_intelligence_fields(current_planm_insight) == without_decision_intelligence_fields(
+        old_planm_insight
+    )
 
 
 def test_planm_pdf_files_are_not_committed_to_repository() -> None:
