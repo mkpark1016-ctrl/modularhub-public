@@ -29,6 +29,8 @@ export function sanitizeCompanySearchParams(searchParams, validValues) {
     relationship: ["all", ...(validValues.relationships || [])],
     tier: ["all", ...(validValues.tiers || [])],
     status: COMPANY_STATUS_VALUES,
+    audit: ["all", "applied", "fallback"],
+    facility: ["all", "confirmed", "none"],
     sort: COMPANY_SORT_VALUES,
   };
   for (const [key, allowed] of Object.entries(rules)) {

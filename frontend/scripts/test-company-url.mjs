@@ -30,6 +30,18 @@ assert.equal(result.params.has("relationship"), false);
 assert.equal(result.params.has("tier"), false);
 assert.equal(result.params.has("status"), false);
 assert.equal(result.params.has("sort"), false);
+assert.equal(result.params.has("audit"), false);
+assert.equal(result.params.has("facility"), false);
+
+result = sanitizeCompanySearchParams(new URLSearchParams("audit=applied&facility=confirmed&sort=production"), validValues);
+assert.equal(result.changed, false);
+assert.equal(result.params.get("audit"), "applied");
+assert.equal(result.params.get("facility"), "confirmed");
+
+result = sanitizeCompanySearchParams(new URLSearchParams("audit=legacy&facility=maybe"), validValues);
+assert.equal(result.changed, true);
+assert.equal(result.params.has("audit"), false);
+assert.equal(result.params.has("facility"), false);
 
 result = sanitizeCompanySearchParams(new URLSearchParams("country=US&source=SBS&role=general_contractor"), validValues);
 assert.equal(result.params.get("role"), "general_contractor");
