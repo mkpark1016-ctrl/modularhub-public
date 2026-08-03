@@ -410,7 +410,7 @@ code { overflow-wrap: anywhere; }
 .technical-token { overflow-wrap: anywhere; word-break: break-word; }
 .facility-detail-grid dd,
 .company-entity-drawer dd,
-.company-entity-drawer p { overflow-wrap: normal; word-break: keep-all; }
+.company-entity-drawer p { overflow-wrap: anywhere; word-break: keep-all; }
 .compact-gap-state { margin-top: 16px; padding: 14px 16px; }
 .monitor-readonly-note { margin: 18px 0 0; padding: 14px 16px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; color: #555; font-size: 14px; line-height: 1.55; }
 .monitor-dashboard { display: grid; gap: 14px; padding-top: 20px; }

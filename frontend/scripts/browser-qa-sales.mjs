@@ -260,6 +260,7 @@ try {
   check(!importantText.includes("R26BK01510994"), "closed known important bid should not appear in important filter");
   const liveImportant = businessItems.filter((item) => isImportantBusiness(item, businessAsOf));
   const liveTimingLabels = new Set(liveImportant.map((item) => getBusinessPriorityInfo(item, businessAsOf).reviewLabel));
+  check(liveTimingLabels.size > 0, "live important set should include at least one review timing label");
   for (const label of liveTimingLabels) {
     check(importantText.includes(label), `${label} review timing should be visible in important filter`);
   }

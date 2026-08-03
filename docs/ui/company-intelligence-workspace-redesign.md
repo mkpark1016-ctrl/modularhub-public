@@ -44,3 +44,44 @@
 - 현재 `origin/main`의 공개 `companies.json` 기준 기업 수는 10개다. 지시서의 11개 기업 목표와 다르지만, 이번 PR은 데이터 변경 금지 원칙에 따라 UI/derived presentation만 수정한다.
 - 경쟁력 프로필은 임의 점수화하지 않고 기존 검증 지표와 데이터 공백 신호를 기반으로 표현한다.
 - 브라우저 캡처 이미지는 저장소에 커밋하지 않고 QA 결과만 PR에 기록한다.
+## Phase 7A-1A Drawer Stability Scope
+
+### Completed In PR #44
+
+- 생산시설 table 내부의 row-level `<details>`를 제거하고 `CompanyEntityDrawer`로 상세 정보를 이동했다.
+- 생산시설, 프로젝트, 기술·특허 상세 패널은 같은 drawer interaction foundation을 공유한다.
+- 기업 목록에는 감사재무 적용 여부와 확인 생산시설 보유 여부를 탐색하는 필터를 추가했다.
+- 종합분석 탭의 최근 활동 표현은 기회 결론이 아니라 검증 데이터 기반 signal로 낮추어 표시한다.
+- `browser-qa-sales.mjs`는 최신 business fixture에서 실제 `getBusinessPriorityInfo`가 산출한 review label을 검증하도록 조정했다. 중요 항목 label set이 비어 있으면 실패한다.
+
+### Deferred To Phase 7A-2
+
+- 종합분석 탭의 투자/영업 의사결정용 deep synthesis.
+- 재무 탭의 cross-company audit insight 비교와 위험 요약 고도화.
+- 근거·출처 탭의 source graph, confidence breakdown, unresolved field workflow.
+- 기업 수 자체를 11개로 확장하는 source data 작업.
+
+### Focus And Isolation Policy
+
+- `CompanyEntityDrawer`는 `createPortal`로 `document.body` 아래에 렌더링한다.
+- Drawer open 동안 React app root `#root`에는 `inert=true`와 `aria-hidden=true`를 적용하고 close cleanup에서 기존 값을 복원한다.
+- body scroll lock은 open 동안 `document.body.style.overflow = "hidden"`으로 적용하고 cleanup에서 기존 overflow 값을 복원한다.
+- 초기 focus는 close button이 아니라 drawer title `h2[tabIndex="-1"]`로 이동한다.
+- `Tab`과 `Shift+Tab`은 drawer 내부 focusable element 사이에서 순환한다.
+- `Escape`, backdrop click, close button으로 닫을 수 있고 close 후 최초 상세보기 trigger로 focus를 복원한다.
+- Drawer 내부 `근거보기`를 누르면 entity drawer를 먼저 닫고 `EvidenceDrawer`만 열어 중첩 modal DOM을 남기지 않는다.
+
+### Browser QA Command
+
+```powershell
+cd frontend
+npm.cmd run qa:company-drawers
+```
+
+검사 범위:
+
+- viewport: 1440x900, 390x844, 320x800
+- 생산시설: tab 이동, 첫 상세보기, dialog semantics, inert, body scroll lock, focus trap, ESC, backdrop, focus restore
+- 프로젝트/기술: detail drawer, evidence drawer transition, body overflow restore, focus restore
+- 레이아웃: page/drawer horizontal overflow 없음, `word-break: break-all` 미사용, close button visible
+- diagnostics: console error 0, React warning 0

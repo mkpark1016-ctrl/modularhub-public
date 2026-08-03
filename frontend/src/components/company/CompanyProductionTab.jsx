@@ -19,6 +19,15 @@ function productionTargets(facility) {
   return (facility.production_scope || []).map((item) => labelValue(item, item)).join(", ") || "확인되지 않음";
 }
 
+function hasProductionValue(value) {
+  if (Array.isArray(value)) return value.length > 0;
+  return value !== null && value !== undefined && value !== "";
+}
+
+function hasAnyProductionValue(...values) {
+  return values.some(hasProductionValue);
+}
+
 function FacilityDetail({ company, facility, productionSummary, onShowEvidence }) {
   const capacity = fallbackProductionCapacityLabel(facility);
   const confirmedItems = [
@@ -31,13 +40,13 @@ function FacilityDetail({ company, facility, productionSummary, onShowEvidence }
     ["근거 기준", facility.verification_basis_label || labelValue(facility.capacity_basis)],
     ["기준일", formatDate(facility.verified_at || productionSummary.verified_at)],
     ["신뢰도", labelValue(facility.data_confidence || facility.confidence || productionSummary.data_confidence)],
-  ].filter(([, value]) => value && value !== "확인되지 않음" && value !== "세부정보 보완 필요");
+  ].filter(([, value]) => hasProductionValue(value) && value !== "확인되지 않음" && value !== "세부정보 보완 필요");
   const missingItems = [
-    !facility.address && "상세 주소",
-    !facility.site_area && !facility.site_area_m2 && "부지면적",
-    !facility.building_area && !facility.building_area_m2 && "건축면적",
-    !(facility.production_processes || []).length && "주요 공정",
-    !facility.notes && "비고",
+    !hasProductionValue(facility.address) && "상세 주소",
+    !hasAnyProductionValue(facility.site_area, facility.site_area_m2) && "부지면적",
+    !hasAnyProductionValue(facility.building_area, facility.building_area_m2) && "건축면적",
+    !hasProductionValue(facility.production_processes) && "주요 공정",
+    !hasProductionValue(facility.notes) && "비고",
   ].filter(Boolean);
   return (
     <>
