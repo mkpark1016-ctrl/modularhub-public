@@ -1,4 +1,7 @@
 import {
+  formatNumber,
+} from "./companyDetailHelpers";
+import {
   decisionStatusLabel,
   decisionStatusTone,
   financialScopeLabel,
@@ -17,7 +20,7 @@ import {
   sourceSectionCounts,
   verificationStatusLabel,
 } from "../../companyReportInsights";
-import { buildReportMetricEvidence } from "../../companyEvidence";
+import { buildReportAnalysisEvidence, buildReportMetricEvidence } from "../../companyEvidence";
 
 const KPI_CARDS = [
   { key: "revenue", label: "최근 매출" },
@@ -205,7 +208,54 @@ function SourceLocationList({ metric }) {
   );
 }
 
-function FinancialDecisionSummary({ insight }) {
+function healthEvidence(insight, item) {
+  return buildReportAnalysisEvidence(insight, item.headline, {
+    value: decisionStatusLabel(item.status),
+    metricIds: item.metric_ids,
+    latestValue: item.actual_value ?? "확인되지 않음",
+    calculationValue: `${item.operator || "operator 확인 필요"} ${item.threshold ?? "threshold 확인 필요"}`,
+    calculationBasis: item.calculation_basis,
+    basisYear: insight.latest_year,
+    dataStatus: `rule_id=${item.rule_id || "확인 필요"}`,
+    limitation: item.interpretation_scope || item.limitation,
+    sourceIds: item.source_ids,
+    note: item.explanation,
+  });
+}
+
+function trendEvidence(insight, trend) {
+  return buildReportAnalysisEvidence(insight, trend.headline, {
+    value: decisionStatusLabel(trend.status),
+    metricIds: trend.metric_ids,
+    latestValue: `${trend.latest_year ?? "확인되지 않음"}년 ${trend.latest_display || "확인되지 않음"}`,
+    previousValue: `${trend.previous_year ?? "확인되지 않음"}년 ${trend.previous_display || "확인되지 않음"}`,
+    calculationValue: trend.change_display || trend.change_pct_unavailable_reason || "확인되지 않음",
+    calculationBasis: trend.calculation_basis,
+    basisYear: trend.latest_year || insight.latest_year,
+    dataStatus: trend.change_pct_unavailable_reason || "변화율 계산 가능",
+    limitation: "최근 연도와 직전 연도의 감사재무 지표 변화만 표시하며 미래 성과를 예측하지 않습니다.",
+    sourceIds: trend.source_ids,
+    note: trend.explanation,
+  });
+}
+
+function peerEvidence(insight, item) {
+  return buildReportAnalysisEvidence(insight, peerBenchmarkLabel(item.metric_id), {
+    value: item.company_display,
+    metricIds: [item.metric_id],
+    latestValue: item.company_display,
+    peerValue: item.median_display,
+    calculationValue: item.comparable ? item.comparison_label : item.not_comparable_reason,
+    calculationBasis: item.calculation_basis,
+    basisYear: insight.latest_year,
+    dataStatus: item.comparable ? "비교 가능" : "비교 불가",
+    limitation: "동일 연도·통화·재무제표 범위에서 최소 3개 기업 값이 있을 때만 순위를 표시하며 종합 경쟁력 점수가 아닙니다.",
+    sourceIds: item.source_ids,
+    note: `비교 모집단 ${item.comparison_universe_count ?? 0}개, 현재 기업 포함 ${item.current_company_included ? "예" : "아니오"}`,
+  });
+}
+
+function FinancialDecisionSummary({ insight, onShowEvidence }) {
   const healthItems = Object.entries(insight.financial_health || {});
   const trendItems = Object.values(insight.trends || {}).slice(0, 4);
   if (!healthItems.length && !trendItems.length) return null;
@@ -221,7 +271,18 @@ function FinancialDecisionSummary({ insight }) {
             <span>{decisionStatusLabel(item.status)}</span>
             <strong>{item.headline}</strong>
             <p>{item.explanation}</p>
+            <dl className="company-mini-detail-list">
+              <div><dt>rule_id</dt><dd>{item.rule_id || "확인 필요"}</dd></div>
+              <div><dt>기준</dt><dd>{item.operator || "확인 필요"} {item.threshold ?? ""}</dd></div>
+              <div><dt>실제값</dt><dd>{item.actual_value ?? "확인되지 않음"}</dd></div>
+            </dl>
             {item.limitation && <small>{item.limitation}</small>}
+            {item.interpretation_scope && <small>{item.interpretation_scope}</small>}
+            {onShowEvidence && (
+              <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(healthEvidence(insight, item))}>
+                계산 근거 보기
+              </button>
+            )}
           </article>
         ))}
       </div>
@@ -229,7 +290,12 @@ function FinancialDecisionSummary({ insight }) {
         {trendItems.map((trend) => (
           <span className={`decision-status ${decisionStatusTone(trend.status)}`} key={trend.headline}>
             <b>{trend.headline}</b>
-            <em>{decisionStatusLabel(trend.status)}</em>
+            <em>{decisionStatusLabel(trend.status)} · {trend.previous_display || "이전값 없음"} → {trend.latest_display || "최신값 없음"} · {trend.change_display || trend.change_pct_unavailable_reason || "변화율 확인 필요"}</em>
+            {onShowEvidence && (
+              <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(trendEvidence(insight, trend))}>
+                계산 근거
+              </button>
+            )}
           </span>
         ))}
       </div>
@@ -237,7 +303,7 @@ function FinancialDecisionSummary({ insight }) {
   );
 }
 
-function PeerBenchmarkPanel({ benchmarks = [] }) {
+function PeerBenchmarkPanel({ insight, benchmarks = [], onShowEvidence }) {
   if (!benchmarks.length) return null;
   return (
     <div className="company-subsection">
@@ -251,7 +317,20 @@ function PeerBenchmarkPanel({ benchmarks = [] }) {
             <span>{peerBenchmarkLabel(item.metric_id)}</span>
             <strong>{item.company_display}</strong>
             <p>{item.comparable ? item.comparison_label : item.not_comparable_reason}</p>
-            <small>{item.comparable ? `비교 대상 ${item.peer_count}개 · 임의 종합점수 없음` : "임의 순위 없음"}</small>
+            <dl className="company-mini-detail-list">
+              <div><dt>현재값</dt><dd>{item.company_display}</dd></div>
+              <div><dt>비교 모집단</dt><dd>{formatNumber(item.comparison_universe_count ?? item.peer_count, "개")}</dd></div>
+              <div><dt>다른 기업</dt><dd>{formatNumber(item.other_peer_count, "개")}</dd></div>
+              <div><dt>현재 기업 포함</dt><dd>{item.current_company_included ? "예" : "아니오"}</dd></div>
+              <div><dt>중앙값</dt><dd>{item.median_display || "확인되지 않음"}</dd></div>
+              <div><dt>{item.reference_value_label || "참고값"}</dt><dd>{item.reference_value_display || "확인되지 않음"}</dd></div>
+            </dl>
+            <small>{item.comparable ? `순위 ${item.rank} · 임의 종합점수 없음` : "비교 조건 미충족 · 임의 순위 없음"}</small>
+            {onShowEvidence && (
+              <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(peerEvidence(insight, item))}>
+                계산 근거 보기
+              </button>
+            )}
           </article>
         ))}
       </div>
@@ -279,7 +358,7 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
         공식 공시문서에 포함된 감사받은 재무제표 기준 정보입니다. 모듈러 부문 별도 매출 공개 여부에 따라 회사 전체 재무와 구분해 해석합니다.
       </p>
 
-      <FinancialDecisionSummary insight={insight} />
+      <FinancialDecisionSummary insight={insight} onShowEvidence={onShowEvidence} />
 
       {visibleDisclosureWarnings.length > 0 && (
         <div className="company-report-pending-callouts" aria-label="검증 보류 및 공시 한계 안내">
@@ -334,7 +413,7 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
         </div>
       </div>
 
-      <PeerBenchmarkPanel benchmarks={insight.peer_benchmarks} />
+      <PeerBenchmarkPanel insight={insight} benchmarks={insight.peer_benchmarks} onShowEvidence={onShowEvidence} />
 
       {hasRevenueBreakdown && (
         <div className="company-subsection">

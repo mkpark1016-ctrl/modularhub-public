@@ -440,7 +440,7 @@ def metric_status(metric: dict[str, Any] | None) -> str:
 
 
 def percent_change(current: int | float | None, previous: int | float | None) -> float | None:
-    if current is None or previous in {None, 0}:
+    if current is None or previous is None or previous == 0:
         return None
     return float(((Decimal(str(current)) - Decimal(str(previous))) / abs(Decimal(str(previous))) * Decimal(100)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))
 
@@ -461,8 +461,26 @@ def direction(current: int | float | None, previous: int | float | None) -> str:
     return "flat"
 
 
-def basis_metric(insight_metrics: dict[str, Any], metric_id: str) -> dict[str, Any] | None:
-    return insight_metrics.get(metric_id)
+def change_pct_unavailable_reason(current: int | float | None, previous: int | float | None) -> str | None:
+    if current is None or previous is None:
+        return "최신 연도 또는 직전 연도 값이 없어 변화율을 계산하지 않습니다."
+    if previous == 0:
+        return "직전 연도 값이 0이라 변화율을 계산하지 않습니다."
+    return None
+
+
+def metric_display(metric: dict[str, Any] | None) -> str:
+    return metric.get("display_text", "확인되지 않음") if metric else "확인되지 않음"
+
+
+def change_display(metric_id: str, change: int | float | None) -> str:
+    if change is None:
+        return "계산되지 않음"
+    if metric_id.endswith("_pct"):
+        return f"{float(change):+.1f}%p"
+    eok = Decimal(str(change)) / Decimal(100_000_000)
+    rounded = eok.quantize(Decimal("0.1"), rounding=ROUND_HALF_UP)
+    return f"{rounded:+,.1f}억원"
 
 
 def trend_item(
@@ -476,14 +494,19 @@ def trend_item(
 ) -> dict[str, Any]:
     current_value = metric_raw(current)
     previous_value = metric_raw(previous)
+    change = value_change(current_value, previous_value)
     return {
         "status": "additional_confirmation_required" if current_value is None or previous_value is None else direction(current_value, previous_value),
         "headline": label,
         "explanation": explanation,
         "latest_year": latest_year,
         "previous_year": previous_year,
-        "change_value": value_change(current_value, previous_value),
+        "latest_display": metric_display(current),
+        "previous_display": metric_display(previous),
+        "change_value": change,
+        "change_display": change_display(key, change),
         "change_pct": percent_change(current_value, previous_value),
+        "change_pct_unavailable_reason": change_pct_unavailable_reason(current_value, previous_value),
         "metric_ids": [key],
         "source_ids": sorted(set(metric_source_refs(current) + metric_source_refs(previous))),
         "calculation_basis": "latest_year_vs_previous_year",
@@ -494,8 +517,10 @@ def build_latest_snapshot(latest_year: int, latest_metrics: dict[str, Any], deri
     snapshot = {"latest_year": latest_year}
     for key in LATEST_SNAPSHOT_FIELDS:
         target_key = "trade_receivables" if key == "receivables_total" else key
-        snapshot[target_key] = latest_metrics.get(key)
-    snapshot["operating_margin_pct"] = derived[str(latest_year)].get("operating_margin_pct")
+        if key in latest_metrics:
+            snapshot[target_key] = latest_metrics[key]
+    if "operating_margin_pct" in derived[str(latest_year)]:
+        snapshot["operating_margin_pct"] = derived[str(latest_year)]["operating_margin_pct"]
     return snapshot
 
 
@@ -517,7 +542,20 @@ def build_decision_trends(years: list[int], series: list[dict[str, Any]], derive
     }
 
 
-def health_item(status: str, headline: str, explanation: str, metric_ids: list[str], source_ids: list[str], limitation: str | None = None) -> dict[str, Any]:
+def health_item(
+    status: str,
+    headline: str,
+    explanation: str,
+    metric_ids: list[str],
+    source_ids: list[str],
+    *,
+    rule_id: str,
+    operator: str,
+    threshold: int | float | None,
+    actual_value: int | float | None,
+    interpretation_scope: str,
+    limitation: str | None = None,
+) -> dict[str, Any]:
     item = {
         "status": status,
         "headline": headline,
@@ -525,6 +563,11 @@ def health_item(status: str, headline: str, explanation: str, metric_ids: list[s
         "metric_ids": metric_ids,
         "source_ids": sorted(set(source_ids)),
         "calculation_basis": "rule_based_from_reported_metrics",
+        "rule_id": rule_id,
+        "operator": operator,
+        "threshold": threshold,
+        "actual_value": actual_value,
+        "interpretation_scope": interpretation_scope,
     }
     if limitation:
         item["limitation"] = limitation
@@ -548,39 +591,137 @@ def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], der
     working_capital_status = "additional_confirmation_required" if metric_raw(receivables_ratio) is None else "watch" if metric_raw(receivables_ratio) > 30 else "info"
     coverage_status = "watch" if source_summary.get("pending_location_count") else "info"
     return {
-        "profitability": health_item(profitability_status, "수익성", f"{latest_year}년 영업이익률은 {operating_margin.get('display_text') if operating_margin else '확인되지 않음'}입니다.", ["revenue", "operating_profit", "operating_margin_pct"], source_ids),
-        "cash_generation": health_item(cash_status, "현금창출력", f"{latest_year}년 영업현금흐름은 {operating_cash_flow.get('display_text') if operating_cash_flow else '확인되지 않음'}입니다.", ["operating_profit", "operating_cash_flow"], metric_source_refs(operating_cash_flow) + metric_source_refs(operating_profit)),
-        "leverage": health_item(leverage_status, "재무안정성", f"{latest_year}년 총차입금은 {borrowings.get('display_text') if borrowings else '확인되지 않음'}이고 부채비율은 {liabilities_ratio.get('display_text') if liabilities_ratio else '확인되지 않음'}입니다.", ["total_borrowings", "liabilities_to_equity_pct"], metric_source_refs(borrowings)),
-        "working_capital": health_item(working_capital_status, "운전자본", f"{latest_year}년 채권/매출 비율은 {receivables_ratio.get('display_text') if receivables_ratio else '확인되지 않음'}입니다.", ["receivables_total", "receivables_to_revenue_pct"], metric_source_refs(receivables), "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다."),
-        "disclosure_coverage": health_item(coverage_status, "공시 범위", f"검증된 출처 위치 {source_summary.get('verified_location_count', 0)}건, 수동 확인 필요 {source_summary.get('pending_location_count', 0)}건입니다.", ["source_locations"], [], None if attribution.get("modular_segment_revenue_disclosed") else "모듈러 부문 별도 매출은 공시되지 않았습니다."),
+        "profitability": health_item(
+            profitability_status,
+            "수익성",
+            f"{latest_year}년 영업이익률은 {operating_margin.get('display_text') if operating_margin else '확인되지 않음'}입니다.",
+            ["revenue", "operating_profit", "operating_margin_pct"],
+            source_ids,
+            rule_id="profitability_negative_margin",
+            operator="<",
+            threshold=0,
+            actual_value=metric_raw(operating_margin),
+            interpretation_scope="영업이익률이 0% 미만인지 확인하는 관찰 규칙이며 신용등급이나 투자 판단이 아닙니다.",
+        ),
+        "cash_generation": health_item(
+            cash_status,
+            "현금창출력",
+            f"{latest_year}년 영업현금흐름은 {operating_cash_flow.get('display_text') if operating_cash_flow else '확인되지 않음'}입니다.",
+            ["operating_profit", "operating_cash_flow"],
+            metric_source_refs(operating_cash_flow) + metric_source_refs(operating_profit),
+            rule_id="positive_profit_negative_operating_cash_flow",
+            operator="operating_profit > 0 and operating_cash_flow <",
+            threshold=0,
+            actual_value=metric_raw(operating_cash_flow),
+            interpretation_scope="이익과 영업현금흐름 방향이 엇갈리는지 확인하는 관찰 규칙입니다.",
+        ),
+        "leverage": health_item(
+            leverage_status,
+            "재무안정성",
+            f"{latest_year}년 총차입금은 {borrowings.get('display_text') if borrowings else '확인되지 않음'}이고 부채비율은 {liabilities_ratio.get('display_text') if liabilities_ratio else '확인되지 않음'}입니다.",
+            ["total_borrowings", "liabilities_to_equity_pct"],
+            metric_source_refs(borrowings),
+            rule_id="liabilities_to_equity_observation",
+            operator=">",
+            threshold=200,
+            actual_value=metric_raw(liabilities_ratio),
+            interpretation_scope="부채비율이 관찰 기준을 넘는지 표시하며 부실 판단을 의미하지 않습니다.",
+        ),
+        "working_capital": health_item(
+            working_capital_status,
+            "운전자본",
+            f"{latest_year}년 채권/매출 비율은 {receivables_ratio.get('display_text') if receivables_ratio else '확인되지 않음'}입니다.",
+            ["receivables_total", "receivables_to_revenue_pct"],
+            metric_source_refs(receivables),
+            rule_id="receivables_to_revenue_observation",
+            operator=">",
+            threshold=30,
+            actual_value=metric_raw(receivables_ratio),
+            interpretation_scope="채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
+            limitation="채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+        ),
+        "disclosure_coverage": health_item(
+            coverage_status,
+            "공시 범위",
+            f"검증된 출처 위치 {source_summary.get('verified_location_count', 0)}건, 수동 확인 필요 {source_summary.get('pending_location_count', 0)}건입니다.",
+            ["source_locations"],
+            [],
+            rule_id="source_location_coverage_observation",
+            operator="pending_location_count >",
+            threshold=0,
+            actual_value=source_summary.get("pending_location_count", 0),
+            interpretation_scope="수동 출처 위치 확인이 남아 있는지 표시하는 공시 범위 관찰 규칙입니다.",
+            limitation=None if attribution.get("modular_segment_revenue_disclosed") else "모듈러 부문 별도 매출은 공시되지 않았습니다.",
+        ),
     }
+
+
+def financial_metric_status_counts(source_payload: dict[str, Any]) -> dict[str, int]:
+    counts = {
+        "not_disclosed": 0,
+        "not_applicable": 0,
+        "verification_pending": 0,
+    }
+    for record in source_payload["financial_years"].values():
+        for section in ["metrics", "revenue_breakdown"]:
+            for metric in record.get(section, {}).values():
+                status = metric.get("disclosure_status")
+                if metric.get("reported") is None and status in counts:
+                    counts[status] += 1
+    return counts
+
+
+def location_verification_counts(locations: list[dict[str, Any]]) -> dict[str, int]:
+    counts = {
+        "verified": 0,
+        "verified_section_range": 0,
+        "pending_manual_page_check": 0,
+    }
+    for location in locations:
+        status = location.get("verification_status")
+        if status in counts:
+            counts[status] += 1
+    return counts
 
 
 def build_evidence_health(source_payload: dict[str, Any], source_summary: dict[str, Any], locations: list[dict[str, Any]]) -> list[dict[str, Any]]:
     financial_source_refs = sorted({location["source_ref"] for location in locations if location.get("source_ref")})
     latest_verified_at = source_summary.get("latest_report_date")
-    pending_count = int(source_summary.get("pending_location_count") or 0)
-    verified_count = int(source_summary.get("verified_location_count") or 0)
+    location_counts = location_verification_counts(locations)
+    metric_counts = financial_metric_status_counts(source_payload)
+    pending_count = int(location_counts["pending_manual_page_check"])
+    verified_count = int(location_counts["verified"] + location_counts["verified_section_range"])
+    modular_disclosed = source_payload["entity_attribution"].get("modular_segment_revenue_disclosed")
     return [
         {
             "domain": "financial",
+            "distinct_source_count": len(financial_source_refs),
             "verified_item_count": verified_count,
             "pending_item_count": pending_count,
-            "unavailable_item_count": 0,
+            "not_disclosed_item_count": metric_counts["not_disclosed"],
+            "not_applicable_item_count": metric_counts["not_applicable"],
+            "verification_pending_item_count": metric_counts["verification_pending"],
+            "unavailable_item_count": metric_counts["not_disclosed"] + metric_counts["not_applicable"] + metric_counts["verification_pending"],
             "source_count": len(financial_source_refs),
             "latest_verified_at": latest_verified_at,
             "verification_status": "pending_manual_page_check" if pending_count else "verified",
             "source_ids": financial_source_refs,
+            "source_type_counts": {"audit_report": len(financial_source_refs)},
         },
         {
             "domain": "disclosure_scope",
-            "verified_item_count": 1,
+            "distinct_source_count": len(financial_source_refs),
+            "verified_item_count": 1 if modular_disclosed else 0,
             "pending_item_count": 0,
-            "unavailable_item_count": 0 if source_payload["entity_attribution"].get("modular_segment_revenue_disclosed") else 1,
+            "not_disclosed_item_count": 0 if modular_disclosed else 1,
+            "not_applicable_item_count": 0,
+            "verification_pending_item_count": 0,
+            "unavailable_item_count": 0 if modular_disclosed else 1,
             "source_count": len(financial_source_refs),
             "latest_verified_at": latest_verified_at,
-            "verification_status": "verified",
+            "verification_status": "verified" if modular_disclosed else "not_disclosed",
             "source_ids": financial_source_refs,
+            "source_type_counts": {"audit_report": len(financial_source_refs)},
         },
     ]
 
@@ -594,11 +735,29 @@ def comparable_metric_value(company: dict[str, Any], metric_id: str, source: str
     return None
 
 
+def comparable_metric(company: dict[str, Any], metric_id: str, source: str) -> dict[str, Any] | None:
+    if source == "latest_metrics":
+        return company.get("latest_metrics", {}).get(metric_id)
+    if source == "derived_metrics":
+        latest_year = company.get("latest_year")
+        return company.get("derived_metrics", {}).get(str(latest_year), {}).get(metric_id)
+    return None
+
+
 def metric_display_for_peer(company: dict[str, Any], metric_id: str, source: str) -> str:
     if source == "latest_metrics":
         return company.get("latest_metrics", {}).get(metric_id, {}).get("display_text", "확인되지 않음")
     latest_year = company.get("latest_year")
     return company.get("derived_metrics", {}).get(str(latest_year), {}).get(metric_id, {}).get("display_text", "확인되지 않음")
+
+
+def peer_value_display(value: int | float | None, source: str) -> str:
+    if value is None:
+        return "확인되지 않음"
+    if source == "derived_metrics":
+        return f"{float(value):,.1f}%"
+    eok = Decimal(str(value)) / Decimal(100_000_000)
+    return f"{eok.quantize(Decimal('0.1'), rounding=ROUND_HALF_UP):,.1f}억원"
 
 
 def build_peer_benchmarks(companies: list[dict[str, Any]]) -> None:
@@ -622,12 +781,14 @@ def build_peer_benchmarks(companies: list[dict[str, Any]]) -> None:
                 rank = [peer["company_id"] for peer in ordered].index(company["company_id"]) + 1
                 values = [comparable_metric_value(peer, metric_id, source) for peer in scoped_peers]
                 best_value = comparable_metric_value(ordered[0], metric_id, source)
+                median_value = float(median(values))
                 comparison_label = f"{len(scoped_peers)}개 감사재무 기업 중 {rank}번째"
                 reason = None
             else:
                 rank = None
                 values = []
                 best_value = None
+                median_value = None
                 comparison_label = "비교 조건 미충족"
                 if value is None:
                     reason = "현재 기업의 해당 지표 값이 확인되지 않았습니다."
@@ -640,13 +801,22 @@ def build_peer_benchmarks(companies: list[dict[str, Any]]) -> None:
                 "company_value": value,
                 "company_display": metric_display_for_peer(company, metric_id, source),
                 "peer_count": len(scoped_peers),
+                "comparison_universe_count": len(scoped_peers),
+                "other_peer_count": max(len(scoped_peers) - (1 if value is not None else 0), 0),
+                "current_company_included": value is not None and any(peer["company_id"] == company["company_id"] for peer in scoped_peers),
                 "rank": rank,
-                "median": float(median(values)) if values else None,
+                "median": median_value,
+                "median_display": peer_value_display(median_value, source),
                 "best_value": best_value,
+                "reference_value": best_value,
+                "reference_value_display": peer_value_display(best_value, source),
+                "reference_value_label": "비교 범위 최대값" if config["comparison_direction"] == "higher_is_larger" else "비교 범위 최소값",
                 "comparison_direction": config["comparison_direction"],
                 "comparison_label": comparison_label,
                 "comparable": comparable,
                 "not_comparable_reason": reason,
+                "source_ids": metric_source_refs(comparable_metric(company, metric_id, source)),
+                "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
             })
         company["peer_benchmarks"] = benchmarks
 

@@ -6,7 +6,15 @@ import {
   formatNumber,
   labelValue,
 } from "./companyDetailHelpers";
-import { buildSourceRows, sourceHasPublicUrl, sourceTypeSummaryForDomain } from "../../companyEvidence";
+import {
+  buildSourceRows,
+  distinctSourceRows,
+  reportSourcesByIds,
+  sourceHasPublicUrl,
+  sourceSummaryForDomain,
+  sourceTypeSummaryForDomain,
+  sourcesForDomain,
+} from "../../companyEvidence";
 import {
   evidenceDomainLabel,
   sourceSectionCounts,
@@ -23,32 +31,143 @@ const MATRIX_AREAS = [
   { key: "recent_signal", label: "최근 활동", tab: "overview" },
 ];
 
-function DataTrustCenter({ reportInsight, matrixRows }) {
+function sourceTypeCountLabel(counts = {}) {
+  const entries = Object.entries(counts).filter(([, count]) => Number(count) > 0);
+  return entries.length ? entries.map(([label, count]) => `${label} ${count}`).join(" · ") : "출처 유형 없음";
+}
+
+function latestSourceDate(rows, fallback) {
+  const dates = rows
+    .map((row) => row.publishedAt)
+    .filter(Boolean)
+    .sort((a, b) => String(b).localeCompare(String(a)));
+  return dates[0] || fallback || "";
+}
+
+function countPresent(values) {
+  return values.filter((value) => (
+    value !== null
+    && value !== undefined
+    && value !== ""
+    && !(Array.isArray(value) && value.length === 0)
+  )).length;
+}
+
+function nonFinancialTrustRows({ company, model, gapRows, sourceRows }) {
+  const profile = company.company_profile || {};
+  const gapsFor = (domain) => gapRows.filter((row) => row.domain === domain).length;
+  const productionItems = Array.isArray(company.production) ? company.production : [];
+  const projectSummary = model.projectSummary || {};
+  const technologyItems = model.technologyItems || [];
+  const recentSignals = [
+    ...(Array.isArray(company.recent_signals) ? company.recent_signals : []),
+    ...(Array.isArray(model.events) ? model.events : []),
+  ];
+  const rows = [
+    {
+      domain: "identity",
+      verified_item_count: countPresent([
+        company.company_name,
+        company.legal_name,
+        profile.representative,
+        profile.established_at,
+        company.headquarters,
+        company.website_url,
+        company.dart_identity?.dart_corp_code,
+      ]),
+      pending_item_count: gapsFor("identity"),
+    },
+    {
+      domain: "production",
+      verified_item_count: productionItems.filter((item) => Array.isArray(item.source_ids) && item.source_ids.length > 0).length,
+      pending_item_count: gapsFor("production"),
+    },
+    {
+      domain: "project",
+      verified_item_count: Number(projectSummary.verified || 0),
+      pending_item_count: Number(projectSummary.candidates || 0) + gapsFor("project"),
+    },
+    {
+      domain: "technology",
+      verified_item_count: technologyItems.filter((item) => Array.isArray(item.source_ids) && item.source_ids.length > 0).length,
+      pending_item_count: gapsFor("technology"),
+    },
+    {
+      domain: "recent_signal",
+      verified_item_count: recentSignals.filter((item) => Array.isArray(item.source_ids) && item.source_ids.length > 0).length,
+      pending_item_count: gapsFor("recent_signal"),
+    },
+  ];
+
+  return rows.map((row) => {
+    const domainSources = sourcesForDomain(sourceRows, row.domain);
+    const summary = sourceSummaryForDomain(sourceRows, row.domain);
+    const status = row.pending_item_count > 0
+      ? "검증 보류 포함"
+      : row.verified_item_count > 0
+        ? "검증 완료"
+        : summary.sourceCount > 0
+          ? "자료 확인 중"
+          : "확인되지 않음";
+    return {
+      key: row.domain,
+      domain: row.domain,
+      label: evidenceDomainLabel(row.domain),
+      status,
+      sourceCount: summary.sourceCount,
+      verifiedCount: row.verified_item_count,
+      pendingCount: row.pending_item_count,
+      notDisclosedCount: 0,
+      notApplicableCount: 0,
+      verificationPendingCount: row.pending_item_count,
+      latest: latestSourceDate(domainSources, model.header.latestVerifiedAt),
+      sourceTypeCounts: summary.sourceTypeCounts,
+      sources: distinctSourceRows(domainSources),
+    };
+  });
+}
+
+function trustEvidencePayload(row) {
+  return {
+    title: `${row.label} Data Trust`,
+    value: row.status,
+    note: "고유 출처 수와 항목 상태를 실제 데이터 기준으로 집계한 읽기 전용 근거입니다.",
+    details: [
+      ["영역", row.label],
+      ["실제 출처 수", formatNumber(row.sourceCount, "개")],
+      ["검증 항목", formatNumber(row.verifiedCount, "건")],
+      ["보류 항목", formatNumber(row.pendingCount, "건")],
+      ["미공시 항목", formatNumber(row.notDisclosedCount, "건")],
+      ["해당 없음 항목", formatNumber(row.notApplicableCount, "건")],
+      ["검증 보류 항목", formatNumber(row.verificationPendingCount, "건")],
+      ["출처 유형", sourceTypeCountLabel(row.sourceTypeCounts)],
+      ["최신 기준", formatDate(row.latest)],
+    ],
+    sources: row.sources,
+  };
+}
+
+function DataTrustCenter({ company, model, reportInsight, gapRows, sourceRows, onShowEvidence }) {
   const financialRows = Array.isArray(reportInsight?.evidence_health) ? reportInsight.evidence_health : [];
   const rows = [
     ...financialRows.map((row) => ({
       key: row.domain,
+      domain: row.domain,
       label: evidenceDomainLabel(row.domain),
       status: verificationStatusLabel(row.verification_status),
-      sourceCount: row.source_count,
-      verifiedCount: row.verified_item_count,
-      pendingCount: row.pending_item_count,
-      unavailableCount: row.unavailable_item_count,
+      sourceCount: row.distinct_source_count ?? row.source_count ?? 0,
+      verifiedCount: row.verified_item_count ?? 0,
+      pendingCount: row.pending_item_count ?? 0,
+      notDisclosedCount: row.not_disclosed_item_count ?? row.unavailable_item_count ?? 0,
+      notApplicableCount: row.not_applicable_item_count ?? 0,
+      verificationPendingCount: row.verification_pending_item_count ?? 0,
       latest: row.latest_verified_at,
+      sourceTypeCounts: row.source_type_counts || {},
+      sources: reportSourcesByIds(reportInsight, row.source_ids),
     })),
-    ...matrixRows
-      .filter((row) => row.key !== "financial")
-      .map((row) => ({
-        key: row.key,
-        label: row.label,
-        status: row.status,
-        sourceCount: row.sourceTypes === "출처 없음" ? 0 : row.sourceTypes.split(",").length,
-        verifiedCount: row.status === "검증 완료" ? 1 : 0,
-        pendingCount: row.gapSummary === "보완 공백 없음" ? 0 : 1,
-        unavailableCount: 0,
-        latest: row.verifiedAt,
-      })),
+    ...nonFinancialTrustRows({ company, model, gapRows, sourceRows }),
   ];
+
   return (
     <div className="company-subsection">
       <div className="company-subsection-heading">
@@ -64,9 +183,21 @@ function DataTrustCenter({ reportInsight, matrixRows }) {
               <div><dt>출처</dt><dd>{formatNumber(row.sourceCount, "개")}</dd></div>
               <div><dt>검증</dt><dd>{formatNumber(row.verifiedCount, "건")}</dd></div>
               <div><dt>보류</dt><dd>{formatNumber(row.pendingCount, "건")}</dd></div>
-              <div><dt>미공시</dt><dd>{formatNumber(row.unavailableCount, "건")}</dd></div>
+              <div><dt>미공시</dt><dd>{formatNumber(row.notDisclosedCount, "건")}</dd></div>
+              <div><dt>해당 없음</dt><dd>{formatNumber(row.notApplicableCount, "건")}</dd></div>
+              <div><dt>검증 보류</dt><dd>{formatNumber(row.verificationPendingCount, "건")}</dd></div>
             </dl>
+            <small>출처 유형 {sourceTypeCountLabel(row.sourceTypeCounts)}</small>
             <small>최신 기준 {formatDate(row.latest)}</small>
+            {onShowEvidence && (
+              <button
+                type="button"
+                className="text-button evidence-inline-button"
+                onClick={() => onShowEvidence(trustEvidencePayload(row))}
+              >
+                상세 근거 보기
+              </button>
+            )}
           </article>
         ))}
       </div>
@@ -100,7 +231,14 @@ export default function CompanyEvidenceTab({ company, reportInsight = null, onSh
         <div><dt>데이터 공백</dt><dd>{formatNumber(gapRows.length, "건")}</dd></div>
       </dl>
 
-      <DataTrustCenter reportInsight={reportInsight} matrixRows={matrixRows} />
+      <DataTrustCenter
+        company={company}
+        model={model}
+        reportInsight={reportInsight}
+        gapRows={gapRows}
+        sourceRows={sourceRows}
+        onShowEvidence={onShowEvidence}
+      />
 
       <div className="company-subsection">
         <h3>영역별 검증 매트릭스</h3>

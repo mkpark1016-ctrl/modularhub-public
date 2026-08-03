@@ -62,6 +62,18 @@ async function clickTab(page, label) {
   await page.waitForTimeout(150);
 }
 
+async function openAndCloseEvidenceDrawer(page, buttonLocator, expectedText) {
+  await buttonLocator.waitFor({ state: "visible", timeout: 5000 });
+  await buttonLocator.click();
+  const drawer = page.locator(".evidence-drawer");
+  await drawer.waitFor({ state: "visible", timeout: 5000 });
+  const drawerText = await drawer.innerText();
+  check(drawerText.includes(expectedText), `evidence drawer missing ${expectedText}`);
+  check(drawerText.includes("계산 기준") || drawerText.includes("실제 출처 수"), "evidence drawer missing calculation/source details");
+  await page.keyboard.press("Escape");
+  await drawer.waitFor({ state: "hidden", timeout: 5000 });
+}
+
 async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
   const diagnostics = { consoleErrors: [], reactWarnings: [] };
   page.on("console", (message) => {
@@ -74,6 +86,9 @@ async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
   check(await page.locator("#company-tab-panel-overview").isVisible(), `${companyId}: overview tab missing`);
   const overviewText = await page.locator("#company-tab-panel-overview").innerText();
   check(overviewText.includes("Executive Summary") || overviewText.includes("감사재무 비교 데이터 없음"), `${companyId}: decision summary missing`);
+  if (companyId !== "gs-ec") {
+    await openAndCloseEvidenceDrawer(page, page.locator("#company-tab-panel-overview .evidence-inline-button").filter({ hasText: "계산 근거" }).first(), "계산 기준");
+  }
   check(!(await hasPageOverflow(page)), `${companyId} ${viewportWidth}: overview overflow`);
 
   await clickTab(page, "재무");
@@ -84,8 +99,11 @@ async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
   } else {
     check(financialText.includes("의사결정 요약"), `${companyId}: audit decision summary missing`);
     check(financialText.includes("동료 비교"), `${companyId}: peer comparison missing`);
+    check(financialText.includes("중앙값"), `${companyId}: peer median missing`);
+    check(financialText.includes("rule_id"), `${companyId}: health rule metadata missing`);
     check(financialText.includes("재무 추세"), `${companyId}: financial trends missing`);
     if (companyId === "kumkang-kind") check(financialText.includes("비교 조건 미충족") || financialText.includes("임의 순위 없음"), `${companyId}: non-comparable peer state missing`);
+    await openAndCloseEvidenceDrawer(page, page.locator("#company-tab-panel-financial .evidence-inline-button").filter({ hasText: "계산 근거" }).first(), "계산 기준");
   }
   check(!(await hasPageOverflow(page)), `${companyId} ${viewportWidth}: financial overflow`);
 
@@ -93,7 +111,9 @@ async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
   await page.reload({ waitUntil: "networkidle" });
   const evidenceText = await page.locator("#company-tab-panel-evidence").innerText();
   check(evidenceText.includes("Data Trust Center"), `${companyId}: data trust center missing`);
+  check(evidenceText.includes("출처 유형"), `${companyId}: source type counts missing`);
   check(evidenceText.includes("영역별 검증 매트릭스"), `${companyId}: evidence matrix missing`);
+  await openAndCloseEvidenceDrawer(page, page.locator("#company-tab-panel-evidence .evidence-inline-button").first(), "실제 출처 수");
   check(!(await hasPageOverflow(page)), `${companyId} ${viewportWidth}: evidence overflow`);
 
   check(diagnostics.consoleErrors.length === 0, `${companyId} ${viewportWidth}: console errors: ${diagnostics.consoleErrors.join("\n")}`);

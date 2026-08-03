@@ -22,6 +22,7 @@ import {
   metricDisplayText,
   peerBenchmarkLabel,
 } from "../../companyReportInsights";
+import { buildReportAnalysisEvidence, buildReportMetricEvidence } from "../../companyEvidence";
 
 function Field({ label, children }) {
   return (
@@ -42,7 +43,39 @@ function TagList({ items }) {
   );
 }
 
-function CompanyIntelligenceSummary({ model, reportInsight }) {
+function trendEvidence(reportInsight, trend) {
+  return buildReportAnalysisEvidence(reportInsight, trend.headline, {
+    value: decisionStatusLabel(trend.status),
+    metricIds: trend.metric_ids,
+    latestValue: `${trend.latest_year ?? "확인되지 않음"}년 ${trend.latest_display || "확인되지 않음"}`,
+    previousValue: `${trend.previous_year ?? "확인되지 않음"}년 ${trend.previous_display || "확인되지 않음"}`,
+    calculationValue: trend.change_display || trend.change_pct_unavailable_reason || "확인되지 않음",
+    calculationBasis: trend.calculation_basis,
+    basisYear: trend.latest_year || reportInsight.latest_year,
+    dataStatus: trend.change_pct_unavailable_reason || "변화율 계산 가능",
+    limitation: "최근 연도와 직전 연도의 감사재무 지표 변화만 표시하며 미래 성과를 예측하지 않습니다.",
+    sourceIds: trend.source_ids,
+    note: trend.explanation,
+  });
+}
+
+function peerEvidence(reportInsight, item) {
+  return buildReportAnalysisEvidence(reportInsight, peerBenchmarkLabel(item.metric_id), {
+    value: item.company_display,
+    metricIds: [item.metric_id],
+    latestValue: item.company_display,
+    peerValue: item.median_display,
+    calculationValue: item.comparable ? item.comparison_label : item.not_comparable_reason,
+    calculationBasis: item.calculation_basis,
+    basisYear: reportInsight.latest_year,
+    dataStatus: item.comparable ? "비교 가능" : "비교 불가",
+    limitation: "동일 연도·통화·재무제표 범위에서 최소 3개 기업 값이 있을 때만 순위를 표시하며 종합 경쟁력 점수가 아닙니다.",
+    sourceIds: item.source_ids,
+    note: `비교 모집단 ${item.comparison_universe_count ?? 0}개, 중앙값 ${item.median_display || "확인되지 않음"}`,
+  });
+}
+
+function CompanyIntelligenceSummary({ model, reportInsight, onShowEvidence }) {
   if (!reportInsight) {
     return (
       <div className="company-intelligence-summary" aria-label="의사결정 요약">
@@ -80,6 +113,15 @@ function CompanyIntelligenceSummary({ model, reportInsight }) {
             <div key={row.key}>
               <dt>{row.label}</dt>
               <dd>{metricDisplayText(latestSnapshotMetric(reportInsight, row.key))}</dd>
+              {onShowEvidence && (
+                <button
+                  type="button"
+                  className="text-button evidence-inline-button"
+                  onClick={() => onShowEvidence(buildReportMetricEvidence(reportInsight, `${reportInsight.latest_year}년 ${row.label}`, latestSnapshotMetric(reportInsight, row.key)))}
+                >
+                  근거
+                </button>
+              )}
             </div>
           ))}
         </dl>
@@ -93,6 +135,12 @@ function CompanyIntelligenceSummary({ model, reportInsight }) {
             <p className={`decision-status ${decisionStatusTone(trend.status)}`} key={trend.headline}>
               <b>{trend.headline}</b>
               <span>{decisionStatusLabel(trend.status)} · {trend.explanation}</span>
+              <small>{trend.previous_display || "이전값 없음"} → {trend.latest_display || "최신값 없음"} · {trend.change_display || trend.change_pct_unavailable_reason || "변화율 확인 필요"}</small>
+              {onShowEvidence && (
+                <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(trendEvidence(reportInsight, trend))}>
+                  계산 근거
+                </button>
+              )}
             </p>
           ))}
         </div>
@@ -108,6 +156,12 @@ function CompanyIntelligenceSummary({ model, reportInsight }) {
               <span>
                 {item.comparable ? `${item.comparison_label} · ${item.company_display}` : item.not_comparable_reason}
               </span>
+              <small>모집단 {item.comparison_universe_count ?? item.peer_count}개 · 중앙값 {item.median_display || "확인되지 않음"}</small>
+              {onShowEvidence && (
+                <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(peerEvidence(reportInsight, item))}>
+                  계산 근거
+                </button>
+              )}
             </p>
           ))}
         </div>
@@ -171,7 +225,7 @@ function DecisionCards({ company, model, reportInsight, activities, onTabChange 
   );
 }
 
-export default function CompanyOverviewTab({ company, activities = [], reportInsight = null, onTabChange }) {
+export default function CompanyOverviewTab({ company, activities = [], reportInsight = null, onShowEvidence, onTabChange }) {
   const model = detailModel(company);
   const profile = company.company_profile || {};
   const recentSignals = recentSignalEvents(model.events);
@@ -180,7 +234,7 @@ export default function CompanyOverviewTab({ company, activities = [], reportIns
   return (
     <section className="summary company-tab-panel" id="company-tab-panel-overview" role="tabpanel" aria-labelledby="company-tab-overview">
       <h2>종합분석</h2>
-      <CompanyIntelligenceSummary model={model} reportInsight={reportInsight} />
+      <CompanyIntelligenceSummary model={model} reportInsight={reportInsight} onShowEvidence={onShowEvidence} />
       <DecisionCards company={company} model={model} reportInsight={reportInsight} activities={activities} onTabChange={onTabChange} />
 
       <div className="company-subsection">

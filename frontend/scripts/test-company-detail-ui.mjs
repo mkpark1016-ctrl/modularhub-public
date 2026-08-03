@@ -30,8 +30,11 @@ import {
 import { getCompanyItems, getCompanyEvents } from "../src/companyInsights.js";
 import {
   buildCompanyItemEvidence,
+  buildReportAnalysisEvidence,
   buildSourceRows,
+  distinctSourceRows,
   hasEvidenceDisplayValue,
+  sourceSummaryForDomain,
   sourceTypeSummaryForDomain,
   sourcesForDomain,
 } from "../src/companyEvidence.js";
@@ -86,9 +89,21 @@ assert.ok(componentFiles.includes("Executive Summary"), "overview should include
 assert.ok(componentFiles.includes("company-intelligence-summary"), "company overview and finance should render decision intelligence cards");
 assert.ok(componentFiles.includes("감사재무 비교 데이터 없음"), "companies without audit report insights should clearly keep a fallback state");
 assert.ok(componentFiles.includes("Data Trust Center"), "evidence tab should expose a data trust center");
+assert.ok(componentFiles.includes("상세 근거 보기"), "data trust cards should expose evidence drawer actions");
+assert.equal(componentFiles.includes("sourceTypes.split"), false, "data trust center should not infer counts from source type labels");
+assert.ok(componentFiles.includes("distinct_source_count"), "data trust center should use actual distinct source counts");
+assert.ok(componentFiles.includes("source_type_counts"), "data trust center should display source type counts separately");
 assert.ok(componentFiles.includes("동료 비교"), "financial tab should expose peer comparison");
 assert.ok(componentFiles.includes("not_comparable_reason"), "peer comparison should render non-comparable reasons instead of forced ranks");
+assert.ok(componentFiles.includes("comparison_universe_count"), "peer comparison should show the comparison universe size");
+assert.ok(componentFiles.includes("current_company_included"), "peer comparison should disclose whether the current company is included");
+assert.ok(componentFiles.includes("median_display"), "peer comparison should show the benchmark median");
+assert.ok(componentFiles.includes("reference_value_label"), "peer comparison should show the reference max/min label");
 assert.ok(componentFiles.includes("같은 연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
+assert.ok(componentFiles.includes("rule_id"), "financial health cards should show rule identifiers");
+assert.ok(componentFiles.includes("interpretation_scope"), "financial health cards should show interpretation scope");
+assert.ok(componentFiles.includes("계산 근거 보기"), "decision cards should open calculation evidence");
+assert.ok(componentFiles.includes("evidence-detail-list"), "evidence drawer should render structured calculation details");
 assert.ok(componentFiles.includes("CompanyEntityDrawer"), "entity detail panels should share a common drawer");
 assert.ok(componentFiles.includes("company-entity-drawer") && componentFiles.includes("aria-modal=\"true\""), "entity drawer should expose modal semantics");
 assert.ok(componentFiles.includes("createPortal"), "entity drawer should render outside the React root for modal isolation");
@@ -211,11 +226,44 @@ assert.equal(evidenceDomainLabel("financial"), "재무");
 assert.equal(peerBenchmarkLabel("operating_cash_flow"), "영업현금흐름");
 assert.equal(latestSnapshotMetric(yuchangReport, "revenue").raw_krw, yuchangReport.latest_metrics.revenue.raw_krw);
 assert.equal(yuchangReport.latest_snapshot.latest_year, 2025);
+assert.equal(Object.hasOwn(yuchangReport.latest_snapshot, "gross_profit"), false, "latest snapshot should omit missing metrics instead of synthetic null keys");
 assert.equal(yuchangReport.financial_health.profitability.metric_ids.includes("operating_margin_pct"), true);
+assert.equal(yuchangReport.financial_health.profitability.rule_id, "profitability_negative_margin");
+assert.equal(yuchangReport.financial_health.profitability.threshold, 0);
+assert.equal(yuchangReport.financial_health.leverage.threshold, 200);
+assert.equal(yuchangReport.financial_health.working_capital.threshold, 30);
+assert.match(yuchangReport.financial_health.profitability.interpretation_scope, /투자 판단이 아닙니다/);
 assert.equal(yuchangReport.evidence_health.some((row) => row.domain === "financial"), true);
+const yuchangFinancialEvidence = yuchangReport.evidence_health.find((row) => row.domain === "financial");
+assert.equal(yuchangFinancialEvidence.distinct_source_count, 2);
+assert.deepEqual(yuchangFinancialEvidence.source_type_counts, { audit_report: 2 });
+const yuchangDisclosureEvidence = yuchangReport.evidence_health.find((row) => row.domain === "disclosure_scope");
+assert.equal(yuchangDisclosureEvidence.verification_status, "not_disclosed");
+assert.equal(yuchangDisclosureEvidence.verified_item_count, 0);
+assert.equal(yuchangDisclosureEvidence.not_disclosed_item_count, 1);
 assert.equal(yuchangReport.peer_benchmarks.some((item) => item.comparable === true), true);
+const yuchangRevenuePeer = yuchangReport.peer_benchmarks.find((item) => item.metric_id === "revenue");
+assert.equal(yuchangRevenuePeer.comparison_universe_count, 4);
+assert.equal(yuchangRevenuePeer.other_peer_count, 3);
+assert.equal(yuchangRevenuePeer.current_company_included, true);
+assert.equal(yuchangRevenuePeer.median_display, "605.7억원");
+assert.equal(yuchangRevenuePeer.reference_value_label, "비교 범위 최대값");
+assert.equal(yuchangRevenuePeer.reference_value_display, "3,076.8억원");
 assert.equal(kumkangReport.peer_benchmarks.every((item) => item.comparable === false), true);
 assert.ok(kumkangReport.peer_benchmarks.every((item) => item.not_comparable_reason), "single consolidated company should not receive peer ranks");
+const duplicateSourceRows = [yuchangSources[0], { ...yuchangSources[0] }, ...yuchangSources.slice(1)];
+assert.equal(distinctSourceRows(duplicateSourceRows).length, yuchangSources.length, "source counts should dedupe equivalent source rows");
+assert.equal(sourceSummaryForDomain(yuchangSources, "financial").sourceCount, 2, "financial source count should use real audit sources");
+const analysisEvidence = buildReportAnalysisEvidence(yuchangReport, "영업이익률 관찰 규칙", {
+  value: 0,
+  latestValue: 0,
+  calculationValue: 0,
+  metricIds: ["operating_margin_pct"],
+  sourceIds: [],
+});
+assert.equal(analysisEvidence.value, 0, "analysis evidence should preserve numeric zero payloads");
+assert.ok(analysisEvidence.note.includes("직접 연결된 출처 없음"), "analysis evidence should disclose missing direct sources");
+assert.ok(analysisEvidence.details.some((row) => row[0] === "해석 한계"), "analysis evidence should carry interpretation limits");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "revenue")), "3,076.8억원");
 assert.equal(metricDisplayText(reportRatioByYear(yuchangReport, 2025, "operating_margin_pct")), "4.8%");
 assert.equal(metricDisplayText(reportMetricByYear(yuchangReport, 2025, "operating_cash_flow")), "-308.3억원");

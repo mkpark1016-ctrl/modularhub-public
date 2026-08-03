@@ -32,6 +32,32 @@
 
 조건을 충족하지 못하면 `rank`는 `null`이며 `not_comparable_reason`을 표시한다. 사용자 임의 경쟁력 순위나 종합점수는 생성하지 않는다.
 
+## Financial Health Rules
+
+`financial_health`는 신용등급, 투자 판단, 안전기업 판정이 아니라 감사재무 수치를 빠르게 읽기 위한 관찰 규칙이다. 각 항목은 `rule_id`, `operator`, `threshold`, `actual_value`, `calculation_basis`, `interpretation_scope`를 함께 제공해야 한다.
+
+| rule_id | Metric | Operator / Threshold | Meaning |
+| --- | --- | --- | --- |
+| `profitability_negative_margin` | `operating_margin_pct` | `< 0` | 영업이익률이 음수인지 관찰한다. |
+| `positive_profit_negative_operating_cash_flow` | `operating_profit`, `operating_cash_flow` | `operating_profit > 0 and operating_cash_flow < 0` | 이익과 영업현금흐름 방향이 엇갈리는지 관찰한다. |
+| `liabilities_to_equity_observation` | `liabilities_to_equity_pct` | `> 200` | 부채비율이 관찰 기준을 넘는지 표시한다. |
+| `receivables_to_revenue_observation` | `receivables_to_revenue_pct` | `> 30` | 채권/매출 비율이 관찰 기준을 넘는지 표시한다. |
+| `source_location_coverage_observation` | `source_locations` | `pending_location_count > 0` | 수동 출처 위치 확인이 남아 있는지 표시한다. |
+
+허용 문구는 “관찰 필요”, “추가 확인 필요”, “공시 범위 확인 필요”처럼 검증 데이터의 해석 범위를 설명하는 표현이다. 금지 문구는 “우량기업”, “부실기업”, “안전기업”, “투자 추천”, “위험등급”, “종합 경쟁력 순위”처럼 평가·추천·등급으로 오인될 수 있는 표현이다.
+
+## Data Trust Counts
+
+Data Trust Center는 문자열 라벨을 분해해 출처 수를 추정하지 않는다. `distinct_source_count`는 고유 출처 기준, `source_type_counts`는 출처 유형별 분포 기준, `verified_item_count`·`pending_item_count`·`not_disclosed_item_count`·`not_applicable_item_count`·`verification_pending_item_count`는 항목 상태 기준으로 별도 표시한다.
+
+`not_disclosed`는 검증 완료와 다르다. 예를 들어 모듈러 부문 별도 매출이 공시되지 않은 기업은 해당 항목을 “미공시”로 표시하고 `verified_item_count`에 더하지 않는다.
+
+## Data Insufficiency
+
+`latest_snapshot`은 존재하지 않는 metric key를 합성 `null` 값으로 채우지 않는다. UI는 키가 없거나 값이 `null`인 항목을 “확인되지 않음”, “공시되지 않음”, “해당 없음”, “검증 보류” 중 View Model의 명시 상태에 맞게 표시한다.
+
+추세 카드에는 최신값, 직전값, 변화 금액 또는 변화율, 계산 불가 사유를 함께 표시한다. 분모가 0이거나 직전값이 없으면 `change_pct_unavailable_reason`을 표시하고 임의의 0% 변화율을 만들지 않는다.
+
 ## Null Semantics
 
 - `0`: 유효한 보고값이며 화면에 표시한다.
