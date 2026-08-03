@@ -40,6 +40,44 @@ function sourceMatchesDomain(source, domain) {
   return claims.some((claim) => expected.has(claim));
 }
 
+function normalizeSourceIdentityPart(value) {
+  return String(value || "").trim().toLowerCase().replace(/[?#].*$/, "").replace(/\/$/, "");
+}
+
+export function sourceIdentity(source) {
+  return normalizeSourceIdentityPart(
+    source?.id
+    || source?.source_ref
+    || source?.documentId
+    || source?.document_id
+    || source?.url
+    || source?.source_url
+    || source?.title,
+  );
+}
+
+export function distinctSourceRows(sourceRows) {
+  const rows = Array.isArray(sourceRows) ? sourceRows : [];
+  const seen = new Set();
+  const distinct = [];
+  for (const row of rows) {
+    const key = sourceIdentity(row);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    distinct.push(row);
+  }
+  return distinct;
+}
+
+export function sourceTypeCounts(sourceRows) {
+  const counts = {};
+  for (const source of distinctSourceRows(sourceRows)) {
+    const type = source.sourceType || "기타";
+    counts[type] = (counts[type] || 0) + 1;
+  }
+  return counts;
+}
+
 export function sourceHasPublicUrl(source) {
   const url = source?.url || source?.source_url || "";
   return /^https?:\/\//.test(String(url));
@@ -116,12 +154,63 @@ export function reportMetricSources(insight, metric) {
   });
 }
 
+export function reportSourcesByIds(insight, sourceIds = []) {
+  const ids = new Set((Array.isArray(sourceIds) ? sourceIds : []).filter(Boolean));
+  if (!ids.size) return [];
+  const documents = new Map();
+  for (const doc of insight?.source_summary?.primary_documents || []) {
+    documents.set(doc.source_ref, doc);
+  }
+  const opinions = new Map();
+  for (const opinion of insight?.source_summary?.audit_opinions || []) {
+    opinions.set(opinion.source_ref, opinion);
+  }
+  return [...ids].map((id) => {
+    const doc = documents.get(id) || {};
+    const opinion = opinions.get(id) || {};
+    return {
+      id,
+      title: doc.filename || id,
+      publisher: opinion.auditor || "감사인 확인 중",
+      sourceType: "감사보고서",
+      publishedAt: doc.report_date || opinion.auditor_report_date || "",
+      documentId: doc.source_role || "",
+      url: "",
+    };
+  });
+}
+
 export function buildReportMetricEvidence(insight, label, metric) {
   return {
     title: label,
     value: metric?.display_text || "확인되지 않음",
     note: `${financialScopeLabel(insight?.financial_scope || insight?.attribution?.financial_scope)} 기준`,
     sources: reportMetricSources(insight, metric),
+  };
+}
+
+export function buildReportAnalysisEvidence(insight, title, options = {}) {
+  const sourceIds = Array.isArray(options.sourceIds) ? options.sourceIds : [];
+  const sources = reportSourcesByIds(insight, sourceIds);
+  const displayOrFallback = (value, fallback) => (hasEvidenceDisplayValue(value) ? value : fallback);
+  const details = [
+    ["사용 metric", Array.isArray(options.metricIds) && options.metricIds.length ? options.metricIds.join(", ") : "연결 metric 없음"],
+    ["최신 값", displayOrFallback(options.latestValue, displayOrFallback(options.value, "확인되지 않음"))],
+    ["비교 값", displayOrFallback(options.previousValue, displayOrFallback(options.peerValue, "해당 없음"))],
+    ["계산값", displayOrFallback(options.calculationValue, "해당 없음")],
+    ["계산 기준", displayOrFallback(options.calculationBasis, "계산 기준 확인 필요")],
+    ["기준 연도", displayOrFallback(options.basisYear, insight?.latest_year || "확인되지 않음")],
+    ["source_ids", sourceIds.length ? sourceIds.join(", ") : "직접 연결된 출처 없음"],
+    ["데이터 상태", displayOrFallback(options.dataStatus, "검증 데이터 기반 파생 해석")],
+    ["해석 한계", displayOrFallback(options.limitation, "관찰용 해석이며 신용등급, 투자 추천, 안전기업 판단이 아닙니다.")],
+  ];
+  return {
+    title,
+    value: options.value,
+    note: sources.length ? (options.note || "") : [options.note, "직접 연결된 출처 없음"].filter(Boolean).join(" "),
+    details,
+    evidenceStatus: sources.length ? "linked" : "source_pending",
+    sources,
   };
 }
 
@@ -163,6 +252,14 @@ export function buildSourceRows(company, reportInsight = null) {
 
 export function sourcesForDomain(sourceRows, domain) {
   return (Array.isArray(sourceRows) ? sourceRows : []).filter((source) => sourceMatchesDomain(source, domain));
+}
+
+export function sourceSummaryForDomain(sourceRows, domain) {
+  const rows = sourcesForDomain(sourceRows, domain);
+  return {
+    sourceCount: distinctSourceRows(rows).length,
+    sourceTypeCounts: sourceTypeCounts(rows),
+  };
 }
 
 export function sourceTypeSummaryForDomain(sourceRows, domain) {

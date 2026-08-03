@@ -16,6 +16,13 @@ PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "news.json",
     ROOT / "frontend" / "public" / "data" / "business.json",
 ]
+DECISION_INTELLIGENCE_FIELDS = {
+    "latest_snapshot",
+    "trends",
+    "financial_health",
+    "evidence_health",
+    "peer_benchmarks",
+}
 
 
 def load_matrix() -> dict:
@@ -34,6 +41,10 @@ def load_from_main(path: str) -> dict:
         encoding="utf-8",
     )
     return json.loads(text)
+
+
+def without_decision_intelligence_fields(company: dict) -> dict:
+    return {key: value for key, value in company.items() if key not in DECISION_INTELLIGENCE_FIELDS}
 
 
 def final_metric(payload: dict, year: str, metric: str) -> dict:
@@ -341,7 +352,7 @@ def test_existing_company_report_insights_and_public_json_are_unchanged() -> Non
     current_insights = json.loads((ROOT / "frontend/public/data/companies/company_report_insights.json").read_text(encoding="utf-8"))
     old_planm_insight = next(company for company in old_insights["companies"] if company["company_id"] == "planm")
     current_planm_insight = next(company for company in current_insights["companies"] if company["company_id"] == "planm")
-    assert current_planm_insight == old_planm_insight
+    assert without_decision_intelligence_fields(current_planm_insight) == old_planm_insight
 
 
 def test_planm_pdf_files_are_not_committed_to_repository() -> None:

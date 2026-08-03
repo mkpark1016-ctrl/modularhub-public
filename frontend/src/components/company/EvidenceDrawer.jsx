@@ -61,6 +61,7 @@ export default function EvidenceDrawer({ evidence, onClose }) {
   if (!open) return null;
 
   const sources = Array.isArray(evidence.sources) ? evidence.sources : [];
+  const details = Array.isArray(evidence.details) ? evidence.details.filter((row) => Array.isArray(row) && row.length >= 2) : [];
   return (
     <div className="evidence-drawer-backdrop" role="presentation" onMouseDown={(event) => {
       if (event.target === event.currentTarget) onClose();
@@ -77,6 +78,16 @@ export default function EvidenceDrawer({ evidence, onClose }) {
           </button>
         </div>
         {evidence.note && <p className="finance-note">{evidence.note}</p>}
+        {details.length > 0 && (
+          <dl className="evidence-detail-list">
+            {details.map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{String(value)}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
         {sources.length ? (
           <div className="source-list evidence-source-list">
             {sources.map((source, index) => (

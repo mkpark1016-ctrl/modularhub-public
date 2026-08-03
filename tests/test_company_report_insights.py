@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-from scripts.build_company_report_insights import DEFAULT_OUTPUT, aggregate_reported, build_view_model, combined_metric, discover_source_files, money_metric, stable_json
+from scripts.build_company_report_insights import DEFAULT_OUTPUT, aggregate_reported, build_latest_snapshot, build_view_model, combined_metric, discover_source_files, money_metric, stable_json
 from scripts.validate_company_audit_financials import SOURCE_SECTION_CODES, load_payload, validate
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,6 +36,19 @@ def planm_company(payload: dict) -> dict:
 
 def nrb_company(payload: dict) -> dict:
     return next(company for company in payload["companies"] if company["company_id"] == "nrb")
+
+
+DECISION_INTELLIGENCE_FIELDS = {
+    "latest_snapshot",
+    "trends",
+    "financial_health",
+    "evidence_health",
+    "peer_benchmarks",
+}
+
+
+def without_decision_intelligence_fields(company: dict) -> dict:
+    return {key: value for key, value in company.items() if key not in DECISION_INTELLIGENCE_FIELDS}
 
 
 def contains_key(value: object, target: str) -> bool:
@@ -124,7 +137,7 @@ def test_yuchang_item_is_semantically_unchanged_from_main() -> None:
         text=True,
         encoding="utf-8",
     )
-    assert yuchang_company(load_output()) == yuchang_company(json.loads(old_text))
+    assert without_decision_intelligence_fields(yuchang_company(load_output())) == yuchang_company(json.loads(old_text))
 
 
 def test_kumkang_item_is_semantically_unchanged_from_main() -> None:
@@ -134,7 +147,96 @@ def test_kumkang_item_is_semantically_unchanged_from_main() -> None:
         text=True,
         encoding="utf-8",
     )
-    assert kumkang_company(load_output()) == kumkang_company(json.loads(old_text))
+    assert without_decision_intelligence_fields(kumkang_company(load_output())) == kumkang_company(json.loads(old_text))
+
+
+def test_decision_intelligence_fields_are_built_from_existing_metrics() -> None:
+    company = yuchang_company(load_output())
+    assert company["latest_snapshot"]["latest_year"] == company["latest_year"]
+    assert company["latest_snapshot"]["revenue"]["raw_krw"] == company["latest_metrics"]["revenue"]["raw_krw"]
+    assert company["latest_snapshot"]["operating_margin_pct"] == company["derived_metrics"]["2025"]["operating_margin_pct"]
+    assert company["trends"]["revenue"]["calculation_basis"] == "latest_year_vs_previous_year"
+    assert company["trends"]["revenue"]["metric_ids"] == ["revenue"]
+    assert company["financial_health"]["profitability"]["metric_ids"] == ["revenue", "operating_profit", "operating_margin_pct"]
+    assert company["evidence_health"][0]["domain"] == "financial"
+    assert company["evidence_health"][0]["pending_item_count"] == company["source_summary"]["pending_location_count"]
+
+
+def test_latest_snapshot_omits_missing_metric_keys() -> None:
+    snapshot = build_latest_snapshot(
+        2025,
+        {"revenue": {"raw_krw": 100, "display_text": "0.0억원"}},
+        {"2025": {}},
+    )
+    assert snapshot["latest_year"] == 2025
+    assert snapshot["revenue"]["raw_krw"] == 100
+    assert "operating_profit" not in snapshot
+    assert "operating_margin_pct" not in snapshot
+
+
+def test_trends_include_display_values_and_unavailable_reason() -> None:
+    company = yuchang_company(load_output())
+    trend = company["trends"]["revenue"]
+    assert trend["latest_display"] == "3,076.8억원"
+    assert trend["previous_display"] == "3,640.2억원"
+    assert trend["change_display"] == "-563.4억원"
+    assert trend["change_pct_unavailable_reason"] is None
+    assert trend["calculation_basis"] == "latest_year_vs_previous_year"
+
+
+def test_financial_health_rule_metadata_is_observational() -> None:
+    company = yuchang_company(load_output())
+    profitability = company["financial_health"]["profitability"]
+    leverage = company["financial_health"]["leverage"]
+    working_capital = company["financial_health"]["working_capital"]
+    assert profitability["rule_id"] == "profitability_negative_margin"
+    assert profitability["operator"] == "<"
+    assert profitability["threshold"] == 0
+    assert profitability["actual_value"] == 4.8
+    assert "신용등급" in profitability["interpretation_scope"]
+    assert leverage["threshold"] == 200
+    assert working_capital["threshold"] == 30
+    assert "단정하지 않습니다" in working_capital["interpretation_scope"]
+
+
+def test_evidence_health_separates_source_counts_and_disclosure_flags() -> None:
+    yuchang = yuchang_company(load_output())
+    financial = next(row for row in yuchang["evidence_health"] if row["domain"] == "financial")
+    disclosure = next(row for row in yuchang["evidence_health"] if row["domain"] == "disclosure_scope")
+    assert financial["distinct_source_count"] == 2
+    assert financial["source_type_counts"] == {"audit_report": 2}
+    assert financial["verification_pending_item_count"] == 0
+    assert disclosure["verification_status"] == "not_disclosed"
+    assert disclosure["verified_item_count"] == 0
+    assert disclosure["not_disclosed_item_count"] == 1
+
+
+def test_peer_benchmarks_are_only_ranked_when_comparable() -> None:
+    payload = load_output()
+    yuchang = yuchang_company(payload)
+    kumkang = kumkang_company(payload)
+    revenue_benchmark = next(item for item in yuchang["peer_benchmarks"] if item["metric_id"] == "revenue")
+    assert revenue_benchmark["comparable"] is True
+    assert revenue_benchmark["peer_count"] >= 3
+    assert revenue_benchmark["rank"] is not None
+    assert revenue_benchmark["not_comparable_reason"] is None
+    kumkang_revenue = next(item for item in kumkang["peer_benchmarks"] if item["metric_id"] == "revenue")
+    assert kumkang_revenue["comparable"] is False
+    assert kumkang_revenue["rank"] is None
+    assert kumkang_revenue["peer_count"] < 3
+    assert kumkang_revenue["not_comparable_reason"]
+
+
+def test_peer_benchmarks_include_universe_median_and_current_company_flags() -> None:
+    benchmark = next(item for item in yuchang_company(load_output())["peer_benchmarks"] if item["metric_id"] == "revenue")
+    assert benchmark["comparison_universe_count"] == 4
+    assert benchmark["other_peer_count"] == 3
+    assert benchmark["current_company_included"] is True
+    assert benchmark["median_display"] == "605.7억원"
+    assert benchmark["reference_value_label"] == "비교 범위 최대값"
+    assert benchmark["reference_value_display"] == "3,076.8억원"
+    assert benchmark["source_ids"] == ["yuchang_audit_report_2026_04_08"]
+    assert benchmark["calculation_basis"] == "same_latest_year_currency_financial_scope_minimum_three_values"
 
 
 def test_daeseung_years_scope_latest_metrics_and_source_quality() -> None:
