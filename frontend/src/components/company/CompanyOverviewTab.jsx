@@ -52,8 +52,8 @@ function DecisionCards({ company, model, reportInsight, activities, onTabChange 
     },
     {
       key: "opportunity",
-      title: "사업 기회",
-      body: latestActivity ? latestActivity.title : "최근 활동 데이터 기준으로 사업 기회를 계속 관찰합니다.",
+      title: "최근 변화",
+      body: latestActivity ? `최근 활동 신호: ${latestActivity.title}` : "최근 활동 데이터 기준으로 변화 신호를 계속 관찰합니다.",
       action: "최근 활동 보기",
       tab: "overview",
     },
@@ -76,7 +76,7 @@ function DecisionCards({ company, model, reportInsight, activities, onTabChange 
     <div className="company-decision-grid" aria-label="한눈에 보는 판단">
       {cards.map((card) => (
         <article key={card.key}>
-          <span>규칙 기반 요약</span>
+          <span>검증 데이터 기반 해석</span>
           <strong>{card.title}</strong>
           <p>{card.body}</p>
           {onTabChange && (

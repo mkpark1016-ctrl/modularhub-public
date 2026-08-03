@@ -19,6 +19,8 @@ export default function EvidenceDrawer({ evidence, onClose }) {
   useEffect(() => {
     if (!open) return undefined;
     const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const focusable = () => Array.from(drawerRef.current?.querySelectorAll(FOCUSABLE_SELECTOR) || [])
       .filter((element) => !element.hasAttribute("disabled") && element.getAttribute("aria-hidden") !== "true");
     const focusFirstElement = () => {
@@ -51,6 +53,7 @@ export default function EvidenceDrawer({ evidence, onClose }) {
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
       if (previousFocus && typeof previousFocus.focus === "function") previousFocus.focus();
     };
   }, [onClose, open]);

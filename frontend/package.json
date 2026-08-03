@@ -23,6 +23,7 @@
     "test:relevance": "node scripts/test-news-relevance.mjs",
     "test:source-health": "node scripts/test-source-health.mjs",
     "qa:browser": "node scripts/browser-qa-runner.mjs",
+    "qa:company-drawers": "node scripts/browser-qa-company-drawers.mjs",
     "qa:production": "node scripts/production-smoke-test.mjs"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { detailModel, formatDate, labelValue } from "./companyDetailHelpers";
 import { buildCompanyItemEvidence } from "../../companyEvidence";
+import CompanyEntityDrawer from "./CompanyEntityDrawer";
 
 const PAGE_SIZE = 8;
 
@@ -28,6 +29,24 @@ function technologyDate(item, key) {
     : formatDate(item.registration_date || item.registered_at);
 }
 
+function TechnologyDetail({ company, item, onShowEvidence }) {
+  const title = item.name || technologyNumber(item);
+  return (
+    <dl className="detail-grid compact-detail-grid">
+      <div><dt>유형</dt><dd>{labelValue(item.record_type || item.group, "확인되지 않음")}</dd></div>
+      <div><dt>등록·출원번호</dt><dd className="technical-token">{technologyNumber(item)}</dd></div>
+      <div><dt>상태</dt><dd>{labelValue(item.status, "확인되지 않음")}</dd></div>
+      <div><dt>기술 분야</dt><dd>{item.technology_area ? labelValue(item.technology_area, item.technology_area) : technologyField(item)}</dd></div>
+      <div><dt>출원일</dt><dd>{technologyDate(item, "filed")}</dd></div>
+      <div><dt>등록일</dt><dd>{technologyDate(item, "registered")}</dd></div>
+      {item.summary && <div><dt>기술 효과</dt><dd>{item.summary}</dd></div>}
+      {onShowEvidence && (
+        <div><dt>근거</dt><dd><button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(buildCompanyItemEvidence(company, title, technologyNumber(item), item.source_ids, technologyField(item)))}>근거보기</button></dd></div>
+      )}
+    </dl>
+  );
+}
+
 export default function CompanyTechnologyTab({ company, onShowEvidence }) {
   const model = detailModel(company);
   const items = model.technologyItems;
@@ -36,6 +55,7 @@ export default function CompanyTechnologyTab({ company, onShowEvidence }) {
   const [status, setStatus] = useState("all");
   const [field, setField] = useState("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [selectedTechnology, setSelectedTechnology] = useState(null);
 
   const recordTypes = useMemo(() => [...new Set(items.map((item) => item.record_type || item.group).filter(Boolean))], [items]);
   const statuses = useMemo(() => [...new Set(items.map((item) => item.status).filter(Boolean))], [items]);
@@ -62,6 +82,10 @@ export default function CompanyTechnologyTab({ company, onShowEvidence }) {
   const resetPaging = (setter) => (value) => {
     setter(value);
     setVisibleCount(PAGE_SIZE);
+  };
+  const showEvidenceFromDrawer = (evidence) => {
+    setSelectedTechnology(null);
+    window.setTimeout(() => onShowEvidence?.(evidence), 0);
   };
 
   return (
@@ -106,11 +130,9 @@ export default function CompanyTechnologyTab({ company, onShowEvidence }) {
                 ].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
                 <span>출원일 {technologyDate(item, "filed")} · 등록일 {technologyDate(item, "registered")}</span>
                 {item.summary && <span>{item.summary}</span>}
-                {onShowEvidence && (
-                  <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(buildCompanyItemEvidence(company, item.name || technologyNumber(item), technologyNumber(item), item.source_ids, technologyField(item)))}>
-                    근거보기
-                  </button>
-                )}
+                <button type="button" className="text-button entity-detail-button" onClick={() => setSelectedTechnology(item)}>
+                  상세보기
+                </button>
               </div>
             ))}
           </div>
@@ -123,6 +145,15 @@ export default function CompanyTechnologyTab({ company, onShowEvidence }) {
       ) : (
         <p>검증 가능한 기술·특허 자료가 없습니다.</p>
       )}
+      <CompanyEntityDrawer
+        eyebrow="TECHNOLOGY"
+        title={selectedTechnology?.name || technologyNumber(selectedTechnology || {})}
+        subtitle={selectedTechnology ? `${labelValue(selectedTechnology.record_type || selectedTechnology.group, "기술")} · ${labelValue(selectedTechnology.status, "상태 확인 중")}` : ""}
+        open={Boolean(selectedTechnology)}
+        onClose={() => setSelectedTechnology(null)}
+      >
+        {selectedTechnology && <TechnologyDetail company={company} item={selectedTechnology} onShowEvidence={showEvidenceFromDrawer} />}
+      </CompanyEntityDrawer>
     </section>
   );
 }

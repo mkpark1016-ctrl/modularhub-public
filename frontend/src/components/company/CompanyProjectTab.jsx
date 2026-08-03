@@ -12,6 +12,7 @@ import {
   verifiedProjectEvents,
 } from "./companyDetailHelpers";
 import { buildCompanyItemEvidence } from "../../companyEvidence";
+import CompanyEntityDrawer from "./CompanyEntityDrawer";
 
 const PAGE_SIZE = 5;
 
@@ -28,7 +29,27 @@ function projectMeta(event) {
   };
 }
 
-function ProjectCard({ company, event, candidate, onShowEvidence }) {
+function ProjectDetail({ company, event, candidate, onShowEvidence }) {
+  const meta = projectMeta(event);
+  return (
+    <dl className="detail-grid compact-detail-grid">
+      <div><dt>유형·상태</dt><dd>{eventTypeLabel(event)} · {eventStatusLabel(event)}</dd></div>
+      <div><dt>용도</dt><dd>{meta.segment}</dd></div>
+      <div><dt>지역</dt><dd>{meta.location}</dd></div>
+      <div><dt>발주처·협력기관</dt><dd>{meta.client}</dd></div>
+      <div><dt>수행 역할</dt><dd>{meta.role}</dd></div>
+      <div><dt>규모·금액</dt><dd>{meta.amount}</dd></div>
+      <div><dt>계약·준공일</dt><dd>{meta.date}</dd></div>
+      <div><dt>관련 보도</dt><dd>{meta.articleCount.toLocaleString("ko-KR")}건</dd></div>
+      <div><dt>실적 집계</dt><dd>{candidate ? "검증 실적 아님" : "검증 프로젝트 실적"}</dd></div>
+      {onShowEvidence && (
+        <div><dt>근거</dt><dd><button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(buildCompanyItemEvidence(company, meta.title, `${eventTypeLabel(event)} · ${eventStatusLabel(event)}`, event.source_ids, candidate ? "파이프라인·기타 활동은 검증 실적으로 합산하지 않습니다." : "검증 프로젝트 실적 근거입니다."))}>근거보기</button></dd></div>
+      )}
+    </dl>
+  );
+}
+
+function ProjectCard({ event, candidate, onOpenDetail }) {
   const meta = projectMeta(event);
   return (
     <article className={candidate ? "responsive-data-card candidate-card" : "responsive-data-card"}>
@@ -42,19 +63,9 @@ function ProjectCard({ company, event, candidate, onShowEvidence }) {
         <div><dt>발주처·협력기관</dt><dd>{meta.client}</dd></div>
         <div><dt>수행 역할</dt><dd>{meta.role}</dd></div>
       </dl>
-      <details className="company-row-detail">
-        <summary>상세정보</summary>
-        <dl>
-          <div><dt>유형·상태</dt><dd>{eventTypeLabel(event)} · {eventStatusLabel(event)}</dd></div>
-          <div><dt>규모·금액</dt><dd>{meta.amount}</dd></div>
-          <div><dt>계약·준공일</dt><dd>{meta.date}</dd></div>
-          <div><dt>관련 보도</dt><dd>{meta.articleCount.toLocaleString("ko-KR")}건</dd></div>
-          {candidate && <div><dt>실적 집계</dt><dd>검증 실적 아님</dd></div>}
-          {onShowEvidence && (
-            <div><dt>근거</dt><dd><button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(buildCompanyItemEvidence(company, meta.title, `${eventTypeLabel(event)} · ${eventStatusLabel(event)}`, event.source_ids, candidate ? "파이프라인·기타 활동은 검증 실적으로 합산하지 않습니다." : "검증 프로젝트 실적 근거입니다."))}>근거보기</button></dd></div>
-          )}
-        </dl>
-      </details>
+      <button type="button" className="text-button entity-detail-button" onClick={() => onOpenDetail(event, candidate)}>
+        상세보기
+      </button>
     </article>
   );
 }
@@ -62,9 +73,16 @@ function ProjectCard({ company, event, candidate, onShowEvidence }) {
 function EventTable({ company, events, emptyText, candidate = false, onShowEvidence }) {
   const [statusFilter, setStatusFilter] = useState("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [selectedProject, setSelectedProject] = useState(null);
   const statusOptions = useMemo(() => [...new Set(events.map((event) => event.event_status).filter(Boolean))], [events]);
   const filtered = statusFilter === "all" ? events : events.filter((event) => event.event_status === statusFilter);
   const visible = filtered.slice(0, visibleCount);
+  const selectedMeta = selectedProject ? projectMeta(selectedProject.event) : null;
+  const openDetail = (event, isCandidate) => setSelectedProject({ event, candidate: isCandidate });
+  const showEvidenceFromDrawer = (evidence) => {
+    setSelectedProject(null);
+    window.setTimeout(() => onShowEvidence?.(evidence), 0);
+  };
 
   if (!events.length) return <p>{emptyText}</p>;
 
@@ -86,7 +104,7 @@ function EventTable({ company, events, emptyText, candidate = false, onShowEvide
               <th>지역</th>
               <th>용도</th>
               <th>수행 역할</th>
-              <th>근거</th>
+              <th>상세</th>
             </tr>
           </thead>
           <tbody>
@@ -104,7 +122,11 @@ function EventTable({ company, events, emptyText, candidate = false, onShowEvide
                   <td>{meta.location}</td>
                   <td>{meta.segment}</td>
                   <td>{meta.role}<small>{meta.date}</small></td>
-                  <td>{onShowEvidence ? <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(buildCompanyItemEvidence(company, meta.title, `${eventTypeLabel(event)} · ${eventStatusLabel(event)}`, event.source_ids, candidate ? "파이프라인·기타 활동은 검증 실적으로 합산하지 않습니다." : "검증 프로젝트 실적 근거입니다."))}>근거보기</button> : meta.amount}</td>
+                  <td>
+                    <button type="button" className="text-button entity-detail-button" onClick={() => openDetail(event, candidate)}>
+                      상세보기
+                    </button>
+                  </td>
                 </tr>
               );
             })}
@@ -112,7 +134,7 @@ function EventTable({ company, events, emptyText, candidate = false, onShowEvide
         </table>
       </div>
       <div className="responsive-card-list project-card-list">
-        {visible.map((event) => <ProjectCard key={`card-${event.event_id}`} company={company} event={event} candidate={candidate} onShowEvidence={onShowEvidence} />)}
+        {visible.map((event) => <ProjectCard key={`card-${event.event_id}`} event={event} candidate={candidate} onOpenDetail={openDetail} />)}
       </div>
       {visible.length < filtered.length && (
         <button className="text-button company-more-button" type="button" onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}>
@@ -120,6 +142,22 @@ function EventTable({ company, events, emptyText, candidate = false, onShowEvide
         </button>
       )}
       {candidate && <p className="finance-note">후보, MOU, Pre-Con, R&D, 전시는 검증 프로젝트 실적 수에 합산하지 않습니다.</p>}
+      <CompanyEntityDrawer
+        eyebrow={selectedProject?.candidate ? "PIPELINE ACTIVITY" : "PROJECT"}
+        title={selectedMeta?.title}
+        subtitle={selectedMeta ? `${eventTypeLabel(selectedProject.event)} · ${eventStatusLabel(selectedProject.event)}` : ""}
+        open={Boolean(selectedProject)}
+        onClose={() => setSelectedProject(null)}
+      >
+        {selectedProject && (
+          <ProjectDetail
+            company={company}
+            event={selectedProject.event}
+            candidate={selectedProject.candidate}
+            onShowEvidence={showEvidenceFromDrawer}
+          />
+        )}
+      </CompanyEntityDrawer>
     </div>
   );
 }

@@ -45,6 +45,7 @@ const componentFiles = [
   "../src/components/company/CompanyAuditFinancialPanel.jsx",
   "../src/components/company/CompanyDataGaps.jsx",
   "../src/components/company/EvidenceDrawer.jsx",
+  "../src/components/company/CompanyEntityDrawer.jsx",
   "../src/components/company/CompanyOverviewTab.jsx",
   "../src/components/company/CompanyFinancialTab.jsx",
   "../src/components/company/CompanyProductionTab.jsx",
@@ -55,6 +56,7 @@ const componentFiles = [
   "../src/companyEvidence.js",
   "../src/companyReportInsights.js",
 ].map((path) => readFileSync(new URL(path, import.meta.url), "utf8")).join("\n");
+const productionTabSource = readFileSync(new URL("../src/components/company/CompanyProductionTab.jsx", import.meta.url), "utf8");
 const stylesheet = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 
 assert.equal(companies.length, 10);
@@ -76,6 +78,17 @@ assert.ok(componentFiles.includes("관련 보도"), "project and activity UI sho
 assert.ok(componentFiles.includes("재무 해석 범위"), "financial warnings should be consolidated into an interpretation scope card");
 assert.ok(componentFiles.includes("상세 재무표 보기"), "financial detailed tables should be collapsible");
 assert.ok(componentFiles.includes("EvidenceDrawer"), "detail UI should provide common evidence drawer");
+assert.ok(componentFiles.includes("CompanyEntityDrawer"), "entity detail panels should share a common drawer");
+assert.ok(componentFiles.includes("company-entity-drawer") && componentFiles.includes("aria-modal=\"true\""), "entity drawer should expose modal semantics");
+assert.ok(componentFiles.includes("createPortal"), "entity drawer should render outside the React root for modal isolation");
+assert.ok(componentFiles.includes("appRoot.inert = true"), "entity drawer should inert the background app while open");
+assert.ok(componentFiles.includes("titleRef.current?.focus"), "entity drawer should focus the title/content start on open");
+assert.ok(componentFiles.includes("preventScroll"), "entity drawer initial focus should avoid unwanted scroll jumps");
+assert.equal(productionTabSource.includes("<details"), false, "production facility details must not render inside table cells");
+assert.equal(productionTabSource.includes("company-row-detail"), false, "production facility details should use drawer, not row expansion");
+assert.ok(productionTabSource.includes("상세보기") && productionTabSource.includes("setSelectedFacility"), "production facilities should open a detail drawer");
+assert.ok(productionTabSource.includes("hasProductionValue"), "production facility missing checks should use explicit value presence");
+assert.equal(productionTabSource.includes("!facility.site_area && !facility.site_area_m2"), false, "production facility missing checks must preserve numeric zero");
 assert.equal(componentFiles.includes("<h3>2023~2025년 재무 추이</h3>"), false, "financial report heading should come from available years");
 assert.ok(componentFiles.includes("공식 공시문서에 포함된 감사받은 재무제표 기준 정보"), "financial report copy should describe the common disclosure basis");
 assert.ok(componentFiles.includes("attribution_warning"), "financial tab should render per-company attribution warnings from data");
