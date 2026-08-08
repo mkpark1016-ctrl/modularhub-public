@@ -17,6 +17,7 @@ from src.company_report_onboarding import (
     PipelineContext,
     preview_diff,
     preview_onboarding,
+    protected_file_changes,
     promote_onboarding,
     stage_onboarding,
     validate_onboarding,
@@ -237,6 +238,36 @@ def test_peer_benchmark_only_change_is_reported_separately(tmp_path: Path) -> No
     diff = preview_diff(manifest, generated, context(tmp_path))
     assert diff["non_target_raw_source_change_count"] == 0
     assert diff["affected_peer_benchmark_company_ids"] == ["other-company"]
+
+
+def test_protected_file_hash_ignores_clean_worktree_line_endings(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "user.name", "Test"], cwd=repo, check=True)
+    subprocess.run(["git", "config", "core.autocrlf", "true"], cwd=repo, check=True)
+
+    protected_paths = [
+        "frontend/public/data/business.json",
+        "frontend/public/data/companies/companies.json",
+        "frontend/public/data/companies/company_intelligence_v2.json",
+        "frontend/public/data/meta.json",
+        "frontend/public/data/news.json",
+    ]
+    for path in protected_paths:
+        target = repo / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text('{\n  "ok": true\n}\n', encoding="utf-8", newline="\n")
+    subprocess.run(["git", "add", *protected_paths], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "baseline"], cwd=repo, check=True, capture_output=True)
+
+    for path in protected_paths:
+        (repo / path).write_text('{\r\n  "ok": true\r\n}\r\n', encoding="utf-8", newline="")
+
+    clean = subprocess.run(["git", "diff", "--quiet", "HEAD", "--", *protected_paths], cwd=repo, check=False)
+    assert clean.returncode == 0
+    assert protected_file_changes(PipelineContext(repo_root=repo, artifact_root=repo / "artifacts", base_ref="HEAD")) == []
 
 
 def test_preview_detects_unexpected_company_add_remove(tmp_path: Path) -> None:
