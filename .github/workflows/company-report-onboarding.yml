@@ -128,3 +128,18 @@ jobs:
           echo "- Promote mode is not available in GitHub Actions." >> "$GITHUB_STEP_SUMMARY"
           echo "- Public files are not written by this workflow." >> "$GITHUB_STEP_SUMMARY"
           echo "- Artifacts, if any, are uploaded for review." >> "$GITHUB_STEP_SUMMARY"
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+
+          for path in sorted(Path("artifacts/company-report-onboarding").glob("*/validation-report.json")):
+              report = json.loads(path.read_text(encoding="utf-8"))
+              print("")
+              print(f"### {report.get('company_id')}")
+              print(f"- verdict: {report.get('verdict')}")
+              print(f"- blockers: {report.get('blocker_count')}")
+              print(f"- warnings: {report.get('warning_count')}")
+              print(f"- pending manual page checks: {report.get('pending_manual_page_check_count')}")
+              print(f"- promotion eligible: {report.get('promotion_eligible')}")
+              print(f"- artifact: `{path.parent.as_posix()}`")
+          PY

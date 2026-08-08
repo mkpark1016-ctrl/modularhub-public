@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -14,6 +15,7 @@ from src.company_report_onboarding import (
     PASS,
     REVIEW_REQUIRED,
     PipelineContext,
+    preview_diff,
     preview_onboarding,
     promote_onboarding,
     stage_onboarding,
@@ -22,6 +24,7 @@ from src.company_report_onboarding import (
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_SOURCE = ROOT / "data" / "company_reports" / "yuchang-enc" / "audit_financials_2023_2025.json"
+STATIC_FIXTURE = ROOT / "tests" / "fixtures" / "company_report_onboarding" / "pass_new_company"
 
 
 def stable_json(payload: dict) -> str:
@@ -188,9 +191,76 @@ def test_preview_is_deterministic_and_reports_new_company(tmp_path: Path) -> Non
     first = preview_onboarding(manifest_path, context(tmp_path))["public_diff_preview"]
     second = preview_onboarding(manifest_path, context(tmp_path))["public_diff_preview"]
     assert first["preview_sha256"] == second["preview_sha256"]
+    assert first["pipeline_contract_version"] == "company_report_onboarding_gate_v1"
+    assert first["manifest_sha256"]
+    assert first["candidate_sha256"]
     assert first["operation"] == "add"
     assert first["added_company_ids"] == ["sample-company"]
     assert first["non_target_raw_source_change_count"] == 0
+
+
+def test_preview_detects_non_target_raw_source_changes(tmp_path: Path) -> None:
+    manifest = sample_manifest()
+    old_target = {"company_id": "sample-company", "source_summary": {"count": 1}, "peer_benchmarks": []}
+    old_other = {"company_id": "other-company", "available_years": [2023], "source_summary": {"count": 1}, "peer_benchmarks": [{"metric_id": "revenue"}]}
+    new_other = {
+        "company_id": "other-company",
+        "available_years": [2023],
+        "source_summary": {"count": 2},
+        "peer_benchmarks": [{"metric_id": "revenue", "rank": 1}],
+    }
+    current = {"schema_version": "company_report_insights_v1", "companies": [old_target, old_other]}
+    generated = {"schema_version": "company_report_insights_v1", "companies": [old_target, new_other]}
+    (tmp_path / "frontend/public/data/companies").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "frontend/public/data/companies/company_report_insights.json").write_text(stable_json(current), encoding="utf-8")
+    write_fixture(tmp_path, manifest=manifest)
+    diff = preview_diff(manifest, generated, context(tmp_path))
+    assert diff["non_target_raw_source_change_count"] == 1
+    assert diff["non_target_raw_source_changes"][0]["company_id"] == "other-company"
+    assert "source_summary" in diff["non_target_raw_source_changes"][0]["changed_paths"]
+
+
+def test_peer_benchmark_only_change_is_reported_separately(tmp_path: Path) -> None:
+    manifest = sample_manifest()
+    other_before = {"company_id": "other-company", "available_years": [2023], "source_summary": {"count": 1}, "peer_benchmarks": []}
+    other_after = {
+        "company_id": "other-company",
+        "available_years": [2023],
+        "source_summary": {"count": 1},
+        "peer_benchmarks": [{"metric_id": "revenue", "rank": 1}],
+    }
+    current = {"schema_version": "company_report_insights_v1", "companies": [other_before]}
+    generated = {"schema_version": "company_report_insights_v1", "companies": [other_after]}
+    (tmp_path / "frontend/public/data/companies").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "frontend/public/data/companies/company_report_insights.json").write_text(stable_json(current), encoding="utf-8")
+    write_fixture(tmp_path, manifest=manifest)
+    diff = preview_diff(manifest, generated, context(tmp_path))
+    assert diff["non_target_raw_source_change_count"] == 0
+    assert diff["affected_peer_benchmark_company_ids"] == ["other-company"]
+
+
+def test_preview_detects_unexpected_company_add_remove(tmp_path: Path) -> None:
+    manifest = sample_manifest(replace_existing=True)
+    current = {
+        "schema_version": "company_report_insights_v1",
+        "companies": [
+            {"company_id": "sample-company", "source_summary": {}, "peer_benchmarks": []},
+            {"company_id": "removed-company", "source_summary": {}, "peer_benchmarks": []},
+        ],
+    }
+    generated = {
+        "schema_version": "company_report_insights_v1",
+        "companies": [
+            {"company_id": "sample-company", "source_summary": {}, "peer_benchmarks": []},
+            {"company_id": "unexpected-company", "source_summary": {}, "peer_benchmarks": []},
+        ],
+    }
+    (tmp_path / "frontend/public/data/companies").mkdir(parents=True, exist_ok=True)
+    (tmp_path / "frontend/public/data/companies/company_report_insights.json").write_text(stable_json(current), encoding="utf-8")
+    write_fixture(tmp_path, manifest=manifest)
+    diff = preview_diff(manifest, generated, context(tmp_path))
+    assert diff["unexpected_added_company_ids"] == ["unexpected-company"]
+    assert diff["unexpected_removed_company_ids"] == ["removed-company"]
 
 
 def test_promote_requires_acknowledgements_and_matching_preview_sha(tmp_path: Path) -> None:
@@ -218,6 +288,41 @@ def test_promote_requires_acknowledgements_and_matching_preview_sha(tmp_path: Pa
     )
     assert result["verdict"] == BLOCKED
     assert any(item["code"] == "preview_sha_mismatch" for item in result["blockers"])
+
+
+def test_promote_requires_existing_preview_artifact(tmp_path: Path) -> None:
+    manifest_path = write_fixture(tmp_path)
+    preview = preview_onboarding(manifest_path, context(tmp_path))["public_diff_preview"]
+    (tmp_path / "artifacts/company-report-onboarding-test/sample-company/public-diff-preview.json").unlink()
+    result = promote_onboarding(
+        manifest_path,
+        context(tmp_path),
+        expected_preview_sha=preview["preview_sha256"],
+        source_ack=True,
+        public_ack=True,
+        write=True,
+    )
+    assert result["verdict"] == BLOCKED
+    assert any(item["code"] == "preview_artifact_missing" for item in result["blockers"])
+
+
+def test_promote_blocks_candidate_change_after_preview(tmp_path: Path) -> None:
+    manifest_path = write_fixture(tmp_path)
+    preview = preview_onboarding(manifest_path, context(tmp_path))["public_diff_preview"]
+    candidate_path = tmp_path / sample_manifest()["candidate_input_path"]
+    candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+    candidate["validation_metadata"]["note"] = "changed after preview"
+    candidate_path.write_text(stable_json(candidate), encoding="utf-8")
+    result = promote_onboarding(
+        manifest_path,
+        context(tmp_path),
+        expected_preview_sha=preview["preview_sha256"],
+        source_ack=True,
+        public_ack=True,
+        write=True,
+    )
+    assert result["verdict"] == BLOCKED
+    assert any(item["code"] == "candidate_changed_after_preview" for item in result["blockers"])
 
 
 def test_atomic_promotion_success_and_rollback(tmp_path: Path) -> None:
@@ -249,6 +354,8 @@ def test_atomic_promotion_success_and_rollback(tmp_path: Path) -> None:
     )
     assert result["verdict"] == BLOCKED
     assert not result["write_applied"]
+    assert result["rollback_applied"]
+    assert result["promotion_manifest"]["rollback_applied"]
     assert not (tmp_path / "rollback" / sample_manifest()["public_output_path"]).exists()
 
 
@@ -275,6 +382,32 @@ def test_builder_discovery_excludes_onboarding_and_staging(tmp_path: Path) -> No
     assert discovered == set()
     preview = preview_onboarding(manifest_path, context(tmp_path))
     assert preview["public_diff_preview"]["non_target_raw_source_change_count"] == 0
+
+
+def test_source_priority_cross_check_and_covered_years_are_validated(tmp_path: Path) -> None:
+    manifest = sample_manifest()
+    manifest["source_priority"]["2023"]["cross_check_source_refs"] = ["missing_source"]
+    manifest_path = write_fixture(tmp_path / "missing_cross", manifest=manifest)
+    result = validate_onboarding(manifest_path, context(tmp_path / "missing_cross"))
+    assert result["verdict"] == BLOCKED
+    assert any(item["code"] == "source_priority_mismatch" for item in result["blockers"])
+    assert any(item["code"] == "cross_check_source_missing" for item in result["blockers"])
+
+    candidate = sample_candidate()
+    candidate["source_documents"]["yuchang_audit_report_2026_04_08"]["covered_years"] = [2024]
+    manifest_path = write_fixture(tmp_path / "coverage", candidate=candidate)
+    result = validate_onboarding(manifest_path, context(tmp_path / "coverage"))
+    assert result["verdict"] == BLOCKED
+    assert any(item["code"] == "primary_source_year_not_covered" for item in result["blockers"])
+
+
+def test_pending_manual_page_check_count_uses_unique_locations(tmp_path: Path) -> None:
+    manifest_path = write_fixture(tmp_path)
+    result = validate_onboarding(manifest_path, context(tmp_path))
+    assert result["pending_manual_page_check_count"] > 1
+    assert result["warnings"][-1]["actual"] == result["pending_manual_page_check_count"]
+    assert result["pending_manual_page_check_source_ids"]
+    assert result["pending_manual_page_check_years"]
 
 
 def test_existing_five_company_audit_sources_still_validate() -> None:
@@ -330,8 +463,43 @@ def test_cli_exit_codes(tmp_path: Path) -> None:
 
 def test_pdf_and_secret_like_text_are_blocked(tmp_path: Path) -> None:
     candidate = sample_candidate()
-    candidate["validation_metadata"]["note"] = "DART_API_KEY"
+    candidate["validation_metadata"]["note"] = "DART_API_KEY=" + "abcdefghijklmnop"
     manifest_path = write_fixture(tmp_path, candidate=candidate)
     result = validate_onboarding(manifest_path, context(tmp_path))
     assert result["verdict"] == BLOCKED
     assert any(item["code"] == "secret_like_text_detected" for item in result["blockers"])
+
+    safe = sample_candidate()
+    safe["validation_metadata"]["note"] = "API Key is managed outside the repository with ${DART_API_KEY}."
+    manifest_path = write_fixture(tmp_path / "safe", candidate=safe)
+    result = validate_onboarding(manifest_path, context(tmp_path / "safe"))
+    assert result["verdict"] == PASS
+
+
+def test_static_synthetic_fixture_cli_validate_stage_preview(tmp_path: Path) -> None:
+    fixture_root = tmp_path / "pass_new_company"
+    shutil.copytree(STATIC_FIXTURE, fixture_root)
+    script = ROOT / "scripts" / "onboard_company_report.py"
+    manifest = "data/company_reports/sample-company/onboarding/manifest.json"
+    for command in ["validate", "stage", "preview"]:
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                command,
+                "--repo-root",
+                str(fixture_root),
+                "--manifest",
+                manifest,
+                "--artifact-root",
+                str(tmp_path / "artifacts"),
+                "--base-ref=",
+            ],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+    assert not (fixture_root / "data/company_reports/sample-company/audit_financials_2023_2025.json").exists()
+    assert (fixture_root / "data/company_reports/sample-company/staging/audit_financials_2023_2025.json").exists()

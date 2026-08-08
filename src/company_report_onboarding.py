@@ -7,6 +7,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
@@ -37,13 +38,12 @@ PROTECTED_PUBLIC_FILES = [
     "frontend/public/data/business.json",
     "frontend/public/data/meta.json",
 ]
+PIPELINE_CONTRACT_VERSION = "company_report_onboarding_gate_v1"
+DECISION_DERIVED_FIELDS = {"latest_snapshot", "trends", "financial_health", "evidence_health", "peer_benchmarks"}
 SECRET_PATTERNS = [
-    re.compile(r"DART_API_KEY", re.I),
-    re.compile(r"NAVER_API_HUB_CLIENT_(?:ID|SECRET)", re.I),
-    re.compile(r"X-NCP-APIGW-API-KEY", re.I),
-    re.compile(r"Authorization", re.I),
-    re.compile(r"secret", re.I),
-    re.compile(r"api[_-]?key", re.I),
+    re.compile(r"(?i)(DART_API_KEY|NAVER_API_HUB_CLIENT_ID|NAVER_API_HUB_CLIENT_SECRET)\s*[:=]\s*['\"]?[A-Za-z0-9_./+=-]{12,}"),
+    re.compile(r"(?i)Authorization\s*[:=]\s*['\"]?(Bearer|Basic)\s+[A-Za-z0-9_./+=-]{12,}"),
+    re.compile(r"X-NCP-APIGW-API-KEY(?:-ID)?\s*[:=]\s*['\"]?[A-Za-z0-9_./+=-]{12,}"),
 ]
 
 
@@ -74,6 +74,42 @@ def sha256_json(payload: dict[str, Any]) -> str:
 
 def file_sha256(path: Path) -> str:
     return sha256_bytes(path.read_bytes())
+
+
+def maybe_file_sha256(path: Path) -> str | None:
+    return file_sha256(path) if path.exists() else None
+
+
+def git_show_bytes(repo_root: Path, ref: str, relative_path: str) -> bytes | None:
+    result = subprocess.run(
+        ["git", "show", f"{ref}:{relative_path}"],
+        cwd=repo_root,
+        capture_output=True,
+        check=False,
+    )
+    return result.stdout if result.returncode == 0 else None
+
+
+def git_file_sha256(repo_root: Path, ref: str | None, relative_path: str) -> str | None:
+    if not ref:
+        return maybe_file_sha256(repo_root / relative_path)
+    data = git_show_bytes(repo_root, ref, relative_path)
+    return sha256_bytes(data) if data is not None else None
+
+
+def protected_file_sha_map(context: PipelineContext, *, base: bool = False) -> dict[str, str | None]:
+    ref = context.base_ref if base else None
+    return {path: git_file_sha256(context.repo_root, ref, path) for path in PROTECTED_PUBLIC_FILES}
+
+
+def protected_file_changes(context: PipelineContext) -> list[dict[str, Any]]:
+    current = protected_file_sha_map(context)
+    base = protected_file_sha_map(context, base=True)
+    changes = []
+    for path in PROTECTED_PUBLIC_FILES:
+        if current.get(path) != base.get(path):
+            changes.append({"path": path, "base_sha256": base.get(path), "current_sha256": current.get(path)})
+    return changes
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -203,6 +239,13 @@ def source_priority_summary(candidate: dict[str, Any], target_years: list[int]) 
     return rows
 
 
+def normalized_source_priority_item(item: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "primary_source_ref": item.get("primary_source_ref"),
+        "cross_check_source_refs": sorted(set(item.get("cross_check_source_refs") or [])),
+    }
+
+
 def find_metric_record(candidate: dict[str, Any], year: str, metric: str) -> dict[str, Any] | None:
     if "." in metric:
         section, key = metric.split(".", 1)
@@ -240,6 +283,33 @@ def disclosure_status_counts(candidate: dict[str, Any]) -> dict[str, int]:
     return counts
 
 
+def pending_manual_page_check_details(candidate: dict[str, Any]) -> dict[str, Any]:
+    seen = set()
+    source_ids = set()
+    years = set()
+    for year, year_record in (candidate.get("financial_years") or {}).items():
+        for _, record in money_paths(year_record):
+            for location in record.get("source_locations") or []:
+                if location.get("verification_status") != "pending_manual_page_check":
+                    continue
+                key = (
+                    location.get("source_ref"),
+                    location.get("section"),
+                    location.get("page_range") or location.get("page"),
+                    location.get("note"),
+                )
+                if key in seen:
+                    continue
+                seen.add(key)
+                source_ids.add(location.get("source_ref"))
+                years.add(int(year))
+    return {
+        "count": len(seen),
+        "source_ids": sorted(item for item in source_ids if item),
+        "years": sorted(years),
+    }
+
+
 def issue_row(code: str, path: str, message: str, **extra: Any) -> dict[str, Any]:
     return {"code": code, "path": path, "message": message, **extra}
 
@@ -273,11 +343,15 @@ def reconcile_manifest_candidate(manifest: dict[str, Any], candidate: dict[str, 
         primary = manifest_item.get("primary_source_ref")
         if primary not in sources:
             blockers.append(issue_row("primary_source_missing", f"source_priority.{year}.primary_source_ref", "primary source ref is not declared in candidate source_documents", actual=primary))
-        if primary != candidate_item.get("primary_source_ref"):
+        elif year not in set(documents_years := (candidate.get("source_documents") or {}).get(primary, {}).get("covered_years") or []):
+            blockers.append(issue_row("primary_source_year_not_covered", f"source_priority.{year}.primary_source_ref", "primary source document does not cover target year", expected=year, actual=documents_years))
+        if normalized_source_priority_item(manifest_item) != normalized_source_priority_item(candidate_item):
             blockers.append(issue_row("source_priority_mismatch", f"source_priority.{year}", "manifest source priority does not match candidate", expected=manifest_item, actual=candidate_item))
         for source_ref in manifest_item.get("cross_check_source_refs") or []:
             if source_ref not in sources:
                 blockers.append(issue_row("cross_check_source_missing", f"source_priority.{year}.cross_check_source_refs", "cross-check source ref is not declared in candidate source_documents", actual=source_ref))
+            elif year not in set(documents_years := (candidate.get("source_documents") or {}).get(source_ref, {}).get("covered_years") or []):
+                blockers.append(issue_row("cross_check_source_year_not_covered", f"source_priority.{year}.cross_check_source_refs", "cross-check source document does not cover target year", expected=year, actual={source_ref: documents_years}))
 
     policy = manifest.get("promotion_policy") or {}
     required = coverage_for_metrics(candidate, manifest.get("required_metrics") or [], target_years)
@@ -298,14 +372,9 @@ def reconcile_manifest_candidate(manifest: dict[str, Any], candidate: dict[str, 
             if status in {"not_disclosed", "verification_pending", "missing"}:
                 warnings.append(issue_row(f"optional_metric_{status}", f"financial_years.{year}.{metric}", "optional metric requires review", actual=status))
 
-    pending_count = sum(
-        1
-        for _, record in money_paths(candidate)
-        for location in record.get("source_locations") or []
-        if location.get("verification_status") == "pending_manual_page_check"
-    )
-    if pending_count:
-        warnings.append(issue_row("pending_manual_page_check", "source_locations", "manual page check remains", actual=pending_count))
+    pending_details = pending_manual_page_check_details(candidate)
+    if pending_details["count"]:
+        warnings.append(issue_row("pending_manual_page_check", "source_locations", "manual page check remains", actual=pending_details["count"], source_ids=pending_details["source_ids"], years=pending_details["years"]))
     for event in (candidate.get("entity_attribution") or {}).get("special_events") or []:
         warnings.append(issue_row("special_event_present", "entity_attribution.special_events", "special event requires reviewer awareness", actual=event.get("event_type")))
     return blockers, warnings
@@ -377,7 +446,9 @@ def validation_report(
         "source_priority_summary": source_priority_summary(candidate, target_years) if candidate else [],
         "accounting_validation_summary": accounting_validation or {},
         "restatement_event_count": sum(1 for event in (candidate.get("entity_attribution") or {}).get("special_events") or [] if "restatement" in str(event.get("event_type", ""))),
-        "pending_manual_page_check_count": sum(1 for warning in warnings if warning["code"] == "pending_manual_page_check"),
+        "pending_manual_page_check_count": pending_manual_page_check_details(candidate)["count"] if candidate else 0,
+        "pending_manual_page_check_source_ids": pending_manual_page_check_details(candidate)["source_ids"] if candidate else [],
+        "pending_manual_page_check_years": pending_manual_page_check_details(candidate)["years"] if candidate else [],
         "promotion_eligible": verdict == PASS,
     }
 
@@ -483,12 +554,21 @@ def stage_onboarding(manifest_path: Path, context: PipelineContext) -> dict[str,
     report["staging_output_path"] = manifest["staging_output_path"]
     report["staging_sha256"] = file_sha256(target)
     write_validation_artifacts(context, report.get("company_id") or manifest["company_id"], report)
+    shutil.copyfile(target, context.resolve_artifact_root(manifest["company_id"]) / "staged-candidate.json")
     return report
 
 
 def source_payload_without_decision(payload: dict[str, Any]) -> dict[str, Any]:
-    decision_fields = {"latest_snapshot", "trends", "financial_health", "evidence_health", "peer_benchmarks"}
-    return {key: value for key, value in payload.items() if key not in decision_fields}
+    return {key: value for key, value in payload.items() if key not in DECISION_DERIVED_FIELDS}
+
+
+def changed_top_level_paths(before: dict[str, Any], after: dict[str, Any]) -> list[str]:
+    keys = sorted(set(before) | set(after))
+    return [key for key in keys if before.get(key) != after.get(key)]
+
+
+def raw_source_changes(before: dict[str, Any], after: dict[str, Any]) -> list[str]:
+    return changed_top_level_paths(source_payload_without_decision(before), source_payload_without_decision(after))
 
 
 def build_temp_input_root(manifest: dict[str, Any], context: PipelineContext) -> tuple[tempfile.TemporaryDirectory[str], Path]:
@@ -529,8 +609,15 @@ def preview_diff(manifest: dict[str, Any], generated: dict[str, Any], context: P
     new_map = company_map(generated)
     company_id = manifest["company_id"]
     operation = "update" if company_id in old_map else "add"
+    manifest_sha = file_sha256(resolve_safe(context.repo_root, f"data/company_reports/{company_id}/onboarding/manifest.json"))
+    candidate_sha = file_sha256(resolve_safe(context.repo_root, manifest["candidate_input_path"]))
+    current_public_sha = maybe_file_sha256(context.repo_root / PUBLIC_VIEW_MODEL_RELATIVE_PATH)
+    protected_current = protected_file_sha_map(context)
+    protected_base = protected_file_sha_map(context, base=True)
+    protected_changes = protected_file_changes(context)
     affected_peer_company_ids = []
     affected_peer_metric_ids = set()
+    non_target_raw_source_changes = []
     for cid, new_company in new_map.items():
         if cid == company_id or cid not in old_map:
             continue
@@ -538,13 +625,20 @@ def preview_diff(manifest: dict[str, Any], generated: dict[str, Any], context: P
             affected_peer_company_ids.append(cid)
             for item in new_company.get("peer_benchmarks") or []:
                 affected_peer_metric_ids.add(item.get("metric_id"))
+        changes = raw_source_changes(old_map[cid], new_company)
+        if changes:
+            non_target_raw_source_changes.append({
+                "company_id": cid,
+                "changed_paths": changes,
+                "before_sha256": sha256_json(source_payload_without_decision(old_map[cid])),
+                "after_sha256": sha256_json(source_payload_without_decision(new_company)),
+            })
     old_target = old_map.get(company_id)
     new_target = new_map.get(company_id)
     target_raw_changes = []
     target_source_changes = []
     if old_target and new_target:
-        if source_payload_without_decision(old_target) != source_payload_without_decision(new_target):
-            target_raw_changes.append(company_id)
+        target_raw_changes = raw_source_changes(old_target, new_target)
         if old_target.get("source_summary") != new_target.get("source_summary"):
             target_source_changes.append(company_id)
     elif new_target:
@@ -552,21 +646,47 @@ def preview_diff(manifest: dict[str, Any], generated: dict[str, Any], context: P
         target_source_changes.append(company_id)
 
     expected_text = stable_json(generated)
+    added_company_ids = sorted(set(new_map) - set(old_map))
+    removed_company_ids = sorted(set(old_map) - set(new_map))
+    unexpected_added = [cid for cid in added_company_ids if not (operation == "add" and cid == company_id)]
+    unexpected_removed = removed_company_ids
     result = {
+        "pipeline_contract_version": PIPELINE_CONTRACT_VERSION,
         "target_company_id": company_id,
         "operation": operation,
+        "manifest_sha256": manifest_sha,
+        "candidate_sha256": candidate_sha,
+        "current_public_view_model_sha256": current_public_sha,
+        "protected_file_sha256": protected_current,
+        "base_protected_file_sha256": protected_base,
         "target_raw_changes": target_raw_changes,
         "target_source_changes": target_source_changes,
-        "non_target_raw_source_change_count": 0,
+        "non_target_raw_source_changes": sorted(non_target_raw_source_changes, key=lambda row: row["company_id"]),
+        "non_target_raw_source_change_count": len(non_target_raw_source_changes),
         "affected_peer_benchmark_company_ids": sorted(affected_peer_company_ids),
         "affected_peer_benchmark_metric_ids": sorted(item for item in affected_peer_metric_ids if item),
-        "added_company_ids": sorted(set(new_map) - set(old_map)),
-        "removed_company_ids": sorted(set(old_map) - set(new_map)),
-        "protected_file_changes": [],
+        "added_company_ids": added_company_ids,
+        "removed_company_ids": removed_company_ids,
+        "unexpected_added_company_ids": unexpected_added,
+        "unexpected_removed_company_ids": unexpected_removed,
+        "protected_file_changes": protected_changes,
         "expected_public_output_sha256": sha256_bytes(expected_text.encode("utf-8")),
     }
     result["preview_sha256"] = sha256_json(result)
     return result
+
+
+def preview_gate_blockers(diff: dict[str, Any]) -> list[dict[str, Any]]:
+    blockers: list[dict[str, Any]] = []
+    if diff.get("non_target_raw_source_change_count", 0) != 0:
+        blockers.append(issue_row("non_target_raw_source_change", "public_diff_preview.non_target_raw_source_changes", "non-target raw/source changes are blocked", actual=diff.get("non_target_raw_source_changes")))
+    if diff.get("unexpected_added_company_ids"):
+        blockers.append(issue_row("unexpected_added_company", "public_diff_preview.added_company_ids", "unexpected non-target company additions are blocked", actual=diff.get("unexpected_added_company_ids")))
+    if diff.get("unexpected_removed_company_ids"):
+        blockers.append(issue_row("unexpected_removed_company", "public_diff_preview.removed_company_ids", "company removals are blocked", actual=diff.get("unexpected_removed_company_ids")))
+    if diff.get("protected_file_changes"):
+        blockers.append(issue_row("protected_file_change", "public_diff_preview.protected_file_changes", "protected file changes are blocked", actual=diff.get("protected_file_changes")))
+    return blockers
 
 
 def preview_onboarding(manifest_path: Path, context: PipelineContext) -> dict[str, Any]:
@@ -583,6 +703,12 @@ def preview_onboarding(manifest_path: Path, context: PipelineContext) -> dict[st
         try:
             generated = build_view_model(input_root=input_root, base_ref=context.base_ref)
             diff = preview_diff(manifest, generated, context)
+            diff_blockers = preview_gate_blockers(diff)
+            if diff_blockers:
+                report["verdict"] = BLOCKED
+                report["promotion_eligible"] = False
+                report["blockers"] = list(report.get("blockers") or []) + diff_blockers
+                report["blocker_count"] = len(report["blockers"])
             diff["preview_output"] = generated
         finally:
             temp.cleanup()
@@ -593,15 +719,36 @@ def preview_onboarding(manifest_path: Path, context: PipelineContext) -> dict[st
     return {**report, "public_diff_preview": {k: v for k, v in diff.items() if k != "preview_output"}, "promotion_manifest": promotion}
 
 
-def promotion_manifest(manifest: dict[str, Any], report: dict[str, Any], diff: dict[str, Any], *, write_requested: bool, expected_preview_sha: str | None = None, source_ack: bool = False, public_ack: bool = False) -> dict[str, Any]:
+def promotion_manifest(
+    manifest: dict[str, Any],
+    report: dict[str, Any],
+    diff: dict[str, Any],
+    *,
+    write_requested: bool,
+    expected_preview_sha: str | None = None,
+    source_ack: bool = False,
+    public_ack: bool = False,
+    preview_artifact_verified: bool = False,
+    write_applied: bool = False,
+    rollback_applied: bool = False,
+    final_public_source_sha256: str | None = None,
+    final_public_view_model_sha256: str | None = None,
+) -> dict[str, Any]:
     return {
         "schema_version": PROMOTION_MANIFEST_SCHEMA_VERSION,
         "company_id": manifest["company_id"],
         "verdict": report["verdict"],
         "promotion_eligible": report.get("promotion_eligible", False),
+        "preview_artifact_verified": preview_artifact_verified,
+        "manifest_unchanged_since_preview": preview_artifact_verified,
+        "candidate_unchanged_since_preview": preview_artifact_verified,
+        "public_view_model_unchanged_since_preview": preview_artifact_verified,
+        "protected_files_unchanged_since_preview": preview_artifact_verified,
         "source_review_acknowledged": source_ack,
         "public_change_acknowledged": public_ack,
         "write_requested": write_requested,
+        "write_applied": write_applied,
+        "rollback_applied": rollback_applied,
         "expected_preview_sha": expected_preview_sha,
         "actual_preview_sha": diff.get("preview_sha256"),
         "manifest_sha256": report.get("manifest_sha256"),
@@ -610,9 +757,47 @@ def promotion_manifest(manifest: dict[str, Any], report: dict[str, Any], diff: d
         "target_public_view_model_path": PUBLIC_VIEW_MODEL_RELATIVE_PATH.as_posix(),
         "non_target_raw_source_change_count": diff.get("non_target_raw_source_change_count", 0),
         "protected_file_change_count": len(diff.get("protected_file_changes") or []),
+        "unexpected_added_company_count": len(diff.get("unexpected_added_company_ids") or []),
+        "unexpected_removed_company_count": len(diff.get("unexpected_removed_company_ids") or []),
         "changed_company_ids": sorted(set(diff.get("added_company_ids") or []) | {manifest["company_id"]}),
         "derived_peer_change_company_ids": diff.get("affected_peer_benchmark_company_ids") or [],
+        "final_public_source_sha256": final_public_source_sha256,
+        "final_public_view_model_sha256": final_public_view_model_sha256,
     }
+
+
+def read_preview_artifact(context: PipelineContext, company_id: str) -> dict[str, Any] | None:
+    path = context.resolve_artifact_root(company_id) / "public-diff-preview.json"
+    if not path.exists():
+        return None
+    try:
+        return read_json(path)
+    except Exception:  # noqa: BLE001
+        return {"preview_artifact_invalid": True}
+
+
+def verify_preview_artifact(artifact: dict[str, Any] | None, latest: dict[str, Any], expected_preview_sha: str | None) -> tuple[bool, list[dict[str, Any]]]:
+    blockers: list[dict[str, Any]] = []
+    if artifact is None:
+        blockers.append(issue_row("preview_artifact_missing", "public-diff-preview.json", "preview artifact must exist before promotion"))
+        return False, blockers
+    if artifact.get("preview_artifact_invalid"):
+        blockers.append(issue_row("preview_artifact_invalid", "public-diff-preview.json", "preview artifact is not valid JSON"))
+        return False, blockers
+    if artifact.get("preview_sha256") != expected_preview_sha:
+        blockers.append(issue_row("preview_sha_mismatch", "expected_preview_sha", "expected preview SHA does not match preview artifact", expected=expected_preview_sha, actual=artifact.get("preview_sha256")))
+    comparable_fields = [
+        ("manifest_sha256", "manifest_changed_after_preview"),
+        ("candidate_sha256", "candidate_changed_after_preview"),
+        ("current_public_view_model_sha256", "public_view_model_changed_after_preview"),
+        ("protected_file_sha256", "protected_file_changed_after_preview"),
+        ("base_protected_file_sha256", "protected_file_changed_after_preview"),
+        ("preview_sha256", "preview_artifact_invalid"),
+    ]
+    for field, code in comparable_fields:
+        if artifact.get(field) != latest.get(field):
+            blockers.append(issue_row(code, f"public-diff-preview.{field}", "latest preview state does not match stored preview artifact", expected=artifact.get(field), actual=latest.get(field)))
+    return not blockers, blockers
 
 
 def replace_atomic(path: Path, data: bytes) -> None:
@@ -638,10 +823,13 @@ def promote_onboarding(
     write: bool,
     simulate_failure: bool = False,
 ) -> dict[str, Any]:
-    preview = preview_onboarding(manifest_path, context)
     manifest = read_json(manifest_path)
+    artifact = read_preview_artifact(context, manifest["company_id"])
+    preview = preview_onboarding(manifest_path, context)
     diff = preview.get("public_diff_preview") or {}
     blockers = list(preview.get("blockers") or [])
+    preview_artifact_verified, artifact_blockers = verify_preview_artifact(artifact, diff, expected_preview_sha)
+    blockers.extend(artifact_blockers)
     if not source_ack and (manifest.get("promotion_policy") or {}).get("require_source_review_acknowledgement", True):
         blockers.append(issue_row("source_review_acknowledgement_missing", "promote", "source review acknowledgement is required"))
     if not public_ack and (manifest.get("promotion_policy") or {}).get("require_public_change_acknowledgement", True):
@@ -659,7 +847,17 @@ def promote_onboarding(
         preview["verdict"] = BLOCKED
         preview["promotion_eligible"] = False
         preview["blockers"] = blockers
-    promotion = promotion_manifest(manifest, preview, diff, write_requested=write, expected_preview_sha=expected_preview_sha, source_ack=source_ack, public_ack=public_ack)
+        preview["blocker_count"] = len(blockers)
+    promotion = promotion_manifest(
+        manifest,
+        preview,
+        diff,
+        write_requested=write,
+        expected_preview_sha=expected_preview_sha,
+        source_ack=source_ack,
+        public_ack=public_ack,
+        preview_artifact_verified=preview_artifact_verified,
+    )
     root = context.resolve_artifact_root(manifest["company_id"])
     write_json(root / "promotion-manifest.json", promotion)
     if preview["verdict"] == BLOCKED or not write:
@@ -682,8 +880,24 @@ def promote_onboarding(
         check = build_view_model(input_root=context.repo_root / "data" / "company_reports", base_ref=context.base_ref)
         if stable_json(check).encode("utf-8") != view_model_bytes:
             raise RuntimeError("post-promotion builder check failed")
-        return {**preview, "promotion_manifest": promotion, "write_applied": True}
+        promotion = promotion_manifest(
+            manifest,
+            preview,
+            diff,
+            write_requested=write,
+            expected_preview_sha=expected_preview_sha,
+            source_ack=source_ack,
+            public_ack=public_ack,
+            preview_artifact_verified=preview_artifact_verified,
+            write_applied=True,
+            rollback_applied=False,
+            final_public_source_sha256=file_sha256(public_source),
+            final_public_view_model_sha256=file_sha256(public_view_model),
+        )
+        write_json(root / "promotion-manifest.json", promotion)
+        return {**preview, "promotion_manifest": promotion, "write_applied": True, "rollback_applied": False}
     except Exception as error:  # noqa: BLE001
+        rollback_applied = bool(backups)
         for path, backup in backups.items():
             if backup is None:
                 if path.exists():
@@ -693,6 +907,22 @@ def promote_onboarding(
         preview["verdict"] = BLOCKED
         preview["promotion_eligible"] = False
         preview["blockers"] = list(preview.get("blockers") or []) + [issue_row("atomic_promotion_failed", "promote", str(error))]
-        return {**preview, "promotion_manifest": promotion, "write_applied": False}
+        preview["blocker_count"] = len(preview["blockers"])
+        promotion = promotion_manifest(
+            manifest,
+            preview,
+            diff,
+            write_requested=write,
+            expected_preview_sha=expected_preview_sha,
+            source_ack=source_ack,
+            public_ack=public_ack,
+            preview_artifact_verified=preview_artifact_verified,
+            write_applied=False,
+            rollback_applied=rollback_applied,
+            final_public_source_sha256=maybe_file_sha256(resolve_safe(context.repo_root, manifest["public_output_path"])),
+            final_public_view_model_sha256=maybe_file_sha256(context.repo_root / PUBLIC_VIEW_MODEL_RELATIVE_PATH),
+        )
+        write_json(root / "promotion-manifest.json", promotion)
+        return {**preview, "promotion_manifest": promotion, "write_applied": False, "rollback_applied": rollback_applied}
     finally:
         temp.cleanup()
