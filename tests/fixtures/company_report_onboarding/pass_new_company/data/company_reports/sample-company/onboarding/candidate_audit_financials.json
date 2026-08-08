@@ -1,0 +1,1381 @@
+{
+  "accounting_standard": {
+    "code": "korean_gaap",
+    "label_en": "Korean GAAP",
+    "label_ko": "일반기업회계기준"
+  },
+  "audit_opinions": [
+    {
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2026-03-31",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "sample_report_2026"
+    },
+    {
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2025-03-27",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "sample_report_2025"
+    },
+    {
+      "auditor": "신정회계법인",
+      "auditor_report_date": "2024-03-27",
+      "covered_years": [
+        2023,
+        2022
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "sample_report_2024"
+    }
+  ],
+  "company_id": "sample-company",
+  "company_name": "샘플기업",
+  "currency": "KRW",
+  "disclosure_limitations": [
+    "Synthetic fixture: modular segment revenue is not separately disclosed.",
+    "Synthetic fixture: project-level revenue and profitability are not included.",
+    "Synthetic fixture: related-entity results are not included in standalone sample-company amounts."
+  ],
+  "entity_attribution": {
+    "attribution_warning": "샘플기업 별도 재무제표 기준 후보 데이터입니다.",
+    "financial_scope": "standalone",
+    "modular_segment_revenue_disclosed": false,
+    "related_entity_attribution_required": false,
+    "reporting_entity": "샘플기업 주식회사",
+    "special_events": []
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "reported": 300000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "current_liabilities": {
+          "reported": 200000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "total_assets": {
+          "reported": 1000000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "total_equity": {
+          "reported": 600000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "total_liabilities": {
+          "reported": 400000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "reported": 20000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 100000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "short_term_borrowings": {
+          "reported": 50000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "reported": 40000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 10000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -20000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "operating_cash_flow": {
+          "reported": 30000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "reported": 150000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "net_income": {
+          "reported": 50000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "operating_profit": {
+          "reported": 80000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "revenue": {
+          "reported": 1000000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2025",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 15000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 5000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 2000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "notes": "공사매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "reported": 570000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "goods_revenue": {
+          "reported": 100000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "other_revenue": {
+          "reported": 30000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "product_revenue": {
+          "notes": "제품매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "reported": 300000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "rental_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        }
+      },
+      "source_refs": [
+        "sample_report_2025",
+        "sample_report_2024"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "reported": 60000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "inventory": {
+          "reported": 50000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "trade_receivables_gross": {
+          "reported": 90000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        },
+        "work_in_progress": {
+          "reported": 30000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2025",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2025"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "reported": 350000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "current_liabilities": {
+          "reported": 220000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "total_assets": {
+          "reported": 1100000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "total_equity": {
+          "reported": 650000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "total_liabilities": {
+          "reported": 450000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "reported": 25000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 105000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "short_term_borrowings": {
+          "reported": 55000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "reported": 45000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 30000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -25000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "operating_cash_flow": {
+          "reported": -20000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "reported": 170000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "net_income": {
+          "reported": 60000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "operating_profit": {
+          "reported": 90000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "revenue": {
+          "reported": 1100000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 20000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 6000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 3000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "notes": "공사매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "reported": 670000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "goods_revenue": {
+          "reported": 100000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "other_revenue": {
+          "reported": 30000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "product_revenue": {
+          "notes": "제품매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "reported": 300000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "rental_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "source_refs": [
+        "sample_report_2026"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "reported": 70000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "inventory": {
+          "reported": 55000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "trade_receivables_gross": {
+          "reported": 100000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "work_in_progress": {
+          "reported": 35000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "reported": 400000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "current_liabilities": {
+          "reported": 240000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "total_assets": {
+          "reported": 1200000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "total_equity": {
+          "reported": 700000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "total_liabilities": {
+          "reported": 500000000,
+          "source_locations": [
+            {
+              "page_range": "6~8",
+              "section": "statement.balance_sheet",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "reported": 30000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 110000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "short_term_borrowings": {
+          "reported": 60000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "reported": 50000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 35000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -30000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "operating_cash_flow": {
+          "reported": -25000000,
+          "source_locations": [
+            {
+              "page_range": "12~13",
+              "section": "statement.cash_flow",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "reported": 190000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "net_income": {
+          "reported": 70000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "operating_profit": {
+          "reported": 100000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "revenue": {
+          "reported": 1200000000,
+          "source_locations": [
+            {
+              "page_range": "9~10",
+              "section": "statement.income_statement",
+              "source_ref": "sample_report_2026",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 25000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 7000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 4000000,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "notes": "공사매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "reported": 770000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "goods_revenue": {
+          "reported": 100000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "other_revenue": {
+          "reported": 30000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "product_revenue": {
+          "notes": "제품매출 전체를 모듈러 매출로 해석하지 않는다.",
+          "reported": 300000000,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "rental_revenue": {
+          "reported": 0,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      },
+      "source_refs": [
+        "sample_report_2026"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "reported": 80000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "inventory": {
+          "reported": 60000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "trade_receivables_gross": {
+          "reported": 110000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        },
+        "work_in_progress": {
+          "reported": 40000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "sample_report_2026",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "sample_report_2026"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "샘플기업 주식회사",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "sample_report_2024": {
+      "audit_opinion": "unmodified_fixture",
+      "auditor": "Sample Auditor",
+      "auditor_report_date": "2024-04-01",
+      "balance_sheet_pages": "1~2",
+      "cash_flow_pages": "5~6",
+      "company_overview_page": "7",
+      "covered_years": [
+        2023
+      ],
+      "filename": "synthetic-sample_report_2024.pdf",
+      "income_statement_pages": "3~4",
+      "notes": "Synthetic fixture document; not a real company report.",
+      "publisher": "Sample Auditor",
+      "report_date": "2024-04-01",
+      "source_role": "synthetic_fixture",
+      "source_tier": "test_fixture",
+      "source_type": "synthetic_fixture",
+      "title": "Sample Company Audit Report 2024",
+      "url": null
+    },
+    "sample_report_2025": {
+      "audit_opinion": "unmodified_fixture",
+      "auditor": "Sample Auditor",
+      "auditor_report_date": "2025-04-01",
+      "balance_sheet_pages": "1~2",
+      "cash_flow_pages": "5~6",
+      "company_overview_page": "7",
+      "covered_years": [
+        2023,
+        2024
+      ],
+      "filename": "synthetic-sample_report_2025.pdf",
+      "income_statement_pages": "3~4",
+      "notes": "Synthetic fixture document; not a real company report.",
+      "publisher": "Sample Auditor",
+      "report_date": "2025-04-01",
+      "source_role": "synthetic_fixture",
+      "source_tier": "test_fixture",
+      "source_type": "synthetic_fixture",
+      "title": "Sample Company Audit Report 2025",
+      "url": null
+    },
+    "sample_report_2026": {
+      "audit_opinion": "unmodified_fixture",
+      "auditor": "Sample Auditor",
+      "auditor_report_date": "2026-04-01",
+      "balance_sheet_pages": "1~2",
+      "cash_flow_pages": "5~6",
+      "company_overview_page": "7",
+      "covered_years": [
+        2024,
+        2025
+      ],
+      "filename": "synthetic-sample_report_2026.pdf",
+      "income_statement_pages": "3~4",
+      "notes": "Synthetic fixture document; not a real company report.",
+      "publisher": "Sample Auditor",
+      "report_date": "2026-04-01",
+      "source_role": "synthetic_fixture",
+      "source_tier": "test_fixture",
+      "source_type": "synthetic_fixture",
+      "title": "Sample Company Audit Report 2026",
+      "url": null
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "sample_report_2024"
+      ],
+      "primary_source_ref": "sample_report_2025"
+    },
+    "2024": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "sample_report_2026"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "sample_report_2026"
+    }
+  },
+  "unit": "won",
+  "validation_metadata": {
+    "amount_storage": "KRW integer won",
+    "created_for": "phase_7b_onboarding_synthetic_fixture",
+    "derived_metrics_storage": "computed_by_validator_only",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "note": "Synthetic onboarding fixture; contains no real company amounts.",
+    "pdf_handling": "source PDFs are not copied into the repository",
+    "public_ui_impact": "none",
+    "validation_policy": {
+      "expected_cash_flow_signs": {
+        "2023": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "positive"
+        },
+        "2024": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "negative"
+        },
+        "2025": {
+          "financing_cash_flow": "positive",
+          "investing_cash_flow": "negative",
+          "operating_cash_flow": "negative"
+        }
+      },
+      "forbidden_field_names": [
+        "modular_revenue",
+        "derived",
+        "inference"
+      ],
+      "required_attribution_warning_terms": [],
+      "required_disclosure_limitations": []
+    }
+  }
+}

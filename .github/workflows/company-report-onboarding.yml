@@ -1,0 +1,145 @@
+name: Company Report Onboarding
+
+on:
+  pull_request:
+    paths:
+      - "schemas/company_reports/**"
+      - "scripts/onboard_company_report.py"
+      - "src/company_report_onboarding.py"
+      - "tests/test_company_report_onboarding.py"
+      - "tests/fixtures/company_report_onboarding/**"
+      - "data/company_reports/**/onboarding/**"
+      - "data/company_reports/**/staging/**"
+  workflow_dispatch:
+    inputs:
+      manifest_path:
+        description: "Repository-relative onboarding manifest path"
+        required: true
+        type: string
+      mode:
+        description: "Validate or stage only"
+        required: true
+        default: "validate"
+        type: choice
+        options:
+          - validate
+          - stage
+
+permissions:
+  contents: read
+
+jobs:
+  onboarding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python test dependencies
+        run: python -m pip install jsonschema pytest
+
+      - name: Compile Python
+        run: python -m compileall scripts src
+
+      - name: Run onboarding tests
+        run: python -m pytest -q tests/test_company_report_onboarding.py
+
+      - name: Run audit report regressions
+        run: python -m pytest -q tests/test_company_audit_financials.py tests/test_company_report_insights.py tests/test_company_report_onboarding.py
+
+      - name: Check generated report insights
+        run: python scripts/build_company_report_insights.py --check
+
+      - name: Protected data diff check
+        run: |
+          git diff --exit-code origin/main...HEAD -- \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json \
+            frontend/public/data/news.json \
+            frontend/public/data/business.json \
+            frontend/public/data/meta.json
+
+      - name: PDF and secret pattern check
+        run: |
+          changed="$(git diff --name-only origin/main...HEAD)"
+          if echo "$changed" | grep -Ei '\.pdf$'; then
+            echo "PDF files are not allowed in onboarding PRs."
+            exit 1
+          fi
+          python - <<'PY'
+          import re
+          import subprocess
+          import sys
+
+          diff = subprocess.check_output(
+              ["git", "diff", "origin/main...HEAD"],
+              text=True,
+              encoding="utf-8",
+              errors="replace",
+          )
+          value_patterns = [
+              re.compile(r"(?i)(DART_API_KEY|NAVER_API_HUB_CLIENT_ID|NAVER_API_HUB_CLIENT_SECRET)\s*[:=]\s*['\"]?[A-Za-z0-9_./+=-]{12,}"),
+              re.compile(r"(?i)Authorization\s*[:=]\s*['\"]?(Bearer|Basic)\s+[A-Za-z0-9_./+=-]{12,}"),
+              re.compile(r"X-NCP-APIGW-API-KEY(?:-ID)?\s*[:=]\s*['\"]?[A-Za-z0-9_./+=-]{12,}"),
+          ]
+          if any(pattern.search(diff) for pattern in value_patterns):
+              print("Secret-like value detected in diff.")
+              sys.exit(1)
+          PY
+
+      - name: Manual onboarding command
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          case "${{ inputs.manifest_path }}" in
+            data/company_reports/*/onboarding/manifest.json) ;;
+            *)
+              echo "manifest_path must be under data/company_reports/<company-id>/onboarding/manifest.json"
+              exit 4
+              ;;
+          esac
+          if [ "${{ inputs.mode }}" = "validate" ]; then
+            python scripts/onboard_company_report.py validate --manifest "${{ inputs.manifest_path }}"
+          elif [ "${{ inputs.mode }}" = "stage" ]; then
+            python scripts/onboard_company_report.py stage --manifest "${{ inputs.manifest_path }}"
+          else
+            echo "Unsupported mode"
+            exit 4
+          fi
+
+      - name: Upload onboarding artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: company-report-onboarding-artifacts
+          path: artifacts/company-report-onboarding/**
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Company Report Onboarding" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Promote mode is not available in GitHub Actions." >> "$GITHUB_STEP_SUMMARY"
+          echo "- Public files are not written by this workflow." >> "$GITHUB_STEP_SUMMARY"
+          echo "- Artifacts, if any, are uploaded for review." >> "$GITHUB_STEP_SUMMARY"
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+
+          for path in sorted(Path("artifacts/company-report-onboarding").glob("*/validation-report.json")):
+              report = json.loads(path.read_text(encoding="utf-8"))
+              print("")
+              print(f"### {report.get('company_id')}")
+              print(f"- verdict: {report.get('verdict')}")
+              print(f"- blockers: {report.get('blocker_count')}")
+              print(f"- warnings: {report.get('warning_count')}")
+              print(f"- pending manual page checks: {report.get('pending_manual_page_check_count')}")
+              print(f"- promotion eligible: {report.get('promotion_eligible')}")
+              print(f"- artifact: `{path.parent.as_posix()}`")
+          PY
