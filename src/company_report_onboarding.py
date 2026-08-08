@@ -97,9 +97,32 @@ def git_file_sha256(repo_root: Path, ref: str | None, relative_path: str) -> str
     return sha256_bytes(data) if data is not None else None
 
 
+def git_path_differs_from_ref(repo_root: Path, ref: str | None, relative_path: str) -> bool:
+    if not ref:
+        return True
+    result = subprocess.run(
+        ["git", "diff", "--quiet", ref, "--", relative_path],
+        cwd=repo_root,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode == 0:
+        return False
+    if result.returncode == 1:
+        return True
+    return True
+
+
 def protected_file_sha_map(context: PipelineContext, *, base: bool = False) -> dict[str, str | None]:
-    ref = context.base_ref if base else None
-    return {path: git_file_sha256(context.repo_root, ref, path) for path in PROTECTED_PUBLIC_FILES}
+    if base:
+        return {path: git_file_sha256(context.repo_root, context.base_ref, path) for path in PROTECTED_PUBLIC_FILES}
+    result: dict[str, str | None] = {}
+    for path in PROTECTED_PUBLIC_FILES:
+        if context.base_ref and not git_path_differs_from_ref(context.repo_root, context.base_ref, path):
+            result[path] = git_file_sha256(context.repo_root, context.base_ref, path)
+        else:
+            result[path] = git_file_sha256(context.repo_root, None, path)
+    return result
 
 
 def protected_file_changes(context: PipelineContext) -> list[dict[str, Any]]:

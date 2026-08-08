@@ -1,0 +1,77 @@
+{
+  "schema_version": "company_report_onboarding_manifest_v1",
+  "company_id": "sungji-steel",
+  "company_name": "성지제강",
+  "reporting_entity": "주식회사 성지제강",
+  "financial_scope": "standalone",
+  "currency": "KRW",
+  "unit": "won",
+  "target_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "candidate_input_path": "data/company_reports/sungji-steel/onboarding/candidate_audit_financials.json",
+  "staging_output_path": "data/company_reports/sungji-steel/staging/audit_financials_2023_2025.json",
+  "public_output_path": "data/company_reports/sungji-steel/audit_financials_2023_2025.json",
+  "replace_existing": false,
+  "source_priority": {
+    "2023": {
+      "primary_source_ref": "sungji_audit_report_2025_04_01",
+      "cross_check_source_refs": [
+        "sungji_audit_report_2024_04_03"
+      ]
+    },
+    "2024": {
+      "primary_source_ref": "sungji_audit_report_2026_04_01",
+      "cross_check_source_refs": [
+        "sungji_audit_report_2025_04_01"
+      ]
+    },
+    "2025": {
+      "primary_source_ref": "sungji_audit_report_2026_04_01",
+      "cross_check_source_refs": []
+    }
+  },
+  "required_metrics": [
+    "income_statement.revenue",
+    "income_statement.gross_profit",
+    "income_statement.operating_profit",
+    "income_statement.net_income",
+    "balance_sheet.total_assets",
+    "balance_sheet.total_liabilities",
+    "balance_sheet.total_equity",
+    "balance_sheet.current_assets",
+    "balance_sheet.current_liabilities",
+    "cash_flow.operating_cash_flow",
+    "cash_flow.investing_cash_flow",
+    "cash_flow.financing_cash_flow",
+    "cash_flow.ending_cash"
+  ],
+  "optional_metrics": [
+    "revenue_breakdown.goods_revenue",
+    "revenue_breakdown.product_revenue",
+    "revenue_breakdown.construction_revenue",
+    "revenue_breakdown.rental_revenue",
+    "revenue_breakdown.other_revenue",
+    "working_capital.trade_receivables_gross",
+    "working_capital.construction_receivables_gross",
+    "working_capital.inventory",
+    "working_capital.work_in_progress",
+    "borrowings.short_term_borrowings",
+    "borrowings.current_portion_long_term_borrowings",
+    "borrowings.long_term_borrowings",
+    "investment_signals.construction_in_progress",
+    "investment_signals.industrial_property_rights",
+    "investment_signals.research_and_development_expense"
+  ],
+  "allowed_warning_codes": [
+    "optional_metric_not_disclosed"
+  ],
+  "promotion_policy": {
+    "require_zero_blockers": true,
+    "require_source_review_acknowledgement": true,
+    "require_public_change_acknowledgement": true,
+    "allow_verification_pending_required_metrics": false
+  }
+}
