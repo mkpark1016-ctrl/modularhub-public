@@ -38,6 +38,10 @@ def nrb_company(payload: dict) -> dict:
     return next(company for company in payload["companies"] if company["company_id"] == "nrb")
 
 
+def sungji_company(payload: dict) -> dict:
+    return next(company for company in payload["companies"] if company["company_id"] == "sungji-steel")
+
+
 DECISION_INTELLIGENCE_FIELDS = {
     "latest_snapshot",
     "trends",
@@ -81,7 +85,29 @@ def test_yuchang_years_and_latest_metrics() -> None:
 
 def test_view_model_contains_yuchang_kumkang_and_daeseung() -> None:
     payload = load_output()
-    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "nrb", "planm", "yuchang-enc"]
+    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]
+
+
+def test_sungji_latest_metrics_and_disclosure_limits() -> None:
+    company = sungji_company(load_output())
+    assert company["available_years"] == [2023, 2024, 2025]
+    assert company["latest_year"] == 2025
+    assert company["financial_scope"] == "standalone"
+    assert company["latest_metrics"]["revenue"]["raw_krw"] == 124911260427
+    assert company["latest_metrics"]["gross_profit"]["raw_krw"] == 16615412854
+    assert company["latest_metrics"]["operating_profit"]["raw_krw"] == 2552444958
+    assert company["latest_metrics"]["net_income"]["raw_krw"] == 1386656032
+    assert company["latest_metrics"]["operating_cash_flow"]["raw_krw"] == -3366459304
+    assert company["latest_metrics"]["total_borrowings"]["raw_krw"] == 31949893915
+    assert company["latest_metrics"]["receivables_total"]["raw_krw"] is None
+    assert company["latest_metrics"]["receivables_total"]["display_text"] == "공시되지 않음"
+    assert company["derived_metrics"]["2025"]["operating_margin_pct"]["display_text"] == "2.0%"
+    assert company["derived_metrics"]["2025"]["revenue_yoy_pct"]["display_text"] == "10.7%"
+    assert company["source_summary"]["pending_location_count"] == 0
+    assert company["source_summary"]["verified_location_count"] == 84
+    assert company["attribution"]["modular_segment_revenue_disclosed"] is False
+    warning_codes = [warning["code"] for warning in company["disclosure_warnings"]]
+    assert "construction_revenue_not_modular_revenue" in warning_codes
 
 
 def test_kumkang_years_scope_and_latest_metrics() -> None:
@@ -229,10 +255,10 @@ def test_peer_benchmarks_are_only_ranked_when_comparable() -> None:
 
 def test_peer_benchmarks_include_universe_median_and_current_company_flags() -> None:
     benchmark = next(item for item in yuchang_company(load_output())["peer_benchmarks"] if item["metric_id"] == "revenue")
-    assert benchmark["comparison_universe_count"] == 4
-    assert benchmark["other_peer_count"] == 3
+    assert benchmark["comparison_universe_count"] == 5
+    assert benchmark["other_peer_count"] == 4
     assert benchmark["current_company_included"] is True
-    assert benchmark["median_display"] == "605.7억원"
+    assert benchmark["median_display"] == "616.6억원"
     assert benchmark["reference_value_label"] == "비교 범위 최대값"
     assert benchmark["reference_value_display"] == "3,076.8억원"
     assert benchmark["source_ids"] == ["yuchang_audit_report_2026_04_08"]

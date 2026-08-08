@@ -84,6 +84,7 @@ def test_nrb_uses_existing_company_id_and_is_publicly_discovered() -> None:
         "kumkang-kind",
         "nrb",
         "planm",
+        "sungji-steel",
         "yuchang-enc",
     }
     assert sum(company["company_id"] == "nrb" for company in public_companies) == 1
