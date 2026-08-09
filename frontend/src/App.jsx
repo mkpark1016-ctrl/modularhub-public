@@ -14,21 +14,13 @@ import {
 import { Link, NavLink, Route, Routes, useParams, useSearchParams } from "react-router-dom";
 import { matchesBusinessFilters } from "./businessFilters";
 import {
-  COMPETITIVE_ROLE_LABELS,
-  TIER_LABELS,
   compareCompanies,
   companyMatchesFilters,
   companyRoleOptions,
-  getCompanyDataGapCount,
   getCompanyItems,
   getCompanySummary,
-  getCanonicalCompanyRoleLabel,
-  isModularSpecialistCompany,
-  optionCounts,
-  statusOptions,
 } from "./companyInsights";
 import {
-  COMPANY_COMPARISON_SORT_OPTIONS,
   MAX_COMPARISON_COMPANIES,
   compareCompaniesForMvp,
   normalizeComparisonSelection,
@@ -160,8 +152,11 @@ const NEWS_RELEVANCE_FILTERS = [
   { value: "reference", label: NEWS_RELEVANCE_LEVELS.reference.label },
 ];
 
-const COMPANY_SORT_OPTIONS = [
-  ...COMPANY_COMPARISON_SORT_OPTIONS,
+const COMPANY_LIST_SORT_OPTIONS = [
+  { value: "name", label: "기업명순" },
+  { value: "recent_activity", label: "최근 활동순" },
+  { value: "revenue", label: "최근 매출 높은 순" },
+  { value: "verified_projects", label: "검증 프로젝트 많은 순" },
 ];
 
 function useDataset(name) {
@@ -718,75 +713,51 @@ function NewsCard({ item, isFavorite, onToggleFavorite, recentlyViewed }) {
   );
 }
 
-function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, tierOptions, statusFilterOptions, filteredCount, chips, onReset }) {
-  const [open, setOpen] = useState(false);
+function CompanyTypeSegmentedControl({ value, options, onChange }) {
   return (
-    <FilterPanel title="기업 검색조건" open={open} setOpen={setOpen}>
-      <div className="filter-heading">
-        <h2>검색조건</h2>
-        <button type="button" className="icon-button" onClick={onReset} aria-label="필터 초기화" title="필터 초기화">
-          <RotateCcw size={16} />
+    <div className="company-type-segmented" role="radiogroup" aria-label="기업 유형">
+      {options.map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          role="radio"
+          aria-checked={value === option.value}
+          className={value === option.value ? "active" : ""}
+          onClick={() => onChange(option.value)}
+        >
+          <span>{option.label}</span>
+          <strong>{option.count.toLocaleString("ko-KR")}</strong>
         </button>
+      ))}
+    </div>
+  );
+}
+
+function CompanyDiscoveryToolbar({ values, setParam, roleOptions, filteredCount, onReset }) {
+  const canReset = Boolean(values.q) || values.role !== "all" || values.sort !== "name";
+  return (
+    <section className="company-discovery-toolbar" aria-label="기업 탐색 조건">
+      <div className="company-discovery-primary">
+        <label className="company-toolbar-label">
+          <span>기업 유형</span>
+          <CompanyTypeSegmentedControl value={values.role} options={roleOptions} onChange={(nextRole) => setParam("role", nextRole)} />
+        </label>
+        <label className="company-toolbar-search">
+          <span>검색</span>
+          <SearchBar value={values.q} onChange={(value) => setParam("q", value)} placeholder="기업명, 프로젝트, 기술 검색" />
+        </label>
+        <label className="company-toolbar-sort">
+          <span>정렬</span>
+          <select value={values.sort} onChange={(event) => setParam("sort", event.target.value)}>
+            {COMPANY_LIST_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </label>
       </div>
-      <SearchBar value={values.q} onChange={(value) => setParam("q", value)} placeholder="기업명, 프로젝트, 기술 검색" />
-      <div className="company-decision-quick-filters" role="group" aria-label="기업 빠른 필터">
-        <button type="button" className={values.relationship === "direct_competitor" ? "active" : ""} onClick={() => setParam("relationship", values.relationship === "direct_competitor" ? "all" : "direct_competitor")}>
-          직접 경쟁
-        </button>
-        <button type="button" className={values.audit === "applied" ? "active" : ""} onClick={() => setParam("audit", values.audit === "applied" ? "all" : "applied")}>
-          감사재무
-        </button>
-        <button type="button" className={values.facility === "confirmed" ? "active" : ""} onClick={() => setParam("facility", values.facility === "confirmed" ? "all" : "confirmed")}>
-          생산시설 확인
-        </button>
+      <div className="company-discovery-meta">
+        <p>검색 결과 {filteredCount.toLocaleString("ko-KR")}개사</p>
+        {canReset && <button type="button" className="text-button" onClick={onReset}>초기화</button>}
       </div>
-      <label>역할
-        <select value={values.role} onChange={(event) => setParam("role", event.target.value)}>
-          <option value="all">전체 역할</option>
-          {roleOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
-        </select>
-      </label>
-      <label>경쟁 관계
-        <select value={values.relationship} onChange={(event) => setParam("relationship", event.target.value)}>
-          <option value="all">전체</option>
-          {relationshipOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
-        </select>
-      </label>
-      <label>분석 우선순위
-        <select value={values.tier} onChange={(event) => setParam("tier", event.target.value)}>
-          <option value="all">전체</option>
-          {tierOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
-        </select>
-      </label>
-      <label>데이터 상태
-        <select value={values.status} onChange={(event) => setParam("status", event.target.value)}>
-          <option value="all">전체 상태</option>
-          {statusFilterOptions.map((option) => <option key={option.value} value={option.value}>{option.label} ({option.count})</option>)}
-        </select>
-      </label>
-      <label>감사재무
-        <select value={values.audit} onChange={(event) => setParam("audit", event.target.value)}>
-          <option value="all">전체</option>
-          <option value="applied">감사재무 적용</option>
-          <option value="fallback">기존 재무 표시</option>
-        </select>
-      </label>
-      <label>생산시설
-        <select value={values.facility} onChange={(event) => setParam("facility", event.target.value)}>
-          <option value="all">전체</option>
-          <option value="confirmed">확인 시설 보유</option>
-          <option value="none">확인 시설 없음</option>
-        </select>
-      </label>
-      <label>정렬
-        <select value={values.sort} onChange={(event) => setParam("sort", event.target.value)}>
-          {COMPANY_SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-        </select>
-      </label>
-      <ActiveFilterChips chips={chips} onReset={onReset} />
-      <button type="button" className="reset-button" onClick={onReset}>필터 초기화</button>
-      <p className="filter-note">검색 결과 {filteredCount.toLocaleString("ko-KR")}개사</p>
-    </FilterPanel>
+    </section>
   );
 }
 
@@ -814,28 +785,14 @@ function CompanyListingPage() {
     return rows;
   }, [items, reportInsightState.data]);
   const summary = useMemo(() => getCompanySummary(items), [items]);
-  const decisionSummary = useMemo(() => {
-    const now = new Date();
-    const cutoff = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-    return {
-      recentActive: items.filter((company) => (activitiesByCompany.get(company.company_id) || []).some((activity) => {
-        const date = new Date(activity.publishedAt);
-        return !Number.isNaN(date.getTime()) && date >= cutoff;
-      })).length,
-      dataGapCompanies: items.filter((company) => getCompanyDataGapCount(company) > 0).length,
-      auditFinancialCompanies: items.filter((company) => getCompanyReportInsight(reportInsightState.data, company.company_id)).length,
-    };
-  }, [activitiesByCompany, items, reportInsightState.data]);
-  const roleOptions = useMemo(() => companyRoleOptions(items), [items]);
-  const relationshipOptions = useMemo(() => optionCounts(items, "competitive_role", COMPETITIVE_ROLE_LABELS), [items]);
-  const tierOptions = useMemo(() => optionCounts(items, "analysis_tier", TIER_LABELS), [items]);
-  const statusFilterOptions = useMemo(() => statusOptions(items), [items]);
+  const roleOptions = useMemo(() => [
+    { value: "all", label: "전체", count: summary.total },
+    ...companyRoleOptions(items),
+  ], [items, summary.total]);
   const validValues = useMemo(() => ({
     roles: roleOptions.map((option) => option.value),
-    relationships: relationshipOptions.map((option) => option.value),
-    tiers: tierOptions.map((option) => option.value),
     companyIds: items.map((company) => company.company_id),
-  }), [items, relationshipOptions, roleOptions, tierOptions]);
+  }), [items, roleOptions]);
 
   useEffect(() => {
     if (!items.length) return;
@@ -846,17 +803,12 @@ function CompanyListingPage() {
   const values = useMemo(() => ({
     q: searchParams.get("q") || "",
     role: getValidParam(searchParams, "role", ["all", ...validValues.roles], "all"),
-    relationship: getValidParam(searchParams, "relationship", ["all", ...validValues.relationships], "all"),
-    tier: getValidParam(searchParams, "tier", ["all", ...validValues.tiers], "all"),
-    status: getValidParam(searchParams, "status", ["all", "core_verified", "partially_verified", "research_in_progress", "watchlist", "insufficient_public_data"], "all"),
-    audit: getValidParam(searchParams, "audit", ["all", "applied", "fallback"], "all"),
-    facility: getValidParam(searchParams, "facility", ["all", "confirmed", "none"], "all"),
-    sort: getValidParam(searchParams, "sort", COMPANY_SORT_VALUES, "tier"),
+    sort: getValidParam(searchParams, "sort", COMPANY_SORT_VALUES, "name"),
   }), [searchParams, validValues]);
 
   const setParam = useCallback((key, value) => {
     const next = new URLSearchParams(searchParams);
-    const defaults = { q: "", role: "all", relationship: "all", tier: "all", status: "all", audit: "all", facility: "all", sort: "tier" };
+    const defaults = { q: "", role: "all", sort: "name" };
     if (!value || value === defaults[key]) next.delete(key);
     else next.set(key, value);
     if (next.toString() === searchParams.toString()) return;
@@ -888,36 +840,19 @@ function CompanyListingPage() {
 
   const reset = () => {
     const next = new URLSearchParams(searchParams);
-    ["q", "role", "relationship", "tier", "status", "audit", "facility", "sort"].forEach((key) => next.delete(key));
+    ["q", "role", "sort"].forEach((key) => next.delete(key));
     setSearchParams(next, { replace: true });
   };
 
   const filtered = useMemo(() => items
     .filter((company) => companyMatchesFilters(company, values))
-    .filter((company) => {
-      if (values.audit === "applied" && !getCompanyReportInsight(reportInsightState.data, company.company_id)) return false;
-      if (values.audit === "fallback" && getCompanyReportInsight(reportInsightState.data, company.company_id)) return false;
-      if (values.facility === "confirmed" && !company.production_facilities?.length) return false;
-      if (values.facility === "none" && company.production_facilities?.length) return false;
-      return true;
-    })
     .sort((a, b) => {
       if (values.sort === "recent_activity") {
         const latest = (company) => (activitiesByCompany.get(company.company_id) || [])[0]?.publishedAt || "";
         return String(latest(b)).localeCompare(String(latest(a))) || compareCompanies(a, b, "name");
       }
       return compareCompaniesForMvp(a, b, values.sort, compareCompanies);
-    }), [activitiesByCompany, items, reportInsightState.data, values]);
-
-  const chips = [
-    { key: "q", active: Boolean(values.q), label: `검색어: ${values.q}`, onRemove: () => setParam("q", "") },
-    { key: "role", active: values.role !== "all", label: getCanonicalCompanyRoleLabel(values.role), onRemove: () => setParam("role", "all") },
-    { key: "relationship", active: values.relationship !== "all", label: COMPETITIVE_ROLE_LABELS[values.relationship], onRemove: () => setParam("relationship", "all") },
-    { key: "tier", active: values.tier !== "all", label: TIER_LABELS[values.tier], onRemove: () => setParam("tier", "all") },
-    { key: "status", active: values.status !== "all", label: statusFilterOptions.find((option) => option.value === values.status)?.label, onRemove: () => setParam("status", "all") },
-    { key: "audit", active: values.audit !== "all", label: values.audit === "applied" ? "감사재무 적용" : "기존 재무 표시", onRemove: () => setParam("audit", "all") },
-    { key: "facility", active: values.facility !== "all", label: values.facility === "confirmed" ? "확인 시설 보유" : "확인 시설 없음", onRemove: () => setParam("facility", "all") },
-  ];
+    }), [activitiesByCompany, items, values]);
 
   return (
     <Layout>
@@ -926,34 +861,15 @@ function CompanyListingPage() {
         <h1>스틸 모듈러 기업정보</h1>
         <p>건설사와 모듈러 제작 전문 업체의 사업 역량과 경쟁 현황을 확인합니다.</p>
       </section>
-      <section className="summary-strip company-summary-strip" aria-label="기업정보 요약">
-        <SummaryItem label="전체 기업" value={summary.total} suffix="개사" />
-        <SummaryItem label="직접 경쟁사" value={summary.directCompetitors} suffix="개사" />
-        <SummaryItem label="감사재무 적용" value={decisionSummary.auditFinancialCompanies} suffix="개사" />
-        <SummaryItem label="최근 90일 활동" value={decisionSummary.recentActive} suffix="개사" />
-        <SummaryItem label="데이터 보완 필요" value={decisionSummary.dataGapCompanies} suffix="개사" />
-      </section>
       <div className="content-layout company-list-layout">
-        <CompanyFilters
+        <CompanyDiscoveryToolbar
           values={values}
           setParam={setParam}
           roleOptions={roleOptions}
-          relationshipOptions={relationshipOptions}
-          tierOptions={tierOptions}
-          statusFilterOptions={statusFilterOptions}
           filteredCount={filtered.length}
-          chips={chips}
           onReset={reset}
         />
         <section className="results" aria-live="polite">
-          <div className="source-status lifecycle-summary">
-            <p>검색 결과 {filtered.length.toLocaleString("ko-KR")}개사 · 건설사 {items.filter((company) => company.company_type === "general_contractor").length.toLocaleString("ko-KR")}개사 · 전문 제작사 {items.filter(isModularSpecialistCompany).length.toLocaleString("ko-KR")}개사</p>
-            <div className="mini-bars" aria-label="기업 역할별 분포">
-              {summary.roleCounts.slice(0, 5).map((option) => (
-                <div key={option.value}><span>{option.label}</span><b style={{ width: `${Math.max(8, (option.count / Math.max(summary.total, 1)) * 100)}%` }} /> <em>{option.count}</em></div>
-              ))}
-            </div>
-          </div>
           {loading && <div className="state">기업정보를 불러오는 중입니다.</div>}
           {error && <div className="state error">기업정보 데이터를 불러오지 못했습니다.</div>}
           {!loading && !error && items.length === 0 && <div className="state">등록된 기업정보가 없습니다.</div>}

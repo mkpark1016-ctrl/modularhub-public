@@ -1,4 +1,4 @@
-﻿import { ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import CompanyDataGaps from "./CompanyDataGaps";
 import {
   detailModel,
@@ -138,19 +138,25 @@ function ThreeYearSignalRows({ reportInsight }) {
 function PeerPositionRows({ reportInsight, onTabChange }) {
   const rows = (reportInsight?.peer_benchmarks || []).slice(0, 3);
   if (!rows.length) return null;
+  const groupLabel = reportInsight?.comparison_context?.group_label || "동일 유형";
   return (
     <div className="company-subsection compact-company-section">
       <div className="company-subsection-heading">
-        <h3>동료 위치</h3>
-        <button type="button" className="text-button" onClick={() => onTabChange?.("financial")}>동료 비교 상세</button>
+        <div>
+          <h3>동일 유형 기업 대비 재무 위치</h3>
+          <span className="comparison-group-label">비교 그룹 · {groupLabel}</span>
+        </div>
+        <button type="button" className="text-button" onClick={() => onTabChange?.("financial")}>재무 비교 자세히</button>
       </div>
-      <div className="company-peer-compact-list" aria-label="동료 위치">
+      <p className="finance-note">같은 기업유형·연도·통화·재무제표 기준의 감사재무를 비교합니다.</p>
+      <div className="company-peer-compact-list" aria-label="동일 유형 기업 대비 재무 위치">
         {rows.map((item) => (
           <div key={item.metric_id}>
             <strong>{peerBenchmarkLabel(item.metric_id)}</strong>
             <span>{item.company_display || "확인되지 않음"}</span>
-            <span>{item.comparable ? `${item.rank} / ${item.comparison_universe_count ?? item.peer_count}` : "비교 불가"}</span>
-            <small>중앙값 {item.median_display || "확인되지 않음"}</small>
+            <span>{item.comparable ? `${item.comparison_universe_count ?? item.peer_count}개 중 ${item.rank}위` : "비교 준비 중"}</span>
+            <small>같은 유형 중앙값 {item.median_display || "확인되지 않음"}</small>
+            {item.median_difference_display && <small>{item.median_difference_display}</small>}
           </div>
         ))}
       </div>

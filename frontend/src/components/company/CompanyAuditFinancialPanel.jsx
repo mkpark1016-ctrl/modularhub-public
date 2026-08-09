@@ -219,7 +219,7 @@ function peerEvidence(insight, item) {
     calculationBasis: item.calculation_basis,
     basisYear: insight.latest_year,
     dataStatus: item.comparable ? "비교 가능" : "비교 불가",
-    limitation: "동일 연도·통화·재무제표 범위에서 최소 3개 기업 값이 있을 때만 순위를 표시하며 종합 경쟁력 점수가 아닙니다.",
+    limitation: "같은 기업유형·연도·통화·재무제표 범위에서 최소 3개 기업 값이 있을 때만 상대 위치를 표시하며 종합 경쟁력 점수가 아닙니다.",
     sourceIds: item.source_ids,
     note: `비교 모집단 ${item.comparison_universe_count ?? 0}개, 현재 기업 포함 ${item.current_company_included ? "예" : "아니오"}`,
   });
@@ -272,32 +272,55 @@ function FinancialDecisionSummary({ insight, onShowEvidence }) {
   );
 }
 
+function benchmarkRankText(item) {
+  if (!item.comparable || !item.rank) return "비교 준비 중";
+  const count = item.comparison_universe_count ?? item.peer_count;
+  return `${count}개 중 ${item.rank}위`;
+}
+
+function comparisonGroupLabel(insight, item) {
+  return item.comparison_group_label || insight?.comparison_context?.group_label || "동일 유형";
+}
+
 function PeerBenchmarkPanel({ insight, benchmarks = [], onShowEvidence }) {
   if (!benchmarks.length) return null;
   return (
     <div className="company-subsection">
       <div className="company-subsection-heading">
-        <h3>동료 비교</h3>
-        <span>같은 연도·통화·재무제표 범위에서 3개 이상일 때만 순위를 표시합니다.</span>
+        <div>
+          <h3>동일 유형 기업 재무 비교</h3>
+          <span>같은 기업유형·연도·통화·재무제표 범위에서만 비교합니다.</span>
+        </div>
+        <span className="comparison-group-label">비교 그룹 · {insight?.comparison_context?.group_label || "확인 중"}</span>
       </div>
-      <div className="company-peer-grid" aria-label="감사재무 동료 비교">
+      <div className="company-peer-grid" aria-label="동일 유형 기업 재무 비교">
         {benchmarks.map((item) => (
           <article className={`company-peer-card ${item.comparable ? "is-comparable" : "is-not-comparable"}`} key={item.metric_id}>
             <span>{peerBenchmarkLabel(item.metric_id)}</span>
             <strong>{item.company_display}</strong>
-            <p>{item.comparable ? item.comparison_label : item.not_comparable_reason}</p>
+            <p>{item.comparable ? benchmarkRankText(item) : item.not_comparable_reason}</p>
             <dl className="company-mini-detail-list">
-              <div><dt>현재값</dt><dd>{item.company_display}</dd></div>
-              <div><dt>비교 모집단</dt><dd>{formatNumber(item.comparison_universe_count ?? item.peer_count, "개")}</dd></div>
-              <div><dt>다른 기업</dt><dd>{formatNumber(item.other_peer_count, "개")}</dd></div>
-              <div><dt>현재 기업 포함</dt><dd>{item.current_company_included ? "예" : "아니오"}</dd></div>
-              <div><dt>중앙값</dt><dd>{item.median_display || "확인되지 않음"}</dd></div>
-              <div><dt>{item.reference_value_label || "참고값"}</dt><dd>{item.reference_value_display || "확인되지 않음"}</dd></div>
+              <div><dt>현재</dt><dd>{item.company_display}</dd></div>
+              <div><dt>같은 유형 중앙값</dt><dd>{item.median_display || "확인되지 않음"}</dd></div>
+              <div><dt>위치</dt><dd>{benchmarkRankText(item)}</dd></div>
+              <div><dt>중앙값과의 차이</dt><dd>{item.median_difference_display || "비교 준비 중"}</dd></div>
             </dl>
-            <small>{item.comparable ? `순위 ${item.rank} · 임의 종합점수 없음` : "비교 조건 미충족 · 임의 순위 없음"}</small>
+            <small>{item.comparable ? `${comparisonGroupLabel(insight, item)} 그룹 · ${item.comparison_direction === "higher_is_larger" ? "값이 큰 순" : "값이 낮은 순"}` : "다른 기업유형으로 대체 비교하지 않습니다."}</small>
+            <details className="comparison-basis-details">
+              <summary>비교 기준 보기</summary>
+              <dl className="company-mini-detail-list">
+                <div><dt>기업 유형</dt><dd>{comparisonGroupLabel(insight, item)}</dd></div>
+                <div><dt>기준 연도</dt><dd>{item.comparison_year || insight.latest_year}</dd></div>
+                <div><dt>재무제표 범위</dt><dd>{financialScopeLabel(item.comparison_financial_scope || insight.financial_scope)}</dd></div>
+                <div><dt>통화</dt><dd>{item.comparison_currency || insight.currency}</dd></div>
+                <div><dt>비교 가능 기업 수</dt><dd>{formatNumber(item.comparison_universe_count ?? item.peer_count, "개")}</dd></div>
+                <div><dt>최소 비교 기준</dt><dd>{formatNumber(insight.comparison_context?.minimum_peer_count || 3, "개")}</dd></div>
+                <div><dt>현재 기업 포함</dt><dd>{item.current_company_included ? "예" : "아니오"}</dd></div>
+              </dl>
+            </details>
             {onShowEvidence && (
               <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(peerEvidence(insight, item))}>
-                계산 근거 보기
+                근거 보기
               </button>
             )}
           </article>

@@ -582,3 +582,63 @@ code { overflow-wrap: anywhere; }
   .financial-cash-flow-row em { grid-column: 2 / -1; text-align: left; }
   .financial-grouped-year { grid-template-columns: 38px minmax(0, 1fr); }
 }
+
+/* Phase 8B-1: simplified company discovery + same-type financial comparison */
+.company-list-layout {
+  display: block;
+}
+.company-discovery-toolbar {
+  border: 1px solid var(--border, #dfe3df);
+  border-radius: 14px;
+  background: #fff;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+.company-discovery-primary {
+  display: grid;
+  grid-template-columns: minmax(360px, 1fr) minmax(280px, 1.6fr) minmax(180px, .55fr);
+  gap: 14px;
+  align-items: end;
+}
+.company-toolbar-label, .company-toolbar-search, .company-toolbar-sort {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+.company-type-segmented {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.company-type-segmented button {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--border, #d7ddd8);
+  border-radius: 999px;
+  background: #fff;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.company-type-segmented button.active, .company-type-segmented button[aria-checked="true"] {
+  border-color: #16794a;
+  box-shadow: inset 0 0 0 1px #16794a;
+}
+.company-discovery-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+}
+.company-discovery-meta p { margin: 0; color: #59645d; }
+.comparison-group-label { font-weight: 700; color: #176b45; }
+.comparison-basis-details { margin-top: 10px; }
+.comparison-basis-details summary { cursor: pointer; font-weight: 700; }
+@media (max-width: 780px) {
+  .company-discovery-primary { grid-template-columns: 1fr; }
+  .company-type-segmented { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .company-type-segmented button { justify-content: center; padding: 9px 8px; }
+}
+@media (max-width: 420px) {
+  .company-type-segmented { grid-template-columns: 1fr; }
+}

@@ -9,9 +9,7 @@ import {
 import {
   getCompanyResearchGapCount,
   getCompanyDataGapCount,
-  getCompanyVerificationLevel,
   getLatestVerifiedAt,
-  getVerificationLevelLabel,
 } from "../../companyInsights";
 import { buildCompanyDecisionModel } from "../../companyDecisionModel";
 import { formatDate, formatKrw, formatNumber, formatPercent, labelValue } from "./companyDetailHelpers";
@@ -45,7 +43,6 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
   const metric = getComparisonMetric(company);
   const decision = buildCompanyDecisionModel(company, { reportInsight, activities });
   const gapCount = getCompanyDataGapCount(company);
-  const verificationLevel = getVerificationLevelLabel(getCompanyVerificationLevel(company));
   const latestVerifiedAt = formatDate(getLatestVerifiedAt(company));
   const cautionText = gapCount > 0
     ? `보완 필요 ${formatNumber(gapCount, "건")}`
@@ -55,8 +52,6 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
       <div className="card-topline">
         <div className="badge-row">
           <span>{metric.typeLabel}</span>
-          <span>{metric.relationshipLabel}</span>
-          <span className={`company-status ${metric.dataStatus}`}>{metric.dataStatusLabel}</span>
         </div>
       </div>
       <div className="company-card-title-row">
@@ -101,9 +96,9 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
           <small>{latestVerifiedAt} 기준</small>
         </div>
       </div>
-      <p className="company-card-meta">검증 수준 {verificationLevel} · 최신 검증일 {latestVerifiedAt}</p>
+      <p className="company-card-meta">최근 검증일 {latestVerifiedAt}</p>
       <div className="card-footer">
-        <span>{metric.tierLabel}</span>
+        <span>{metric.typeLabel}</span>
         <div className="card-actions">
           <Link to={`/companies/${company.company_id}`}>상세보기</Link>
         </div>

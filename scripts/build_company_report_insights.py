@@ -18,8 +18,21 @@ except ModuleNotFoundError:
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT_ROOT = ROOT / "data" / "company_reports"
 DEFAULT_OUTPUT = ROOT / "frontend" / "public" / "data" / "companies" / "company_report_insights.json"
+DEFAULT_COMPANY_MASTER = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
 SCHEMA_VERSION = "company_report_insights_v1"
 SOURCE_SCHEMA_VERSION = "company_audit_financials_v1"
+COMPARISON_GROUPS = {
+    "general_contractor": {
+        "group_id": "general_contractor",
+        "label": "건설사",
+        "company_types": ["general_contractor"],
+    },
+    "modular_specialist": {
+        "group_id": "modular_specialist",
+        "label": "모듈러 제작 전문 업체",
+        "company_types": ["specialist_manufacturer", "modular_integrator", "modular_specialist", "producer_group"],
+    },
+}
 LATEST_METRIC_FIELDS = [
     "revenue",
     "gross_profit",
@@ -100,6 +113,30 @@ PEER_BENCHMARK_METRICS = [
 
 def stable_json(payload: dict[str, Any]) -> str:
     return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+
+
+def comparison_group_for_company_type(company_type: str | None) -> dict[str, Any] | None:
+    for group in COMPARISON_GROUPS.values():
+        if company_type in group["company_types"]:
+            return group
+    return None
+
+
+def load_company_comparison_groups(path: Path = DEFAULT_COMPANY_MASTER) -> dict[str, dict[str, Any]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rows = payload.get("companies") if isinstance(payload, dict) else payload
+    mapping: dict[str, dict[str, Any]] = {}
+    for company in rows:
+        company_id = company.get("company_id")
+        if not company_id:
+            continue
+        group = comparison_group_for_company_type(company.get("company_type"))
+        mapping[company_id] = {
+            "company_type": company.get("company_type"),
+            "group_id": group["group_id"] if group else None,
+            "group_label": group["label"] if group else None,
+        }
+    return mapping
 
 
 def discover_source_files(input_root: Path = DEFAULT_INPUT_ROOT) -> list[Path]:
@@ -760,15 +797,32 @@ def peer_value_display(value: int | float | None, source: str) -> str:
     return f"{eok.quantize(Decimal('0.1'), rounding=ROUND_HALF_UP):,.1f}억원"
 
 
+def benchmark_difference_display(company_value: int | float | None, median_value: int | float | None, source: str) -> str | None:
+    if company_value is None or median_value is None:
+        return None
+    difference = float(company_value) - float(median_value)
+    if difference == 0:
+        return "중앙값과 같음"
+    direction = "높음" if difference > 0 else "낮음"
+    if source == "derived_metrics":
+        return f"중앙값보다 {abs(difference):,.1f}%p {direction}"
+    eok = Decimal(str(abs(difference))) / Decimal(100_000_000)
+    return f"중앙값보다 {eok.quantize(Decimal('0.1'), rounding=ROUND_HALF_UP):,.1f}억원 {direction}"
+
+
 def build_peer_benchmarks(companies: list[dict[str, Any]]) -> None:
     for company in companies:
         benchmarks = []
+        company_context = company.get("comparison_context", {})
+        comparison_group_id = company_context.get("group_id")
         for config in PEER_BENCHMARK_METRICS:
             metric_id = config["metric_id"]
             source = config["source"]
             scoped_peers = [
                 peer for peer in companies
-                if peer.get("latest_year") == company.get("latest_year")
+                if comparison_group_id is not None
+                and peer.get("comparison_context", {}).get("group_id") == comparison_group_id
+                and peer.get("latest_year") == company.get("latest_year")
                 and peer.get("currency") == company.get("currency")
                 and peer.get("financial_scope") == company.get("financial_scope")
                 and comparable_metric_value(peer, metric_id, source) is not None
@@ -782,22 +836,26 @@ def build_peer_benchmarks(companies: list[dict[str, Any]]) -> None:
                 values = [comparable_metric_value(peer, metric_id, source) for peer in scoped_peers]
                 best_value = comparable_metric_value(ordered[0], metric_id, source)
                 median_value = float(median(values))
-                comparison_label = f"{len(scoped_peers)}개 감사재무 기업 중 {rank}번째"
+                comparison_label = f"{len(scoped_peers)}개 중 {rank}위"
                 reason = None
             else:
                 rank = None
-                values = []
                 best_value = None
                 median_value = None
-                comparison_label = "비교 조건 미충족"
+                comparison_label = "동일 유형 재무 비교 준비 중"
                 if value is None:
-                    reason = "현재 기업의 해당 지표 값이 확인되지 않았습니다."
-                elif len(scoped_peers) < 3:
-                    reason = "같은 재무제표 범위와 연도를 가진 감사재무 기업이 3개 미만입니다."
+                    reason = "현재 기업의 해당 지표값이 확인되지 않았습니다."
+                elif comparison_group_id is None:
+                    reason = "canonical 기업유형이 자동 재무 비교 그룹에 포함되지 않습니다."
                 else:
-                    reason = "비교 가능한 조건을 충족하지 못했습니다."
+                    reason = "같은 기업유형의 비교 가능한 감사재무가 3개 미만이라 상대 위치를 표시하지 않습니다."
             benchmarks.append({
                 "metric_id": metric_id,
+                "comparison_group_id": comparison_group_id,
+                "comparison_group_label": company_context.get("group_label"),
+                "comparison_year": company.get("latest_year"),
+                "comparison_currency": company.get("currency"),
+                "comparison_financial_scope": company.get("financial_scope"),
                 "company_value": value,
                 "company_display": metric_display_for_peer(company, metric_id, source),
                 "peer_count": len(scoped_peers),
@@ -807,6 +865,7 @@ def build_peer_benchmarks(companies: list[dict[str, Any]]) -> None:
                 "rank": rank,
                 "median": median_value,
                 "median_display": peer_value_display(median_value, source),
+                "median_difference_display": benchmark_difference_display(value, median_value, source),
                 "best_value": best_value,
                 "reference_value": best_value,
                 "reference_value_display": peer_value_display(best_value, source),
@@ -816,7 +875,7 @@ def build_peer_benchmarks(companies: list[dict[str, Any]]) -> None:
                 "comparable": comparable,
                 "not_comparable_reason": reason,
                 "source_ids": metric_source_refs(comparable_metric(company, metric_id, source)),
-                "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
+                "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
             })
         company["peer_benchmarks"] = benchmarks
 
@@ -883,14 +942,28 @@ def build_company_insight(source_payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_view_model(input_root: Path = DEFAULT_INPUT_ROOT, base_ref: str | None = "origin/main") -> dict[str, Any]:
+def apply_comparison_context(company: dict[str, Any], group_map: dict[str, dict[str, Any]]) -> None:
+    group = group_map.get(company["company_id"], {})
+    company["comparison_context"] = {
+        "company_type": group.get("company_type", "unknown"),
+        "group_id": group.get("group_id"),
+        "group_label": group.get("group_label"),
+        "minimum_peer_count": 3,
+        "calculation_basis": "canonical_company_type_same_latest_year_currency_financial_scope",
+    }
+
+
+def build_view_model(input_root: Path = DEFAULT_INPUT_ROOT, base_ref: str | None = "origin/main", company_master: Path = DEFAULT_COMPANY_MASTER) -> dict[str, Any]:
+    group_map = load_company_comparison_groups(company_master)
     companies = []
     for path in discover_source_files(input_root):
         payload = load_payload(path)
         validation = validate(payload, base_ref=base_ref)
         if not validation["valid"]:
             raise ValueError(f"source validation failed for {path}: {validation['issues']}")
-        companies.append(build_company_insight(payload))
+        insight = build_company_insight(payload)
+        apply_comparison_context(insight, group_map)
+        companies.append(insight)
     companies.sort(key=lambda item: item["company_id"])
     build_peer_benchmarks(companies)
     return {"schema_version": SCHEMA_VERSION, "companies": companies}
@@ -900,11 +973,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build public company report insight view models.")
     parser.add_argument("--input-root", type=Path, default=DEFAULT_INPUT_ROOT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--company-master", type=Path, default=DEFAULT_COMPANY_MASTER)
     parser.add_argument("--base-ref", default="origin/main")
     parser.add_argument("--check", action="store_true", help="Fail if the stored output differs from generated output.")
     args = parser.parse_args()
 
-    payload = build_view_model(args.input_root, base_ref=args.base_ref)
+    payload = build_view_model(args.input_root, base_ref=args.base_ref, company_master=args.company_master)
     rendered = stable_json(payload)
     if args.check:
         existing = args.output.read_text(encoding="utf-8") if args.output.exists() else ""

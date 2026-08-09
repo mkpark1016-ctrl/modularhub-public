@@ -1,23 +1,19 @@
-export const COMPANY_SORT_VALUES = ["tier", "recent_activity", "verified", "name", "revenue", "operating_margin", "production", "verified_projects", "technology"];
-export const COMPANY_STATUS_VALUES = ["all", "core_verified", "partially_verified", "research_in_progress", "watchlist", "insufficient_public_data"];
-const LEGACY_STATUS_ALIASES = {
-  verified: "core_verified",
-  partial: "partially_verified",
-  collecting: "research_in_progress",
-};
+export const COMPANY_SORT_VALUES = ["name", "recent_activity", "revenue", "verified_projects"];
 const LEGACY_ROLE_ALIASES = {
   specialist_manufacturer: "modular_specialist",
   modular_integrator: "modular_specialist",
   producer_group: "modular_specialist",
 };
+const OBSOLETE_FILTER_KEYS = ["relationship", "tier", "status", "audit", "facility"];
 
 export function sanitizeCompanySearchParams(searchParams, validValues) {
   const next = new URLSearchParams(searchParams);
   let changed = false;
-  const legacyStatus = next.get("status");
-  if (LEGACY_STATUS_ALIASES[legacyStatus]) {
-    next.set("status", LEGACY_STATUS_ALIASES[legacyStatus]);
-    changed = true;
+  for (const key of OBSOLETE_FILTER_KEYS) {
+    if (next.has(key)) {
+      next.delete(key);
+      changed = true;
+    }
   }
   const legacyRole = next.get("role");
   if (LEGACY_ROLE_ALIASES[legacyRole]) {
@@ -26,17 +22,18 @@ export function sanitizeCompanySearchParams(searchParams, validValues) {
   }
   const rules = {
     role: ["all", ...(validValues.roles || [])],
-    relationship: ["all", ...(validValues.relationships || [])],
-    tier: ["all", ...(validValues.tiers || [])],
-    status: COMPANY_STATUS_VALUES,
-    audit: ["all", "applied", "fallback"],
-    facility: ["all", "confirmed", "none"],
     sort: COMPANY_SORT_VALUES,
   };
   for (const [key, allowed] of Object.entries(rules)) {
     const value = next.get(key);
     if (!value) continue;
     if (!allowed.includes(value)) {
+      next.delete(key);
+      changed = true;
+    }
+  }
+  for (const key of [...next.keys()]) {
+    if (!["q", "role", "sort", "compare"].includes(key)) {
       next.delete(key);
       changed = true;
     }
