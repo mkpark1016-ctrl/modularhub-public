@@ -101,9 +101,6 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
           <small>{latestVerifiedAt} 기준</small>
         </div>
       </div>
-      <div className="company-tag-block" aria-label="역량 요약">
-        {decision.capabilities.slice(0, 3).map((item) => <span key={item}>{item}</span>)}
-      </div>
       <p className="company-card-meta">검증 수준 {verificationLevel} · 최신 검증일 {latestVerifiedAt}</p>
       <div className="card-footer">
         <span>{metric.tierLabel}</span>

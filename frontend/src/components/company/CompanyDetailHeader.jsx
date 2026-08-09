@@ -19,15 +19,17 @@ export default function CompanyDetailHeader({ company, activeTab = "overview", r
           </div>
           <h1>{company.company_name}</h1>
           {company.company_name_en && <p className="company-name-en">{company.company_name_en}</p>}
-          <div className="company-detail-keyword-panel" aria-label="기업 의사결정 키워드">
-            <div className="company-chip-row">
-              {decision.positionKeywords.slice(0, 4).map((item) => <span key={item}>{item}</span>)}
+          {!compact && (
+            <div className="company-detail-keyword-panel" aria-label="기업 의사결정 키워드">
+              <div className="company-chip-row">
+                {decision.positionKeywords.slice(0, 4).map((item) => <span key={item}>{item}</span>)}
+              </div>
+              <div className="company-chip-row subtle">
+                {decision.targetMarkets.slice(0, 4).map((item) => <span key={`market-${item}`}>{item}</span>)}
+                {decision.modularMethods.slice(0, 3).map((item) => <span key={`method-${item}`}>{item}</span>)}
+              </div>
             </div>
-            <div className="company-chip-row subtle">
-              {decision.targetMarkets.slice(0, 4).map((item) => <span key={`market-${item}`}>{item}</span>)}
-              {decision.modularMethods.slice(0, 3).map((item) => <span key={`method-${item}`}>{item}</span>)}
-            </div>
-          </div>
+          )}
         </div>
         <p className="finance-note">
           검증 수준 {model.header.verificationLevelLabel} · 최신 검증일 {formatDate(model.header.latestVerifiedAt)} · 데이터 신뢰도 {model.header.confidenceLabel}
@@ -39,14 +41,16 @@ export default function CompanyDetailHeader({ company, activeTab = "overview", r
           <p className="company-position-summary">{model.header.summary}</p>
         </details>
       )}
-      <dl className="company-kpi-grid" aria-label="기업 핵심 지표">
-        {decision.metrics.map((item) => (
-          <div key={item.key}>
-            <dt>{item.label}</dt>
-            <dd>{item.value}</dd>
-          </div>
-        ))}
-      </dl>
+      {!compact && (
+        <dl className="company-kpi-grid" aria-label="기업 핵심 지표">
+          {decision.metrics.map((item) => (
+            <div key={item.key}>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </header>
   );
 }

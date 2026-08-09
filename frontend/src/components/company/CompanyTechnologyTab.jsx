@@ -122,14 +122,14 @@ export default function CompanyTechnologyTab({ company, onShowEvidence }) {
               <div key={item.technology_id || item.registration_number || item.application_number || `${item.name}-${index}`}>
                 <strong>{item.name || item.registration_number || item.application_number || "기술명 확인 중"}</strong>
                 {(!item.application_date && !item.filed_at) || (!item.registration_date && !item.registered_at) ? <span className="mini-status-badge">정보 보완 필요</span> : null}
-                <span>{[
-                  labelValue(item.record_type || item.group, null),
-                  technologyNumber(item),
-                  labelValue(item.status, null),
-                  item.technology_area ? labelValue(item.technology_area, item.technology_area) : technologyField(item),
-                ].filter(Boolean).join(" · ") || "세부 정보 확인 중"}</span>
-                <span>출원일 {technologyDate(item, "filed")} · 등록일 {technologyDate(item, "registered")}</span>
-                {item.summary && <span>{item.summary}</span>}
+                <div className="technology-card-chip-row" aria-label="기술 요약 키워드">
+                  {[
+                    labelValue(item.record_type || item.group, null),
+                    labelValue(item.status, null),
+                    item.technology_area ? labelValue(item.technology_area, item.technology_area) : technologyField(item),
+                  ].filter(Boolean).slice(0, 3).map((keyword) => <span key={keyword}>{keyword}</span>)}
+                </div>
+                {item.summary && <p className="technology-card-summary">{item.summary}</p>}
                 <button type="button" className="text-button entity-detail-button" onClick={() => setSelectedTechnology(item)}>
                   상세보기
                 </button>

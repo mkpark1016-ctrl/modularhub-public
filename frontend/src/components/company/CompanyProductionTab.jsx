@@ -107,41 +107,12 @@ export default function CompanyProductionTab({ company, onShowEvidence }) {
       </p>
       {production.length ? (
         <>
-        <div className="company-table-wrap responsive-table-wrap">
-          <table className="company-financial-table company-production-table">
-            <thead>
-              <tr>
-                <th>시설명</th>
-                <th>지역</th>
-                <th>운영 상태</th>
-                <th>소유 관계</th>
-                <th>규모 또는 생산능력</th>
-                <th>생산 대상</th>
-                <th>상세</th>
-              </tr>
-            </thead>
-            <tbody>
-              {production.map((facility) => {
-                const capacity = fallbackProductionCapacityLabel(facility);
-                const isTargetCapacity = facility.capacity_status === "derived" || facility.operation_status === "planned";
-                return (
-                  <tr key={facility.facility_id || facility.facility_name}>
-                    <th>{facility.display_name || facility.facility_name || "시설명 확인 중"}</th>
-                    <td>{facility.region || facility.city || facility.location || "확인되지 않음"}</td>
-                    <td>{labelValue(facility.operation_status)}</td>
-                    <td>{labelValue(facility.ownership_type)}</td>
-                    <td>{isTargetCapacity ? <><span className="mini-status-badge">목표</span> {capacity}</> : capacity}</td>
-                    <td>{productionTargets(facility)}</td>
-                    <td>
-                      <button type="button" className="text-button entity-detail-button" onClick={() => setSelectedFacility(facility)}>
-                        상세보기
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="company-highlight-grid production-summary-grid" aria-label="생산시설 요약">
+          <span>전체 {production.length.toLocaleString("ko-KR")}건</span>
+          <span>운영 중 {production.filter((facility) => facility.operation_status === "active").length.toLocaleString("ko-KR")}건</span>
+          <span>공사·계획 {production.filter((facility) => ["planned", "under_construction", "under_expansion"].includes(facility.operation_status)).length.toLocaleString("ko-KR")}건</span>
+          <span>자체 소유 {production.filter((facility) => ["owned", "subsidiary_owned", "affiliate_owned"].includes(facility.ownership_type)).length.toLocaleString("ko-KR")}건</span>
+          <span>생산능력 확인 {production.filter((facility) => hasAnyProductionValue(facility.reported_capacity, facility.capacity_value)).length.toLocaleString("ko-KR")}건</span>
         </div>
         <div className="responsive-card-list facility-card-list">
           {production.map((facility) => {
