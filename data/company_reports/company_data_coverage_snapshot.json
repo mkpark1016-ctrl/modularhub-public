@@ -1,0 +1,125 @@
+{
+  "as_of_date": "2026-08-09",
+  "audit_backed_count": 6,
+  "audit_backed_in_universe_count": 5,
+  "company_count": 10,
+  "company_coverage_states": [
+    {
+      "audit_coverage_state": "unavailable",
+      "company_id": "dl-enc",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials"
+      ]
+    },
+    {
+      "audit_coverage_state": "unavailable",
+      "company_id": "geogwang-enterprise",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown",
+        "technology_evidence_sparse"
+      ]
+    },
+    {
+      "audit_coverage_state": "unavailable",
+      "company_id": "gs-ec",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ]
+    },
+    {
+      "audit_coverage_state": "unavailable",
+      "company_id": "hyundai-engineering",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials"
+      ]
+    },
+    {
+      "audit_coverage_state": "complete",
+      "company_id": "kumkang-kind",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P3",
+      "recommendation_reason_codes": []
+    },
+    {
+      "audit_coverage_state": "complete",
+      "company_id": "nrb",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P2",
+      "recommendation_reason_codes": [
+        "production_capacity_unknown"
+      ]
+    },
+    {
+      "audit_coverage_state": "verification_pending",
+      "company_id": "planm",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "excessive_verification_pending"
+      ]
+    },
+    {
+      "audit_coverage_state": "unavailable",
+      "company_id": "samsung-ct-construction",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ]
+    },
+    {
+      "audit_coverage_state": "complete",
+      "company_id": "sungji-steel",
+      "evidence_coverage_state": "verified",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P3",
+      "recommendation_reason_codes": []
+    },
+    {
+      "audit_coverage_state": "verification_pending",
+      "company_id": "yuchang-enc",
+      "evidence_coverage_state": "mixed",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "excessive_verification_pending"
+      ]
+    }
+  ],
+  "priority_counts": {
+    "P0": 0,
+    "P1": 7,
+    "P2": 1,
+    "P3": 0
+  },
+  "schema_version": "company_data_coverage_v1"
+}
