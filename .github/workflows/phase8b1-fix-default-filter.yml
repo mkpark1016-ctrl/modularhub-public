@@ -1,0 +1,37 @@
+name: Fix Phase 8B-1 default company filters
+
+on:
+  push:
+    branches:
+      - fix/company-type-first-discovery-and-financial-comparison
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Keep removed filter dimensions neutral internally
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path('frontend/src/App.jsx')
+          text = path.read_text(encoding='utf-8')
+          old = '''  const values = useMemo(() => ({\n    q: searchParams.get("q") || "",\n    role: getValidParam(searchParams, "role", ["all", ...validValues.roles], "all"),\n    sort: getValidParam(searchParams, "sort", COMPANY_SORT_VALUES, "name"),\n  }), [searchParams, validValues]);'''
+          new = '''  const values = useMemo(() => ({\n    q: searchParams.get("q") || "",\n    role: getValidParam(searchParams, "role", ["all", ...validValues.roles], "all"),\n    sort: getValidParam(searchParams, "sort", COMPANY_SORT_VALUES, "name"),\n    relationship: "all",\n    tier: "all",\n    status: "all",\n  }), [searchParams, validValues]);'''
+          if old not in text:
+              raise SystemExit('target values block not found')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+      - name: Remove temporary workflow and commit
+        run: |
+          rm .github/workflows/phase8b1-fix-default-filter.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Keep removed company filters neutral internally"
+          git push origin HEAD:fix/company-type-first-discovery-and-financial-comparison
