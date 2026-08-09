@@ -566,4 +566,3 @@ def test_peer_benchmark_groups_follow_canonical_company_types() -> None:
             assert benchmark["comparison_group_id"] == context["group_id"]
             assert benchmark["comparison_group_label"] == context["group_label"]
             assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"
-

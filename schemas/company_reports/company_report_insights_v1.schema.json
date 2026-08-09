@@ -3,19 +3,12 @@
   "$id": "https://modularhub.local/schemas/company_reports/company_report_insights_v1.schema.json",
   "title": "Company Report Insights v1",
   "type": "object",
-  "required": [
-    "schema_version",
-    "companies"
-  ],
+  "required": ["schema_version", "companies"],
   "properties": {
-    "schema_version": {
-      "const": "company_report_insights_v1"
-    },
+    "schema_version": { "const": "company_report_insights_v1" },
     "companies": {
       "type": "array",
-      "items": {
-        "$ref": "#/$defs/companyReportInsight"
-      }
+      "items": { "$ref": "#/$defs/companyReportInsight" }
     }
   },
   "additionalProperties": false,
@@ -47,307 +40,150 @@
         "data_quality"
       ],
       "properties": {
-        "company_id": {
-          "type": "string",
-          "minLength": 1
-        },
-        "company_name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "reporting_entity": {
-          "type": "string",
-          "minLength": 1
-        },
-        "financial_scope": {
-          "enum": [
-            "standalone",
-            "consolidated",
-            "standalone_and_consolidated"
-          ]
-        },
-        "currency": {
-          "const": "KRW"
-        },
-        "source_schema_version": {
-          "const": "company_audit_financials_v1"
-        },
+        "company_id": { "type": "string", "minLength": 1 },
+        "company_name": { "type": "string", "minLength": 1 },
+        "reporting_entity": { "type": "string", "minLength": 1 },
+        "financial_scope": { "enum": ["standalone", "consolidated", "standalone_and_consolidated"] },
+        "currency": { "const": "KRW" },
+        "source_schema_version": { "const": "company_audit_financials_v1" },
         "available_years": {
           "type": "array",
-          "items": {
-            "type": "integer"
-          },
+          "items": { "type": "integer" },
           "minItems": 1
         },
-        "latest_year": {
-          "type": "integer"
-        },
-        "latest_metrics": {
-          "$ref": "#/$defs/metricMap"
-        },
-        "latest_snapshot": {
-          "$ref": "#/$defs/latestSnapshot"
-        },
+        "latest_year": { "type": "integer" },
+        "latest_metrics": { "$ref": "#/$defs/metricMap" },
+        "latest_snapshot": { "$ref": "#/$defs/latestSnapshot" },
         "financial_series": {
           "type": "array",
-          "items": {
-            "$ref": "#/$defs/yearSeries"
-          },
+          "items": { "$ref": "#/$defs/yearSeries" },
           "minItems": 1
         },
         "derived_metrics": {
           "type": "object",
           "patternProperties": {
-            "^[0-9]{4}$": {
-              "$ref": "#/$defs/derivedMetricMap"
-            }
+            "^[0-9]{4}$": { "$ref": "#/$defs/derivedMetricMap" }
           },
           "additionalProperties": false
         },
         "trends": {
           "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/decisionSignal"
-          }
+          "additionalProperties": { "$ref": "#/$defs/decisionSignal" }
         },
         "financial_health": {
           "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/healthSignal"
-          }
+          "additionalProperties": { "$ref": "#/$defs/healthSignal" }
         },
         "evidence_health": {
           "type": "array",
-          "items": {
-            "$ref": "#/$defs/evidenceHealth"
-          }
+          "items": { "$ref": "#/$defs/evidenceHealth" }
         },
+        "comparison_context": { "$ref": "#/$defs/comparisonContext" },
         "peer_benchmarks": {
           "type": "array",
-          "items": {
-            "$ref": "#/$defs/peerBenchmark"
-          }
+          "items": { "$ref": "#/$defs/peerBenchmark" }
         },
         "trend_signals": {
           "type": "array",
-          "items": {
-            "$ref": "#/$defs/trendSignal"
-          }
+          "items": { "$ref": "#/$defs/trendSignal" }
         },
         "disclosure_warnings": {
           "type": "array",
-          "items": {
-            "$ref": "#/$defs/warning"
-          }
+          "items": { "$ref": "#/$defs/warning" }
         },
-        "attribution": {
-          "type": "object"
-        },
-        "source_summary": {
-          "$ref": "#/$defs/sourceSummary"
-        },
-        "data_quality": {
-          "$ref": "#/$defs/dataQuality"
-        },
-        "comparison_context": {
-          "$ref": "#/$defs/comparisonContext"
-        }
+        "attribution": { "type": "object" },
+        "source_summary": { "$ref": "#/$defs/sourceSummary" },
+        "data_quality": { "$ref": "#/$defs/dataQuality" }
       },
       "additionalProperties": false
     },
     "latestSnapshot": {
       "type": "object",
-      "required": [
-        "latest_year"
-      ],
+      "required": ["latest_year"],
       "properties": {
-        "latest_year": {
-          "type": "integer"
-        },
-        "revenue": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "operating_profit": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "net_income": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "operating_cash_flow": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "total_borrowings": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "trade_receivables": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "total_assets": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "total_liabilities": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "total_equity": {
-          "$ref": "#/$defs/moneyMetric"
-        },
-        "operating_margin_pct": {
-          "$ref": "#/$defs/derivedMetric"
-        }
+        "latest_year": { "type": "integer" },
+        "revenue": { "$ref": "#/$defs/moneyMetric" },
+        "operating_profit": { "$ref": "#/$defs/moneyMetric" },
+        "net_income": { "$ref": "#/$defs/moneyMetric" },
+        "operating_cash_flow": { "$ref": "#/$defs/moneyMetric" },
+        "total_borrowings": { "$ref": "#/$defs/moneyMetric" },
+        "trade_receivables": { "$ref": "#/$defs/moneyMetric" },
+        "total_assets": { "$ref": "#/$defs/moneyMetric" },
+        "total_liabilities": { "$ref": "#/$defs/moneyMetric" },
+        "total_equity": { "$ref": "#/$defs/moneyMetric" },
+        "operating_margin_pct": { "$ref": "#/$defs/derivedMetric" }
       },
       "additionalProperties": false
     },
     "yearSeries": {
       "type": "object",
-      "required": [
-        "year",
-        "metrics"
-      ],
+      "required": ["year", "metrics"],
       "properties": {
-        "year": {
-          "type": "integer"
-        },
-        "metrics": {
-          "$ref": "#/$defs/metricMap"
-        }
+        "year": { "type": "integer" },
+        "metrics": { "$ref": "#/$defs/metricMap" }
       },
       "additionalProperties": false
     },
     "metricMap": {
       "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/moneyMetric"
-      }
+      "additionalProperties": { "$ref": "#/$defs/moneyMetric" }
     },
     "moneyMetric": {
       "type": "object",
-      "required": [
-        "raw_krw",
-        "display_eok",
-        "display_text",
-        "source_refs",
-        "source_locations",
-        "calculation_basis"
-      ],
+      "required": ["raw_krw", "display_eok", "display_text", "source_refs", "source_locations", "calculation_basis"],
       "properties": {
         "raw_krw": {
           "oneOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
+            { "type": "integer" },
+            { "type": "null" }
           ]
         },
         "display_eok": {
           "oneOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
+            { "type": "number" },
+            { "type": "null" }
           ]
         },
-        "display_text": {
-          "type": "string",
-          "minLength": 1
-        },
+        "display_text": { "type": "string", "minLength": 1 },
         "source_refs": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
+          "items": { "type": "string", "minLength": 1 },
           "minItems": 1
         },
         "source_locations": {
           "type": "array",
-          "items": {
-            "$ref": "#/$defs/sourceLocation"
-          }
+          "items": { "$ref": "#/$defs/sourceLocation" }
         },
-        "calculation_basis": {
-          "enum": [
-            "reported",
-            "derived_from_reported",
-            "not_disclosed",
-            "not_applicable",
-            "verification_pending"
-          ]
-        },
+        "calculation_basis": { "enum": ["reported", "derived_from_reported", "not_disclosed", "not_applicable", "verification_pending"] },
         "disclosure_status": {
-          "enum": [
-            "reported",
-            "not_disclosed",
-            "not_applicable",
-            "verification_pending"
-          ]
+          "enum": ["reported", "not_disclosed", "not_applicable", "verification_pending"]
         }
       },
       "allOf": [
         {
           "if": {
-            "properties": {
-              "raw_krw": {
-                "type": "null"
-              }
-            },
-            "required": [
-              "raw_krw"
-            ]
+            "properties": { "raw_krw": { "type": "null" } },
+            "required": ["raw_krw"]
           },
           "then": {
-            "required": [
-              "disclosure_status"
-            ],
+            "required": ["disclosure_status"],
             "properties": {
-              "display_eok": {
-                "type": "null"
-              },
-              "calculation_basis": {
-                "enum": [
-                  "not_disclosed",
-                  "not_applicable",
-                  "verification_pending"
-                ]
-              },
-              "disclosure_status": {
-                "enum": [
-                  "not_disclosed",
-                  "not_applicable",
-                  "verification_pending"
-                ]
-              }
+              "display_eok": { "type": "null" },
+              "calculation_basis": { "enum": ["not_disclosed", "not_applicable", "verification_pending"] },
+              "disclosure_status": { "enum": ["not_disclosed", "not_applicable", "verification_pending"] }
             }
           }
         },
         {
           "if": {
-            "properties": {
-              "raw_krw": {
-                "type": "integer"
-              }
-            },
-            "required": [
-              "raw_krw"
-            ]
+            "properties": { "raw_krw": { "type": "integer" } },
+            "required": ["raw_krw"]
           },
           "then": {
             "properties": {
-              "display_eok": {
-                "type": "number"
-              },
-              "calculation_basis": {
-                "enum": [
-                  "reported",
-                  "derived_from_reported"
-                ]
-              },
-              "disclosure_status": {
-                "const": "reported"
-              }
+              "display_eok": { "type": "number" },
+              "calculation_basis": { "enum": ["reported", "derived_from_reported"] },
+              "disclosure_status": { "const": "reported" }
             }
           }
         }
@@ -356,71 +192,34 @@
     },
     "sourceLocation": {
       "type": "object",
-      "required": [
-        "source_ref",
-        "section",
-        "verification_status"
-      ],
+      "required": ["source_ref", "section", "verification_status"],
       "properties": {
-        "source_ref": {
-          "type": "string",
-          "minLength": 1
-        },
+        "source_ref": { "type": "string", "minLength": 1 },
         "page": {
           "oneOf": [
-            {
-              "type": "integer",
-              "minimum": 1
-            },
-            {
-              "type": "string",
-              "minLength": 1
-            }
+            { "type": "integer", "minimum": 1 },
+            { "type": "string", "minLength": 1 }
           ]
         },
-        "page_range": {
-          "type": "string",
-          "minLength": 1
-        },
-        "section": {
-          "$ref": "#/$defs/sourceSectionCode"
-        },
+        "page_range": { "type": "string", "minLength": 1 },
+        "section": { "$ref": "#/$defs/sourceSectionCode" },
         "verification_status": {
-          "enum": [
-            "verified",
-            "verified_section_range",
-            "pending_manual_page_check"
-          ]
+          "enum": ["verified", "verified_section_range", "pending_manual_page_check"]
         }
       },
       "additionalProperties": false
     },
     "derivedMetricMap": {
       "type": "object",
-      "additionalProperties": {
-        "$ref": "#/$defs/derivedMetric"
-      }
+      "additionalProperties": { "$ref": "#/$defs/derivedMetric" }
     },
     "derivedMetric": {
       "type": "object",
-      "required": [
-        "value",
-        "display_text",
-        "calculation_basis"
-      ],
+      "required": ["value", "display_text", "calculation_basis"],
       "properties": {
-        "value": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "display_text": {
-          "type": "string"
-        },
-        "calculation_basis": {
-          "const": "derived_from_reported"
-        }
+        "value": { "type": ["number", "null"] },
+        "display_text": { "type": "string" },
+        "calculation_basis": { "const": "derived_from_reported" }
       },
       "additionalProperties": false
     },
@@ -443,77 +242,26 @@
         "calculation_basis"
       ],
       "properties": {
-        "status": {
-          "enum": [
-            "increased",
-            "decreased",
-            "flat",
-            "unknown",
-            "additional_confirmation_required"
-          ]
-        },
-        "headline": {
-          "type": "string",
-          "minLength": 1
-        },
-        "explanation": {
-          "type": "string",
-          "minLength": 1
-        },
-        "latest_year": {
-          "type": "integer"
-        },
-        "previous_year": {
-          "type": "integer"
-        },
-        "latest_display": {
-          "type": "string",
-          "minLength": 1
-        },
-        "previous_display": {
-          "type": "string",
-          "minLength": 1
-        },
-        "change_value": {
-          "type": [
-            "number",
-            "integer",
-            "null"
-          ]
-        },
-        "change_display": {
-          "type": "string",
-          "minLength": 1
-        },
-        "change_pct": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "change_pct_unavailable_reason": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
+        "status": { "enum": ["increased", "decreased", "flat", "unknown", "additional_confirmation_required"] },
+        "headline": { "type": "string", "minLength": 1 },
+        "explanation": { "type": "string", "minLength": 1 },
+        "latest_year": { "type": "integer" },
+        "previous_year": { "type": "integer" },
+        "latest_display": { "type": "string", "minLength": 1 },
+        "previous_display": { "type": "string", "minLength": 1 },
+        "change_value": { "type": ["number", "integer", "null"] },
+        "change_display": { "type": "string", "minLength": 1 },
+        "change_pct": { "type": ["number", "null"] },
+        "change_pct_unavailable_reason": { "type": ["string", "null"] },
         "metric_ids": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "items": { "type": "string", "minLength": 1 }
         },
         "source_ids": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "items": { "type": "string", "minLength": 1 }
         },
-        "calculation_basis": {
-          "const": "latest_year_vs_previous_year"
-        }
+        "calculation_basis": { "const": "latest_year_vs_previous_year" }
       },
       "additionalProperties": false
     },
@@ -533,68 +281,24 @@
         "interpretation_scope"
       ],
       "properties": {
-        "status": {
-          "enum": [
-            "info",
-            "watch",
-            "additional_confirmation_required"
-          ]
-        },
-        "headline": {
-          "type": "string",
-          "minLength": 1
-        },
-        "explanation": {
-          "type": "string",
-          "minLength": 1
-        },
+        "status": { "enum": ["info", "watch", "additional_confirmation_required"] },
+        "headline": { "type": "string", "minLength": 1 },
+        "explanation": { "type": "string", "minLength": 1 },
         "metric_ids": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "items": { "type": "string", "minLength": 1 }
         },
         "source_ids": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "items": { "type": "string", "minLength": 1 }
         },
-        "calculation_basis": {
-          "const": "rule_based_from_reported_metrics"
-        },
-        "rule_id": {
-          "type": "string",
-          "minLength": 1
-        },
-        "operator": {
-          "type": "string",
-          "minLength": 1
-        },
-        "threshold": {
-          "type": [
-            "number",
-            "integer",
-            "null"
-          ]
-        },
-        "actual_value": {
-          "type": [
-            "number",
-            "integer",
-            "null"
-          ]
-        },
-        "interpretation_scope": {
-          "type": "string",
-          "minLength": 1
-        },
-        "limitation": {
-          "type": "string",
-          "minLength": 1
-        }
+        "calculation_basis": { "const": "rule_based_from_reported_metrics" },
+        "rule_id": { "type": "string", "minLength": 1 },
+        "operator": { "type": "string", "minLength": 1 },
+        "threshold": { "type": ["number", "integer", "null"] },
+        "actual_value": { "type": ["number", "integer", "null"] },
+        "interpretation_scope": { "type": "string", "minLength": 1 },
+        "limitation": { "type": "string", "minLength": 1 }
       },
       "additionalProperties": false
     },
@@ -616,73 +320,39 @@
         "source_type_counts"
       ],
       "properties": {
-        "domain": {
-          "type": "string",
-          "minLength": 1
-        },
-        "distinct_source_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "verified_item_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "pending_item_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "not_disclosed_item_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "not_applicable_item_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "verification_pending_item_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "unavailable_item_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "source_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "latest_verified_at": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date"
-        },
+        "domain": { "type": "string", "minLength": 1 },
+        "distinct_source_count": { "type": "integer", "minimum": 0 },
+        "verified_item_count": { "type": "integer", "minimum": 0 },
+        "pending_item_count": { "type": "integer", "minimum": 0 },
+        "not_disclosed_item_count": { "type": "integer", "minimum": 0 },
+        "not_applicable_item_count": { "type": "integer", "minimum": 0 },
+        "verification_pending_item_count": { "type": "integer", "minimum": 0 },
+        "unavailable_item_count": { "type": "integer", "minimum": 0 },
+        "source_count": { "type": "integer", "minimum": 0 },
+        "latest_verified_at": { "type": ["string", "null"], "format": "date" },
         "verification_status": {
-          "enum": [
-            "verified",
-            "verified_section_range",
-            "pending_manual_page_check",
-            "not_disclosed",
-            "not_applicable",
-            "verification_pending"
-          ]
+          "enum": ["verified", "verified_section_range", "pending_manual_page_check", "not_disclosed", "not_applicable", "verification_pending"]
         },
         "source_ids": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "items": { "type": "string", "minLength": 1 }
         },
         "source_type_counts": {
           "type": "object",
-          "additionalProperties": {
-            "type": "integer",
-            "minimum": 0
-          }
+          "additionalProperties": { "type": "integer", "minimum": 0 }
         }
+      },
+      "additionalProperties": false
+    },
+    "comparisonContext": {
+      "type": "object",
+      "required": ["company_type", "group_id", "group_label", "minimum_peer_count", "calculation_basis"],
+      "properties": {
+        "company_type": { "type": "string", "minLength": 1 },
+        "group_id": { "type": ["string", "null"] },
+        "group_label": { "type": ["string", "null"] },
+        "minimum_peer_count": { "type": "integer", "minimum": 3 },
+        "calculation_basis": { "const": "canonical_company_type_same_latest_year_currency_financial_scope" }
       },
       "additionalProperties": false
     },
@@ -695,7 +365,6 @@
         "comparison_year",
         "comparison_currency",
         "comparison_financial_scope",
-        "median_difference_display",
         "company_value",
         "company_display",
         "peer_count",
@@ -705,6 +374,7 @@
         "rank",
         "median",
         "median_display",
+        "median_difference_display",
         "best_value",
         "reference_value",
         "reference_value_display",
@@ -717,207 +387,63 @@
         "calculation_basis"
       ],
       "properties": {
-        "metric_id": {
-          "type": "string",
-          "minLength": 1
-        },
-        "company_value": {
-          "type": [
-            "number",
-            "integer",
-            "null"
-          ]
-        },
-        "company_display": {
-          "type": "string",
-          "minLength": 1
-        },
-        "peer_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "comparison_universe_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "other_peer_count": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "current_company_included": {
-          "type": "boolean"
-        },
-        "rank": {
-          "type": [
-            "integer",
-            "null"
-          ],
-          "minimum": 1
-        },
-        "median": {
-          "type": [
-            "number",
-            "null"
-          ]
-        },
-        "median_display": {
-          "type": "string",
-          "minLength": 1
-        },
-        "best_value": {
-          "type": [
-            "number",
-            "integer",
-            "null"
-          ]
-        },
-        "reference_value": {
-          "type": [
-            "number",
-            "integer",
-            "null"
-          ]
-        },
-        "reference_value_display": {
-          "type": "string",
-          "minLength": 1
-        },
-        "reference_value_label": {
-          "type": "string",
-          "minLength": 1
-        },
-        "comparison_direction": {
-          "enum": [
-            "higher_is_larger",
-            "lower_is_lower_burden"
-          ]
-        },
-        "comparison_label": {
-          "type": "string",
-          "minLength": 1
-        },
-        "comparable": {
-          "type": "boolean"
-        },
-        "not_comparable_reason": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
+        "metric_id": { "type": "string", "minLength": 1 },
+        "comparison_group_id": { "type": ["string", "null"] },
+        "comparison_group_label": { "type": ["string", "null"] },
+        "comparison_year": { "type": "integer" },
+        "comparison_currency": { "const": "KRW" },
+        "comparison_financial_scope": { "enum": ["standalone", "consolidated", "standalone_and_consolidated"] },
+        "company_value": { "type": ["number", "integer", "null"] },
+        "company_display": { "type": "string", "minLength": 1 },
+        "peer_count": { "type": "integer", "minimum": 0 },
+        "comparison_universe_count": { "type": "integer", "minimum": 0 },
+        "other_peer_count": { "type": "integer", "minimum": 0 },
+        "current_company_included": { "type": "boolean" },
+        "rank": { "type": ["integer", "null"], "minimum": 1 },
+        "median": { "type": ["number", "null"] },
+        "median_display": { "type": "string", "minLength": 1 },
+        "median_difference_display": { "type": ["string", "null"] },
+        "best_value": { "type": ["number", "integer", "null"] },
+        "reference_value": { "type": ["number", "integer", "null"] },
+        "reference_value_display": { "type": "string", "minLength": 1 },
+        "reference_value_label": { "type": "string", "minLength": 1 },
+        "comparison_direction": { "enum": ["higher_is_larger", "lower_is_lower_burden"] },
+        "comparison_label": { "type": "string", "minLength": 1 },
+        "comparable": { "type": "boolean" },
+        "not_comparable_reason": { "type": ["string", "null"] },
         "source_ids": {
           "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "items": { "type": "string", "minLength": 1 }
         },
-        "calculation_basis": {
-          "const": "same_company_group_latest_year_currency_financial_scope_minimum_three_values"
-        },
-        "comparison_group_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "comparison_group_label": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "comparison_year": {
-          "type": "integer"
-        },
-        "comparison_currency": {
-          "const": "KRW"
-        },
-        "comparison_financial_scope": {
-          "enum": [
-            "standalone",
-            "consolidated",
-            "standalone_and_consolidated"
-          ]
-        },
-        "median_difference_display": {
-          "type": [
-            "string",
-            "null"
-          ]
-        }
+        "calculation_basis": { "const": "same_company_group_latest_year_currency_financial_scope_minimum_three_values" }
       },
       "additionalProperties": false
     },
     "trendSignal": {
       "type": "object",
-      "required": [
-        "code",
-        "level",
-        "title",
-        "description",
-        "based_on_years",
-        "metric_values",
-        "interpretation_type"
-      ],
+      "required": ["code", "level", "title", "description", "based_on_years", "metric_values", "interpretation_type"],
       "properties": {
-        "code": {
-          "type": "string",
-          "minLength": 1
-        },
-        "level": {
-          "enum": [
-            "info",
-            "watch",
-            "neutral"
-          ]
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1
-        },
-        "description": {
-          "type": "string",
-          "minLength": 1
-        },
+        "code": { "type": "string", "minLength": 1 },
+        "level": { "enum": ["info", "watch", "neutral"] },
+        "title": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
         "based_on_years": {
           "type": "array",
-          "items": {
-            "type": "integer"
-          },
+          "items": { "type": "integer" },
           "minItems": 1
         },
-        "metric_values": {
-          "type": "object"
-        },
-        "interpretation_type": {
-          "const": "rule_based"
-        }
+        "metric_values": { "type": "object" },
+        "interpretation_type": { "const": "rule_based" }
       },
       "additionalProperties": false
     },
     "warning": {
       "type": "object",
-      "required": [
-        "code",
-        "message",
-        "level"
-      ],
+      "required": ["code", "message", "level"],
       "properties": {
-        "code": {
-          "type": "string",
-          "minLength": 1
-        },
-        "message": {
-          "type": "string",
-          "minLength": 1
-        },
-        "level": {
-          "enum": [
-            "info",
-            "warning"
-          ]
-        }
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "level": { "enum": ["info", "warning"] }
       },
       "additionalProperties": false
     },
@@ -933,28 +459,13 @@
         "latest_report_date"
       ],
       "properties": {
-        "primary_documents": {
-          "type": "array"
-        },
-        "source_priority_by_year": {
-          "type": "object"
-        },
-        "audit_opinions": {
-          "type": "array"
-        },
-        "auditors": {
-          "type": "array"
-        },
-        "verified_location_count": {
-          "type": "integer"
-        },
-        "pending_location_count": {
-          "type": "integer"
-        },
-        "latest_report_date": {
-          "type": "string",
-          "format": "date"
-        }
+        "primary_documents": { "type": "array" },
+        "source_priority_by_year": { "type": "object" },
+        "audit_opinions": { "type": "array" },
+        "auditors": { "type": "array" },
+        "verified_location_count": { "type": "integer" },
+        "pending_location_count": { "type": "integer" },
+        "latest_report_date": { "type": "string", "format": "date" }
       },
       "additionalProperties": false
     },
@@ -968,24 +479,11 @@
         "modular_segment_revenue_disclosed"
       ],
       "properties": {
-        "source_validator_status": {
-          "enum": [
-            "passed",
-            "failed"
-          ]
-        },
-        "source_location_count": {
-          "type": "integer"
-        },
-        "pending_manual_page_check_count": {
-          "type": "integer"
-        },
-        "manual_page_check_required": {
-          "type": "boolean"
-        },
-        "modular_segment_revenue_disclosed": {
-          "type": "boolean"
-        }
+        "source_validator_status": { "enum": ["passed", "failed"] },
+        "source_location_count": { "type": "integer" },
+        "pending_manual_page_check_count": { "type": "integer" },
+        "manual_page_check_required": { "type": "boolean" },
+        "modular_segment_revenue_disclosed": { "type": "boolean" }
       },
       "additionalProperties": false
     },
@@ -1000,42 +498,6 @@
         "note.investment_signals",
         "note.restatement"
       ]
-    },
-    "comparisonContext": {
-      "type": "object",
-      "required": [
-        "company_type",
-        "group_id",
-        "group_label",
-        "minimum_peer_count",
-        "calculation_basis"
-      ],
-      "properties": {
-        "company_type": {
-          "type": "string",
-          "minLength": 1
-        },
-        "group_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "group_label": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "minimum_peer_count": {
-          "type": "integer",
-          "minimum": 3
-        },
-        "calculation_basis": {
-          "const": "canonical_company_type_same_latest_year_currency_financial_scope"
-        }
-      },
-      "additionalProperties": false
     }
   }
 }
