@@ -1,3 +1,4 @@
+# Verification rerun after simplified-list default filter fix.
 name: Verify Phase 8B-1 implementation
 
 on:
