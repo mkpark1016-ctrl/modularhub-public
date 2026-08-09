@@ -15,8 +15,9 @@ const payload = JSON.parse(readFileSync(new URL("../public/data/companies/compan
 const companies = getCompanyItems(payload);
 const byId = (id) => companies.find((company) => company.company_id === id);
 
-assert.equal(companies.length, 10);
-assert.equal(companies.filter((company) => company.competitive_role === "direct_competitor").length, 5);
+assert.equal(companies.length, 11);
+assert.equal(companies.filter((company) => company.company_id === "daeseung-engineering").length, 1);
+assert.equal(companies.filter((company) => company.competitive_role === "direct_competitor").length, 6);
 
 const expected = {
   "gs-ec": [3, 0],
@@ -29,6 +30,7 @@ const expected = {
   "planm": [10, 7],
   "geogwang-enterprise": [1, 0],
   "sungji-steel": [1, 0],
+  "daeseung-engineering": [2, 0],
 };
 
 for (const [id, [verified, candidates]] of Object.entries(expected)) {

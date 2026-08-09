@@ -16,10 +16,9 @@ import {
   normalizeComparisonSelection,
 } from "../src/companyComparison.js";
 import { compareCompanies, companyMatchesFilters, getCompanyItems, getCompanyProjectSummary, getCompanyTypeLabel, isModularSpecialistCompany } from "../src/companyInsights.js";
-import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
-const companies = [...getCompanyItems(payload), DAESEUNG_ENGINEERING_COMPANY];
+const companies = getCompanyItems(payload);
 const byId = (id) => companies.find((company) => company.company_id === id);
 
 assert.equal(companies.length, 11);

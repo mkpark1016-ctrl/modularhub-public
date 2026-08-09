@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 import {
   filterCompanyActivities,
   getActivityFilterGroup,
@@ -10,7 +9,7 @@ import {
 
 const companiesPayload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
 const activityPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company-activities.json", import.meta.url), "utf8"));
-const companies = [...companiesPayload.companies, DAESEUNG_ENGINEERING_COMPANY];
+const companies = companiesPayload.companies;
 const companyIds = new Set(companies.map((company) => company.company_id));
 
 assert.equal(activityPayload.schemaVersion, "company-activities-v1");

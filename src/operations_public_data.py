@@ -90,15 +90,10 @@ def dataset_threshold_hours(policy: dict[str, Any], dataset: str) -> tuple[float
     return float(config.get("warningDays", 0)) * 24, float(config.get("criticalDays", 0)) * 24
 
 
-def public_company_count(companies_payload: dict[str, Any], daeseung_source: Path | None = None) -> int:
+def public_company_count(companies_payload: dict[str, Any]) -> int:
     companies = item_list(companies_payload, "companies")
     ids = {str(company.get("company_id") or "").strip() for company in companies}
     ids.discard("")
-    if daeseung_source and daeseung_source.exists():
-        text = daeseung_source.read_text(encoding="utf-8", errors="ignore")
-        match = re.search(r'company_id:\s*"([^"]+)"', text)
-        if match:
-            ids.add(match.group(1))
     return len(ids)
 
 
@@ -111,7 +106,6 @@ def audit_datasets(
     meta_payload: dict[str, Any],
     policy: dict[str, Any],
     now: datetime | None = None,
-    daeseung_source: Path | None = None,
 ) -> list[dict[str, Any]]:
     now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     datasets: list[dict[str, Any]] = []
@@ -149,7 +143,7 @@ def audit_datasets(
             }
         )
 
-    company_count = public_company_count(companies_payload, daeseung_source)
+    company_count = public_company_count(companies_payload)
     company_generated = parse_datetime(companies_payload.get("generated_at"))
     company_v2_generated = parse_datetime((company_v2_payload or {}).get("generated_at"))
     latest_company_at = max([dt for dt in [company_generated, company_v2_generated] if dt], default=None)

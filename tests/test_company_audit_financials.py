@@ -19,6 +19,7 @@ from scripts.validate_company_audit_financials import (
     aggregate_reported,
     calculate_derived_metrics,
     contains_key,
+    is_allowed_daeseung_canonical_migration,
     is_allowed_nrb_public_financial_summary_update,
     protected_public_diff_status,
     validate,
@@ -600,7 +601,7 @@ def test_public_data_files_are_not_changed() -> None:
     )
     changed = [line.strip() for line in result.stdout.splitlines() if line.strip()]
     if changed == ["frontend/public/data/companies/companies.json"]:
-        assert is_allowed_nrb_public_financial_summary_update(None)
+        assert is_allowed_nrb_public_financial_summary_update(None) or is_allowed_daeseung_canonical_migration(None)
     else:
         assert changed == []
 

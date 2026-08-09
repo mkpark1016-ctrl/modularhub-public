@@ -27,12 +27,10 @@ import {
   productionFacilities,
   technologyCount,
 } from "../src/companyInsights.js";
-import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 import publicCompanySupplements from "../src/data/publicCompanySupplements.json" with { type: "json" };
-import { appendSupplementalCompanies } from "../src/publicDashboardOverrides.js";
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
-const companies = [...getCompanyItems(payload), DAESEUNG_ENGINEERING_COMPANY];
+const companies = getCompanyItems(payload);
 const byId = (id) => companies.find((company) => company.company_id === id);
 const verifiedIds = [
   "gs-ec", "hyundai-engineering", "samsung-ct-construction", "dl-enc",
@@ -40,29 +38,11 @@ const verifiedIds = [
 ];
 
 assert.equal(publicCompanySupplements.schema_version, "public_company_supplements_v1");
-assert.equal(publicCompanySupplements.companies.length, 1);
-assert.deepEqual(
-  DAESEUNG_ENGINEERING_COMPANY,
-  publicCompanySupplements.companies.find((company) => company.company_id === "daeseung-engineering"),
-);
+assert.equal(publicCompanySupplements.companies.length, 0);
 const canonicalCompanies = getCompanyItems(payload);
-assert.equal(canonicalCompanies.length, 10);
-const runtimePayload = appendSupplementalCompanies(payload);
-assert.equal(runtimePayload.companies.length, 11);
-assert.equal(runtimePayload.companies.filter((company) => company.company_id === "daeseung-engineering").length, 1);
-assert.deepEqual(runtimePayload.companies.slice(0, canonicalCompanies.length), canonicalCompanies);
-const duplicatePayload = {
-  companies: [
-    ...canonicalCompanies,
-    { company_id: "daeseung-engineering", company_name: "Canonical Daeseung Placeholder" },
-  ],
-};
-const dedupedPayload = appendSupplementalCompanies(duplicatePayload);
-assert.equal(dedupedPayload.companies.length, 11);
-assert.equal(
-  dedupedPayload.companies.find((company) => company.company_id === "daeseung-engineering").company_name,
-  "Canonical Daeseung Placeholder",
-);
+assert.equal(canonicalCompanies.length, 11);
+assert.equal(canonicalCompanies.filter((company) => company.company_id === "daeseung-engineering").length, 1);
+assert.equal(new Set(canonicalCompanies.map((company) => company.company_id)).size, 11);
 
 assert.equal(companies.length, 11);
 const summary = getCompanySummary(companies);

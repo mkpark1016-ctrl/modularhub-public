@@ -131,7 +131,6 @@ def main() -> int:
     parser.add_argument("--meta", type=Path, default=Path("frontend/public/data/meta.json"))
     parser.add_argument("--companies", type=Path, default=Path("frontend/public/data/companies/companies.json"))
     parser.add_argument("--companies-v2", type=Path, default=Path("frontend/public/data/companies/company_intelligence_v2.json"))
-    parser.add_argument("--daeseung-source", type=Path, default=Path("frontend/src/data/daeseungEngineeringCompany.js"))
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/operations"))
     parser.add_argument("--strict-critical", action="store_true", help="Exit 1 when any critical state is found.")
     args = parser.parse_args()
@@ -151,7 +150,6 @@ def main() -> int:
             meta_payload=meta_payload,
             policy=policy,
             now=datetime.now(timezone.utc),
-            daeseung_source=args.daeseung_source,
         )
         sources = source_health_from_payloads(news_payload, business_payload, meta_payload, policy)
         counts = {

@@ -50,6 +50,7 @@ def test_public_company_supplements_schema_passes() -> None:
     payload = json.loads(DEFAULT_SUPPLEMENTS.read_text(encoding="utf-8"))
     errors = list(Draft202012Validator(schema).iter_errors(payload))
     assert errors == []
+    assert payload["companies"] == []
 
 
 def test_discovers_public_company_universe_and_audit_backed_companies() -> None:
@@ -57,40 +58,38 @@ def test_discovers_public_company_universe_and_audit_backed_companies() -> None:
     companies = json.loads(DEFAULT_COMPANIES.read_text(encoding="utf-8"))["companies"]
     supplements = json.loads(DEFAULT_SUPPLEMENTS.read_text(encoding="utf-8"))["companies"]
     insights = json.loads(DEFAULT_REPORT_INSIGHTS.read_text(encoding="utf-8"))["companies"]
-    assert payload["summary"]["canonical_company_count"] == len(companies) == 10
-    assert payload["summary"]["supplemental_public_company_count"] == len(supplements) == 1
+    assert payload["summary"]["canonical_company_count"] == len(companies) == 11
+    assert payload["summary"]["supplemental_public_company_count"] == len(supplements) == 0
     assert payload["summary"]["effective_public_company_count"] == 11
     assert payload["summary"]["total_company_count"] == 11
     assert payload["summary"]["audit_backed_company_count"] == len(insights)
     assert payload["summary"]["audit_backed_company_count"] == 6
     assert payload["summary"]["full_three_year_audit_count"] == 6
     assert payload["summary"]["canonical_company_ids"] == sorted(company["company_id"] for company in companies)
-    assert payload["summary"]["supplemental_company_ids"] == ["daeseung-engineering"]
+    assert payload["summary"]["supplemental_company_ids"] == []
     assert payload["summary"]["company_ids"] == payload["summary"]["effective_public_company_ids"]
+    assert "daeseung-engineering" in payload["summary"]["canonical_company_ids"]
     assert "daeseung-engineering" in payload["summary"]["effective_public_company_ids"]
     assert payload["summary"]["audit_company_ids"] == sorted(company["company_id"] for company in insights)
 
 
-def test_supplemental_daeseung_is_effective_public_company_not_orphan() -> None:
+def test_canonical_daeseung_is_effective_public_company_not_orphan() -> None:
     payload = generated_payload()
     assert "daeseung-engineering" in payload["summary"]["audit_company_ids"]
-    assert "daeseung-engineering" not in payload["summary"]["canonical_company_ids"]
-    assert "daeseung-engineering" in payload["summary"]["supplemental_company_ids"]
+    assert "daeseung-engineering" in payload["summary"]["canonical_company_ids"]
+    assert "daeseung-engineering" not in payload["summary"]["supplemental_company_ids"]
     assert "daeseung-engineering" in payload["summary"]["effective_public_company_ids"]
     assert payload["summary"]["audit_company_ids_not_in_universe"] == []
     daeseung = next(company for company in payload["companies"] if company["company_id"] == "daeseung-engineering")
-    assert daeseung["company_record_source"] == "supplemental"
+    assert daeseung["company_record_source"] == "canonical"
     assert daeseung["audit_financials_available"] is True
     assert daeseung["audit_coverage_state"] == "complete"
     assert payload["consistency"]["status"] == "clean"
     assert payload["consistency"]["issue_count"] == 0
     assert payload["consistency"]["audit_record_without_company_master_ids"] == []
-    daeseung_item = next(item for item in payload["priority_queue"] if item["company_id"] == "daeseung-engineering")
-    assert daeseung_item["item_type"] == "maintenance_issue"
-    assert daeseung_item["priority"] == "P2"
-    assert daeseung_item["recommended_next_domain"] == "consistency"
-    assert daeseung_item["recommended_next_action"] == "canonical_company_migration"
-    assert "supplemental_profile_not_canonicalized" in daeseung_item["reason_codes"]
+    daeseung_items = [item for item in payload["priority_queue"] if item["company_id"] == "daeseung-engineering"]
+    assert all(item["recommended_next_action"] != "canonical_company_migration" for item in daeseung_items)
+    assert all("supplemental_profile_not_canonicalized" not in item["reason_codes"] for item in daeseung_items)
 
 
 def test_true_orphan_audit_record_remains_p0_with_empty_supplements(tmp_path: Path) -> None:
@@ -253,11 +252,11 @@ def test_audit_record_counts_are_split_between_all_records_and_public_universe()
     payload = generated_payload()
     assert payload["summary"]["audit_record_count"] == 6
     assert payload["summary"]["audit_backed_company_count"] == 6
-    assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 5
+    assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 6
     assert payload["summary"]["audit_backed_in_universe_count"] == 6
     assert payload["summary"]["audit_backed_in_effective_universe_count"] == 6
     assert payload["summary"]["full_three_year_audit_record_count"] == 6
-    assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 5
+    assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 6
     assert payload["summary"]["full_three_year_audit_in_universe_count"] == 6
     assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 6
 
