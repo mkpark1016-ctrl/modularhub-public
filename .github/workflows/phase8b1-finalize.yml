@@ -1,0 +1,149 @@
+name: Finalize Phase 8B-1 tests and QA
+
+on:
+  push:
+    branches:
+      - fix/company-type-first-discovery-and-financial-comparison
+
+permissions:
+  contents: write
+
+env:
+  CI: true
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Patch Phase 8B-1 regression and browser QA contracts
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8-sig')
+
+          def write(path, text):
+              Path(path).write_text(text, encoding='utf-8')
+
+          # Python semantic-equality tests: comparison_context is derived decision intelligence.
+          for path in [
+              'tests/test_company_report_insights.py',
+              'tests/test_nrb_financial_source_reconciliation.py',
+              'tests/test_planm_restatement_source_matrix.py',
+          ]:
+              text = read(path)
+              marker = '    "peer_benchmarks",\n'
+              if '    "comparison_context",\n' not in text:
+                  text = text.replace(marker, marker + '    "comparison_context",\n', 1)
+              write(path, text)
+
+          # Update peer benchmark contract assertions and add grouping checks.
+          path = 'tests/test_company_report_insights.py'
+          text = read(path)
+          text = text.replace(
+              'assert benchmark["calculation_basis"] == "same_latest_year_currency_financial_scope_minimum_three_values"',
+              'assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"\n'
+              '    assert benchmark["comparison_group_id"] == "modular_specialist"\n'
+              '    assert benchmark["comparison_group_label"] == "모듈러 제작 전문 업체"\n'
+              '    assert benchmark["median_difference_display"] == "중앙값보다 2,460.2억원 높음"'
+          )
+          if 'def test_peer_benchmark_groups_follow_canonical_company_types()' not in text:
+              text += '''\n\ndef test_peer_benchmark_groups_follow_canonical_company_types() -> None:\n    payload = load_output()\n    specialist_ids = {"daeseung-engineering", "nrb", "planm", "sungji-steel", "yuchang-enc"}\n    for company in payload["companies"]:\n        context = company["comparison_context"]\n        if company["company_id"] in specialist_ids:\n            assert context["group_id"] == "modular_specialist"\n            assert context["group_label"] == "모듈러 제작 전문 업체"\n        for benchmark in company["peer_benchmarks"]:\n            assert benchmark["comparison_group_id"] == context["group_id"]\n            assert benchmark["comparison_group_label"] == context["group_label"]\n            assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"\n\n'''
+          write(path, text)
+
+          # URL contract is intentionally q/role/sort/compare only.
+          write('frontend/scripts/test-company-url.mjs', '''import assert from "node:assert/strict";\nimport { readFileSync } from "node:fs";\nimport { getCompanyItems } from "../src/companyInsights.js";\nimport { COMPANY_SORT_VALUES, sanitizeCompanySearchParams } from "../src/companyUrlParams.js";\n\nconst payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));\nconst companies = getCompanyItems(payload);\nconst validValues = {\n  roles: ["general_contractor", "modular_specialist"],\n  companyIds: companies.map((company) => company.company_id),\n};\n\nassert.deepEqual(COMPANY_SORT_VALUES, ["name", "recent_activity", "revenue", "verified_projects"]);\n\nlet result = sanitizeCompanySearchParams(new URLSearchParams("role=specialist_manufacturer&relationship=direct_competitor&tier=tier_1&status=core_verified&audit=applied&facility=confirmed&sort=name&q=PlanM"), validValues);\nassert.equal(result.changed, true);\nassert.equal(result.params.get("role"), "modular_specialist");\nassert.equal(result.params.get("q"), "PlanM");\nfor (const key of ["relationship", "tier", "status", "audit", "facility"]) assert.equal(result.params.has(key), false);\n\nresult = sanitizeCompanySearchParams(new URLSearchParams("role=bad&sort=bad&q=PlanM"), validValues);\nassert.equal(result.changed, true);\nassert.equal(result.params.get("q"), "PlanM");\nassert.equal(result.params.has("role"), false);\nassert.equal(result.params.has("sort"), false);\n\nresult = sanitizeCompanySearchParams(new URLSearchParams("country=US&source=SBS&role=general_contractor"), validValues);\nassert.equal(result.changed, true);\nassert.equal(result.params.get("role"), "general_contractor");\nassert.equal(result.params.has("country"), false);\nassert.equal(result.params.has("source"), false);\n\nresult = sanitizeCompanySearchParams(new URLSearchParams("role=producer_group&sort=revenue&compare=gs-ec,bad,gs-ec,yuchang-enc,nrb,planm,dl-enc"), validValues);\nassert.equal(result.changed, true);\nassert.equal(result.params.get("role"), "modular_specialist");\nassert.equal(result.params.get("sort"), "revenue");\nassert.equal(result.params.get("compare"), "gs-ec,yuchang-enc,nrb,planm");\n\nconsole.log("COMPANY URL TESTS PASSED");\n''')
+
+          # Detail source-level contract copy.
+          path = 'frontend/scripts/test-company-detail-ui.mjs'
+          text = read(path)
+          text = text.replace('같은 연도·통화·재무제표 범위', '같은 기업유형·연도·통화·재무제표 범위')
+          text = text.replace('"peer comparison should show the reference max/min label"', '"peer comparison should show the median difference"')
+          write(path, text)
+
+          # Workspace browser QA wording.
+          path = 'frontend/scripts/browser-qa-company-intelligence-workspace.mjs'
+          text = read(path)
+          text = text.replace('financialText.includes("동료 비교")', 'financialText.includes("동일 유형 기업 재무 비교")')
+          text = text.replace('`${companyId}: peer comparison missing`', '`${companyId}: same-type financial comparison missing`')
+          text = text.replace('financialText.includes("비교 조건 미충족") || financialText.includes("임의 순위 없음")', 'financialText.includes("동일 유형 재무 비교 준비 중") || financialText.includes("3개 미만") || financialText.includes("다른 기업유형으로 대체 비교하지 않습니다")')
+          write(path, text)
+
+          # Production smoke: simple type-first discovery contract.
+          path = 'frontend/scripts/production-smoke-test.mjs'
+          text = read(path)
+          text = text.replace('  check(companyText.includes("전체 11개사"), "company count 11 missing");\n', '  check(companyText.includes("검색 결과 11개사"), "company count 11 missing");\n')
+          text = text.replace('  check(await page.locator(".company-decision-quick-filters").count() === 1, "company decision quick filters should render once");\n', '  check(await page.locator(".company-decision-quick-filters").count() === 0, "legacy company quick filters should be removed");\n  check(await page.locator(".company-type-segmented").count() === 1, "company type segmented control missing");\n')
+          write(path, text)
+
+          # Main browser QA: replace the old company-list filter section with type-first discovery checks.
+          path = 'frontend/scripts/browser-qa-sales.mjs'
+          text = read(path)
+          start = text.index('  const companyText = await page.locator("main").innerText();')
+          end = text.index('  for (const company of companyItems) {', start)
+          if start < 0 or end < 0:
+              raise RuntimeError('company browser QA section not found')
+          replacement = '''  const companyText = await page.locator("main").innerText();\n  check(!companyText.includes("직접 경쟁사"), "legacy direct competitor summary should be removed");\n  check(!companyText.includes("감사재무 적용"), "legacy audit summary should be removed");\n  check(!companyText.includes("데이터 보완 필요"), "legacy data-gap summary should be removed");\n  check(await page.locator(".company-decision-quick-filters").count() === 0, "legacy quick filters should be removed");\n  check(await page.locator(".company-type-segmented").count() === 1, "company type segmented control should render once");\n  const typeButtons = page.locator(".company-type-segmented [role=radio]");\n  check(await typeButtons.count() === 3, "company type segmented control should expose all/contractor/specialist");\n  check(companyText.includes("건설사"), "general contractor type label missing");\n  check(companyText.includes("모듈러 제작 전문 업체"), "modular specialist type label missing");\n  const sortSelect = page.getByLabel("정렬");\n  const sortOptions = await sortSelect.locator("option").evaluateAll((options) => options.map((option) => option.textContent));\n  check(sortOptions.length === 4, "company list should expose exactly four sort options");\n  check(sortOptions[0].includes("기업명순"), "company name sort should be default");\n  await page.getByRole("radio", { name: /모듈러 제작 전문 업체/ }).click();\n  await waitForCardCount(page, companyItems.filter(isModularSpecialistCompany).length, "modular specialist type filter mismatch");\n  const resetButton = page.getByRole("button", { name: "초기화" });\n  await resetButton.click();\n  await waitForCardCount(page, companyItems.length, "company type reset mismatch");\n  await page.getByPlaceholder("기업명, 프로젝트, 기술 검색").fill("PlanM");\n  await page.keyboard.press("Enter");\n  await page.waitForURL(/q=PlanM/);\n  check(await countCards(page) >= 1, "company alias search should return results");\n  await page.getByRole("button", { name: "초기화" }).click();\n  await waitForCardCount(page, companyItems.length, "company reset mismatch");\n'''
+          text = text[:start] + replacement + text[end:]
+          write(path, text)
+
+      - name: Remove temporary finalize workflow and commit test/QA updates
+        run: |
+          rm .github/workflows/phase8b1-finalize.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Align tests and QA with type-first company discovery"
+          git push origin HEAD:fix/company-type-first-discovery-and-financial-comparison
+
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt pytest jsonschema
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Validate builders
+        run: |
+          python scripts/build_company_report_insights.py --base-ref origin/main --check
+          python scripts/build_company_data_coverage.py --as-of-date 2026-08-09 --check
+
+      - name: Python tests
+        run: |
+          python -m pytest -q tests/test_company_report_insights.py
+          python -m pytest -q
+          python -m compileall scripts src
+
+      - name: Frontend tests and QA
+        working-directory: frontend
+        run: |
+          npm run test:companies
+          npm run test:companies-detail
+          npm run test:companies-comparison
+          npm run test:companies-url
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:business
+          npm run test:news
+          npm run lint
+          npm run build
+          npm run qa:browser
+          npm run qa:company-intelligence-workspace
+
+      - name: Diff quality
+        run: git diff --check origin/main...HEAD
