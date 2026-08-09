@@ -84,9 +84,12 @@ tracks whether the technology status itself has been recently verified.
 
 Priority is a data-maintenance priority, not a company risk score.
 
-- `P0`: public data conflicts, verified value conflicts, or stale critical
-  source issues. The current builder reserves this level for future conflict
-  gates.
+- `P0`: cross-source referential integrity or public-data consistency work that
+  should be reconciled before downstream data maintenance. Examples include an
+  audit-backed View Model record without a `companies.json` master row,
+  an audit insight without a public audit source, a public audit source without
+  an audit insight, or a future-dated public verification timestamp. P0 is not
+  a company risk rating.
 - `P1`: gaps that significantly limit dashboard analysis, such as missing audit
   financials, incomplete audit years, stale audit data, or excessive
   verification-pending items.
@@ -112,6 +115,75 @@ Reason codes include:
 - `company_profile_stale`
 - `excessive_verification_pending`
 - `source_coverage_sparse`
+- `audit_record_without_company_master`
+- `audit_insight_without_public_source`
+- `public_source_without_audit_insight`
+- `future_verification_date`
+
+The JSON separates:
+
+- `company_priority_counts`: all public companies grouped by their company data
+  maintenance priority, including monitor-only P3 companies
+- `work_item_priority_counts`: actual queue work items, including consistency
+  issues
+
+`priority_counts` remains as a backward-compatible alias of
+`work_item_priority_counts`.
+
+## Public Universe And Audit Records
+
+The public company universe is discovered from `companies.json`. Audit-backed
+records are discovered from `company_report_insights.json`.
+
+The control plane reports both views:
+
+- `audit_record_count`: all audit-backed records in the audit View Model
+- `audit_backed_in_universe_count`: audit-backed records that also exist in the
+  public company universe
+- `full_three_year_audit_record_count`: all three-year audit-backed records
+- `full_three_year_audit_in_universe_count`: three-year audit-backed records in
+  the public company universe
+
+If an audit-backed record exists without a company master row, the record is not
+deleted or promoted. It becomes a `P0` `consistency_issue` with
+`audit_record_without_company_master`.
+
+## Audit Source Discovery
+
+Public audit source discovery is filename-range agnostic. It searches
+`data/company_reports/<company-id>/` for `audit_financials_*.json` files whose
+`schema_version` is `company_audit_financials_v1`.
+
+Excluded files and directories:
+
+- `onboarding/`
+- `staging/`
+- `artifacts/`
+- candidate files
+
+If multiple public candidates exist, the builder uses a deterministic ordering:
+
+1. latest maximum financial year
+2. earliest minimum financial year
+3. filename
+
+If multiple files cover the same year span, the selected path is deterministic
+but the discovery result is marked ambiguous for consistency review.
+
+## Date Parsing
+
+Supported date inputs:
+
+- `YYYY-MM-DD`
+- `YYYY-MM`, interpreted as the first day of the month
+- `YYYY`, interpreted as January 1
+- ISO datetime
+- ISO datetime with `Z`
+- ISO datetime with timezone
+
+Invalid, empty, or missing values parse as unknown. Future verification dates
+remain freshness-current for display purposes but generate
+`future_verification_date` as a P0 consistency signal.
 
 ## CLI
 

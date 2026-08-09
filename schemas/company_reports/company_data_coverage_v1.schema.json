@@ -7,7 +7,10 @@
     "schema_version",
     "as_of_date",
     "summary",
+    "consistency",
     "companies",
+    "company_priority_queue",
+    "consistency_priority_queue",
     "priority_queue",
     "audit_coverage",
     "evidence_coverage"
@@ -28,11 +31,16 @@
       "required": [
         "total_company_count",
         "audit_backed_company_count",
+        "audit_record_count",
+        "audit_backed_in_universe_count",
         "non_audit_company_count",
+        "full_three_year_audit_record_count",
+        "full_three_year_audit_in_universe_count",
         "company_ids",
         "audit_company_ids",
         "non_audit_company_ids",
-        "priority_counts"
+        "company_priority_counts",
+        "work_item_priority_counts"
       ],
       "properties": {
         "total_company_count": {
@@ -40,6 +48,10 @@
           "minimum": 0
         },
         "audit_backed_company_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "audit_record_count": {
           "type": "integer",
           "minimum": 0
         },
@@ -52,6 +64,14 @@
           "minimum": 0
         },
         "full_three_year_audit_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "full_three_year_audit_record_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "full_three_year_audit_in_universe_count": {
           "type": "integer",
           "minimum": 0
         },
@@ -79,11 +99,95 @@
             "type": "string"
           }
         },
+        "company_priority_counts": {
+          "$ref": "#/$defs/priority_counts"
+        },
+        "work_item_priority_counts": {
+          "$ref": "#/$defs/priority_counts"
+        },
         "priority_counts": {
           "$ref": "#/$defs/priority_counts"
         }
       },
       "additionalProperties": true
+    },
+    "consistency": {
+      "type": "object",
+      "required": [
+        "status",
+        "issue_count",
+        "reason_codes",
+        "audit_record_without_company_master_ids",
+        "company_master_without_audit_record_ids",
+        "audit_insight_without_public_source_ids",
+        "public_source_without_audit_insight_ids"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "clean",
+            "issue_detected"
+          ]
+        },
+        "issue_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "issue_type",
+              "company_id",
+              "reason_code"
+            ],
+            "properties": {
+              "issue_type": {
+                "type": "string"
+              },
+              "company_id": {
+                "type": "string"
+              },
+              "reason_code": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "audit_record_without_company_master_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "company_master_without_audit_record_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "audit_insight_without_public_source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "public_source_without_audit_insight_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "companies": {
       "type": "array",
@@ -92,6 +196,18 @@
       }
     },
     "priority_queue": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/priority_item"
+      }
+    },
+    "company_priority_queue": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/priority_item"
+      }
+    },
+    "consistency_priority_queue": {
       "type": "array",
       "items": {
         "$ref": "#/$defs/priority_item"
@@ -298,6 +414,7 @@
       "type": "object",
       "required": [
         "priority",
+        "item_type",
         "company_id",
         "recommended_next_action",
         "recommended_next_domain",
@@ -306,6 +423,12 @@
       "properties": {
         "priority": {
           "$ref": "#/$defs/priority"
+        },
+        "item_type": {
+          "enum": [
+            "company_data_gap",
+            "consistency_issue"
+          ]
         },
         "company_id": {
           "type": "string"

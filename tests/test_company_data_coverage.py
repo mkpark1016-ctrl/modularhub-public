@@ -14,7 +14,10 @@ from scripts.build_company_data_coverage import (
     build_payload,
     build_snapshot,
     check_outputs,
+    date_is_future,
+    discover_public_audit_source,
     metric_status,
+    parse_date,
     stable_json,
     write_outputs,
 )
@@ -57,6 +60,14 @@ def test_reports_audit_companies_outside_public_universe_without_promoting_them(
     assert "daeseung-engineering" not in payload["summary"]["company_ids"]
     assert payload["summary"]["audit_company_ids_not_in_universe"] == ["daeseung-engineering"]
     assert all(company["company_id"] != "daeseung-engineering" for company in payload["companies"])
+    assert payload["consistency"]["status"] == "issue_detected"
+    assert payload["consistency"]["issue_count"] == 1
+    assert payload["consistency"]["audit_record_without_company_master_ids"] == ["daeseung-engineering"]
+    daeseung_item = next(item for item in payload["priority_queue"] if item["company_id"] == "daeseung-engineering")
+    assert daeseung_item["item_type"] == "consistency_issue"
+    assert daeseung_item["priority"] == "P0"
+    assert daeseung_item["recommended_next_action"] == "company_universe_reconciliation"
+    assert daeseung_item["reason_codes"] == ["audit_record_without_company_master"]
 
 
 def test_metric_status_preserves_zero_and_null_meanings() -> None:
@@ -97,11 +108,32 @@ def test_priority_queue_contains_data_work_priorities() -> None:
     payload = generated_payload()
     queue = payload["priority_queue"]
     assert queue
-    assert payload["summary"]["priority_counts"]["P1"] >= 1
+    assert payload["summary"]["work_item_priority_counts"]["P1"] >= 1
     gs = next(item for item in queue if item["company_id"] == "gs-ec")
+    assert gs["item_type"] == "company_data_gap"
     assert gs["priority"] == "P1"
     assert gs["recommended_next_action"] == "audit_report_onboarding"
     assert "missing_audit_financials" in gs["reason_codes"]
+
+
+def test_company_priority_counts_and_work_item_counts_are_separate() -> None:
+    payload = generated_payload()
+    company_counts = payload["summary"]["company_priority_counts"]
+    work_item_counts = payload["summary"]["work_item_priority_counts"]
+    assert sum(company_counts.values()) == payload["summary"]["total_company_count"]
+    assert sum(work_item_counts.values()) == len(payload["priority_queue"])
+    assert company_counts["P3"] > 0
+    assert work_item_counts["P0"] == 1
+    assert payload["summary"]["priority_counts"] == work_item_counts
+
+
+def test_audit_record_counts_are_split_between_all_records_and_public_universe() -> None:
+    payload = generated_payload()
+    assert payload["summary"]["audit_record_count"] == 6
+    assert payload["summary"]["audit_backed_company_count"] == 6
+    assert payload["summary"]["audit_backed_in_universe_count"] == 5
+    assert payload["summary"]["full_three_year_audit_record_count"] == 6
+    assert payload["summary"]["full_three_year_audit_in_universe_count"] == 5
 
 
 def test_builder_is_deterministic_for_fixed_as_of_date() -> None:
@@ -148,6 +180,37 @@ def test_missing_dates_are_safe_unknown_values() -> None:
     assert freshness_state(None, date(2026, 8, 9), FRESHNESS_POLICIES["company_profile"]) == "unknown"
 
 
+def test_partial_and_iso_date_parser_contract() -> None:
+    assert parse_date("2026-08-09") == date(2026, 8, 9)
+    assert parse_date("2026-08") == date(2026, 8, 1)
+    assert parse_date("2026") == date(2026, 1, 1)
+    assert parse_date("2026-08-09T10:15:00+09:00") == date(2026, 8, 9)
+    assert parse_date("2026-08-09T01:15:00Z") == date(2026, 8, 9)
+    assert parse_date("invalid") is None
+    assert parse_date("") is None
+    assert parse_date(None) is None
+
+
+def test_future_date_signal_becomes_p0_consistency_reason(tmp_path: Path) -> None:
+    from scripts.build_company_data_coverage import parse_date
+
+    parsed = parse_date(AS_OF_DATE)
+    assert parsed is not None
+    companies_payload = json.loads(DEFAULT_COMPANIES.read_text(encoding="utf-8"))
+    companies_payload["companies"] = [dict(companies_payload["companies"][0])]
+    companies_payload["companies"][0]["last_verified_at"] = "2027-01-01"
+    companies_path = tmp_path / "companies.json"
+    companies_path.write_text(json.dumps(companies_payload, ensure_ascii=False), encoding="utf-8")
+    insight_payload = {"schema_version": "company_report_insights_v1", "companies": []}
+    insights_path = tmp_path / "company_report_insights.json"
+    insights_path.write_text(json.dumps(insight_payload), encoding="utf-8")
+    payload = build_payload(as_of_date=parsed, companies_path=companies_path, report_insights_path=insights_path, source_root=tmp_path / "reports")
+    company = payload["companies"][0]
+    assert date_is_future("2027-01-01", parsed)
+    assert "future_verification_date" in company["recommendation_reason_codes"]
+    assert company["recommendation_priority"] == "P0"
+
+
 def test_priority_filter_limits_queue() -> None:
     from scripts.build_company_data_coverage import parse_date
 
@@ -156,3 +219,105 @@ def test_priority_filter_limits_queue() -> None:
     payload = build_payload(as_of_date=parsed, priority="P2")
     assert payload["priority_queue"]
     assert {item["priority"] for item in payload["priority_queue"]} == {"P2"}
+
+
+def write_audit_source(path: Path, years: list[int]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "schema_version": "company_audit_financials_v1",
+        "financial_years": {str(year): {} for year in years},
+    }
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+
+def test_public_audit_source_discovery_accepts_future_year_filename(tmp_path: Path) -> None:
+    write_audit_source(tmp_path / "sample" / "audit_financials_2024_2026.json", [2024, 2025, 2026])
+    discovered = discover_public_audit_source("sample", tmp_path)
+    assert discovered["status"] == "found"
+    assert discovered["path"].name == "audit_financials_2024_2026.json"
+
+
+def test_public_audit_source_discovery_excludes_onboarding_staging_and_candidates(tmp_path: Path) -> None:
+    write_audit_source(tmp_path / "sample" / "audit_financials_2023_2025.json", [2023, 2024, 2025])
+    write_audit_source(tmp_path / "sample" / "staging" / "audit_financials_2026_2028.json", [2026, 2027, 2028])
+    write_audit_source(tmp_path / "sample" / "onboarding" / "candidate_audit_financials.json", [2026, 2027, 2028])
+    write_audit_source(tmp_path / "sample" / "audit_financials_candidate_2026_2028.json", [2026, 2027, 2028])
+    discovered = discover_public_audit_source("sample", tmp_path)
+    assert discovered["status"] == "found"
+    assert discovered["path"].name == "audit_financials_2023_2025.json"
+
+
+def test_public_audit_source_discovery_uses_latest_year_then_filename_tiebreak(tmp_path: Path) -> None:
+    write_audit_source(tmp_path / "sample" / "audit_financials_2021_2023.json", [2021, 2022, 2023])
+    write_audit_source(tmp_path / "sample" / "audit_financials_2024_2026.json", [2024, 2025, 2026])
+    discovered = discover_public_audit_source("sample", tmp_path)
+    assert discovered["path"].name == "audit_financials_2024_2026.json"
+
+
+def test_public_audit_source_discovery_flags_same_span_ambiguity(tmp_path: Path) -> None:
+    write_audit_source(tmp_path / "sample" / "audit_financials_2023_2025.json", [2023, 2024, 2025])
+    write_audit_source(tmp_path / "sample" / "audit_financials_2023_2025_revised.json", [2023, 2024, 2025])
+    discovered = discover_public_audit_source("sample", tmp_path)
+    assert discovered["status"] == "ambiguous"
+    assert discovered["ambiguous"] is True
+    assert discovered["path"].name == "audit_financials_2023_2025.json"
+
+
+def test_referential_integrity_detects_insight_without_source_and_source_without_insight(tmp_path: Path) -> None:
+    from scripts.build_company_data_coverage import parse_date
+
+    parsed = parse_date(AS_OF_DATE)
+    assert parsed is not None
+    companies_payload = {
+        "companies": [
+            {"company_id": "with-source-only", "company_name": "With Source", "last_verified_at": AS_OF_DATE},
+            {"company_id": "with-insight-only", "company_name": "With Insight", "last_verified_at": AS_OF_DATE},
+        ]
+    }
+    insights_payload = {
+        "schema_version": "company_report_insights_v1",
+        "companies": [
+            {
+                "company_id": "with-insight-only",
+                "company_name": "With Insight",
+                "available_years": [2023, 2024, 2025],
+                "latest_year": 2025,
+                "financial_series": [],
+                "source_summary": {"latest_report_date": AS_OF_DATE},
+                "data_quality": {},
+                "evidence_health": [],
+            }
+        ],
+    }
+    companies_path = tmp_path / "companies.json"
+    insights_path = tmp_path / "company_report_insights.json"
+    companies_path.write_text(json.dumps(companies_payload), encoding="utf-8")
+    insights_path.write_text(json.dumps(insights_payload), encoding="utf-8")
+    write_audit_source(tmp_path / "with-source-only" / "audit_financials_2023_2025.json", [2023, 2024, 2025])
+    payload = build_payload(as_of_date=parsed, companies_path=companies_path, report_insights_path=insights_path, source_root=tmp_path)
+    assert payload["consistency"]["audit_insight_without_public_source_ids"] == ["with-insight-only"]
+    assert payload["consistency"]["public_source_without_audit_insight_ids"] == ["with-source-only"]
+    assert {item["reason_codes"][0] for item in payload["consistency_priority_queue"]} == {
+        "audit_insight_without_public_source",
+        "public_source_without_audit_insight",
+    }
+
+
+def test_referential_integrity_clean_state_with_matching_master_insight_and_source(tmp_path: Path) -> None:
+    from scripts.build_company_data_coverage import parse_date
+
+    parsed = parse_date(AS_OF_DATE)
+    assert parsed is not None
+    companies_payload = {"companies": [{"company_id": "sample", "company_name": "Sample", "last_verified_at": AS_OF_DATE}]}
+    insights_payload = {
+        "schema_version": "company_report_insights_v1",
+        "companies": [{"company_id": "sample", "company_name": "Sample", "available_years": [2023, 2024, 2025], "latest_year": 2025, "financial_series": [], "source_summary": {"latest_report_date": AS_OF_DATE}, "data_quality": {}, "evidence_health": []}],
+    }
+    companies_path = tmp_path / "companies.json"
+    insights_path = tmp_path / "company_report_insights.json"
+    companies_path.write_text(json.dumps(companies_payload), encoding="utf-8")
+    insights_path.write_text(json.dumps(insights_payload), encoding="utf-8")
+    write_audit_source(tmp_path / "sample" / "audit_financials_2023_2025.json", [2023, 2024, 2025])
+    payload = build_payload(as_of_date=parsed, companies_path=companies_path, report_insights_path=insights_path, source_root=tmp_path)
+    assert payload["consistency"]["status"] == "clean"
+    assert payload["consistency_priority_queue"] == []

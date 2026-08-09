@@ -2,6 +2,10 @@
   "as_of_date": "2026-08-09",
   "audit_backed_count": 6,
   "audit_backed_in_universe_count": 5,
+  "audit_record_count": 6,
+  "audit_record_without_company_master_ids": [
+    "daeseung-engineering"
+  ],
   "company_count": 10,
   "company_coverage_states": [
     {
@@ -115,11 +119,30 @@
       ]
     }
   ],
-  "priority_counts": {
+  "company_priority_counts": {
     "P0": 0,
+    "P1": 7,
+    "P2": 1,
+    "P3": 2
+  },
+  "consistency_issue_count": 1,
+  "consistency_reason_codes": [
+    "audit_record_without_company_master"
+  ],
+  "consistency_status": "issue_detected",
+  "full_three_year_audit_in_universe_count": 5,
+  "full_three_year_audit_record_count": 6,
+  "priority_counts": {
+    "P0": 1,
     "P1": 7,
     "P2": 1,
     "P3": 0
   },
-  "schema_version": "company_data_coverage_v1"
+  "schema_version": "company_data_coverage_v1",
+  "work_item_priority_counts": {
+    "P0": 1,
+    "P1": 7,
+    "P2": 1,
+    "P3": 0
+  }
 }
