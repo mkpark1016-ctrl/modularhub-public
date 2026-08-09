@@ -33,6 +33,18 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
+      - name: Repair temporary migration script
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path('scripts/phase8b1_apply.py')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace('peer + peer_end, "peer benchmark builder"', 'peer, "peer benchmark builder"')
+          text = text.replace('build_block + build_end, "build_view_model"', 'build_block, "build_view_model"')
+          text = text.replace('block + end, "PeerPositionRows"', 'block, "PeerPositionRows"')
+          text = text.replace('block + end, "PeerBenchmarkPanel"', 'block, "PeerBenchmarkPanel"')
+          path.write_text(text, encoding='utf-8')
+
       - name: Apply migration
         run: python scripts/phase8b1_apply.py
 
