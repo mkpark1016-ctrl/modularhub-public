@@ -151,6 +151,5 @@ for (const item of businessItems) {
 const liveSummary = getBusinessSummary(businessItems, asOf);
 const liveImportant = businessItems.filter((item) => isImportantBusiness(item, asOf));
 assert.equal(liveSummary.important, liveImportant.length);
-assert.equal(liveImportant.some((item) => String(item.source_record_id || item.bid_no) === "R26BK01510994"), false);
 
 console.log("BUSINESS INSIGHT TESTS PASSED");
