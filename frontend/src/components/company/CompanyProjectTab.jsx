@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import {
   detailModel,
   eventDate,
@@ -57,11 +57,14 @@ function ProjectCard({ event, candidate, onOpenDetail }) {
         <strong>{meta.title}</strong>
         <span className="mini-status-badge">{eventStatusLabel(event)}</span>
       </div>
+      {candidate && <span className="mini-status-badge">검증 실적 아님</span>}
+      {meta.articleCount > 0 && <span className="mini-status-badge">관련 보도 {meta.articleCount.toLocaleString("ko-KR")}건</span>}
       <dl>
         <div><dt>용도</dt><dd>{meta.segment}</dd></div>
         <div><dt>지역</dt><dd>{meta.location}</dd></div>
         <div><dt>발주처·협력기관</dt><dd>{meta.client}</dd></div>
         <div><dt>수행 역할</dt><dd>{meta.role}</dd></div>
+        <div><dt>관련 보도</dt><dd>{meta.articleCount.toLocaleString("ko-KR")}건</dd></div>
       </dl>
       <button type="button" className="text-button entity-detail-button" onClick={() => onOpenDetail(event, candidate)}>
         상세보기
@@ -94,45 +97,6 @@ function EventTable({ company, events, emptyText, candidate = false, onShowEvide
           {statusOptions.map((status) => <option key={status} value={status}>{labelValue(status)}</option>)}
         </select>
       </label>
-      <div className="company-table-wrap responsive-table-wrap">
-        <table className="company-financial-table company-project-table">
-          <thead>
-            <tr>
-              <th>프로젝트명</th>
-              <th>상태</th>
-              <th>발주처·협력기관</th>
-              <th>지역</th>
-              <th>용도</th>
-              <th>수행 역할</th>
-              <th>상세</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visible.map((event) => {
-              const meta = projectMeta(event);
-              return (
-                <tr key={event.event_id}>
-                  <th>
-                    {meta.title}
-                    {candidate && <span className="mini-status-badge">검증 실적 아님</span>}
-                    {meta.articleCount > 0 && <small>관련 보도 {meta.articleCount.toLocaleString("ko-KR")}건</small>}
-                  </th>
-                  <td>{eventTypeLabel(event)} · {eventStatusLabel(event)}</td>
-                  <td>{meta.client}</td>
-                  <td>{meta.location}</td>
-                  <td>{meta.segment}</td>
-                  <td>{meta.role}<small>{meta.date}</small></td>
-                  <td>
-                    <button type="button" className="text-button entity-detail-button" onClick={() => openDetail(event, candidate)}>
-                      상세보기
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
       <div className="responsive-card-list project-card-list">
         {visible.map((event) => <ProjectCard key={`card-${event.event_id}`} event={event} candidate={candidate} onOpenDetail={openDetail} />)}
       </div>
@@ -166,6 +130,7 @@ export default function CompanyProjectTab({ company, onShowEvidence }) {
   const model = detailModel(company);
   const verified = verifiedProjectEvents(model.events);
   const pipeline = pipelineEvents(model.events);
+  const majorMarkets = [...new Set(verified.map((event) => labelValue(event.market_segment, "")).filter(Boolean))].slice(0, 3);
 
   return (
     <section className="summary company-tab-panel" id="company-tab-panel-projects" role="tabpanel" aria-labelledby="company-tab-projects">
@@ -173,6 +138,8 @@ export default function CompanyProjectTab({ company, onShowEvidence }) {
       <div className="company-highlight-grid">
         <span>검증 실적 {verified.length.toLocaleString("ko-KR")}건</span>
         <span>파이프라인·기타 활동 {pipeline.length.toLocaleString("ko-KR")}건</span>
+        <span>주요 시장 {majorMarkets.length ? majorMarkets.join(", ") : "확인 중"}</span>
+        <span>관련 보도 별도 표시</span>
       </div>
       <div className="company-subsection">
         <h3>검증 실적</h3>

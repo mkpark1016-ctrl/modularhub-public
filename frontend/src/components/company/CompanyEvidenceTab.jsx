@@ -223,10 +223,8 @@ export default function CompanyEvidenceTab({ company, reportInsight = null, onSh
     <section className="summary company-tab-panel" id="company-tab-panel-evidence" role="tabpanel" aria-labelledby="company-tab-evidence">
       <h2>근거·출처</h2>
       <dl className="detail-grid compact-detail-grid">
-        <div><dt>전체 데이터 상태</dt><dd>{model.header.dataStatusLabel}</dd></div>
-        <div><dt>데이터 신뢰도</dt><dd>{model.header.confidenceLabel}</dd></div>
+        <div><dt>데이터 신뢰도</dt><dd>{model.header.confidenceLabel} · {model.header.dataStatusLabel}</dd></div>
         <div><dt>최신 검증일</dt><dd>{formatDate(model.header.latestVerifiedAt)}</dd></div>
-        <div><dt>DART corp_code</dt><dd>{company.dart_identity?.dart_corp_code || "확인되지 않음"}</dd></div>
         <div><dt>최근 감사보고서</dt><dd>{model.latestAudit?.receipt_number || "공개자료 없음"}</dd></div>
         <div><dt>데이터 공백</dt><dd>{formatNumber(gapRows.length, "건")}</dd></div>
       </dl>
@@ -240,80 +238,92 @@ export default function CompanyEvidenceTab({ company, reportInsight = null, onSh
         onShowEvidence={onShowEvidence}
       />
 
-      <div className="company-subsection">
-        <h3>영역별 검증 매트릭스</h3>
-        <div className="company-table-wrap evidence-matrix-wrap">
-          <table className="company-financial-table evidence-matrix-table">
-            <thead>
-              <tr><th>영역</th><th>상태</th><th>주요 출처</th><th>최신 검증</th><th>보완 필요</th><th>이동</th></tr>
-            </thead>
-            <tbody>
-              {matrixRows.map((row) => (
-                <tr key={row.key}>
-                  <th>{row.label}</th>
-                  <td>{row.status}</td>
-                  <td>{row.sourceTypes}</td>
-                  <td>{formatDate(row.verifiedAt)}</td>
-                  <td>{row.gapSummary}</td>
-                  <td><button type="button" className="text-button" onClick={() => onTabChange?.(row.tab)}>탭 열기</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <details className="company-report-details evidence-secondary-details">
+        <summary>영역별 검증 매트릭스와 출처 목록 보기</summary>
 
-      {gaps.length > 0 && (
         <div className="company-subsection">
-          <h3>추가 확인 필요 사항</h3>
-          <div className="company-section-list">
-            {gaps.map((gap, index) => (
-              <div key={`${gap.area || "gap"}-${index}`}>
-                <strong>{gap.area ? labelValue(gap.area, gap.area) : "추가 확인 필요"}</strong>
-                <span>{gap.description || gap.note || "공개자료를 추가 확인 중입니다."}</span>
-              </div>
-            ))}
+          <h3>식별 출처 메타</h3>
+          <dl className="detail-grid compact-detail-grid">
+            <div><dt>DART corp_code</dt><dd>{company.dart_identity?.dart_corp_code || "확인되지 않음"}</dd></div>
+            <div><dt>최근 감사보고서 접수번호</dt><dd>{model.latestAudit?.receipt_number || "공개자료 없음"}</dd></div>
+          </dl>
+        </div>
+
+        <div className="company-subsection">
+          <h3>영역별 검증 매트릭스</h3>
+          <div className="company-table-wrap evidence-matrix-wrap">
+            <table className="company-financial-table evidence-matrix-table">
+              <thead>
+                <tr><th>영역</th><th>상태</th><th>주요 출처</th><th>최신 검증</th><th>보완 필요</th><th>이동</th></tr>
+              </thead>
+              <tbody>
+                {matrixRows.map((row) => (
+                  <tr key={row.key}>
+                    <th>{row.label}</th>
+                    <td>{row.status}</td>
+                    <td>{row.sourceTypes}</td>
+                    <td>{formatDate(row.verifiedAt)}</td>
+                    <td>{row.gapSummary}</td>
+                    <td><button type="button" className="text-button" onClick={() => onTabChange?.(row.tab)}>탭 열기</button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
 
-      <div className="company-subsection">
-        <h3>실제 출처 목록</h3>
-        {sourceRows.length ? (
-          <div className="source-list evidence-source-list">
-            {sourceRows.map((source) => (
-              <div key={source.id || source.title}>
-                <strong>{source.title}</strong>
-                <span>{[source.publisher, source.sourceType, formatDate(source.publishedAt), source.documentId ? `문서 ${source.documentId}` : null].filter(Boolean).join(" · ")}</span>
-                {source.supportedClaims?.length ? <span>연결 데이터 {formatNumber(source.supportedClaims.length, "개")}</span> : null}
-                <div className="evidence-source-actions">
-                  {sourceHasPublicUrl(source) ? (
-                    <a href={source.url} target="_blank" rel="noopener noreferrer">원문 보기 <ExternalLink size={13} /></a>
-                  ) : (
-                    <span className="disabled-link">원문 링크 없음</span>
-                  )}
-                  {onShowEvidence && (
-                    <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence({ title: source.title, value: source.sourceType, note: source.note || "출처 상세", sources: [source] })}>
-                      근거보기
-                    </button>
-                  )}
+        {gaps.length > 0 && (
+          <div className="company-subsection">
+            <h3>추가 확인 필요 사항</h3>
+            <div className="company-section-list">
+              {gaps.map((gap, index) => (
+                <div key={`${gap.area || "gap"}-${index}`}>
+                  <strong>{gap.area ? labelValue(gap.area, gap.area) : "추가 확인 필요"}</strong>
+                  <span>{gap.description || gap.note || "공개자료를 추가 확인 중입니다."}</span>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        ) : (
-          <p>공개 출처를 추가 정리 중입니다.</p>
         )}
-      </div>
 
-      {sectionRows.length > 0 && (
         <div className="company-subsection">
-          <h3>재무 출처 섹션</h3>
-          <div className="company-report-section-tags">
-            {sectionRows.map((row) => <span key={row.section}>{row.label} <small>{row.count}건</small></span>)}
-          </div>
+          <h3>실제 출처 목록</h3>
+          {sourceRows.length ? (
+            <div className="source-list evidence-source-list">
+              {sourceRows.map((source) => (
+                <div key={source.id || source.title}>
+                  <strong>{source.title}</strong>
+                  <span>{[source.publisher, source.sourceType, formatDate(source.publishedAt), source.documentId ? `문서 ${source.documentId}` : null].filter(Boolean).join(" · ")}</span>
+                  {source.supportedClaims?.length ? <span>연결 데이터 {formatNumber(source.supportedClaims.length, "개")}</span> : null}
+                  <div className="evidence-source-actions">
+                    {sourceHasPublicUrl(source) ? (
+                      <a href={source.url} target="_blank" rel="noopener noreferrer">원문 보기 <ExternalLink size={13} /></a>
+                    ) : (
+                      <span className="disabled-link">원문 링크 없음</span>
+                    )}
+                    {onShowEvidence && (
+                      <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence({ title: source.title, value: source.sourceType, note: source.note || "출처 상세", sources: [source] })}>
+                        근거보기
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>공개 출처를 추가 정리 중입니다.</p>
+          )}
         </div>
-      )}
+
+        {sectionRows.length > 0 && (
+          <div className="company-subsection">
+            <h3>재무 출처 섹션</h3>
+            <div className="company-report-section-tags">
+              {sectionRows.map((row) => <span key={row.section}>{row.label} <small>{row.count}건</small></span>)}
+            </div>
+          </div>
+        )}
+      </details>
     </section>
   );
 }

@@ -729,6 +729,17 @@ function CompanyFilters({ values, setParam, roleOptions, relationshipOptions, ti
         </button>
       </div>
       <SearchBar value={values.q} onChange={(value) => setParam("q", value)} placeholder="기업명, 프로젝트, 기술 검색" />
+      <div className="company-decision-quick-filters" role="group" aria-label="기업 빠른 필터">
+        <button type="button" className={values.relationship === "direct_competitor" ? "active" : ""} onClick={() => setParam("relationship", values.relationship === "direct_competitor" ? "all" : "direct_competitor")}>
+          직접 경쟁
+        </button>
+        <button type="button" className={values.audit === "applied" ? "active" : ""} onClick={() => setParam("audit", values.audit === "applied" ? "all" : "applied")}>
+          감사재무
+        </button>
+        <button type="button" className={values.facility === "confirmed" ? "active" : ""} onClick={() => setParam("facility", values.facility === "confirmed" ? "all" : "confirmed")}>
+          생산시설 확인
+        </button>
+      </div>
       <label>역할
         <select value={values.role} onChange={(event) => setParam("role", event.target.value)}>
           <option value="all">전체 역할</option>
@@ -794,6 +805,14 @@ function CompanyListingPage() {
     }
     return rows;
   }, [activityState.data, items]);
+  const reportInsightsByCompany = useMemo(() => {
+    const rows = new Map();
+    for (const company of items) {
+      const insight = getCompanyReportInsight(reportInsightState.data, company.company_id);
+      if (insight) rows.set(company.company_id, insight);
+    }
+    return rows;
+  }, [items, reportInsightState.data]);
   const summary = useMemo(() => getCompanySummary(items), [items]);
   const decisionSummary = useMemo(() => {
     const now = new Date();
@@ -914,7 +933,7 @@ function CompanyListingPage() {
         <SummaryItem label="최근 90일 활동" value={decisionSummary.recentActive} suffix="개사" />
         <SummaryItem label="데이터 보완 필요" value={decisionSummary.dataGapCompanies} suffix="개사" />
       </section>
-      <div className="content-layout">
+      <div className="content-layout company-list-layout">
         <CompanyFilters
           values={values}
           setParam={setParam}
@@ -939,7 +958,7 @@ function CompanyListingPage() {
           {error && <div className="state error">기업정보 데이터를 불러오지 못했습니다.</div>}
           {!loading && !error && items.length === 0 && <div className="state">등록된 기업정보가 없습니다.</div>}
           {!loading && !error && items.length > 0 && filtered.length === 0 && <div className="state">현재 검색조건에 맞는 기업정보가 없습니다.</div>}
-          <CompanyCardGrid companies={filtered} selectedIds={selectedIds} onToggleCompare={toggleCompare} activitiesByCompany={activitiesByCompany} />
+          <CompanyCardGrid companies={filtered} selectedIds={selectedIds} onToggleCompare={toggleCompare} activitiesByCompany={activitiesByCompany} reportInsightsByCompany={reportInsightsByCompany} />
         </section>
       </div>
       <CompanyComparisonPanel

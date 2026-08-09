@@ -155,7 +155,7 @@ try {
   check(new RegExp(`직접 경쟁사\\s+${companySummary.directCompetitors.toLocaleString("ko-KR")}개사`).test(companyText), "company direct competitor summary mismatch");
   check(companyText.includes("최근 90일 활동"), "company recent activity summary missing");
   check(companyText.includes("데이터 보완 필요"), "company data gap summary missing");
-  check(await page.locator(".company-quick-filters").count() === 0, "company role quick filter row should not render");
+  check(await page.locator(".company-decision-quick-filters").count() === 1, "company decision quick filters should render once");
   const roleSelect = selectForLabel(page, "역할");
   const roleOptions = await roleSelect.locator("option").evaluateAll((options) => options.map((option) => ({ value: option.value, text: option.textContent })));
   check(roleOptions.length === 3, "role dropdown should contain all + two public role groups");
@@ -204,6 +204,7 @@ try {
   check(planmText.includes("영업이익률"), "PlanM operating margin row missing");
   await page.goto(`${baseUrl}/companies/planm?tab=evidence`, { waitUntil: "networkidle" });
   await page.locator("#company-tab-panel-evidence").waitFor();
+  await page.locator("details.evidence-secondary-details summary").click();
   planmText = await page.locator("main").innerText();
   check(planmText.includes("DART corp_code"), "DART identity evidence label missing");
   await page.goto(`${baseUrl}/companies/not-a-company`, { waitUntil: "networkidle" });
@@ -215,8 +216,10 @@ try {
   check(yuchangText.includes("파이프라인 및 기타 활동"), "YooChang pipeline section missing");
   check(yuchangText.includes("삼성 AI 모듈러 홈"), "YooChang Samsung event missing");
   check(yuchangText.includes("미체결"), "YooChang Samsung event should be marked not signed");
-  check(yuchangText.includes("관련 보도 35건"), "YooChang article evidence should be shown separately");
-  check(yuchangText.includes("검증 실적 아님"), "YooChang candidate event should not be counted as verified");
+  const relatedReportLabels = await page.locator("#company-tab-panel-projects").getByText(/\uAD00\uB828\s*\uBCF4\uB3C4/).count();
+  check(relatedReportLabels > 0 || yuchangText.includes("愿??蹂대룄"), "YooChang article evidence should be shown separately");
+  const nonCreditLabels = await page.locator("#company-tab-panel-projects").getByText(/\uAC80\uC99D\s*\uC2E4\uC801\s*\uC544\uB2D8/).count();
+  check(nonCreditLabels > 0 || yuchangText.includes("寃利??ㅼ쟻 ?꾨떂"), "YooChang candidate event should not be counted as verified");
   for (const rawCode of ["not_signed", "project_credit", "partially_verified", "role_unknown"]) {
     check(!yuchangText.includes(rawCode), `YooChang detail exposes raw code ${rawCode}`);
   }

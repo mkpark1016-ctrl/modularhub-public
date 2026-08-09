@@ -1,14 +1,12 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import { detailModel, formatDate, formatKrw, formatPercent, metricMargin } from "./companyDetailHelpers";
-import { metricDisplayText } from "../../companyReportInsights";
+import { detailModel, formatDate } from "./companyDetailHelpers";
+import { buildCompanyDecisionModel } from "../../companyDecisionModel";
 
 export default function CompanyDetailHeader({ company, activeTab = "overview", reportInsight = null }) {
   const model = detailModel(company);
   const compact = activeTab !== "overview";
-  const latestRevenue = reportInsight?.latest_metrics?.revenue;
-  const latestOperatingMargin = reportInsight?.derived_metrics?.[String(reportInsight.latest_year)]?.operating_margin_pct;
-  const fallbackOperatingMargin = metricMargin(model.financials[0]?.operating_profit, model.financials[0]?.revenue);
+  const decision = buildCompanyDecisionModel(company, { reportInsight });
   return (
     <header className={compact ? "company-detail-header compact-company-detail-header" : "company-detail-header"}>
       <Link className="back" to="/companies"><ArrowLeft size={17} />목록으로</Link>
@@ -21,30 +19,38 @@ export default function CompanyDetailHeader({ company, activeTab = "overview", r
           </div>
           <h1>{company.company_name}</h1>
           {company.company_name_en && <p className="company-name-en">{company.company_name_en}</p>}
+          {!compact && (
+            <div className="company-detail-keyword-panel" aria-label="기업 의사결정 키워드">
+              <div className="company-chip-row">
+                {decision.positionKeywords.slice(0, 4).map((item) => <span key={item}>{item}</span>)}
+              </div>
+              <div className="company-chip-row subtle">
+                {decision.targetMarkets.slice(0, 4).map((item) => <span key={`market-${item}`}>{item}</span>)}
+                {decision.modularMethods.slice(0, 3).map((item) => <span key={`method-${item}`}>{item}</span>)}
+              </div>
+            </div>
+          )}
         </div>
         <p className="finance-note">
           검증 수준 {model.header.verificationLevelLabel} · 최신 검증일 {formatDate(model.header.latestVerifiedAt)} · 데이터 신뢰도 {model.header.confidenceLabel}
         </p>
       </div>
-      {!compact && <p className="company-position-summary">{model.header.summary}</p>}
-      <dl className="company-kpi-grid" aria-label="기업 핵심 지표">
-        <div>
-          <dt>최근 매출</dt>
-          <dd>{latestRevenue ? metricDisplayText(latestRevenue) : (model.kpis.latestRevenueYear ? `${model.kpis.latestRevenueYear}년 ${formatKrw(model.kpis.latestRevenue)}` : "확인되지 않음")}</dd>
-        </div>
-        <div>
-          <dt>영업이익률</dt>
-          <dd>{latestOperatingMargin ? metricDisplayText(latestOperatingMargin) : formatPercent(fallbackOperatingMargin)}</dd>
-        </div>
-        <div>
-          <dt>생산시설</dt>
-          <dd>{model.kpis.productionFacilities.toLocaleString("ko-KR")}건</dd>
-        </div>
-        <div>
-          <dt>검증 프로젝트</dt>
-          <dd>{model.kpis.verifiedProjects.toLocaleString("ko-KR")}건</dd>
-        </div>
-      </dl>
+      {!compact && (
+        <details className="company-summary-disclosure">
+          <summary>요약 설명 보기</summary>
+          <p className="company-position-summary">{model.header.summary}</p>
+        </details>
+      )}
+      {!compact && (
+        <dl className="company-kpi-grid" aria-label="기업 핵심 지표">
+          {decision.metrics.map((item) => (
+            <div key={item.key}>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </header>
   );
 }

@@ -27,7 +27,6 @@ const KPI_CARDS = [
   { key: "operating_profit", label: "영업이익", ratioKey: "operating_margin_pct", ratioLabel: "영업이익률" },
   { key: "operating_cash_flow", label: "영업현금흐름" },
   { key: "total_borrowings", label: "총차입금" },
-  { key: "receivables_total", label: "채권 합계" },
 ];
 
 function latestRatio(insight, key) {
@@ -137,44 +136,6 @@ function CashFlowTrend({ rows }) {
   );
 }
 
-function GroupedMetricTrend({ title, years, series }) {
-  const values = series.flatMap((item) => item.rows.map((row) => metricNumber(row.metric))).filter((value) => Number.isFinite(value));
-  const max = Math.max(...values.map((value) => Math.abs(value)), 1);
-  return (
-    <article className="financial-mini-chart grouped" aria-label={`${title}: ${series.map((item) => item.label).join(", ")} 연도별 비교`}>
-      <div className="financial-chart-header">
-        <strong>{title}</strong>
-        <div className="financial-chart-legend" aria-label={`${title} 범례`}>
-          {series.map((item) => (
-            <span key={item.key}><i className={item.variant} aria-hidden="true" />{item.label}</span>
-          ))}
-        </div>
-      </div>
-      <div className="financial-grouped-bars">
-        {years.map((year) => (
-          <div className="financial-grouped-year" key={`grouped-${year}`}>
-            <b>{year}</b>
-            <div>
-              {series.map((item) => {
-                const row = item.rows.find((entry) => entry.year === year) || {};
-                const value = metricNumber(row.metric);
-                const isAvailable = Number.isFinite(value);
-                return (
-                  <span className={`financial-grouped-row ${isAvailable ? "" : "is-unavailable"}`} key={`${item.key}-${year}`} aria-label={`${year}년 ${item.label} ${metricDisplayText(row.metric)}`}>
-                    <small>{item.label}</small>
-                    {isAvailable && <i className={item.variant} style={{ width: `${metricWidth(value, max)}%` }} aria-hidden="true" />}
-                    <em>{metricDisplayText(row.metric)}</em>
-                  </span>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-    </article>
-  );
-}
-
 function groupedSignals(signals = []) {
   const groups = [
     { key: "growth", title: "성장성", match: ["revenue", "receivables", "inventory"] },
@@ -185,6 +146,15 @@ function groupedSignals(signals = []) {
     ...group,
     signals: signals.filter((signal) => group.match.some((token) => String(signal.code || "").includes(token))),
   })).filter((group) => group.signals.length);
+}
+
+function healthDisplayValue(insight, item) {
+  const metricId = Array.isArray(item.metric_ids) ? item.metric_ids[0] : null;
+  if (!metricId) return item.actual_value ?? "확인되지 않음";
+  const metric = metricId.endsWith("_pct")
+    ? reportRatioByYear(insight, insight.latest_year, metricId)
+    : reportMetricByYear(insight, insight.latest_year, metricId);
+  return metricDisplayText(metric);
 }
 
 function hasRevenueBreakdownRows(insight, years) {
@@ -216,7 +186,7 @@ function healthEvidence(insight, item) {
     calculationValue: `${item.operator || "operator 확인 필요"} ${item.threshold ?? "threshold 확인 필요"}`,
     calculationBasis: item.calculation_basis,
     basisYear: insight.latest_year,
-    dataStatus: `rule_id=${item.rule_id || "확인 필요"}`,
+    dataStatus: "감사재무 관찰 규칙",
     limitation: item.interpretation_scope || item.limitation,
     sourceIds: item.source_ids,
     note: item.explanation,
@@ -272,9 +242,8 @@ function FinancialDecisionSummary({ insight, onShowEvidence }) {
             <strong>{item.headline}</strong>
             <p>{item.explanation}</p>
             <dl className="company-mini-detail-list">
-              <div><dt>rule_id</dt><dd>{item.rule_id || "확인 필요"}</dd></div>
-              <div><dt>기준</dt><dd>{item.operator || "확인 필요"} {item.threshold ?? ""}</dd></div>
-              <div><dt>실제값</dt><dd>{item.actual_value ?? "확인되지 않음"}</dd></div>
+              <div><dt>관찰값</dt><dd>{healthDisplayValue(insight, item)}</dd></div>
+              <div><dt>상태</dt><dd>{decisionStatusLabel(item.status)}</dd></div>
             </dl>
             {item.limitation && <small>{item.limitation}</small>}
             {item.interpretation_scope && <small>{item.interpretation_scope}</small>}
@@ -399,17 +368,9 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
         <h3>재무 추세</h3>
         <div className="financial-mini-chart-grid">
           <SingleMetricTrend title="매출 추이" rows={chartRows("revenue")} variant="revenue" />
-          <SingleMetricTrend title="영업이익 추이" rows={chartRows("operating_profit")} variant="operating-profit" />
-          <CashFlowTrend rows={chartRows("operating_cash_flow")} />
-          <GroupedMetricTrend
-            title="차입금과 채권"
-            years={years}
-            series={[
-              { key: "total_borrowings", label: "총차입금", variant: "borrowings", rows: chartRows("total_borrowings") },
-              { key: "receivables_total", label: "채권 합계", variant: "receivables", rows: chartRows("receivables_total") },
-            ]}
-          />
           <SingleMetricTrend title="영업이익률" rows={ratioRows("operating_margin_pct")} variant="operating-margin" subtitle="감사보고서 기반 파생 비율" />
+          <CashFlowTrend rows={chartRows("operating_cash_flow")} />
+          <SingleMetricTrend title="총차입금 추이" rows={chartRows("total_borrowings")} variant="borrowings" />
         </div>
       </div>
 

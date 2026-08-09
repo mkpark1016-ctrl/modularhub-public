@@ -39,7 +39,8 @@ const detailViewSource = readFileSync(new URL("../src/components/company/Company
 const overviewSource = readFileSync(new URL("../src/components/company/CompanyOverviewTab.jsx", import.meta.url), "utf8");
 const timelineSource = readFileSync(new URL("../src/components/company/CompanyActivityTimeline.jsx", import.meta.url), "utf8");
 assert.match(detailViewSource, /activities=\{activities\}/);
-assert.match(overviewSource, /CompanyActivityTimeline/);
+assert.match(overviewSource, /RecentActivityPreview/);
+assert.match(overviewSource, /company-compact-row-list/);
 assert.match(timelineSource, /최근 90일 변화/);
 assert.match(timelineSource, /INITIAL_VISIBLE_COUNT = 5/);
 assert.match(timelineSource, /관련 보도/);

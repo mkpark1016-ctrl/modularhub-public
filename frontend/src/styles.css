@@ -192,6 +192,13 @@ code { overflow-wrap: anywhere; }
 .ratio-bar b { background: #6b7280; }
 .empty-inline { margin: 0; color: #666; }
 .company-summary-strip { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.company-list-layout { display: block; padding-top: 22px; }
+.company-list-layout .filters { position: static; margin-bottom: 18px; }
+.company-list-layout .filter-body { grid-template-columns: minmax(220px, 1.3fr) repeat(6, minmax(132px, 1fr)); align-items: end; }
+.company-list-layout .filter-heading, .company-list-layout .active-filter-chips, .company-list-layout .reset-button, .company-list-layout .filter-note { grid-column: 1 / -1; }
+.company-decision-quick-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.company-decision-quick-filters button { min-height: 34px; padding: 0 10px; border: 1px solid #d7d7d2; border-radius: 999px; background: #fff; color: #444; cursor: pointer; font-size: 12px; font-weight: 900; }
+.company-decision-quick-filters button.active { border-color: #171717; background: #171717; color: #fff; }
 .company-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .company-summary-card { min-width: 0; }
 .company-card-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
@@ -201,6 +208,10 @@ code { overflow-wrap: anywhere; }
 .compare-check:has(input:checked) { border-color: #171717; background: #171717; color: #fff; }
 .compare-check input { width: 16px; height: 16px; accent-color: #171717; }
 .company-card-summary { display: -webkit-box; min-height: 42px; overflow: hidden; margin: 10px 0 12px; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-height: 1.55; }
+.company-decision-chip-stack { display: grid; gap: 7px; margin: 10px 0 12px; }
+.company-chip-row { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.company-chip-row span, .company-chip-row b { display: inline-flex; width: fit-content; max-width: 100%; min-height: 25px; align-items: center; padding: 4px 8px; border: 1px solid #d7d7d2; border-radius: 999px; background: #f7f7f4; color: #333; font-size: 12px; font-weight: 900; line-height: 1.3; overflow-wrap: anywhere; }
+.company-chip-row.subtle span, .company-chip-row.subtle b { background: #fff; color: #555; font-weight: 800; }
 .company-card-meta { margin: 8px 0 0; color: #666; font-size: 12.5px; line-height: 1.55; }
 .company-kpi-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0 0 12px; }
 .company-kpi-list div { min-width: 0; padding: 9px; border: 1px solid #e2e2dd; border-radius: 6px; background: #fafaf7; }
@@ -270,9 +281,16 @@ code { overflow-wrap: anywhere; }
 .company-detail-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .compact-company-detail-header h1 { margin-bottom: 8px; font-size: 30px; }
 .company-position-summary { margin: -8px 0 4px; color: #444; line-height: 1.7; }
-.company-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 4px 0 0; }
+.company-detail-keyword-panel { display: grid; gap: 6px; margin-top: 10px; }
+.company-summary-disclosure { width: fit-content; max-width: 100%; }
+.company-summary-disclosure summary { cursor: pointer; color: #444; font-weight: 900; }
+.company-summary-disclosure .company-position-summary { margin: 8px 0 0; }
+.company-kpi-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 4px 0 0; }
 .company-kpi-grid div { min-width: 0; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
 .company-kpi-grid dd { font-size: 18px; font-weight: 800; }
+.company-decision-snapshot { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0 0 14px; }
+.company-decision-snapshot article { display: grid; align-content: start; gap: 8px; min-width: 0; padding: 15px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-decision-snapshot article > span { color: #666; font-size: 12px; font-weight: 900; }
 .company-decision-grid, .company-strength-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 12px 0 0; }
 .company-decision-grid article, .company-strength-grid button { display: grid; gap: 7px; min-width: 0; padding: 15px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; text-align: left; }
 .company-decision-grid span, .company-strength-grid span { color: #666; font-size: 12px; font-weight: 800; }
@@ -304,6 +322,15 @@ code { overflow-wrap: anywhere; }
 .decision-status span, .decision-status em { color: #555; font-size: 12px; font-style: normal; line-height: 1.45; overflow-wrap: anywhere; }
 .decision-status.watch { border-color: #d9b866; background: #fffaf0; }
 .decision-status.pending { border-style: dashed; color: #6b6251; }
+.compact-company-section { padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-compact-metric-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.company-compact-metric-grid div { min-width: 0; padding: 10px; border: 1px solid #ecece8; border-radius: 6px; background: #fbfbf8; }
+.company-compact-metric-grid dt { color: #666; font-size: 11px; font-weight: 900; }
+.company-compact-metric-grid dd { margin: 3px 0 0; font-weight: 900; overflow-wrap: anywhere; }
+.company-compact-row-list, .company-peer-compact-list { display: grid; gap: 8px; }
+.company-compact-row-list > div, .company-peer-compact-list > div { display: grid; gap: 4px; min-width: 0; padding: 10px; border: 1px solid #ecece8; border-radius: 6px; background: #fbfbf8; }
+.company-compact-row-list b, .company-peer-compact-list strong { font-size: 13px; overflow-wrap: anywhere; }
+.company-compact-row-list span, .company-compact-row-list em, .company-peer-compact-list span, .company-peer-compact-list small { color: #555; font-size: 12px; font-style: normal; line-height: 1.45; overflow-wrap: anywhere; }
 .company-intelligence-trend-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .company-peer-grid, .company-trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .company-peer-card, .company-trust-card { display: grid; gap: 7px; min-width: 0; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
@@ -363,8 +390,12 @@ code { overflow-wrap: anywhere; }
 .financial-zero-line { align-self: stretch; width: 2px; min-height: 22px; background: #777; opacity: 0.72; position: relative; }
 .financial-zero-marker { position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; min-width: 0; border-radius: 50%; border: 2px solid #777; background: #fff; transform: translate(-50%, -50%); }
 .financial-cash-flow-row.cash-flow-direction-negative em { color: #9a3412; }
-.company-report-details { display: grid; gap: 12px; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-report-details { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 14px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
+.company-report-details > * { min-width: 0; }
 .company-report-details summary { cursor: pointer; font-weight: 800; }
+.evidence-secondary-details { margin-top: 18px; background: #fbfbf8; }
+.evidence-secondary-details > .company-subsection:first-of-type { margin-top: 14px; }
+.evidence-secondary-details .company-table-wrap { min-width: 0; max-width: 100%; }
 .evidence-inline-button { width: fit-content; min-height: 32px; padding: 0 10px; font-size: 12px; }
 .company-report-table { min-width: 760px; }
 .company-report-table .is-negative, .company-report-kpi .is-negative { color: #9a3412; }
@@ -421,6 +452,7 @@ code { overflow-wrap: anywhere; }
 .company-row-detail dd { white-space: normal; }
 .company-production-table td, .company-project-table td { vertical-align: top; }
 .responsive-card-list { display: none; gap: 10px; }
+.facility-card-list, .project-card-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .responsive-data-card { display: grid; gap: 12px; min-width: 0; padding: 16px; border: 1px solid #d7d7d2; border-radius: 8px; background: #fff; }
 .responsive-card-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
 .responsive-card-heading strong { min-width: 0; line-height: 1.45; overflow-wrap: anywhere; word-break: keep-all; }
@@ -447,6 +479,9 @@ code { overflow-wrap: anywhere; }
 .company-entity-drawer-content { min-width: 0; }
 .entity-detail-button { min-height: 32px; }
 .technical-token { overflow-wrap: anywhere; word-break: break-word; }
+.technology-card-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.technology-card-chip-row span { display: inline-flex; width: fit-content; min-height: 24px; align-items: center; padding: 3px 7px; border: 1px solid #d7d7d2; border-radius: 999px; background: #f7f7f4; color: #444; font-size: 12px; font-weight: 800; }
+.technology-card-summary { display: -webkit-box; margin: 0; color: #555; font-size: 13px; line-height: 1.55; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 .facility-detail-grid dd,
 .company-entity-drawer dd,
 .company-entity-drawer p { overflow-wrap: anywhere; word-break: keep-all; }
@@ -499,12 +534,13 @@ code { overflow-wrap: anywhere; }
   .filter-toggle { display: inline-flex; }
   .filter-body { display: none; }
   .filters.open .filter-body { display: grid; }
+  .company-list-layout .filter-body { grid-template-columns: 1fr 1fr; }
   .priority-item, .news-brief-item, .source-health-row { grid-template-columns: 1fr; align-items: start; }
   .priority-actions { justify-content: flex-start; }
   .card-topline, .detail-action-row { flex-direction: column; }
   .company-card-grid { grid-template-columns: 1fr; }
   .company-domain-grid { grid-template-columns: 1fr 1fr; }
-  .company-kpi-grid, .company-report-kpi-grid, .company-report-signal-grid, .company-report-source-summary, .company-toolbar, .company-intelligence-summary, .company-intelligence-summary.compact, .company-peer-grid, .company-trust-grid { grid-template-columns: 1fr 1fr; }
+  .company-kpi-grid, .company-report-kpi-grid, .company-report-signal-grid, .company-report-source-summary, .company-toolbar, .company-intelligence-summary, .company-intelligence-summary.compact, .company-peer-grid, .company-trust-grid, .company-decision-snapshot, .company-compact-metric-grid { grid-template-columns: 1fr 1fr; }
   .company-detail-title-row, .company-decision-grid, .company-strength-grid, .company-data-gap-list { grid-template-columns: 1fr 1fr; }
   .financial-mini-chart-grid { grid-template-columns: 1fr; }
   .company-detail-title-row { flex-direction: column; }
@@ -512,6 +548,7 @@ code { overflow-wrap: anywhere; }
   .company-tabs button { flex: 0 0 auto; white-space: nowrap; }
   .responsive-table-wrap { display: none; }
   .responsive-card-list { display: grid; }
+  .facility-card-list, .project-card-list { grid-template-columns: 1fr; }
   .monitor-kpi-grid, .monitor-controls { grid-template-columns: 1fr 1fr; }
   .company-tabs { position: static; }
   .company-comparison-bar { bottom: 10px; flex-direction: column; align-items: stretch; width: calc(100vw - 24px); }
@@ -520,7 +557,7 @@ code { overflow-wrap: anywhere; }
 }
 
 @media (max-width: 520px) {
-  .company-kpi-grid, .company-report-kpi-grid, .company-report-signal-grid, .company-report-source-summary, .company-toolbar, .company-row-detail dl, .company-intelligence-summary, .company-intelligence-summary.compact, .company-peer-grid, .company-trust-grid, .company-intelligence-kpi-list { grid-template-columns: 1fr; }
+  .company-kpi-grid, .company-report-kpi-grid, .company-report-signal-grid, .company-report-source-summary, .company-toolbar, .company-row-detail dl, .company-intelligence-summary, .company-intelligence-summary.compact, .company-peer-grid, .company-trust-grid, .company-intelligence-kpi-list, .company-decision-snapshot, .company-compact-metric-grid, .company-list-layout .filter-body { grid-template-columns: 1fr; }
   .company-report-table { min-width: 0; width: 100%; table-layout: fixed; }
   .company-report-table th, .company-report-table td { overflow-wrap: anywhere; padding: 10px 8px; }
   .company-revenue-breakdown-table .evidence-inline-button { padding: 0 6px; }

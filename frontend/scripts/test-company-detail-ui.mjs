@@ -39,6 +39,7 @@ import {
   sourcesForDomain,
 } from "../src/companyEvidence.js";
 import { companyDataGapRows, dataGapSummaryForDomain } from "../src/companyDataGaps.js";
+import { buildCompanyDecisionKeywordAudit, buildCompanyDecisionModel } from "../src/companyDecisionModel.js";
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
 const reportPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company_report_insights.json", import.meta.url), "utf8"));
@@ -50,6 +51,7 @@ const componentFiles = [
   "../src/components/company/CompanyDetailHeader.jsx",
   "../src/components/company/CompanyDetailTabs.jsx",
   "../src/components/company/CompanyAuditFinancialPanel.jsx",
+  "../src/components/company/CompanyComparisonMvp.jsx",
   "../src/components/company/CompanyDataGaps.jsx",
   "../src/components/company/EvidenceDrawer.jsx",
   "../src/components/company/CompanyEntityDrawer.jsx",
@@ -61,9 +63,11 @@ const componentFiles = [
   "../src/components/company/CompanyEvidenceTab.jsx",
   "../src/components/company/companyDetailHelpers.js",
   "../src/companyEvidence.js",
+  "../src/companyDecisionModel.js",
   "../src/companyReportInsights.js",
 ].map((path) => readFileSync(new URL(path, import.meta.url), "utf8")).join("\n");
 const productionTabSource = readFileSync(new URL("../src/components/company/CompanyProductionTab.jsx", import.meta.url), "utf8");
+const projectTabSource = readFileSync(new URL("../src/components/company/CompanyProjectTab.jsx", import.meta.url), "utf8");
 const stylesheet = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 const reportBackedMasterFinancialGapIds = new Set(["daeseung-engineering"]);
 
@@ -86,9 +90,11 @@ assert.ok(componentFiles.includes("관련 보도"), "project and activity UI sho
 assert.ok(componentFiles.includes("재무 해석 범위"), "financial warnings should be consolidated into an interpretation scope card");
 assert.ok(componentFiles.includes("상세 재무표 보기"), "financial detailed tables should be collapsible");
 assert.ok(componentFiles.includes("EvidenceDrawer"), "detail UI should provide common evidence drawer");
-assert.ok(componentFiles.includes("Executive Summary"), "overview should include an executive summary for decision use");
-assert.ok(componentFiles.includes("company-intelligence-summary"), "company overview and finance should render decision intelligence cards");
-assert.ok(componentFiles.includes("감사재무 비교 데이터 없음"), "companies without audit report insights should clearly keep a fallback state");
+assert.equal(componentFiles.includes("Executive Summary"), false, "overview should not duplicate legacy executive summary copy");
+assert.equal(componentFiles.includes("CompanyIntelligenceSummary"), false, "overview should use the consolidated decision-first snapshot");
+assert.equal(componentFiles.includes("DecisionCards"), false, "overview should not render duplicate legacy decision cards");
+assert.ok(componentFiles.includes("company-decision-snapshot"), "overview should include a compact decision snapshot");
+assert.ok(componentFiles.includes("compact-company-section"), "overview should consolidate decision-first sections");
 assert.ok(componentFiles.includes("Data Trust Center"), "evidence tab should expose a data trust center");
 assert.ok(componentFiles.includes("상세 근거 보기"), "data trust cards should expose evidence drawer actions");
 assert.equal(componentFiles.includes("sourceTypes.split"), false, "data trust center should not infer counts from source type labels");
@@ -101,8 +107,12 @@ assert.ok(componentFiles.includes("current_company_included"), "peer comparison 
 assert.ok(componentFiles.includes("median_display"), "peer comparison should show the benchmark median");
 assert.ok(componentFiles.includes("reference_value_label"), "peer comparison should show the reference max/min label");
 assert.ok(componentFiles.includes("같은 연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
-assert.ok(componentFiles.includes("rule_id"), "financial health cards should show rule identifiers");
+assert.equal(componentFiles.includes("<dt>rule_id</dt>"), false, "financial health cards should hide raw rule identifiers by default");
+assert.ok(componentFiles.includes("관찰값"), "financial health cards should show observation values first");
 assert.ok(componentFiles.includes("interpretation_scope"), "financial health cards should show interpretation scope");
+assert.ok(componentFiles.includes("company-detail-keyword-panel"), "detail header should expose decision keywords");
+assert.ok(componentFiles.includes("!compact &&") && componentFiles.includes("company-detail-keyword-panel"), "full keyword panel should only render on the overview header");
+assert.ok(componentFiles.includes("company-decision-chip-stack"), "company list cards should use scan-first decision chips");
 assert.ok(componentFiles.includes("계산 근거 보기"), "decision cards should open calculation evidence");
 assert.ok(componentFiles.includes("evidence-detail-list"), "evidence drawer should render structured calculation details");
 assert.ok(componentFiles.includes("CompanyEntityDrawer"), "entity detail panels should share a common drawer");
@@ -123,7 +133,13 @@ assert.equal(componentFiles.includes("제품매출과 공사매출은 모듈러 
 assert.equal(componentFiles.includes("유창엠앤씨 등 관계사 실적도 유창이앤씨 별도 실적으로 합산하지 않습니다"), false, "financial tab should not hardcode Yuchang related-entity wording");
 assert.ok(stylesheet.includes(".company-report-table { min-width: 760px; }"), "financial report tables should use contained horizontal scrolling");
 assert.ok(stylesheet.includes(".company-report-kpi-grid") && stylesheet.includes("grid-template-columns: 1fr"), "financial report layout should collapse on mobile");
-assert.ok(stylesheet.includes(".responsive-card-list") && stylesheet.includes(".responsive-table-wrap { display: none; }"), "facility/project tables should switch to cards on mobile");
+assert.equal(productionTabSource.includes("responsive-table-wrap"), false, "production facilities should use card-first layout on every viewport");
+assert.ok(productionTabSource.includes("facility-card-list"), "production facilities should render responsive cards");
+assert.equal(projectTabSource.includes("company-project-table"), false, "projects should not render a desktop data table");
+assert.equal(projectTabSource.includes("responsive-table-wrap"), false, "projects should use card-first layout on every viewport");
+assert.ok(projectTabSource.includes("project-card-list"), "projects should render responsive cards");
+assert.ok(stylesheet.includes(".facility-card-list, .project-card-list") && stylesheet.includes("grid-template-columns: repeat(2"), "facility/project cards should use a two-column desktop grid");
+assert.ok(stylesheet.includes(".facility-card-list, .project-card-list { grid-template-columns: 1fr; }"), "facility/project cards should collapse to one column on mobile");
 assert.ok(stylesheet.includes(".evidence-drawer") && componentFiles.includes("role=\"dialog\""), "evidence drawer styles and dialog markup should exist");
 assert.ok(componentFiles.includes("FOCUSABLE_SELECTOR"), "evidence drawer should define focusable targets");
 assert.ok(componentFiles.includes("event.key !== \"Tab\""), "evidence drawer should trap Tab navigation");
@@ -135,10 +151,11 @@ assert.equal(componentFiles.includes("sourceTypeSummary(sourceRows)"), false, "e
 assert.ok(componentFiles.includes("sourceTypeSummaryForDomain"), "evidence matrix should use domain-scoped source summaries");
 assert.ok(componentFiles.includes("row.metricKey"), "financial mini-chart rows should use metric keys to avoid duplicate React keys");
 assert.ok(componentFiles.includes("매출 추이"), "revenue trend should render as a separate chart");
-assert.ok(componentFiles.includes("영업이익 추이"), "operating profit trend should render as a separate chart");
+assert.equal(componentFiles.includes("영업이익 추이"), false, "finance tab should not add a fifth operating-profit chart");
 assert.equal(componentFiles.includes("title=\"매출과 영업이익\""), false, "revenue and operating profit should not share one mini-chart title");
-assert.ok(componentFiles.includes("financial-chart-legend"), "grouped financial chart should include a visible legend");
-assert.ok(componentFiles.includes("총차입금") && componentFiles.includes("채권 합계"), "borrowings and receivables legend labels should exist");
+assert.equal(componentFiles.includes("GroupedMetricTrend"), false, "finance tab should not use grouped second-level charts");
+assert.ok(componentFiles.includes("총차입금 추이"), "borrowings should render as a dedicated first-level chart");
+assert.ok(componentFiles.includes("영업이익률"), "operating margin should render as a dedicated first-level chart");
 assert.ok(componentFiles.includes("financial-zero-line"), "cash-flow chart should render an explicit zero baseline");
 assert.ok(componentFiles.includes("financial-cash-flow-zone negative"), "cash-flow chart should include a negative value lane");
 assert.ok(componentFiles.includes("financial-cash-flow-zone positive"), "cash-flow chart should include a positive value lane");
@@ -201,6 +218,74 @@ assert.equal(metricDisplayText({ raw_krw: null, disclosure_status: "not_disclose
 assert.equal(metricDisplayText({ raw_krw: null, disclosure_status: "not_applicable" }), "해당 없음");
 assert.equal(metricDisplayText({ raw_krw: null }), "확인되지 않음");
 const yuchang = byId("yuchang-enc");
+const sungji = byId("sungji-steel");
+const sungjiReport = getCompanyReportInsight(reportPayload, "sungji-steel");
+const sungjiDecision = buildCompanyDecisionModel(sungji, { reportInsight: sungjiReport });
+const sungjiKeywordAudit = buildCompanyDecisionKeywordAudit(sungji, { reportInsight: sungjiReport });
+const forbiddenPositionKeywords = new Set([
+  "모듈러 제작 전문 업체",
+  "직접 경쟁사",
+  "대체 경쟁사",
+  "최우선 분석",
+  "우선 분석",
+  "감사재무 적용",
+]);
+assert.equal(sungjiDecision.positionKeywords.some((keyword) => forbiddenPositionKeywords.has(keyword)), false, "position keywords should not reuse metadata labels");
+assert.ok(sungjiDecision.positionKeywords.length > 0, "position keywords should be derived from business position signals");
+assert.equal(sungjiDecision.positionKeywords.includes("종합 OSC 사업자 전환"), true, "Sungji position should use its verified strategy event");
+assert.equal(sungjiKeywordAudit.position.find((item) => item.label === "종합 OSC 사업자 전환")?.sourceDomain, "event");
+assert.equal(sungjiKeywordAudit.position.some((item) => item.sourceDomain === "market" || item.sourceDomain === "method"), false, "position keywords should not duplicate market or method chips");
+assert.ok(sungjiDecision.capabilities.includes("자체 생산") || sungjiDecision.capabilities.includes("자체 공장"), "capability keywords should expose source-backed manufacturing capability");
+assert.equal(sungjiDecision.capabilities.some((keyword) => /^\d/.test(keyword) || keyword.includes("건 보유")), false, "capability keywords should not be count duplicates");
+assert.ok(sungjiDecision.watchSignals.every((keyword) => keyword.length <= 14), "watch chips should use short semantic labels");
+assert.equal(sungjiDecision.capabilities.includes("등록특허"), true, "registered patents should be labeled as registered patents");
+assert.equal(sungjiDecision.capabilities.includes("건설신기술"), true, "registered construction new technology should be labeled as construction new technology");
+
+const syntheticBaseCompany = {
+  company_id: "synthetic-keyword-company",
+  company_name: "Synthetic Keyword Company",
+  target_markets: ["office"],
+  modular_methods: ["steel_volumetric"],
+  production: [],
+  production_summary: {},
+  intelligence_v2: { events: [] },
+  technology: {},
+};
+const officeMarketAudit = buildCompanyDecisionKeywordAudit(syntheticBaseCompany);
+assert.equal(officeMarketAudit.market.map((item) => item.label).includes("업무시설"), true, "target markets should stay in market chips");
+assert.equal(officeMarketAudit.position.map((item) => item.label).includes("업무시설 정비"), false, "target markets must not create position claims");
+const schoolMarketAudit = buildCompanyDecisionKeywordAudit({ ...syntheticBaseCompany, target_markets: ["school"] });
+assert.equal(schoolMarketAudit.position.map((item) => item.label).includes("학교 모듈러 중심"), false, "school target market must not imply business focus as position");
+const filedPatentAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { patents: [{ record_type: "patent_application", status: "filed", name: "Synthetic filed patent" }] },
+});
+assert.equal(filedPatentAudit.capability.map((item) => item.label).includes("특허 출원"), true);
+assert.equal(filedPatentAudit.capability.map((item) => item.label).includes("등록특허"), false);
+const registeredPatentAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { patents: [{ record_type: "patent", status: "registered", name: "Synthetic registered patent" }] },
+});
+assert.equal(registeredPatentAudit.capability.map((item) => item.label).includes("등록특허"), true);
+const innovativeProductAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { innovative_procurement_products: [{ record_type: "innovative_product", status: "registered", name: "Synthetic product" }] },
+});
+assert.equal(innovativeProductAudit.capability.map((item) => item.label).includes("혁신제품"), true);
+assert.equal(innovativeProductAudit.capability.map((item) => item.label).includes("공업화주택 인증"), false);
+const genericCertificationAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { certifications: [{ record_type: "certification", status: "registered", name: "Synthetic certification" }] },
+});
+assert.equal(genericCertificationAudit.capability.map((item) => item.label).includes("인증 보유"), true);
+assert.equal(genericCertificationAudit.capability.map((item) => item.label).includes("공업화주택 인증"), false);
+const strategyEventAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  intelligence_v2: {
+    events: [{ event_id: "event-synthetic-osc-transition", event_type: "business_strategy", event_status: "in_progress", title: "종합 OSC 사업자 전환" }],
+  },
+});
+assert.equal(strategyEventAudit.position.map((item) => item.label).includes("종합 OSC 사업자 전환"), true);
 const missingEvidence = buildCompanyItemEvidence(yuchang, "직접 출처 미정리 항목", 0, ["missing-source-id"]);
 assert.equal(missingEvidence.value, 0, "zero values should be preserved in evidence payloads");
 assert.equal(missingEvidence.sources.length, 0, "missing source IDs should not fall back to unrelated company sources");
