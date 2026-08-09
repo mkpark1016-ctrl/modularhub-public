@@ -804,6 +804,9 @@ function CompanyListingPage() {
     q: searchParams.get("q") || "",
     role: getValidParam(searchParams, "role", ["all", ...validValues.roles], "all"),
     sort: getValidParam(searchParams, "sort", COMPANY_SORT_VALUES, "name"),
+    relationship: "all",
+    tier: "all",
+    status: "all",
   }), [searchParams, validValues]);
 
   const setParam = useCallback((key, value) => {
