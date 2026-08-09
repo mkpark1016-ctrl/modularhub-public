@@ -39,7 +39,7 @@ import {
   sourcesForDomain,
 } from "../src/companyEvidence.js";
 import { companyDataGapRows, dataGapSummaryForDomain } from "../src/companyDataGaps.js";
-import { buildCompanyDecisionModel } from "../src/companyDecisionModel.js";
+import { buildCompanyDecisionKeywordAudit, buildCompanyDecisionModel } from "../src/companyDecisionModel.js";
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
 const reportPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company_report_insights.json", import.meta.url), "utf8"));
@@ -221,6 +221,7 @@ const yuchang = byId("yuchang-enc");
 const sungji = byId("sungji-steel");
 const sungjiReport = getCompanyReportInsight(reportPayload, "sungji-steel");
 const sungjiDecision = buildCompanyDecisionModel(sungji, { reportInsight: sungjiReport });
+const sungjiKeywordAudit = buildCompanyDecisionKeywordAudit(sungji, { reportInsight: sungjiReport });
 const forbiddenPositionKeywords = new Set([
   "모듈러 제작 전문 업체",
   "직접 경쟁사",
@@ -231,9 +232,60 @@ const forbiddenPositionKeywords = new Set([
 ]);
 assert.equal(sungjiDecision.positionKeywords.some((keyword) => forbiddenPositionKeywords.has(keyword)), false, "position keywords should not reuse metadata labels");
 assert.ok(sungjiDecision.positionKeywords.length > 0, "position keywords should be derived from business position signals");
+assert.equal(sungjiDecision.positionKeywords.includes("종합 OSC 사업자 전환"), true, "Sungji position should use its verified strategy event");
+assert.equal(sungjiKeywordAudit.position.find((item) => item.label === "종합 OSC 사업자 전환")?.sourceDomain, "event");
+assert.equal(sungjiKeywordAudit.position.some((item) => item.sourceDomain === "market" || item.sourceDomain === "method"), false, "position keywords should not duplicate market or method chips");
 assert.ok(sungjiDecision.capabilities.includes("자체 생산") || sungjiDecision.capabilities.includes("자체 공장"), "capability keywords should expose source-backed manufacturing capability");
 assert.equal(sungjiDecision.capabilities.some((keyword) => /^\d/.test(keyword) || keyword.includes("건 보유")), false, "capability keywords should not be count duplicates");
 assert.ok(sungjiDecision.watchSignals.every((keyword) => keyword.length <= 14), "watch chips should use short semantic labels");
+assert.equal(sungjiDecision.capabilities.includes("등록특허"), true, "registered patents should be labeled as registered patents");
+assert.equal(sungjiDecision.capabilities.includes("건설신기술"), true, "registered construction new technology should be labeled as construction new technology");
+
+const syntheticBaseCompany = {
+  company_id: "synthetic-keyword-company",
+  company_name: "Synthetic Keyword Company",
+  target_markets: ["office"],
+  modular_methods: ["steel_volumetric"],
+  production: [],
+  production_summary: {},
+  intelligence_v2: { events: [] },
+  technology: {},
+};
+const officeMarketAudit = buildCompanyDecisionKeywordAudit(syntheticBaseCompany);
+assert.equal(officeMarketAudit.market.map((item) => item.label).includes("업무시설"), true, "target markets should stay in market chips");
+assert.equal(officeMarketAudit.position.map((item) => item.label).includes("업무시설 정비"), false, "target markets must not create position claims");
+const schoolMarketAudit = buildCompanyDecisionKeywordAudit({ ...syntheticBaseCompany, target_markets: ["school"] });
+assert.equal(schoolMarketAudit.position.map((item) => item.label).includes("학교 모듈러 중심"), false, "school target market must not imply business focus as position");
+const filedPatentAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { patents: [{ record_type: "patent_application", status: "filed", name: "Synthetic filed patent" }] },
+});
+assert.equal(filedPatentAudit.capability.map((item) => item.label).includes("특허 출원"), true);
+assert.equal(filedPatentAudit.capability.map((item) => item.label).includes("등록특허"), false);
+const registeredPatentAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { patents: [{ record_type: "patent", status: "registered", name: "Synthetic registered patent" }] },
+});
+assert.equal(registeredPatentAudit.capability.map((item) => item.label).includes("등록특허"), true);
+const innovativeProductAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { innovative_procurement_products: [{ record_type: "innovative_product", status: "registered", name: "Synthetic product" }] },
+});
+assert.equal(innovativeProductAudit.capability.map((item) => item.label).includes("혁신제품"), true);
+assert.equal(innovativeProductAudit.capability.map((item) => item.label).includes("공업화주택 인증"), false);
+const genericCertificationAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  technology: { certifications: [{ record_type: "certification", status: "registered", name: "Synthetic certification" }] },
+});
+assert.equal(genericCertificationAudit.capability.map((item) => item.label).includes("인증 보유"), true);
+assert.equal(genericCertificationAudit.capability.map((item) => item.label).includes("공업화주택 인증"), false);
+const strategyEventAudit = buildCompanyDecisionKeywordAudit({
+  ...syntheticBaseCompany,
+  intelligence_v2: {
+    events: [{ event_id: "event-synthetic-osc-transition", event_type: "business_strategy", event_status: "in_progress", title: "종합 OSC 사업자 전환" }],
+  },
+});
+assert.equal(strategyEventAudit.position.map((item) => item.label).includes("종합 OSC 사업자 전환"), true);
 const missingEvidence = buildCompanyItemEvidence(yuchang, "직접 출처 미정리 항목", 0, ["missing-source-id"]);
 assert.equal(missingEvidence.value, 0, "zero values should be preserved in evidence payloads");
 assert.equal(missingEvidence.sources.length, 0, "missing source IDs should not fall back to unrelated company sources");
