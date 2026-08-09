@@ -21,6 +21,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_COMPANIES = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
 DEFAULT_REPORT_INSIGHTS = ROOT / "frontend" / "public" / "data" / "companies" / "company_report_insights.json"
+DEFAULT_SUPPLEMENTS = ROOT / "frontend" / "src" / "data" / "publicCompanySupplements.json"
 DEFAULT_AUDIT_SOURCE_ROOT = ROOT / "data" / "company_reports"
 DEFAULT_ARTIFACT_DIR = ROOT / "artifacts" / "company-data-coverage"
 DEFAULT_SNAPSHOT = ROOT / "data" / "company_reports" / "company_data_coverage_snapshot.json"
@@ -45,7 +46,7 @@ OPTIONAL_AUDIT_METRICS = [
     "current_assets",
     "current_liabilities",
 ]
-VERIFIED_STATUSES = {"verified", "cross_verified", "verified_section_range"}
+VERIFIED_STATUSES = {"verified", "cross_verified", "official_verified", "verified_section_range"}
 CONFIRMED_FACILITY_STATUSES = {"confirmed_own_facility", "confirmed_partner_facility", "confirmed_affiliate_facility"}
 PROJECT_CREDIT_STATUSES = {"completed", "under_construction", "contracted", "awarded"}
 
@@ -56,6 +57,7 @@ REASON_DOMAIN = {
     "verified_cross_source_conflict": "consistency",
     "critical_source_stale": "consistency",
     "future_verification_date": "consistency",
+    "supplemental_profile_not_canonicalized": "consistency",
     "missing_audit_financials": "financial",
     "audit_years_incomplete": "financial",
     "audit_data_stale": "financial",
@@ -158,6 +160,40 @@ def load_report_insights(path: Path = DEFAULT_REPORT_INSIGHTS) -> list[dict[str,
     if not isinstance(companies, list):
         raise ValueError(f"{path} does not contain a companies list")
     return sorted(companies, key=lambda item: item.get("company_id", ""))
+
+
+def load_supplemental_companies(path: Path = DEFAULT_SUPPLEMENTS) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    payload = load_json(path)
+    if payload.get("schema_version") != "public_company_supplements_v1":
+        raise ValueError(f"{path} does not contain public_company_supplements_v1")
+    companies = payload.get("companies")
+    if not isinstance(companies, list):
+        raise ValueError(f"{path} does not contain a companies list")
+    return sorted(companies, key=lambda item: item.get("company_id", ""))
+
+
+def effective_company_universe(
+    canonical_companies: list[dict[str, Any]],
+    supplemental_companies: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    effective: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for company in canonical_companies:
+        record = dict(company)
+        record["company_record_source"] = "canonical"
+        effective.append(record)
+        seen.add(company["company_id"])
+    for company in supplemental_companies:
+        company_id = company.get("company_id")
+        if not company_id or company_id in seen:
+            continue
+        record = dict(company)
+        record["company_record_source"] = "supplemental"
+        effective.append(record)
+        seen.add(company_id)
+    return sorted(effective, key=lambda item: item.get("company_id", ""))
 
 
 def load_audit_source(company_id: str, source_root: Path = DEFAULT_AUDIT_SOURCE_ROOT) -> dict[str, Any] | None:
@@ -439,6 +475,8 @@ def priority_for_reasons(reasons: list[str]) -> str:
         for reason in reasons
     ):
         return "P0"
+    if "supplemental_profile_not_canonicalized" in reasons:
+        return "P2"
     if any(reason in {"missing_audit_financials", "audit_years_incomplete", "audit_data_stale", "excessive_verification_pending"} for reason in reasons):
         return "P1"
     if any(
@@ -462,6 +500,8 @@ def priority_for_reasons(reasons: list[str]) -> str:
 def next_action_for_reasons(reasons: list[str]) -> str:
     if any(reason in {"audit_record_without_company_master", "audit_insight_without_public_source", "public_source_without_audit_insight"} for reason in reasons):
         return "company_universe_reconciliation"
+    if "supplemental_profile_not_canonicalized" in reasons:
+        return "canonical_company_migration"
     if "future_verification_date" in reasons:
         return "source_date_reconciliation"
     if "missing_audit_financials" in reasons:
@@ -481,6 +521,12 @@ def next_action_for_reasons(reasons: list[str]) -> str:
     if "source_coverage_sparse" in reasons:
         return "source_registry_review"
     return "monitor"
+
+
+def next_domain_for_reasons(reasons: list[str]) -> str:
+    if "supplemental_profile_not_canonicalized" in reasons:
+        return "consistency"
+    return REASON_DOMAIN.get(reasons[0], "monitoring") if reasons else "monitoring"
 
 
 def recommendation_reasons(
@@ -528,6 +574,8 @@ def recommendation_reasons(
         reasons.append("company_profile_stale")
     if evidence["verified_source_count"] == 0 or evidence["source_count"] == 0:
         reasons.append("source_coverage_sparse")
+    if company.get("company_record_source") == "supplemental":
+        reasons.append("supplemental_profile_not_canonicalized")
     critical_dates = [
         company.get("last_verified_at"),
         production["production_verified_at"],
@@ -587,6 +635,7 @@ def build_company_coverage(company: dict[str, Any], insight: dict[str, Any] | No
     return {
         "company_id": company["company_id"],
         "company_name": company.get("company_name"),
+        "company_record_source": company.get("company_record_source", "canonical"),
         "company_master_present": True,
         "company_profile_present": bool(company.get("company_profile") or company.get("summary")),
         "headquarters_present": bool(company.get("headquarters")),
@@ -612,7 +661,7 @@ def build_company_coverage(company: dict[str, Any], insight: dict[str, Any] | No
         "operational_coverage_state": operational_state(production, projects, technology),
         "freshness_state": freshness,
         "recommended_next_action": next_action,
-        "recommended_next_domain": REASON_DOMAIN.get(reasons[0], "monitoring") if reasons else "monitoring",
+        "recommended_next_domain": next_domain_for_reasons(reasons),
         "recommendation_priority": priority,
         "recommendation_reason_codes": reasons,
     }
@@ -624,8 +673,9 @@ def company_priority_queue(companies: list[dict[str, Any]], company_id: str | No
         reasons = company["recommendation_reason_codes"]
         if not reasons:
             continue
+        item_type = "maintenance_issue" if "supplemental_profile_not_canonicalized" in reasons else "company_data_gap"
         item = {
-            "item_type": "company_data_gap",
+            "item_type": item_type,
             "priority": company["recommendation_priority"],
             "company_id": company["company_id"],
             "company_name": company["company_name"],
@@ -727,12 +777,17 @@ def build_payload(
     as_of_date: date,
     companies_path: Path = DEFAULT_COMPANIES,
     report_insights_path: Path = DEFAULT_REPORT_INSIGHTS,
+    supplements_path: Path = DEFAULT_SUPPLEMENTS,
     source_root: Path = DEFAULT_AUDIT_SOURCE_ROOT,
     company_id: str | None = None,
     priority: str | None = None,
 ) -> dict[str, Any]:
-    companies = load_company_universe(companies_path)
+    canonical_companies = load_company_universe(companies_path)
+    supplemental_companies = load_supplemental_companies(supplements_path)
+    companies = effective_company_universe(canonical_companies, supplemental_companies)
     insights = load_report_insights(report_insights_path)
+    canonical_company_ids = [company["company_id"] for company in canonical_companies]
+    supplemental_company_ids = [company["company_id"] for company in supplemental_companies]
     company_ids = [company["company_id"] for company in companies]
     insight_by_id = {company["company_id"]: company for company in insights}
     audit_company_ids = sorted(insight_by_id)
@@ -740,6 +795,7 @@ def build_payload(
         companies = [company for company in companies if company["company_id"] == company_id]
 
     coverage_companies = [build_company_coverage(company, insight_by_id.get(company["company_id"]), as_of_date) for company in companies]
+    audit_backed_in_canonical = [company_id for company_id in canonical_company_ids if company_id in insight_by_id]
     audit_backed_in_universe = [company_id for company_id in company_ids if company_id in insight_by_id]
     non_audit_company_ids = [company_id for company_id in company_ids if company_id not in insight_by_id]
     audit_not_in_universe = sorted(set(audit_company_ids) - set(company_ids))
@@ -758,6 +814,9 @@ def build_payload(
     company_priority_counts = Counter(company["recommendation_priority"] for company in coverage_companies)
     work_item_priority_counts = Counter(item["priority"] for item in queue)
     full_three_year_audit_record_count = sum(1 for item in insights if len(item.get("available_years") or []) >= EXPECTED_AUDIT_YEARS)
+    full_three_year_audit_in_canonical_count = sum(
+        1 for item in insights if item["company_id"] in canonical_company_ids and len(item.get("available_years") or []) >= EXPECTED_AUDIT_YEARS
+    )
     full_three_year_audit_in_universe_count = sum(
         1 for item in insights if item["company_id"] in company_ids and len(item.get("available_years") or []) >= EXPECTED_AUDIT_YEARS
     )
@@ -768,13 +827,23 @@ def build_payload(
         "generated_at": f"{as_of_date.isoformat()}T00:00:00Z",
         "summary": {
             "total_company_count": len(company_ids),
+            "canonical_company_count": len(canonical_company_ids),
+            "supplemental_public_company_count": len(set(supplemental_company_ids) - set(canonical_company_ids)),
+            "effective_public_company_count": len(company_ids),
             "audit_record_count": len(audit_company_ids),
             "audit_backed_company_count": len(audit_company_ids),
+            "audit_backed_in_canonical_universe_count": len(audit_backed_in_canonical),
             "audit_backed_in_universe_count": len(audit_backed_in_universe),
+            "audit_backed_in_effective_universe_count": len(audit_backed_in_universe),
             "non_audit_company_count": len(non_audit_company_ids),
             "full_three_year_audit_count": full_three_year_audit_record_count,
             "full_three_year_audit_record_count": full_three_year_audit_record_count,
+            "full_three_year_audit_in_canonical_universe_count": full_three_year_audit_in_canonical_count,
             "full_three_year_audit_in_universe_count": full_three_year_audit_in_universe_count,
+            "full_three_year_audit_in_effective_universe_count": full_three_year_audit_in_universe_count,
+            "canonical_company_ids": canonical_company_ids,
+            "supplemental_company_ids": supplemental_company_ids,
+            "effective_public_company_ids": company_ids,
             "company_ids": company_ids,
             "audit_company_ids": audit_company_ids,
             "audit_company_ids_not_in_universe": audit_not_in_universe,
@@ -807,9 +876,13 @@ def build_payload(
             "audit_record_count": len(audit_company_ids),
             "audit_company_ids": audit_company_ids,
             "audit_company_ids_not_in_universe": audit_not_in_universe,
+            "audit_backed_in_canonical_universe_count": len(audit_backed_in_canonical),
             "audit_backed_in_universe_count": len(audit_backed_in_universe),
+            "audit_backed_in_effective_universe_count": len(audit_backed_in_universe),
             "full_three_year_audit_record_count": full_three_year_audit_record_count,
+            "full_three_year_audit_in_canonical_universe_count": full_three_year_audit_in_canonical_count,
             "full_three_year_audit_in_universe_count": full_three_year_audit_in_universe_count,
+            "full_three_year_audit_in_effective_universe_count": full_three_year_audit_in_universe_count,
         },
         "evidence_coverage": {
             "state_counts": dict(sorted(evidence_counts.items())),
@@ -826,11 +899,16 @@ def build_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
         "schema_version": payload["schema_version"],
         "as_of_date": payload["as_of_date"],
         "company_count": payload["summary"]["total_company_count"],
+        "canonical_company_count": payload["summary"]["canonical_company_count"],
+        "supplemental_public_company_count": payload["summary"]["supplemental_public_company_count"],
+        "effective_public_company_count": payload["summary"]["effective_public_company_count"],
         "audit_record_count": payload["summary"]["audit_record_count"],
         "audit_backed_count": payload["summary"]["audit_backed_company_count"],
         "audit_backed_in_universe_count": payload["summary"]["audit_backed_in_universe_count"],
+        "audit_backed_in_effective_universe_count": payload["summary"]["audit_backed_in_effective_universe_count"],
         "full_three_year_audit_record_count": payload["summary"]["full_three_year_audit_record_count"],
         "full_three_year_audit_in_universe_count": payload["summary"]["full_three_year_audit_in_universe_count"],
+        "full_three_year_audit_in_effective_universe_count": payload["summary"]["full_three_year_audit_in_effective_universe_count"],
         "consistency_status": payload["consistency"]["status"],
         "consistency_issue_count": payload["consistency"]["issue_count"],
         "consistency_reason_codes": payload["consistency"]["reason_codes"],
@@ -838,6 +916,7 @@ def build_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
         "company_coverage_states": [
             {
                 "company_id": company["company_id"],
+                "company_record_source": company["company_record_source"],
                 "audit_coverage_state": company["audit_coverage_state"],
                 "operational_coverage_state": company["operational_coverage_state"],
                 "evidence_coverage_state": company["evidence_coverage_state"],
@@ -859,11 +938,13 @@ def markdown_report(payload: dict[str, Any]) -> str:
         "# Company Data Coverage & Freshness",
         "",
         f"- As of date: `{payload['as_of_date']}`",
-        f"- Total companies: {summary['total_company_count']}",
+        f"- Canonical companies: {summary['canonical_company_count']}",
+        f"- Supplemental public companies: {summary['supplemental_public_company_count']}",
+        f"- Effective public companies: {summary['effective_public_company_count']}",
         f"- Audit records: {summary['audit_record_count']}",
-        f"- Public universe audit-backed: {summary['audit_backed_in_universe_count']} / {summary['total_company_count']}",
+        f"- Effective public universe audit-backed: {summary['audit_backed_in_effective_universe_count']} / {summary['effective_public_company_count']}",
         f"- Full three-year audit records: {summary['full_three_year_audit_record_count']}",
-        f"- Full three-year audit records in public universe: {summary['full_three_year_audit_in_universe_count']}",
+        f"- Full three-year audit records in effective public universe: {summary['full_three_year_audit_in_effective_universe_count']}",
         f"- Non-audit companies in public universe: {summary['non_audit_company_count']}",
         f"- Consistency status: {payload['consistency']['status']} ({payload['consistency']['issue_count']} issues)",
         f"- Company priority counts P0/P1/P2/P3: {summary['company_priority_counts']['P0']} / {summary['company_priority_counts']['P1']} / {summary['company_priority_counts']['P2']} / {summary['company_priority_counts']['P3']}",
@@ -933,6 +1014,7 @@ def main() -> int:
     parser.add_argument("--as-of-date", type=str, default=datetime.now(timezone.utc).date().isoformat())
     parser.add_argument("--companies", type=Path, default=DEFAULT_COMPANIES)
     parser.add_argument("--report-insights", type=Path, default=DEFAULT_REPORT_INSIGHTS)
+    parser.add_argument("--supplements", type=Path, default=DEFAULT_SUPPLEMENTS)
     parser.add_argument("--source-root", type=Path, default=DEFAULT_AUDIT_SOURCE_ROOT)
     parser.add_argument("--artifact-dir", type=Path, default=DEFAULT_ARTIFACT_DIR)
     parser.add_argument("--snapshot", type=Path, default=DEFAULT_SNAPSHOT)
@@ -948,6 +1030,7 @@ def main() -> int:
         as_of_date=as_of_date,
         companies_path=args.companies,
         report_insights_path=args.report_insights,
+        supplements_path=args.supplements,
         source_root=args.source_root,
         company_id=args.company_id,
         priority=args.priority,

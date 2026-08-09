@@ -1,4 +1,4 @@
-import { DAESEUNG_ENGINEERING_COMPANY } from "./data/daeseungEngineeringCompany";
+import publicCompanySupplements from "./data/publicCompanySupplements.json" with { type: "json" };
 
 const COMPANY_DATA_PATH = "/data/companies/companies.json";
 
@@ -17,20 +17,27 @@ function isCompanyDatasetRequest(input) {
   }
 }
 
-function appendDaeseungCompany(payload) {
+export function appendSupplementalCompanies(payload) {
+  const supplements = Array.isArray(publicCompanySupplements.companies)
+    ? publicCompanySupplements.companies
+    : [];
   if (Array.isArray(payload)) {
-    if (payload.some((company) => company?.company_id === DAESEUNG_ENGINEERING_COMPANY.company_id)) return payload;
-    return [...payload, DAESEUNG_ENGINEERING_COMPANY];
+    const existingIds = new Set(payload.map((company) => company?.company_id).filter(Boolean));
+    const missingSupplements = supplements.filter((company) => !existingIds.has(company?.company_id));
+    if (!missingSupplements.length) return payload;
+    return [...payload, ...missingSupplements];
   }
 
   if (!payload || typeof payload !== "object") return payload;
   const companies = Array.isArray(payload.companies) ? payload.companies : [];
-  if (companies.some((company) => company?.company_id === DAESEUNG_ENGINEERING_COMPANY.company_id)) return payload;
+  const existingIds = new Set(companies.map((company) => company?.company_id).filter(Boolean));
+  const missingSupplements = supplements.filter((company) => !existingIds.has(company?.company_id));
+  if (!missingSupplements.length) return payload;
 
   return {
     ...payload,
-    description: `${payload.description || "ModularHub verified company universe"} Includes the separately researched Daeseung Engineering profile.`,
-    companies: [...companies, DAESEUNG_ENGINEERING_COMPANY],
+    description: `${payload.description || "ModularHub verified company universe"} Includes separately researched supplemental public company profiles.`,
+    companies: [...companies, ...missingSupplements],
   };
 }
 
@@ -42,7 +49,7 @@ if (typeof window !== "undefined") {
 
     try {
       const payload = await response.clone().json();
-      const enrichedPayload = appendDaeseungCompany(payload);
+      const enrichedPayload = appendSupplementalCompanies(payload);
       if (enrichedPayload === payload) return response;
 
       const headers = new Headers(response.headers);

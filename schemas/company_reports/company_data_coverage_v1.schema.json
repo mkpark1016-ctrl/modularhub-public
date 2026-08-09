@@ -30,12 +30,22 @@
       "type": "object",
       "required": [
         "total_company_count",
+        "canonical_company_count",
+        "supplemental_public_company_count",
+        "effective_public_company_count",
         "audit_backed_company_count",
         "audit_record_count",
+        "audit_backed_in_canonical_universe_count",
         "audit_backed_in_universe_count",
+        "audit_backed_in_effective_universe_count",
         "non_audit_company_count",
         "full_three_year_audit_record_count",
+        "full_three_year_audit_in_canonical_universe_count",
         "full_three_year_audit_in_universe_count",
+        "full_three_year_audit_in_effective_universe_count",
+        "canonical_company_ids",
+        "supplemental_company_ids",
+        "effective_public_company_ids",
         "company_ids",
         "audit_company_ids",
         "non_audit_company_ids",
@@ -44,6 +54,18 @@
       ],
       "properties": {
         "total_company_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "canonical_company_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "supplemental_public_company_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "effective_public_company_count": {
           "type": "integer",
           "minimum": 0
         },
@@ -56,6 +78,14 @@
           "minimum": 0
         },
         "audit_backed_in_universe_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "audit_backed_in_canonical_universe_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "audit_backed_in_effective_universe_count": {
           "type": "integer",
           "minimum": 0
         },
@@ -74,6 +104,32 @@
         "full_three_year_audit_in_universe_count": {
           "type": "integer",
           "minimum": 0
+        },
+        "full_three_year_audit_in_canonical_universe_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "full_three_year_audit_in_effective_universe_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "canonical_company_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "supplemental_company_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "effective_public_company_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
         "company_ids": {
           "type": "array",
@@ -345,6 +401,7 @@
       "type": "object",
       "required": [
         "company_id",
+        "company_record_source",
         "company_name",
         "audit_financials_available",
         "required_metric_coverage",
@@ -358,6 +415,12 @@
       "properties": {
         "company_id": {
           "type": "string"
+        },
+        "company_record_source": {
+          "enum": [
+            "canonical",
+            "supplemental"
+          ]
         },
         "company_name": {
           "type": [
@@ -427,7 +490,8 @@
         "item_type": {
           "enum": [
             "company_data_gap",
-            "consistency_issue"
+            "consistency_issue",
+            "maintenance_issue"
           ]
         },
         "company_id": {

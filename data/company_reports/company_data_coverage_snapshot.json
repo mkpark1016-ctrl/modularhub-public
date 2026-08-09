@@ -1,16 +1,30 @@
 {
   "as_of_date": "2026-08-09",
   "audit_backed_count": 6,
-  "audit_backed_in_universe_count": 5,
+  "audit_backed_in_effective_universe_count": 6,
+  "audit_backed_in_universe_count": 6,
   "audit_record_count": 6,
-  "audit_record_without_company_master_ids": [
-    "daeseung-engineering"
-  ],
-  "company_count": 10,
+  "audit_record_without_company_master_ids": [],
+  "canonical_company_count": 10,
+  "company_count": 11,
   "company_coverage_states": [
+    {
+      "audit_coverage_state": "complete",
+      "company_id": "daeseung-engineering",
+      "company_record_source": "supplemental",
+      "evidence_coverage_state": "sparse",
+      "freshness_state": "current",
+      "operational_coverage_state": "sufficiently_covered",
+      "recommendation_priority": "P2",
+      "recommendation_reason_codes": [
+        "source_coverage_sparse",
+        "supplemental_profile_not_canonicalized"
+      ]
+    },
     {
       "audit_coverage_state": "unavailable",
       "company_id": "dl-enc",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -22,6 +36,7 @@
     {
       "audit_coverage_state": "unavailable",
       "company_id": "geogwang-enterprise",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -35,6 +50,7 @@
     {
       "audit_coverage_state": "unavailable",
       "company_id": "gs-ec",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -47,6 +63,7 @@
     {
       "audit_coverage_state": "unavailable",
       "company_id": "hyundai-engineering",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -58,6 +75,7 @@
     {
       "audit_coverage_state": "complete",
       "company_id": "kumkang-kind",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -67,6 +85,7 @@
     {
       "audit_coverage_state": "complete",
       "company_id": "nrb",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -78,6 +97,7 @@
     {
       "audit_coverage_state": "verification_pending",
       "company_id": "planm",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -89,6 +109,7 @@
     {
       "audit_coverage_state": "unavailable",
       "company_id": "samsung-ct-construction",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -101,6 +122,7 @@
     {
       "audit_coverage_state": "complete",
       "company_id": "sungji-steel",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "verified",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -110,6 +132,7 @@
     {
       "audit_coverage_state": "verification_pending",
       "company_id": "yuchang-enc",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "mixed",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
@@ -122,27 +145,28 @@
   "company_priority_counts": {
     "P0": 0,
     "P1": 7,
-    "P2": 1,
+    "P2": 2,
     "P3": 2
   },
-  "consistency_issue_count": 1,
-  "consistency_reason_codes": [
-    "audit_record_without_company_master"
-  ],
-  "consistency_status": "issue_detected",
-  "full_three_year_audit_in_universe_count": 5,
+  "consistency_issue_count": 0,
+  "consistency_reason_codes": [],
+  "consistency_status": "clean",
+  "effective_public_company_count": 11,
+  "full_three_year_audit_in_effective_universe_count": 6,
+  "full_three_year_audit_in_universe_count": 6,
   "full_three_year_audit_record_count": 6,
   "priority_counts": {
-    "P0": 1,
+    "P0": 0,
     "P1": 7,
-    "P2": 1,
+    "P2": 2,
     "P3": 0
   },
   "schema_version": "company_data_coverage_v1",
+  "supplemental_public_company_count": 1,
   "work_item_priority_counts": {
-    "P0": 1,
+    "P0": 0,
     "P1": 7,
-    "P2": 1,
+    "P2": 2,
     "P3": 0
   }
 }

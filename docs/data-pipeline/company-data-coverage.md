@@ -9,6 +9,7 @@ company quality, creditworthiness, investment merit, or competitive ranking.
 The builder reads:
 
 - `frontend/public/data/companies/companies.json`
+- `frontend/src/data/publicCompanySupplements.json`
 - `frontend/public/data/companies/company_report_insights.json`
 - existing public audit source JSON files under `data/company_reports/*/`
 
@@ -115,6 +116,7 @@ Reason codes include:
 - `company_profile_stale`
 - `excessive_verification_pending`
 - `source_coverage_sparse`
+- `supplemental_profile_not_canonicalized`
 - `audit_record_without_company_master`
 - `audit_insight_without_public_source`
 - `public_source_without_audit_insight`
@@ -132,21 +134,50 @@ The JSON separates:
 
 ## Public Universe And Audit Records
 
-The public company universe is discovered from `companies.json`. Audit-backed
-records are discovered from `company_report_insights.json`.
+The canonical public company universe is discovered from `companies.json`.
+Browser-visible supplemental public profiles are discovered from
+`frontend/src/data/publicCompanySupplements.json`. The effective public universe
+is canonical companies plus supplemental public companies, de-duplicated by
+`company_id`; canonical records win if an ID appears in both sources.
+
+Audit-backed records are discovered from `company_report_insights.json`.
 
 The control plane reports both views:
 
+- `canonical_company_count`: canonical `companies.json` records
+- `supplemental_public_company_count`: supplemental public records not already
+  present in the canonical company list
+- `effective_public_company_count`: browser-visible public universe used for
+  coverage evaluation
 - `audit_record_count`: all audit-backed records in the audit View Model
-- `audit_backed_in_universe_count`: audit-backed records that also exist in the
-  public company universe
+- `audit_backed_in_canonical_universe_count`: audit-backed records that also
+  exist in the canonical company list
+- `audit_backed_in_universe_count`: backward-compatible alias for
+  audit-backed records in the effective public universe
+- `audit_backed_in_effective_universe_count`: audit-backed records that also
+  exist in the effective public universe
 - `full_three_year_audit_record_count`: all three-year audit-backed records
-- `full_three_year_audit_in_universe_count`: three-year audit-backed records in
-  the public company universe
+- `full_three_year_audit_in_canonical_universe_count`: three-year audit-backed
+  records in the canonical company list
+- `full_three_year_audit_in_universe_count`: backward-compatible alias for
+  three-year audit-backed records in the effective public universe
+- `full_three_year_audit_in_effective_universe_count`: three-year audit-backed
+  records in the effective public universe
 
-If an audit-backed record exists without a company master row, the record is not
-deleted or promoted. It becomes a `P0` `consistency_issue` with
-`audit_record_without_company_master`.
+Each company coverage row includes `company_record_source`:
+
+- `canonical`: source record came from `companies.json`
+- `supplemental`: source record came from the supplemental public profile file
+
+If an audit-backed record exists in neither canonical nor supplemental public
+data, the record is not deleted or promoted. It becomes a `P0`
+`consistency_issue` with `audit_record_without_company_master`.
+
+If a company is browser-visible only through the supplemental profile contract,
+it remains in the effective universe and is not treated as a P0 orphan. Instead,
+it receives a nonblocking `P2` `maintenance_issue` with
+`supplemental_profile_not_canonicalized`, `recommended_next_domain =
+consistency`, and `recommended_next_action = canonical_company_migration`.
 
 ## Audit Source Discovery
 
@@ -192,6 +223,7 @@ python scripts\build_company_data_coverage.py --as-of-date 2026-08-09
 python scripts\build_company_data_coverage.py --as-of-date 2026-08-09 --check
 python scripts\build_company_data_coverage.py --as-of-date 2026-08-09 --company-id yuchang-enc
 python scripts\build_company_data_coverage.py --as-of-date 2026-08-09 --priority P1
+python scripts\build_company_data_coverage.py --as-of-date 2026-08-09 --supplements frontend\src\data\publicCompanySupplements.json
 ```
 
 ## Artifacts
@@ -245,5 +277,7 @@ tests.
   View Model.
 - The builder does not infer unreported values.
 - The builder does not determine company quality or rank companies.
-- Audit records present outside the `companies.json` universe are reported as a
+- Audit records present outside the effective public universe are reported as a
   consistency signal but are not automatically promoted or removed.
+- Supplemental public profiles are a compatibility bridge. They should be
+  migrated into the canonical company list in a later data PR after review.
