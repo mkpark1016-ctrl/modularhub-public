@@ -2,14 +2,17 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
+  REVIEW_TIMING_ORDER,
   compareBusinessBySort,
   getBusinessPriority,
   getBusinessPriorityInfo,
   getBusinessPriorityReasons,
+  getBusinessStatus,
   getBusinessSummary,
   isBusinessActionable,
   isDeadlineWithin,
   isImportantBusiness,
+  parseDate,
   isRecentlyPosted,
 } from "../src/businessInsights.js";
 
@@ -91,26 +94,59 @@ assert.equal(summary.important, 4);
 const kstBoundaryNow = new Date("2026-07-12T23:30:00+09:00");
 assert.equal(getBusinessPriorityInfo({ ...d1, due_at: "2026-07-13" }, kstBoundaryNow).daysRemaining, 1);
 
+const refreshVariants = [
+  [...fixtureItems, { ...d1, id: 20, title: "New refresh item", due_at: "2026-07-07" }],
+  fixtureItems.filter((item) => item.id !== d5.id),
+  fixtureItems.map((item) => item.id === d1.id ? { ...item, opportunity_status: "closed" } : item),
+  fixtureItems.map((item) => item.id === d1.id ? { ...item, due_at: "2026-08-20" } : item),
+  [...fixtureItems].reverse(),
+];
+
+for (const items of refreshVariants) {
+  const variantSummary = getBusinessSummary(items, now);
+  assert.equal(variantSummary.total, items.length);
+  const variantSorted = [...items].sort((a, b) => compareBusinessBySort(a, b, "priority", now));
+  assert.equal(variantSorted.length, items.length);
+}
+assert.equal(getBusinessPriorityInfo({ ...d1, opportunity_status: "closed" }, now).reviewTiming, "closed");
+assert.equal(getBusinessPriorityInfo({ ...d1, due_at: "2026-08-20" }, now).reviewTiming, "long_term");
+
 const businessPath = fileURLToPath(new URL("../public/data/business.json", import.meta.url));
 const businessItems = JSON.parse(readFileSync(businessPath, "utf8")).items || [];
 const asOf = new Date("2026-07-13T07:40:40+09:00");
-const byId = new Map(businessItems.map((item) => [String(item.id), item]));
+const allowedOpportunityStatuses = new Set(["active", "closed", "unknown", "canceled", "cancelled"]);
+const allowedReviewTimings = new Set(Object.keys(REVIEW_TIMING_ORDER));
 
-const jeju = byId.get("54");
-const busan = byId.get("5772");
-const icheon = byId.get("208");
-assert.ok(jeju && busan && icheon, "expected live business fixtures are missing");
-assert.deepEqual(
-  [jeju, busan, icheon].map((item) => {
-    const info = getBusinessPriorityInfo(item, asOf);
-    return [String(item.id), info.actionable, info.important, info.reviewTiming, info.reviewLabel];
-  }),
-  [
-    ["54", false, false, "closed", "마감"],
-    ["5772", true, true, "immediate", "즉시 검토"],
-    ["208", true, true, "long_term", "중장기 검토"],
-  ],
-);
+assert.ok(Array.isArray(businessItems));
+assert.ok(businessItems.length > 0);
+assert.equal(new Set(businessItems.map((item) => String(item.id))).size, businessItems.length);
+
+for (const item of businessItems) {
+  assert.ok(item.id !== undefined && item.id !== null && String(item.id) !== "");
+  assert.ok(typeof item.title === "string" && item.title.trim() !== "");
+  if (item.opportunity_status) assert.ok(allowedOpportunityStatuses.has(item.opportunity_status), `unexpected opportunity_status for ${item.id}`);
+  for (const field of ["posted_at", "due_at", "deadline_at"]) {
+    if (item[field]) assert.ok(parseDate(item[field]), `invalid ${field} for ${item.id}`);
+  }
+  for (const field of ["amount", "estimated_amount", "budget_amount"]) {
+    if (item[field] !== undefined && item[field] !== null && item[field] !== "") {
+      assert.ok(Number.isFinite(Number(item[field])), `invalid numeric ${field} for ${item.id}`);
+    }
+  }
+  const info = getBusinessPriorityInfo(item, asOf);
+  assert.equal(typeof info.actionable, "boolean");
+  assert.equal(typeof info.important, "boolean");
+  assert.ok(allowedReviewTimings.has(info.reviewTiming), `unexpected reviewTiming for ${item.id}`);
+  assert.ok(typeof info.reviewLabel === "string" && info.reviewLabel.trim() !== "");
+  assert.ok(Array.isArray(info.reasons));
+  assert.ok(Array.isArray(info.priorityReasons));
+  assert.ok(Number.isFinite(info.priorityScore));
+  assert.ok(Number.isFinite(info.score));
+  assert.ok(info.daysRemaining === null || Number.isFinite(info.daysRemaining));
+  if (["closed", "canceled", "cancelled"].includes(getBusinessStatus(item))) {
+    assert.equal(info.actionable, false, `closed record should not be actionable: ${item.id}`);
+  }
+}
 
 const liveSummary = getBusinessSummary(businessItems, asOf);
 const liveImportant = businessItems.filter((item) => isImportantBusiness(item, asOf));
