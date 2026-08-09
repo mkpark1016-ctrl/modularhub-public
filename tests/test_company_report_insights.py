@@ -48,6 +48,7 @@ DECISION_INTELLIGENCE_FIELDS = {
     "financial_health",
     "evidence_health",
     "peer_benchmarks",
+    "comparison_context",
 }
 
 
@@ -262,7 +263,10 @@ def test_peer_benchmarks_include_universe_median_and_current_company_flags() -> 
     assert benchmark["reference_value_label"] == "비교 범위 최대값"
     assert benchmark["reference_value_display"] == "3,076.8억원"
     assert benchmark["source_ids"] == ["yuchang_audit_report_2026_04_08"]
-    assert benchmark["calculation_basis"] == "same_latest_year_currency_financial_scope_minimum_three_values"
+    assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"
+    assert benchmark["comparison_group_id"] == "modular_specialist"
+    assert benchmark["comparison_group_label"] == "모듈러 제작 전문 업체"
+    assert benchmark["median_difference_display"] == "중앙값보다 2,460.2억원 높음"
 
 
 def test_daeseung_years_scope_latest_metrics_and_source_quality() -> None:
@@ -548,3 +552,17 @@ def test_existing_non_nrb_company_public_data_files_are_not_changed() -> None:
         check=False,
     )
     assert result.stdout.strip() == ""
+
+
+def test_peer_benchmark_groups_follow_canonical_company_types() -> None:
+    payload = load_output()
+    specialist_ids = {"daeseung-engineering", "nrb", "planm", "sungji-steel", "yuchang-enc"}
+    for company in payload["companies"]:
+        context = company["comparison_context"]
+        if company["company_id"] in specialist_ids:
+            assert context["group_id"] == "modular_specialist"
+            assert context["group_label"] == "모듈러 제작 전문 업체"
+        for benchmark in company["peer_benchmarks"]:
+            assert benchmark["comparison_group_id"] == context["group_id"]
+            assert benchmark["comparison_group_label"] == context["group_label"]
+            assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"

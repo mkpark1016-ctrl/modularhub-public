@@ -31,6 +31,7 @@
         "trends",
         "financial_health",
         "evidence_health",
+        "comparison_context",
         "peer_benchmarks",
         "trend_signals",
         "disclosure_warnings",
@@ -77,6 +78,7 @@
           "type": "array",
           "items": { "$ref": "#/$defs/evidenceHealth" }
         },
+        "comparison_context": { "$ref": "#/$defs/comparisonContext" },
         "peer_benchmarks": {
           "type": "array",
           "items": { "$ref": "#/$defs/peerBenchmark" }
@@ -342,10 +344,27 @@
       },
       "additionalProperties": false
     },
+    "comparisonContext": {
+      "type": "object",
+      "required": ["company_type", "group_id", "group_label", "minimum_peer_count", "calculation_basis"],
+      "properties": {
+        "company_type": { "type": "string", "minLength": 1 },
+        "group_id": { "type": ["string", "null"] },
+        "group_label": { "type": ["string", "null"] },
+        "minimum_peer_count": { "type": "integer", "minimum": 3 },
+        "calculation_basis": { "const": "canonical_company_type_same_latest_year_currency_financial_scope" }
+      },
+      "additionalProperties": false
+    },
     "peerBenchmark": {
       "type": "object",
       "required": [
         "metric_id",
+        "comparison_group_id",
+        "comparison_group_label",
+        "comparison_year",
+        "comparison_currency",
+        "comparison_financial_scope",
         "company_value",
         "company_display",
         "peer_count",
@@ -355,6 +374,7 @@
         "rank",
         "median",
         "median_display",
+        "median_difference_display",
         "best_value",
         "reference_value",
         "reference_value_display",
@@ -368,6 +388,11 @@
       ],
       "properties": {
         "metric_id": { "type": "string", "minLength": 1 },
+        "comparison_group_id": { "type": ["string", "null"] },
+        "comparison_group_label": { "type": ["string", "null"] },
+        "comparison_year": { "type": "integer" },
+        "comparison_currency": { "const": "KRW" },
+        "comparison_financial_scope": { "enum": ["standalone", "consolidated", "standalone_and_consolidated"] },
         "company_value": { "type": ["number", "integer", "null"] },
         "company_display": { "type": "string", "minLength": 1 },
         "peer_count": { "type": "integer", "minimum": 0 },
@@ -377,6 +402,7 @@
         "rank": { "type": ["integer", "null"], "minimum": 1 },
         "median": { "type": ["number", "null"] },
         "median_display": { "type": "string", "minLength": 1 },
+        "median_difference_display": { "type": ["string", "null"] },
         "best_value": { "type": ["number", "integer", "null"] },
         "reference_value": { "type": ["number", "integer", "null"] },
         "reference_value_display": { "type": "string", "minLength": 1 },
@@ -389,7 +415,7 @@
           "type": "array",
           "items": { "type": "string", "minLength": 1 }
         },
-        "calculation_basis": { "const": "same_latest_year_currency_financial_scope_minimum_three_values" }
+        "calculation_basis": { "const": "same_company_group_latest_year_currency_financial_scope_minimum_three_values" }
       },
       "additionalProperties": false
     },

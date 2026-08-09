@@ -100,13 +100,13 @@ assert.ok(componentFiles.includes("상세 근거 보기"), "data trust cards sho
 assert.equal(componentFiles.includes("sourceTypes.split"), false, "data trust center should not infer counts from source type labels");
 assert.ok(componentFiles.includes("distinct_source_count"), "data trust center should use actual distinct source counts");
 assert.ok(componentFiles.includes("source_type_counts"), "data trust center should display source type counts separately");
-assert.ok(componentFiles.includes("동료 비교"), "financial tab should expose peer comparison");
+assert.ok(componentFiles.includes("동일 유형 기업 재무 비교"), "financial tab should expose peer comparison");
 assert.ok(componentFiles.includes("not_comparable_reason"), "peer comparison should render non-comparable reasons instead of forced ranks");
 assert.ok(componentFiles.includes("comparison_universe_count"), "peer comparison should show the comparison universe size");
 assert.ok(componentFiles.includes("current_company_included"), "peer comparison should disclose whether the current company is included");
 assert.ok(componentFiles.includes("median_display"), "peer comparison should show the benchmark median");
-assert.ok(componentFiles.includes("reference_value_label"), "peer comparison should show the reference max/min label");
-assert.ok(componentFiles.includes("같은 연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
+assert.ok(componentFiles.includes("median_difference_display"), "peer comparison should show the median difference");
+assert.ok(componentFiles.includes("같은 기업유형·연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
 assert.equal(componentFiles.includes("<dt>rule_id</dt>"), false, "financial health cards should hide raw rule identifiers by default");
 assert.ok(componentFiles.includes("관찰값"), "financial health cards should show observation values first");
 assert.ok(componentFiles.includes("interpretation_scope"), "financial health cards should show interpretation scope");

@@ -72,10 +72,11 @@ try {
   await page.goto(`${baseUrl}/companies`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: "스틸 모듈러 기업정보" }).waitFor();
   const companyText = await page.locator("main").innerText();
-  check(companyText.includes("전체 11개사"), "company count 11 missing");
+  check(companyText.includes("검색 결과 11개사"), "company count 11 missing");
   check(companyText.includes("건설사"), "contractor role label missing");
   check(companyText.includes("모듈러 제작 전문 업체"), "modular specialist role label missing");
-  check(await page.locator(".company-decision-quick-filters").count() === 1, "company decision quick filters should render once");
+  check(await page.locator(".company-decision-quick-filters").count() === 0, "legacy company quick filters should be removed");
+  check(await page.locator(".company-type-segmented").count() === 1, "company type segmented control missing");
   await page.goto(`${baseUrl}/companies/daeseung-engineering`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: /대승엔지니어링/ }).waitFor();
   const hiddenRoute = await page.request.get(`${baseUrl}/company-intelligence`, { maxRedirects: 0 });

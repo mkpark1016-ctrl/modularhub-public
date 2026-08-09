@@ -98,11 +98,11 @@ async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
     check(financialText.includes("최근 재무") || financialText.includes("최근 3개년 재무"), `${companyId}: fallback financial UI missing`);
   } else {
     check(financialText.includes("의사결정 요약"), `${companyId}: audit decision summary missing`);
-    check(financialText.includes("동료 비교"), `${companyId}: peer comparison missing`);
+    check(financialText.includes("동일 유형 기업 재무 비교"), `${companyId}: same-type financial comparison missing`);
     check(financialText.includes("중앙값"), `${companyId}: peer median missing`);
     check(!financialText.includes("rule_id"), `${companyId}: raw health rule metadata should be hidden by default`);
     check(financialText.includes("재무 추세"), `${companyId}: financial trends missing`);
-    if (companyId === "kumkang-kind") check(financialText.includes("비교 조건 미충족") || financialText.includes("임의 순위 없음"), `${companyId}: non-comparable peer state missing`);
+    if (companyId === "kumkang-kind") check(financialText.includes("동일 유형 재무 비교 준비 중") || financialText.includes("3개 미만") || financialText.includes("다른 기업유형으로 대체 비교하지 않습니다"), `${companyId}: non-comparable peer state missing`);
     await openAndCloseEvidenceDrawer(page, page.locator("#company-tab-panel-financial .evidence-inline-button").first(), "\uACC4\uC0B0 \uAE30\uC900");
   }
   check(!(await hasPageOverflow(page)), `${companyId} ${viewportWidth}: financial overflow`);
