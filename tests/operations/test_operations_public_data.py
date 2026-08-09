@@ -49,17 +49,11 @@ def business_payload(generated_at: str = "2026-07-22T00:00:00+00:00", posted_at:
     }
 
 
-def companies_payload(count: int = 10) -> dict:
+def companies_payload(count: int = 11) -> dict:
     return {
         "generated_at": "2026-07-16T00:00:00+00:00",
         "companies": [{"company_id": f"c{i}"} for i in range(count)],
     }
-
-
-def daeseung_file(tmp_path: Path) -> Path:
-    path = tmp_path / "daeseungEngineeringCompany.js"
-    path.write_text('export const D = { company_id: "daeseung-engineering" };\n', encoding="utf-8")
-    return path
 
 
 def audit(now: datetime, tmp_path: Path, *, news=None, business=None, companies=None) -> list[dict]:
@@ -71,7 +65,6 @@ def audit(now: datetime, tmp_path: Path, *, news=None, business=None, companies=
         meta_payload={},
         policy=POLICY,
         now=now,
-        daeseung_source=daeseung_file(tmp_path),
     )
 
 
@@ -101,11 +94,11 @@ def test_business_freshness_healthy_warning_critical(tmp_path: Path) -> None:
 
 def test_company_freshness_and_count_guard(tmp_path: Path) -> None:
     now = datetime(2026, 7, 22, 12, tzinfo=timezone.utc)
-    rows = audit(now, tmp_path, companies=companies_payload(10))
+    rows = audit(now, tmp_path, companies=companies_payload(11))
     company = next(row for row in rows if row["dataset"] == "companies")
     assert company["recordCount"] == 11
     assert company["state"] == "healthy"
-    rows = audit(now, tmp_path, companies=companies_payload(9))
+    rows = audit(now, tmp_path, companies=companies_payload(10))
     company = next(row for row in rows if row["dataset"] == "companies")
     assert company["recordCount"] == 10
     assert company["state"] == "critical"
@@ -162,5 +155,6 @@ def test_workflow_concurrency_timeout_and_permissions_contract() -> None:
     assert "scripts/operations_issue_alert.py" in workflow
 
 
-def test_public_runtime_company_count_uses_daeseung_overlay(tmp_path: Path) -> None:
-    assert public_company_count(companies_payload(10), daeseung_file(tmp_path)) == 11
+def test_public_company_count_uses_canonical_companies_only() -> None:
+    assert public_company_count(companies_payload(11)) == 11
+    assert public_company_count({"companies": [{"company_id": "c1"}, {"company_id": "c1"}, {"company_id": ""}]}) == 1

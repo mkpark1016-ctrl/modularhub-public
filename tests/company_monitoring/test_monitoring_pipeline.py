@@ -271,6 +271,7 @@ def test_validate_queue_rejects_secret_literal(tmp_path: Path) -> None:
     assert any(issue["code"] == "secret_literal_exposed" for issue in result["issues"])
 
 
-def test_public_baseline_company_count_is_unchanged() -> None:
+def test_public_baseline_company_count_matches_canonical_universe() -> None:
     companies = read_json(Path("frontend/public/data/companies/companies.json"))
-    assert len(companies["companies"]) == 10
+    assert len(companies["companies"]) == 11
+    assert sum(1 for company in companies["companies"] if company.get("company_id") == "daeseung-engineering") == 1

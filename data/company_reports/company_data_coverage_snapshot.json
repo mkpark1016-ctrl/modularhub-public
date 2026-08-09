@@ -5,20 +5,19 @@
   "audit_backed_in_universe_count": 6,
   "audit_record_count": 6,
   "audit_record_without_company_master_ids": [],
-  "canonical_company_count": 10,
+  "canonical_company_count": 11,
   "company_count": 11,
   "company_coverage_states": [
     {
       "audit_coverage_state": "complete",
       "company_id": "daeseung-engineering",
-      "company_record_source": "supplemental",
+      "company_record_source": "canonical",
       "evidence_coverage_state": "sparse",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
       "recommendation_priority": "P2",
       "recommendation_reason_codes": [
-        "source_coverage_sparse",
-        "supplemental_profile_not_canonicalized"
+        "source_coverage_sparse"
       ]
     },
     {
@@ -162,7 +161,7 @@
     "P3": 0
   },
   "schema_version": "company_data_coverage_v1",
-  "supplemental_public_company_count": 1,
+  "supplemental_public_company_count": 0,
   "work_item_priority_counts": {
     "P0": 0,
     "P1": 7,

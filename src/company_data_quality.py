@@ -11,8 +11,6 @@ from urllib.parse import urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_COMPANIES_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
-DAESEUNG_JS_PATH = ROOT / "frontend" / "src" / "data" / "daeseungEngineeringCompany.js"
-DAESEUNG_IDENTITY_PATH = ROOT / "research" / "company-enrichment" / "daeseung-engineering-identity.json"
 
 VERIFICATION_STATUSES = {
     "verified_primary",
@@ -80,70 +78,6 @@ FIELD_AREAS = {
     "metadata": ["last_verified_at", "data_confidence", "review_status"],
 }
 
-DAESEUNG_SOURCE_RECORDS = [
-    {
-        "source_id": "daeseung-patent-kr102761128b1",
-        "source_type": "patent",
-        "title": "KR102761128B1 모듈러 건축물의 접합부 결합 고정방법",
-        "publisher": "Google Patents",
-        "source_url": "https://patents.google.com/patent/KR102761128B1/ko",
-        "published_at": "2025-02-03",
-        "accessed_at": "2026-07-19",
-        "supported_claims": ["technology", "patent_status"],
-    },
-    {
-        "source_id": "daeseung-yongsan-contract-20241223",
-        "source_type": "public_official",
-        "title": "용산초 그린스마트스쿨 임시교사 임대용역 계약체결현황",
-        "publisher": "전북특별자치도교육청",
-        "source_url": "https://www.jbe.go.kr/open/edufine/eduCntrView2.jbe?cm_seq_no=103675418&fscl_y=2024",
-        "published_at": "2024-12-23",
-        "accessed_at": "2026-07-19",
-        "supported_claims": ["project", "contract_amount", "client"],
-    },
-    {
-        "source_id": "daeseung-seogwang-payment-2025",
-        "source_type": "public_official",
-        "title": "서광초 임시교사(모듈러) 임차용역 대가지급",
-        "publisher": "광주광역시교육청",
-        "source_url": "https://www.gen.go.kr/opengen/contract/index.php?DateYear=2025&mode=billpaymt_view&num=101178663",
-        "published_at": "2025",
-        "accessed_at": "2026-07-19",
-        "supported_claims": ["project", "contract_amount", "client"],
-    },
-    {
-        "source_id": "daeseung-company-info-2025",
-        "source_type": "company_information",
-        "title": "대승엔지니어링 기업정보",
-        "publisher": "사람인·잡코리아·캐치",
-        "source_url": "https://www.saramin.co.kr/zf_user/company-info/view/csn/aVB0ZThORGFDTW5HcEl4eUROL2hZZz09/company_nm/%28%EC%A3%BC%29%EB%8C%80%EC%8A%B9%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81",
-        "published_at": "2026",
-        "accessed_at": "2026-07-19",
-        "supported_claims": ["identity", "financials"],
-    },
-    {
-        "source_id": "daeseung-factory-db-20260601",
-        "source_type": "factory_database",
-        "title": "군산 공장정보 DB (오식도동 873-11)",
-        "publisher": "iFactoryHub",
-        "source_url": "https://ifactoryhub.com/factory/13105-%EC%A3%BC%EB%8C%80%EC%8A%B9%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81-%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84-%EA%B5%B0%EC%82%B0%EC%8B%9C/",
-        "published_at": "2026-06-01",
-        "accessed_at": "2026-07-19",
-        "supported_claims": ["production"],
-    },
-    {
-        "source_id": "daeseung-factory-db-20260501",
-        "source_type": "factory_database",
-        "title": "군산 공장정보 DB (오식도동 857)",
-        "publisher": "iFactoryHub",
-        "source_url": "https://ifactoryhub.com/factory/13104-%EC%A3%BC%EB%8C%80%EC%8A%B9%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81-%EC%A0%84%EB%9D%BC%EB%B6%81%EB%8F%84-%EA%B5%B0%EC%82%B0%EC%8B%9C/",
-        "published_at": "2026-05-01",
-        "accessed_at": "2026-07-19",
-        "supported_claims": ["production"],
-    },
-]
-
-
 @dataclass(frozen=True)
 class QualityWeights:
     completeness: int = 30
@@ -198,49 +132,9 @@ def source_tier(source: dict[str, Any]) -> str:
     return SOURCE_TIER_BY_TYPE.get(str(source.get("source_type")), "tier_3")
 
 
-def load_daeseung_overlay(root: Path = ROOT) -> dict[str, Any]:
-    identity = read_json(root / DAESEUNG_IDENTITY_PATH.relative_to(ROOT)) if (root / DAESEUNG_IDENTITY_PATH.relative_to(ROOT)).exists() else {}
-    return {
-        "schema_version": "company-master-v1",
-        "company_id": "daeseung-engineering",
-        "company_name": identity.get("displayName", "대승엔지니어링"),
-        "company_name_en": None,
-        "aliases": ["대승엔지니어링", "(주)대승엔지니어링", "주식회사 대승엔지니어링"],
-        "company_type": "specialist_manufacturer",
-        "competitive_role": "direct_competitor",
-        "analysis_tier": "tier_1b",
-        "review_status": "partially_verified",
-        "data_confidence": identity.get("confidence", "medium"),
-        "last_verified_at": identity.get("verifiedAt", "2026-07-19T00:00:00+09:00"),
-        "headquarters": identity.get("headquarters"),
-        "website_url": identity.get("officialWebsite"),
-        "company_profile": {
-            "legal_name": identity.get("legalName"),
-            "representative": identity.get("representative"),
-            "established_at": identity.get("foundedDate"),
-            "major_businesses": identity.get("industry", []),
-        },
-        "financials": [{"year": 2025, "scope": "separate", "audited": False, "source_ids": ["daeseung-company-info-2025"]}],
-        "production": [{"facility_id": "daeseung-gunsan-factory-candidates", "operation_status": "active", "verification_status": "partially_verified", "source_ids": ["daeseung-factory-db-20260601", "daeseung-factory-db-20260501"]}],
-        "project_portfolio": [
-            {"project_id": "daeseung-yongsan-elementary-temporary-school", "project_status": "completed", "project_credit": True, "source_ids": ["daeseung-yongsan-contract-20241223"]},
-            {"project_id": "daeseung-seogwang-elementary-temporary-school-2", "project_status": "completed", "project_credit": True, "source_ids": ["daeseung-seogwang-payment-2025"]},
-        ],
-        "technology": {"patents": [{"technology_id": "daeseung-patent-kr102761128b1", "registration_number": "KR102761128B1", "status": "registered", "source_ids": ["daeseung-patent-kr102761128b1"]}]},
-        "recent_signals": [],
-        "research_gaps": [{"area": field, "description": field} for field in identity.get("unresolvedFields", [])[:5]],
-        "sources": DAESEUNG_SOURCE_RECORDS,
-        "conflicting_values": [],
-        "source_file": "frontend/src/data/daeseungEngineeringCompany.js",
-    }
-
-
 def load_public_company_universe(root: Path = ROOT) -> list[dict[str, Any]]:
     payload = read_json(root / PUBLIC_COMPANIES_PATH.relative_to(ROOT))
-    companies = [dict(row, source_file="frontend/public/data/companies/companies.json") for row in payload.get("companies", [])]
-    if DAESEUNG_JS_PATH.exists() and not any(row.get("company_id") == "daeseung-engineering" for row in companies):
-        companies.append(load_daeseung_overlay(root))
-    return companies
+    return [dict(row, source_file="frontend/public/data/companies/companies.json") for row in payload.get("companies", [])]
 
 
 def source_registry(companies: list[dict[str, Any]]) -> list[dict[str, Any]]:

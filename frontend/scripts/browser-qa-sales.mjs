@@ -6,7 +6,6 @@ import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
 import { getCompanyDataStatus, getCompanyItems, getCompanySummary, isModularSpecialistCompany } from "../src/companyInsights.js";
-import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -17,12 +16,6 @@ function check(condition, message) {
 
 function itemsFrom(data) {
   return Array.isArray(data) ? data : data.items || [];
-}
-
-function companyItemsFromPublicData(data) {
-  const companies = getCompanyItems(data);
-  if (companies.some((company) => company.company_id === DAESEUNG_ENGINEERING_COMPANY.company_id)) return companies;
-  return [...companies, DAESEUNG_ENGINEERING_COMPANY];
 }
 
 async function countCards(page) {
@@ -109,7 +102,7 @@ try {
   const companiesData = await companiesResponse.json();
   const businessItems = itemsFrom(businessData);
   const newsItems = itemsFrom(newsData);
-  const companyItems = companyItemsFromPublicData(companiesData);
+  const companyItems = getCompanyItems(companiesData);
   const companySummary = getCompanySummary(companyItems);
   const dashboardAsOf = parseDate(metaData.generated_at) || parseDate(metaData.last_updated_at) || new Date();
   const expectedNewsSummary = getNewsSummary(newsItems, dashboardAsOf);

@@ -135,9 +135,14 @@ The JSON separates:
 ## Public Universe And Audit Records
 
 The canonical public company universe is discovered from `companies.json`.
-Browser-visible supplemental public profiles are discovered from
-`frontend/src/data/publicCompanySupplements.json`. The effective public universe
-is canonical companies plus supplemental public companies, de-duplicated by
+The current public universe contains 11 canonical companies. Daeseung
+Engineering was migrated from the legacy runtime supplement into canonical
+`companies.json`, so the supplemental public company count is currently 0.
+
+The generic supplemental contract is still retained in
+`frontend/src/data/publicCompanySupplements.json` for future temporary public
+profiles. If supplemental rows are added later, the effective public universe is
+canonical companies plus supplemental public companies, de-duplicated by
 `company_id`; canonical records win if an ID appears in both sources.
 
 Audit-backed records are discovered from `company_report_insights.json`.
@@ -178,6 +183,8 @@ it remains in the effective universe and is not treated as a P0 orphan. Instead,
 it receives a nonblocking `P2` `maintenance_issue` with
 `supplemental_profile_not_canonicalized`, `recommended_next_domain =
 consistency`, and `recommended_next_action = canonical_company_migration`.
+This maintenance item is not expected for Daeseung Engineering after the
+canonical migration.
 
 ## Audit Source Discovery
 

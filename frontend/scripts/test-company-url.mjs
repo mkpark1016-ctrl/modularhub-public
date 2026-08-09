@@ -2,10 +2,9 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { getCompanyItems } from "../src/companyInsights.js";
 import { sanitizeCompanySearchParams } from "../src/companyUrlParams.js";
-import { DAESEUNG_ENGINEERING_COMPANY } from "../src/data/daeseungEngineeringCompany.js";
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
-const companies = [...getCompanyItems(payload), DAESEUNG_ENGINEERING_COMPANY];
+const companies = getCompanyItems(payload);
 const validValues = {
   roles: ["general_contractor", "modular_specialist"],
   relationships: [...new Set(companies.map((company) => company.competitive_role).filter(Boolean))],

@@ -15,7 +15,6 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_COMPANIES = ROOT / "frontend/public/data/companies/companies.json"
-DEFAULT_DAESEUNG = ROOT / "frontend/src/data/daeseungEngineeringCompany.js"
 DEFAULT_NEWS = ROOT / "frontend/public/data/news.json"
 DEFAULT_BUSINESS = ROOT / "frontend/public/data/business.json"
 DEFAULT_OUTPUT = ROOT / "frontend/public/data/companies/company-activities.json"
@@ -145,41 +144,8 @@ def stable_hash(*parts: Any, length: int = 16) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:length]
 
 
-def parse_js_string_array(text: str, key: str) -> list[str]:
-    match = re.search(rf"{re.escape(key)}\s*:\s*\[(.*?)\]", text, flags=re.S)
-    if not match:
-        return []
-    return re.findall(r'"([^"]+)"', match.group(1))
-
-
-def parse_js_string_value(text: str, key: str) -> str:
-    match = re.search(rf"{re.escape(key)}\s*:\s*\"([^\"]*)\"", text)
-    return match.group(1) if match else ""
-
-
-def load_daeseung_company(path: Path) -> dict[str, Any] | None:
-    if not path.exists():
-        return None
-    text = path.read_text(encoding="utf-8")
-    company_id = parse_js_string_value(text, "company_id")
-    company_name = parse_js_string_value(text, "company_name")
-    if not company_id or not company_name:
-        return None
-    return {
-        "company_id": company_id,
-        "company_name": company_name,
-        "company_name_en": parse_js_string_value(text, "company_name_en"),
-        "legal_name": parse_js_string_value(text, "legal_name"),
-        "aliases": parse_js_string_array(text, "aliases"),
-    }
-
-
-def load_companies(companies_path: Path, daeseung_path: Path) -> list[dict[str, Any]]:
-    companies = items_from_payload(load_json(companies_path))
-    daeseung = load_daeseung_company(daeseung_path)
-    if daeseung and all(row.get("company_id") != daeseung["company_id"] for row in companies):
-        companies.append(daeseung)
-    return companies
+def load_companies(companies_path: Path) -> list[dict[str, Any]]:
+    return items_from_payload(load_json(companies_path))
 
 
 def is_ambiguous_alias(alias: str) -> bool:
@@ -516,7 +482,6 @@ def write_outputs(output: dict[str, Any], audit: dict[str, Any], output_path: Pa
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build company activity timelines from public news and business data.")
     parser.add_argument("--companies", type=Path, default=DEFAULT_COMPANIES)
-    parser.add_argument("--daeseung-source", type=Path, default=DEFAULT_DAESEUNG)
     parser.add_argument("--news", type=Path, default=DEFAULT_NEWS)
     parser.add_argument("--business", type=Path, default=DEFAULT_BUSINESS)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -528,7 +493,7 @@ def main() -> int:
     if now is None:
         raise SystemExit("--now must be an ISO datetime")
     existing = load_json(args.output) if args.output.exists() else None
-    companies = load_companies(args.companies, args.daeseung_source)
+    companies = load_companies(args.companies)
     news_items = items_from_payload(load_json(args.news))
     business_items = items_from_payload(load_json(args.business))
     output, audit = build_timeline(

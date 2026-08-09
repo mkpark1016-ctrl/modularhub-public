@@ -23,6 +23,7 @@ PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "companies" / "company_intelligence_v2.json",
 ]
 COMPANIES_PUBLIC_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
+PUBLIC_COMPANY_SUPPLEMENTS_PATH = ROOT / "frontend" / "src" / "data" / "publicCompanySupplements.json"
 ALLOWED_NRB_FINANCIAL_SOURCE_ID = "nrb-audit-financials-2023-2025"
 REQUIRED_YEAR_SECTIONS = {
     "income_statement",
@@ -697,6 +698,33 @@ def is_allowed_nrb_public_financial_summary_update(base_ref: str | None) -> bool
     return True
 
 
+def is_allowed_daeseung_canonical_migration(base_ref: str | None) -> bool:
+    compare_ref = base_ref if base_ref and git_ref_exists(base_ref) else "HEAD"
+    previous = json_from_git(compare_ref, COMPANIES_PUBLIC_PATH)
+    previous_supplements = json_from_git(compare_ref, PUBLIC_COMPANY_SUPPLEMENTS_PATH)
+    if previous is None or previous_supplements is None or not COMPANIES_PUBLIC_PATH.exists() or not PUBLIC_COMPANY_SUPPLEMENTS_PATH.exists():
+        return False
+    current = json.loads(COMPANIES_PUBLIC_PATH.read_text(encoding="utf-8"))
+    current_supplements = json.loads(PUBLIC_COMPANY_SUPPLEMENTS_PATH.read_text(encoding="utf-8"))
+    previous_companies = previous.get("companies")
+    current_companies = current.get("companies")
+    previous_supplement_companies = previous_supplements.get("companies")
+    current_supplement_companies = current_supplements.get("companies")
+    if not all(isinstance(rows, list) for rows in [previous_companies, current_companies, previous_supplement_companies, current_supplement_companies]):
+        return False
+    daeseung_rows = [company for company in previous_supplement_companies if company.get("company_id") == "daeseung-engineering"]
+    if len(daeseung_rows) != 1 or current_supplement_companies:
+        return False
+    previous_ids = [company.get("company_id") for company in previous_companies]
+    current_ids = [company.get("company_id") for company in current_companies]
+    if current_ids != [*previous_ids, "daeseung-engineering"]:
+        return False
+    for before, after in zip(previous_companies, current_companies):
+        if before != after:
+            return False
+    return current_companies[-1] == daeseung_rows[0]
+
+
 def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths: list[Path] = PROTECTED_PUBLIC_FILES) -> dict[str, Any]:
     existing = [str(path.relative_to(ROOT)) for path in paths if path.exists()]
     if not existing:
@@ -726,6 +754,9 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
     if companies_relpath in changed_files and is_allowed_nrb_public_financial_summary_update(base_ref):
         changed_files = [path for path in changed_files if path != companies_relpath]
         warnings.append("allowed_nrb_public_financial_summary_update")
+    if companies_relpath in changed_files and is_allowed_daeseung_canonical_migration(base_ref):
+        changed_files = [path for path in changed_files if path != companies_relpath]
+        warnings.append("allowed_daeseung_canonical_company_migration")
     return {
         "mode": mode,
         "base_ref": base_ref,

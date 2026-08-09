@@ -180,7 +180,7 @@ def main() -> int:
     except Exception as exc:
         print(f"Public company data could not be read. Refusing commit. error={type(exc).__name__}")
         return 1
-    runtime_company_count = public_company_count(companies_payload, ROOT / "frontend/src/data/daeseungEngineeringCompany.js")
+    runtime_company_count = public_company_count(companies_payload)
     minimum_companies = int(policy["datasets"]["companies"].get("minimumPublicCount", 11))
     if runtime_company_count < minimum_companies:
         print(

@@ -20,7 +20,8 @@ const verifiedIds = new Set([
 ]);
 
 assert.equal(v2.schema_version, "2.0.0");
-assert.equal(companies.length, 10);
+assert.equal(companies.length, 11);
+assert.equal(companies.filter((company) => company.company_id === "daeseung-engineering").length, 1);
 assert.equal(v2.companies.length, 10);
 assert.equal(v2.materialized_summaries.length, 10);
 assert.equal(companies.every((company) => company.intelligence_v2?.domain_statuses), true);
