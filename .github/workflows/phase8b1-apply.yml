@@ -1,0 +1,85 @@
+name: Apply Phase 8B-1 migration
+
+on:
+  push:
+    branches:
+      - fix/company-type-first-discovery-and-financial-comparison
+
+permissions:
+  contents: write
+
+env:
+  CI: true
+
+jobs:
+  apply-and-validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Apply migration
+        run: python scripts/phase8b1_apply.py
+
+      - name: Rebuild report insights
+        run: python scripts/build_company_report_insights.py --base-ref origin/main
+
+      - name: Remove temporary migration files
+        run: |
+          rm scripts/phase8b1_apply.py
+          rm .github/workflows/phase8b1-apply.yml
+
+      - name: Commit Phase 8B-1 implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Simplify company discovery and segment financial comparison"
+          git push origin HEAD:fix/company-type-first-discovery-and-financial-comparison
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Validate report insight builder
+        run: |
+          python scripts/build_company_report_insights.py --base-ref origin/main --check
+          python scripts/build_company_data_coverage.py --as-of-date 2026-08-09 --check
+
+      - name: Python tests
+        run: |
+          python -m pytest -q tests/test_company_report_insights.py
+          python -m pytest -q
+          python -m compileall scripts src
+
+      - name: Frontend tests
+        working-directory: frontend
+        run: |
+          npm run test:companies
+          npm run test:companies-detail
+          npm run test:companies-comparison
+          npm run test:companies-url
+          npm run test:companies-v2
+          npm run test:companies-projects
+          npm run test:business
+          npm run test:news
+          npm run lint
+          npm run build
+
+      - name: Diff quality
+        run: git diff --check HEAD^ HEAD
