@@ -1,4 +1,4 @@
-# Verification rerun after simplified-list default filter fix.
+# Verification rerun with Playwright browser installed.
 name: Verify Phase 8B-1 implementation
 
 on:
@@ -34,6 +34,10 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
+
+      - name: Install Playwright Chromium
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
 
       - name: Validate derived builders
         run: |
