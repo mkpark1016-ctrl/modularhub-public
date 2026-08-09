@@ -151,37 +151,29 @@ try {
   await waitForCardCount(page, companyItems.length, "company default card count mismatch");
   await checkNoBadDisplayText(page, "main", "company list");
   const companyText = await page.locator("main").innerText();
-  check(new RegExp(`전체 기업\\s+${companySummary.total.toLocaleString("ko-KR")}개사`).test(companyText), "company summary total mismatch");
-  check(new RegExp(`직접 경쟁사\\s+${companySummary.directCompetitors.toLocaleString("ko-KR")}개사`).test(companyText), "company direct competitor summary mismatch");
-  check(companyText.includes("최근 90일 활동"), "company recent activity summary missing");
-  check(companyText.includes("데이터 보완 필요"), "company data gap summary missing");
-  check(await page.locator(".company-decision-quick-filters").count() === 1, "company decision quick filters should render once");
-  const roleSelect = selectForLabel(page, "역할");
-  const roleOptions = await roleSelect.locator("option").evaluateAll((options) => options.map((option) => ({ value: option.value, text: option.textContent })));
-  check(roleOptions.length === 3, "role dropdown should contain all + two public role groups");
-  check(roleOptions.some((option) => option.value === "general_contractor" && option.text.includes("건설사")), "general contractor role option missing");
-  check(roleOptions.some((option) => option.value === "modular_specialist" && option.text.includes("모듈러 제작 전문 업체")), "modular specialist role option missing");
-  check(!roleOptions.some((option) => option.text.includes("전문 제작·통합사") || option.text.includes("모듈러 통합사")), "legacy role option should not be visible");
-  check(companyText.includes("모듈러 제작 전문 업체"), "canonical modular specialist label missing");
-  await selectFilter(page, "경쟁 관계", "direct_competitor");
-  await waitForCardCount(page, companySummary.directCompetitors, "direct competitor filter mismatch");
-  await page.getByRole("button", { name: "필터 초기화" }).first().click();
-  await waitForCardCount(page, companyItems.length, "company reset after competitor filter failed");
-  await selectFilter(page, "역할", "modular_specialist");
-  await waitForCardCount(page, companyItems.filter(isModularSpecialistCompany).length, "modular specialist role filter mismatch");
-  await selectFilter(page, "데이터 상태", "core_verified");
-  await waitForCardCount(
-    page,
-    companyItems.filter((item) => isModularSpecialistCompany(item) && getCompanyDataStatus(item) === "core_verified").length,
-    "modular specialist + core verified company filter mismatch",
-  );
-  await page.getByRole("button", { name: "필터 초기화" }).first().click();
-  await waitForCardCount(page, companyItems.length, "company pre-search reset mismatch");
+  check(!companyText.includes("직접 경쟁사"), "legacy direct competitor summary should be removed");
+  check(!companyText.includes("감사재무 적용"), "legacy audit summary should be removed");
+  check(!companyText.includes("데이터 보완 필요"), "legacy data-gap summary should be removed");
+  check(await page.locator(".company-decision-quick-filters").count() === 0, "legacy quick filters should be removed");
+  check(await page.locator(".company-type-segmented").count() === 1, "company type segmented control should render once");
+  const typeButtons = page.locator(".company-type-segmented [role=radio]");
+  check(await typeButtons.count() === 3, "company type segmented control should expose all/contractor/specialist");
+  check(companyText.includes("건설사"), "general contractor type label missing");
+  check(companyText.includes("모듈러 제작 전문 업체"), "modular specialist type label missing");
+  const sortSelect = page.getByLabel("정렬");
+  const sortOptions = await sortSelect.locator("option").evaluateAll((options) => options.map((option) => option.textContent));
+  check(sortOptions.length === 4, "company list should expose exactly four sort options");
+  check(sortOptions[0].includes("기업명순"), "company name sort should be default");
+  await page.getByRole("radio", { name: /모듈러 제작 전문 업체/ }).click();
+  await waitForCardCount(page, companyItems.filter(isModularSpecialistCompany).length, "modular specialist type filter mismatch");
+  const resetButton = page.getByRole("button", { name: "초기화" });
+  await resetButton.click();
+  await waitForCardCount(page, companyItems.length, "company type reset mismatch");
   await page.getByPlaceholder("기업명, 프로젝트, 기술 검색").fill("PlanM");
   await page.keyboard.press("Enter");
   await page.waitForURL(/q=PlanM/);
   check(await countCards(page) >= 1, "company alias search should return results");
-  await page.getByRole("button", { name: "필터 초기화" }).first().click();
+  await page.getByRole("button", { name: "초기화" }).click();
   await waitForCardCount(page, companyItems.length, "company reset mismatch");
   for (const company of companyItems) {
     await page.goto(`${baseUrl}/companies/${company.company_id}`, { waitUntil: "networkidle" });

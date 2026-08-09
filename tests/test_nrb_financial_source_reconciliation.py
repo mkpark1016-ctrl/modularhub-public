@@ -19,6 +19,7 @@ DECISION_INTELLIGENCE_FIELDS = {
     "financial_health",
     "evidence_health",
     "peer_benchmarks",
+    "comparison_context",
 }
 
 

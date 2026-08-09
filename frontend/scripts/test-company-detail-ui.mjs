@@ -105,8 +105,8 @@ assert.ok(componentFiles.includes("not_comparable_reason"), "peer comparison sho
 assert.ok(componentFiles.includes("comparison_universe_count"), "peer comparison should show the comparison universe size");
 assert.ok(componentFiles.includes("current_company_included"), "peer comparison should disclose whether the current company is included");
 assert.ok(componentFiles.includes("median_display"), "peer comparison should show the benchmark median");
-assert.ok(componentFiles.includes("median_difference_display"), "peer comparison should show the reference max/min label");
-assert.ok(componentFiles.includes("같은 연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
+assert.ok(componentFiles.includes("median_difference_display"), "peer comparison should show the median difference");
+assert.ok(componentFiles.includes("같은 기업유형·연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
 assert.equal(componentFiles.includes("<dt>rule_id</dt>"), false, "financial health cards should hide raw rule identifiers by default");
 assert.ok(componentFiles.includes("관찰값"), "financial health cards should show observation values first");
 assert.ok(componentFiles.includes("interpretation_scope"), "financial health cards should show interpretation scope");
