@@ -1,0 +1,1478 @@
+{
+  "schema_version": "company_audit_financials_v1",
+  "company_id": "sungji-steel",
+  "company_name": "성지제강",
+  "reporting_entity": "주식회사 성지제강",
+  "accounting_standard": {
+    "code": "korean_gaap",
+    "label_ko": "일반기업회계기준",
+    "label_en": "Korean GAAP"
+  },
+  "currency": "KRW",
+  "unit": "won",
+  "audit_opinions": [
+    {
+      "source_ref": "sungji_audit_report_2026_04_01",
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "auditor": "삼덕회계법인",
+      "auditor_report_date": "2026-03-13"
+    },
+    {
+      "source_ref": "sungji_audit_report_2025_04_01",
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "auditor": "삼덕회계법인",
+      "auditor_report_date": "2025-03-12"
+    },
+    {
+      "source_ref": "sungji_audit_report_2024_04_03",
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "covered_years": [
+        2023,
+        2022
+      ],
+      "auditor": "삼덕회계법인",
+      "auditor_report_date": "2024-03-15"
+    }
+  ],
+  "source_documents": {
+    "sungji_audit_report_2026_04_01": {
+      "filename": "OpenDART audit report XML rcept_no 20260401003674",
+      "report_date": "2026-04-01",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "auditor": "삼덕회계법인",
+      "auditor_report_date": "2026-03-13",
+      "audit_opinion": "적정의견",
+      "balance_sheet_pages": "DART XML ACODE rows",
+      "income_statement_pages": "DART XML ACODE rows",
+      "cash_flow_pages": "DART XML ACODE rows",
+      "audit_opinion_pages": "DART XML audit opinion section",
+      "source_role": "primary_2025_and_2024_comparative",
+      "usage": "Official OpenDART document.xml source; PDF is not committed."
+    },
+    "sungji_audit_report_2025_04_01": {
+      "filename": "OpenDART audit report XML rcept_no 20250401001241",
+      "report_date": "2025-04-01",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "auditor": "삼덕회계법인",
+      "auditor_report_date": "2025-03-12",
+      "audit_opinion": "적정의견",
+      "balance_sheet_pages": "DART XML ACODE rows",
+      "income_statement_pages": "DART XML ACODE rows",
+      "cash_flow_pages": "DART XML ACODE rows",
+      "audit_opinion_pages": "DART XML audit opinion section",
+      "source_role": "primary_2023_comparative_and_cross_check_2024",
+      "usage": "Official OpenDART document.xml source; PDF is not committed."
+    },
+    "sungji_audit_report_2024_04_03": {
+      "filename": "OpenDART audit report XML rcept_no 20240403002985",
+      "report_date": "2024-04-03",
+      "covered_years": [
+        2023,
+        2022
+      ],
+      "auditor": "삼덕회계법인",
+      "auditor_report_date": "2024-03-15",
+      "audit_opinion": "적정의견",
+      "balance_sheet_pages": "DART XML ACODE rows",
+      "income_statement_pages": "DART XML ACODE rows",
+      "cash_flow_pages": "DART XML ACODE rows",
+      "audit_opinion_pages": "DART XML audit opinion section",
+      "source_role": "cross_check_2023_only",
+      "usage": "Official OpenDART document.xml source; PDF is not committed."
+    }
+  },
+  "source_priority": {
+    "2025": {
+      "primary_source_ref": "sungji_audit_report_2026_04_01",
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": []
+    },
+    "2024": {
+      "primary_source_ref": "sungji_audit_report_2026_04_01",
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "sungji_audit_report_2025_04_01"
+      ]
+    },
+    "2023": {
+      "primary_source_ref": "sungji_audit_report_2025_04_01",
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "sungji_audit_report_2024_04_03"
+      ]
+    }
+  },
+  "financial_years": {
+    "2025": {
+      "source_refs": [
+        "sungji_audit_report_2026_04_01"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 124911260427,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 16615412854,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 2552444958,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 1386656032,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 94516518967,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 56095550229,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 38420968738,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 55687160398,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 43844364617,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": -3366459304,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -2101101534,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 5726151369,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 19686349606,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART XML cash and cash equivalents line used as ending cash cross-check",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Cash and cash equivalents balance-sheet line is used as the ending cash balance cross-check."
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": 19169528086,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "product_revenue": {
+          "reported": 13236518302,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 83166649988,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 8763008678,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Rental revenue and building rental revenue are summed."
+        },
+        "other_revenue": {
+          "reported": 575555373,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 21098873137,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE working-capital rows",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "No separate construction receivables or contract assets line was located in the DART XML."
+        },
+        "inventory": {
+          "reported": 12908131922,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE inventory rows",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "No separate work-in-progress inventory line was located in the DART XML."
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 15815081700,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": 7402624769,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 8732187446,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 584500000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 9342562,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 175291681,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      }
+    },
+    "2024": {
+      "source_refs": [
+        "sungji_audit_report_2026_04_01"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 112807588365,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 27680638753,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 5872247965,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 3493966102,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 84526862236,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 52552611005,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 31974251231,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 51259949878,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 36489431997,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": 7485038295,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -2227798485,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": -4549209956,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 19427759075,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART XML cash and cash equivalents line used as ending cash cross-check",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Cash and cash equivalents balance-sheet line is used as the ending cash balance cross-check."
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": 27497539917,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "product_revenue": {
+          "reported": 8881327954,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 55281011107,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 20073201588,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Rental revenue and building rental revenue are summed."
+        },
+        "other_revenue": {
+          "reported": 1074507799,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 26406917710,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE working-capital rows",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "No separate construction receivables or contract assets line was located in the DART XML."
+        },
+        "inventory": {
+          "reported": 2442696586,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE inventory rows",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "No separate work-in-progress inventory line was located in the DART XML."
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 9948531229,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": 7472223746,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 11545923351,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 1053719170,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 685362,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 245741141,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      }
+    },
+    "2023": {
+      "source_refs": [
+        "sungji_audit_report_2025_04_01"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 110521344333,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 35346741273,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 5881256243,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 3953407065,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 79453919933,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 50974931452,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 28478988481,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 46160095563,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 31766454743,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": 5875907405,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -8440420933,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 12312435620,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 18719729221,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART XML cash and cash equivalents line used as ending cash cross-check",
+              "section": "statement.cash_flow",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Cash and cash equivalents balance-sheet line is used as the ending cash balance cross-check."
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": 29530537763,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "product_revenue": {
+          "reported": 2252565487,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 46050249422,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 30739152317,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "Rental revenue and building rental revenue are summed."
+        },
+        "other_revenue": {
+          "reported": 1948839344,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE revenue detail rows",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 26298752509,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE working-capital rows",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "No separate construction receivables or contract assets line was located in the DART XML."
+        },
+        "inventory": {
+          "reported": 3936299,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE inventory rows",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "notes": "No separate work-in-progress inventory line was located in the DART XML."
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 10501884013,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": 8025506648,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 14921476709,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 10694657601,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 1412072,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 305306683,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "sungji_audit_report_2025_04_01"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "sungji_audit_report_2025_04_01",
+              "page_range": "DART original XML ACODE investment-signal rows",
+              "section": "note.investment_signals",
+              "verification_status": "verified_section_range"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "entity_attribution": {
+    "reporting_entity": "주식회사 성지제강",
+    "financial_scope": "standalone",
+    "related_entity_attribution_required": false,
+    "modular_segment_revenue_disclosed": false,
+    "attribution_warning": "This financial candidate is based on the standalone audit reports of Sungji Steel Co., Ltd. Product, goods, construction, rental, and other revenue are not interpreted as modular revenue.",
+    "special_events": []
+  },
+  "disclosure_limitations": [
+    "No modular segment revenue is disclosed in the audit reports.",
+    "Construction revenue is not interpreted as modular construction revenue.",
+    "Construction receivables, contract assets, and work-in-progress inventory are kept as not_disclosed because separate lines were not located."
+  ],
+  "validation_metadata": {
+    "prepared_by": "Codex Phase 7B-2 onboarding pilot",
+    "prepared_at": "2026-08-09",
+    "source_system": "OpenDART document.xml",
+    "source_receipt_numbers": [
+      "20260401003674",
+      "20250401001241",
+      "20240403002985"
+    ],
+    "promotion_status": "candidate_only_not_public",
+    "notes": "Candidate and manifest only; no promote --write execution."
+  }
+}

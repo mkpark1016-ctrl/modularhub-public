@@ -1620,16 +1620,16 @@
           "company_value": 61659861549,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 2번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 3번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 60570703113.5,
-          "median_display": "605.7억원",
+          "median": 61659861549.0,
+          "median_display": "616.6억원",
           "metric_id": "revenue",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 2,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 3,
           "reference_value": 307684467052,
           "reference_value_display": "3,076.8억원",
           "reference_value_label": "비교 범위 최대값",
@@ -1644,15 +1644,15 @@
           "company_value": 10.3,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 1번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 1번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 8.05,
-          "median_display": "8.1%",
+          "median": 7.5,
+          "median_display": "7.5%",
           "metric_id": "operating_margin_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 1,
           "reference_value": 10.3,
           "reference_value_display": "10.3%",
@@ -1666,15 +1666,15 @@
           "company_value": -345400575,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 2번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 2번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": -6188393909.5,
-          "median_display": "-61.9억원",
+          "median": -3366459304.0,
+          "median_display": "-33.7억원",
           "metric_id": "operating_cash_flow",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 2,
           "reference_value": 3068742998,
           "reference_value_display": "30.7억원",
@@ -1690,16 +1690,16 @@
           "company_value": 53164938435,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 3번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 4번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 48930238668.0,
-          "median_display": "489.3억원",
+          "median": 44695538901.0,
+          "median_display": "447.0억원",
           "metric_id": "total_borrowings",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 3,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 4,
           "reference_value": 30242382764,
           "reference_value_display": "302.4억원",
           "reference_value_label": "비교 범위 최소값",
@@ -1714,16 +1714,16 @@
           "company_value": 318.4,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 4번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 5번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 288.95000000000005,
-          "median_display": "289.0%",
+          "median": 283.8,
+          "median_display": "283.8%",
           "metric_id": "liabilities_to_equity_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 5,
           "reference_value": 105.1,
           "reference_value_display": "105.1%",
           "reference_value_label": "비교 범위 최소값",
@@ -6198,16 +6198,16 @@
           "company_value": 59481544678,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 3번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 4번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 60570703113.5,
-          "median_display": "605.7억원",
+          "median": 61659861549.0,
+          "median_display": "616.6억원",
           "metric_id": "revenue",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 3,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 4,
           "reference_value": 307684467052,
           "reference_value_display": "3,076.8억원",
           "reference_value_label": "비교 범위 최대값",
@@ -6222,15 +6222,15 @@
           "company_value": 7.5,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 3번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 3번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 8.05,
-          "median_display": "8.1%",
+          "median": 7.5,
+          "median_display": "7.5%",
           "metric_id": "operating_margin_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 3,
           "reference_value": 10.3,
           "reference_value_display": "10.3%",
@@ -6244,15 +6244,15 @@
           "company_value": 3068742998,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 1번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 1번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": -6188393909.5,
-          "median_display": "-61.9억원",
+          "median": -3366459304.0,
+          "median_display": "-33.7억원",
           "metric_id": "operating_cash_flow",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 1,
           "reference_value": 3068742998,
           "reference_value_display": "30.7억원",
@@ -6268,16 +6268,16 @@
           "company_value": 44695538901,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 2번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 3번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 48930238668.0,
-          "median_display": "489.3억원",
+          "median": 44695538901.0,
+          "median_display": "447.0억원",
           "metric_id": "total_borrowings",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 2,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 3,
           "reference_value": 30242382764,
           "reference_value_display": "302.4억원",
           "reference_value_label": "비교 범위 최소값",
@@ -6292,15 +6292,15 @@
           "company_value": 105.1,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 1번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 1번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 288.95000000000005,
-          "median_display": "289.0%",
+          "median": 283.8,
+          "median_display": "283.8%",
           "metric_id": "liabilities_to_equity_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 1,
           "reference_value": 105.1,
           "reference_value_display": "105.1%",
@@ -8346,16 +8346,16 @@
           "company_value": 59222859418,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 4번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 5번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 60570703113.5,
-          "median_display": "605.7억원",
+          "median": 61659861549.0,
+          "median_display": "616.6억원",
           "metric_id": "revenue",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 5,
           "reference_value": 307684467052,
           "reference_value_display": "3,076.8억원",
           "reference_value_label": "비교 범위 최대값",
@@ -8370,15 +8370,15 @@
           "company_value": 8.6,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 2번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 2번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 8.05,
-          "median_display": "8.1%",
+          "median": 7.5,
+          "median_display": "7.5%",
           "metric_id": "operating_margin_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 2,
           "reference_value": 10.3,
           "reference_value_display": "10.3%",
@@ -8392,16 +8392,16 @@
           "company_value": -12031387244,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 3번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 4번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": -6188393909.5,
-          "median_display": "-61.9억원",
+          "median": -3366459304.0,
+          "median_display": "-33.7억원",
           "metric_id": "operating_cash_flow",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 3,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 4,
           "reference_value": 3068742998,
           "reference_value_display": "30.7억원",
           "reference_value_label": "비교 범위 최대값",
@@ -8416,15 +8416,15 @@
           "company_value": 30242382764,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 1번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 1번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 48930238668.0,
-          "median_display": "489.3억원",
+          "median": 44695538901.0,
+          "median_display": "447.0억원",
           "metric_id": "total_borrowings",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 1,
           "reference_value": 30242382764,
           "reference_value_display": "302.4억원",
@@ -8440,16 +8440,16 @@
           "company_value": 294.1,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 3번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 4번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 288.95000000000005,
-          "median_display": "289.0%",
+          "median": 283.8,
+          "median_display": "283.8%",
           "metric_id": "liabilities_to_equity_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 3,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 4,
           "reference_value": 105.1,
           "reference_value_display": "105.1%",
           "reference_value_label": "비교 범위 최소값",
@@ -8805,6 +8805,2075 @@
             "planm_audit_report_2026_06_25"
           ],
           "status": "decreased"
+        }
+      }
+    },
+    {
+      "attribution": {
+        "attribution_warning": "This financial candidate is based on the standalone audit reports of Sungji Steel Co., Ltd. Product, goods, construction, rental, and other revenue are not interpreted as modular revenue.",
+        "financial_scope": "standalone",
+        "modular_segment_revenue_disclosed": false,
+        "related_entity_attribution_required": false,
+        "reporting_entity": "주식회사 성지제강",
+        "special_events": []
+      },
+      "available_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "sungji-steel",
+      "company_name": "성지제강",
+      "currency": "KRW",
+      "data_quality": {
+        "manual_page_check_required": false,
+        "modular_segment_revenue_disclosed": false,
+        "pending_manual_page_check_count": 0,
+        "source_location_count": 84,
+        "source_validator_status": "passed"
+      },
+      "derived_metrics": {
+        "2023": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "117.5%",
+            "value": 117.5
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "41.7%",
+            "value": 41.7
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "145.3%",
+            "value": 145.3
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "26.7%",
+            "value": 26.7
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "32.0%",
+            "value": 32.0
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.0%",
+            "value": 0.0
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "179.0%",
+            "value": 179.0
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "3.6%",
+            "value": 3.6
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.5",
+            "value": 1.486
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "5.3%",
+            "value": 5.3
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.8%",
+            "value": 1.8
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.0%",
+            "value": 2.0
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "27.8%",
+            "value": 27.8
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          }
+        },
+        "2024": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "90.6%",
+            "value": 90.6
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "49.0%",
+            "value": 49.0
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "140.5%",
+            "value": 140.5
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "24.4%",
+            "value": 24.4
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "24.5%",
+            "value": 24.5
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.2%",
+            "value": 2.2
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "164.4%",
+            "value": 164.4
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "3.1%",
+            "value": 3.1
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.1",
+            "value": 2.142
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "5.2%",
+            "value": 5.2
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.0%",
+            "value": 1.0
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "7.9%",
+            "value": 7.9
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "17.8%",
+            "value": 17.8
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.1%",
+            "value": 2.1
+          }
+        },
+        "2025": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "83.2%",
+            "value": 83.2
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "66.6%",
+            "value": 66.6
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "127.0%",
+            "value": 127.0
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "15.3%",
+            "value": 15.3
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "13.3%",
+            "value": 13.3
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.3%",
+            "value": 10.3
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "146.0%",
+            "value": 146.0
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.1%",
+            "value": 1.1
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-2.4",
+            "value": -2.428
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.0%",
+            "value": 2.0
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.5%",
+            "value": 0.5
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.6%",
+            "value": 10.6
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "7.0%",
+            "value": 7.0
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.7%",
+            "value": 10.7
+          }
+        }
+      },
+      "disclosure_warnings": [
+        {
+          "code": "modular_segment_revenue_not_disclosed",
+          "level": "warning",
+          "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다."
+        },
+        {
+          "code": "product_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "제품매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "construction_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "공사매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "related_entity_results_not_combined",
+          "level": "warning",
+          "message": "This financial candidate is based on the standalone audit reports of Sungji Steel Co., Ltd. Product, goods, construction, rental, and other revenue are not interpreted as modular revenue."
+        }
+      ],
+      "evidence_health": [
+        {
+          "distinct_source_count": 2,
+          "domain": "financial",
+          "latest_verified_at": "2026-04-01",
+          "not_applicable_item_count": 0,
+          "not_disclosed_item_count": 0,
+          "pending_item_count": 0,
+          "source_count": 2,
+          "source_ids": [
+            "sungji_audit_report_2025_04_01",
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_type_counts": {
+            "audit_report": 2
+          },
+          "unavailable_item_count": 0,
+          "verification_pending_item_count": 0,
+          "verification_status": "verified",
+          "verified_item_count": 84
+        },
+        {
+          "distinct_source_count": 2,
+          "domain": "disclosure_scope",
+          "latest_verified_at": "2026-04-01",
+          "not_applicable_item_count": 0,
+          "not_disclosed_item_count": 1,
+          "pending_item_count": 0,
+          "source_count": 2,
+          "source_ids": [
+            "sungji_audit_report_2025_04_01",
+            "sungji_audit_report_2026_04_01"
+          ],
+          "source_type_counts": {
+            "audit_report": 2
+          },
+          "unavailable_item_count": 1,
+          "verification_pending_item_count": 0,
+          "verification_status": "not_disclosed",
+          "verified_item_count": 0
+        }
+      ],
+      "financial_health": {
+        "cash_generation": {
+          "actual_value": -3366459304,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업현금흐름은 -33.7억원입니다.",
+          "headline": "현금창출력",
+          "interpretation_scope": "이익과 영업현금흐름 방향이 엇갈리는지 확인하는 관찰 규칙입니다.",
+          "metric_ids": [
+            "operating_profit",
+            "operating_cash_flow"
+          ],
+          "operator": "operating_profit > 0 and operating_cash_flow <",
+          "rule_id": "positive_profit_negative_operating_cash_flow",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "watch",
+          "threshold": 0
+        },
+        "disclosure_coverage": {
+          "actual_value": 0,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "검증된 출처 위치 84건, 수동 확인 필요 0건입니다.",
+          "headline": "공시 범위",
+          "interpretation_scope": "수동 출처 위치 확인이 남아 있는지 표시하는 공시 범위 관찰 규칙입니다.",
+          "limitation": "모듈러 부문 별도 매출은 공시되지 않았습니다.",
+          "metric_ids": [
+            "source_locations"
+          ],
+          "operator": "pending_location_count >",
+          "rule_id": "source_location_coverage_observation",
+          "source_ids": [],
+          "status": "info",
+          "threshold": 0
+        },
+        "leverage": {
+          "actual_value": 146.0,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 총차입금은 319.5억원이고 부채비율은 146.0%입니다.",
+          "headline": "재무안정성",
+          "interpretation_scope": "부채비율이 관찰 기준을 넘는지 표시하며 부실 판단을 의미하지 않습니다.",
+          "metric_ids": [
+            "total_borrowings",
+            "liabilities_to_equity_pct"
+          ],
+          "operator": ">",
+          "rule_id": "liabilities_to_equity_observation",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "info",
+          "threshold": 200
+        },
+        "profitability": {
+          "actual_value": 2.0,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업이익률은 2.0%입니다.",
+          "headline": "수익성",
+          "interpretation_scope": "영업이익률이 0% 미만인지 확인하는 관찰 규칙이며 신용등급이나 투자 판단이 아닙니다.",
+          "metric_ids": [
+            "revenue",
+            "operating_profit",
+            "operating_margin_pct"
+          ],
+          "operator": "<",
+          "rule_id": "profitability_negative_margin",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "info",
+          "threshold": 0
+        },
+        "working_capital": {
+          "actual_value": null,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "metric_ids": [
+            "receivables_total",
+            "receivables_to_revenue_pct"
+          ],
+          "operator": ">",
+          "rule_id": "receivables_to_revenue_observation",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "additional_confirmation_required",
+          "threshold": 30
+        }
+      },
+      "financial_scope": "standalone",
+      "financial_series": [
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 461.6,
+              "display_text": "461.6억원",
+              "raw_krw": 46160095563,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 317.7,
+              "display_text": "317.7억원",
+              "raw_krw": 31766454743,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 353.5,
+              "display_text": "353.5억원",
+              "raw_krw": 35346741273,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 0.0,
+              "display_text": "0.0억원",
+              "raw_krw": 3936299,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE inventory rows",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 39.5,
+              "display_text": "39.5억원",
+              "raw_krw": 3953407065,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 58.8,
+              "display_text": "58.8억원",
+              "raw_krw": 5875907405,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE cash-flow rows",
+                  "section": "statement.cash_flow",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 58.8,
+              "display_text": "58.8억원",
+              "raw_krw": 5881256243,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "not_disclosed",
+              "disclosure_status": "not_disclosed",
+              "display_eok": null,
+              "display_text": "공시되지 않음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE working-capital rows",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML reviewed; separate amount not located",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1105.2,
+              "display_text": "1,105.2억원",
+              "raw_krw": 110521344333,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 794.5,
+              "display_text": "794.5억원",
+              "raw_krw": 79453919933,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 334.5,
+              "display_text": "334.5억원",
+              "raw_krw": 33448867370,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 284.8,
+              "display_text": "284.8억원",
+              "raw_krw": 28478988481,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 509.7,
+              "display_text": "509.7억원",
+              "raw_krw": 50974931452,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2025_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2025_04_01"
+              ]
+            }
+          },
+          "year": 2023
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 512.6,
+              "display_text": "512.6억원",
+              "raw_krw": 51259949878,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 364.9,
+              "display_text": "364.9억원",
+              "raw_krw": 36489431997,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 276.8,
+              "display_text": "276.8억원",
+              "raw_krw": 27680638753,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 24.4,
+              "display_text": "24.4억원",
+              "raw_krw": 2442696586,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE inventory rows",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 34.9,
+              "display_text": "34.9억원",
+              "raw_krw": 3493966102,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 74.9,
+              "display_text": "74.9억원",
+              "raw_krw": 7485038295,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE cash-flow rows",
+                  "section": "statement.cash_flow",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 58.7,
+              "display_text": "58.7억원",
+              "raw_krw": 5872247965,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "not_disclosed",
+              "disclosure_status": "not_disclosed",
+              "display_eok": null,
+              "display_text": "공시되지 않음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE working-capital rows",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML reviewed; separate amount not located",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1128.1,
+              "display_text": "1,128.1억원",
+              "raw_krw": 112807588365,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 845.3,
+              "display_text": "845.3억원",
+              "raw_krw": 84526862236,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 289.7,
+              "display_text": "289.7억원",
+              "raw_krw": 28966678326,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 319.7,
+              "display_text": "319.7억원",
+              "raw_krw": 31974251231,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 525.5,
+              "display_text": "525.5억원",
+              "raw_krw": 52552611005,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            }
+          },
+          "year": 2024
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 556.9,
+              "display_text": "556.9억원",
+              "raw_krw": 55687160398,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 438.4,
+              "display_text": "438.4억원",
+              "raw_krw": 43844364617,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 166.2,
+              "display_text": "166.2억원",
+              "raw_krw": 16615412854,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 129.1,
+              "display_text": "129.1억원",
+              "raw_krw": 12908131922,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE inventory rows",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 13.9,
+              "display_text": "13.9억원",
+              "raw_krw": 1386656032,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -33.7,
+              "display_text": "-33.7억원",
+              "raw_krw": -3366459304,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE cash-flow rows",
+                  "section": "statement.cash_flow",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 25.5,
+              "display_text": "25.5억원",
+              "raw_krw": 2552444958,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "not_disclosed",
+              "disclosure_status": "not_disclosed",
+              "display_eok": null,
+              "display_text": "공시되지 않음",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE working-capital rows",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML reviewed; separate amount not located",
+                  "section": "note.working_capital",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 1249.1,
+              "display_text": "1,249.1억원",
+              "raw_krw": 124911260427,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE income-statement rows",
+                  "section": "statement.income_statement",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 945.2,
+              "display_text": "945.2억원",
+              "raw_krw": 94516518967,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 319.5,
+              "display_text": "319.5억원",
+              "raw_krw": 31949893915,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                },
+                {
+                  "page_range": "DART original XML ACODE borrowings rows",
+                  "section": "note.borrowings",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 384.2,
+              "display_text": "384.2억원",
+              "raw_krw": 38420968738,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 561.0,
+              "display_text": "561.0억원",
+              "raw_krw": 56095550229,
+              "source_locations": [
+                {
+                  "page_range": "DART original XML ACODE balance-sheet rows",
+                  "section": "statement.balance_sheet",
+                  "source_ref": "sungji_audit_report_2026_04_01",
+                  "verification_status": "verified_section_range"
+                }
+              ],
+              "source_refs": [
+                "sungji_audit_report_2026_04_01"
+              ]
+            }
+          },
+          "year": 2025
+        }
+      ],
+      "latest_metrics": {
+        "gross_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 166.2,
+          "display_text": "166.2억원",
+          "raw_krw": 16615412854,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "inventory": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 129.1,
+          "display_text": "129.1억원",
+          "raw_krw": 12908131922,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE inventory rows",
+              "section": "note.working_capital",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 13.9,
+          "display_text": "13.9억원",
+          "raw_krw": 1386656032,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -33.7,
+          "display_text": "-33.7억원",
+          "raw_krw": -3366459304,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 25.5,
+          "display_text": "25.5억원",
+          "raw_krw": 2552444958,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "receivables_total": {
+          "calculation_basis": "not_disclosed",
+          "disclosure_status": "not_disclosed",
+          "display_eok": null,
+          "display_text": "공시되지 않음",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE working-capital rows",
+              "section": "note.working_capital",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 1249.1,
+          "display_text": "1,249.1억원",
+          "raw_krw": 124911260427,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 945.2,
+          "display_text": "945.2억원",
+          "raw_krw": 94516518967,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 319.5,
+          "display_text": "319.5억원",
+          "raw_krw": 31949893915,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 384.2,
+          "display_text": "384.2억원",
+          "raw_krw": 38420968738,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 561.0,
+          "display_text": "561.0억원",
+          "raw_krw": 56095550229,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "work_in_progress": {
+          "calculation_basis": "not_disclosed",
+          "disclosure_status": "not_disclosed",
+          "display_eok": null,
+          "display_text": "공시되지 않음",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        }
+      },
+      "latest_snapshot": {
+        "latest_year": 2025,
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 13.9,
+          "display_text": "13.9억원",
+          "raw_krw": 1386656032,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": -33.7,
+          "display_text": "-33.7억원",
+          "raw_krw": -3366459304,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE cash-flow rows",
+              "section": "statement.cash_flow",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "operating_margin_pct": {
+          "calculation_basis": "derived_from_reported",
+          "display_text": "2.0%",
+          "value": 2.0
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 25.5,
+          "display_text": "25.5억원",
+          "raw_krw": 2552444958,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 1249.1,
+          "display_text": "1,249.1억원",
+          "raw_krw": 124911260427,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE income-statement rows",
+              "section": "statement.income_statement",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 945.2,
+          "display_text": "945.2억원",
+          "raw_krw": 94516518967,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 319.5,
+          "display_text": "319.5억원",
+          "raw_krw": 31949893915,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "DART original XML ACODE borrowings rows",
+              "section": "note.borrowings",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 384.2,
+          "display_text": "384.2억원",
+          "raw_krw": 38420968738,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 561.0,
+          "display_text": "561.0억원",
+          "raw_krw": 56095550229,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE balance-sheet rows",
+              "section": "statement.balance_sheet",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        "trade_receivables": {
+          "calculation_basis": "not_disclosed",
+          "disclosure_status": "not_disclosed",
+          "display_eok": null,
+          "display_text": "공시되지 않음",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "page_range": "DART original XML ACODE working-capital rows",
+              "section": "note.working_capital",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            },
+            {
+              "page_range": "DART original XML reviewed; separate amount not located",
+              "section": "note.working_capital",
+              "source_ref": "sungji_audit_report_2026_04_01",
+              "verification_status": "verified_section_range"
+            }
+          ],
+          "source_refs": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        }
+      },
+      "latest_year": 2025,
+      "peer_benchmarks": [
+        {
+          "best_value": 307684467052,
+          "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "1,249.1억원",
+          "company_value": 124911260427,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "5개 감사재무 기업 중 2번째",
+          "comparison_universe_count": 5,
+          "current_company_included": true,
+          "median": 61659861549.0,
+          "median_display": "616.6억원",
+          "metric_id": "revenue",
+          "not_comparable_reason": null,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 2,
+          "reference_value": 307684467052,
+          "reference_value_display": "3,076.8억원",
+          "reference_value_label": "비교 범위 최대값",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        {
+          "best_value": 10.3,
+          "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "2.0%",
+          "company_value": 2.0,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "5개 감사재무 기업 중 5번째",
+          "comparison_universe_count": 5,
+          "current_company_included": true,
+          "median": 7.5,
+          "median_display": "7.5%",
+          "metric_id": "operating_margin_pct",
+          "not_comparable_reason": null,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 5,
+          "reference_value": 10.3,
+          "reference_value_display": "10.3%",
+          "reference_value_label": "비교 범위 최대값",
+          "source_ids": []
+        },
+        {
+          "best_value": 3068742998,
+          "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "-33.7억원",
+          "company_value": -3366459304,
+          "comparable": true,
+          "comparison_direction": "higher_is_larger",
+          "comparison_label": "5개 감사재무 기업 중 3번째",
+          "comparison_universe_count": 5,
+          "current_company_included": true,
+          "median": -3366459304.0,
+          "median_display": "-33.7억원",
+          "metric_id": "operating_cash_flow",
+          "not_comparable_reason": null,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 3,
+          "reference_value": 3068742998,
+          "reference_value_display": "30.7억원",
+          "reference_value_label": "비교 범위 최대값",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        {
+          "best_value": 30242382764,
+          "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "319.5억원",
+          "company_value": 31949893915,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "5개 감사재무 기업 중 2번째",
+          "comparison_universe_count": 5,
+          "current_company_included": true,
+          "median": 44695538901.0,
+          "median_display": "447.0억원",
+          "metric_id": "total_borrowings",
+          "not_comparable_reason": null,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 2,
+          "reference_value": 30242382764,
+          "reference_value_display": "302.4억원",
+          "reference_value_label": "비교 범위 최소값",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ]
+        },
+        {
+          "best_value": 105.1,
+          "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "146.0%",
+          "company_value": 146.0,
+          "comparable": true,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "5개 감사재무 기업 중 2번째",
+          "comparison_universe_count": 5,
+          "current_company_included": true,
+          "median": 283.8,
+          "median_display": "283.8%",
+          "metric_id": "liabilities_to_equity_pct",
+          "not_comparable_reason": null,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 2,
+          "reference_value": 105.1,
+          "reference_value_display": "105.1%",
+          "reference_value_label": "비교 범위 최소값",
+          "source_ids": []
+        },
+        {
+          "best_value": null,
+          "calculation_basis": "same_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "확인되지 않음",
+          "company_value": null,
+          "comparable": false,
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_label": "비교 조건 미충족",
+          "comparison_universe_count": 3,
+          "current_company_included": false,
+          "median": null,
+          "median_display": "확인되지 않음",
+          "metric_id": "receivables_to_revenue_pct",
+          "not_comparable_reason": "현재 기업의 해당 지표 값이 확인되지 않았습니다.",
+          "other_peer_count": 3,
+          "peer_count": 3,
+          "rank": null,
+          "reference_value": null,
+          "reference_value_display": "확인되지 않음",
+          "reference_value_label": "비교 범위 최소값",
+          "source_ids": []
+        }
+      ],
+      "reporting_entity": "주식회사 성지제강",
+      "source_schema_version": "company_audit_financials_v1",
+      "source_summary": {
+        "audit_opinions": [
+          {
+            "auditor": "삼덕회계법인",
+            "auditor_report_date": "2026-03-13",
+            "covered_years": [
+              2025,
+              2024
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "sungji_audit_report_2026_04_01"
+          },
+          {
+            "auditor": "삼덕회계법인",
+            "auditor_report_date": "2025-03-12",
+            "covered_years": [
+              2024,
+              2023
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "sungji_audit_report_2025_04_01"
+          },
+          {
+            "auditor": "삼덕회계법인",
+            "auditor_report_date": "2024-03-15",
+            "covered_years": [
+              2023,
+              2022
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "sungji_audit_report_2024_04_03"
+          }
+        ],
+        "auditors": [
+          "삼덕회계법인"
+        ],
+        "latest_report_date": "2026-04-01",
+        "pending_location_count": 0,
+        "primary_documents": [
+          {
+            "filename": "OpenDART audit report XML rcept_no 20250401001241",
+            "report_date": "2025-04-01",
+            "source_ref": "sungji_audit_report_2025_04_01",
+            "source_role": "primary_2023_comparative_and_cross_check_2024"
+          },
+          {
+            "filename": "OpenDART audit report XML rcept_no 20260401003674",
+            "report_date": "2026-04-01",
+            "source_ref": "sungji_audit_report_2026_04_01",
+            "source_role": "primary_2025_and_2024_comparative"
+          }
+        ],
+        "source_priority_by_year": {
+          "2023": {
+            "basis": "comparative_financial_statements",
+            "cross_check_source_refs": [
+              "sungji_audit_report_2024_04_03"
+            ],
+            "primary_source_ref": "sungji_audit_report_2025_04_01"
+          },
+          "2024": {
+            "basis": "comparative_financial_statements",
+            "cross_check_source_refs": [
+              "sungji_audit_report_2025_04_01"
+            ],
+            "primary_source_ref": "sungji_audit_report_2026_04_01"
+          },
+          "2025": {
+            "basis": "current_year_financial_statements",
+            "cross_check_source_refs": [],
+            "primary_source_ref": "sungji_audit_report_2026_04_01"
+          }
+        },
+        "verified_location_count": 84
+      },
+      "trend_signals": [
+        {
+          "based_on_years": [
+            2023,
+            2025
+          ],
+          "code": "revenue_increased",
+          "description": "2023년 대비 2025년 매출액이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 124911260427,
+            "start_raw_krw": 110521344333
+          },
+          "title": "매출 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "operating_margin_declined",
+          "description": "2024년 대비 2025년 영업이익률이 하락됐다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 2.0,
+            "previous_pct": 5.2
+          },
+          "title": "영업이익률 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "operating_cash_flow_negative",
+          "description": "2025년 영업현금흐름은 음수다.",
+          "interpretation_type": "rule_based",
+          "level": "watch",
+          "metric_values": {
+            "latest_raw_krw": -3366459304
+          },
+          "title": "영업현금흐름 상태"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "borrowings_increased",
+          "description": "2024년 대비 2025년 총차입금이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 31949893915,
+            "previous_raw_krw": 28966678326
+          },
+          "title": "차입금 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "receivables_unknown",
+          "description": "2024년 대비 2025년 매출채권 합계가 확인되지 않았다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": null,
+            "previous_raw_krw": null
+          },
+          "title": "매출채권 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "inventory_increased",
+          "description": "2024년 대비 2025년 재고자산이 증가했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 12908131922,
+            "previous_raw_krw": 2442696586
+          },
+          "title": "재고 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "current_ratio_above_100",
+          "description": "2025년 유동비율은 127.0%다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 127.0
+          },
+          "title": "유동비율 상태"
+        }
+      ],
+      "trends": {
+        "liabilities_to_equity": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "-18.4%p",
+          "change_pct": -11.2,
+          "change_pct_unavailable_reason": null,
+          "change_value": -18.400000000000006,
+          "explanation": "총부채와 자본의 비율 변화를 확인합니다.",
+          "headline": "부채비율 변화",
+          "latest_display": "146.0%",
+          "latest_year": 2025,
+          "metric_ids": [
+            "liabilities_to_equity_pct"
+          ],
+          "previous_display": "164.4%",
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "-108.5억원",
+          "change_pct": -145.0,
+          "change_pct_unavailable_reason": null,
+          "change_value": -10851497599,
+          "explanation": "회계상 이익이 현금창출로 이어지는지 확인합니다.",
+          "headline": "영업현금흐름 변화",
+          "latest_display": "-33.7억원",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_cash_flow"
+          ],
+          "previous_display": "74.9억원",
+          "previous_year": 2024,
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "decreased"
+        },
+        "operating_margin": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "-3.2%p",
+          "change_pct": -61.5,
+          "change_pct_unavailable_reason": null,
+          "change_value": -3.2,
+          "explanation": "영업이익률의 전년 대비 변화폭을 확인합니다.",
+          "headline": "영업이익률 변화",
+          "latest_display": "2.0%",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_margin_pct"
+          ],
+          "previous_display": "5.2%",
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_profit": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "-33.2억원",
+          "change_pct": -56.5,
+          "change_pct_unavailable_reason": null,
+          "change_value": -3319803007,
+          "explanation": "영업이익의 금액 변화만 표시하며 수익성 판단은 영업이익률과 함께 봅니다.",
+          "headline": "영업이익 변화",
+          "latest_display": "25.5억원",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_profit"
+          ],
+          "previous_display": "58.7억원",
+          "previous_year": 2024,
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "decreased"
+        },
+        "revenue": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "+121.0억원",
+          "change_pct": 10.7,
+          "change_pct_unavailable_reason": null,
+          "change_value": 12103672062,
+          "explanation": "최근 연도 매출을 직전 연도와 비교합니다.",
+          "headline": "매출 변화",
+          "latest_display": "1,249.1억원",
+          "latest_year": 2025,
+          "metric_ids": [
+            "revenue"
+          ],
+          "previous_display": "1,128.1억원",
+          "previous_year": 2024,
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "increased"
+        },
+        "total_borrowings": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "+29.8억원",
+          "change_pct": 10.3,
+          "change_pct_unavailable_reason": null,
+          "change_value": 2983215589,
+          "explanation": "차입금 부담의 방향만 표시하며 부실 판단은 하지 않습니다.",
+          "headline": "총차입금 변화",
+          "latest_display": "319.5억원",
+          "latest_year": 2025,
+          "metric_ids": [
+            "total_borrowings"
+          ],
+          "previous_display": "289.7억원",
+          "previous_year": 2024,
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "increased"
+        },
+        "trade_receivables": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "계산되지 않음",
+          "change_pct": null,
+          "change_pct_unavailable_reason": "최신 연도 또는 직전 연도 값이 없어 변화율을 계산하지 않습니다.",
+          "change_value": null,
+          "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
+          "headline": "채권 변화",
+          "latest_display": "공시되지 않음",
+          "latest_year": 2025,
+          "metric_ids": [
+            "receivables_total"
+          ],
+          "previous_display": "공시되지 않음",
+          "previous_year": 2024,
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "additional_confirmation_required"
         }
       }
     },
@@ -10357,15 +12426,15 @@
           "company_value": 307684467052,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 1번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 1번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 60570703113.5,
-          "median_display": "605.7억원",
+          "median": 61659861549.0,
+          "median_display": "616.6억원",
           "metric_id": "revenue",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 1,
           "reference_value": 307684467052,
           "reference_value_display": "3,076.8억원",
@@ -10381,15 +12450,15 @@
           "company_value": 4.8,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 4번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 4번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 8.05,
-          "median_display": "8.1%",
+          "median": 7.5,
+          "median_display": "7.5%",
           "metric_id": "operating_margin_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
           "rank": 4,
           "reference_value": 10.3,
           "reference_value_display": "10.3%",
@@ -10403,16 +12472,16 @@
           "company_value": -30830315410,
           "comparable": true,
           "comparison_direction": "higher_is_larger",
-          "comparison_label": "4개 감사재무 기업 중 4번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 5번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": -6188393909.5,
-          "median_display": "-61.9억원",
+          "median": -3366459304.0,
+          "median_display": "-33.7억원",
           "metric_id": "operating_cash_flow",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 5,
           "reference_value": 3068742998,
           "reference_value_display": "30.7억원",
           "reference_value_label": "비교 범위 최대값",
@@ -10427,16 +12496,16 @@
           "company_value": 112134492523,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 4번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 5번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 48930238668.0,
-          "median_display": "489.3억원",
+          "median": 44695538901.0,
+          "median_display": "447.0억원",
           "metric_id": "total_borrowings",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 4,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 5,
           "reference_value": 30242382764,
           "reference_value_display": "302.4억원",
           "reference_value_label": "비교 범위 최소값",
@@ -10451,16 +12520,16 @@
           "company_value": 283.8,
           "comparable": true,
           "comparison_direction": "lower_is_lower_burden",
-          "comparison_label": "4개 감사재무 기업 중 2번째",
-          "comparison_universe_count": 4,
+          "comparison_label": "5개 감사재무 기업 중 3번째",
+          "comparison_universe_count": 5,
           "current_company_included": true,
-          "median": 288.95000000000005,
-          "median_display": "289.0%",
+          "median": 283.8,
+          "median_display": "283.8%",
           "metric_id": "liabilities_to_equity_pct",
           "not_comparable_reason": null,
-          "other_peer_count": 3,
-          "peer_count": 4,
-          "rank": 2,
+          "other_peer_count": 4,
+          "peer_count": 5,
+          "rank": 3,
           "reference_value": 105.1,
           "reference_value_display": "105.1%",
           "reference_value_label": "비교 범위 최소값",
