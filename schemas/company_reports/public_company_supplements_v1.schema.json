@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://modularhub.local/schemas/company_reports/public_company_supplements_v1.schema.json",
+  "title": "Public Company Supplements v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "companies"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "public_company_supplements_v1"
+    },
+    "companies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "company_id",
+          "company_name",
+          "schema_version"
+        ],
+        "properties": {
+          "schema_version": {
+            "type": "string"
+          },
+          "company_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "company_name": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
