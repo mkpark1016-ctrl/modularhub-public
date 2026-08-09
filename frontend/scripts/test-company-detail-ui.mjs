@@ -50,6 +50,7 @@ const componentFiles = [
   "../src/components/company/CompanyDetailHeader.jsx",
   "../src/components/company/CompanyDetailTabs.jsx",
   "../src/components/company/CompanyAuditFinancialPanel.jsx",
+  "../src/components/company/CompanyComparisonMvp.jsx",
   "../src/components/company/CompanyDataGaps.jsx",
   "../src/components/company/EvidenceDrawer.jsx",
   "../src/components/company/CompanyEntityDrawer.jsx",
@@ -61,6 +62,7 @@ const componentFiles = [
   "../src/components/company/CompanyEvidenceTab.jsx",
   "../src/components/company/companyDetailHelpers.js",
   "../src/companyEvidence.js",
+  "../src/companyDecisionModel.js",
   "../src/companyReportInsights.js",
 ].map((path) => readFileSync(new URL(path, import.meta.url), "utf8")).join("\n");
 const productionTabSource = readFileSync(new URL("../src/components/company/CompanyProductionTab.jsx", import.meta.url), "utf8");
@@ -101,8 +103,12 @@ assert.ok(componentFiles.includes("current_company_included"), "peer comparison 
 assert.ok(componentFiles.includes("median_display"), "peer comparison should show the benchmark median");
 assert.ok(componentFiles.includes("reference_value_label"), "peer comparison should show the reference max/min label");
 assert.ok(componentFiles.includes("같은 연도·통화·재무제표 범위"), "peer comparison copy should explain comparability constraints");
-assert.ok(componentFiles.includes("rule_id"), "financial health cards should show rule identifiers");
+assert.equal(componentFiles.includes("<dt>rule_id</dt>"), false, "financial health cards should hide raw rule identifiers by default");
+assert.ok(componentFiles.includes("관찰값"), "financial health cards should show observation values first");
 assert.ok(componentFiles.includes("interpretation_scope"), "financial health cards should show interpretation scope");
+assert.ok(componentFiles.includes("company-decision-snapshot"), "overview should include a decision snapshot");
+assert.ok(componentFiles.includes("company-detail-keyword-panel"), "detail header should expose decision keywords");
+assert.ok(componentFiles.includes("company-decision-chip-stack"), "company list cards should use scan-first decision chips");
 assert.ok(componentFiles.includes("계산 근거 보기"), "decision cards should open calculation evidence");
 assert.ok(componentFiles.includes("evidence-detail-list"), "evidence drawer should render structured calculation details");
 assert.ok(componentFiles.includes("CompanyEntityDrawer"), "entity detail panels should share a common drawer");

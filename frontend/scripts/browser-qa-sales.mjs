@@ -155,7 +155,7 @@ try {
   check(new RegExp(`직접 경쟁사\\s+${companySummary.directCompetitors.toLocaleString("ko-KR")}개사`).test(companyText), "company direct competitor summary mismatch");
   check(companyText.includes("최근 90일 활동"), "company recent activity summary missing");
   check(companyText.includes("데이터 보완 필요"), "company data gap summary missing");
-  check(await page.locator(".company-quick-filters").count() === 0, "company role quick filter row should not render");
+  check(await page.locator(".company-decision-quick-filters").count() === 1, "company decision quick filters should render once");
   const roleSelect = selectForLabel(page, "역할");
   const roleOptions = await roleSelect.locator("option").evaluateAll((options) => options.map((option) => ({ value: option.value, text: option.textContent })));
   check(roleOptions.length === 3, "role dropdown should contain all + two public role groups");

@@ -100,7 +100,7 @@ async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
     check(financialText.includes("의사결정 요약"), `${companyId}: audit decision summary missing`);
     check(financialText.includes("동료 비교"), `${companyId}: peer comparison missing`);
     check(financialText.includes("중앙값"), `${companyId}: peer median missing`);
-    check(financialText.includes("rule_id"), `${companyId}: health rule metadata missing`);
+    check(!financialText.includes("rule_id"), `${companyId}: raw health rule metadata should be hidden by default`);
     check(financialText.includes("재무 추세"), `${companyId}: financial trends missing`);
     if (companyId === "kumkang-kind") check(financialText.includes("비교 조건 미충족") || financialText.includes("임의 순위 없음"), `${companyId}: non-comparable peer state missing`);
     await openAndCloseEvidenceDrawer(page, page.locator("#company-tab-panel-financial .evidence-inline-button").filter({ hasText: "계산 근거" }).first(), "계산 기준");

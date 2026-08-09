@@ -23,6 +23,7 @@ import {
   peerBenchmarkLabel,
 } from "../../companyReportInsights";
 import { buildReportAnalysisEvidence, buildReportMetricEvidence } from "../../companyEvidence";
+import { buildCompanyDecisionModel } from "../../companyDecisionModel";
 
 function Field({ label, children }) {
   return (
@@ -225,8 +226,29 @@ function DecisionCards({ company, model, reportInsight, activities, onTabChange 
   );
 }
 
+function DecisionSnapshotPanel({ decision }) {
+  const groups = [
+    { key: "position", title: "포지션", items: decision.positionKeywords },
+    { key: "capability", title: "역량", items: decision.capabilities },
+    { key: "watch", title: "관찰", items: decision.watchSignals.length ? decision.watchSignals : ["추가 관찰 신호 없음"] },
+  ];
+  return (
+    <div className="company-decision-snapshot" aria-label="기업 의사결정 스냅샷">
+      {groups.map((group) => (
+        <article key={group.key}>
+          <span>{group.title}</span>
+          <div className="company-chip-row">
+            {group.items.slice(0, 4).map((item) => <b key={item}>{item}</b>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 export default function CompanyOverviewTab({ company, activities = [], reportInsight = null, onShowEvidence, onTabChange }) {
   const model = detailModel(company);
+  const decision = buildCompanyDecisionModel(company, { reportInsight, activities });
   const profile = company.company_profile || {};
   const recentSignals = recentSignalEvents(model.events);
   const strategicSignals = recentSignals.slice(0, 3);
@@ -234,6 +256,7 @@ export default function CompanyOverviewTab({ company, activities = [], reportIns
   return (
     <section className="summary company-tab-panel" id="company-tab-panel-overview" role="tabpanel" aria-labelledby="company-tab-overview">
       <h2>종합분석</h2>
+      <DecisionSnapshotPanel decision={decision} />
       <CompanyIntelligenceSummary model={model} reportInsight={reportInsight} onShowEvidence={onShowEvidence} />
       <DecisionCards company={company} model={model} reportInsight={reportInsight} activities={activities} onTabChange={onTabChange} />
 

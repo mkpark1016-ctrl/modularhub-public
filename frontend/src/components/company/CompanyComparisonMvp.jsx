@@ -8,12 +8,12 @@ import {
 } from "../../companyComparison";
 import {
   getCompanyResearchGapCount,
-  getCompanyCompactSummary,
   getCompanyDataGapCount,
   getCompanyVerificationLevel,
   getLatestVerifiedAt,
   getVerificationLevelLabel,
 } from "../../companyInsights";
+import { buildCompanyDecisionModel } from "../../companyDecisionModel";
 import { formatDate, formatKrw, formatNumber, formatPercent, labelValue } from "./companyDetailHelpers";
 
 function joinLabels(values, emptyText = "확인되지 않음") {
@@ -41,12 +41,12 @@ function projectText(metric) {
   return parts.join(" · ");
 }
 
-export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare, activities = [] }) {
+export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare, activities = [], reportInsight = null }) {
   const metric = getComparisonMetric(company);
+  const decision = buildCompanyDecisionModel(company, { reportInsight, activities });
   const gapCount = getCompanyDataGapCount(company);
   const verificationLevel = getVerificationLevelLabel(getCompanyVerificationLevel(company));
   const latestVerifiedAt = formatDate(getLatestVerifiedAt(company));
-  const latestActivity = activities[0];
   const cautionText = gapCount > 0
     ? `보완 필요 ${formatNumber(gapCount, "건")}`
     : (getCompanyResearchGapCount(company) > 0 ? `조사 공백 ${formatNumber(getCompanyResearchGapCount(company), "건")}` : "");
@@ -75,30 +75,34 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
           비교
         </label>
       </div>
-      <p className="company-card-summary">{getCompanyCompactSummary(company)}</p>
+      <div className="company-decision-chip-stack" aria-label={`${company.company_name} 의사결정 키워드`}>
+        <div className="company-chip-row">
+          {decision.positionKeywords.slice(0, 3).map((item) => <span key={item}>{item}</span>)}
+        </div>
+        <div className="company-chip-row subtle">
+          {decision.targetMarkets.slice(0, 4).map((item) => <span key={`market-${item}`}>{item}</span>)}
+          {decision.modularMethods.slice(0, 2).map((item) => <span key={`method-${item}`}>{item}</span>)}
+        </div>
+      </div>
       <dl className="company-kpi-list">
-        <div><dt>최근 매출</dt><dd>{metric.revenue === null ? "확인되지 않음" : `${metric.latestFinancialYear}년 ${formatKrw(metric.revenue)}`}</dd></div>
-        <div><dt>영업이익률</dt><dd>{formatMargin(metric.operatingMargin)}</dd></div>
-        <div><dt>생산시설</dt><dd>{facilityText(metric)}</dd></div>
-        <div><dt>검증 실적</dt><dd>{projectText(metric)}</dd></div>
+        {decision.cardMetrics.map((item) => (
+          <div key={item.key}><dt>{item.label}</dt><dd>{item.value}</dd></div>
+        ))}
       </dl>
       <div className="company-card-decision">
         <div>
           <span>최근 변화</span>
-          <strong>{latestActivity ? latestActivity.title : "최근 90일 주요 변화 없음"}</strong>
-          {latestActivity?.publishedAt && <small>{formatDate(latestActivity.publishedAt)}</small>}
+          <strong>{decision.recentSignal.title}</strong>
+          <small>{decision.recentSignal.meta}</small>
         </div>
-        {cautionText && (
-          <div>
-            <span>주의사항</span>
-            <strong>{cautionText}</strong>
-            <small>{latestVerifiedAt} 기준</small>
-          </div>
-        )}
+        <div>
+          <span>관찰 포인트</span>
+          <strong>{decision.watchSignals[0] || cautionText || "추가 관찰 신호 없음"}</strong>
+          <small>{latestVerifiedAt} 기준</small>
+        </div>
       </div>
-      <div className="company-tag-block">
-        <span>{joinLabels(metric.targetMarkets.slice(0, 3))}</span>
-        <span>{joinLabels(metric.modularMethods.slice(0, 2))}</span>
+      <div className="company-tag-block" aria-label="역량 요약">
+        {decision.capabilities.slice(0, 3).map((item) => <span key={item}>{item}</span>)}
       </div>
       <p className="company-card-meta">검증 수준 {verificationLevel} · 최신 검증일 {latestVerifiedAt}</p>
       <div className="card-footer">
@@ -111,7 +115,7 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
   );
 }
 
-export function CompanyCardGrid({ companies, selectedIds, onToggleCompare, activitiesByCompany = new Map() }) {
+export function CompanyCardGrid({ companies, selectedIds, onToggleCompare, activitiesByCompany = new Map(), reportInsightsByCompany = new Map() }) {
   const selectionDisabled = selectedIds.length >= MAX_COMPARISON_COMPANIES;
   return (
     <div className="company-card-grid">
@@ -123,6 +127,7 @@ export function CompanyCardGrid({ companies, selectedIds, onToggleCompare, activ
           selectionDisabled={selectionDisabled}
           onToggleCompare={onToggleCompare}
           activities={activitiesByCompany.get(company.company_id) || []}
+          reportInsight={reportInsightsByCompany.get(company.company_id) || null}
         />
       ))}
     </div>

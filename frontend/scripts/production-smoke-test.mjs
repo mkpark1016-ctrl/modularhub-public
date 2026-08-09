@@ -75,7 +75,7 @@ try {
   check(companyText.includes("전체 11개사"), "company count 11 missing");
   check(companyText.includes("건설사"), "contractor role label missing");
   check(companyText.includes("모듈러 제작 전문 업체"), "modular specialist role label missing");
-  check(await page.locator(".company-quick-filters").count() === 0, "duplicate role quick filter visible");
+  check(await page.locator(".company-decision-quick-filters").count() === 1, "company decision quick filters should render once");
   await page.goto(`${baseUrl}/companies/daeseung-engineering`, { waitUntil: "networkidle" });
   await page.getByRole("heading", { name: /대승엔지니어링/ }).waitFor();
   const hiddenRoute = await page.request.get(`${baseUrl}/company-intelligence`, { maxRedirects: 0 });
