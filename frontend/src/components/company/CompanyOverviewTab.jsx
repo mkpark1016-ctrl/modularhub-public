@@ -118,12 +118,10 @@ function KeyFinancialSnapshot({ reportInsight, onTabChange, onShowEvidence }) {
 function AuditOpinionNotice({ reportInsight }) {
   const opinion = latestAuditOpinion(reportInsight);
   if (!opinion || opinion.opinion === "unqualified") return null;
-  const limitation = reportInsight?.source_summary?.disclosure_limitations?.[0]
-    || "비적정 감사의견이 확인되었습니다. 재무 수치는 감사의견의 제한사항과 함께 해석해야 합니다.";
   return (
     <div className="company-audit-opinion-notice" role="note" aria-label="감사의견 해석 주의">
       <strong>감사의견 {opinion.opinion_label_ko || "확인 필요"} · 해석 주의</strong>
-      <span>{limitation}</span>
+      <span>비적정 감사의견이 확인되었습니다. 감사의견은 재무제표의 신뢰성·감사범위에 관한 정보이며, 회사의 모든 수치가 오류라는 의미는 아닙니다.</span>
     </div>
   );
 }

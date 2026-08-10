@@ -3954,11 +3954,6 @@
         "auditors": [
           "태성회계법인"
         ],
-        "disclosure_limitations": [
-          "2023~2025 감사보고서는 재고자산 관련 감사범위 제한으로 모두 한정의견입니다. 손익과 영업활동현금흐름 해석 시 해당 제한을 함께 고려해야 합니다.",
-          "건설공사 관련 별도 공사미수금/공사채권 총액은 재무상태표에서 별도 공시되지 않아 construction_receivables_gross는 not_disclosed로 처리합니다.",
-          "제품매출·공사수입금은 회사 전체 기준이며 모듈러 사업 귀속분이 별도 분리 공시되지 않습니다."
-        ],
         "latest_report_date": "2026-04-09",
         "pending_location_count": 0,
         "primary_documents": [
