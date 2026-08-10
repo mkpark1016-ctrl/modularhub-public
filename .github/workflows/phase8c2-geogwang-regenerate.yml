@@ -45,7 +45,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add frontend/public/data/companies/company_report_insights.json data/company_reports/company_data_coverage_snapshot.json
+          git add \
+            frontend/public/data/companies/company_report_insights.json \
+            data/company_reports/company_data_coverage_snapshot.json \
+            artifacts/company-data-coverage/company-data-coverage.json \
+            artifacts/company-data-coverage/company-data-coverage.md
           if git diff --cached --quiet; then
             echo "No derived changes to commit."
             exit 0
