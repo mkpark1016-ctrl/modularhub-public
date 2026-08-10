@@ -29,3 +29,23 @@ jobs:
           python scripts/build_company_data_coverage.py --as-of-date 2026-08-10 --check
       - name: Python tests
         run: python -m pytest -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: Frontend company tests
+        working-directory: frontend
+        run: |
+          npm run test:companies
+          npm run test:companies-detail
+          npm run test:companies-comparison
+          npm run test:companies-url
+      - name: Frontend lint and build
+        working-directory: frontend
+        run: |
+          npm run lint
+          npm run build
