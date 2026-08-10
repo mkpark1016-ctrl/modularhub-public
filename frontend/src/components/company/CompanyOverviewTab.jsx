@@ -22,6 +22,7 @@ import {
 } from "../../companyReportInsights";
 import { buildReportAnalysisEvidence } from "../../companyEvidence";
 import { buildCompanyDecisionModel } from "../../companyDecisionModel";
+import { getActivitySourceName, getActivitySourceUrl } from "../../companyActivities";
 
 function Field({ label, children }) {
   return (
@@ -188,13 +189,23 @@ function RecentActivityPreview({ activities }) {
       </div>
       {visible.length ? (
         <div className="company-compact-row-list">
-          {visible.map((activity) => (
-            <div key={activity.activityId || activity.url || activity.title}>
-              <b>{activity.title}</b>
-              <span>{activity.source || activity.publisher || "공개자료"}</span>
-              <em>{formatDate(activity.publishedAt)}</em>
-            </div>
-          ))}
+          {visible.map((activity) => {
+            const sourceName = getActivitySourceName(activity);
+            const sourceUrl = getActivitySourceUrl(activity);
+            return (
+              <div key={activity.activityId || activity.url || activity.title}>
+                <b>{activity.title}</b>
+                <span>
+                  {sourceUrl ? (
+                    <a className="inline-link" href={sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`${sourceName} 원문 열기`}>
+                      {sourceName} <ExternalLink size={12} />
+                    </a>
+                  ) : sourceName}
+                </span>
+                <em>{formatDate(activity.publishedAt)}</em>
+              </div>
+            );
+          })}
         </div>
       ) : (
         <p className="finance-note">최근 공개 활동 신호가 확인되지 않았습니다.</p>

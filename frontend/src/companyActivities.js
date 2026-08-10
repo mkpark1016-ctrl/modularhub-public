@@ -30,6 +30,23 @@ export function getActivityTypeLabel(type) {
   return COMPANY_ACTIVITY_TYPE_LABELS[type] || "일반뉴스";
 }
 
+export function getActivitySourceName(activity) {
+  const value = activity?.sourceName || activity?.source || activity?.publisher || "공개자료";
+  return String(value).trim() || "공개자료";
+}
+
+export function getActivitySourceUrl(activity) {
+  const value = String(activity?.sourceUrl || "").trim();
+  if (!value) return null;
+  try {
+    const parsed = new URL(value);
+    if (!["http:", "https:"].includes(parsed.protocol)) return null;
+    return value;
+  } catch {
+    return null;
+  }
+}
+
 export function getActivityFilterGroup(type) {
   if (["project", "contract", "bid"].includes(type)) return "projects";
   if (["investment", "factory"].includes(type)) return "investment_factory";
@@ -46,6 +63,6 @@ export function filterCompanyActivities(activities, filter) {
 export function isValidActivity(activity) {
   if (!activity || typeof activity !== "object") return false;
   if (!["high", "medium"].includes(activity.confidence)) return false;
-  if (activity.sourceUrl && !/^https?:\/\//.test(String(activity.sourceUrl))) return false;
+  if (activity.sourceUrl && !getActivitySourceUrl(activity)) return false;
   return Boolean(activity.companyId && activity.activityId && activity.title && activity.publishedAt);
 }
