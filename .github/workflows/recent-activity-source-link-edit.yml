@@ -1,4 +1,4 @@
-name: Recent Activity Source Link Edit
+name: Recent Activity Source Link QA
 
 on:
   push:
@@ -6,30 +6,46 @@ on:
       - feat/recent-activity-source-links
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  edit:
+  qa:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           ref: feat/recent-activity-source-links
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Apply source-link patch
+      - name: Install Python dependencies
         run: |
-          python scripts/apply_recent_activity_source_links_once.py
-          git diff --check
-      - name: Commit implementation
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest jsonschema
+      - name: Python regressions and compile
         run: |
-          if git diff --quiet -- frontend/src/components/company/CompanyOverviewTab.jsx frontend/scripts/test-company-activities.mjs; then
-            echo "No source-link edits needed"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add frontend/src/components/company/CompanyOverviewTab.jsx frontend/scripts/test-company-activities.mjs
-          git commit -m "Link recent activities to original sources"
-          git push origin HEAD:feat/recent-activity-source-links
+          python -m pytest -q
+          python -m compileall scripts src
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: Recent activity and company UI regressions
+        working-directory: frontend
+        run: |
+          npm run test:companies-activities
+          npm run test:companies-detail
+          npm run test:companies-url
+          npm run test:companies-v2
+      - name: Lint and build
+        working-directory: frontend
+        run: |
+          npm run lint
+          npm run build
+      - name: Diff hygiene
+        run: git diff --check origin/main...HEAD
