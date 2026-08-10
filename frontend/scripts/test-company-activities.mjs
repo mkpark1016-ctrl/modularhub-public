@@ -141,6 +141,7 @@ assert.equal(normalizeCompanyTab("not-a-tab"), "overview");
 const detailViewSource = readFileSync(new URL("../src/components/company/CompanyDetailView.jsx", import.meta.url), "utf8");
 const overviewSource = readFileSync(new URL("../src/components/company/CompanyOverviewTab.jsx", import.meta.url), "utf8");
 const timelineSource = readFileSync(new URL("../src/components/company/CompanyActivityTimeline.jsx", import.meta.url), "utf8");
+const companyUiOverridesSource = readFileSync(new URL("../src/companyUiOverrides.css", import.meta.url), "utf8");
 assert.match(detailViewSource, /activities=\{activities\}/);
 assert.match(detailViewSource, /CompanyActivityTimeline/);
 assert.match(detailViewSource, /tab === "activity"/);
@@ -177,5 +178,17 @@ assert.match(timelineSource, /검색·필터 조건에 맞는 활동이 없습�
 assert.match(timelineSource, /확인된 공개 활동이 없습니다/);
 assert.match(timelineSource, /{sourceName} 원문 보기/);
 assert.match(timelineSource, /getActivitySourceUrl/);
+assert.match(timelineSource, /company-activity-search-control/);
+assert.match(timelineSource, /company-activity-period-control/);
+assert.match(timelineSource, /company-activity-sort-control/);
+assert.match(timelineSource, /company-activity-toolbar-label">활동 검색/);
+assert.match(timelineSource, /company-activity-toolbar-label">기간/);
+assert.match(timelineSource, /company-activity-toolbar-label">정렬/);
+assert.match(companyUiOverridesSource, /@media \(min-width: 960px\)/);
+assert.match(companyUiOverridesSource, /grid-template-columns: minmax\(360px, 2\.2fr\) minmax\(210px, 1fr\) minmax\(210px, 1fr\)/);
+assert.match(companyUiOverridesSource, /@media \(min-width: 761px\) and \(max-width: 959px\)/);
+assert.match(companyUiOverridesSource, /company-activity-search-control/);
+assert.match(companyUiOverridesSource, /grid-column: 1 \/ -1/);
+assert.match(companyUiOverridesSource, /@media \(max-width: 760px\)/);
 
 console.log("COMPANY ACTIVITY FRONTEND TESTS PASSED");

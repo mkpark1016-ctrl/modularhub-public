@@ -25,3 +25,72 @@
     min-height: 46px;
   }
 }
+
+/* Company activity timeline: keep search, period, and sort compact without changing filter logic. */
+.company-activity-toolbar .company-activity-toolbar-control,
+.company-activity-toolbar .search-input-wrap,
+.company-activity-toolbar select {
+  min-width: 0;
+}
+
+.company-activity-toolbar .company-activity-toolbar-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.company-activity-toolbar .search-input-wrap,
+.company-activity-toolbar select {
+  width: 100%;
+}
+
+@media (min-width: 960px) {
+  .company-activity-toolbar {
+    display: grid;
+    grid-template-columns: minmax(360px, 2.2fr) minmax(210px, 1fr) minmax(210px, 1fr);
+    gap: 16px;
+    align-items: center;
+  }
+
+  .company-activity-toolbar .company-activity-toolbar-control {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 959px) {
+  .company-activity-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 16px;
+  }
+
+  .company-activity-toolbar .company-activity-search-control {
+    grid-column: 1 / -1;
+  }
+
+  .company-activity-toolbar .company-activity-toolbar-control {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .company-activity-toolbar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .company-activity-toolbar .company-activity-toolbar-control {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin: 0;
+  }
+}

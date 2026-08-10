@@ -72,8 +72,8 @@ export default function CompanyActivityTimeline({ activities = [] }) {
       </div>
 
       <div className="company-toolbar company-activity-toolbar" aria-label="기업 활동 검색 및 정렬">
-        <label>
-          활동 검색
+        <label className="company-activity-toolbar-control company-activity-search-control">
+          <span className="company-activity-toolbar-label">활동 검색</span>
           <span className="search-input-wrap">
             <Search size={15} aria-hidden="true" />
             <input
@@ -87,8 +87,8 @@ export default function CompanyActivityTimeline({ activities = [] }) {
             />
           </span>
         </label>
-        <label>
-          기간
+        <label className="company-activity-toolbar-control company-activity-period-control">
+          <span className="company-activity-toolbar-label">기간</span>
           <select
             value={period}
             onChange={(event) => {
@@ -101,8 +101,8 @@ export default function CompanyActivityTimeline({ activities = [] }) {
             ))}
           </select>
         </label>
-        <label>
-          정렬
+        <label className="company-activity-toolbar-control company-activity-sort-control">
+          <span className="company-activity-toolbar-label">정렬</span>
           <select
             value={sortOrder}
             onChange={(event) => {
