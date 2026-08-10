@@ -147,7 +147,7 @@ assert.match(detailViewSource, /tab === "activity"/);
 assert.match(detailViewSource, /company-tab-panel-activity/);
 assert.match(detailViewSource, /company-activity-history/);
 assert.match(detailViewSource, /getCompanyActivityHistory/);
-assert.match(detailViewSource, /encodeURIComponent\(company\.company_id\)/);
+assert.match(detailViewSource, /encodeURIComponent\(companyId\)/);
 assert.match(detailViewSource, /historyActivities \?\? activities/);
 assert.match(detailViewSource, /CompanyActivityTimeline activities=\{timelineActivities\}/);
 assert.match(detailViewSource, /공개 뉴스와 사업정보에서 확인된 기업 활동을 최신순으로 누적/);
