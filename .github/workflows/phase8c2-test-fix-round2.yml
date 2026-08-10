@@ -1,0 +1,49 @@
+name: Phase 8C-2 Test Fix Round 2
+
+on:
+  push:
+    branches:
+      - feat/geogwang-audit-financials
+
+permissions:
+  contents: write
+
+jobs:
+  update-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/geogwang-audit-financials
+          fetch-depth: 0
+      - name: Update changed peer universe expectations
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('tests/test_company_report_insights.py')
+          text = path.read_text(encoding='utf-8')
+          old = 'assert benchmark["comparison_universe_count"] == 5\n    assert benchmark["other_peer_count"] == 4'
+          new = 'assert benchmark["comparison_universe_count"] == 6\n    assert benchmark["other_peer_count"] == 5'
+          if old not in text:
+              raise SystemExit('peer universe assertion not found')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+
+          path = Path('tests/test_nrb_financial_source_reconciliation.py')
+          text = path.read_text(encoding='utf-8')
+          old = '''        "daeseung-engineering",\n        "kumkang-kind",'''
+          new = '''        "daeseung-engineering",\n        "geogwang-enterprise",\n        "kumkang-kind",'''
+          if old not in text:
+              raise SystemExit('NRB public company set assertion not found')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Commit updates and remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/phase8c2-test-fix-round2.yml
+          git add tests/test_company_report_insights.py tests/test_nrb_financial_source_reconciliation.py
+          git commit -m "test: include Geogwang in audit peer universe"
+          git push origin HEAD:feat/geogwang-audit-financials
