@@ -26,6 +26,7 @@ jobs:
       - name: Derived data checks
         run: |
           python scripts/build_company_report_insights.py --base-ref origin/main --check
+          python scripts/build_company_data_coverage.py --as-of-date 2026-08-10
           python scripts/build_company_data_coverage.py --as-of-date 2026-08-10 --check
       - name: Python tests and compile
         run: |
