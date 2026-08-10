@@ -25,7 +25,9 @@ jobs:
           python-version: '3.11'
 
       - name: Apply guarded source migration
-        run: python scripts/migrations/apply_phase_8c_1b.py
+        run: |
+          python scripts/migrations/apply_phase_8c_1b.py
+          python scripts/migrations/update_phase_8c_1b_existing_test.py
 
       - name: Set up Node
         uses: actions/setup-node@v4
