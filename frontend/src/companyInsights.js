@@ -270,8 +270,13 @@ export function getCompanyTypeLabel(company) {
   return getCanonicalCompanyRoleLabel(company);
 }
 
+export function getStrategicCompetitiveRole(company) {
+  if (isModularSpecialistCompany(company)) return "direct_competitor";
+  return company?.competitive_role || "unknown";
+}
+
 export function getCompetitiveRoleLabel(company) {
-  return labelFromMap(COMPETITIVE_ROLE_LABELS, company?.competitive_role);
+  return labelFromMap(COMPETITIVE_ROLE_LABELS, getStrategicCompetitiveRole(company));
 }
 
 export function getTierLabel(company) {
@@ -504,7 +509,7 @@ export function matchesCompanySearch(company, query) {
 export function companyMatchesFilters(company, values) {
   if ([MODULAR_SPECIALIST_ROLE, LEGACY_PRODUCER_GROUP_ROLE].includes(values.role) && !isModularSpecialistCompany(company)) return false;
   if (values.role !== "all" && ![MODULAR_SPECIALIST_ROLE, LEGACY_PRODUCER_GROUP_ROLE].includes(values.role) && getCanonicalCompanyRole(company) !== values.role) return false;
-  if (values.relationship !== "all" && company.competitive_role !== values.relationship) return false;
+  if (values.relationship !== "all" && getStrategicCompetitiveRole(company) !== values.relationship) return false;
   if (values.tier !== "all" && company.analysis_tier !== values.tier) return false;
   if (values.status !== "all" && getCompanyDataStatus(company) !== values.status) return false;
   return matchesCompanySearch(company, values.q);
@@ -519,7 +524,7 @@ export function compareCompanies(a, b, sort = "tier") {
   }
   const tierDelta = TIER_SORT_ORDER.indexOf(a.analysis_tier) - TIER_SORT_ORDER.indexOf(b.analysis_tier);
   if (tierDelta !== 0) return tierDelta;
-  const roleDelta = ROLE_SORT_ORDER.indexOf(a.competitive_role) - ROLE_SORT_ORDER.indexOf(b.competitive_role);
+  const roleDelta = ROLE_SORT_ORDER.indexOf(getStrategicCompetitiveRole(a)) - ROLE_SORT_ORDER.indexOf(getStrategicCompetitiveRole(b));
   if (roleDelta !== 0) return roleDelta;
   return String(a.company_name || "").localeCompare(String(b.company_name || ""), "ko-KR");
 }
@@ -560,13 +565,21 @@ export function statusOptions(companies) {
 
 export function getCompanySummary(companies) {
   const list = Array.isArray(companies) ? companies : [];
+  const roleCounts = companyRoleOptions(list);
+  const strategicRelationshipRows = list.map((company) => ({
+    ...company,
+    competitive_role: getStrategicCompetitiveRole(company),
+  }));
   return {
     total: list.length,
-    directCompetitors: list.filter((company) => company.competitive_role === "direct_competitor").length,
+    generalContractors: list.filter((company) => getCanonicalCompanyRole(company) === "general_contractor").length,
+    modularSpecialists: list.filter(isModularSpecialistCompany).length,
+    directModularCompetitors: list.filter(isModularSpecialistCompany).length,
+    directCompetitors: list.filter((company) => getStrategicCompetitiveRole(company) === "direct_competitor").length,
     coreVerified: list.filter((company) => getCompanyDataStatus(company) === "core_verified").length,
     facilityConfirmed: list.filter((company) => hasConfirmedProductionFacility(company)).length,
-    roleCounts: companyRoleOptions(list),
-    relationshipCounts: optionCounts(list, "competitive_role", COMPETITIVE_ROLE_LABELS),
+    roleCounts,
+    relationshipCounts: optionCounts(strategicRelationshipRows, "competitive_role", COMPETITIVE_ROLE_LABELS),
     statusCounts: statusOptions(list),
   };
 }

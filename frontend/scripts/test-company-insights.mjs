@@ -47,7 +47,10 @@ assert.equal(new Set(canonicalCompanies.map((company) => company.company_id)).si
 assert.equal(companies.length, 11);
 const summary = getCompanySummary(companies);
 assert.equal(summary.total, 11);
-assert.equal(summary.directCompetitors, 6);
+assert.equal(summary.generalContractors, 4);
+assert.equal(summary.modularSpecialists, 7);
+assert.equal(summary.directModularCompetitors, 7);
+assert.equal(summary.directCompetitors, 7);
 assert.equal(summary.coreVerified, 10);
 assert.equal(summary.facilityConfirmed, 8);
 assert.deepEqual(summary.roleCounts.map((option) => [option.value, option.label, option.count]), [
@@ -109,7 +112,7 @@ assert.equal(legacySamsung.project_credit, false);
 assert.ok(yuchangEvents.some((event) => event.event_id === "event-yuchang-poscoac-acquisition"));
 
 const direct = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "all", relationship: "direct_competitor", tier: "all", status: "all" }));
-assert.equal(direct.length, 6);
+assert.equal(direct.length, 7);
 const modularSpecialists = companies.filter((company) => companyMatchesFilters(company, { q: "", role: "modular_specialist", relationship: "all", tier: "all", status: "all" }));
 assert.equal(modularSpecialists.length, 7);
 assert.equal(modularSpecialists.every(isModularSpecialistCompany), true);

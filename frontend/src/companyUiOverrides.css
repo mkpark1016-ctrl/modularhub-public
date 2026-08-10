@@ -1,0 +1,27 @@
+/* Phase 8C-1B: keep company discovery controls aligned on desktop without changing mobile behavior. */
+@media (min-width: 781px) {
+  .company-discovery-primary {
+    grid-template-columns: minmax(430px, 480px) minmax(320px, 1fr) minmax(180px, 210px);
+    gap: 16px;
+    align-items: end;
+  }
+
+  .company-discovery-primary .company-toolbar-label,
+  .company-discovery-primary .company-toolbar-search,
+  .company-discovery-primary .company-toolbar-sort {
+    min-width: 0;
+  }
+
+  .company-discovery-primary .company-type-segmented {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .company-discovery-primary .company-type-segmented button,
+  .company-discovery-primary .search-field,
+  .company-discovery-primary .company-toolbar-sort select {
+    min-height: 46px;
+  }
+}
