@@ -7,12 +7,28 @@ import {
   getStrategicCompetitiveRole,
   isModularSpecialistCompany,
 } from "../src/companyInsights.js";
+import {
+  applyCompanyStrategy,
+  validateCompanyStrategyPayload,
+} from "../src/companyStrategy.js";
 
 const companiesPath = fileURLToPath(new URL("../public/data/companies/companies.json", import.meta.url));
-const payload = JSON.parse(fs.readFileSync(companiesPath, "utf8"));
-const companies = Array.isArray(payload) ? payload : payload.companies;
-assert.equal(companies.length, 11, "public company universe must remain 11");
+const strategyPath = fileURLToPath(new URL("../public/data/companies/company_strategy.json", import.meta.url));
+const companyPayload = JSON.parse(fs.readFileSync(companiesPath, "utf8"));
+const strategyPayload = JSON.parse(fs.readFileSync(strategyPath, "utf8"));
+const rawCompanies = Array.isArray(companyPayload) ? companyPayload : companyPayload.companies;
+assert.equal(rawCompanies.length, 11, "public company universe must remain 11");
 
+const validation = validateCompanyStrategyPayload(strategyPayload, rawCompanies);
+assert.equal(validation.valid, true, validation.errors.join("\n"));
+assert.equal(strategyPayload.records.length, 11);
+assert.equal(strategyPayload.records.filter((record) => record.strategic_role === "direct_competitor").length, 7);
+assert.equal(strategyPayload.records.filter((record) => record.strategic_role === "inherit").length, 4);
+
+const rawSummary = getCompanySummary(rawCompanies);
+assert.equal(rawSummary.directCompetitors, 6, "raw source classification must remain unchanged without strategy overlay");
+
+const companies = applyCompanyStrategy(rawCompanies, strategyPayload);
 const summary = getCompanySummary(companies);
 assert.equal(summary.total, 11);
 assert.equal(summary.generalContractors, 4);
@@ -28,13 +44,27 @@ const modularSpecialists = companies.filter(isModularSpecialistCompany);
 assert.equal(modularSpecialists.length, 7);
 assert.ok(modularSpecialists.every((company) => getStrategicCompetitiveRole(company) === "direct_competitor"));
 
+const rawNrb = rawCompanies.find((company) => company.company_id === "nrb");
 const nrb = companies.find((company) => company.company_id === "nrb");
-assert.ok(nrb, "NRB must exist");
-assert.equal(nrb.competitive_role, "substitute_competitor", "raw source-backed classification must remain untouched");
+assert.ok(rawNrb && nrb, "NRB must exist");
+assert.equal(rawNrb.competitive_role, "substitute_competitor", "raw source-backed classification must remain untouched");
+assert.equal(rawNrb.strategy_override, undefined);
+assert.equal(nrb.strategy_override.strategic_role, "direct_competitor");
 assert.equal(getStrategicCompetitiveRole(nrb), "direct_competitor");
 assert.equal(getCompetitiveRoleLabel(nrb), "직접 경쟁사");
 
+const duplicatePayload = structuredClone(strategyPayload);
+duplicatePayload.records[1].company_id = duplicatePayload.records[0].company_id;
+assert.equal(validateCompanyStrategyPayload(duplicatePayload, rawCompanies).valid, false);
+
+const unknownPayload = structuredClone(strategyPayload);
+unknownPayload.records[0].company_id = "unknown-company";
+assert.equal(validateCompanyStrategyPayload(unknownPayload, rawCompanies).valid, false);
+
 const appSource = fs.readFileSync(fileURLToPath(new URL("../src/App.jsx", import.meta.url)), "utf8");
+assert.ok(appSource.includes('useDataset("companies/company_strategy")'));
+assert.ok(appSource.includes("applyCompanyStrategy(getCompanyItems(companyState.data), strategyState.data)"));
+assert.ok(appSource.includes("applyCompanyStrategy(getCompanyItems(data), strategyState.data)"));
 assert.ok(appSource.includes("직접 경쟁 모듈러 업체 {companySummary.directModularCompetitors}개사"));
 assert.ok(appSource.includes('monitoringAt={activityState.data?.generatedAt || ""}'));
 
