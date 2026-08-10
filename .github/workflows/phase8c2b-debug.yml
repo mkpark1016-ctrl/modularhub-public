@@ -1,0 +1,38 @@
+name: Phase 8C-2B Debug Determinism
+
+on:
+  push:
+    branches:
+      - feat/audit-opinion-interpretation-notice
+
+permissions:
+  contents: read
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/audit-opinion-interpretation-notice
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Inspect source and generated limitations
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from scripts.build_company_report_insights import build_view_model
+          p=Path('data/company_reports/geogwang-enterprise/audit_financials_2023_2025.json')
+          raw=json.loads(p.read_text(encoding='utf-8'))
+          print('raw limitations=', raw.get('disclosure_limitations'))
+          for base in [None, 'origin/main']:
+              payload=build_view_model(base_ref=base)
+              g=next(c for c in payload['companies'] if c['company_id']=='geogwang-enterprise')
+              print('base=',base,'generated=',g['source_summary'].get('disclosure_limitations'))
+          stored=json.loads(Path('frontend/public/data/companies/company_report_insights.json').read_text(encoding='utf-8'))
+          g=next(c for c in stored['companies'] if c['company_id']=='geogwang-enterprise')
+          print('stored=',g['source_summary'].get('disclosure_limitations'))
+          PY
