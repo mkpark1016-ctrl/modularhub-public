@@ -41,7 +41,7 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
-      - name: Frontend company tests
+      - name: Frontend regression tests
         working-directory: frontend
         run: |
           npm run test:companies
@@ -51,6 +51,8 @@ jobs:
           npm run test:companies-url
           npm run test:companies-v2
           npm run test:companies-projects
+          npm run test:business
+          npm run test:news
       - name: Frontend lint and build
         working-directory: frontend
         run: |
