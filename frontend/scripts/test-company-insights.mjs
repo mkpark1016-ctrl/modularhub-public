@@ -27,10 +27,15 @@ import {
   productionFacilities,
   technologyCount,
 } from "../src/companyInsights.js";
+import { applyCompanyStrategy, validateCompanyStrategyPayload } from "../src/companyStrategy.js";
 import publicCompanySupplements from "../src/data/publicCompanySupplements.json" with { type: "json" };
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
-const companies = getCompanyItems(payload);
+const strategyPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company_strategy.json", import.meta.url), "utf8"));
+const rawCompanies = getCompanyItems(payload);
+const strategyValidation = validateCompanyStrategyPayload(strategyPayload, rawCompanies);
+assert.equal(strategyValidation.valid, true, strategyValidation.errors.join("\n"));
+const companies = applyCompanyStrategy(rawCompanies, strategyPayload);
 const byId = (id) => companies.find((company) => company.company_id === id);
 const verifiedIds = [
   "gs-ec", "hyundai-engineering", "samsung-ct-construction", "dl-enc",
@@ -39,7 +44,7 @@ const verifiedIds = [
 
 assert.equal(publicCompanySupplements.schema_version, "public_company_supplements_v1");
 assert.equal(publicCompanySupplements.companies.length, 0);
-const canonicalCompanies = getCompanyItems(payload);
+const canonicalCompanies = rawCompanies;
 assert.equal(canonicalCompanies.length, 11);
 assert.equal(canonicalCompanies.filter((company) => company.company_id === "daeseung-engineering").length, 1);
 assert.equal(new Set(canonicalCompanies.map((company) => company.company_id)).size, 11);
