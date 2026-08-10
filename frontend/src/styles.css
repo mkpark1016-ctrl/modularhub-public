@@ -642,3 +642,8 @@ code { overflow-wrap: anywhere; }
 @media (max-width: 420px) {
   .company-type-segmented { grid-template-columns: 1fr; }
 }
+
+/* Phase 8C-2B: non-unqualified audit opinion interpretation notice */
+.company-audit-opinion-notice { display: grid; gap: 6px; margin: 12px 0 18px; padding: 12px 14px; border: 1px solid #e7c76f; border-radius: 8px; background: #fffaf0; color: #5f4a12; }
+.company-audit-opinion-notice strong { font-size: 14px; }
+.company-audit-opinion-notice span { font-size: 13px; line-height: 1.55; }

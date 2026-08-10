@@ -72,6 +72,12 @@ const stylesheet = readFileSync(new URL("../src/styles.css", import.meta.url), "
 const reportBackedMasterFinancialGapIds = new Set(["daeseung-engineering"]);
 
 assert.equal(companies.length, 11);
+const geogwangReport = getCompanyReportInsight(reportPayload, "geogwang-enterprise");
+assert.equal(geogwangReport.source_summary.audit_opinions[0].opinion, "qualified");
+assert.match(geogwangReport.source_summary.disclosure_limitations[0], /재고자산/);
+assert.ok(componentFiles.includes("company-audit-opinion-notice"));
+assert.ok(componentFiles.includes("감사의견 {opinion.opinion_label_ko"));
+assert.ok(stylesheet.includes(".company-audit-opinion-notice"));
 assert.deepEqual(COMPANY_DETAIL_TABS.map((tab) => tab.value), ["overview", "financial", "production", "projects", "technology", "evidence"]);
 assert.equal(COMPANY_DETAIL_TABS.find((tab) => tab.value === "overview").label, "종합분석");
 assert.ok(componentFiles.includes("normalizeCompanyTab(searchParams.get(\"tab\")"));
