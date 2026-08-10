@@ -15,6 +15,7 @@ import {
   decisionStatusLabel,
   decisionStatusTone,
   financialScopeLabel,
+  latestAuditOpinion,
   latestSnapshotMetric,
   metricDisplayText,
   peerBenchmarkLabel,
@@ -113,6 +114,19 @@ function KeyFinancialSnapshot({ reportInsight, onTabChange, onShowEvidence }) {
   );
 }
 
+function AuditOpinionNotice({ reportInsight }) {
+  const opinion = latestAuditOpinion(reportInsight);
+  if (!opinion || opinion.opinion === "unqualified") return null;
+  const limitation = reportInsight?.source_summary?.disclosure_limitations?.[0]
+    || "비적정 감사의견이 확인되었습니다. 재무 수치는 감사의견의 제한사항과 함께 해석해야 합니다.";
+  return (
+    <div className="company-audit-opinion-notice" role="note" aria-label="감사의견 해석 주의">
+      <strong>감사의견 {opinion.opinion_label_ko || "확인 필요"} · 해석 주의</strong>
+      <span>{limitation}</span>
+    </div>
+  );
+}
+
 function ThreeYearSignalRows({ reportInsight }) {
   const rows = Object.values(reportInsight?.trends || {}).slice(0, 4);
   if (!rows.length) return null;
@@ -201,6 +215,7 @@ export default function CompanyOverviewTab({ company, activities = [], reportIns
       <h2>종합분석</h2>
       <DecisionSnapshotPanel decision={decision} />
       <KeyFinancialSnapshot reportInsight={reportInsight} onTabChange={onTabChange} onShowEvidence={onShowEvidence} />
+      <AuditOpinionNotice reportInsight={reportInsight} />
       <ThreeYearSignalRows reportInsight={reportInsight} />
       <PeerPositionRows reportInsight={reportInsight} onTabChange={onTabChange} />
       <RecentActivityPreview activities={activities} />
