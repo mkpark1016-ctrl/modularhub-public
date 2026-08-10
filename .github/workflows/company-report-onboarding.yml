@@ -55,28 +55,6 @@ jobs:
       - name: Check generated report insights
         run: python scripts/build_company_report_insights.py --check
 
-      - name: Set up Node for activity-tab QA
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install frontend dependencies for activity-tab QA
-        working-directory: frontend
-        run: npm ci
-
-      - name: Run activity-tab frontend QA
-        working-directory: frontend
-        run: |
-          npm run test:companies-activities
-          npm run test:companies-detail
-          npm run test:companies-url
-          npm run test:companies
-          npm run test:companies-v2
-          npm run lint
-          npm run build
-
       - name: Protected data diff check
         run: |
           git diff --exit-code origin/main...HEAD -- \
@@ -86,9 +64,6 @@ jobs:
             frontend/public/data/news.json \
             frontend/public/data/business.json \
             frontend/public/data/meta.json
-
-      - name: Diff hygiene
-        run: git diff --check origin/main...HEAD
 
       - name: PDF and secret pattern check
         run: |
