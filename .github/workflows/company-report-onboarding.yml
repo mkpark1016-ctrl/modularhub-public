@@ -56,23 +56,14 @@ jobs:
         run: python scripts/build_company_report_insights.py --check
 
       - name: Protected data diff check
-        shell: bash
         run: |
-          changed="$(git diff --name-only origin/main...HEAD)"
-
           git diff --exit-code origin/main...HEAD -- \
             frontend/public/data/companies/companies.json \
             frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json \
             frontend/public/data/news.json \
             frontend/public/data/business.json \
             frontend/public/data/meta.json
-
-          if echo "$changed" | grep -Eq '^data/company_reports/.+/(onboarding|staging)/'; then
-            git diff --exit-code origin/main...HEAD -- \
-              frontend/public/data/companies/company_report_insights.json
-          else
-            echo "No onboarding/staging source changes; generated company_report_insights.json is covered by the preceding builder --check."
-          fi
 
       - name: PDF and secret pattern check
         run: |
