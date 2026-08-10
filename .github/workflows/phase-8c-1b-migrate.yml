@@ -67,7 +67,8 @@ jobs:
             frontend/src/components/company/CompanyComparisonMvp.jsx \
             frontend/src/main.jsx \
             frontend/src/companyUiOverrides.css \
-            frontend/scripts/test-company-strategy-monitoring.mjs
+            frontend/scripts/test-company-strategy-monitoring.mjs \
+            frontend/scripts/test-company-insights.mjs
           git diff --cached --check
           git commit -m "Refine company strategy and monitoring UI"
           git push origin HEAD:feat/company-strategy-monitoring-ui
