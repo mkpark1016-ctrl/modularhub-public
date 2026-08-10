@@ -1,0 +1,31 @@
+name: Phase 8C-2 Geogwang QA
+
+on:
+  push:
+    branches:
+      - feat/geogwang-audit-financials
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/geogwang-audit-financials
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python test dependencies
+        run: python -m pip install --upgrade pip pytest jsonschema
+      - name: Validate Geogwang source
+        run: python scripts/validate_company_audit_financials.py --input data/company_reports/geogwang-enterprise/audit_financials_2023_2025.json --expected-years 2023 2024 2025 --base-ref origin/main
+      - name: Verify derived outputs
+        run: |
+          python scripts/build_company_report_insights.py --base-ref origin/main --check
+          python scripts/build_company_data_coverage.py --as-of-date 2026-08-10 --check
+      - name: Python tests
+        run: python -m pytest -q
