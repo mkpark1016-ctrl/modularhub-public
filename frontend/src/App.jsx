@@ -491,8 +491,8 @@ function HomePage() {
         </Link>
         <Link className="category-panel" to="/companies">
           <Factory size={26} />
-          <div><strong>기업정보</strong><span>분석 대상 {companySummary.total}개사 · 직접 경쟁사 {companySummary.directCompetitors}개사 · 핵심 정보 검증 {companySummary.coreVerified}개사</span></div>
-          <b>{companySummary.coreVerified}개사 핵심 검증</b>
+          <div><strong>기업정보</strong><span>분석 대상 {companySummary.total}개사 · 건설사 {companySummary.generalContractors}개사 · 직접 경쟁 모듈러 업체 {companySummary.directModularCompetitors}개사</span></div>
+          <b>데이터 검증 {companySummary.coreVerified} / {companySummary.total}개사</b>
         </Link>
       </section>
       <div className="public-data-note">
@@ -877,7 +877,7 @@ function CompanyListingPage() {
           {error && <div className="state error">기업정보 데이터를 불러오지 못했습니다.</div>}
           {!loading && !error && items.length === 0 && <div className="state">등록된 기업정보가 없습니다.</div>}
           {!loading && !error && items.length > 0 && filtered.length === 0 && <div className="state">현재 검색조건에 맞는 기업정보가 없습니다.</div>}
-          <CompanyCardGrid companies={filtered} selectedIds={selectedIds} onToggleCompare={toggleCompare} activitiesByCompany={activitiesByCompany} reportInsightsByCompany={reportInsightsByCompany} />
+          <CompanyCardGrid companies={filtered} selectedIds={selectedIds} onToggleCompare={toggleCompare} activitiesByCompany={activitiesByCompany} reportInsightsByCompany={reportInsightsByCompany} monitoringAt={activityState.data?.generatedAt || ""} />
         </section>
       </div>
       <CompanyComparisonPanel

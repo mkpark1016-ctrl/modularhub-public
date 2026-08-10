@@ -39,11 +39,12 @@ function projectText(metric) {
   return parts.join(" · ");
 }
 
-export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare, activities = [], reportInsight = null }) {
+export function CompanySummaryCard({ company, selected, selectionDisabled, onToggleCompare, activities = [], reportInsight = null, monitoringAt = "" }) {
   const metric = getComparisonMetric(company);
   const decision = buildCompanyDecisionModel(company, { reportInsight, activities });
   const gapCount = getCompanyDataGapCount(company);
   const latestVerifiedAt = formatDate(getLatestVerifiedAt(company));
+  const latestMonitoringAt = monitoringAt ? formatDate(monitoringAt) : "확인 중";
   const cautionText = gapCount > 0
     ? `보완 필요 ${formatNumber(gapCount, "건")}`
     : (getCompanyResearchGapCount(company) > 0 ? `조사 공백 ${formatNumber(getCompanyResearchGapCount(company), "건")}` : "");
@@ -96,7 +97,7 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
           <small>{latestVerifiedAt} 기준</small>
         </div>
       </div>
-      <p className="company-card-meta">최근 검증일 {latestVerifiedAt}</p>
+      <p className="company-card-meta">최근 모니터링 {latestMonitoringAt} · 최근 검증 {latestVerifiedAt}</p>
       <div className="card-footer">
         <span>{metric.typeLabel}</span>
         <div className="card-actions">
@@ -107,7 +108,7 @@ export function CompanySummaryCard({ company, selected, selectionDisabled, onTog
   );
 }
 
-export function CompanyCardGrid({ companies, selectedIds, onToggleCompare, activitiesByCompany = new Map(), reportInsightsByCompany = new Map() }) {
+export function CompanyCardGrid({ companies, selectedIds, onToggleCompare, activitiesByCompany = new Map(), reportInsightsByCompany = new Map(), monitoringAt = "" }) {
   const selectionDisabled = selectedIds.length >= MAX_COMPARISON_COMPANIES;
   return (
     <div className="company-card-grid">
@@ -120,6 +121,7 @@ export function CompanyCardGrid({ companies, selectedIds, onToggleCompare, activ
           onToggleCompare={onToggleCompare}
           activities={activitiesByCompany.get(company.company_id) || []}
           reportInsight={reportInsightsByCompany.get(company.company_id) || null}
+          monitoringAt={monitoringAt}
         />
       ))}
     </div>
