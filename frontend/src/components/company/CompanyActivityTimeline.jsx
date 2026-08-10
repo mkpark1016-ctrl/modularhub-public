@@ -3,6 +3,9 @@ import { ExternalLink } from "lucide-react";
 import {
   COMPANY_ACTIVITY_FILTERS,
   filterCompanyActivities,
+  getActivityFilterGroup,
+  getActivitySourceName,
+  getActivitySourceUrl,
   getActivityTypeLabel,
   isValidActivity,
 } from "../../companyActivities";
@@ -13,7 +16,7 @@ const INITIAL_VISIBLE_COUNT = 5;
 function ActivityMeta({ activity }) {
   const meta = [
     formatDate(activity.publishedAt),
-    activity.sourceName,
+    getActivitySourceName(activity),
     activity.status ? "관련 보도" : "",
   ].filter(Boolean);
   return <span>{meta.join(" · ")}</span>;
@@ -56,25 +59,29 @@ export default function CompanyActivityTimeline({ activities = [] }) {
       </div>
       {visible.length ? (
         <div className="company-section-list company-activity-list">
-          {visible.map((activity) => (
-            <div key={activity.activityId} className="company-activity-item">
-              <div className="company-activity-title-row">
-                <span className="mini-status-badge">{getActivityTypeLabel(activity.activityType)}</span>
-                <strong>{activity.title}</strong>
+          {visible.map((activity) => {
+            const sourceUrl = getActivitySourceUrl(activity);
+            const sourceName = getActivitySourceName(activity);
+            return (
+              <div key={activity.activityId} className="company-activity-item">
+                <div className="company-activity-title-row">
+                  <span className="mini-status-badge">{getActivityTypeLabel(activity.activityType)}</span>
+                  <strong>{activity.title}</strong>
+                </div>
+                <ActivityMeta activity={activity} />
+                {activity.summary && <p>{activity.summary}</p>}
+                <div className="company-activity-actions">
+                  {sourceUrl ? (
+                    <a className="inline-link" href={sourceUrl} target="_blank" rel="noopener noreferrer" aria-label={`${sourceName} 원문 열기`}>
+                      {sourceName} 원문 보기 <ExternalLink size={13} />
+                    </a>
+                  ) : (
+                    <span>{sourceName} · 원문 링크 미공개</span>
+                  )}
+                </div>
               </div>
-              <ActivityMeta activity={activity} />
-              {activity.summary && <p>{activity.summary}</p>}
-              <div className="company-activity-actions">
-                {activity.sourceUrl ? (
-                  <a className="inline-link" href={activity.sourceUrl} target="_blank" rel="noopener noreferrer">
-                    원문 보기 <ExternalLink size={13} />
-                  </a>
-                ) : (
-                  <span>원문 링크 미공개</span>
-                )}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <p>최근 확인된 공개 활동이 없습니다.</p>
