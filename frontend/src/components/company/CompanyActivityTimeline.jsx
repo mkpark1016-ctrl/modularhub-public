@@ -3,7 +3,6 @@ import { ExternalLink } from "lucide-react";
 import {
   COMPANY_ACTIVITY_FILTERS,
   filterCompanyActivities,
-  getActivityFilterGroup,
   getActivitySourceName,
   getActivitySourceUrl,
   getActivityTypeLabel,
