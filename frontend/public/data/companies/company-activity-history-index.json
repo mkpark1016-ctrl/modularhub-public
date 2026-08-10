@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "company-activity-history-index-v1",
+  "generatedAt": "2026-08-10T10:02:36.351576+00:00",
+  "companyCount": 11,
+  "totalActivityCount": 284,
+  "companies": [
+    {
+      "companyId": "yuchang-enc",
+      "activityCount": 51,
+      "latestPublishedAt": "2026-07-08",
+      "earliestPublishedAt": "2026-06-18",
+      "path": "company-activity-history/yuchang-enc.json"
+    },
+    {
+      "companyId": "kumkang-kind",
+      "activityCount": 9,
+      "latestPublishedAt": "2026-07-10",
+      "earliestPublishedAt": "2026-05-06",
+      "path": "company-activity-history/kumkang-kind.json"
+    },
+    {
+      "companyId": "planm",
+      "activityCount": 6,
+      "latestPublishedAt": "2026-06-23",
+      "earliestPublishedAt": "2026-06-19",
+      "path": "company-activity-history/planm.json"
+    },
+    {
+      "companyId": "sungji-steel",
+      "activityCount": 0,
+      "latestPublishedAt": null,
+      "earliestPublishedAt": null,
+      "path": "company-activity-history/sungji-steel.json"
+    },
+    {
+      "companyId": "geogwang-enterprise",
+      "activityCount": 0,
+      "latestPublishedAt": null,
+      "earliestPublishedAt": null,
+      "path": "company-activity-history/geogwang-enterprise.json"
+    },
+    {
+      "companyId": "nrb",
+      "activityCount": 26,
+      "latestPublishedAt": "2026-08-04",
+      "earliestPublishedAt": "2026-06-01",
+      "path": "company-activity-history/nrb.json"
+    },
+    {
+      "companyId": "gs-ec",
+      "activityCount": 61,
+      "latestPublishedAt": "2026-08-04",
+      "earliestPublishedAt": "2026-05-07",
+      "path": "company-activity-history/gs-ec.json"
+    },
+    {
+      "companyId": "hyundai-engineering",
+      "activityCount": 13,
+      "latestPublishedAt": "2026-07-23",
+      "earliestPublishedAt": "2026-05-04",
+      "path": "company-activity-history/hyundai-engineering.json"
+    },
+    {
+      "companyId": "samsung-ct-construction",
+      "activityCount": 107,
+      "latestPublishedAt": "2026-08-05",
+      "earliestPublishedAt": "2026-05-12",
+      "path": "company-activity-history/samsung-ct-construction.json"
+    },
+    {
+      "companyId": "dl-enc",
+      "activityCount": 11,
+      "latestPublishedAt": "2026-08-03",
+      "earliestPublishedAt": "2026-05-11",
+      "path": "company-activity-history/dl-enc.json"
+    },
+    {
+      "companyId": "daeseung-engineering",
+      "activityCount": 0,
+      "latestPublishedAt": null,
+      "earliestPublishedAt": null,
+      "path": "company-activity-history/daeseung-engineering.json"
+    }
+  ]
+}
