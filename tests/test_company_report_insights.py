@@ -256,8 +256,8 @@ def test_peer_benchmarks_are_only_ranked_when_comparable() -> None:
 
 def test_peer_benchmarks_include_universe_median_and_current_company_flags() -> None:
     benchmark = next(item for item in yuchang_company(load_output())["peer_benchmarks"] if item["metric_id"] == "revenue")
-    assert benchmark["comparison_universe_count"] == 5
-    assert benchmark["other_peer_count"] == 4
+    assert benchmark["comparison_universe_count"] == 6
+    assert benchmark["other_peer_count"] == 5
     assert benchmark["current_company_included"] is True
     assert benchmark["median_display"] == "616.6억원"
     assert benchmark["reference_value_label"] == "비교 범위 최대값"
