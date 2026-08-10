@@ -1,0 +1,1482 @@
+{
+  "schema_version": "company_audit_financials_v1",
+  "company_id": "geogwang-enterprise",
+  "company_name": "거광기업",
+  "reporting_entity": "주식회사 거광기업",
+  "accounting_standard": {
+    "code": "korean_gaap",
+    "label_ko": "일반기업회계기준",
+    "label_en": "Korean GAAP"
+  },
+  "currency": "KRW",
+  "unit": "won",
+  "audit_opinions": [
+    {
+      "source_ref": "geogwang_audit_report_2026_04_09",
+      "opinion": "qualified",
+      "opinion_label_ko": "한정의견",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "auditor": "태성회계법인",
+      "auditor_report_date": "2026-04-08"
+    },
+    {
+      "source_ref": "geogwang_audit_report_2025_04_14",
+      "opinion": "qualified",
+      "opinion_label_ko": "한정의견",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "auditor": "태성회계법인",
+      "auditor_report_date": "2025-04-10"
+    },
+    {
+      "source_ref": "geogwang_audit_report_2024_04_12",
+      "opinion": "qualified",
+      "opinion_label_ko": "한정의견",
+      "covered_years": [
+        2023,
+        2022
+      ],
+      "auditor": "태성회계법인",
+      "auditor_report_date": "2024-03-30"
+    }
+  ],
+  "source_documents": {
+    "geogwang_audit_report_2026_04_09": {
+      "filename": "[거광기업]감사보고서(2026.04.09).pdf",
+      "report_date": "2026-04-09",
+      "covered_years": [
+        2025,
+        2024
+      ],
+      "auditor": "태성회계법인",
+      "auditor_report_date": "2026-04-08",
+      "audit_opinion": "한정의견",
+      "balance_sheet_pages": "PDF pages 7-8",
+      "income_statement_pages": "PDF pages 9-10",
+      "cash_flow_pages": "PDF pages 12-13",
+      "audit_opinion_pages": "PDF page 3",
+      "source_role": "primary_2025_and_2024_comparative",
+      "usage": "User-provided DART audit-report PDF reviewed for extraction; PDF is not committed."
+    },
+    "geogwang_audit_report_2025_04_14": {
+      "filename": "[거광기업]감사보고서(2025.04.14).pdf",
+      "report_date": "2025-04-14",
+      "covered_years": [
+        2024,
+        2023
+      ],
+      "auditor": "태성회계법인",
+      "auditor_report_date": "2025-04-10",
+      "audit_opinion": "한정의견",
+      "balance_sheet_pages": "PDF pages 7-8",
+      "income_statement_pages": "PDF pages 9-10",
+      "cash_flow_pages": "PDF pages 12-13",
+      "audit_opinion_pages": "PDF page 3",
+      "source_role": "primary_2023_comparative_and_cross_check_2024",
+      "usage": "User-provided DART audit-report PDF reviewed for extraction; PDF is not committed."
+    },
+    "geogwang_audit_report_2024_04_12": {
+      "filename": "[거광기업]감사보고서(2024.04.12).pdf",
+      "report_date": "2024-04-12",
+      "covered_years": [
+        2023,
+        2022
+      ],
+      "auditor": "태성회계법인",
+      "auditor_report_date": "2024-03-30",
+      "audit_opinion": "한정의견",
+      "balance_sheet_pages": "PDF pages 7-9",
+      "income_statement_pages": "PDF pages 10-11",
+      "cash_flow_pages": "PDF pages 13-14",
+      "audit_opinion_pages": "PDF page 3",
+      "source_role": "cross_check_2023_only",
+      "usage": "User-provided DART audit-report PDF reviewed for extraction; PDF is not committed."
+    }
+  },
+  "source_priority": {
+    "2025": {
+      "primary_source_ref": "geogwang_audit_report_2026_04_09",
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": []
+    },
+    "2024": {
+      "primary_source_ref": "geogwang_audit_report_2026_04_09",
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "geogwang_audit_report_2025_04_14"
+      ]
+    },
+    "2023": {
+      "primary_source_ref": "geogwang_audit_report_2025_04_14",
+      "basis": "comparative_financial_statements",
+      "cross_check_source_refs": [
+        "geogwang_audit_report_2024_04_12"
+      ]
+    }
+  },
+  "financial_years": {
+    "2023": {
+      "source_refs": [
+        "geogwang_audit_report_2025_04_14"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 11579964740,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 3026200324,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 588952920,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 1095001351,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 17726407868,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 7607951859,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 10118456009,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 9384569114,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 7048151859,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": 2477599303,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -4828319234,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": -1000000000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 268311482,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서에 별도 상품매출 항목이 없고 제품매출·공사수입금·모듈러임대수익 합계가 매출액과 일치합니다."
+        },
+        "product_revenue": {
+          "reported": 3414963378,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 1498673384,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 6666327978,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서의 모듈러임대수익."
+        },
+        "other_revenue": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서에 별도 기타매출 항목이 없고 공시된 세 매출 구성항목 합계가 총매출과 일치합니다."
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 318345531,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "공사 관련 채권이 별도 공사미수금/공사채권 항목으로 분리 공시되지 않습니다."
+        },
+        "inventory": {
+          "reported": 815503307,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": 241358062,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 1050495000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": 3000000000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "long_term_borrowings": {
+          "reported": 559800000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 2052500000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 197524731,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 7-8",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 542703289,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2025_04_14"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2025_04_14",
+              "page_range": "PDF pages 9-10",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      }
+    },
+    "2024": {
+      "source_refs": [
+        "geogwang_audit_report_2026_04_09"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 16085433038,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 4525628300,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 783313827,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 1081053226,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 21898327145,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 10475326054,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 11423001091,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 11849613524,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 4915526054,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": 4707490650,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -5125636548,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": 1054440737,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 904606321,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서에 별도 상품매출 항목이 없고 제품매출·공사수입금·모듈러임대수익 합계가 매출액과 일치합니다."
+        },
+        "product_revenue": {
+          "reported": 10173030063,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 4374997068,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 1537405907,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서의 모듈러임대수익."
+        },
+        "other_revenue": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서에 별도 기타매출 항목이 없고 공시된 세 매출 구성항목 합계가 총매출과 일치합니다."
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 1849650931,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "공사 관련 채권이 별도 공사미수금/공사채권 항목으로 분리 공시되지 않습니다."
+        },
+        "inventory": {
+          "reported": 341354218,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "재고자산 상세에 재공품 금액이 별도 공시되지 않습니다."
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 66935737,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "재무상태표에 유동성장기차입금 잔액이 '-'로 표시됩니다."
+        },
+        "long_term_borrowings": {
+          "reported": 5559800000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": 3557925689,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "industrial_property_rights": {
+          "reported": 3022784,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 968126204,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      }
+    },
+    "2025": {
+      "source_refs": [
+        "geogwang_audit_report_2026_04_09"
+      ],
+      "income_statement": {
+        "revenue": {
+          "reported": 16133052916,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "gross_profit": {
+          "reported": 5630794902,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "operating_profit": {
+          "reported": 2654581705,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "net_income": {
+          "reported": 2594631088,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "statement.income_statement",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "balance_sheet": {
+        "total_assets": {
+          "reported": 21205762497,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "total_liabilities": {
+          "reported": 7186716202,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "total_equity": {
+          "reported": 14019046295,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_assets": {
+          "reported": 8468957399,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_liabilities": {
+          "reported": 2622871586,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "statement.balance_sheet",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "cash_flow": {
+        "operating_cash_flow": {
+          "reported": 2927766375,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "investing_cash_flow": {
+          "reported": -1827893503,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "financing_cash_flow": {
+          "reported": -844200000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "ending_cash": {
+          "reported": 1160279193,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 12-13",
+              "section": "statement.cash_flow",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "goods_revenue": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서에 별도 상품매출 항목이 없고 제품매출·공사수입금·모듈러임대수익 합계가 매출액과 일치합니다."
+        },
+        "product_revenue": {
+          "reported": 9319386834,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "construction_revenue": {
+          "reported": 3387211257,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "rental_revenue": {
+          "reported": 3426454825,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서의 모듈러임대수익."
+        },
+        "other_revenue": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.revenue_breakdown",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "손익계산서에 별도 기타매출 항목이 없고 공시된 세 매출 구성항목 합계가 총매출과 일치합니다."
+        }
+      },
+      "working_capital": {
+        "trade_receivables_gross": {
+          "reported": 1124024711,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "construction_receivables_gross": {
+          "reported": null,
+          "disclosure_status": "not_disclosed",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "공사 관련 채권이 별도 공사미수금/공사채권 항목으로 분리 공시되지 않습니다."
+        },
+        "inventory": {
+          "reported": 985079237,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "work_in_progress": {
+          "reported": 490509923,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.working_capital",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "borrowings": {
+        "short_term_borrowings": {
+          "reported": 236935737,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "current_portion_long_term_borrowings": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "재무상태표에 유동성장기차입금 잔액이 '-'로 표시됩니다."
+        },
+        "long_term_borrowings": {
+          "reported": 4545600000,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.borrowings",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "reported": null,
+          "disclosure_status": "not_applicable",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ],
+          "notes": "재무상태표에 건설중인자산 잔액이 별도 금액 없이 '-'로 표시됩니다."
+        },
+        "industrial_property_rights": {
+          "reported": 1726721,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 7-8",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        },
+        "research_and_development_expense": {
+          "reported": 1138970026,
+          "disclosure_status": "reported",
+          "source_refs": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "source_locations": [
+            {
+              "source_ref": "geogwang_audit_report_2026_04_09",
+              "page_range": "PDF pages 9-10",
+              "section": "note.investment_signals",
+              "verification_status": "verified"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "entity_attribution": {
+    "reporting_entity": "주식회사 거광기업",
+    "financial_scope": "standalone",
+    "related_entity_attribution_required": false,
+    "modular_segment_revenue_disclosed": true,
+    "attribution_warning": "모듈러임대수익은 별도 공시되지만 제품매출과 공사수입금 중 모듈러 관련 매출은 분리되지 않아 회사 전체 매출을 모듈러 사업 매출로 해석하면 안 됩니다.",
+    "special_events": []
+  },
+  "disclosure_limitations": [
+    "2023~2025 감사보고서는 재고자산 관련 감사범위 제한으로 모두 한정의견입니다. 손익과 영업활동현금흐름 해석 시 해당 제한을 함께 고려해야 합니다.",
+    "건설공사 관련 별도 공사미수금/공사채권 총액은 재무상태표에서 별도 공시되지 않아 construction_receivables_gross는 not_disclosed로 처리합니다.",
+    "제품매출·공사수입금은 회사 전체 기준이며 모듈러 사업 귀속분이 별도 분리 공시되지 않습니다."
+  ],
+  "validation_metadata": {
+    "created_for": "Phase 8C-2A Geogwang Enterprise audit financial promotion",
+    "amount_storage": "Raw disclosed KRW amounts are stored as integer won values; null is never converted to zero.",
+    "derived_metrics_storage": "Derived ratios and trends are generated downstream and are not stored in this curated source file.",
+    "pdf_handling": "User-provided audit-report PDFs were reviewed for extraction and reconciliation but are not committed.",
+    "public_ui_impact": "Promote Geogwang Enterprise into the audit-backed company report insight pipeline after validation.",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ]
+  }
+}
