@@ -584,4 +584,3 @@ def test_audit_opinion_limitations_do_not_change_unqualified_company_semantics()
     assert geogwang["source_summary"]["disclosure_limitations"]
     assert "disclosure_limitations" not in yuchang_company(payload)["source_summary"]
     assert "disclosure_limitations" not in kumkang_company(payload)["source_summary"]
-
