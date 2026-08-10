@@ -25,6 +25,7 @@ import {
 
 export const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "종합분석" },
+  { value: "activity", label: "활동·동향" },
   { value: "financial", label: "재무" },
   { value: "production", label: "생산시설" },
   { value: "projects", label: "프로젝트" },

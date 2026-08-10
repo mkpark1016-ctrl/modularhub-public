@@ -8,6 +8,7 @@ import {
   getCompanyActivities,
   isValidActivity,
 } from "../src/companyActivities.js";
+import { COMPANY_DETAIL_TABS, normalizeCompanyTab } from "../src/components/company/companyDetailHelpers.js";
 
 const companiesPayload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
 const activityPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company-activities.json", import.meta.url), "utf8"));
@@ -49,10 +50,19 @@ assert.deepEqual(getCompanyActivities(activityPayload, "missing-company"), []);
 assert.ok(filterCompanyActivities(yuchangActivities, "all").length === yuchangActivities.length);
 assert.ok(["projects", "investment_factory", "technology_financial", "general"].includes(getActivityFilterGroup(yuchangActivities[0].activityType)));
 
+assert.equal(COMPANY_DETAIL_TABS[1]?.value, "activity");
+assert.equal(COMPANY_DETAIL_TABS[1]?.label, "활동·동향");
+assert.equal(normalizeCompanyTab("activity"), "activity");
+assert.equal(normalizeCompanyTab("not-a-tab"), "overview");
+
 const detailViewSource = readFileSync(new URL("../src/components/company/CompanyDetailView.jsx", import.meta.url), "utf8");
 const overviewSource = readFileSync(new URL("../src/components/company/CompanyOverviewTab.jsx", import.meta.url), "utf8");
 const timelineSource = readFileSync(new URL("../src/components/company/CompanyActivityTimeline.jsx", import.meta.url), "utf8");
 assert.match(detailViewSource, /activities=\{activities\}/);
+assert.match(detailViewSource, /CompanyActivityTimeline/);
+assert.match(detailViewSource, /tab === "activity"/);
+assert.match(detailViewSource, /company-tab-panel-activity/);
+assert.match(detailViewSource, /공개 뉴스와 사업정보에서 확인된 기업 활동을 최신순으로 누적/);
 assert.match(overviewSource, /RecentActivityPreview/);
 assert.match(overviewSource, /company-compact-row-list/);
 assert.match(overviewSource, /getActivitySourceName/);
@@ -60,11 +70,17 @@ assert.match(overviewSource, /getActivitySourceUrl/);
 assert.match(overviewSource, /href={sourceUrl}/);
 assert.match(overviewSource, /target="_blank"/);
 assert.match(overviewSource, /rel="noopener noreferrer"/);
-assert.match(timelineSource, /최근 90일 변화/);
-assert.match(timelineSource, /INITIAL_VISIBLE_COUNT = 5/);
-assert.match(timelineSource, /관련 보도/);
-assert.match(timelineSource, /aria-pressed/);
-assert.match(timelineSource, /최근 확인된 공개 활동이 없습니다/);
+assert.match(overviewSource, /최신 3건 미리보기/);
+assert.match(overviewSource, /활동·동향 전체 보기/);
+assert.match(overviewSource, /onTabChange\?\.\("activity"\)/);
+assert.doesNotMatch(overviewSource, /<span>최대 3건<\/span>/);
+assert.match(timelineSource, /기업 활동 타임라인/);
+assert.doesNotMatch(timelineSource, /최근 90일 변화/);
+assert.match(timelineSource, /INITIAL_VISIBLE_COUNT = 10/);
+assert.match(timelineSource, /확인된 활동/);
+assert.match(timelineSource, /기업 활동 필터/);
+assert.match(timelineSource, /\.sort\(\(a, b\) => String\(b\.publishedAt/);
+assert.match(timelineSource, /확인된 공개 활동이 없습니다/);
 assert.match(timelineSource, /{sourceName} 원문 보기/);
 assert.match(timelineSource, /getActivitySourceUrl/);
 

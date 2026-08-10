@@ -72,8 +72,9 @@ const stylesheet = readFileSync(new URL("../src/styles.css", import.meta.url), "
 const reportBackedMasterFinancialGapIds = new Set(["daeseung-engineering"]);
 
 assert.equal(companies.length, 11);
-assert.deepEqual(COMPANY_DETAIL_TABS.map((tab) => tab.value), ["overview", "financial", "production", "projects", "technology", "evidence"]);
+assert.deepEqual(COMPANY_DETAIL_TABS.map((tab) => tab.value), ["overview", "activity", "financial", "production", "projects", "technology", "evidence"]);
 assert.equal(COMPANY_DETAIL_TABS.find((tab) => tab.value === "overview").label, "종합분석");
+assert.equal(COMPANY_DETAIL_TABS.find((tab) => tab.value === "activity").label, "활동·동향");
 assert.ok(componentFiles.includes("normalizeCompanyTab(searchParams.get(\"tab\")"));
 assert.ok(componentFiles.includes("role=\"tablist\""));
 assert.ok(componentFiles.includes("role=\"tab\""));

@@ -177,13 +177,16 @@ function PeerPositionRows({ reportInsight, onTabChange }) {
   );
 }
 
-function RecentActivityPreview({ activities }) {
+function RecentActivityPreview({ activities, onTabChange }) {
   const visible = (activities || []).slice(0, 3);
   return (
     <div className="company-subsection compact-company-section">
       <div className="company-subsection-heading">
-        <h3>최근 활동</h3>
-        <span>최대 3건</span>
+        <div>
+          <h3>최근 활동</h3>
+          <span>최신 3건 미리보기</span>
+        </div>
+        <button type="button" className="text-button" onClick={() => onTabChange?.("activity")}>활동·동향 전체 보기</button>
       </div>
       {visible.length ? (
         <div className="company-compact-row-list">
@@ -227,7 +230,7 @@ export default function CompanyOverviewTab({ company, activities = [], reportIns
       <AuditOpinionNotice reportInsight={reportInsight} />
       <ThreeYearSignalRows reportInsight={reportInsight} />
       <PeerPositionRows reportInsight={reportInsight} onTabChange={onTabChange} />
-      <RecentActivityPreview activities={activities} />
+      <RecentActivityPreview activities={activities} onTabChange={onTabChange} />
 
       <div className="company-subsection">
         <div className="company-subsection-heading">

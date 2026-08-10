@@ -10,13 +10,13 @@ import {
 } from "../../companyActivities";
 import { formatDate } from "./companyDetailHelpers";
 
-const INITIAL_VISIBLE_COUNT = 5;
+const INITIAL_VISIBLE_COUNT = 10;
 
 function ActivityMeta({ activity }) {
   const meta = [
     formatDate(activity.publishedAt),
     getActivitySourceName(activity),
-    activity.status ? "관련 보도" : "",
+    activity.sourceType === "news" ? "관련 보도" : activity.sourceType === "business" ? "사업정보" : "",
   ].filter(Boolean);
   return <span>{meta.join(" · ")}</span>;
 }
@@ -25,7 +25,9 @@ export default function CompanyActivityTimeline({ activities = [] }) {
   const [filter, setFilter] = useState("all");
   const [expanded, setExpanded] = useState(false);
   const validActivities = useMemo(
-    () => activities.filter((activity) => isValidActivity(activity)),
+    () => [...activities]
+      .filter((activity) => isValidActivity(activity))
+      .sort((a, b) => String(b.publishedAt || "").localeCompare(String(a.publishedAt || ""))),
     [activities],
   );
   const filtered = useMemo(
@@ -37,10 +39,10 @@ export default function CompanyActivityTimeline({ activities = [] }) {
   return (
     <div className="company-subsection company-activity-timeline">
       <div className="company-subsection-heading">
-        <h3>최근 90일 변화</h3>
-        <span>관련 보도 {validActivities.length.toLocaleString("ko-KR")}건</span>
+        <h3>기업 활동 타임라인</h3>
+        <span>확인된 활동 {validActivities.length.toLocaleString("ko-KR")}건</span>
       </div>
-      <div className="company-activity-filters" aria-label="최근 활동 필터">
+      <div className="company-activity-filters" aria-label="기업 활동 필터">
         {COMPANY_ACTIVITY_FILTERS.map((option) => (
           <button
             key={option.value}
@@ -83,7 +85,7 @@ export default function CompanyActivityTimeline({ activities = [] }) {
           })}
         </div>
       ) : (
-        <p>최근 확인된 공개 활동이 없습니다.</p>
+        <p>확인된 공개 활동이 없습니다.</p>
       )}
       {filtered.length > INITIAL_VISIBLE_COUNT && (
         <button type="button" className="button secondary company-activity-more" onClick={() => setExpanded((value) => !value)}>
