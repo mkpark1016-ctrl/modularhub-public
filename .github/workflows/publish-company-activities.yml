@@ -39,7 +39,7 @@ jobs:
           cache: pip
 
       - name: Install Python dependencies
-        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt pytest
 
       - name: Back up published company activity timeline
         run: |
