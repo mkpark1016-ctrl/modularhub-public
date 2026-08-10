@@ -1,0 +1,117 @@
+name: Publish company activity timeline
+
+on:
+  workflow_run:
+    workflows: ["Update public data"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: publish-company-activities-main
+  cancel-in-progress: false
+
+jobs:
+  publish-company-activities:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TZ: Asia/Seoul
+
+    steps:
+      - name: Check out latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Back up published company activity timeline
+        run: |
+          cp frontend/public/data/companies/company-activities.json "$RUNNER_TEMP/company-activities-baseline.json"
+
+      - name: Build company activity timeline
+        run: |
+          set +e
+          python scripts/build_company_activity_timeline.py
+          code=$?
+          if [ -f artifacts/company_activity_timeline/company-activity-audit.md ]; then
+            cat artifacts/company_activity_timeline/company-activity-audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ "$code" -ne 0 ]; then
+            cp "$RUNNER_TEMP/company-activities-baseline.json" frontend/public/data/companies/company-activities.json
+            echo "::error::Company activity timeline generation failed. Restored previously published timeline. exit_code=$code"
+            exit "$code"
+          fi
+
+      - name: Guard company activity publication
+        run: |
+          set +e
+          python scripts/validate_company_activity_publication.py \
+            --candidate frontend/public/data/companies/company-activities.json \
+            --companies frontend/public/data/companies/companies.json \
+            --baseline "$RUNNER_TEMP/company-activities-baseline.json"
+          code=$?
+          if [ "$code" -ne 0 ]; then
+            cp "$RUNNER_TEMP/company-activities-baseline.json" frontend/public/data/companies/company-activities.json
+            echo "::error::Company activity publication guard blocked the candidate. Restored previously published timeline. exit_code=$code"
+            exit "$code"
+          fi
+
+      - name: Run company activity tests
+        run: python -m pytest -q tests/test_company_activity_publication_guard.py
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Validate frontend company activity contract
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run test:companies-activities
+          npm run build
+
+      - name: Upload company activity audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-company-activity-audit-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/company_activity_timeline/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Commit published company activity timeline
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "::error::main moved while company activities were being generated. Refusing to publish stale derived data; rerun the workflow."
+            exit 1
+          fi
+
+          git add frontend/public/data/companies/company-activities.json
+          if git diff --cached --quiet; then
+            echo "No company activity changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: publish company activity timeline"
+          git push origin HEAD:main
