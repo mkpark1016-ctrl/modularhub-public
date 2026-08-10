@@ -38,6 +38,14 @@ export function getCompanyActivities(data, companyId) {
   return Array.isArray(row?.activities) ? row.activities : [];
 }
 
+export function getCompanyActivityHistory(data, companyId) {
+  if (!data || !companyId) return null;
+  if (data.schemaVersion !== "company-activity-history-v1") return null;
+  if (data.companyId !== companyId) return null;
+  if (!Array.isArray(data.activities)) return null;
+  return data.activities;
+}
+
 export function getActivityTypeLabel(type) {
   return COMPANY_ACTIVITY_TYPE_LABELS[type] || "일반뉴스";
 }

@@ -10,6 +10,7 @@ import {
   getActivitySourceUrl,
   getCompanyActivities,
   getCompanyActivityFilterCounts,
+  getCompanyActivityHistory,
   isValidActivity,
   searchCompanyActivities,
   sortCompanyActivities,
@@ -55,6 +56,17 @@ assert.equal(getActivitySourceUrl({ sourceUrl: "not-a-url" }), null);
 assert.deepEqual(getCompanyActivities(activityPayload, "missing-company"), []);
 assert.ok(filterCompanyActivities(yuchangActivities, "all").length === yuchangActivities.length);
 assert.ok(["projects", "investment_factory", "technology_financial", "general"].includes(getActivityFilterGroup(yuchangActivities[0].activityType)));
+
+const historyPayload = {
+  schemaVersion: "company-activity-history-v1",
+  companyId: "yuchang-enc",
+  activityCount: yuchangActivities.length,
+  activities: yuchangActivities,
+};
+assert.equal(getCompanyActivityHistory(historyPayload, "yuchang-enc"), yuchangActivities);
+assert.equal(getCompanyActivityHistory({ ...historyPayload, schemaVersion: "wrong" }, "yuchang-enc"), null);
+assert.equal(getCompanyActivityHistory(historyPayload, "other-company"), null);
+assert.equal(getCompanyActivityHistory({ ...historyPayload, activities: null }, "yuchang-enc"), null);
 
 assert.deepEqual(COMPANY_ACTIVITY_PERIOD_FILTERS.map((option) => option.value), ["all", "90", "180", "365"]);
 assert.deepEqual(COMPANY_ACTIVITY_SORT_OPTIONS.map((option) => option.value), ["newest", "oldest"]);
@@ -133,6 +145,11 @@ assert.match(detailViewSource, /activities=\{activities\}/);
 assert.match(detailViewSource, /CompanyActivityTimeline/);
 assert.match(detailViewSource, /tab === "activity"/);
 assert.match(detailViewSource, /company-tab-panel-activity/);
+assert.match(detailViewSource, /company-activity-history/);
+assert.match(detailViewSource, /getCompanyActivityHistory/);
+assert.match(detailViewSource, /encodeURIComponent\(companyId\)/);
+assert.match(detailViewSource, /historyActivities \?\? activities/);
+assert.match(detailViewSource, /CompanyActivityTimeline activities=\{timelineActivities\}/);
 assert.match(detailViewSource, /공개 뉴스와 사업정보에서 확인된 기업 활동을 최신순으로 누적/);
 assert.match(overviewSource, /RecentActivityPreview/);
 assert.match(overviewSource, /company-compact-row-list/);
