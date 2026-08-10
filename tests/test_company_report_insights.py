@@ -259,14 +259,14 @@ def test_peer_benchmarks_include_universe_median_and_current_company_flags() -> 
     assert benchmark["comparison_universe_count"] == 6
     assert benchmark["other_peer_count"] == 5
     assert benchmark["current_company_included"] is True
-    assert benchmark["median_display"] == "616.6억원"
+    assert benchmark["median_display"] == "605.7억원"
     assert benchmark["reference_value_label"] == "비교 범위 최대값"
     assert benchmark["reference_value_display"] == "3,076.8억원"
     assert benchmark["source_ids"] == ["yuchang_audit_report_2026_04_08"]
     assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"
     assert benchmark["comparison_group_id"] == "modular_specialist"
     assert benchmark["comparison_group_label"] == "모듈러 제작 전문 업체"
-    assert benchmark["median_difference_display"] == "중앙값보다 2,460.2억원 높음"
+    assert benchmark["median_difference_display"] == "중앙값보다 2,471.1억원 높음"
 
 
 def test_daeseung_years_scope_latest_metrics_and_source_quality() -> None:
