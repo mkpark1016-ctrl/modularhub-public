@@ -63,8 +63,8 @@ def test_discovers_public_company_universe_and_audit_backed_companies() -> None:
     assert payload["summary"]["effective_public_company_count"] == 11
     assert payload["summary"]["total_company_count"] == 11
     assert payload["summary"]["audit_backed_company_count"] == len(insights)
-    assert payload["summary"]["audit_backed_company_count"] == 6
-    assert payload["summary"]["full_three_year_audit_count"] == 6
+    assert payload["summary"]["audit_backed_company_count"] == 7
+    assert payload["summary"]["full_three_year_audit_count"] == 7
     assert payload["summary"]["canonical_company_ids"] == sorted(company["company_id"] for company in companies)
     assert payload["summary"]["supplemental_company_ids"] == []
     assert payload["summary"]["company_ids"] == payload["summary"]["effective_public_company_ids"]
@@ -250,15 +250,15 @@ def test_company_priority_counts_and_work_item_counts_are_separate() -> None:
 
 def test_audit_record_counts_are_split_between_all_records_and_public_universe() -> None:
     payload = generated_payload()
-    assert payload["summary"]["audit_record_count"] == 6
-    assert payload["summary"]["audit_backed_company_count"] == 6
-    assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 6
-    assert payload["summary"]["audit_backed_in_universe_count"] == 6
-    assert payload["summary"]["audit_backed_in_effective_universe_count"] == 6
-    assert payload["summary"]["full_three_year_audit_record_count"] == 6
-    assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 6
-    assert payload["summary"]["full_three_year_audit_in_universe_count"] == 6
-    assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 6
+    assert payload["summary"]["audit_record_count"] == 7
+    assert payload["summary"]["audit_backed_company_count"] == 7
+    assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 7
+    assert payload["summary"]["audit_backed_in_universe_count"] == 7
+    assert payload["summary"]["audit_backed_in_effective_universe_count"] == 7
+    assert payload["summary"]["full_three_year_audit_record_count"] == 7
+    assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 7
+    assert payload["summary"]["full_three_year_audit_in_universe_count"] == 7
+    assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 7
 
 
 def test_builder_is_deterministic_for_fixed_as_of_date() -> None:

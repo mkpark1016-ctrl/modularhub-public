@@ -86,7 +86,7 @@ def test_yuchang_years_and_latest_metrics() -> None:
 
 def test_view_model_contains_yuchang_kumkang_and_daeseung() -> None:
     payload = load_output()
-    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]
+    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "geogwang-enterprise", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]
 
 
 def test_sungji_latest_metrics_and_disclosure_limits() -> None:
@@ -256,17 +256,17 @@ def test_peer_benchmarks_are_only_ranked_when_comparable() -> None:
 
 def test_peer_benchmarks_include_universe_median_and_current_company_flags() -> None:
     benchmark = next(item for item in yuchang_company(load_output())["peer_benchmarks"] if item["metric_id"] == "revenue")
-    assert benchmark["comparison_universe_count"] == 5
-    assert benchmark["other_peer_count"] == 4
+    assert benchmark["comparison_universe_count"] == 6
+    assert benchmark["other_peer_count"] == 5
     assert benchmark["current_company_included"] is True
-    assert benchmark["median_display"] == "616.6억원"
+    assert benchmark["median_display"] == "605.7억원"
     assert benchmark["reference_value_label"] == "비교 범위 최대값"
     assert benchmark["reference_value_display"] == "3,076.8억원"
     assert benchmark["source_ids"] == ["yuchang_audit_report_2026_04_08"]
     assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"
     assert benchmark["comparison_group_id"] == "modular_specialist"
     assert benchmark["comparison_group_label"] == "모듈러 제작 전문 업체"
-    assert benchmark["median_difference_display"] == "중앙값보다 2,460.2억원 높음"
+    assert benchmark["median_difference_display"] == "중앙값보다 2,471.1억원 높음"
 
 
 def test_daeseung_years_scope_latest_metrics_and_source_quality() -> None:
