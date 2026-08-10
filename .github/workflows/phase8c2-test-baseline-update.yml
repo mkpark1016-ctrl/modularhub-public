@@ -1,0 +1,61 @@
+name: Phase 8C-2 Test Baseline Update
+
+on:
+  push:
+    branches:
+      - feat/geogwang-audit-financials
+
+permissions:
+  contents: write
+
+jobs:
+  update-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/geogwang-audit-financials
+          fetch-depth: 0
+      - name: Update audit universe expectations
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          coverage = Path('tests/test_company_data_coverage.py')
+          text = coverage.read_text(encoding='utf-8')
+          replacements = {
+              'assert payload["summary"]["audit_backed_company_count"] == 6': 'assert payload["summary"]["audit_backed_company_count"] == 7',
+              'assert payload["summary"]["full_three_year_audit_count"] == 6': 'assert payload["summary"]["full_three_year_audit_count"] == 7',
+              'assert payload["summary"]["audit_record_count"] == 6': 'assert payload["summary"]["audit_record_count"] == 7',
+              'assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 6': 'assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 7',
+              'assert payload["summary"]["audit_backed_in_universe_count"] == 6': 'assert payload["summary"]["audit_backed_in_universe_count"] == 7',
+              'assert payload["summary"]["audit_backed_in_effective_universe_count"] == 6': 'assert payload["summary"]["audit_backed_in_effective_universe_count"] == 7',
+              'assert payload["summary"]["full_three_year_audit_record_count"] == 6': 'assert payload["summary"]["full_three_year_audit_record_count"] == 7',
+              'assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 6': 'assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 7',
+              'assert payload["summary"]["full_three_year_audit_in_universe_count"] == 6': 'assert payload["summary"]["full_three_year_audit_in_universe_count"] == 7',
+              'assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 6': 'assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 7',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'missing expected coverage assertion: {old}')
+              text = text.replace(old, new)
+          coverage.write_text(text, encoding='utf-8')
+
+          insights = Path('tests/test_company_report_insights.py')
+          text = insights.read_text(encoding='utf-8')
+          old = 'assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]'
+          new = 'assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "geogwang-enterprise", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]'
+          if old not in text:
+              raise SystemExit('missing expected company insight list assertion')
+          insights.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+      - name: Commit updates and remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/phase8c2-test-baseline-update.yml
+          git add tests/test_company_data_coverage.py tests/test_company_report_insights.py
+          git commit -m "test: update audit universe for Geogwang promotion"
+          git push origin HEAD:feat/geogwang-audit-financials
