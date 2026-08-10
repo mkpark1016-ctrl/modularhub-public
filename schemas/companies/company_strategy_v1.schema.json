@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "company_strategy_v1.schema.json",
+  "title": "Company strategy overrides",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "as_of_date", "records"],
+  "properties": {
+    "schema_version": {
+      "const": "company_strategy_v1"
+    },
+    "as_of_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "company_id",
+          "strategic_role",
+          "basis",
+          "priority",
+          "watch_reason",
+          "owner_note",
+          "reviewed_at"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "strategic_role": {
+            "enum": [
+              "inherit",
+              "direct_competitor",
+              "substitute_competitor",
+              "strategic_benchmark",
+              "design_influencer",
+              "internal_baseline",
+              "watchlist"
+            ]
+          },
+          "basis": {
+            "enum": ["user_business_judgment", "canonical_fallback"]
+          },
+          "priority": {
+            "type": ["string", "null"],
+            "enum": ["high", "medium", "low", null]
+          },
+          "watch_reason": {
+            "type": ["string", "null"]
+          },
+          "owner_note": {
+            "type": ["string", "null"]
+          },
+          "reviewed_at": {
+            "type": ["string", "null"],
+            "format": "date"
+          }
+        }
+      }
+    }
+  }
+}
