@@ -7,6 +7,10 @@ on:
       - "frontend/public/data/business.json"
       - "frontend/public/data/news.json"
       - "frontend/public/data/meta.json"
+      - "scripts/build_company_activity_timeline.py"
+      - "scripts/build_company_activity_history.py"
+      - "scripts/validate_company_activity_publication.py"
+      - "scripts/validate_company_activity_history.py"
       - ".github/workflows/publish-company-activities.yml"
   workflow_dispatch:
 
@@ -24,6 +28,8 @@ jobs:
     timeout-minutes: 20
     env:
       TZ: Asia/Seoul
+      HISTORY_DIR: frontend/public/data/companies/company-activity-history
+      HISTORY_INDEX: frontend/public/data/companies/company-activity-history-index.json
 
     steps:
       - name: Check out latest main
@@ -41,11 +47,14 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install --upgrade pip && pip install -r requirements.txt pytest
 
-      - name: Back up published company activity timeline
+      - name: Back up published company activity data
         run: |
           cp frontend/public/data/companies/company-activities.json "$RUNNER_TEMP/company-activities-baseline.json"
+          if [ -d "$HISTORY_DIR" ]; then
+            cp -R "$HISTORY_DIR" "$RUNNER_TEMP/company-activity-history-baseline"
+          fi
 
-      - name: Build company activity timeline
+      - name: Build company activity snapshot
         run: |
           set +e
           python scripts/build_company_activity_timeline.py
@@ -55,26 +64,44 @@ jobs:
           fi
           if [ "$code" -ne 0 ]; then
             cp "$RUNNER_TEMP/company-activities-baseline.json" frontend/public/data/companies/company-activities.json
-            echo "::error::Company activity timeline generation failed. Restored previously published timeline. exit_code=$code"
+            echo "::error::Company activity snapshot generation failed. Restored previously published snapshot. exit_code=$code"
             exit "$code"
           fi
 
-      - name: Guard company activity publication
+      - name: Build long-term company activity history
         run: |
-          set +e
+          python scripts/build_company_activity_history.py
+          if [ -f artifacts/company_activity_timeline/company-activity-history-audit.md ]; then
+            cat artifacts/company_activity_timeline/company-activity-history-audit.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Guard company activity snapshot publication
+        run: |
           python scripts/validate_company_activity_publication.py \
             --candidate frontend/public/data/companies/company-activities.json \
             --companies frontend/public/data/companies/companies.json \
             --baseline "$RUNNER_TEMP/company-activities-baseline.json"
-          code=$?
-          if [ "$code" -ne 0 ]; then
-            cp "$RUNNER_TEMP/company-activities-baseline.json" frontend/public/data/companies/company-activities.json
-            echo "::error::Company activity publication guard blocked the candidate. Restored previously published timeline. exit_code=$code"
-            exit "$code"
+
+      - name: Guard long-term company activity history publication
+        run: |
+          args=(
+            --history-index "$HISTORY_INDEX"
+            --history-dir "$HISTORY_DIR"
+            --companies frontend/public/data/companies/companies.json
+            --snapshot frontend/public/data/companies/company-activities.json
+          )
+          if [ -d "$RUNNER_TEMP/company-activity-history-baseline" ]; then
+            args+=(--baseline-history-dir "$RUNNER_TEMP/company-activity-history-baseline")
           fi
+          python scripts/validate_company_activity_history.py "${args[@]}"
 
       - name: Run company activity tests
-        run: python -m pytest -q tests/test_company_activity_publication_guard.py
+        run: |
+          python scripts/test_company_activity_timeline.py
+          python -m pytest -q \
+            tests/test_company_activity_publication_guard.py \
+            tests/test_company_activity_history_builder.py \
+            tests/test_company_activity_history_guard.py
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -88,6 +115,8 @@ jobs:
         run: |
           npm ci
           npm run test:companies-activities
+          npm run test:companies-detail
+          npm run lint
           npm run build
 
       - name: Upload company activity audit artifact
@@ -99,7 +128,7 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
-      - name: Commit published company activity timeline
+      - name: Commit published company activity data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -110,11 +139,14 @@ jobs:
             exit 1
           fi
 
-          git add frontend/public/data/companies/company-activities.json
+          git add \
+            frontend/public/data/companies/company-activities.json \
+            "$HISTORY_INDEX" \
+            "$HISTORY_DIR"
           if git diff --cached --quiet; then
             echo "No company activity changes to commit."
             exit 0
           fi
 
-          git commit -m "chore: publish company activity timeline"
+          git commit -m "chore: publish company activity history"
           git push origin HEAD:main
