@@ -1838,13 +1838,6 @@
         "auditors": [
           "미립회계법인"
         ],
-        "disclosure_limitations": [
-          "FY2022",
-          "FY2022 comparative financial statements in the 2023 audit report are marked unaudited and excluded from the public three-year series.",
-          "modular classroom rental asset",
-          "The common schema has no dedicated modular classroom rental asset fields; gross/net rental assets, additions, and future operating lease revenue are documented in the audit note and source audit documentation instead of adding company-specific schema fields.",
-          "Product revenue, construction revenue, service revenue, and equipment rental revenue are not automatically classified as modular revenue. Only modular classroom rental revenue is separately identifiable from the audit reports."
-        ],
         "latest_report_date": "2025-09-17",
         "pending_location_count": 0,
         "primary_documents": [
@@ -6074,13 +6067,6 @@
         "auditors": [
           "안경회계법인"
         ],
-        "disclosure_limitations": [
-          "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있다.",
-          "제품과 용역 매출 및 연결 총매출을 모듈러 매출로 해석하지 않는다.",
-          "사업보고서의 모듈러 매출 및 생산실적 공시금액은 모듈 개수가 아닌 금액 기준이다.",
-          "매출채권 총액과 전체 채권 합계는 서로 다른 값이다.",
-          "보은공장 매입계약은 보고기간후사건이며 운영 중 생산시설로 자동 판정하지 않는다."
-        ],
         "latest_report_date": "2026-03-12",
         "pending_location_count": 0,
         "primary_documents": [
@@ -8631,19 +8617,6 @@
         "auditors": [
           "삼정회계법인"
         ],
-        "disclosure_limitations": [
-          "This NRB file is promoted into frontend/public/data/companies/company_report_insights.json as a controlled public audit financial contract.",
-          "All reported amounts are stored as integer KRW won and no derived ratios are stored in the source JSON.",
-          "2026-03-18 business report standalone statements are the latest primary source for 2023, 2024, and 2025 values.",
-          "The 2024 operating cash flow difference is treated as a resolved K-IFRS 1008 retrospective cash-flow presentation policy change; the pre-policy-change amount is retained only as historical evidence.",
-          "The 2023 current-liability difference is treated as a resolved K-IFRS 1001 retrospective classification change for redeemable convertible preferred-share liabilities.",
-          "Consolidated statement values and subsidiary results are excluded from financial_years.",
-          "Standalone revenue breakdown is disclosed in thousand KRW and converted to integer KRW with a maximum 999 KRW rounding tolerance against income_statement.revenue.",
-          "The disclosed product, rental, service, construction, and other revenue labels are not interpreted as separate modular segment revenue without additional segment disclosure.",
-          "Goods revenue is not a disclosed NRB standalone revenue caption and remains not_applicable instead of being filled with zero.",
-          "Convertible bonds, bonds, derivative liabilities, and redeemable preferred-share liabilities are not added to the existing borrowings fields unless the schema definition is expanded in a later phase.",
-          "The existing public company card operating margin of 7.6% is reconciled to the audited standalone calculation of 7.5% through this public View Model and the NRB public company summary financials."
-        ],
         "latest_report_date": "2026-03-18",
         "pending_location_count": 0,
         "primary_documents": [
@@ -10836,18 +10809,6 @@
           "인덕회계법인",
           "회계법인 서정"
         ],
-        "disclosure_limitations": [
-          "This PlanM audit financial JSON is a public company_report_insights source, but verification_pending values remain excluded from public calculations.",
-          "2023 total_equity uses disclosure_status verification_pending because an additional 777,851,000 KRW opening equity correction requires manual cross-check.",
-          "verification_pending is different from zero, not_disclosed, and not_applicable and is excluded from derived public calculations.",
-          "Tax effects for restatement events are not separately verified; tax_effect_status is not_separately_verified where applicable.",
-          "Product, rental, service, and F&B revenue are not modular segment revenue by themselves.",
-          "The 2026-06-25 report is treated as the primary restatement basis for 2024 and 2025; wording in the 2025-04-24 report remains a manual cross-check item before public use.",
-          "감사보고서에서는 모듈러 사업부문 별도 매출을 공시하지 않음",
-          "제품매출은 모듈러 매출로 자동 간주하지 않음",
-          "임대매출은 모듈러 매출로 자동 간주하지 않음",
-          "용역 및 F&B 매출은 모듈러 매출로 자동 간주하지 않음"
-        ],
         "latest_report_date": "2026-06-25",
         "pending_location_count": 0,
         "primary_documents": [
@@ -12961,11 +12922,6 @@
         "auditors": [
           "삼덕회계법인"
         ],
-        "disclosure_limitations": [
-          "No modular segment revenue is disclosed in the audit reports.",
-          "Construction revenue is not interpreted as modular construction revenue.",
-          "Construction receivables, contract assets, and work-in-progress inventory are kept as not_disclosed because separate lines were not located."
-        ],
         "latest_report_date": "2026-04-01",
         "pending_location_count": 0,
         "primary_documents": [
@@ -15011,14 +14967,6 @@
         ],
         "auditors": [
           "신정회계법인"
-        ],
-        "disclosure_limitations": [
-          "감사보고서에는 모듈러 사업부문 별도 매출이 공시되지 않았다.",
-          "제품매출 중 모듈러 제품 비중은 감사보고서만으로 확인할 수 없다.",
-          "공사매출 중 모듈러 공사 비중은 감사보고서만으로 확인할 수 없다.",
-          "프로젝트별 매출 또는 수익성은 감사보고서만으로 확인할 수 없다.",
-          "개별 공장의 모듈 생산능력은 감사보고서만으로 확인할 수 없다.",
-          "유창엠앤씨 등 관계사 실적은 주식회사 유창이앤씨 별도 실적으로 합산하지 않는다."
         ],
         "latest_report_date": "2026-04-08",
         "pending_location_count": 45,

@@ -447,7 +447,7 @@ def build_source_summary(source_payload: dict[str, Any], locations: list[dict[st
         "primary_documents": primary_documents,
         "source_priority_by_year": source_payload["source_priority"],
         "audit_opinions": source_payload["audit_opinions"],
-        "disclosure_limitations": list(source_payload.get("disclosure_limitations") or []),
+        **({"disclosure_limitations": list(source_payload.get("disclosure_limitations") or [])} if any(opinion.get("opinion") != "unqualified" for opinion in source_payload.get("audit_opinions") or []) else {}),
         "auditors": sorted({doc["auditor"] for doc in source_documents.values()}),
         "verified_location_count": sum(1 for item in locations if item["verification_status"] in {"verified", "verified_section_range"}),
         "pending_location_count": sum(1 for item in locations if item["verification_status"] == "pending_manual_page_check"),
