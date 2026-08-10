@@ -53,6 +53,7 @@ jobs:
           npm run test:companies-projects
           npm run test:business
           npm run test:news
+          npm run test:news-url
       - name: Frontend lint and build
         working-directory: frontend
         run: |
