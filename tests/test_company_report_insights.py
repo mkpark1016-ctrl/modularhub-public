@@ -566,21 +566,3 @@ def test_peer_benchmark_groups_follow_canonical_company_types() -> None:
             assert benchmark["comparison_group_id"] == context["group_id"]
             assert benchmark["comparison_group_label"] == context["group_label"]
             assert benchmark["calculation_basis"] == "same_company_group_latest_year_currency_financial_scope_minimum_three_values"
-
-def test_geogwang_qualified_opinion_limitations_are_public() -> None:
-    payload = load_output()
-    company = next(row for row in payload["companies"] if row["company_id"] == "geogwang-enterprise")
-    opinions = company["source_summary"]["audit_opinions"]
-    assert opinions[0]["opinion"] == "qualified"
-    assert opinions[0]["opinion_label_ko"] == "한정의견"
-    limitations = company["source_summary"]["disclosure_limitations"]
-    assert limitations
-    assert "재고자산" in limitations[0]
-    assert "영업활동현금흐름" in limitations[0]
-
-def test_audit_opinion_limitations_do_not_change_unqualified_company_semantics() -> None:
-    payload = load_output()
-    geogwang = next(row for row in payload["companies"] if row["company_id"] == "geogwang-enterprise")
-    assert geogwang["source_summary"]["disclosure_limitations"]
-    assert "disclosure_limitations" not in yuchang_company(payload)["source_summary"]
-    assert "disclosure_limitations" not in kumkang_company(payload)["source_summary"]

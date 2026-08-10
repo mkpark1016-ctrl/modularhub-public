@@ -462,10 +462,6 @@
         "primary_documents": { "type": "array" },
         "source_priority_by_year": { "type": "object" },
         "audit_opinions": { "type": "array" },
-        "disclosure_limitations": {
-          "type": "array",
-          "items": { "type": "string", "minLength": 1 }
-        },
         "auditors": { "type": "array" },
         "verified_location_count": { "type": "integer" },
         "pending_location_count": { "type": "integer" },

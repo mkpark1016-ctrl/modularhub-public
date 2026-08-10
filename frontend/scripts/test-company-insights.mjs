@@ -27,11 +27,15 @@ import {
   productionFacilities,
   technologyCount,
 } from "../src/companyInsights.js";
+import { getCompanyReportInsight, latestAuditOpinion } from "../src/companyReportInsights.js";
 import { applyCompanyStrategy, validateCompanyStrategyPayload } from "../src/companyStrategy.js";
 import publicCompanySupplements from "../src/data/publicCompanySupplements.json" with { type: "json" };
 
 const payload = JSON.parse(readFileSync(new URL("../public/data/companies/companies.json", import.meta.url), "utf8"));
+const reportPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company_report_insights.json", import.meta.url), "utf8"));
 const strategyPayload = JSON.parse(readFileSync(new URL("../public/data/companies/company_strategy.json", import.meta.url), "utf8"));
+const overviewSource = readFileSync(new URL("../src/components/company/CompanyOverviewTab.jsx", import.meta.url), "utf8");
+const stylesheet = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 const rawCompanies = getCompanyItems(payload);
 const strategyValidation = validateCompanyStrategyPayload(strategyPayload, rawCompanies);
 assert.equal(strategyValidation.valid, true, strategyValidation.errors.join("\n"));
@@ -50,6 +54,19 @@ assert.equal(canonicalCompanies.filter((company) => company.company_id === "daes
 assert.equal(new Set(canonicalCompanies.map((company) => company.company_id)).size, 11);
 
 assert.equal(companies.length, 11);
+const geogwangReport = getCompanyReportInsight(reportPayload, "geogwang-enterprise");
+const geogwangOpinion = latestAuditOpinion(geogwangReport);
+assert.equal(geogwangOpinion.opinion, "qualified");
+assert.equal(geogwangOpinion.opinion_label_ko, "한정의견");
+assert.equal("disclosure_limitations" in geogwangReport.source_summary, false);
+const yuchangOpinion = latestAuditOpinion(getCompanyReportInsight(reportPayload, "yuchang-enc"));
+assert.equal(yuchangOpinion.opinion, "unqualified");
+assert.ok(overviewSource.includes("latestAuditOpinion(reportInsight)"));
+assert.ok(overviewSource.includes('if (!opinion || opinion.opinion === "unqualified") return null;'));
+assert.ok(overviewSource.includes("회사의 모든 수치가 오류라는 의미는 아닙니다."));
+assert.equal(overviewSource.includes("disclosure_limitations"), false);
+assert.ok(stylesheet.includes(".company-audit-opinion-notice"));
+
 const summary = getCompanySummary(companies);
 assert.equal(summary.total, 11);
 assert.equal(summary.generalContractors, 4);
