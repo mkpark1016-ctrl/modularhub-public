@@ -1,0 +1,2636 @@
+{
+  "as_of_date": "2026-08-10",
+  "audit_coverage": {
+    "audit_backed_in_canonical_universe_count": 7,
+    "audit_backed_in_effective_universe_count": 7,
+    "audit_backed_in_universe_count": 7,
+    "audit_company_ids": [
+      "daeseung-engineering",
+      "geogwang-enterprise",
+      "kumkang-kind",
+      "nrb",
+      "planm",
+      "sungji-steel",
+      "yuchang-enc"
+    ],
+    "audit_company_ids_not_in_universe": [],
+    "audit_record_count": 7,
+    "full_three_year_audit_in_canonical_universe_count": 7,
+    "full_three_year_audit_in_effective_universe_count": 7,
+    "full_three_year_audit_in_universe_count": 7,
+    "full_three_year_audit_record_count": 7,
+    "state_counts": {
+      "complete": 5,
+      "unavailable": 4,
+      "verification_pending": 2
+    }
+  },
+  "companies": [
+    {
+      "accounting_standard": {
+        "code": "korean_gaap",
+        "label_en": "Korean GAAP",
+        "label_ko": "일반기업회계기준"
+      },
+      "audit_coverage_state": "complete",
+      "audit_financials_available": true,
+      "audit_latest_report_date": "2025-09-17",
+      "audit_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "daeseung-engineering",
+      "company_master_present": true,
+      "company_name": "대승엔지니어링",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-19T00:00:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "sparse",
+      "financial_scope": "standalone",
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": 2025,
+      "latest_report_date": "2025-09-17",
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2025-09-17",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {
+            "2023": "missing",
+            "2024": "missing",
+            "2025": "missing"
+          },
+          "missing": 3,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": false,
+      "production_facility_count": 2,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-19",
+      "project_count": 2,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-19",
+      "recommendation_priority": "P2",
+      "recommendation_reason_codes": [
+        "source_coverage_sparse"
+      ],
+      "recommended_next_action": "source_registry_review",
+      "recommended_next_domain": "evidence",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 6,
+      "source_document_count": 3,
+      "technology_count": 1,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-19",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 0,
+      "verified_project_count": 2,
+      "verified_source_count": 0,
+      "verified_technology_count": 1,
+      "website_present": false
+    },
+    {
+      "accounting_standard": null,
+      "audit_coverage_state": "unavailable",
+      "audit_financials_available": false,
+      "audit_latest_report_date": null,
+      "audit_years": [],
+      "company_id": "dl-enc",
+      "company_master_present": true,
+      "company_name": "DL이앤씨",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": null,
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": null,
+      "latest_report_date": null,
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2026-07-16",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": false,
+      "production_facility_count": 0,
+      "production_freshness_state": "unknown",
+      "production_verified_at": null,
+      "project_count": 2,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 0,
+      "technology_count": 21,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 0,
+      "verified_project_count": 1,
+      "verified_source_count": 1,
+      "verified_technology_count": 21,
+      "website_present": false
+    },
+    {
+      "accounting_standard": {
+        "code": "korean_gaap",
+        "label_en": "Korean GAAP",
+        "label_ko": "일반기업회계기준"
+      },
+      "audit_coverage_state": "complete",
+      "audit_financials_available": true,
+      "audit_latest_report_date": "2026-04-09",
+      "audit_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "geogwang-enterprise",
+      "company_master_present": true,
+      "company_name": "거광기업",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": "standalone",
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": 2025,
+      "latest_report_date": "2026-04-09",
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2026-04-09",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {
+            "2023": "missing",
+            "2024": "missing",
+            "2025": "missing"
+          },
+          "missing": 3,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": false,
+      "production_facility_count": 1,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 1,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P2",
+      "recommendation_reason_codes": [
+        "production_capacity_unknown",
+        "technology_evidence_sparse"
+      ],
+      "recommended_next_action": "production_source_refresh",
+      "recommended_next_domain": "production",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {
+            "2023": "not_disclosed",
+            "2024": "not_disclosed",
+            "2025": "not_disclosed"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 3,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 2,
+      "technology_count": 0,
+      "technology_freshness_state": "unknown",
+      "technology_verified_at": null,
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 1,
+      "verified_project_count": 1,
+      "verified_source_count": 1,
+      "verified_technology_count": 0,
+      "website_present": false
+    },
+    {
+      "accounting_standard": null,
+      "audit_coverage_state": "unavailable",
+      "audit_financials_available": false,
+      "audit_latest_report_date": null,
+      "audit_years": [],
+      "company_id": "gs-ec",
+      "company_master_present": true,
+      "company_name": "GS건설",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": null,
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": null,
+      "latest_report_date": null,
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2026-07-16",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": false,
+      "production_facility_count": 3,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 3,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 0,
+      "technology_count": 3,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 3,
+      "verified_project_count": 3,
+      "verified_source_count": 1,
+      "verified_technology_count": 3,
+      "website_present": false
+    },
+    {
+      "accounting_standard": null,
+      "audit_coverage_state": "unavailable",
+      "audit_financials_available": false,
+      "audit_latest_report_date": null,
+      "audit_years": [],
+      "company_id": "hyundai-engineering",
+      "company_master_present": true,
+      "company_name": "현대엔지니어링",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": null,
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": null,
+      "latest_report_date": null,
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2026-07-16",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": false,
+      "production_facility_count": 0,
+      "production_freshness_state": "unknown",
+      "production_verified_at": null,
+      "project_count": 3,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 0,
+      "technology_count": 14,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 0,
+      "verified_project_count": 3,
+      "verified_source_count": 1,
+      "verified_technology_count": 14,
+      "website_present": false
+    },
+    {
+      "accounting_standard": {
+        "code": "k_ifrs",
+        "label_en": "K-IFRS",
+        "label_ko": "한국채택국제회계기준"
+      },
+      "audit_coverage_state": "complete",
+      "audit_financials_available": true,
+      "audit_latest_report_date": "2026-03-12",
+      "audit_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "kumkang-kind",
+      "company_master_present": true,
+      "company_name": "금강공업",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": "consolidated",
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": 2025,
+      "latest_report_date": "2026-03-12",
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2026-03-12",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {
+            "2023": "missing",
+            "2024": "missing",
+            "2025": "missing"
+          },
+          "missing": 3,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": true,
+      "production_facility_count": 3,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 10,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P3",
+      "recommendation_reason_codes": [],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "monitoring",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 3,
+      "technology_count": 4,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 2,
+      "verified_project_count": 9,
+      "verified_source_count": 1,
+      "verified_technology_count": 4,
+      "website_present": true
+    },
+    {
+      "accounting_standard": {
+        "code": "k_ifrs",
+        "label_en": "K-IFRS",
+        "label_ko": "한국채택국제회계기준"
+      },
+      "audit_coverage_state": "complete",
+      "audit_financials_available": true,
+      "audit_latest_report_date": "2026-03-18",
+      "audit_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "nrb",
+      "company_master_present": true,
+      "company_name": "엔알비",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": "standalone",
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": 2025,
+      "latest_report_date": "2026-03-18",
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2026-03-18",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {
+            "2023": "missing",
+            "2024": "missing",
+            "2025": "missing"
+          },
+          "missing": 3,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": false,
+      "production_facility_count": 2,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 7,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P2",
+      "recommendation_reason_codes": [
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "production_source_refresh",
+      "recommended_next_domain": "production",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {
+            "2023": "not_disclosed",
+            "2024": "not_disclosed",
+            "2025": "not_disclosed"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 3,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 2,
+      "source_document_count": 1,
+      "technology_count": 16,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 2,
+      "verified_project_count": 7,
+      "verified_source_count": 2,
+      "verified_technology_count": 16,
+      "website_present": false
+    },
+    {
+      "accounting_standard": {
+        "code": "korean_general_enterprise_accounting_standards",
+        "label_en": "Korean General Enterprise Accounting Standards",
+        "label_ko": "일반기업회계기준"
+      },
+      "audit_coverage_state": "verification_pending",
+      "audit_financials_available": true,
+      "audit_latest_report_date": "2026-06-25",
+      "audit_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "planm",
+      "company_master_present": true,
+      "company_name": "플랜엠",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": "standalone",
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": 2025,
+      "latest_report_date": "2026-06-25",
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 1,
+      "oldest_critical_verification_date": "2026-06-25",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {
+            "2023": "missing",
+            "2024": "missing",
+            "2025": "missing"
+          },
+          "missing": 3,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": true,
+      "production_facility_count": 1,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 17,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "excessive_verification_pending"
+      ],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "evidence",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {
+            "2023": "verification_pending",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 2,
+          "verification_pending": 1
+        },
+        "total_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 2,
+      "technology_count": 10,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 1,
+      "verified_project_count": 10,
+      "verified_source_count": 1,
+      "verified_technology_count": 10,
+      "website_present": false
+    },
+    {
+      "accounting_standard": null,
+      "audit_coverage_state": "unavailable",
+      "audit_financials_available": false,
+      "audit_latest_report_date": null,
+      "audit_years": [],
+      "company_id": "samsung-ct-construction",
+      "company_master_present": true,
+      "company_name": "삼성물산 건설부문",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": null,
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": null,
+      "latest_report_date": null,
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 0,
+      "oldest_critical_verification_date": "2026-07-16",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": false,
+      "production_facility_count": 1,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 1,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {},
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 0,
+      "technology_count": 7,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 1,
+      "verified_project_count": 1,
+      "verified_source_count": 1,
+      "verified_technology_count": 7,
+      "website_present": false
+    },
+    {
+      "accounting_standard": {
+        "code": "korean_gaap",
+        "label_en": "Korean GAAP",
+        "label_ko": "일반기업회계기준"
+      },
+      "audit_coverage_state": "complete",
+      "audit_financials_available": true,
+      "audit_latest_report_date": "2026-04-01",
+      "audit_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "sungji-steel",
+      "company_master_present": true,
+      "company_name": "성지제강",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "verified",
+      "financial_scope": "standalone",
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": 2025,
+      "latest_report_date": "2026-04-01",
+      "manual_page_check_count": 0,
+      "not_disclosed_count": 1,
+      "oldest_critical_verification_date": "2026-04-01",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {
+            "2023": "missing",
+            "2024": "missing",
+            "2025": "missing"
+          },
+          "missing": 3,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": true,
+      "production_facility_count": 3,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 1,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P3",
+      "recommendation_reason_codes": [],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "monitoring",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {
+            "2023": "not_disclosed",
+            "2024": "not_disclosed",
+            "2025": "not_disclosed"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 3,
+          "reported": 0,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 2,
+      "technology_count": 2,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 2,
+      "verified_project_count": 1,
+      "verified_source_count": 1,
+      "verified_technology_count": 2,
+      "website_present": false
+    },
+    {
+      "accounting_standard": {
+        "code": "korean_gaap",
+        "label_en": "Korean GAAP",
+        "label_ko": "일반기업회계기준"
+      },
+      "audit_coverage_state": "verification_pending",
+      "audit_financials_available": true,
+      "audit_latest_report_date": "2026-04-08",
+      "audit_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "yuchang-enc",
+      "company_master_present": true,
+      "company_name": "유창이앤씨",
+      "company_profile_present": true,
+      "company_profile_verified_at": "2026-07-16T22:30:00+09:00",
+      "company_record_source": "canonical",
+      "evidence_coverage_state": "mixed",
+      "financial_scope": "standalone",
+      "freshness_state": "current",
+      "headquarters_present": true,
+      "latest_audit_year": 2025,
+      "latest_report_date": "2026-04-08",
+      "manual_page_check_count": 45,
+      "not_disclosed_count": 1,
+      "oldest_critical_verification_date": "2026-04-08",
+      "operational_coverage_state": "sufficiently_covered",
+      "optional_metric_coverage": {
+        "current_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "current_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "inventory": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "work_in_progress": {
+          "by_year": {
+            "2023": "missing",
+            "2024": "missing",
+            "2025": "missing"
+          },
+          "missing": 3,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 0,
+          "verification_pending": 0
+        }
+      },
+      "pending_source_count": 0,
+      "production_capacity_available": true,
+      "production_facility_count": 4,
+      "production_freshness_state": "current",
+      "production_verified_at": "2026-07-16",
+      "project_count": 10,
+      "project_freshness_state": "current",
+      "project_verified_at": "2026-07-16",
+      "recommendation_priority": "P1",
+      "recommendation_reason_codes": [
+        "excessive_verification_pending"
+      ],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "evidence",
+      "representative_present": true,
+      "required_metric_coverage": {
+        "gross_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "net_income": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_cash_flow": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "operating_profit": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "receivables_total": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "revenue": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_assets": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_borrowings": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_equity": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        },
+        "total_liabilities": {
+          "by_year": {
+            "2023": "reported",
+            "2024": "reported",
+            "2025": "reported"
+          },
+          "missing": 0,
+          "not_applicable": 0,
+          "not_disclosed": 0,
+          "reported": 3,
+          "verification_pending": 0
+        }
+      },
+      "source_count": 1,
+      "source_document_count": 2,
+      "technology_count": 7,
+      "technology_freshness_state": "current",
+      "technology_verified_at": "2026-07-16",
+      "verification_pending_count": 0,
+      "verified_production_facility_count": 3,
+      "verified_project_count": 9,
+      "verified_source_count": 1,
+      "verified_technology_count": 7,
+      "website_present": true
+    }
+  ],
+  "company_priority_queue": [
+    {
+      "company_id": "dl-enc",
+      "company_name": "DL이앤씨",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "gs-ec",
+      "company_name": "GS건설",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "hyundai-engineering",
+      "company_name": "현대엔지니어링",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "planm",
+      "company_name": "플랜엠",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "excessive_verification_pending"
+      ],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "evidence"
+    },
+    {
+      "company_id": "samsung-ct-construction",
+      "company_name": "삼성물산 건설부문",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "yuchang-enc",
+      "company_name": "유창이앤씨",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "excessive_verification_pending"
+      ],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "evidence"
+    },
+    {
+      "company_id": "daeseung-engineering",
+      "company_name": "대승엔지니어링",
+      "item_type": "company_data_gap",
+      "priority": "P2",
+      "reason_codes": [
+        "source_coverage_sparse"
+      ],
+      "recommended_next_action": "source_registry_review",
+      "recommended_next_domain": "evidence"
+    },
+    {
+      "company_id": "geogwang-enterprise",
+      "company_name": "거광기업",
+      "item_type": "company_data_gap",
+      "priority": "P2",
+      "reason_codes": [
+        "production_capacity_unknown",
+        "technology_evidence_sparse"
+      ],
+      "recommended_next_action": "production_source_refresh",
+      "recommended_next_domain": "production"
+    },
+    {
+      "company_id": "nrb",
+      "company_name": "엔알비",
+      "item_type": "company_data_gap",
+      "priority": "P2",
+      "reason_codes": [
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "production_source_refresh",
+      "recommended_next_domain": "production"
+    }
+  ],
+  "consistency": {
+    "audit_insight_without_public_source_ids": [],
+    "audit_record_without_company_master_ids": [],
+    "company_master_without_audit_record_ids": [
+      "dl-enc",
+      "gs-ec",
+      "hyundai-engineering",
+      "samsung-ct-construction"
+    ],
+    "issue_count": 0,
+    "issues": [],
+    "public_source_without_audit_insight_ids": [],
+    "reason_codes": [],
+    "status": "clean"
+  },
+  "consistency_priority_queue": [],
+  "evidence_coverage": {
+    "manual_page_check_company_ids": [
+      "yuchang-enc"
+    ],
+    "state_counts": {
+      "mixed": 1,
+      "sparse": 1,
+      "verified": 9
+    }
+  },
+  "generated_at": "2026-08-10T00:00:00Z",
+  "priority_queue": [
+    {
+      "company_id": "dl-enc",
+      "company_name": "DL이앤씨",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "gs-ec",
+      "company_name": "GS건설",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "hyundai-engineering",
+      "company_name": "현대엔지니어링",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "planm",
+      "company_name": "플랜엠",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "excessive_verification_pending"
+      ],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "evidence"
+    },
+    {
+      "company_id": "samsung-ct-construction",
+      "company_name": "삼성물산 건설부문",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "missing_audit_financials",
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "audit_report_onboarding",
+      "recommended_next_domain": "financial"
+    },
+    {
+      "company_id": "yuchang-enc",
+      "company_name": "유창이앤씨",
+      "item_type": "company_data_gap",
+      "priority": "P1",
+      "reason_codes": [
+        "excessive_verification_pending"
+      ],
+      "recommended_next_action": "monitor",
+      "recommended_next_domain": "evidence"
+    },
+    {
+      "company_id": "daeseung-engineering",
+      "company_name": "대승엔지니어링",
+      "item_type": "company_data_gap",
+      "priority": "P2",
+      "reason_codes": [
+        "source_coverage_sparse"
+      ],
+      "recommended_next_action": "source_registry_review",
+      "recommended_next_domain": "evidence"
+    },
+    {
+      "company_id": "geogwang-enterprise",
+      "company_name": "거광기업",
+      "item_type": "company_data_gap",
+      "priority": "P2",
+      "reason_codes": [
+        "production_capacity_unknown",
+        "technology_evidence_sparse"
+      ],
+      "recommended_next_action": "production_source_refresh",
+      "recommended_next_domain": "production"
+    },
+    {
+      "company_id": "nrb",
+      "company_name": "엔알비",
+      "item_type": "company_data_gap",
+      "priority": "P2",
+      "reason_codes": [
+        "production_capacity_unknown"
+      ],
+      "recommended_next_action": "production_source_refresh",
+      "recommended_next_domain": "production"
+    }
+  ],
+  "schema_version": "company_data_coverage_v1",
+  "stale_domains": [],
+  "summary": {
+    "audit_backed_company_count": 7,
+    "audit_backed_in_canonical_universe_count": 7,
+    "audit_backed_in_effective_universe_count": 7,
+    "audit_backed_in_universe_count": 7,
+    "audit_company_ids": [
+      "daeseung-engineering",
+      "geogwang-enterprise",
+      "kumkang-kind",
+      "nrb",
+      "planm",
+      "sungji-steel",
+      "yuchang-enc"
+    ],
+    "audit_company_ids_not_in_universe": [],
+    "audit_coverage_state_counts": {
+      "complete": 5,
+      "unavailable": 4,
+      "verification_pending": 2
+    },
+    "audit_record_count": 7,
+    "canonical_company_count": 11,
+    "canonical_company_ids": [
+      "daeseung-engineering",
+      "dl-enc",
+      "geogwang-enterprise",
+      "gs-ec",
+      "hyundai-engineering",
+      "kumkang-kind",
+      "nrb",
+      "planm",
+      "samsung-ct-construction",
+      "sungji-steel",
+      "yuchang-enc"
+    ],
+    "company_ids": [
+      "daeseung-engineering",
+      "dl-enc",
+      "geogwang-enterprise",
+      "gs-ec",
+      "hyundai-engineering",
+      "kumkang-kind",
+      "nrb",
+      "planm",
+      "samsung-ct-construction",
+      "sungji-steel",
+      "yuchang-enc"
+    ],
+    "company_priority_counts": {
+      "P0": 0,
+      "P1": 6,
+      "P2": 3,
+      "P3": 2
+    },
+    "effective_public_company_count": 11,
+    "effective_public_company_ids": [
+      "daeseung-engineering",
+      "dl-enc",
+      "geogwang-enterprise",
+      "gs-ec",
+      "hyundai-engineering",
+      "kumkang-kind",
+      "nrb",
+      "planm",
+      "samsung-ct-construction",
+      "sungji-steel",
+      "yuchang-enc"
+    ],
+    "evidence_coverage_state_counts": {
+      "mixed": 1,
+      "sparse": 1,
+      "verified": 9
+    },
+    "freshness_state_counts": {
+      "current": 11
+    },
+    "full_three_year_audit_count": 7,
+    "full_three_year_audit_in_canonical_universe_count": 7,
+    "full_three_year_audit_in_effective_universe_count": 7,
+    "full_three_year_audit_in_universe_count": 7,
+    "full_three_year_audit_record_count": 7,
+    "non_audit_company_count": 4,
+    "non_audit_company_ids": [
+      "dl-enc",
+      "gs-ec",
+      "hyundai-engineering",
+      "samsung-ct-construction"
+    ],
+    "operational_coverage_state_counts": {
+      "sufficiently_covered": 11
+    },
+    "priority_counts": {
+      "P0": 0,
+      "P1": 6,
+      "P2": 3,
+      "P3": 0
+    },
+    "supplemental_company_ids": [],
+    "supplemental_public_company_count": 0,
+    "total_company_count": 11,
+    "work_item_priority_counts": {
+      "P0": 0,
+      "P1": 6,
+      "P2": 3,
+      "P3": 0
+    }
+  }
+}
