@@ -17,15 +17,15 @@ const DATA_BASE = import.meta.env.VITE_DATA_BASE_URL || "/data";
 export default function CompanyDetailView({ company, activeTab, onTabChange, activities = [], reportInsight = null }) {
   const tab = normalizeCompanyTab(activeTab);
   const [evidence, setEvidence] = useState(null);
-  const [historyActivities, setHistoryActivities] = useState(null);
+  const [historyState, setHistoryState] = useState({ companyId: "", activities: null });
   const showEvidence = useCallback((nextEvidence) => setEvidence(nextEvidence), []);
 
   useEffect(() => {
     let active = true;
-    if (tab !== "activity" || !company?.company_id) return () => { active = false; };
+    const companyId = company?.company_id;
+    if (tab !== "activity" || !companyId) return () => { active = false; };
 
-    setHistoryActivities(null);
-    const historyUrl = `${DATA_BASE}/companies/company-activity-history/${encodeURIComponent(company.company_id)}.json`;
+    const historyUrl = `${DATA_BASE}/companies/company-activity-history/${encodeURIComponent(companyId)}.json`;
     fetch(historyUrl)
       .then((response) => {
         if (!response.ok) throw new Error(`history unavailable (${response.status})`);
@@ -33,16 +33,16 @@ export default function CompanyDetailView({ company, activeTab, onTabChange, act
       })
       .then((payload) => {
         if (!active) return;
-        const history = getCompanyActivityHistory(payload, company.company_id);
-        if (history) setHistoryActivities(history);
+        setHistoryState({ companyId, activities: getCompanyActivityHistory(payload, companyId) });
       })
       .catch(() => {
-        if (active) setHistoryActivities(null);
+        if (active) setHistoryState({ companyId, activities: null });
       });
 
     return () => { active = false; };
   }, [company?.company_id, tab]);
 
+  const historyActivities = historyState.companyId === company?.company_id ? historyState.activities : null;
   const timelineActivities = historyActivities ?? activities;
 
   return (
