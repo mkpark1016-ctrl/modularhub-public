@@ -20,6 +20,7 @@ import {
   getCompanyItems,
   getCompanySummary,
 } from "./companyInsights";
+import { applyCompanyStrategy } from "./companyStrategy";
 import {
   MAX_COMPARISON_COMPANIES,
   compareCompaniesForMvp,
@@ -430,10 +431,14 @@ function HomePage() {
   const businessState = useDataset("business");
   const newsState = useDataset("news");
   const companyState = useDataset("companies/companies");
+  const strategyState = useDataset("companies/company_strategy");
   const favorites = useFavorites();
   const businessItems = getItems(businessState.data);
   const newsItems = getItems(newsState.data).map((item) => ({ ...item, topic: getNewsTopic(item), relevanceGrade: getNewsRelevance(item) })).sort((a, b) => compareNewsBySort(a, b, "newest"));
-  const companyItems = getCompanyItems(companyState.data);
+  const companyItems = useMemo(
+    () => applyCompanyStrategy(getCompanyItems(companyState.data), strategyState.data),
+    [companyState.data, strategyState.data],
+  );
   const companySummary = getCompanySummary(companyItems);
   const dashboardAsOf = parseDate(metaState.data?.generated_at) || parseDate(metaState.data?.last_updated_at) || new Date();
   const businessSummary = getBusinessSummary(businessItems, dashboardAsOf);
@@ -763,12 +768,16 @@ function CompanyDiscoveryToolbar({ values, setParam, roleOptions, filteredCount,
 
 function CompanyListingPage() {
   const { loading, error, data } = useDataset("companies/companies");
+  const strategyState = useDataset("companies/company_strategy");
   const activityState = useDataset("companies/company-activities");
   const reportInsightState = useDataset("companies/company_report_insights");
   const [searchParams, setSearchParams] = useSearchParams();
   const [comparisonOpen, setComparisonOpen] = useState(false);
   const compareButtonRef = useRef(null);
-  const items = getCompanyItems(data);
+  const items = useMemo(
+    () => applyCompanyStrategy(getCompanyItems(data), strategyState.data),
+    [data, strategyState.data],
+  );
   const activitiesByCompany = useMemo(() => {
     const rows = new Map();
     for (const company of items) {
@@ -904,9 +913,14 @@ function CompanyDetailPage() {
   const { companyId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { loading, error, data } = useDataset("companies/companies");
+  const strategyState = useDataset("companies/company_strategy");
   const activityState = useDataset("companies/company-activities");
   const reportInsightState = useDataset("companies/company_report_insights");
-  const company = getCompanyItems(data).find((item) => item.company_id === companyId);
+  const strategyCompanies = useMemo(
+    () => applyCompanyStrategy(getCompanyItems(data), strategyState.data),
+    [data, strategyState.data],
+  );
+  const company = strategyCompanies.find((item) => item.company_id === companyId);
   const reportInsight = getCompanyReportInsight(reportInsightState.data, companyId);
   const activities = getCompanyActivities(activityState.data, companyId);
   const activeTab = normalizeCompanyTab(searchParams.get("tab") || "overview");

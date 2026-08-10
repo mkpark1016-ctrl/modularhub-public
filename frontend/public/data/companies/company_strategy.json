@@ -1,0 +1,105 @@
+{
+  "schema_version": "company_strategy_v1",
+  "as_of_date": "2026-08-10",
+  "records": [
+    {
+      "company_id": "daeseung-engineering",
+      "strategic_role": "direct_competitor",
+      "basis": "user_business_judgment",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": "2026-08-10"
+    },
+    {
+      "company_id": "dl-enc",
+      "strategic_role": "inherit",
+      "basis": "canonical_fallback",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": null
+    },
+    {
+      "company_id": "geogwang-enterprise",
+      "strategic_role": "direct_competitor",
+      "basis": "user_business_judgment",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": "2026-08-10"
+    },
+    {
+      "company_id": "gs-ec",
+      "strategic_role": "inherit",
+      "basis": "canonical_fallback",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": null
+    },
+    {
+      "company_id": "hyundai-engineering",
+      "strategic_role": "inherit",
+      "basis": "canonical_fallback",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": null
+    },
+    {
+      "company_id": "kumkang-kind",
+      "strategic_role": "direct_competitor",
+      "basis": "user_business_judgment",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": "2026-08-10"
+    },
+    {
+      "company_id": "nrb",
+      "strategic_role": "direct_competitor",
+      "basis": "user_business_judgment",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": "2026-08-10"
+    },
+    {
+      "company_id": "planm",
+      "strategic_role": "direct_competitor",
+      "basis": "user_business_judgment",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": "2026-08-10"
+    },
+    {
+      "company_id": "samsung-ct-construction",
+      "strategic_role": "inherit",
+      "basis": "canonical_fallback",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": null
+    },
+    {
+      "company_id": "sungji-steel",
+      "strategic_role": "direct_competitor",
+      "basis": "user_business_judgment",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": "2026-08-10"
+    },
+    {
+      "company_id": "yuchang-enc",
+      "strategic_role": "direct_competitor",
+      "basis": "user_business_judgment",
+      "priority": null,
+      "watch_reason": null,
+      "owner_note": null,
+      "reviewed_at": "2026-08-10"
+    }
+  ]
+}

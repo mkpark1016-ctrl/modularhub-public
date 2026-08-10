@@ -271,7 +271,8 @@ export function getCompanyTypeLabel(company) {
 }
 
 export function getStrategicCompetitiveRole(company) {
-  if (isModularSpecialistCompany(company)) return "direct_competitor";
+  const overrideRole = company?.strategy_override?.strategic_role;
+  if (overrideRole && overrideRole !== "inherit") return overrideRole;
   return company?.competitive_role || "unknown";
 }
 
