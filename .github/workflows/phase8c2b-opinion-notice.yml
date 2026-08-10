@@ -1,0 +1,85 @@
+name: Phase 8C-2B Audit Opinion Notice
+
+on:
+  push:
+    branches:
+      - feat/audit-opinion-interpretation-notice
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    if: ${{ !contains(github.event.head_commit.message, '[skip phase8c2b]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/audit-opinion-interpretation-notice
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Apply generic audit-opinion interpretation notice
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          builder = Path('scripts/build_company_report_insights.py')
+          text = builder.read_text(encoding='utf-8')
+          old = '        "audit_opinions": source_payload["audit_opinions"],\n        "auditors": sorted({doc["auditor"] for doc in source_documents.values()}),'
+          new = '        "audit_opinions": source_payload["audit_opinions"],\n        "disclosure_limitations": list(source_payload.get("disclosure_limitations") or []),\n        "auditors": sorted({doc["auditor"] for doc in source_documents.values()}),'
+          if old not in text:
+              raise SystemExit('build_source_summary insertion point not found')
+          builder.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          overview = Path('frontend/src/components/company/CompanyOverviewTab.jsx')
+          text = overview.read_text(encoding='utf-8')
+          old = '  latestSnapshotMetric,\n  metricDisplayText,'
+          new = '  latestAuditOpinion,\n  latestSnapshotMetric,\n  metricDisplayText,'
+          if old not in text:
+              raise SystemExit('overview import insertion point not found')
+          text = text.replace(old, new, 1)
+          marker = 'function ThreeYearSignalRows({ reportInsight }) {'
+          notice = '''function AuditOpinionNotice({ reportInsight }) {\n  const opinion = latestAuditOpinion(reportInsight);\n  if (!opinion || opinion.opinion === "unqualified") return null;\n  const limitation = reportInsight?.source_summary?.disclosure_limitations?.[0]\n    || "비적정 감사의견이 확인되었습니다. 재무 수치는 감사의견의 제한사항과 함께 해석해야 합니다.";\n  return (\n    <div className="company-audit-opinion-notice" role="note" aria-label="감사의견 해석 주의">\n      <strong>감사의견 {opinion.opinion_label_ko || "확인 필요"} · 해석 주의</strong>\n      <span>{limitation}</span>\n    </div>\n  );\n}\n\n'''
+          if marker not in text:
+              raise SystemExit('overview function insertion point not found')
+          text = text.replace(marker, notice + marker, 1)
+          old = '      <KeyFinancialSnapshot reportInsight={reportInsight} onTabChange={onTabChange} onShowEvidence={onShowEvidence} />\n      <ThreeYearSignalRows reportInsight={reportInsight} />'
+          new = '      <KeyFinancialSnapshot reportInsight={reportInsight} onTabChange={onTabChange} onShowEvidence={onShowEvidence} />\n      <AuditOpinionNotice reportInsight={reportInsight} />\n      <ThreeYearSignalRows reportInsight={reportInsight} />'
+          if old not in text:
+              raise SystemExit('overview render insertion point not found')
+          overview.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          styles = Path('frontend/src/styles.css')
+          css = styles.read_text(encoding='utf-8')
+          block = '''\n/* Phase 8C-2B: non-unqualified audit opinion interpretation notice */\n.company-audit-opinion-notice { display: grid; gap: 6px; margin: 12px 0 18px; padding: 12px 14px; border: 1px solid #e7c76f; border-radius: 8px; background: #fffaf0; color: #5f4a12; }\n.company-audit-opinion-notice strong { font-size: 14px; }\n.company-audit-opinion-notice span { font-size: 13px; line-height: 1.55; }\n'''
+          if '.company-audit-opinion-notice {' not in css:
+              styles.write_text(css.rstrip() + '\n' + block, encoding='utf-8')
+
+          test = Path('frontend/scripts/test-company-detail-ui.mjs')
+          text = test.read_text(encoding='utf-8')
+          anchor = 'assert.equal(companies.length, 11);\n'
+          addition = '''assert.equal(companies.length, 11);\nconst geogwangReport = getCompanyReportInsight(reportPayload, "geogwang-enterprise");\nassert.equal(geogwangReport.source_summary.audit_opinions[0].opinion, "qualified");\nassert.match(geogwangReport.source_summary.disclosure_limitations[0], /재고자산/);\nassert.ok(componentFiles.includes("company-audit-opinion-notice"));\nassert.ok(componentFiles.includes("감사의견 {opinion.opinion_label_ko"));\nassert.ok(stylesheet.includes(".company-audit-opinion-notice"));\n'''
+          if anchor not in text:
+              raise SystemExit('frontend test insertion point not found')
+          test.write_text(text.replace(anchor, addition, 1), encoding='utf-8')
+
+          pytest_path = Path('tests/test_company_report_insights.py')
+          text = pytest_path.read_text(encoding='utf-8')
+          addition = '''\n\ndef test_geogwang_qualified_opinion_limitations_are_public() -> None:\n    payload = json.loads(OUTPUT.read_text(encoding="utf-8"))\n    company = next(row for row in payload["companies"] if row["company_id"] == "geogwang-enterprise")\n    opinions = company["source_summary"]["audit_opinions"]\n    assert opinions[0]["opinion"] == "qualified"\n    assert opinions[0]["opinion_label_ko"] == "한정의견"\n    limitations = company["source_summary"]["disclosure_limitations"]\n    assert limitations\n    assert "재고자산" in limitations[0]\n    assert "영업활동현금흐름" in limitations[0]\n'''
+          if 'test_geogwang_qualified_opinion_limitations_are_public' not in text:
+              pytest_path.write_text(text.rstrip() + addition + '\n', encoding='utf-8')
+          PY
+      - name: Regenerate report insights
+        run: python scripts/build_company_report_insights.py --base-ref origin/main
+      - name: Commit implementation and remove one-shot workflow
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/phase8c2b-opinion-notice.yml
+          git add scripts/build_company_report_insights.py frontend/public/data/companies/company_report_insights.json frontend/src/components/company/CompanyOverviewTab.jsx frontend/src/styles.css frontend/scripts/test-company-detail-ui.mjs tests/test_company_report_insights.py
+          git commit -m "feat: surface non-unqualified audit opinion warnings [skip phase8c2b]"
+          git push origin HEAD:feat/audit-opinion-interpretation-notice
