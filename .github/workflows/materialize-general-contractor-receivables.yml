@@ -1,0 +1,87 @@
+name: Materialize General Contractor Receivables
+
+on:
+  push:
+    branches:
+      - feat/general-contractor-working-capital-reconciliation
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: ${{ !contains(github.event.head_commit.message, '[materialized]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENDART_API_KEY: ${{ secrets.DART_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Python dependencies
+        run: python -m pip install -r requirements.txt pytest
+      - name: Build exact receivable candidates
+        run: |
+          python scripts/reconcile_general_contractor_working_capital.py \
+            --companies samsung-ct-construction hyundai-engineering \
+            --output-dir artifacts/reconciliation
+      - name: Promote exact-account candidates in branch workspace
+        run: |
+          cp artifacts/reconciliation/samsung-ct-construction/candidate_audit_financials.json \
+            data/company_reports/samsung-ct-construction/audit_financials_2023_2025.json
+          cp artifacts/reconciliation/hyundai-engineering/candidate_audit_financials.json \
+            data/company_reports/hyundai-engineering/audit_financials_2023_2025.json
+      - name: Rebuild public company report insights
+        run: python scripts/build_company_report_insights.py --base-ref origin/main
+      - name: Python regression suite
+        run: |
+          python -m pytest -q \
+            tests/test_general_contractor_working_capital.py \
+            tests/test_general_contractor_receivable_reconciliation.py \
+            tests/test_general_contractor_dart_audit_adapter.py \
+            tests/test_company_report_insights.py \
+            tests/test_company_audit_financials_review.py
+          python scripts/build_company_report_insights.py --check --base-ref origin/main
+          python -m compileall scripts src
+          git diff --check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Frontend regression, lint and build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run test:companies-detail
+          npm run test:companies-v2
+          npm run lint
+          npm run build
+      - name: Assert promotion scope
+        run: |
+          changed="$(git diff --name-only)"
+          echo "$changed"
+          test -n "$changed"
+          echo "$changed" | grep -qx 'data/company_reports/samsung-ct-construction/audit_financials_2023_2025.json'
+          echo "$changed" | grep -qx 'data/company_reports/hyundai-engineering/audit_financials_2023_2025.json'
+          echo "$changed" | grep -qx 'frontend/public/data/companies/company_report_insights.json'
+          if echo "$changed" | grep -Eq 'data/company_reports/(gs-ec|dl-enc)/'; then
+            echo 'GS/DL public source must not change in exact-account promotion.'
+            exit 1
+          fi
+      - name: Commit materialized public data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            data/company_reports/samsung-ct-construction/audit_financials_2023_2025.json \
+            data/company_reports/hyundai-engineering/audit_financials_2023_2025.json \
+            frontend/public/data/companies/company_report_insights.json
+          if git diff --cached --quiet; then
+            echo 'No materialized data changes.'
+            exit 0
+          fi
+          git commit -m "chore: reconcile exact contractor receivables [materialized]"
+          git push origin HEAD:feat/general-contractor-working-capital-reconciliation
