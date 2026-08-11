@@ -99,6 +99,48 @@ jobs:
           print('GS report insight validation PASS')
           PY
 
+      - name: Update audit-universe regression expectations
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace(path_text, old, new):
+              path = Path(path_text)
+              text = path.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'expected regression anchor missing: {path_text}: {old[:80]}')
+              path.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          coverage = 'tests/test_company_data_coverage.py'
+          replace(coverage, 'assert payload["summary"]["audit_backed_company_count"] == 7\n    assert payload["summary"]["full_three_year_audit_count"] == 7',
+                  'assert payload["summary"]["audit_backed_company_count"] == 8\n    assert payload["summary"]["full_three_year_audit_count"] == 8')
+          replace(coverage, 'assert companies["gs-ec"]["audit_coverage_state"] == "unavailable"',
+                  'assert companies["gs-ec"]["audit_coverage_state"] == "verification_pending"')
+          replace(coverage, 'assert gs["recommended_next_action"] == "audit_report_onboarding"\n    assert "missing_audit_financials" in gs["reason_codes"]',
+                  'assert gs["recommended_next_action"] == "audit_metric_reconciliation"\n    assert "missing_audit_financials" not in gs["reason_codes"]\n    assert "missing_borrowings" in gs["reason_codes"]\n    assert "missing_receivables" in gs["reason_codes"]')
+          old_counts = '''assert payload["summary"]["audit_record_count"] == 7
+              assert payload["summary"]["audit_backed_company_count"] == 7
+              assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 7
+              assert payload["summary"]["audit_backed_in_universe_count"] == 7
+              assert payload["summary"]["audit_backed_in_effective_universe_count"] == 7
+              assert payload["summary"]["full_three_year_audit_record_count"] == 7
+              assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 7
+              assert payload["summary"]["full_three_year_audit_in_universe_count"] == 7
+              assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 7'''.replace('              ', '    ')
+          new_counts = old_counts.replace(' == 7', ' == 8')
+          replace(coverage, old_counts, new_counts)
+
+          replace('tests/test_company_report_insights.py',
+                  '["daeseung-engineering", "geogwang-enterprise", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]',
+                  '["daeseung-engineering", "geogwang-enterprise", "gs-ec", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]')
+          replace('tests/test_geogwang_audit_financials.py',
+                  'def test_geogwang_coverage_is_complete_and_audit_universe_is_seven() -> None:\n    payload = json.loads(COVERAGE.read_text(encoding="utf-8"))\n    assert payload["audit_record_count"] == 7\n    assert payload["audit_backed_in_effective_universe_count"] == 7\n    assert payload["full_three_year_audit_record_count"] == 7',
+                  'def test_geogwang_coverage_is_complete_as_audit_universe_expands() -> None:\n    payload = json.loads(COVERAGE.read_text(encoding="utf-8"))\n    assert payload["audit_record_count"] == 8\n    assert payload["audit_backed_in_effective_universe_count"] == 8\n    assert payload["full_three_year_audit_record_count"] == 8')
+          replace('tests/test_nrb_financial_source_reconciliation.py',
+                  '        "geogwang-enterprise",\n        "kumkang-kind",',
+                  '        "geogwang-enterprise",\n        "gs-ec",\n        "kumkang-kind",')
+          PY
+
       - name: Python regressions
         run: |
           python scripts/build_company_report_insights.py --check
@@ -141,7 +183,11 @@ jobs:
             data/company_reports/gs-ec/audit_financials_2023_2025.json \
             data/company_reports/company_data_coverage_snapshot.json \
             frontend/public/data/companies/company_report_insights.json \
-            frontend/scripts/test-company-detail-ui.mjs
+            frontend/scripts/test-company-detail-ui.mjs \
+            tests/test_company_data_coverage.py \
+            tests/test_company_report_insights.py \
+            tests/test_geogwang_audit_financials.py \
+            tests/test_nrb_financial_source_reconciliation.py
           git diff --cached --check
           git commit -m "Promote GS E&C OpenDART audit financials"
           git push origin HEAD:feat/gs-ec-dart-audit-financials
