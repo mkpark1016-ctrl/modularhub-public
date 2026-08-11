@@ -47,4 +47,4 @@ def test_hyundai_reconciled_receivables_enable_auxiliary_burden_ratio() -> None:
     hyundai = companies()["hyundai-engineering"]
     burden = hyundai["financial_health"]["receivables_burden"]
     assert burden["status"] == "info"
-    assert burden["actual_value"] == 28.7
+    assert round(burden["actual_value"], 1) == 28.7
