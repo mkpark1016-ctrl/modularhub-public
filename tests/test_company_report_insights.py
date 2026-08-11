@@ -222,8 +222,12 @@ def test_financial_health_rule_metadata_is_observational() -> None:
     assert profitability["actual_value"] == 4.8
     assert "신용등급" in profitability["interpretation_scope"]
     assert leverage["threshold"] == 200
-    assert working_capital["threshold"] == 30
+    assert working_capital["rule_id"] == "current_ratio_liquidity_observation"
+    assert working_capital["threshold"] == 100
     assert "단정하지 않습니다" in working_capital["interpretation_scope"]
+    receivables_burden = company["financial_health"]["receivables_burden"]
+    assert receivables_burden["rule_id"] == "receivables_to_revenue_observation"
+    assert receivables_burden["threshold"] == 30
 
 
 def test_evidence_health_separates_source_counts_and_disclosure_flags() -> None:
