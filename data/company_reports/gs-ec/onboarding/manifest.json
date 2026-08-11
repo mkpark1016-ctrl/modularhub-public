@@ -1,0 +1,81 @@
+{
+  "allowed_warning_codes": [
+    "optional_metric_verification_pending",
+    "pending_manual_page_check",
+    "revenue_breakdown_check_unavailable"
+  ],
+  "candidate_input_path": "data/company_reports/gs-ec/onboarding/candidate_audit_financials.json",
+  "company_id": "gs-ec",
+  "company_name": "GS건설",
+  "currency": "KRW",
+  "financial_scope": "consolidated",
+  "optional_metrics": [
+    "revenue_breakdown.goods_revenue",
+    "revenue_breakdown.product_revenue",
+    "revenue_breakdown.construction_revenue",
+    "revenue_breakdown.rental_revenue",
+    "revenue_breakdown.other_revenue",
+    "working_capital.trade_receivables_gross",
+    "working_capital.construction_receivables_gross",
+    "working_capital.inventory",
+    "working_capital.work_in_progress",
+    "borrowings.short_term_borrowings",
+    "borrowings.current_portion_long_term_borrowings",
+    "borrowings.long_term_borrowings",
+    "investment_signals.construction_in_progress",
+    "investment_signals.industrial_property_rights",
+    "investment_signals.research_and_development_expense"
+  ],
+  "promotion_policy": {
+    "allow_verification_pending_required_metrics": false,
+    "require_public_change_acknowledgement": true,
+    "require_source_review_acknowledgement": true,
+    "require_zero_blockers": true
+  },
+  "public_output_path": "data/company_reports/gs-ec/audit_financials_2023_2025.json",
+  "replace_existing": false,
+  "reporting_entity": "지에스건설 주식회사 및 연결대상 종속기업",
+  "required_metrics": [
+    "income_statement.revenue",
+    "income_statement.gross_profit",
+    "income_statement.operating_profit",
+    "income_statement.net_income",
+    "balance_sheet.total_assets",
+    "balance_sheet.total_liabilities",
+    "balance_sheet.total_equity",
+    "balance_sheet.current_assets",
+    "balance_sheet.current_liabilities",
+    "cash_flow.operating_cash_flow",
+    "cash_flow.investing_cash_flow",
+    "cash_flow.financing_cash_flow",
+    "cash_flow.ending_cash"
+  ],
+  "schema_version": "company_report_onboarding_manifest_v1",
+  "source_priority": {
+    "2023": {
+      "cross_check_source_refs": [
+        "gs-ec_opendart_audit_2023_20240321001895"
+      ],
+      "primary_source_ref": "gs-ec_opendart_2023_20260630000500"
+    },
+    "2024": {
+      "cross_check_source_refs": [
+        "gs-ec_opendart_audit_2024_20250317000736"
+      ],
+      "primary_source_ref": "gs-ec_opendart_2024_20260701000540"
+    },
+    "2025": {
+      "cross_check_source_refs": [
+        "gs-ec_opendart_audit_2025_20260316001192"
+      ],
+      "primary_source_ref": "gs-ec_opendart_2025_20260701000624"
+    }
+  },
+  "staging_output_path": "data/company_reports/gs-ec/staging/audit_financials_2023_2025.json",
+  "target_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "unit": "won"
+}

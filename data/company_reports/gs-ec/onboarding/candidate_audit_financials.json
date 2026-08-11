@@ -1,0 +1,1465 @@
+{
+  "accounting_standard": {
+    "code": "k_ifrs",
+    "label_en": "K-IFRS",
+    "label_ko": "한국채택국제회계기준"
+  },
+  "audit_opinions": [
+    {
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "gs-ec_opendart_audit_2023_20240321001895"
+    },
+    {
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "gs-ec_opendart_audit_2024_20250317000736"
+    },
+    {
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2025
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "gs-ec_opendart_audit_2025_20260316001192"
+    }
+  ],
+  "company_id": "gs-ec",
+  "company_name": "GS건설",
+  "currency": "KRW",
+  "disclosure_limitations": [
+    "연결재무제표 기준 회사 전체 실적이며 모듈러 사업부문 별도 실적으로 해석하지 않는다.",
+    "OpenDART 전체재무제표 API에서 직접 확정할 수 없는 주석 계정은 verification_pending으로 유지한다.",
+    "총차입금·채권·세부 매출구성은 구성 계정이 모두 검증된 경우에만 파생 계산한다."
+  ],
+  "entity_attribution": {
+    "attribution_warning": "연결재무제표는 회사와 연결대상 종속기업의 실적을 포함합니다. 회사 전체 매출 또는 건설 매출을 모듈러 사업 매출로 자동 해석하지 않습니다.",
+    "financial_scope": "consolidated",
+    "modular_segment_revenue_disclosed": false,
+    "related_entity_attribution_required": true,
+    "reporting_entity": "지에스건설 주식회사 및 연결대상 종속기업",
+    "special_events": []
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 9482031400336,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 8796223078467,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 17707298538013,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 4885159860812,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 12822138677201,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 2244924955931,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 496488378686,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -763060089903,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 469798620792,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 262193954029,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": -419500544880,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": -387945401071,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 13436684904471,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        }
+      },
+      "source_refs": [
+        "gs-ec_opendart_2023_20260630000500",
+        "gs-ec_opendart_audit_2023_20240321001895"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 1338666208609,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2023_20260630000500",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2023_20260630000500"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 8666549605548,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 9031905115658,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 17803293924556,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 5087123959443,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 12716169965113,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 2083024788853,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 76567785863,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -548920682867,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 267812354593,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 1114179838862,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 263924031753,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 285954335787,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 12863811468386,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        }
+      },
+      "source_refs": [
+        "gs-ec_opendart_2024_20260701000540",
+        "gs-ec_opendart_audit_2024_20250317000736"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 1280005616400,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2024_20260701000540",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2024_20260701000540"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 9074153000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 7832139000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 18459842000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 5523557000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 12936285000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 3015810000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 573708000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -246980000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 591530000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 1345064000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 93423000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 437809000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 12450347000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "source_refs": [
+        "gs-ec_opendart_2025_20260701000624",
+        "gs-ec_opendart_audit_2025_20260316001192"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 1163292000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "지에스건설 주식회사 및 연결대상 종속기업",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "gs-ec_opendart_2023_20260630000500": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "filename": "OpenDART receipt 20260630000500",
+      "report_date": "2026-06-30",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API의 금액 기준 공시. 감사인·감사의견은 gs-ec_opendart_audit_2023_20240321001895에서 교차검증했다."
+    },
+    "gs-ec_opendart_2024_20260701000540": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "filename": "OpenDART receipt 20260701000540",
+      "report_date": "2026-07-01",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API의 금액 기준 공시. 감사인·감사의견은 gs-ec_opendart_audit_2024_20250317000736에서 교차검증했다."
+    },
+    "gs-ec_opendart_2025_20260701000624": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2025
+      ],
+      "filename": "OpenDART receipt 20260701000624",
+      "report_date": "2026-07-01",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API의 금액 기준 공시. 감사인·감사의견은 gs-ec_opendart_audit_2025_20260316001192에서 교차검증했다."
+    },
+    "gs-ec_opendart_audit_2023_20240321001895": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "filename": "OpenDART audit metadata receipt 20240321001895",
+      "report_date": "2024-03-21",
+      "source_role": "cross_check",
+      "usage": "재무 API 기준 receipt와 분리된 동일연도 공시에서 감사인·감사의견을 교차검증한 출처"
+    },
+    "gs-ec_opendart_audit_2024_20250317000736": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "filename": "OpenDART audit metadata receipt 20250317000736",
+      "report_date": "2025-03-17",
+      "source_role": "cross_check",
+      "usage": "재무 API 기준 receipt와 분리된 동일연도 공시에서 감사인·감사의견을 교차검증한 출처"
+    },
+    "gs-ec_opendart_audit_2025_20260316001192": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2025
+      ],
+      "filename": "OpenDART audit metadata receipt 20260316001192",
+      "report_date": "2026-03-16",
+      "source_role": "cross_check",
+      "usage": "재무 API 기준 receipt와 분리된 동일연도 공시에서 감사인·감사의견을 교차검증한 출처"
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "gs-ec_opendart_audit_2023_20240321001895"
+      ],
+      "primary_source_ref": "gs-ec_opendart_2023_20260630000500"
+    },
+    "2024": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "gs-ec_opendart_audit_2024_20250317000736"
+      ],
+      "primary_source_ref": "gs-ec_opendart_2024_20260701000540"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "gs-ec_opendart_audit_2025_20260316001192"
+      ],
+      "primary_source_ref": "gs-ec_opendart_2025_20260701000624"
+    }
+  },
+  "unit": "won",
+  "validation_metadata": {
+    "amount_storage": "KRW integer won",
+    "created_for": "OpenDART general-contractor consolidated audit-financial onboarding",
+    "derived_metrics_storage": "not stored; derived by build_company_report_insights.py",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "pdf_handling": "OpenDART API/XML sources only; source PDFs are not committed",
+    "public_ui_impact": "none until guarded validation and promotion complete"
+  }
+}
