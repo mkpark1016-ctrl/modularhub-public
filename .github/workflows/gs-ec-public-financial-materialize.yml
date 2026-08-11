@@ -91,9 +91,9 @@ jobs:
           assert row['latest_metrics']['revenue']['raw_krw'] == 12450347000000
           assert row['latest_metrics']['operating_profit']['raw_krw'] == 437809000000
           assert row['latest_metrics']['operating_cash_flow']['raw_krw'] == 591530000000
-          assert row['derived_metrics_by_year']['2025']['operating_margin_pct']['raw_value'] == '3.5'
-          assert row['derived_metrics_by_year']['2025']['total_borrowings']['raw_krw'] is None
-          assert row['derived_metrics_by_year']['2025']['receivables_total']['raw_krw'] is None
+          assert row['derived_metrics']['2025']['operating_margin_pct']['value'] == 3.5
+          assert row['latest_metrics']['total_borrowings']['raw_krw'] is None
+          assert row['latest_metrics']['receivables_total']['raw_krw'] is None
           assert set(row['financial_health']) >= {'cash_generation', 'profitability', 'leverage', 'working_capital'}
           print('GS report insight validation PASS')
           PY
