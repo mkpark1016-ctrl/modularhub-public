@@ -29,11 +29,11 @@ const KPI_CARDS = [
   { key: "total_borrowings", label: "총차입금" },
 ];
 
-const FINANCIAL_DECISION_KEYS = [
-  "cash_generation",
-  "profitability",
-  "leverage",
-  "working_capital",
+const FINANCIAL_DECISION_CONFIG = [
+  { key: "cash_generation", label: "현금창출력" },
+  { key: "profitability", label: "수익성" },
+  { key: "leverage", label: "재무안정성" },
+  { key: "working_capital", label: "운전자본" },
 ];
 
 function latestRatio(insight, key) {
@@ -238,8 +238,8 @@ function FinancialStatusGuide() {
       <details className="financial-status-rule-details">
         <summary>상세 판단기준 보기</summary>
         <div className="financial-status-rule-grid">
-          <span><b>수익성</b><em>영업이익률 0% 미만 → 관찰 필요</em></span>
           <span><b>현금창출력</b><em>영업이익 양수 + 영업현금흐름 음수 → 관찰 필요</em></span>
+          <span><b>수익성</b><em>영업이익률 0% 미만 → 관찰 필요</em></span>
           <span><b>재무안정성</b><em>부채비율 200% 초과 → 관찰 필요</em></span>
           <span><b>운전자본</b><em>유동비율 100% 미만 → 관찰 필요</em></span>
         </div>
@@ -318,7 +318,17 @@ function peerEvidence(insight, item) {
 }
 
 function FinancialDecisionSummary({ insight, onShowEvidence }) {
-  const healthItems = FINANCIAL_DECISION_KEYS.map((key) => [key, insight.financial_health?.[key]]).filter(([, item]) => item);
+  const healthItems = FINANCIAL_DECISION_CONFIG.map(({ key, label }) => [
+    key,
+    insight.financial_health?.[key] || {
+      headline: label,
+      status: "additional_confirmation_required",
+      actual_value: null,
+      threshold: null,
+      metric_ids: [],
+      source_ids: [],
+    },
+  ]);
   const receivablesBurden = insight.financial_health?.receivables_burden || null;
   const trendItems = Object.values(insight.trends || {}).slice(0, 4);
   if (!healthItems.length && !trendItems.length) return null;
@@ -330,7 +340,7 @@ function FinancialDecisionSummary({ insight, onShowEvidence }) {
       </div>
       <div className="company-intelligence-summary compact financial-decision-grid" aria-label="재무 의사결정 요약">
         {healthItems.map(([key, item]) => (
-          <article className={`company-intelligence-card financial-decision-card ${decisionStatusTone(item.status)}`} key={key}>
+          <article className={`company-intelligence-card financial-decision-card ${decisionStatusTone(item.status)}`} data-financial-factor={key} key={key}>
             <span className="financial-status-badge">{decisionStatusLabel(item.status)}</span>
             <strong>{item.headline}</strong>
             <dl className="financial-decision-metrics">
