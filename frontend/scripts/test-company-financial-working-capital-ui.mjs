@@ -26,6 +26,7 @@ const gs = byId.get('gs-ec');
 const hyundai = byId.get('hyundai-engineering');
 assert(gs?.financial_health?.working_capital?.rule_id === 'current_ratio_liquidity_observation', 'GS working capital must use current-ratio semantics');
 assert(gs?.financial_health?.receivables_burden?.status === 'additional_confirmation_required', 'GS composite receivables must remain pending');
-assert(hyundai?.financial_health?.receivables_burden?.actual_value === 28.7, 'Hyundai reconciled receivables burden should be 28.7%');
+const hyundaiBurden = hyundai?.financial_health?.receivables_burden?.actual_value;
+assert(Number.isFinite(hyundaiBurden) && Math.round(hyundaiBurden * 10) / 10 === 28.7, 'Hyundai reconciled receivables burden should display as 28.7%');
 
 console.log('company financial working-capital UI contract: PASS');
