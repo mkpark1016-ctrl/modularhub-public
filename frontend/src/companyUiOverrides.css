@@ -452,3 +452,46 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Financial decision summary: four standardized financial factors; disclosure coverage stays in data/evidence. */
+.company-intelligence-summary.compact.financial-decision-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+.financial-decision-grid .financial-decision-card {
+  height: 100%;
+}
+
+/* Builder order is profitability, cash generation, leverage, working capital, disclosure coverage. */
+.financial-decision-grid .financial-decision-card:nth-child(1) { order: 2; }
+.financial-decision-grid .financial-decision-card:nth-child(2) { order: 1; }
+.financial-decision-grid .financial-decision-card:nth-child(3) { order: 3; }
+.financial-decision-grid .financial-decision-card:nth-child(4) { order: 4; }
+.financial-decision-grid .financial-decision-card:nth-child(5) { display: none; }
+
+.financial-status-rule-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.financial-status-rule-grid span:nth-child(1) { order: 2; }
+.financial-status-rule-grid span:nth-child(2) { order: 1; }
+.financial-status-rule-grid span:nth-child(3) { order: 3; }
+.financial-status-rule-grid span:nth-child(4) { order: 4; }
+.financial-status-rule-grid span:nth-child(5) { display: none; }
+
+@media (max-width: 1023px) {
+  .company-intelligence-summary.compact.financial-decision-grid,
+  .financial-status-rule-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .company-intelligence-summary.compact.financial-decision-grid,
+  .financial-status-rule-grid {
+    grid-template-columns: 1fr;
+  }
+}
