@@ -35,6 +35,9 @@ assert.deepEqual(
   "Yuchang observation states must remain unchanged by the UI refactor",
 );
 
+assert.equal(kumkang.peer_benchmarks.some((item) => item.comparable), false, "Kumkang peer metrics should remain comparison-pending");
+assert.equal(yuchang.peer_benchmarks.every((item) => item.comparable), true, "Yuchang peer metrics should remain comparable");
+
 assert.match(panelSource, /financial-decision-grid/);
 assert.match(panelSource, /financial-decision-metrics/);
 assert.match(panelSource, /financial-status-guide/);
@@ -51,11 +54,32 @@ assert.match(panelSource, /ratio\("receivables_to_revenue_pct"\)/);
 assert.doesNotMatch(panelSource, /<p>\{item\.explanation\}<\/p>/);
 assert.doesNotMatch(panelSource, /<div><dt>상태<\/dt><dd>\{decisionStatusLabel\(item\.status\)\}<\/dd><\/div>/);
 
+assert.match(panelSource, /company-peer-availability-note/);
+assert.match(panelSource, /company-peer-keywords/);
+assert.match(panelSource, /비교 데이터 부족/);
+assert.match(panelSource, /일부 지표 비교 준비 중/);
+assert.match(panelSource, /동일 조건에서 최소/);
+assert.match(panelSource, /중앙값 \{item\.median_display/);
+assert.doesNotMatch(panelSource, /<p>\{item\.comparable \? benchmarkRankText\(item\) : item\.not_comparable_reason\}<\/p>/);
+
+assert.match(panelSource, /financial-signal-grid/);
+assert.match(panelSource, /financial-signal-keywords/);
+assert.match(panelSource, /signalKeywordValue/);
+assert.match(panelSource, /↑ 증가/);
+assert.match(panelSource, /↓ 감소/);
+assert.match(panelSource, /↑ 개선/);
+assert.match(panelSource, /영업현금흐름/);
+assert.doesNotMatch(panelSource, /<p key=\{signal\.code\}>\{signal\.description\}<\/p>/);
+
 assert.match(overridesSource, /company-intelligence-summary\.compact\.financial-decision-grid/);
 assert.match(overridesSource, /display: flex/);
 assert.match(overridesSource, /flex-wrap: wrap/);
 assert.match(overridesSource, /\.company-report-kpi-grid \{\s*grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/);
 assert.match(overridesSource, /financial-status-guide-items/);
 assert.match(overridesSource, /financial-status-rule-grid/);
+assert.match(overridesSource, /company-peer-availability-note/);
+assert.match(overridesSource, /company-peer-keywords/);
+assert.match(overridesSource, /company-report-signal-grid\.financial-signal-grid/);
+assert.match(overridesSource, /financial-signal-keyword/);
 
 console.log("COMPANY FINANCIAL DASHBOARD TESTS PASSED");
