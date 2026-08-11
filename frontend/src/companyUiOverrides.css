@@ -114,3 +114,206 @@
     margin: 0;
   }
 }
+
+/* Financial dashboard: scan-first decision cards and full-width card utilization. */
+.company-intelligence-summary.compact.financial-decision-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 0;
+}
+
+.financial-decision-grid .financial-decision-card {
+  flex: 1 1 190px;
+  min-width: 0;
+}
+
+.financial-decision-card {
+  min-height: 188px;
+}
+
+.financial-decision-card .financial-status-badge {
+  width: fit-content;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border: 1px solid #d7d7d2;
+  border-radius: 999px;
+  background: #f7f7f4;
+  color: #444;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.financial-decision-card.watch .financial-status-badge {
+  border-color: #d9b866;
+  background: #fff3cd;
+  color: #6b4e16;
+}
+
+.financial-decision-card.pending .financial-status-badge {
+  border-style: dashed;
+  color: #6b6251;
+}
+
+.financial-decision-metrics {
+  display: grid;
+  gap: 6px;
+  margin: 2px 0 0;
+}
+
+.financial-decision-metrics div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.financial-decision-metrics dt {
+  color: #666;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.financial-decision-metrics dd {
+  min-width: 0;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.financial-decision-criterion {
+  margin-top: auto !important;
+  padding-top: 8px;
+  border-top: 1px solid #ecece8;
+  color: #444 !important;
+  font-size: 12px !important;
+  font-weight: 900;
+  line-height: 1.4 !important;
+}
+
+.financial-status-guide {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #d7d7d2;
+  border-radius: 8px;
+  background: #fbfbf8;
+}
+
+.financial-status-guide-items {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.financial-status-guide-item {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #e2e2dd;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.financial-status-guide-item b {
+  font-size: 12px;
+}
+
+.financial-status-guide-item em {
+  color: #555;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.4;
+}
+
+.financial-status-guide-item.watch {
+  border-color: #d9b866;
+  background: #fffaf0;
+}
+
+.financial-status-guide-item.pending {
+  border-style: dashed;
+}
+
+.financial-status-rule-details summary {
+  cursor: pointer;
+  width: fit-content;
+  color: #333;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.financial-status-rule-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.financial-status-rule-grid span {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #ecece8;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.financial-status-rule-grid b {
+  font-size: 11px;
+}
+
+.financial-status-rule-grid em {
+  color: #555;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1.45;
+}
+
+.financial-status-rule-details > p {
+  margin: 10px 0 0;
+  color: #666;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.company-report-kpi-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 960px) {
+  .financial-status-rule-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .financial-decision-grid .financial-decision-card {
+    flex-basis: calc(50% - 5px);
+  }
+
+  .financial-status-guide-items,
+  .company-report-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .financial-decision-grid .financial-decision-card {
+    flex-basis: 100%;
+  }
+
+  .financial-status-guide-items,
+  .financial-status-rule-grid,
+  .company-report-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
