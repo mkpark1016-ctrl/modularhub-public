@@ -1,9 +1,9 @@
 {
   "as_of_date": "2026-08-11",
-  "audit_backed_count": 8,
-  "audit_backed_in_effective_universe_count": 8,
-  "audit_backed_in_universe_count": 8,
-  "audit_record_count": 8,
+  "audit_backed_count": 11,
+  "audit_backed_in_effective_universe_count": 11,
+  "audit_backed_in_universe_count": 11,
+  "audit_record_count": 11,
   "audit_record_without_company_master_ids": [],
   "canonical_company_count": 11,
   "company_count": 11,
@@ -21,15 +21,17 @@
       ]
     },
     {
-      "audit_coverage_state": "unavailable",
+      "audit_coverage_state": "verification_pending",
       "company_id": "dl-enc",
       "company_record_source": "canonical",
-      "evidence_coverage_state": "verified",
+      "evidence_coverage_state": "mixed",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
       "recommendation_priority": "P1",
       "recommendation_reason_codes": [
-        "missing_audit_financials"
+        "excessive_verification_pending",
+        "missing_borrowings",
+        "missing_receivables"
       ]
     },
     {
@@ -61,15 +63,17 @@
       ]
     },
     {
-      "audit_coverage_state": "unavailable",
+      "audit_coverage_state": "verification_pending",
       "company_id": "hyundai-engineering",
       "company_record_source": "canonical",
-      "evidence_coverage_state": "verified",
+      "evidence_coverage_state": "mixed",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
       "recommendation_priority": "P1",
       "recommendation_reason_codes": [
-        "missing_audit_financials"
+        "excessive_verification_pending",
+        "missing_borrowings",
+        "missing_receivables"
       ]
     },
     {
@@ -107,15 +111,16 @@
       ]
     },
     {
-      "audit_coverage_state": "unavailable",
+      "audit_coverage_state": "verification_pending",
       "company_id": "samsung-ct-construction",
       "company_record_source": "canonical",
-      "evidence_coverage_state": "verified",
+      "evidence_coverage_state": "mixed",
       "freshness_state": "current",
       "operational_coverage_state": "sufficiently_covered",
       "recommendation_priority": "P1",
       "recommendation_reason_codes": [
-        "missing_audit_financials",
+        "excessive_verification_pending",
+        "missing_receivables",
         "production_capacity_unknown"
       ]
     },
@@ -152,9 +157,9 @@
   "consistency_reason_codes": [],
   "consistency_status": "clean",
   "effective_public_company_count": 11,
-  "full_three_year_audit_in_effective_universe_count": 8,
-  "full_three_year_audit_in_universe_count": 8,
-  "full_three_year_audit_record_count": 8,
+  "full_three_year_audit_in_effective_universe_count": 11,
+  "full_three_year_audit_in_universe_count": 11,
+  "full_three_year_audit_record_count": 11,
   "priority_counts": {
     "P0": 0,
     "P1": 6,

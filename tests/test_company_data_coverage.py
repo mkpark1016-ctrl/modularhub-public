@@ -63,8 +63,8 @@ def test_discovers_public_company_universe_and_audit_backed_companies() -> None:
     assert payload["summary"]["effective_public_company_count"] == 11
     assert payload["summary"]["total_company_count"] == 11
     assert payload["summary"]["audit_backed_company_count"] == len(insights)
-    assert payload["summary"]["audit_backed_company_count"] == 8
-    assert payload["summary"]["full_three_year_audit_count"] == 8
+    assert payload["summary"]["audit_backed_company_count"] == 11
+    assert payload["summary"]["full_three_year_audit_count"] == 11
     assert payload["summary"]["canonical_company_ids"] == sorted(company["company_id"] for company in companies)
     assert payload["summary"]["supplemental_company_ids"] == []
     assert payload["summary"]["company_ids"] == payload["summary"]["effective_public_company_ids"]
@@ -215,6 +215,9 @@ def test_audit_complete_verification_pending_and_unavailable_are_distinguished()
     assert companies["kumkang-kind"]["audit_coverage_state"] == "complete"
     assert companies["planm"]["audit_coverage_state"] == "verification_pending"
     assert companies["gs-ec"]["audit_coverage_state"] == "verification_pending"
+    assert companies["samsung-ct-construction"]["audit_coverage_state"] == "verification_pending"
+    assert companies["hyundai-engineering"]["audit_coverage_state"] == "verification_pending"
+    assert companies["dl-enc"]["audit_coverage_state"] == "verification_pending"
 
 
 def test_operational_and_freshness_states_are_calculated() -> None:
@@ -252,15 +255,15 @@ def test_company_priority_counts_and_work_item_counts_are_separate() -> None:
 
 def test_audit_record_counts_are_split_between_all_records_and_public_universe() -> None:
     payload = generated_payload()
-    assert payload["summary"]["audit_record_count"] == 8
-    assert payload["summary"]["audit_backed_company_count"] == 8
-    assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 8
-    assert payload["summary"]["audit_backed_in_universe_count"] == 8
-    assert payload["summary"]["audit_backed_in_effective_universe_count"] == 8
-    assert payload["summary"]["full_three_year_audit_record_count"] == 8
-    assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 8
-    assert payload["summary"]["full_three_year_audit_in_universe_count"] == 8
-    assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 8
+    assert payload["summary"]["audit_record_count"] == 11
+    assert payload["summary"]["audit_backed_company_count"] == 11
+    assert payload["summary"]["audit_backed_in_canonical_universe_count"] == 11
+    assert payload["summary"]["audit_backed_in_universe_count"] == 11
+    assert payload["summary"]["audit_backed_in_effective_universe_count"] == 11
+    assert payload["summary"]["full_three_year_audit_record_count"] == 11
+    assert payload["summary"]["full_three_year_audit_in_canonical_universe_count"] == 11
+    assert payload["summary"]["full_three_year_audit_in_universe_count"] == 11
+    assert payload["summary"]["full_three_year_audit_in_effective_universe_count"] == 11
 
 
 def test_builder_is_deterministic_for_fixed_as_of_date() -> None:

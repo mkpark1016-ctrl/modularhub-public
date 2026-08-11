@@ -102,9 +102,9 @@ def test_geogwang_public_insight_exposes_latest_cash_flow_and_qualified_opinion(
 
 def test_geogwang_coverage_is_complete_as_audit_universe_expands() -> None:
     payload = json.loads(COVERAGE.read_text(encoding="utf-8"))
-    assert payload["audit_record_count"] == 8
-    assert payload["audit_backed_in_effective_universe_count"] == 8
-    assert payload["full_three_year_audit_record_count"] == 8
+    assert payload["audit_record_count"] == 11
+    assert payload["audit_backed_in_effective_universe_count"] == 11
+    assert payload["full_three_year_audit_record_count"] == 11
     company = next(row for row in payload["company_coverage_states"] if row["company_id"] == "geogwang-enterprise")
     assert company["audit_coverage_state"] == "complete"
     assert "missing_audit_financials" not in company["recommendation_reason_codes"]

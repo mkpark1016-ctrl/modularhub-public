@@ -82,11 +82,14 @@ def test_nrb_uses_existing_company_id_and_is_publicly_discovered() -> None:
     public_companies = json.loads(DEFAULT_OUTPUT.read_text(encoding="utf-8"))["companies"]
     assert {company["company_id"] for company in public_companies} == {
         "daeseung-engineering",
+        "dl-enc",
         "geogwang-enterprise",
         "gs-ec",
+        "hyundai-engineering",
         "kumkang-kind",
         "nrb",
         "planm",
+        "samsung-ct-construction",
         "sungji-steel",
         "yuchang-enc",
     }
