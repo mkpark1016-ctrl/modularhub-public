@@ -410,3 +410,45 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Financial decision trends: deterministic 4/2/1-column grid regardless of value length. */
+.company-intelligence-trend-strip[aria-label="최근 추세 신호"] {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+  margin-top: 10px;
+}
+
+.company-intelligence-trend-strip[aria-label="최근 추세 신호"] .decision-status {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-content: start;
+  min-width: 0;
+  height: 100%;
+}
+
+.company-intelligence-trend-strip[aria-label="최근 추세 신호"] .decision-status em {
+  min-width: 0;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.company-intelligence-trend-strip[aria-label="최근 추세 신호"] .evidence-inline-button {
+  align-self: end;
+  justify-self: start;
+  margin-top: 8px;
+}
+
+@media (max-width: 1023px) {
+  .company-intelligence-trend-strip[aria-label="최근 추세 신호"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .company-intelligence-trend-strip[aria-label="최근 추세 신호"] {
+    grid-template-columns: 1fr;
+  }
+}
