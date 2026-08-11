@@ -1,0 +1,89 @@
+name: General Contractor DART Audit QA
+
+on:
+  push:
+    branches:
+      - feat/general-contractor-dart-audit-adapter
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENDART_API_KEY: ${{ secrets.DART_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: python -m pip install jsonschema pytest
+
+      - name: Compile Python
+        run: python -m compileall scripts src
+
+      - name: Run adapter regressions
+        run: |
+          python -m pytest -q tests/test_general_contractor_dart_audit_adapter.py
+          python scripts/test_opendart_client.py
+
+      - name: Build live four-contractor CFS candidates
+        run: python scripts/build_general_contractor_dart_audit_candidates.py --require-all-valid
+
+      - name: Run existing audit/report regressions
+        run: python -m pytest -q tests/test_company_audit_financials.py tests/test_company_report_insights.py
+
+      - name: Check existing generated report insights
+        run: python scripts/build_company_report_insights.py --check
+
+      - name: Protected public data diff check
+        run: |
+          git diff --exit-code origin/main...HEAD -- \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json \
+            frontend/public/data/news.json \
+            frontend/public/data/business.json \
+            frontend/public/data/meta.json
+
+      - name: Diff hygiene and secret scan
+        run: |
+          git diff --check origin/main...HEAD
+          if git diff origin/main...HEAD | grep -E '(^|[+[:space:]])(DART_API_KEY|OPENDART_API_KEY)[[:space:]]*[:=][[:space:]]*[A-Za-z0-9_./+=-]{12,}'; then
+            echo "Secret-like OpenDART value detected in diff."
+            exit 1
+          fi
+
+      - name: Upload read-only candidate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: general-contractor-dart-audit-candidates
+          path: artifacts/general-contractor-dart-audit/**
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## General Contractor DART Audit QA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Scope: CFS / 2023-2025 / four canonical general contractors" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Public data writes: none" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f artifacts/general-contractor-dart-audit/summary.json ]; then
+            python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          summary = json.loads(Path('artifacts/general-contractor-dart-audit/summary.json').read_text(encoding='utf-8'))
+          print(f"- Valid candidates: {summary.get('valid_count')} / {summary.get('requested_count')}")
+          for company_id, row in summary.get('companies', {}).items():
+              print(f"- {company_id}: {row.get('status')} / valid={row.get('valid')} / rows={row.get('structured_row_counts')} / pending={row.get('pending_metrics')}")
+          PY
+          fi
