@@ -44,7 +44,7 @@ jobs:
             tests/test_general_contractor_receivable_reconciliation.py \
             tests/test_general_contractor_dart_audit_adapter.py \
             tests/test_company_report_insights.py \
-            tests/test_company_audit_financials_review.py
+            tests/test_company_audit_financials.py
           python scripts/build_company_report_insights.py --check --base-ref origin/main
           python -m compileall scripts src
           git diff --check
