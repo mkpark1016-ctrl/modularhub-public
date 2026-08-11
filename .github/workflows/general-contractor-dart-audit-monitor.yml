@@ -1,10 +1,6 @@
 name: General Contractor OpenDART Audit Monitor
 
 on:
-  # Temporary branch trigger is removed after the live validation run passes.
-  push:
-    branches:
-      - feat/general-contractor-dart-audit-monitor
   schedule:
     # Monday 07:17 KST (Sunday 22:17 UTC)
     - cron: "17 22 * * 0"
@@ -12,6 +8,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: general-contractor-opendart-audit-monitor
+  cancel-in-progress: false
 
 jobs:
   unit:
