@@ -152,16 +152,34 @@ class OpenDartClient:
         body = self._request_bytes("company.json", {"corp_code": corp_code})
         return json.loads(body.decode("utf-8"))
 
-    def single_account_all(self, *, corp_code: str, fiscal_year: int, report_code: str = "11011") -> dict[str, Any]:
+    def single_account_all(
+        self,
+        *,
+        corp_code: str,
+        fiscal_year: int,
+        report_code: str = "11011",
+        fs_div: str = "OFS",
+    ) -> dict[str, Any]:
+        """Return all accounts for one annual/periodic filing scope.
+
+        ``fs_div`` follows OpenDART's contract: ``OFS`` for separate financial
+        statements and ``CFS`` for consolidated financial statements. Existing
+        callers keep the historical ``OFS`` default, while general-contractor
+        audit onboarding explicitly requests ``CFS``.
+        """
+
         import json
 
+        normalized_fs_div = str(fs_div).upper().strip()
+        if normalized_fs_div not in {"OFS", "CFS"}:
+            raise ValueError("fs_div must be 'OFS' or 'CFS'")
         body = self._request_bytes(
             "fnlttSinglAcntAll.json",
             {
                 "corp_code": corp_code,
                 "bsns_year": str(fiscal_year),
                 "reprt_code": report_code,
-                "fs_div": "OFS",
+                "fs_div": normalized_fs_div,
             },
         )
         return json.loads(body.decode("utf-8"))
