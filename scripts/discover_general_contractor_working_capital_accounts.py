@@ -11,13 +11,16 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
-from src.company_dart_audit_adapter import GENERAL_CONTRACTORS, TARGET_YEARS
-from src.opendart_client import OpenDartClient
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from src.company_dart_audit_adapter import GENERAL_CONTRACTORS, TARGET_YEARS  # noqa: E402
+from src.opendart_client import OpenDartClient  # noqa: E402
+
 DEFAULT_OUTPUT = ROOT / "artifacts" / "general-contractor-working-capital-discovery"
 
 KEYWORDS = (
@@ -60,6 +63,13 @@ def sanitize_row(row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _ord_value(row: dict[str, Any]) -> int:
+    try:
+        return int(str(row.get("ord") or "0"))
+    except ValueError:
+        return 0
+
+
 def discover_company(client: OpenDartClient, company_id: str) -> dict[str, Any]:
     spec = GENERAL_CONTRACTORS[company_id]
     years: dict[str, Any] = {}
@@ -70,7 +80,7 @@ def discover_company(client: OpenDartClient, company_id: str) -> dict[str, Any]:
             fs_div="CFS",
         )
         rows = [sanitize_row(row) for row in (payload.get("list") or []) if matches_working_capital_keyword(row)]
-        rows.sort(key=lambda row: (str(row.get("sj_div") or ""), int(str(row.get("ord") or "0") or 0), str(row.get("account_nm") or "")))
+        rows.sort(key=lambda row: (str(row.get("sj_div") or ""), _ord_value(row), str(row.get("account_nm") or "")))
         years[str(year)] = {
             "row_count": len(rows),
             "rows": rows,
