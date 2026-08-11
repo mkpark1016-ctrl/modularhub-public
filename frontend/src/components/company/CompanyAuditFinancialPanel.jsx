@@ -148,13 +148,84 @@ function groupedSignals(signals = []) {
   })).filter((group) => group.signals.length);
 }
 
-function healthDisplayValue(insight, item) {
-  const metricId = Array.isArray(item.metric_ids) ? item.metric_ids[0] : null;
-  if (!metricId) return item.actual_value ?? "확인되지 않음";
-  const metric = metricId.endsWith("_pct")
-    ? reportRatioByYear(insight, insight.latest_year, metricId)
-    : reportMetricByYear(insight, insight.latest_year, metricId);
-  return metricDisplayText(metric);
+function signalKeywordLabel(signal) {
+  return String(signal.title || "관찰").replace(/\s+(방향|상태)$/, "");
+}
+
+function signalKeywordValue(signal) {
+  const code = String(signal.code || "");
+  if (code.endsWith("_increased")) return "↑ 증가";
+  if (code.endsWith("_decreased")) return "↓ 감소";
+  if (code.endsWith("_flat")) return "→ 유지";
+  if (code.endsWith("_unknown")) return "확인 필요";
+  if (code === "operating_margin_improved") return "↑ 개선";
+  if (code === "operating_margin_declined") return "↓ 하락";
+  if (code === "operating_margin_flat") return "→ 유지";
+  if (code === "operating_cash_flow_positive") return "양수";
+  if (code === "operating_cash_flow_negative") return "음수";
+  if (code === "operating_cash_flow_zero") return "0";
+  if (code === "current_ratio_above_100") return "100% 이상";
+  if (code === "current_ratio_below_100") return "100% 미만";
+  return "추세 확인";
+}
+
+function financialHealthRows(insight, key, item) {
+  const latestYear = insight.latest_year;
+  const amount = (metricKey) => metricDisplayText(reportMetricByYear(insight, latestYear, metricKey));
+  const ratio = (metricKey) => metricDisplayText(reportRatioByYear(insight, latestYear, metricKey));
+  const sourceSummary = insight.source_summary || {};
+
+  if (key === "profitability") return [{ label: "영업이익률", value: ratio("operating_margin_pct") }];
+  if (key === "cash_generation") return [
+    { label: "영업현금흐름", value: amount("operating_cash_flow") },
+    { label: "영업이익", value: amount("operating_profit") },
+  ];
+  if (key === "leverage") return [
+    { label: "부채비율", value: ratio("liabilities_to_equity_pct") },
+    { label: "총차입금", value: amount("total_borrowings") },
+  ];
+  if (key === "working_capital") return [
+    { label: "채권/매출", value: ratio("receivables_to_revenue_pct") },
+    { label: "채권", value: amount("receivables_total") },
+  ];
+  if (key === "disclosure_coverage") return [
+    { label: "수동 확인", value: `${sourceSummary.pending_location_count ?? insight.data_quality?.pending_manual_page_check_count ?? 0}건` },
+    { label: "검증 위치", value: `${sourceSummary.verified_location_count ?? insight.data_quality?.source_location_count ?? 0}건` },
+  ];
+  return [{ label: "관찰값", value: item.actual_value ?? "확인되지 않음" }];
+}
+
+function financialHealthCriterion(key, item) {
+  if (item.status === "additional_confirmation_required") return "판단 지표 확인 필요";
+  if (key === "profitability") return item.status === "watch" ? "영업이익률 0% 미만" : "영업이익률 0% 이상";
+  if (key === "cash_generation") return item.status === "watch" ? "이익 양수 · 현금흐름 음수" : "현금창출 관찰기준 미해당";
+  if (key === "leverage") return `부채비율 ${item.threshold ?? 200}% ${item.status === "watch" ? "초과" : "이하"}`;
+  if (key === "working_capital") return `채권/매출 ${item.threshold ?? 30}% ${item.status === "watch" ? "초과" : "이하"}`;
+  if (key === "disclosure_coverage") return item.status === "watch" ? "수동 확인 항목 있음" : "수동 확인 0건";
+  return decisionStatusLabel(item.status);
+}
+
+function FinancialStatusGuide() {
+  return (
+    <div className="financial-status-guide" aria-label="재무 상태 판단 기준">
+      <div className="financial-status-guide-items">
+        <span className="financial-status-guide-item info"><b>참고</b><em>현재 관찰기준 미해당</em></span>
+        <span className="financial-status-guide-item watch"><b>관찰 필요</b><em>설정된 재무 관찰기준 해당</em></span>
+        <span className="financial-status-guide-item pending"><b>추가 확인 필요</b><em>판단 지표 또는 검증 정보 부족</em></span>
+      </div>
+      <details className="financial-status-rule-details">
+        <summary>상세 판단기준 보기</summary>
+        <div className="financial-status-rule-grid">
+          <span><b>수익성</b><em>영업이익률 0% 미만 → 관찰 필요</em></span>
+          <span><b>현금창출력</b><em>영업이익 양수 + 영업현금흐름 음수 → 관찰 필요</em></span>
+          <span><b>재무안정성</b><em>부채비율 200% 초과 → 관찰 필요</em></span>
+          <span><b>운전자본</b><em>채권/매출 비율 30% 초과 → 관찰 필요</em></span>
+          <span><b>공시 범위</b><em>수동 확인 필요 출처 1건 이상 → 관찰 필요</em></span>
+        </div>
+        <p>본 상태는 감사재무를 빠르게 관찰하기 위한 규칙이며 신용등급, 부실판정 또는 투자의견을 의미하지 않습니다.</p>
+      </details>
+    </div>
+  );
 }
 
 function hasRevenueBreakdownRows(insight, years) {
@@ -233,20 +304,19 @@ function FinancialDecisionSummary({ insight, onShowEvidence }) {
     <div className="company-subsection">
       <div className="company-subsection-heading">
         <h3>의사결정 요약</h3>
-        <span>공식 공시문서에 포함된 감사받은 재무제표 기준 정보</span>
+        <span>핵심 관찰값과 상태를 우선 표시합니다.</span>
       </div>
-      <div className="company-intelligence-summary compact" aria-label="재무 의사결정 요약">
+      <div className="company-intelligence-summary compact financial-decision-grid" aria-label="재무 의사결정 요약">
         {healthItems.map(([key, item]) => (
-          <article className={`company-intelligence-card ${decisionStatusTone(item.status)}`} key={key}>
-            <span>{decisionStatusLabel(item.status)}</span>
+          <article className={`company-intelligence-card financial-decision-card ${decisionStatusTone(item.status)}`} key={key}>
+            <span className="financial-status-badge">{decisionStatusLabel(item.status)}</span>
             <strong>{item.headline}</strong>
-            <p>{item.explanation}</p>
-            <dl className="company-mini-detail-list">
-              <div><dt>관찰값</dt><dd>{healthDisplayValue(insight, item)}</dd></div>
-              <div><dt>상태</dt><dd>{decisionStatusLabel(item.status)}</dd></div>
+            <dl className="financial-decision-metrics">
+              {financialHealthRows(insight, key, item).map((row) => (
+                <div key={`${key}-${row.label}`}><dt>{row.label}</dt><dd>{row.value}</dd></div>
+              ))}
             </dl>
-            {item.limitation && <small>{item.limitation}</small>}
-            {item.interpretation_scope && <small>{item.interpretation_scope}</small>}
+            <small className="financial-decision-criterion">{financialHealthCriterion(key, item)}</small>
             {onShowEvidence && (
               <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(healthEvidence(insight, item))}>
                 계산 근거 보기
@@ -255,6 +325,7 @@ function FinancialDecisionSummary({ insight, onShowEvidence }) {
           </article>
         ))}
       </div>
+      <FinancialStatusGuide />
       <div className="company-intelligence-trend-strip" aria-label="최근 추세 신호">
         {trendItems.map((trend) => (
           <span className={`decision-status ${decisionStatusTone(trend.status)}`} key={trend.headline}>
@@ -275,15 +346,26 @@ function FinancialDecisionSummary({ insight, onShowEvidence }) {
 function benchmarkRankText(item) {
   if (!item.comparable || !item.rank) return "비교 준비 중";
   const count = item.comparison_universe_count ?? item.peer_count;
-  return `${count}개 중 ${item.rank}위`;
+  return `${item.rank}위 / ${count}개`;
 }
 
 function comparisonGroupLabel(insight, item) {
   return item.comparison_group_label || insight?.comparison_context?.group_label || "동일 유형";
 }
 
+function compactBenchmarkDifference(item) {
+  const text = item.median_difference_display || "비교 준비 중";
+  if (!item.comparable) return { marker: "", text: "동일 조건 데이터 부족" };
+  if (text.includes("높음")) return { marker: "▲", text: text.replace(/^중앙값보다\s*/, "") };
+  if (text.includes("낮음")) return { marker: "▼", text: text.replace(/^중앙값보다\s*/, "") };
+  return { marker: "•", text };
+}
+
 function PeerBenchmarkPanel({ insight, benchmarks = [], onShowEvidence }) {
   if (!benchmarks.length) return null;
+  const minimumPeerCount = insight.comparison_context?.minimum_peer_count || 3;
+  const comparableCount = benchmarks.filter((item) => item.comparable).length;
+  const unavailableCount = benchmarks.length - comparableCount;
   return (
     <div className="company-subsection">
       <div className="company-subsection-heading">
@@ -293,38 +375,45 @@ function PeerBenchmarkPanel({ insight, benchmarks = [], onShowEvidence }) {
         </div>
         <span className="comparison-group-label">비교 그룹 · {insight?.comparison_context?.group_label || "확인 중"}</span>
       </div>
+      {unavailableCount > 0 && (
+        <div className="company-peer-availability-note" role="note">
+          <strong>{comparableCount > 0 ? "일부 지표 비교 준비 중" : "비교 데이터 부족"}</strong>
+          <span>동일 조건에서 최소 {minimumPeerCount}개 기업 값이 확보된 지표만 상대 순위를 표시합니다.</span>
+        </div>
+      )}
       <div className="company-peer-grid" aria-label="동일 유형 기업 재무 비교">
-        {benchmarks.map((item) => (
-          <article className={`company-peer-card ${item.comparable ? "is-comparable" : "is-not-comparable"}`} key={item.metric_id}>
-            <span>{peerBenchmarkLabel(item.metric_id)}</span>
-            <strong>{item.company_display}</strong>
-            <p>{item.comparable ? benchmarkRankText(item) : item.not_comparable_reason}</p>
-            <dl className="company-mini-detail-list">
-              <div><dt>현재</dt><dd>{item.company_display}</dd></div>
-              <div><dt>같은 유형 중앙값</dt><dd>{item.median_display || "확인되지 않음"}</dd></div>
-              <div><dt>위치</dt><dd>{benchmarkRankText(item)}</dd></div>
-              <div><dt>중앙값과의 차이</dt><dd>{item.median_difference_display || "비교 준비 중"}</dd></div>
-            </dl>
-            <small>{item.comparable ? `${comparisonGroupLabel(insight, item)} 그룹 · ${item.comparison_direction === "higher_is_larger" ? "값이 큰 순" : "값이 낮은 순"}` : "다른 기업유형으로 대체 비교하지 않습니다."}</small>
-            <details className="comparison-basis-details">
-              <summary>비교 기준 보기</summary>
-              <dl className="company-mini-detail-list">
-                <div><dt>기업 유형</dt><dd>{comparisonGroupLabel(insight, item)}</dd></div>
-                <div><dt>기준 연도</dt><dd>{item.comparison_year || insight.latest_year}</dd></div>
-                <div><dt>재무제표 범위</dt><dd>{financialScopeLabel(item.comparison_financial_scope || insight.financial_scope)}</dd></div>
-                <div><dt>통화</dt><dd>{item.comparison_currency || insight.currency}</dd></div>
-                <div><dt>비교 가능 기업 수</dt><dd>{formatNumber(item.comparison_universe_count ?? item.peer_count, "개")}</dd></div>
-                <div><dt>최소 비교 기준</dt><dd>{formatNumber(insight.comparison_context?.minimum_peer_count || 3, "개")}</dd></div>
-                <div><dt>현재 기업 포함</dt><dd>{item.current_company_included ? "예" : "아니오"}</dd></div>
-              </dl>
-            </details>
-            {onShowEvidence && (
-              <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(peerEvidence(insight, item))}>
-                근거 보기
-              </button>
-            )}
-          </article>
-        ))}
+        {benchmarks.map((item) => {
+          const difference = compactBenchmarkDifference(item);
+          return (
+            <article className={`company-peer-card ${item.comparable ? "is-comparable" : "is-not-comparable"}`} key={item.metric_id}>
+              <span>{peerBenchmarkLabel(item.metric_id)}</span>
+              <strong>{item.company_display}</strong>
+              <div className="company-peer-keywords">
+                <b>{item.comparable ? benchmarkRankText(item) : "비교 준비 중"}</b>
+                <span>중앙값 {item.median_display || "확인되지 않음"}</span>
+                <em>{difference.marker} {difference.text}</em>
+              </div>
+              <details className="comparison-basis-details">
+                <summary>비교 기준</summary>
+                <dl className="company-mini-detail-list">
+                  <div><dt>비교 상태</dt><dd>{item.comparable ? "비교 가능" : item.not_comparable_reason}</dd></div>
+                  <div><dt>기업 유형</dt><dd>{comparisonGroupLabel(insight, item)}</dd></div>
+                  <div><dt>기준 연도</dt><dd>{item.comparison_year || insight.latest_year}</dd></div>
+                  <div><dt>재무제표 범위</dt><dd>{financialScopeLabel(item.comparison_financial_scope || insight.financial_scope)}</dd></div>
+                  <div><dt>통화</dt><dd>{item.comparison_currency || insight.currency}</dd></div>
+                  <div><dt>비교 가능 기업 수</dt><dd>{formatNumber(item.comparison_universe_count ?? item.peer_count, "개")}</dd></div>
+                  <div><dt>최소 비교 기준</dt><dd>{formatNumber(minimumPeerCount, "개")}</dd></div>
+                  <div><dt>현재 기업 포함</dt><dd>{item.current_company_included ? "예" : "아니오"}</dd></div>
+                </dl>
+              </details>
+              {onShowEvidence && (
+                <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(peerEvidence(insight, item))}>
+                  근거 보기
+                </button>
+              )}
+            </article>
+          );
+        })}
       </div>
     </div>
   );
@@ -515,14 +604,24 @@ export default function CompanyAuditFinancialPanel({ insight, onShowEvidence }) 
 
       <div className="company-subsection">
         <h3>재무 인사이트</h3>
-        <div className="company-report-signal-grid">
-          {groupedSignals(insight.trend_signals).map((group) => (
-            <article className={`company-report-signal ${group.signals.some((signal) => signal.level === "watch") ? "watch" : "info"}`} key={group.key}>
-              <span>{group.signals.some((signal) => signal.level === "watch") ? "관찰 필요" : "참고"}</span>
-              <strong>{group.title}</strong>
-              {group.signals.slice(0, 2).map((signal) => <p key={signal.code}>{signal.description}</p>)}
-            </article>
-          ))}
+        <div className="company-report-signal-grid financial-signal-grid">
+          {groupedSignals(insight.trend_signals).map((group) => {
+            const watch = group.signals.some((signal) => signal.level === "watch");
+            return (
+              <article className={`company-report-signal ${watch ? "watch" : "info"}`} key={group.key}>
+                <span>{watch ? "관찰 필요" : "참고"}</span>
+                <strong>{group.title}</strong>
+                <div className="financial-signal-keywords">
+                  {group.signals.slice(0, 2).map((signal) => (
+                    <span className="financial-signal-keyword" key={signal.code}>
+                      <b>{signalKeywordLabel(signal)}</b>
+                      <em>{signalKeywordValue(signal)}</em>
+                    </span>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
 
