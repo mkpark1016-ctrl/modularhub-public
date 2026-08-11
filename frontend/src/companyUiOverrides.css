@@ -289,6 +289,94 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.company-peer-availability-note {
+  display: flex;
+  align-items: baseline;
+  gap: 8px 14px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  padding: 10px 12px;
+  border: 1px solid #e2e2dd;
+  border-radius: 6px;
+  background: #fbfbf8;
+}
+
+.company-peer-availability-note strong {
+  font-size: 12px;
+}
+
+.company-peer-availability-note span {
+  color: #666;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.company-peer-keywords {
+  display: grid;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.company-peer-keywords b {
+  font-size: 13px;
+}
+
+.company-peer-keywords span,
+.company-peer-keywords em {
+  color: #555;
+  font-size: 12px;
+  font-style: normal;
+  line-height: 1.4;
+}
+
+.company-peer-card.is-not-comparable .company-peer-keywords {
+  color: #6b6251;
+}
+
+.company-peer-card .comparison-basis-details summary {
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.company-report-signal-grid.financial-signal-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.financial-signal-grid .company-report-signal {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.financial-signal-keywords {
+  display: grid;
+  gap: 6px;
+}
+
+.financial-signal-keyword {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  padding-top: 6px;
+  border-top: 1px solid #ecece8;
+}
+
+.financial-signal-keyword b {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.financial-signal-keyword em {
+  color: #444;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
 @media (max-width: 960px) {
   .financial-status-rule-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -304,10 +392,15 @@
   .company-report-kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .financial-signal-grid .company-report-signal {
+    flex-basis: calc(50% - 5px);
+  }
 }
 
 @media (max-width: 520px) {
-  .financial-decision-grid .financial-decision-card {
+  .financial-decision-grid .financial-decision-card,
+  .financial-signal-grid .company-report-signal {
     flex-basis: 100%;
   }
 
