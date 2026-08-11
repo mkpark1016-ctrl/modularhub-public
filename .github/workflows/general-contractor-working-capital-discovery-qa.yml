@@ -18,7 +18,10 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install pytest
       - run: |
-          python -m pytest -q tests/test_general_contractor_working_capital_discovery.py tests/test_general_contractor_dart_audit_adapter.py
+          python -m pytest -q \
+            tests/test_general_contractor_working_capital.py \
+            tests/test_general_contractor_working_capital_discovery.py \
+            tests/test_general_contractor_dart_audit_adapter.py
           python -m compileall scripts src
           git diff --check
 
