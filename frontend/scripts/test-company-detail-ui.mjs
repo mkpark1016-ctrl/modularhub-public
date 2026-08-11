@@ -223,6 +223,51 @@ assert.ok(gsReport.financial_health.leverage, "GS leverage decision factor shoul
 assert.ok(gsReport.financial_health.working_capital, "GS working-capital decision factor should remain visible when receivables need confirmation");
 assert.equal(gsReport.source_summary.audit_opinions.at(-1).opinion, "unqualified");
 assert.equal(gsReport.source_summary.audit_opinions.at(-1).auditor, "한영회계법인");
+const samsungReport = getCompanyReportInsight(reportPayload, "samsung-ct-construction");
+const hyundaiReport = getCompanyReportInsight(reportPayload, "hyundai-engineering");
+const dlReport = getCompanyReportInsight(reportPayload, "dl-enc");
+for (const [companyId, report] of [
+  ["samsung-ct-construction", samsungReport],
+  ["hyundai-engineering", hyundaiReport],
+  ["dl-enc", dlReport],
+]) {
+  assert.ok(report, `${companyId} should use the common audit financial panel`);
+  assert.deepEqual(reportYears(report), [2023, 2024, 2025]);
+  assert.equal(report.financial_scope, "consolidated");
+  assert.equal(report.latest_year, 2025);
+  assert.equal(report.comparison_context.group_id, "general_contractor");
+  assert.equal(report.comparison_context.group_label, "건설사");
+}
+assert.equal(reportMetricByYear(samsungReport, 2025, "revenue").raw_krw, 40742240967149);
+assert.equal(reportMetricByYear(samsungReport, 2025, "operating_profit").raw_krw, 3292747495925);
+assert.equal(reportMetricByYear(samsungReport, 2025, "operating_cash_flow").raw_krw, 3023741373868);
+assert.equal(reportMetricByYear(hyundaiReport, 2025, "revenue").raw_krw, 13896504000000);
+assert.equal(reportMetricByYear(hyundaiReport, 2025, "operating_profit").raw_krw, 277859000000);
+assert.equal(reportMetricByYear(hyundaiReport, 2025, "operating_cash_flow").raw_krw, -987129000000);
+assert.equal(reportMetricByYear(dlReport, 2025, "revenue").raw_krw, 7402425126660);
+assert.equal(reportMetricByYear(dlReport, 2025, "operating_profit").raw_krw, 386953267819);
+assert.equal(reportMetricByYear(dlReport, 2025, "operating_cash_flow").raw_krw, 232139885997);
+for (const report of [gsReport, samsungReport, hyundaiReport, dlReport]) {
+  const peers = new Map(report.peer_benchmarks.map((row) => [row.metric_id, row]));
+  for (const metricId of ["revenue", "operating_margin_pct", "operating_cash_flow", "liabilities_to_equity_pct"]) {
+    const benchmark = peers.get(metricId);
+    assert.ok(benchmark, `${metricId} benchmark should exist for all general contractors`);
+    assert.equal(benchmark.comparable, true, `${metricId} should be comparable across four general contractors`);
+    assert.equal(benchmark.peer_count, 4);
+    assert.equal(benchmark.other_peer_count, 3);
+    assert.equal(benchmark.comparison_group_id, "general_contractor");
+    assert.equal(benchmark.comparison_financial_scope, "consolidated");
+  }
+  const borrowings = peers.get("total_borrowings");
+  assert.ok(borrowings);
+  assert.equal(borrowings.comparable, false, "incomplete borrowing-note coverage must not be forced into a peer ranking");
+  assert.ok(borrowings.peer_count < 3);
+  const receivables = peers.get("receivables_to_revenue_pct");
+  assert.ok(receivables);
+  assert.equal(receivables.comparable, false, "pending gross receivables must not be forced into a peer ranking");
+  assert.ok(receivables.peer_count < 3);
+}
+
 assert.equal(hasEvidenceDisplayValue(0), true);
 assert.equal(hasEvidenceDisplayValue(-1), true);
 assert.equal(hasEvidenceDisplayValue("0"), true);
