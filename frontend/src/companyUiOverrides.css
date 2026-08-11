@@ -465,12 +465,12 @@
   height: 100%;
 }
 
-/* Builder order is profitability, cash generation, leverage, working capital, disclosure coverage. */
-.financial-decision-grid .financial-decision-card:nth-child(1) { order: 2; }
-.financial-decision-grid .financial-decision-card:nth-child(2) { order: 1; }
+/* Serialized JSON order is cash generation, disclosure coverage, leverage, profitability, working capital. */
+.financial-decision-grid .financial-decision-card:nth-child(1) { order: 1; }
+.financial-decision-grid .financial-decision-card:nth-child(2) { display: none; }
 .financial-decision-grid .financial-decision-card:nth-child(3) { order: 3; }
-.financial-decision-grid .financial-decision-card:nth-child(4) { order: 4; }
-.financial-decision-grid .financial-decision-card:nth-child(5) { display: none; }
+.financial-decision-grid .financial-decision-card:nth-child(4) { order: 2; }
+.financial-decision-grid .financial-decision-card:nth-child(5) { order: 4; }
 
 .financial-status-rule-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
