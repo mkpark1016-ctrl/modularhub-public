@@ -6,12 +6,12 @@ const reportPayload = JSON.parse(
 );
 const overridesSource = readFileSync(new URL("../src/companyUiOverrides.css", import.meta.url), "utf8");
 
-const sourceHealthKeys = [
-  "profitability",
+const serializedHealthKeys = [
   "cash_generation",
-  "leverage",
-  "working_capital",
   "disclosure_coverage",
+  "leverage",
+  "profitability",
+  "working_capital",
 ];
 
 const companiesWithHealth = reportPayload.companies.filter((company) => company.financial_health);
@@ -20,8 +20,8 @@ assert.ok(companiesWithHealth.length > 0, "at least one company financial_health
 for (const company of companiesWithHealth) {
   assert.deepEqual(
     Object.keys(company.financial_health),
-    sourceHealthKeys,
-    `${company.company_id}: builder financial_health order/shape must remain stable for the presentation contract`,
+    serializedHealthKeys,
+    `${company.company_id}: serialized financial_health order must remain stable for the presentation contract`,
   );
   assert.ok(
     company.financial_health.disclosure_coverage,
@@ -62,11 +62,11 @@ assert.match(
   /company-intelligence-summary\.compact\.financial-decision-grid\s*\{[\s\S]*?display:\s*grid;[\s\S]*?grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/,
   "desktop decision summary must be a deterministic four-column grid",
 );
-assert.match(overridesSource, /financial-decision-card:nth-child\(2\)\s*\{\s*order:\s*1;/, "cash generation must render first");
-assert.match(overridesSource, /financial-decision-card:nth-child\(1\)\s*\{\s*order:\s*2;/, "profitability must render second");
+assert.match(overridesSource, /financial-decision-card:nth-child\(1\)\s*\{\s*order:\s*1;/, "cash generation must render first");
+assert.match(overridesSource, /financial-decision-card:nth-child\(4\)\s*\{\s*order:\s*2;/, "profitability must render second");
 assert.match(overridesSource, /financial-decision-card:nth-child\(3\)\s*\{\s*order:\s*3;/, "financial stability must render third");
-assert.match(overridesSource, /financial-decision-card:nth-child\(4\)\s*\{\s*order:\s*4;/, "working capital must render fourth");
-assert.match(overridesSource, /financial-decision-card:nth-child\(5\)\s*\{\s*display:\s*none;/, "disclosure coverage must be excluded from the visible decision cards");
+assert.match(overridesSource, /financial-decision-card:nth-child\(5\)\s*\{\s*order:\s*4;/, "working capital must render fourth");
+assert.match(overridesSource, /financial-decision-card:nth-child\(2\)\s*\{\s*display:\s*none;/, "disclosure coverage must be excluded from the visible decision cards");
 
 assert.match(
   overridesSource,
