@@ -611,7 +611,7 @@ def health_item(
     return item
 
 
-def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], derived: dict[str, Any], source_summary: dict[str, Any], attribution: dict[str, Any]) -> dict[str, Any]:
+def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], latest_series_metrics: dict[str, Any], derived: dict[str, Any], source_summary: dict[str, Any], attribution: dict[str, Any]) -> dict[str, Any]:
     latest_derived = derived[str(latest_year)]
     revenue = latest_metrics.get("revenue")
     operating_profit = latest_metrics.get("operating_profit")
@@ -620,12 +620,16 @@ def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], der
     borrowings = latest_metrics.get("total_borrowings")
     receivables = latest_metrics.get("receivables_total")
     receivables_ratio = latest_derived.get("receivables_to_revenue_pct")
+    current_assets = latest_series_metrics.get("current_assets")
+    current_liabilities = latest_series_metrics.get("current_liabilities")
+    current_ratio = latest_derived.get("current_ratio_pct")
     liabilities_ratio = latest_derived.get("liabilities_to_equity_pct")
     source_ids = metric_source_refs(revenue) + metric_source_refs(operating_profit)
     profitability_status = "additional_confirmation_required" if metric_raw(operating_margin) is None else "watch" if metric_raw(operating_margin) < 0 else "info"
     cash_status = "additional_confirmation_required" if metric_raw(operating_cash_flow) is None else "watch" if metric_raw(operating_cash_flow) < 0 and metric_raw(operating_profit) and metric_raw(operating_profit) > 0 else "info"
     leverage_status = "additional_confirmation_required" if metric_raw(liabilities_ratio) is None else "watch" if metric_raw(liabilities_ratio) > 200 else "info"
-    working_capital_status = "additional_confirmation_required" if metric_raw(receivables_ratio) is None else "watch" if metric_raw(receivables_ratio) > 30 else "info"
+    working_capital_status = "additional_confirmation_required" if metric_raw(current_ratio) is None else "watch" if metric_raw(current_ratio) < 100 else "info"
+    receivables_burden_status = "additional_confirmation_required" if metric_raw(receivables_ratio) is None else "watch" if metric_raw(receivables_ratio) > 30 else "info"
     coverage_status = "watch" if source_summary.get("pending_location_count") else "info"
     return {
         "profitability": health_item(
@@ -667,6 +671,19 @@ def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], der
         "working_capital": health_item(
             working_capital_status,
             "운전자본",
+            f"{latest_year}년 유동비율은 {current_ratio.get('display_text') if current_ratio else '확인되지 않음'}입니다.",
+            ["current_assets", "current_liabilities", "current_ratio_pct"],
+            metric_source_refs(current_assets) + metric_source_refs(current_liabilities),
+            rule_id="current_ratio_liquidity_observation",
+            operator="<",
+            threshold=100,
+            actual_value=metric_raw(current_ratio),
+            interpretation_scope="유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+            limitation="순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+        ),
+        "receivables_burden": health_item(
+            receivables_burden_status,
+            "매출채권 부담",
             f"{latest_year}년 채권/매출 비율은 {receivables_ratio.get('display_text') if receivables_ratio else '확인되지 않음'}입니다.",
             ["receivables_total", "receivables_to_revenue_pct"],
             metric_source_refs(receivables),
@@ -674,8 +691,8 @@ def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], der
             operator=">",
             threshold=30,
             actual_value=metric_raw(receivables_ratio),
-            interpretation_scope="채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-            limitation="채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+            interpretation_scope="확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+            limitation="복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
         ),
         "disclosure_coverage": health_item(
             coverage_status,
@@ -923,6 +940,7 @@ def build_company_insight(source_payload: dict[str, Any]) -> dict[str, Any]:
         "financial_health": build_financial_health(
             latest_year,
             latest_metrics,
+            financial_series[-1]["metrics"],
             derived,
             source_summary,
             source_payload["entity_attribution"],

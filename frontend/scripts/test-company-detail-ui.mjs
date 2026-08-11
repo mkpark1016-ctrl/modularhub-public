@@ -380,7 +380,10 @@ assert.equal(yuchangReport.financial_health.profitability.metric_ids.includes("o
 assert.equal(yuchangReport.financial_health.profitability.rule_id, "profitability_negative_margin");
 assert.equal(yuchangReport.financial_health.profitability.threshold, 0);
 assert.equal(yuchangReport.financial_health.leverage.threshold, 200);
-assert.equal(yuchangReport.financial_health.working_capital.threshold, 30);
+assert.equal(yuchangReport.financial_health.working_capital.rule_id, "current_ratio_liquidity_observation");
+assert.equal(yuchangReport.financial_health.working_capital.threshold, 100);
+assert.equal(yuchangReport.financial_health.receivables_burden.rule_id, "receivables_to_revenue_observation");
+assert.equal(yuchangReport.financial_health.receivables_burden.threshold, 30);
 assert.match(yuchangReport.financial_health.profitability.interpretation_scope, /투자 판단이 아닙니다/);
 assert.equal(yuchangReport.evidence_health.some((row) => row.domain === "financial"), true);
 const yuchangFinancialEvidence = yuchangReport.evidence_health.find((row) => row.domain === "financial");

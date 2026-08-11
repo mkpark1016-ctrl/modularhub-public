@@ -410,13 +410,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": 5.5,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 5.5%입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -428,6 +428,26 @@
           ],
           "status": "info",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 158.3,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 158.3%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "daeseung_audit_report_2025_09_17"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "standalone",
@@ -2536,13 +2556,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": null,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -2554,6 +2574,26 @@
           ],
           "status": "additional_confirmation_required",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 151.2,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 151.2%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "dl-enc_opendart_2025_20260515002039"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "consolidated",
@@ -4583,13 +4623,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": null,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -4601,6 +4641,26 @@
           ],
           "status": "additional_confirmation_required",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 322.9,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 322.9%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "geogwang_audit_report_2026_04_09"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "standalone",
@@ -6702,13 +6762,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": null,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -6720,6 +6780,26 @@
           ],
           "status": "additional_confirmation_required",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 115.9,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 115.9%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "consolidated",
@@ -8767,13 +8847,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": 28.7,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 28.7%입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -8785,6 +8865,26 @@
           ],
           "status": "info",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 126.9,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 126.9%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "consolidated",
@@ -10821,13 +10921,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": 23.2,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 23.2%입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -10839,6 +10939,26 @@
           ],
           "status": "info",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 95.7,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 95.7%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "kumkang_annual_report_2026_03_12"
+          ],
+          "status": "watch",
+          "threshold": 100
         }
       },
       "financial_scope": "consolidated",
@@ -12989,13 +13109,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": null,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -13007,6 +13127,26 @@
           ],
           "status": "additional_confirmation_required",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 41.7,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 41.7%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "nrb_annual_report_2026_03_18"
+          ],
+          "status": "watch",
+          "threshold": 100
         }
       },
       "financial_scope": "standalone",
@@ -15541,13 +15681,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": 0.4,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 0.4%입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -15559,6 +15699,26 @@
           ],
           "status": "info",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 17.4,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 17.4%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "planm_audit_report_2026_06_25"
+          ],
+          "status": "watch",
+          "threshold": 100
         }
       },
       "financial_scope": "standalone",
@@ -17670,13 +17830,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": null,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -17688,6 +17848,26 @@
           ],
           "status": "additional_confirmation_required",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 154.0,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 154.0%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "consolidated",
@@ -19721,13 +19901,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": null,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -19739,6 +19919,26 @@
           ],
           "status": "additional_confirmation_required",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 127.0,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 127.0%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "sungji_audit_report_2026_04_01"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "standalone",
@@ -21852,13 +22052,13 @@
           "status": "info",
           "threshold": 0
         },
-        "working_capital": {
+        "receivables_burden": {
           "actual_value": 37.6,
           "calculation_basis": "rule_based_from_reported_metrics",
           "explanation": "2025년 채권/매출 비율은 37.6%입니다.",
-          "headline": "운전자본",
-          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
-          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "headline": "매출채권 부담",
+          "interpretation_scope": "확정된 영업채권/매출 비율을 별도 보조지표로 관찰하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "복합 채권 계정은 주석 분해 전까지 합계에 포함하지 않으며, 정확히 검증된 매출채권·공사미수금만 사용합니다.",
           "metric_ids": [
             "receivables_total",
             "receivables_to_revenue_pct"
@@ -21870,6 +22070,26 @@
           ],
           "status": "watch",
           "threshold": 30
+        },
+        "working_capital": {
+          "actual_value": 121.9,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 유동비율은 121.9%입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "유동자산과 유동부채를 이용해 단기 유동성을 관찰하는 규칙이며 지급능력이나 신용등급을 단정하지 않습니다.",
+          "limitation": "순운전자본은 유동자산에서 유동부채를 차감한 값이며 유동비율과 함께 봅니다.",
+          "metric_ids": [
+            "current_assets",
+            "current_liabilities",
+            "current_ratio_pct"
+          ],
+          "operator": "<",
+          "rule_id": "current_ratio_liquidity_observation",
+          "source_ids": [
+            "yuchang_audit_report_2026_04_08"
+          ],
+          "status": "info",
+          "threshold": 100
         }
       },
       "financial_scope": "standalone",

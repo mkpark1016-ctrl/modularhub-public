@@ -29,6 +29,13 @@ const KPI_CARDS = [
   { key: "total_borrowings", label: "총차입금" },
 ];
 
+const FINANCIAL_DECISION_KEYS = [
+  "cash_generation",
+  "profitability",
+  "leverage",
+  "working_capital",
+];
+
 function latestRatio(insight, key) {
   return insight?.derived_metrics?.[String(insight.latest_year)]?.[key] || null;
 }
@@ -42,6 +49,16 @@ function metricNumber(metric) {
   if (metric?.raw_krw !== null && metric?.raw_krw !== undefined) return Number(metric.raw_krw) / 100_000_000;
   if (metric?.value !== null && metric?.value !== undefined) return Number(metric.value);
   return null;
+}
+
+function workingCapitalDisplay(insight) {
+  const latestYear = insight.latest_year;
+  const currentAssets = metricNumber(reportMetricByYear(insight, latestYear, "current_assets"));
+  const currentLiabilities = metricNumber(reportMetricByYear(insight, latestYear, "current_liabilities"));
+  if (!Number.isFinite(currentAssets) || !Number.isFinite(currentLiabilities)) return "확인되지 않음";
+  const value = currentAssets - currentLiabilities;
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${value.toLocaleString("ko-KR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}억원`;
 }
 
 function metricDisplayLabel(row, title) {
@@ -185,6 +202,10 @@ function financialHealthRows(insight, key, item) {
     { label: "총차입금", value: amount("total_borrowings") },
   ];
   if (key === "working_capital") return [
+    { label: "순운전자본", value: workingCapitalDisplay(insight) },
+    { label: "유동비율", value: ratio("current_ratio_pct") },
+  ];
+  if (key === "receivables_burden") return [
     { label: "채권/매출", value: ratio("receivables_to_revenue_pct") },
     { label: "채권", value: amount("receivables_total") },
   ];
@@ -200,7 +221,8 @@ function financialHealthCriterion(key, item) {
   if (key === "profitability") return item.status === "watch" ? "영업이익률 0% 미만" : "영업이익률 0% 이상";
   if (key === "cash_generation") return item.status === "watch" ? "이익 양수 · 현금흐름 음수" : "현금창출 관찰기준 미해당";
   if (key === "leverage") return `부채비율 ${item.threshold ?? 200}% ${item.status === "watch" ? "초과" : "이하"}`;
-  if (key === "working_capital") return `채권/매출 ${item.threshold ?? 30}% ${item.status === "watch" ? "초과" : "이하"}`;
+  if (key === "working_capital") return `유동비율 ${item.threshold ?? 100}% ${item.status === "watch" ? "미만" : "이상"}`;
+  if (key === "receivables_burden") return `채권/매출 ${item.threshold ?? 30}% ${item.status === "watch" ? "초과" : "이하"}`;
   if (key === "disclosure_coverage") return item.status === "watch" ? "수동 확인 항목 있음" : "수동 확인 0건";
   return decisionStatusLabel(item.status);
 }
@@ -219,10 +241,9 @@ function FinancialStatusGuide() {
           <span><b>수익성</b><em>영업이익률 0% 미만 → 관찰 필요</em></span>
           <span><b>현금창출력</b><em>영업이익 양수 + 영업현금흐름 음수 → 관찰 필요</em></span>
           <span><b>재무안정성</b><em>부채비율 200% 초과 → 관찰 필요</em></span>
-          <span><b>운전자본</b><em>채권/매출 비율 30% 초과 → 관찰 필요</em></span>
-          <span><b>공시 범위</b><em>수동 확인 필요 출처 1건 이상 → 관찰 필요</em></span>
+          <span><b>운전자본</b><em>유동비율 100% 미만 → 관찰 필요</em></span>
         </div>
-        <p>본 상태는 감사재무를 빠르게 관찰하기 위한 규칙이며 신용등급, 부실판정 또는 투자의견을 의미하지 않습니다.</p>
+        <p>본 상태는 감사재무를 빠르게 관찰하기 위한 규칙이며 신용등급, 부실판정 또는 투자의견을 의미하지 않습니다. 매출채권 부담은 별도 보조지표로 표시합니다.</p>
       </details>
     </div>
   );
@@ -297,7 +318,8 @@ function peerEvidence(insight, item) {
 }
 
 function FinancialDecisionSummary({ insight, onShowEvidence }) {
-  const healthItems = Object.entries(insight.financial_health || {});
+  const healthItems = FINANCIAL_DECISION_KEYS.map((key) => [key, insight.financial_health?.[key]]).filter(([, item]) => item);
+  const receivablesBurden = insight.financial_health?.receivables_burden || null;
   const trendItems = Object.values(insight.trends || {}).slice(0, 4);
   if (!healthItems.length && !trendItems.length) return null;
   return (
@@ -326,6 +348,20 @@ function FinancialDecisionSummary({ insight, onShowEvidence }) {
         ))}
       </div>
       <FinancialStatusGuide />
+      {receivablesBurden && (
+        <div className={`company-peer-availability-note ${decisionStatusTone(receivablesBurden.status)}`} role="note" aria-label="매출채권 부담 보조지표">
+          <strong>매출채권 부담 · {decisionStatusLabel(receivablesBurden.status)}</strong>
+          <span>
+            {financialHealthRows(insight, "receivables_burden", receivablesBurden).map((row) => `${row.label} ${row.value}`).join(" · ")}
+            {` · ${financialHealthCriterion("receivables_burden", receivablesBurden)}`}
+          </span>
+          {onShowEvidence && (
+            <button type="button" className="text-button evidence-inline-button" onClick={() => onShowEvidence(healthEvidence(insight, receivablesBurden))}>
+              계산 근거 보기
+            </button>
+          )}
+        </div>
+      )}
       <div className="company-intelligence-trend-strip" aria-label="최근 추세 신호">
         {trendItems.map((trend) => (
           <span className={`decision-status ${decisionStatusTone(trend.status)}`} key={trend.headline}>
