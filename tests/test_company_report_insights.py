@@ -86,7 +86,7 @@ def test_yuchang_years_and_latest_metrics() -> None:
 
 def test_view_model_contains_yuchang_kumkang_and_daeseung() -> None:
     payload = load_output()
-    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "geogwang-enterprise", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]
+    assert [company["company_id"] for company in payload["companies"]] == ["daeseung-engineering", "geogwang-enterprise", "gs-ec", "kumkang-kind", "nrb", "planm", "sungji-steel", "yuchang-enc"]
 
 
 def test_sungji_latest_metrics_and_disclosure_limits() -> None:

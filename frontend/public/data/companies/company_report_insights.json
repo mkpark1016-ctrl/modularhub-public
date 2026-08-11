@@ -4237,6 +4237,2071 @@
     },
     {
       "attribution": {
+        "attribution_warning": "연결재무제표는 회사와 연결대상 종속기업의 실적을 포함합니다. 회사 전체 매출 또는 건설 매출을 모듈러 사업 매출로 자동 해석하지 않습니다.",
+        "financial_scope": "consolidated",
+        "modular_segment_revenue_disclosed": false,
+        "related_entity_attribution_required": true,
+        "reporting_entity": "지에스건설 주식회사 및 연결대상 종속기업",
+        "special_events": []
+      },
+      "available_years": [
+        2023,
+        2024,
+        2025
+      ],
+      "company_id": "gs-ec",
+      "company_name": "GS건설",
+      "comparison_context": {
+        "calculation_basis": "canonical_company_type_same_latest_year_currency_financial_scope",
+        "company_type": "general_contractor",
+        "group_id": "general_contractor",
+        "group_label": "건설사",
+        "minimum_peer_count": 3
+      },
+      "currency": "KRW",
+      "data_quality": {
+        "manual_page_check_required": true,
+        "modular_segment_revenue_disclosed": false,
+        "pending_manual_page_check_count": 84,
+        "source_location_count": 84,
+        "source_validator_status": "passed"
+      },
+      "derived_metrics": {
+        "2023": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "107.8%",
+            "value": 107.8
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.0%",
+            "value": 2.0
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.0%",
+            "value": 10.0
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "262.5%",
+            "value": 262.5
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-3.1%",
+            "value": -3.1
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-1.1",
+            "value": -1.12
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-2.9%",
+            "value": -2.9
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          }
+        },
+        "2024": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "96.0%",
+            "value": 96.0
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "8.7%",
+            "value": 8.7
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.0%",
+            "value": 10.0
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "250.0%",
+            "value": 250.0
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.1%",
+            "value": 2.1
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "1.0",
+            "value": 1.015
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "2.2%",
+            "value": 2.2
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-4.3%",
+            "value": -4.3
+          }
+        },
+        "2025": {
+          "borrowings_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "construction_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "current_ratio_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "115.9%",
+            "value": 115.9
+          },
+          "goods_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "gross_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "10.8%",
+            "value": 10.8
+          },
+          "inventory_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "9.3%",
+            "value": 9.3
+          },
+          "liabilities_to_equity_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "234.2%",
+            "value": 234.2
+          },
+          "net_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "0.8%",
+            "value": 0.8
+          },
+          "operating_cash_flow_to_net_income": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "6.3",
+            "value": 6.332
+          },
+          "operating_margin_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "3.5%",
+            "value": 3.5
+          },
+          "other_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "product_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "receivables_to_revenue_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "rental_revenue_share_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "확인되지 않음",
+            "value": null
+          },
+          "revenue_yoy_pct": {
+            "calculation_basis": "derived_from_reported",
+            "display_text": "-3.2%",
+            "value": -3.2
+          }
+        }
+      },
+      "disclosure_warnings": [
+        {
+          "code": "modular_segment_revenue_not_disclosed",
+          "level": "warning",
+          "message": "감사보고서에 모듈러 사업부문 별도 매출이 공시되지 않았다."
+        },
+        {
+          "code": "product_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "제품매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "construction_revenue_not_modular_revenue",
+          "level": "warning",
+          "message": "공사매출을 모듈러 매출로 간주할 수 없다."
+        },
+        {
+          "code": "related_entity_results_not_combined",
+          "level": "warning",
+          "message": "연결재무제표는 회사와 연결대상 종속기업의 실적을 포함합니다. 회사 전체 매출 또는 건설 매출을 모듈러 사업 매출로 자동 해석하지 않습니다."
+        },
+        {
+          "code": "pending_manual_page_check",
+          "level": "info",
+          "message": "주석 기반 수치 84건은 정확한 페이지 수동 확인이 남아 있다."
+        }
+      ],
+      "evidence_health": [
+        {
+          "distinct_source_count": 3,
+          "domain": "financial",
+          "latest_verified_at": "2026-07-01",
+          "not_applicable_item_count": 0,
+          "not_disclosed_item_count": 0,
+          "pending_item_count": 84,
+          "source_count": 3,
+          "source_ids": [
+            "gs-ec_opendart_2023_20260630000500",
+            "gs-ec_opendart_2024_20260701000540",
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "source_type_counts": {
+            "audit_report": 3
+          },
+          "unavailable_item_count": 15,
+          "verification_pending_item_count": 15,
+          "verification_status": "pending_manual_page_check",
+          "verified_item_count": 0
+        },
+        {
+          "distinct_source_count": 3,
+          "domain": "disclosure_scope",
+          "latest_verified_at": "2026-07-01",
+          "not_applicable_item_count": 0,
+          "not_disclosed_item_count": 1,
+          "pending_item_count": 0,
+          "source_count": 3,
+          "source_ids": [
+            "gs-ec_opendart_2023_20260630000500",
+            "gs-ec_opendart_2024_20260701000540",
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "source_type_counts": {
+            "audit_report": 3
+          },
+          "unavailable_item_count": 1,
+          "verification_pending_item_count": 0,
+          "verification_status": "not_disclosed",
+          "verified_item_count": 0
+        }
+      ],
+      "financial_health": {
+        "cash_generation": {
+          "actual_value": 591530000000,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업현금흐름은 5,915.3억원입니다.",
+          "headline": "현금창출력",
+          "interpretation_scope": "이익과 영업현금흐름 방향이 엇갈리는지 확인하는 관찰 규칙입니다.",
+          "metric_ids": [
+            "operating_profit",
+            "operating_cash_flow"
+          ],
+          "operator": "operating_profit > 0 and operating_cash_flow <",
+          "rule_id": "positive_profit_negative_operating_cash_flow",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "info",
+          "threshold": 0
+        },
+        "disclosure_coverage": {
+          "actual_value": 84,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "검증된 출처 위치 0건, 수동 확인 필요 84건입니다.",
+          "headline": "공시 범위",
+          "interpretation_scope": "수동 출처 위치 확인이 남아 있는지 표시하는 공시 범위 관찰 규칙입니다.",
+          "limitation": "모듈러 부문 별도 매출은 공시되지 않았습니다.",
+          "metric_ids": [
+            "source_locations"
+          ],
+          "operator": "pending_location_count >",
+          "rule_id": "source_location_coverage_observation",
+          "source_ids": [],
+          "status": "watch",
+          "threshold": 0
+        },
+        "leverage": {
+          "actual_value": 234.2,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 총차입금은 검증 보류이고 부채비율은 234.2%입니다.",
+          "headline": "재무안정성",
+          "interpretation_scope": "부채비율이 관찰 기준을 넘는지 표시하며 부실 판단을 의미하지 않습니다.",
+          "metric_ids": [
+            "total_borrowings",
+            "liabilities_to_equity_pct"
+          ],
+          "operator": ">",
+          "rule_id": "liabilities_to_equity_observation",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "watch",
+          "threshold": 200
+        },
+        "profitability": {
+          "actual_value": 3.5,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 영업이익률은 3.5%입니다.",
+          "headline": "수익성",
+          "interpretation_scope": "영업이익률이 0% 미만인지 확인하는 관찰 규칙이며 신용등급이나 투자 판단이 아닙니다.",
+          "metric_ids": [
+            "revenue",
+            "operating_profit",
+            "operating_margin_pct"
+          ],
+          "operator": "<",
+          "rule_id": "profitability_negative_margin",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "info",
+          "threshold": 0
+        },
+        "working_capital": {
+          "actual_value": null,
+          "calculation_basis": "rule_based_from_reported_metrics",
+          "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
+          "headline": "운전자본",
+          "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
+          "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
+          "metric_ids": [
+            "receivables_total",
+            "receivables_to_revenue_pct"
+          ],
+          "operator": ">",
+          "rule_id": "receivables_to_revenue_observation",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "additional_confirmation_required",
+          "threshold": 30
+        }
+      },
+      "financial_scope": "consolidated",
+      "financial_series": [
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 94820.3,
+              "display_text": "94,820.3억원",
+              "raw_krw": 9482031400336,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 87962.2,
+              "display_text": "87,962.2억원",
+              "raw_krw": 8796223078467,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2621.9,
+              "display_text": "2,621.9억원",
+              "raw_krw": 262193954029,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 13386.7,
+              "display_text": "13,386.7억원",
+              "raw_krw": 1338666208609,
+              "source_locations": [
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -4195.0,
+              "display_text": "-4,195.0억원",
+              "raw_krw": -419500544880,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 4698.0,
+              "display_text": "4,698.0억원",
+              "raw_krw": 469798620792,
+              "source_locations": [
+                {
+                  "section": "statement.cash_flow",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": -3879.5,
+              "display_text": "-3,879.5억원",
+              "raw_krw": -387945401071,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "verification_pending",
+              "disclosure_status": "verification_pending",
+              "display_eok": null,
+              "display_text": "검증 보류",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 134366.8,
+              "display_text": "134,366.8억원",
+              "raw_krw": 13436684904471,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 177073.0,
+              "display_text": "177,073.0억원",
+              "raw_krw": 17707298538013,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "verification_pending",
+              "disclosure_status": "verification_pending",
+              "display_eok": null,
+              "display_text": "검증 보류",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 48851.6,
+              "display_text": "48,851.6억원",
+              "raw_krw": 4885159860812,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 128221.4,
+              "display_text": "128,221.4억원",
+              "raw_krw": 12822138677201,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2023_20260630000500",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2023_20260630000500"
+              ]
+            }
+          },
+          "year": 2023
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 86665.5,
+              "display_text": "86,665.5억원",
+              "raw_krw": 8666549605548,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 90319.1,
+              "display_text": "90,319.1억원",
+              "raw_krw": 9031905115658,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 11141.8,
+              "display_text": "11,141.8억원",
+              "raw_krw": 1114179838862,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 12800.1,
+              "display_text": "12,800.1억원",
+              "raw_krw": 1280005616400,
+              "source_locations": [
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2639.2,
+              "display_text": "2,639.2억원",
+              "raw_krw": 263924031753,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2678.1,
+              "display_text": "2,678.1억원",
+              "raw_krw": 267812354593,
+              "source_locations": [
+                {
+                  "section": "statement.cash_flow",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 2859.5,
+              "display_text": "2,859.5억원",
+              "raw_krw": 285954335787,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "verification_pending",
+              "disclosure_status": "verification_pending",
+              "display_eok": null,
+              "display_text": "검증 보류",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 128638.1,
+              "display_text": "128,638.1억원",
+              "raw_krw": 12863811468386,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 178032.9,
+              "display_text": "178,032.9억원",
+              "raw_krw": 17803293924556,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "verification_pending",
+              "disclosure_status": "verification_pending",
+              "display_eok": null,
+              "display_text": "검증 보류",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 50871.2,
+              "display_text": "50,871.2억원",
+              "raw_krw": 5087123959443,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 127161.7,
+              "display_text": "127,161.7억원",
+              "raw_krw": 12716169965113,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2024_20260701000540",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2024_20260701000540"
+              ]
+            }
+          },
+          "year": 2024
+        },
+        {
+          "metrics": {
+            "current_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 90741.5,
+              "display_text": "90,741.5억원",
+              "raw_krw": 9074153000000,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "current_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 78321.4,
+              "display_text": "78,321.4억원",
+              "raw_krw": 7832139000000,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "gross_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 13450.6,
+              "display_text": "13,450.6억원",
+              "raw_krw": 1345064000000,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "inventory": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 11632.9,
+              "display_text": "11,632.9억원",
+              "raw_krw": 1163292000000,
+              "source_locations": [
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "net_income": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 934.2,
+              "display_text": "934.2억원",
+              "raw_krw": 93423000000,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "operating_cash_flow": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 5915.3,
+              "display_text": "5,915.3억원",
+              "raw_krw": 591530000000,
+              "source_locations": [
+                {
+                  "section": "statement.cash_flow",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "operating_profit": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 4378.1,
+              "display_text": "4,378.1억원",
+              "raw_krw": 437809000000,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "receivables_total": {
+              "calculation_basis": "verification_pending",
+              "disclosure_status": "verification_pending",
+              "display_eok": null,
+              "display_text": "검증 보류",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.working_capital",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "revenue": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 124503.5,
+              "display_text": "124,503.5억원",
+              "raw_krw": 12450347000000,
+              "source_locations": [
+                {
+                  "section": "statement.income_statement",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "total_assets": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 184598.4,
+              "display_text": "184,598.4억원",
+              "raw_krw": 18459842000000,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "total_borrowings": {
+              "calculation_basis": "verification_pending",
+              "disclosure_status": "verification_pending",
+              "display_eok": null,
+              "display_text": "검증 보류",
+              "raw_krw": null,
+              "source_locations": [
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                },
+                {
+                  "section": "note.borrowings",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "total_equity": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 55235.6,
+              "display_text": "55,235.6억원",
+              "raw_krw": 5523557000000,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            },
+            "total_liabilities": {
+              "calculation_basis": "reported",
+              "disclosure_status": "reported",
+              "display_eok": 129362.9,
+              "display_text": "129,362.9억원",
+              "raw_krw": 12936285000000,
+              "source_locations": [
+                {
+                  "section": "statement.balance_sheet",
+                  "source_ref": "gs-ec_opendart_2025_20260701000624",
+                  "verification_status": "pending_manual_page_check"
+                }
+              ],
+              "source_refs": [
+                "gs-ec_opendart_2025_20260701000624"
+              ]
+            }
+          },
+          "year": 2025
+        }
+      ],
+      "latest_metrics": {
+        "gross_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 13450.6,
+          "display_text": "13,450.6억원",
+          "raw_krw": 1345064000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "inventory": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 11632.9,
+          "display_text": "11,632.9억원",
+          "raw_krw": 1163292000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 934.2,
+          "display_text": "934.2억원",
+          "raw_krw": 93423000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 5915.3,
+          "display_text": "5,915.3억원",
+          "raw_krw": 591530000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 4378.1,
+          "display_text": "4,378.1억원",
+          "raw_krw": 437809000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "receivables_total": {
+          "calculation_basis": "verification_pending",
+          "disclosure_status": "verification_pending",
+          "display_eok": null,
+          "display_text": "검증 보류",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 124503.5,
+          "display_text": "124,503.5억원",
+          "raw_krw": 12450347000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 184598.4,
+          "display_text": "184,598.4억원",
+          "raw_krw": 18459842000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "verification_pending",
+          "disclosure_status": "verification_pending",
+          "display_eok": null,
+          "display_text": "검증 보류",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 55235.6,
+          "display_text": "55,235.6억원",
+          "raw_krw": 5523557000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 129362.9,
+          "display_text": "129,362.9억원",
+          "raw_krw": 12936285000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "work_in_progress": {
+          "calculation_basis": "verification_pending",
+          "disclosure_status": "verification_pending",
+          "display_eok": null,
+          "display_text": "검증 보류",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "latest_snapshot": {
+        "latest_year": 2025,
+        "net_income": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 934.2,
+          "display_text": "934.2억원",
+          "raw_krw": 93423000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 5915.3,
+          "display_text": "5,915.3억원",
+          "raw_krw": 591530000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "operating_margin_pct": {
+          "calculation_basis": "derived_from_reported",
+          "display_text": "3.5%",
+          "value": 3.5
+        },
+        "operating_profit": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 4378.1,
+          "display_text": "4,378.1억원",
+          "raw_krw": 437809000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "revenue": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 124503.5,
+          "display_text": "124,503.5억원",
+          "raw_krw": 12450347000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_assets": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 184598.4,
+          "display_text": "184,598.4억원",
+          "raw_krw": 18459842000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_borrowings": {
+          "calculation_basis": "verification_pending",
+          "disclosure_status": "verification_pending",
+          "display_eok": null,
+          "display_text": "검증 보류",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.borrowings",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_equity": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 55235.6,
+          "display_text": "55,235.6억원",
+          "raw_krw": 5523557000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "total_liabilities": {
+          "calculation_basis": "reported",
+          "disclosure_status": "reported",
+          "display_eok": 129362.9,
+          "display_text": "129,362.9억원",
+          "raw_krw": 12936285000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        "trade_receivables": {
+          "calculation_basis": "verification_pending",
+          "disclosure_status": "verification_pending",
+          "display_eok": null,
+          "display_text": "검증 보류",
+          "raw_krw": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            },
+            {
+              "section": "note.working_capital",
+              "source_ref": "gs-ec_opendart_2025_20260701000624",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        }
+      },
+      "latest_year": 2025,
+      "peer_benchmarks": [
+        {
+          "best_value": null,
+          "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "124,503.5억원",
+          "company_value": 12450347000000,
+          "comparable": false,
+          "comparison_currency": "KRW",
+          "comparison_direction": "higher_is_larger",
+          "comparison_financial_scope": "consolidated",
+          "comparison_group_id": "general_contractor",
+          "comparison_group_label": "건설사",
+          "comparison_label": "동일 유형 재무 비교 준비 중",
+          "comparison_universe_count": 1,
+          "comparison_year": 2025,
+          "current_company_included": true,
+          "median": null,
+          "median_difference_display": null,
+          "median_display": "확인되지 않음",
+          "metric_id": "revenue",
+          "not_comparable_reason": "같은 기업유형의 비교 가능한 감사재무가 3개 미만이라 상대 위치를 표시하지 않습니다.",
+          "other_peer_count": 0,
+          "peer_count": 1,
+          "rank": null,
+          "reference_value": null,
+          "reference_value_display": "확인되지 않음",
+          "reference_value_label": "비교 범위 최대값",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        {
+          "best_value": null,
+          "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "3.5%",
+          "company_value": 3.5,
+          "comparable": false,
+          "comparison_currency": "KRW",
+          "comparison_direction": "higher_is_larger",
+          "comparison_financial_scope": "consolidated",
+          "comparison_group_id": "general_contractor",
+          "comparison_group_label": "건설사",
+          "comparison_label": "동일 유형 재무 비교 준비 중",
+          "comparison_universe_count": 1,
+          "comparison_year": 2025,
+          "current_company_included": true,
+          "median": null,
+          "median_difference_display": null,
+          "median_display": "확인되지 않음",
+          "metric_id": "operating_margin_pct",
+          "not_comparable_reason": "같은 기업유형의 비교 가능한 감사재무가 3개 미만이라 상대 위치를 표시하지 않습니다.",
+          "other_peer_count": 0,
+          "peer_count": 1,
+          "rank": null,
+          "reference_value": null,
+          "reference_value_display": "확인되지 않음",
+          "reference_value_label": "비교 범위 최대값",
+          "source_ids": []
+        },
+        {
+          "best_value": null,
+          "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "5,915.3억원",
+          "company_value": 591530000000,
+          "comparable": false,
+          "comparison_currency": "KRW",
+          "comparison_direction": "higher_is_larger",
+          "comparison_financial_scope": "consolidated",
+          "comparison_group_id": "general_contractor",
+          "comparison_group_label": "건설사",
+          "comparison_label": "동일 유형 재무 비교 준비 중",
+          "comparison_universe_count": 1,
+          "comparison_year": 2025,
+          "current_company_included": true,
+          "median": null,
+          "median_difference_display": null,
+          "median_display": "확인되지 않음",
+          "metric_id": "operating_cash_flow",
+          "not_comparable_reason": "같은 기업유형의 비교 가능한 감사재무가 3개 미만이라 상대 위치를 표시하지 않습니다.",
+          "other_peer_count": 0,
+          "peer_count": 1,
+          "rank": null,
+          "reference_value": null,
+          "reference_value_display": "확인되지 않음",
+          "reference_value_label": "비교 범위 최대값",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        {
+          "best_value": null,
+          "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "검증 보류",
+          "company_value": null,
+          "comparable": false,
+          "comparison_currency": "KRW",
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_financial_scope": "consolidated",
+          "comparison_group_id": "general_contractor",
+          "comparison_group_label": "건설사",
+          "comparison_label": "동일 유형 재무 비교 준비 중",
+          "comparison_universe_count": 0,
+          "comparison_year": 2025,
+          "current_company_included": false,
+          "median": null,
+          "median_difference_display": null,
+          "median_display": "확인되지 않음",
+          "metric_id": "total_borrowings",
+          "not_comparable_reason": "현재 기업의 해당 지표값이 확인되지 않았습니다.",
+          "other_peer_count": 0,
+          "peer_count": 0,
+          "rank": null,
+          "reference_value": null,
+          "reference_value_display": "확인되지 않음",
+          "reference_value_label": "비교 범위 최소값",
+          "source_ids": [
+            "gs-ec_opendart_2025_20260701000624"
+          ]
+        },
+        {
+          "best_value": null,
+          "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "234.2%",
+          "company_value": 234.2,
+          "comparable": false,
+          "comparison_currency": "KRW",
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_financial_scope": "consolidated",
+          "comparison_group_id": "general_contractor",
+          "comparison_group_label": "건설사",
+          "comparison_label": "동일 유형 재무 비교 준비 중",
+          "comparison_universe_count": 1,
+          "comparison_year": 2025,
+          "current_company_included": true,
+          "median": null,
+          "median_difference_display": null,
+          "median_display": "확인되지 않음",
+          "metric_id": "liabilities_to_equity_pct",
+          "not_comparable_reason": "같은 기업유형의 비교 가능한 감사재무가 3개 미만이라 상대 위치를 표시하지 않습니다.",
+          "other_peer_count": 0,
+          "peer_count": 1,
+          "rank": null,
+          "reference_value": null,
+          "reference_value_display": "확인되지 않음",
+          "reference_value_label": "비교 범위 최소값",
+          "source_ids": []
+        },
+        {
+          "best_value": null,
+          "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
+          "company_display": "확인되지 않음",
+          "company_value": null,
+          "comparable": false,
+          "comparison_currency": "KRW",
+          "comparison_direction": "lower_is_lower_burden",
+          "comparison_financial_scope": "consolidated",
+          "comparison_group_id": "general_contractor",
+          "comparison_group_label": "건설사",
+          "comparison_label": "동일 유형 재무 비교 준비 중",
+          "comparison_universe_count": 0,
+          "comparison_year": 2025,
+          "current_company_included": false,
+          "median": null,
+          "median_difference_display": null,
+          "median_display": "확인되지 않음",
+          "metric_id": "receivables_to_revenue_pct",
+          "not_comparable_reason": "현재 기업의 해당 지표값이 확인되지 않았습니다.",
+          "other_peer_count": 0,
+          "peer_count": 0,
+          "rank": null,
+          "reference_value": null,
+          "reference_value_display": "확인되지 않음",
+          "reference_value_label": "비교 범위 최소값",
+          "source_ids": []
+        }
+      ],
+      "reporting_entity": "지에스건설 주식회사 및 연결대상 종속기업",
+      "source_schema_version": "company_audit_financials_v1",
+      "source_summary": {
+        "audit_opinions": [
+          {
+            "auditor": "한영회계법인",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+            "auditor_report_date_verification_status": "pending_manual_page_check",
+            "covered_years": [
+              2023
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "gs-ec_opendart_audit_2023_20240321001895"
+          },
+          {
+            "auditor": "한영회계법인",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+            "auditor_report_date_verification_status": "pending_manual_page_check",
+            "covered_years": [
+              2024
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "gs-ec_opendart_audit_2024_20250317000736"
+          },
+          {
+            "auditor": "한영회계법인",
+            "auditor_report_date": null,
+            "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+            "auditor_report_date_verification_status": "pending_manual_page_check",
+            "covered_years": [
+              2025
+            ],
+            "opinion": "unqualified",
+            "opinion_label_ko": "적정의견",
+            "source_ref": "gs-ec_opendart_audit_2025_20260316001192"
+          }
+        ],
+        "auditors": [
+          "한영회계법인"
+        ],
+        "latest_report_date": "2026-07-01",
+        "pending_location_count": 84,
+        "primary_documents": [
+          {
+            "filename": "OpenDART receipt 20260630000500",
+            "report_date": "2026-06-30",
+            "source_ref": "gs-ec_opendart_2023_20260630000500",
+            "source_role": "primary"
+          },
+          {
+            "filename": "OpenDART receipt 20260701000540",
+            "report_date": "2026-07-01",
+            "source_ref": "gs-ec_opendart_2024_20260701000540",
+            "source_role": "primary"
+          },
+          {
+            "filename": "OpenDART receipt 20260701000624",
+            "report_date": "2026-07-01",
+            "source_ref": "gs-ec_opendart_2025_20260701000624",
+            "source_role": "primary"
+          }
+        ],
+        "source_priority_by_year": {
+          "2023": {
+            "basis": "current_year_financial_statements",
+            "cross_check_source_refs": [
+              "gs-ec_opendart_audit_2023_20240321001895"
+            ],
+            "primary_source_ref": "gs-ec_opendart_2023_20260630000500"
+          },
+          "2024": {
+            "basis": "current_year_financial_statements",
+            "cross_check_source_refs": [
+              "gs-ec_opendart_audit_2024_20250317000736"
+            ],
+            "primary_source_ref": "gs-ec_opendart_2024_20260701000540"
+          },
+          "2025": {
+            "basis": "current_year_financial_statements",
+            "cross_check_source_refs": [
+              "gs-ec_opendart_audit_2025_20260316001192"
+            ],
+            "primary_source_ref": "gs-ec_opendart_2025_20260701000624"
+          }
+        },
+        "verified_location_count": 0
+      },
+      "trend_signals": [
+        {
+          "based_on_years": [
+            2023,
+            2025
+          ],
+          "code": "revenue_decreased",
+          "description": "2023년 대비 2025년 매출액이 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 12450347000000,
+            "start_raw_krw": 13436684904471
+          },
+          "title": "매출 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "operating_margin_improved",
+          "description": "2024년 대비 2025년 영업이익률이 개선됐다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 3.5,
+            "previous_pct": 2.2
+          },
+          "title": "영업이익률 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "operating_cash_flow_positive",
+          "description": "2025년 영업현금흐름은 양수다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 591530000000
+          },
+          "title": "영업현금흐름 상태"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "borrowings_unknown",
+          "description": "2024년 대비 2025년 총차입금이 확인되지 않았다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": null,
+            "previous_raw_krw": null
+          },
+          "title": "차입금 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "receivables_unknown",
+          "description": "2024년 대비 2025년 매출채권 합계가 확인되지 않았다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": null,
+            "previous_raw_krw": null
+          },
+          "title": "매출채권 방향"
+        },
+        {
+          "based_on_years": [
+            2024,
+            2025
+          ],
+          "code": "inventory_decreased",
+          "description": "2024년 대비 2025년 재고자산이 감소했다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_raw_krw": 1163292000000,
+            "previous_raw_krw": 1280005616400
+          },
+          "title": "재고 방향"
+        },
+        {
+          "based_on_years": [
+            2025
+          ],
+          "code": "current_ratio_above_100",
+          "description": "2025년 유동비율은 115.9%다.",
+          "interpretation_type": "rule_based",
+          "level": "info",
+          "metric_values": {
+            "latest_pct": 115.9
+          },
+          "title": "유동비율 상태"
+        }
+      ],
+      "trends": {
+        "liabilities_to_equity": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "-15.8%p",
+          "change_pct": -6.3,
+          "change_pct_unavailable_reason": null,
+          "change_value": -15.800000000000011,
+          "explanation": "총부채와 자본의 비율 변화를 확인합니다.",
+          "headline": "부채비율 변화",
+          "latest_display": "234.2%",
+          "latest_year": 2025,
+          "metric_ids": [
+            "liabilities_to_equity_pct"
+          ],
+          "previous_display": "250.0%",
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "decreased"
+        },
+        "operating_cash_flow": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "+3,237.2억원",
+          "change_pct": 120.9,
+          "change_pct_unavailable_reason": null,
+          "change_value": 323717645407,
+          "explanation": "회계상 이익이 현금창출로 이어지는지 확인합니다.",
+          "headline": "영업현금흐름 변화",
+          "latest_display": "5,915.3억원",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_cash_flow"
+          ],
+          "previous_display": "2,678.1억원",
+          "previous_year": 2024,
+          "source_ids": [
+            "gs-ec_opendart_2024_20260701000540",
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "increased"
+        },
+        "operating_margin": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "+1.3%p",
+          "change_pct": 59.1,
+          "change_pct_unavailable_reason": null,
+          "change_value": 1.2999999999999998,
+          "explanation": "영업이익률의 전년 대비 변화폭을 확인합니다.",
+          "headline": "영업이익률 변화",
+          "latest_display": "3.5%",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_margin_pct"
+          ],
+          "previous_display": "2.2%",
+          "previous_year": 2024,
+          "source_ids": [],
+          "status": "increased"
+        },
+        "operating_profit": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "+1,518.5억원",
+          "change_pct": 53.1,
+          "change_pct_unavailable_reason": null,
+          "change_value": 151854664213,
+          "explanation": "영업이익의 금액 변화만 표시하며 수익성 판단은 영업이익률과 함께 봅니다.",
+          "headline": "영업이익 변화",
+          "latest_display": "4,378.1억원",
+          "latest_year": 2025,
+          "metric_ids": [
+            "operating_profit"
+          ],
+          "previous_display": "2,859.5억원",
+          "previous_year": 2024,
+          "source_ids": [
+            "gs-ec_opendart_2024_20260701000540",
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "increased"
+        },
+        "revenue": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "-4,134.6억원",
+          "change_pct": -3.2,
+          "change_pct_unavailable_reason": null,
+          "change_value": -413464468386,
+          "explanation": "최근 연도 매출을 직전 연도와 비교합니다.",
+          "headline": "매출 변화",
+          "latest_display": "124,503.5억원",
+          "latest_year": 2025,
+          "metric_ids": [
+            "revenue"
+          ],
+          "previous_display": "128,638.1억원",
+          "previous_year": 2024,
+          "source_ids": [
+            "gs-ec_opendart_2024_20260701000540",
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "decreased"
+        },
+        "total_borrowings": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "계산되지 않음",
+          "change_pct": null,
+          "change_pct_unavailable_reason": "최신 연도 또는 직전 연도 값이 없어 변화율을 계산하지 않습니다.",
+          "change_value": null,
+          "explanation": "차입금 부담의 방향만 표시하며 부실 판단은 하지 않습니다.",
+          "headline": "총차입금 변화",
+          "latest_display": "검증 보류",
+          "latest_year": 2025,
+          "metric_ids": [
+            "total_borrowings"
+          ],
+          "previous_display": "검증 보류",
+          "previous_year": 2024,
+          "source_ids": [
+            "gs-ec_opendart_2024_20260701000540",
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "additional_confirmation_required"
+        },
+        "trade_receivables": {
+          "calculation_basis": "latest_year_vs_previous_year",
+          "change_display": "계산되지 않음",
+          "change_pct": null,
+          "change_pct_unavailable_reason": "최신 연도 또는 직전 연도 값이 없어 변화율을 계산하지 않습니다.",
+          "change_value": null,
+          "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
+          "headline": "채권 변화",
+          "latest_display": "검증 보류",
+          "latest_year": 2025,
+          "metric_ids": [
+            "receivables_total"
+          ],
+          "previous_display": "검증 보류",
+          "previous_year": 2024,
+          "source_ids": [
+            "gs-ec_opendart_2024_20260701000540",
+            "gs-ec_opendart_2025_20260701000624"
+          ],
+          "status": "additional_confirmation_required"
+        }
+      }
+    },
+    {
+      "attribution": {
         "attribution_warning": "연결 재무제표 기준으로 금강공업과 연결종속기업 실적이 포함되어 있으며, 제품과 용역 매출 또는 연결 총매출을 모듈러 사업 매출로 자동 해석하지 않는다.",
         "financial_scope": "consolidated",
         "modular_segment_revenue_disclosed": true,
