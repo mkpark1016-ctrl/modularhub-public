@@ -83,6 +83,7 @@ def test_nrb_uses_existing_company_id_and_is_publicly_discovered() -> None:
     assert {company["company_id"] for company in public_companies} == {
         "daeseung-engineering",
         "geogwang-enterprise",
+        "gs-ec",
         "kumkang-kind",
         "nrb",
         "planm",
