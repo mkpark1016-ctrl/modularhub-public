@@ -1,0 +1,44 @@
+name: Final Working Capital Reconciliation QA
+
+on:
+  push:
+    branches:
+      - feat/general-contractor-working-capital-reconciliation
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -r requirements.txt pytest
+      - name: Python and generated-data regressions
+        run: |
+          python -m pytest -q \
+            tests/test_general_contractor_working_capital.py \
+            tests/test_general_contractor_receivable_reconciliation.py \
+            tests/test_general_contractor_dart_audit_adapter.py \
+            tests/test_company_report_insights.py \
+            tests/test_company_audit_financials.py
+          python scripts/build_company_report_insights.py --check --base-ref origin/main
+          python -m compileall scripts src
+          git diff --check
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Frontend regressions, lint and build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run test:companies-detail
+          npm run test:companies-v2
+          npm run lint
+          npm run build
