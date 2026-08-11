@@ -35,8 +35,8 @@ jobs:
           python -m pytest -q tests/test_general_contractor_dart_audit_adapter.py
           python scripts/test_opendart_client.py
 
-      - name: Build live four-contractor CFS candidates
-        run: python scripts/build_general_contractor_dart_audit_candidates.py --require-all-valid
+      - name: Build live DL E&C CFS candidate
+        run: python scripts/build_general_contractor_dart_audit_candidates.py --companies dl-enc --require-all-valid
 
       - name: Run existing audit/report regressions
         run: python -m pytest -q tests/test_company_audit_financials.py tests/test_company_report_insights.py
@@ -75,7 +75,7 @@ jobs:
         if: always()
         run: |
           echo "## General Contractor DART Audit QA" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Scope: CFS / 2023-2025 / four canonical general contractors" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Scope: targeted DL E&C CFS / 2023-2025 receipt-lineage verification" >> "$GITHUB_STEP_SUMMARY"
           echo "- Public data writes: none" >> "$GITHUB_STEP_SUMMARY"
           if [ -f artifacts/general-contractor-dart-audit/summary.json ]; then
             python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
@@ -84,6 +84,6 @@ jobs:
           summary = json.loads(Path('artifacts/general-contractor-dart-audit/summary.json').read_text(encoding='utf-8'))
           print(f"- Valid candidates: {summary.get('valid_count')} / {summary.get('requested_count')}")
           for company_id, row in summary.get('companies', {}).items():
-              print(f"- {company_id}: {row.get('status')} / valid={row.get('valid')} / rows={row.get('structured_row_counts')} / pending={row.get('pending_metrics')}")
+              print(f"- {company_id}: {row.get('status')} / valid={row.get('valid')} / rows={row.get('structured_row_counts')} / receipts={row.get('structured_receipts')} / pending={row.get('pending_metrics')}")
           PY
           fi
