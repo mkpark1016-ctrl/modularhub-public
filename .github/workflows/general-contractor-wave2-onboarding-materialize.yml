@@ -7,14 +7,12 @@ on:
 
 permissions:
   contents: write
-
-env:
-  OPENDART_API_KEY: ${{ secrets.DART_API_KEY }}
+  actions: read
 
 jobs:
   materialize:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,12 +27,25 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install jsonschema pytest
 
-      - name: Generate three live CFS candidates
+      - name: Download previously validated final matrix candidates
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 31452634481
+          pattern: dart-audit-*
+          path: artifacts/general-contractor-dart-audit
+          merge-multiple: true
+
+      - name: Verify candidate artifact contract
         run: |
-          python scripts/build_general_contractor_dart_audit_candidates.py \
-            --companies samsung-ct-construction,hyundai-engineering,dl-enc \
-            --output-dir artifacts/general-contractor-dart-audit \
-            --require-all-valid
+          for company in samsung-ct-construction hyundai-engineering dl-enc; do
+            test -f "artifacts/general-contractor-dart-audit/${company}/candidate_audit_financials.json"
+            test -f "artifacts/general-contractor-dart-audit/${company}/diagnostics.json"
+            python scripts/validate_company_audit_financials.py \
+              --input "artifacts/general-contractor-dart-audit/${company}/candidate_audit_financials.json" \
+              --expected-years 2023 2024 2025 \
+              --base-ref origin/main
+          done
 
       - name: Materialize onboarding inputs and manifests
         run: |
