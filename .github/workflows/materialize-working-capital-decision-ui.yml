@@ -55,6 +55,7 @@ jobs:
           git add \
             scripts/build_company_report_insights.py \
             frontend/src/components/company/CompanyAuditFinancialPanel.jsx \
-            frontend/public/data/companies/company_report_insights.json
+            frontend/public/data/companies/company_report_insights.json \
+            tests/test_company_report_insights.py
           git commit -m "refactor: separate working capital from receivables burden [ui-materialized]"
           git push origin HEAD:refactor/general-contractor-working-capital-decision-ui
