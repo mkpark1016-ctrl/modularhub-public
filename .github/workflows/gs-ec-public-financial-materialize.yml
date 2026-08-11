@@ -82,7 +82,7 @@ jobs:
           import json
           from pathlib import Path
           payload = json.loads(Path('frontend/public/data/companies/company_report_insights.json').read_text(encoding='utf-8'))
-          items = payload.get('items') or []
+          items = payload.get('companies') or []
           rows = [row for row in items if row.get('company_id') == 'gs-ec']
           assert len(rows) == 1, len(rows)
           row = rows[0]
