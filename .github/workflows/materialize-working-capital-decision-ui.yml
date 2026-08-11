@@ -21,7 +21,9 @@ jobs:
         with:
           python-version: "3.11"
       - name: Apply working-capital decision refactor
-        run: python scripts/_apply_working_capital_decision_refactor.py
+        run: |
+          python scripts/_apply_working_capital_decision_refactor.py
+          python scripts/_patch_detail_test_working_capital.py
       - name: Install Python dependencies
         run: python -m pip install -r requirements.txt pytest
       - name: Rebuild financial insight View Model
@@ -56,6 +58,7 @@ jobs:
             scripts/build_company_report_insights.py \
             frontend/src/components/company/CompanyAuditFinancialPanel.jsx \
             frontend/public/data/companies/company_report_insights.json \
-            tests/test_company_report_insights.py
+            tests/test_company_report_insights.py \
+            frontend/scripts/test-company-detail-ui.mjs
           git commit -m "refactor: separate working capital from receivables burden [ui-materialized]"
           git push origin HEAD:refactor/general-contractor-working-capital-decision-ui
