@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ExternalLink, Search } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import {
   COMPANY_ACTIVITY_FILTERS,
   COMPANY_ACTIVITY_PERIOD_FILTERS,
@@ -74,18 +74,16 @@ export default function CompanyActivityTimeline({ activities = [] }) {
       <div className="company-toolbar company-activity-toolbar" aria-label="기업 활동 검색 및 정렬">
         <label className="company-activity-toolbar-control company-activity-search-control">
           <span className="company-activity-toolbar-label">활동 검색</span>
-          <span className="search-input-wrap">
-            <Search size={15} aria-hidden="true" />
-            <input
-              type="search"
-              value={query}
-              placeholder="제목·요약·출처 검색"
-              onChange={(event) => {
-                setQuery(event.target.value);
-                resetVisibleCount();
-              }}
-            />
-          </span>
+          <input
+            className="company-activity-search-input"
+            type="search"
+            value={query}
+            placeholder="제목·요약·출처 검색"
+            onChange={(event) => {
+              setQuery(event.target.value);
+              resetVisibleCount();
+            }}
+          />
         </label>
         <label className="company-activity-toolbar-control company-activity-period-control">
           <span className="company-activity-toolbar-label">기간</span>
