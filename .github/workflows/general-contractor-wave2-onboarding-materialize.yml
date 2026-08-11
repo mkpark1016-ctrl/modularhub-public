@@ -1,0 +1,192 @@
+name: General Contractor Wave2 Onboarding Materialize
+
+on:
+  push:
+    branches:
+      - feat/general-contractor-dart-audit-onboarding-wave2
+
+permissions:
+  contents: write
+
+env:
+  OPENDART_API_KEY: ${{ secrets.DART_API_KEY }}
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install jsonschema pytest
+
+      - name: Generate three live CFS candidates
+        run: |
+          python scripts/build_general_contractor_dart_audit_candidates.py \
+            --companies samsung-ct-construction,hyundai-engineering,dl-enc \
+            --output-dir artifacts/general-contractor-dart-audit \
+            --require-all-valid
+
+      - name: Materialize onboarding inputs and manifests
+        run: |
+          python - <<'PY'
+          import json
+          import shutil
+          from pathlib import Path
+
+          companies = [
+              'samsung-ct-construction',
+              'hyundai-engineering',
+              'dl-enc',
+          ]
+          required = [
+              'income_statement.revenue',
+              'income_statement.gross_profit',
+              'income_statement.operating_profit',
+              'income_statement.net_income',
+              'balance_sheet.total_assets',
+              'balance_sheet.total_liabilities',
+              'balance_sheet.total_equity',
+              'balance_sheet.current_assets',
+              'balance_sheet.current_liabilities',
+              'cash_flow.operating_cash_flow',
+              'cash_flow.investing_cash_flow',
+              'cash_flow.financing_cash_flow',
+              'cash_flow.ending_cash',
+          ]
+          optional = [
+              'revenue_breakdown.goods_revenue',
+              'revenue_breakdown.product_revenue',
+              'revenue_breakdown.construction_revenue',
+              'revenue_breakdown.rental_revenue',
+              'revenue_breakdown.other_revenue',
+              'working_capital.trade_receivables_gross',
+              'working_capital.construction_receivables_gross',
+              'working_capital.inventory',
+              'working_capital.work_in_progress',
+              'borrowings.short_term_borrowings',
+              'borrowings.current_portion_long_term_borrowings',
+              'borrowings.long_term_borrowings',
+              'investment_signals.construction_in_progress',
+              'investment_signals.industrial_property_rights',
+              'investment_signals.research_and_development_expense',
+          ]
+          for company_id in companies:
+              source = Path(f'artifacts/general-contractor-dart-audit/{company_id}/candidate_audit_financials.json')
+              onboarding_dir = Path(f'data/company_reports/{company_id}/onboarding')
+              onboarding_dir.mkdir(parents=True, exist_ok=True)
+              candidate_path = onboarding_dir / 'candidate_audit_financials.json'
+              shutil.copyfile(source, candidate_path)
+              candidate = json.loads(candidate_path.read_text(encoding='utf-8'))
+              manifest = {
+                  'schema_version': 'company_report_onboarding_manifest_v1',
+                  'company_id': company_id,
+                  'company_name': candidate['company_name'],
+                  'reporting_entity': candidate['reporting_entity'],
+                  'financial_scope': 'consolidated',
+                  'currency': 'KRW',
+                  'unit': 'won',
+                  'target_years': [2023, 2024, 2025],
+                  'candidate_input_path': str(candidate_path).replace('\\', '/'),
+                  'staging_output_path': f'data/company_reports/{company_id}/staging/audit_financials_2023_2025.json',
+                  'public_output_path': f'data/company_reports/{company_id}/audit_financials_2023_2025.json',
+                  'replace_existing': False,
+                  'source_priority': {
+                      year: {
+                          'primary_source_ref': item['primary_source_ref'],
+                          'cross_check_source_refs': item.get('cross_check_source_refs', []),
+                      }
+                      for year, item in candidate['source_priority'].items()
+                  },
+                  'required_metrics': required,
+                  'optional_metrics': optional,
+                  'allowed_warning_codes': [
+                      'optional_metric_verification_pending',
+                      'pending_manual_page_check',
+                      'revenue_breakdown_check_unavailable',
+                  ],
+                  'promotion_policy': {
+                      'require_zero_blockers': True,
+                      'require_source_review_acknowledgement': True,
+                      'require_public_change_acknowledgement': True,
+                      'allow_verification_pending_required_metrics': False,
+                  },
+              }
+              (onboarding_dir / 'manifest.json').write_text(
+                  json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + '\n',
+                  encoding='utf-8',
+              )
+          PY
+
+      - name: Guarded validate and stage three companies
+        run: |
+          for company in samsung-ct-construction hyundai-engineering dl-enc; do
+            manifest="data/company_reports/${company}/onboarding/manifest.json"
+            set +e
+            python scripts/onboard_company_report.py validate --manifest "$manifest"
+            validate_code=$?
+            set -e
+            if [ "$validate_code" -ne 0 ] && [ "$validate_code" -ne 2 ]; then
+              exit "$validate_code"
+            fi
+            set +e
+            python scripts/onboard_company_report.py stage --manifest "$manifest"
+            stage_code=$?
+            set -e
+            if [ "$stage_code" -ne 0 ] && [ "$stage_code" -ne 2 ]; then
+              exit "$stage_code"
+            fi
+            test -f "data/company_reports/${company}/staging/audit_financials_2023_2025.json"
+          done
+
+      - name: Regression checks
+        run: |
+          python -m pytest -q tests/test_company_report_onboarding.py tests/test_company_audit_financials.py tests/test_company_report_insights.py tests/test_general_contractor_dart_audit_adapter.py
+          python scripts/build_company_report_insights.py --check
+          python -m compileall scripts src
+          git diff --exit-code origin/main...HEAD -- \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json \
+            frontend/public/data/news.json \
+            frontend/public/data/business.json \
+            frontend/public/data/meta.json
+          git diff --check
+
+      - name: Commit staged wave2 onboarding data
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add \
+            data/company_reports/samsung-ct-construction/onboarding/candidate_audit_financials.json \
+            data/company_reports/samsung-ct-construction/onboarding/manifest.json \
+            data/company_reports/samsung-ct-construction/staging/audit_financials_2023_2025.json \
+            data/company_reports/hyundai-engineering/onboarding/candidate_audit_financials.json \
+            data/company_reports/hyundai-engineering/onboarding/manifest.json \
+            data/company_reports/hyundai-engineering/staging/audit_financials_2023_2025.json \
+            data/company_reports/dl-enc/onboarding/candidate_audit_financials.json \
+            data/company_reports/dl-enc/onboarding/manifest.json \
+            data/company_reports/dl-enc/staging/audit_financials_2023_2025.json
+          git diff --cached --check
+          git commit -m "Stage remaining contractor OpenDART audit financials"
+          git push origin HEAD:feat/general-contractor-dart-audit-onboarding-wave2
+
+      - name: Upload onboarding artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: general-contractor-wave2-onboarding
+          path: |
+            artifacts/general-contractor-dart-audit/**
+            artifacts/company-report-onboarding/**
+          if-no-files-found: warn
+          retention-days: 7
