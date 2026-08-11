@@ -88,8 +88,21 @@ new_working = '''        "working_capital": health_item(
 builder = replace_once(builder, old_working, new_working, "working capital health item")
 builder = replace_once(
     builder,
-    '"financial_health": build_financial_health(latest_year, latest_metrics, derived, source_summary, attribution),',
-    '"financial_health": build_financial_health(latest_year, latest_metrics, series[-1]["metrics"], derived, source_summary, attribution),',
+    '''        "financial_health": build_financial_health(
+            latest_year,
+            latest_metrics,
+            derived,
+            source_summary,
+            source_payload["entity_attribution"],
+        ),''',
+    '''        "financial_health": build_financial_health(
+            latest_year,
+            latest_metrics,
+            financial_series[-1]["metrics"],
+            derived,
+            source_summary,
+            source_payload["entity_attribution"],
+        ),''',
     "financial health call",
 )
 builder_path.write_text(builder, encoding="utf-8")
