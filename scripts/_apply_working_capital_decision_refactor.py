@@ -14,9 +14,9 @@ builder_path = Path("scripts/build_company_report_insights.py")
 builder = builder_path.read_text(encoding="utf-8")
 builder = replace_once(
     builder,
-    '    "operating_cash_flow",\n    "total_assets",',
-    '    "operating_cash_flow",\n    "current_assets",\n    "current_liabilities",\n    "total_assets",',
-    "latest metric current assets/liabilities",
+    "def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], derived: dict[str, Any], source_summary: dict[str, Any], attribution: dict[str, Any]) -> dict[str, Any]:",
+    "def build_financial_health(latest_year: int, latest_metrics: dict[str, Any], latest_series_metrics: dict[str, Any], derived: dict[str, Any], source_summary: dict[str, Any], attribution: dict[str, Any]) -> dict[str, Any]:",
+    "financial health signature",
 )
 builder = replace_once(
     builder,
@@ -31,8 +31,8 @@ builder = replace_once(
     '    coverage_status = "watch" if source_summary.get("pending_location_count") else "info"',
     '    receivables = latest_metrics.get("receivables_total")\n'
     '    receivables_ratio = latest_derived.get("receivables_to_revenue_pct")\n'
-    '    current_assets = latest_metrics.get("current_assets")\n'
-    '    current_liabilities = latest_metrics.get("current_liabilities")\n'
+    '    current_assets = latest_series_metrics.get("current_assets")\n'
+    '    current_liabilities = latest_series_metrics.get("current_liabilities")\n'
     '    current_ratio = latest_derived.get("current_ratio_pct")\n'
     '    liabilities_ratio = latest_derived.get("liabilities_to_equity_pct")\n'
     '    source_ids = metric_source_refs(revenue) + metric_source_refs(operating_profit)\n'
@@ -86,6 +86,12 @@ new_working = '''        "working_capital": health_item(
         ),
 '''
 builder = replace_once(builder, old_working, new_working, "working capital health item")
+builder = replace_once(
+    builder,
+    '"financial_health": build_financial_health(latest_year, latest_metrics, derived, source_summary, attribution),',
+    '"financial_health": build_financial_health(latest_year, latest_metrics, series[-1]["metrics"], derived, source_summary, attribution),',
+    "financial health call",
+)
 builder_path.write_text(builder, encoding="utf-8")
 
 panel_path = Path("frontend/src/components/company/CompanyAuditFinancialPanel.jsx")
@@ -196,3 +202,18 @@ panel = replace_once(
     "receivables burden auxiliary panel",
 )
 panel_path.write_text(panel, encoding="utf-8")
+
+test_path = Path("tests/test_company_report_insights.py")
+test_text = test_path.read_text(encoding="utf-8")
+test_text = replace_once(
+    test_text,
+    '    assert working_capital["threshold"] == 30\n    assert "단정하지 않습니다" in working_capital["interpretation_scope"]',
+    '    assert working_capital["rule_id"] == "current_ratio_liquidity_observation"\n'
+    '    assert working_capital["threshold"] == 100\n'
+    '    assert "단정하지 않습니다" in working_capital["interpretation_scope"]\n'
+    '    receivables_burden = company["financial_health"]["receivables_burden"]\n'
+    '    assert receivables_burden["rule_id"] == "receivables_to_revenue_observation"\n'
+    '    assert receivables_burden["threshold"] == 30',
+    "existing financial health regression",
+)
+test_path.write_text(test_text, encoding="utf-8")
