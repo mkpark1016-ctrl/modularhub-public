@@ -1,0 +1,146 @@
+name: GS E&C Public Financial Materialize
+
+on:
+  push:
+    branches:
+      - feat/gs-ec-dart-audit-financials
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          python -m pip install jsonschema pytest
+          cd frontend
+          npm ci
+
+      - name: Promote staged GS source into public audit source path
+        run: |
+          cp data/company_reports/gs-ec/staging/audit_financials_2023_2025.json \
+            data/company_reports/gs-ec/audit_financials_2023_2025.json
+          python scripts/validate_company_audit_financials.py \
+            --input data/company_reports/gs-ec/audit_financials_2023_2025.json \
+            --expected-years 2023 2024 2025 \
+            --base-ref origin/main
+
+      - name: Rebuild derived financial insights and coverage
+        run: |
+          python scripts/build_company_report_insights.py
+          python scripts/build_company_data_coverage.py --as-of-date 2026-08-11
+
+      - name: Update GS rich-financial frontend regression
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('frontend/scripts/test-company-detail-ui.mjs')
+          text = path.read_text(encoding='utf-8')
+          old = 'assert.equal(getCompanyReportInsight(reportPayload, "gs-ec"), null, "companies without report insights should fall back to legacy financial UI");'
+          new = '''const gsReport = getCompanyReportInsight(reportPayload, "gs-ec");
+          assert.ok(gsReport, "gs-ec should use the common audit financial panel after OpenDART promotion");
+          assert.deepEqual(reportYears(gsReport), [2023, 2024, 2025]);
+          assert.equal(gsReport.financial_scope, "consolidated");
+          assert.equal(gsReport.latest_year, 2025);
+          assert.equal(reportMetricByYear(gsReport, 2025, "revenue").raw_krw, 12450347000000);
+          assert.equal(reportMetricByYear(gsReport, 2025, "operating_profit").raw_krw, 437809000000);
+          assert.equal(reportMetricByYear(gsReport, 2025, "operating_cash_flow").raw_krw, 591530000000);
+          assert.equal(metricDisplayText(reportRatioByYear(gsReport, 2025, "operating_margin_pct")), "3.5%");
+          assert.equal(reportMetricByYear(gsReport, 2025, "total_borrowings").raw_krw, null);
+          assert.equal(reportMetricByYear(gsReport, 2025, "receivables_total").raw_krw, null);
+          assert.equal(gsReport.financial_health.cash_generation.status === "info" || gsReport.financial_health.cash_generation.status === "watch", true);
+          assert.equal(gsReport.financial_health.profitability.status === "info" || gsReport.financial_health.profitability.status === "watch", true);
+          assert.ok(gsReport.financial_health.leverage, "GS leverage decision factor should render from liabilities/equity even when borrowings are pending");
+          assert.ok(gsReport.financial_health.working_capital, "GS working-capital decision factor should remain visible when receivables need confirmation");
+          assert.equal(gsReport.source_summary.audit_opinions.at(-1).opinion, "unqualified");
+          assert.equal(gsReport.source_summary.audit_opinions.at(-1).auditor, "한영회계법인");'''
+          if old not in text:
+              raise SystemExit('GS fallback regression anchor not found')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+
+      - name: Validate generated GS View Model
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('frontend/public/data/companies/company_report_insights.json').read_text(encoding='utf-8'))
+          items = payload.get('items') or []
+          rows = [row for row in items if row.get('company_id') == 'gs-ec']
+          assert len(rows) == 1, len(rows)
+          row = rows[0]
+          assert row['latest_year'] == 2025
+          assert row['financial_scope'] == 'consolidated'
+          assert row['latest_metrics']['revenue']['raw_krw'] == 12450347000000
+          assert row['latest_metrics']['operating_profit']['raw_krw'] == 437809000000
+          assert row['latest_metrics']['operating_cash_flow']['raw_krw'] == 591530000000
+          assert row['derived_metrics_by_year']['2025']['operating_margin_pct']['raw_value'] == '3.5'
+          assert row['derived_metrics_by_year']['2025']['total_borrowings']['raw_krw'] is None
+          assert row['derived_metrics_by_year']['2025']['receivables_total']['raw_krw'] is None
+          assert set(row['financial_health']) >= {'cash_generation', 'profitability', 'leverage', 'working_capital'}
+          print('GS report insight validation PASS')
+          PY
+
+      - name: Python regressions
+        run: |
+          python scripts/build_company_report_insights.py --check
+          python scripts/build_company_data_coverage.py --as-of-date 2026-08-11 --check
+          python -m pytest -q
+          python -m compileall scripts src
+
+      - name: Frontend regressions
+        working-directory: frontend
+        run: |
+          npm run test:companies
+          npm run test:companies-detail
+          npm run test:companies-comparison
+          npm run test:companies-v2
+          node scripts/test-company-financial-dashboard.mjs
+          node scripts/test-company-financial-trend-grid.mjs
+          node scripts/test-company-financial-four-factor-summary.mjs
+          npm run lint
+          npm run build
+
+      - name: Diff and protected-source checks
+        run: |
+          git diff --check
+          git diff --exit-code origin/main...HEAD -- \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/meta.json \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json
+          if find data/company_reports/gs-ec -type f -iname '*.pdf' -print -quit | grep -q .; then
+            echo 'PDF must not be committed'
+            exit 1
+          fi
+
+      - name: Commit GS public financial promotion
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add \
+            data/company_reports/gs-ec/audit_financials_2023_2025.json \
+            data/company_reports/company_data_coverage_snapshot.json \
+            frontend/public/data/companies/company_report_insights.json \
+            frontend/scripts/test-company-detail-ui.mjs
+          git diff --cached --check
+          git commit -m "Promote GS E&C OpenDART audit financials"
+          git push origin HEAD:feat/gs-ec-dart-audit-financials
