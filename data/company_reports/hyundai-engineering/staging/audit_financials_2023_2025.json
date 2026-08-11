@@ -1,0 +1,1407 @@
+{
+  "accounting_standard": {
+    "code": "k_ifrs",
+    "label_en": "K-IFRS",
+    "label_ko": "한국채택국제회계기준"
+  },
+  "audit_opinions": [
+    {
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "hyundai-engineering_opendart_2023_20240328001259"
+    },
+    {
+      "auditor": "안진회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "hyundai-engineering_opendart_2024_20251111000074"
+    },
+    {
+      "auditor": "안진회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2025
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "hyundai-engineering_opendart_2025_20260331003081"
+    }
+  ],
+  "company_id": "hyundai-engineering",
+  "company_name": "현대엔지니어링",
+  "currency": "KRW",
+  "disclosure_limitations": [
+    "연결재무제표 기준 회사 전체 실적이며 모듈러 사업부문 별도 실적으로 해석하지 않는다.",
+    "OpenDART 전체재무제표 API에서 직접 확정할 수 없는 주석 계정은 verification_pending으로 유지한다.",
+    "총차입금·채권·세부 매출구성은 구성 계정이 모두 검증된 경우에만 파생 계산한다."
+  ],
+  "entity_attribution": {
+    "attribution_warning": "연결재무제표는 회사와 연결대상 종속기업의 실적을 포함합니다. 회사 전체 매출 또는 건설 매출을 모듈러 사업 매출로 자동 해석하지 않습니다.",
+    "financial_scope": "consolidated",
+    "modular_segment_revenue_disclosed": false,
+    "related_entity_attribution_required": true,
+    "reporting_entity": "현대엔지니어링 주식회사 및 연결대상 종속기업",
+    "special_events": []
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 6441575000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 3948274000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 8071956000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 3881096000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 4190860000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 0,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 1357330000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -81822000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 227405000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -100123000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 638945000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 201999000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 255177000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 13063327000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        }
+      },
+      "source_refs": [
+        "hyundai-engineering_opendart_2023_20240328001259"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 115009000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2023_20240328001259",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2023_20240328001259"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 7371374000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 6393626000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 9431171000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 2762945000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 6668226000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 520000000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 1733110000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 440063000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -7249000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -138042000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": -791061000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": -990640000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": -1240068000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 14760411000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        }
+      },
+      "source_refs": [
+        "hyundai-engineering_opendart_2024_20251111000074"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 93506000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2024_20251111000074",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2024_20251111000074"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 7915519000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 6240060000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 9882600000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 3091309000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 6791291000000,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 100000000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 930000000000,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 1388866000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 646060000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 19247000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -987129000000,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 913205000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 295053000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 277859000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 13896504000000,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        }
+      },
+      "source_refs": [
+        "hyundai-engineering_opendart_2025_20260331003081"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 265260000000,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "hyundai-engineering_opendart_2025_20260331003081",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "hyundai-engineering_opendart_2025_20260331003081"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "현대엔지니어링 주식회사 및 연결대상 종속기업",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "hyundai-engineering_opendart_2023_20240328001259": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "filename": "OpenDART receipt 20240328001259",
+      "report_date": "2024-03-28",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API와 해당 공시 원문을 결합한 자동 온보딩 후보"
+    },
+    "hyundai-engineering_opendart_2024_20251111000074": {
+      "audit_opinion": "unqualified",
+      "auditor": "안진회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "filename": "OpenDART receipt 20251111000074",
+      "report_date": "2025-11-11",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API와 해당 공시 원문을 결합한 자동 온보딩 후보"
+    },
+    "hyundai-engineering_opendart_2025_20260331003081": {
+      "audit_opinion": "unqualified",
+      "auditor": "안진회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2025
+      ],
+      "filename": "OpenDART receipt 20260331003081",
+      "report_date": "2026-03-31",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API와 해당 공시 원문을 결합한 자동 온보딩 후보"
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "hyundai-engineering_opendart_2023_20240328001259"
+    },
+    "2024": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "hyundai-engineering_opendart_2024_20251111000074"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "hyundai-engineering_opendart_2025_20260331003081"
+    }
+  },
+  "unit": "won",
+  "validation_metadata": {
+    "amount_storage": "KRW integer won",
+    "created_for": "OpenDART general-contractor consolidated audit-financial onboarding",
+    "derived_metrics_storage": "not stored; derived by build_company_report_insights.py",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "pdf_handling": "OpenDART API/XML sources only; source PDFs are not committed",
+    "public_ui_impact": "none until guarded validation and promotion complete"
+  }
+}

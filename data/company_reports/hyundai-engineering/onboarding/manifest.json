@@ -1,0 +1,75 @@
+{
+  "allowed_warning_codes": [
+    "optional_metric_verification_pending",
+    "pending_manual_page_check",
+    "revenue_breakdown_check_unavailable"
+  ],
+  "candidate_input_path": "data/company_reports/hyundai-engineering/onboarding/candidate_audit_financials.json",
+  "company_id": "hyundai-engineering",
+  "company_name": "현대엔지니어링",
+  "currency": "KRW",
+  "financial_scope": "consolidated",
+  "optional_metrics": [
+    "revenue_breakdown.goods_revenue",
+    "revenue_breakdown.product_revenue",
+    "revenue_breakdown.construction_revenue",
+    "revenue_breakdown.rental_revenue",
+    "revenue_breakdown.other_revenue",
+    "working_capital.trade_receivables_gross",
+    "working_capital.construction_receivables_gross",
+    "working_capital.inventory",
+    "working_capital.work_in_progress",
+    "borrowings.short_term_borrowings",
+    "borrowings.current_portion_long_term_borrowings",
+    "borrowings.long_term_borrowings",
+    "investment_signals.construction_in_progress",
+    "investment_signals.industrial_property_rights",
+    "investment_signals.research_and_development_expense"
+  ],
+  "promotion_policy": {
+    "allow_verification_pending_required_metrics": false,
+    "require_public_change_acknowledgement": true,
+    "require_source_review_acknowledgement": true,
+    "require_zero_blockers": true
+  },
+  "public_output_path": "data/company_reports/hyundai-engineering/audit_financials_2023_2025.json",
+  "replace_existing": false,
+  "reporting_entity": "현대엔지니어링 주식회사 및 연결대상 종속기업",
+  "required_metrics": [
+    "income_statement.revenue",
+    "income_statement.gross_profit",
+    "income_statement.operating_profit",
+    "income_statement.net_income",
+    "balance_sheet.total_assets",
+    "balance_sheet.total_liabilities",
+    "balance_sheet.total_equity",
+    "balance_sheet.current_assets",
+    "balance_sheet.current_liabilities",
+    "cash_flow.operating_cash_flow",
+    "cash_flow.investing_cash_flow",
+    "cash_flow.financing_cash_flow",
+    "cash_flow.ending_cash"
+  ],
+  "schema_version": "company_report_onboarding_manifest_v1",
+  "source_priority": {
+    "2023": {
+      "cross_check_source_refs": [],
+      "primary_source_ref": "hyundai-engineering_opendart_2023_20240328001259"
+    },
+    "2024": {
+      "cross_check_source_refs": [],
+      "primary_source_ref": "hyundai-engineering_opendart_2024_20251111000074"
+    },
+    "2025": {
+      "cross_check_source_refs": [],
+      "primary_source_ref": "hyundai-engineering_opendart_2025_20260331003081"
+    }
+  },
+  "staging_output_path": "data/company_reports/hyundai-engineering/staging/audit_financials_2023_2025.json",
+  "target_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "unit": "won"
+}

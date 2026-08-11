@@ -1,0 +1,1438 @@
+{
+  "accounting_standard": {
+    "code": "k_ifrs",
+    "label_en": "K-IFRS",
+    "label_ko": "한국채택국제회계기준"
+  },
+  "audit_opinions": [
+    {
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "samsung-ct-construction_opendart_audit_2023_20240307000811"
+    },
+    {
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "opinion": "unqualified",
+      "opinion_label_ko": "적정의견",
+      "source_ref": "samsung-ct-construction_opendart_audit_2024_20250306000575"
+    },
+    {
+      "auditor": "삼일회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2025
+      ],
+      "opinion": "unknown",
+      "opinion_label_ko": "확인 필요",
+      "source_ref": "samsung-ct-construction_opendart_2025_20260312000856"
+    }
+  ],
+  "company_id": "samsung-ct-construction",
+  "company_name": "삼성물산 건설부문",
+  "currency": "KRW",
+  "disclosure_limitations": [
+    "연결재무제표 기준 회사 전체 실적이며 모듈러 사업부문 별도 실적으로 해석하지 않는다.",
+    "OpenDART 전체재무제표 API에서 직접 확정할 수 없는 주석 계정은 verification_pending으로 유지한다.",
+    "총차입금·채권·세부 매출구성은 구성 계정이 모두 검증된 경우에만 파생 계산한다."
+  ],
+  "entity_attribution": {
+    "attribution_warning": "연결재무제표는 회사와 연결대상 종속기업의 실적을 포함합니다. 회사 전체 매출 또는 건설 매출을 모듈러 사업 매출로 자동 해석하지 않습니다.",
+    "financial_scope": "consolidated",
+    "modular_segment_revenue_disclosed": false,
+    "related_entity_attribution_required": true,
+    "reporting_entity": "삼성물산 주식회사 및 연결대상 종속기업",
+    "special_events": []
+  },
+  "financial_years": {
+    "2023": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 18977560736022,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 14759071583172,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 66127029212679,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 39897109481722,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 26229919730957,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 1440775837839,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 1635327654170,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 1376714754735,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 3119516302897,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -1818094449035,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -2105421759791,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 2798653381137,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 6566946726526,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 2719106116709,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 2870173816853,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 41895681215734,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        }
+      },
+      "source_refs": [
+        "samsung-ct-construction_opendart_2023_20240329002523",
+        "samsung-ct-construction_opendart_audit_2023_20240307000811"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 4470088756719,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2023_20240329002523",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2023_20240329002523"
+          ]
+        }
+      }
+    },
+    "2024": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 20180976210724,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 14747260718483,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 61990426835548,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 37258539898529,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 24731886937019,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 1303745412135,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 1741990159918,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 822061962764,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 3622371844804,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -1298327291405,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -1759468808360,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 3306879187574,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 7107601726437,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 2772012091811,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 2983396694918,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 42103238027336,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        }
+      },
+      "source_refs": [
+        "samsung-ct-construction_opendart_2024_20250814002350",
+        "samsung-ct-construction_opendart_audit_2024_20250306000575"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 5125896844856,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2024_20250814002350",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2024_20250814002350"
+          ]
+        }
+      }
+    },
+    "2025": {
+      "balance_sheet": {
+        "current_assets": {
+          "disclosure_status": "reported",
+          "reported": 21356404512532,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "current_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 13871980126883,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "total_assets": {
+          "disclosure_status": "reported",
+          "reported": 86532745699428,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "total_equity": {
+          "disclosure_status": "reported",
+          "reported": 57496949405446,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "total_liabilities": {
+          "disclosure_status": "reported",
+          "reported": 29035796293982,
+          "source_locations": [
+            {
+              "section": "statement.balance_sheet",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        }
+      },
+      "borrowings": {
+        "current_portion_long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 798958770893,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "long_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 1611322967337,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "short_term_borrowings": {
+          "disclosure_status": "reported",
+          "reported": 981336899188,
+          "source_locations": [
+            {
+              "section": "note.borrowings",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        }
+      },
+      "cash_flow": {
+        "ending_cash": {
+          "disclosure_status": "reported",
+          "reported": 3458217651048,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "financing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -1276863227656,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "investing_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": -1839846947378,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "operating_cash_flow": {
+          "disclosure_status": "reported",
+          "reported": 3023741373868,
+          "source_locations": [
+            {
+              "section": "statement.cash_flow",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        }
+      },
+      "income_statement": {
+        "gross_profit": {
+          "disclosure_status": "reported",
+          "reported": 7687587042654,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "net_income": {
+          "disclosure_status": "reported",
+          "reported": 3906652564846,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "operating_profit": {
+          "disclosure_status": "reported",
+          "reported": 3292747495925,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "revenue": {
+          "disclosure_status": "reported",
+          "reported": 40742240967149,
+          "source_locations": [
+            {
+              "section": "statement.income_statement",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        }
+      },
+      "investment_signals": {
+        "construction_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "industrial_property_rights": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "research_and_development_expense": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.investment_signals",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        }
+      },
+      "revenue_breakdown": {
+        "construction_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "goods_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "other_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "product_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "rental_revenue": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.revenue_breakdown",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        }
+      },
+      "source_refs": [
+        "samsung-ct-construction_opendart_2025_20260312000856"
+      ],
+      "working_capital": {
+        "construction_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "inventory": {
+          "disclosure_status": "reported",
+          "reported": 5642125021821,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "trade_receivables_gross": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        },
+        "work_in_progress": {
+          "disclosure_status": "verification_pending",
+          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
+          "reported": null,
+          "source_locations": [
+            {
+              "section": "note.working_capital",
+              "source_ref": "samsung-ct-construction_opendart_2025_20260312000856",
+              "verification_status": "pending_manual_page_check"
+            }
+          ],
+          "source_refs": [
+            "samsung-ct-construction_opendart_2025_20260312000856"
+          ]
+        }
+      }
+    }
+  },
+  "reporting_entity": "삼성물산 주식회사 및 연결대상 종속기업",
+  "schema_version": "company_audit_financials_v1",
+  "source_documents": {
+    "samsung-ct-construction_opendart_2023_20240329002523": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "filename": "OpenDART receipt 20240329002523",
+      "report_date": "2024-03-29",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API의 금액 기준 공시. 감사인·감사의견은 samsung-ct-construction_opendart_audit_2023_20240307000811에서 교차검증했다."
+    },
+    "samsung-ct-construction_opendart_2024_20250814002350": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "filename": "OpenDART receipt 20250814002350",
+      "report_date": "2025-08-14",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API의 금액 기준 공시. 감사인·감사의견은 samsung-ct-construction_opendart_audit_2024_20250306000575에서 교차검증했다."
+    },
+    "samsung-ct-construction_opendart_2025_20260312000856": {
+      "audit_opinion": "unknown",
+      "auditor": "삼일회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2025
+      ],
+      "filename": "OpenDART receipt 20260312000856",
+      "report_date": "2026-03-12",
+      "source_role": "primary",
+      "usage": "OpenDART 연결 전체재무제표 API와 해당 공시 원문을 결합한 자동 온보딩 후보"
+    },
+    "samsung-ct-construction_opendart_audit_2023_20240307000811": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2023
+      ],
+      "filename": "OpenDART audit metadata receipt 20240307000811",
+      "report_date": "2024-03-07",
+      "source_role": "cross_check",
+      "usage": "재무 API 기준 receipt와 분리된 동일연도 공시에서 감사인·감사의견을 교차검증한 출처"
+    },
+    "samsung-ct-construction_opendart_audit_2024_20250306000575": {
+      "audit_opinion": "unqualified",
+      "auditor": "한영회계법인",
+      "auditor_report_date": null,
+      "auditor_report_date_note": "OpenDART 원문에서 독립감사인 보고서 작성일은 별도 수동 확인이 필요합니다.",
+      "auditor_report_date_verification_status": "pending_manual_page_check",
+      "covered_years": [
+        2024
+      ],
+      "filename": "OpenDART audit metadata receipt 20250306000575",
+      "report_date": "2025-03-06",
+      "source_role": "cross_check",
+      "usage": "재무 API 기준 receipt와 분리된 동일연도 공시에서 감사인·감사의견을 교차검증한 출처"
+    }
+  },
+  "source_priority": {
+    "2023": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "samsung-ct-construction_opendart_audit_2023_20240307000811"
+      ],
+      "primary_source_ref": "samsung-ct-construction_opendart_2023_20240329002523"
+    },
+    "2024": {
+      "basis": "current_year_financial_statements",
+      "cross_check_source_refs": [
+        "samsung-ct-construction_opendart_audit_2024_20250306000575"
+      ],
+      "primary_source_ref": "samsung-ct-construction_opendart_2024_20250814002350"
+    },
+    "2025": {
+      "basis": "current_year_financial_statements",
+      "primary_source_ref": "samsung-ct-construction_opendart_2025_20260312000856"
+    }
+  },
+  "unit": "won",
+  "validation_metadata": {
+    "amount_storage": "KRW integer won",
+    "created_for": "OpenDART general-contractor consolidated audit-financial onboarding",
+    "derived_metrics_storage": "not stored; derived by build_company_report_insights.py",
+    "expected_years": [
+      2023,
+      2024,
+      2025
+    ],
+    "pdf_handling": "OpenDART API/XML sources only; source PDFs are not committed",
+    "public_ui_impact": "none until guarded validation and promotion complete"
+  }
+}
