@@ -1,0 +1,157 @@
+name: GS E&C DART Onboarding Materialize
+
+on:
+  push:
+    branches:
+      - feat/gs-ec-dart-audit-onboarding
+
+permissions:
+  contents: write
+
+env:
+  OPENDART_API_KEY: ${{ secrets.DART_API_KEY }}
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install jsonschema pytest
+
+      - name: Generate validated GS E&C candidate
+        run: |
+          python scripts/build_general_contractor_dart_audit_candidates.py \
+            --companies gs-ec \
+            --output-dir artifacts/general-contractor-dart-audit \
+            --require-all-valid
+
+      - name: Materialize onboarding input and manifest
+        run: |
+          mkdir -p data/company_reports/gs-ec/onboarding
+          cp artifacts/general-contractor-dart-audit/gs-ec/candidate_audit_financials.json \
+            data/company_reports/gs-ec/onboarding/candidate_audit_financials.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          candidate_path = Path('data/company_reports/gs-ec/onboarding/candidate_audit_financials.json')
+          candidate = json.loads(candidate_path.read_text(encoding='utf-8'))
+          manifest = {
+              'schema_version': 'company_report_onboarding_manifest_v1',
+              'company_id': 'gs-ec',
+              'company_name': candidate['company_name'],
+              'reporting_entity': candidate['reporting_entity'],
+              'financial_scope': 'consolidated',
+              'currency': 'KRW',
+              'unit': 'won',
+              'target_years': [2023, 2024, 2025],
+              'candidate_input_path': 'data/company_reports/gs-ec/onboarding/candidate_audit_financials.json',
+              'staging_output_path': 'data/company_reports/gs-ec/staging/audit_financials_2023_2025.json',
+              'public_output_path': 'data/company_reports/gs-ec/audit_financials_2023_2025.json',
+              'replace_existing': False,
+              'source_priority': {
+                  year: {
+                      'primary_source_ref': item['primary_source_ref'],
+                      'cross_check_source_refs': item.get('cross_check_source_refs', []),
+                  }
+                  for year, item in candidate['source_priority'].items()
+              },
+              'required_metrics': [
+                  'income_statement.revenue',
+                  'income_statement.gross_profit',
+                  'income_statement.operating_profit',
+                  'income_statement.net_income',
+                  'balance_sheet.total_assets',
+                  'balance_sheet.total_liabilities',
+                  'balance_sheet.total_equity',
+                  'balance_sheet.current_assets',
+                  'balance_sheet.current_liabilities',
+                  'cash_flow.operating_cash_flow',
+                  'cash_flow.investing_cash_flow',
+                  'cash_flow.financing_cash_flow',
+                  'cash_flow.ending_cash',
+              ],
+              'optional_metrics': [
+                  'revenue_breakdown.goods_revenue',
+                  'revenue_breakdown.product_revenue',
+                  'revenue_breakdown.construction_revenue',
+                  'revenue_breakdown.rental_revenue',
+                  'revenue_breakdown.other_revenue',
+                  'working_capital.trade_receivables_gross',
+                  'working_capital.construction_receivables_gross',
+                  'working_capital.inventory',
+                  'working_capital.work_in_progress',
+                  'borrowings.short_term_borrowings',
+                  'borrowings.current_portion_long_term_borrowings',
+                  'borrowings.long_term_borrowings',
+                  'investment_signals.construction_in_progress',
+                  'investment_signals.industrial_property_rights',
+                  'investment_signals.research_and_development_expense',
+              ],
+              'allowed_warning_codes': [
+                  'optional_metric_verification_pending',
+                  'pending_manual_page_check',
+              ],
+              'promotion_policy': {
+                  'require_zero_blockers': True,
+                  'require_source_review_acknowledgement': True,
+                  'require_public_change_acknowledgement': True,
+                  'allow_verification_pending_required_metrics': False,
+              },
+          }
+          Path('data/company_reports/gs-ec/onboarding/manifest.json').write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + '\n',
+              encoding='utf-8',
+          )
+          PY
+
+      - name: Guarded validate and stage
+        run: |
+          python scripts/onboard_company_report.py validate \
+            --manifest data/company_reports/gs-ec/onboarding/manifest.json
+          python scripts/onboard_company_report.py stage \
+            --manifest data/company_reports/gs-ec/onboarding/manifest.json
+
+      - name: Regression checks
+        run: |
+          python -m pytest -q tests/test_company_report_onboarding.py tests/test_company_audit_financials.py tests/test_company_report_insights.py
+          python scripts/build_company_report_insights.py --check
+          git diff --exit-code origin/main...HEAD -- \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json \
+            frontend/public/data/news.json \
+            frontend/public/data/business.json \
+            frontend/public/data/meta.json
+
+      - name: Commit staged onboarding data
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add \
+            data/company_reports/gs-ec/onboarding/candidate_audit_financials.json \
+            data/company_reports/gs-ec/onboarding/manifest.json \
+            data/company_reports/gs-ec/staging/audit_financials_2023_2025.json
+          git diff --cached --check
+          git commit -m "Stage GS E&C OpenDART audit financials"
+          git push origin HEAD:feat/gs-ec-dart-audit-onboarding
+
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gs-ec-dart-onboarding
+          path: |
+            artifacts/general-contractor-dart-audit/**
+            artifacts/company-report-onboarding/**
+          if-no-files-found: warn
+          retention-days: 7
