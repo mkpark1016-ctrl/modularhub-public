@@ -179,7 +179,9 @@ def reported_amount(value: int, source_ref: str, section: str) -> dict[str, Any]
         "reported": int(value),
         "disclosure_status": "reported",
         "source_refs": [source_ref],
-        "source_locations": [source_location(source_ref, section, verified=True)],
+        # OpenDART proves the amount/account, but it does not provide a PDF page.
+        # Keep location verification pending until the filing page is reconciled.
+        "source_locations": [source_location(source_ref, section, verified=False)],
     }
 
 
