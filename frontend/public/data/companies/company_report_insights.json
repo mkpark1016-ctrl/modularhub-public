@@ -3839,7 +3839,7 @@
           "comparison_group_id": "general_contractor",
           "comparison_group_label": "건설사",
           "comparison_label": "동일 유형 재무 비교 준비 중",
-          "comparison_universe_count": 0,
+          "comparison_universe_count": 1,
           "comparison_year": 2025,
           "current_company_included": false,
           "median": null,
@@ -3847,8 +3847,8 @@
           "median_display": "확인되지 않음",
           "metric_id": "receivables_to_revenue_pct",
           "not_comparable_reason": "현재 기업의 해당 지표값이 확인되지 않았습니다.",
-          "other_peer_count": 0,
-          "peer_count": 0,
+          "other_peer_count": 1,
+          "peer_count": 1,
           "rank": null,
           "reference_value": null,
           "reference_value_display": "확인되지 않음",
@@ -8005,7 +8005,7 @@
           "comparison_group_id": "general_contractor",
           "comparison_group_label": "건설사",
           "comparison_label": "동일 유형 재무 비교 준비 중",
-          "comparison_universe_count": 0,
+          "comparison_universe_count": 1,
           "comparison_year": 2025,
           "current_company_included": false,
           "median": null,
@@ -8013,8 +8013,8 @@
           "median_display": "확인되지 않음",
           "metric_id": "receivables_to_revenue_pct",
           "not_comparable_reason": "현재 기업의 해당 지표값이 확인되지 않았습니다.",
-          "other_peer_count": 0,
-          "peer_count": 0,
+          "other_peer_count": 1,
+          "peer_count": 1,
           "rank": null,
           "reference_value": null,
           "reference_value_display": "확인되지 않음",
@@ -8455,8 +8455,8 @@
           },
           "receivables_to_revenue_pct": {
             "calculation_basis": "derived_from_reported",
-            "display_text": "확인되지 않음",
-            "value": null
+            "display_text": "25.0%",
+            "value": 25.0
           },
           "rental_revenue_share_pct": {
             "calculation_basis": "derived_from_reported",
@@ -8532,8 +8532,8 @@
           },
           "receivables_to_revenue_pct": {
             "calculation_basis": "derived_from_reported",
-            "display_text": "확인되지 않음",
-            "value": null
+            "display_text": "23.8%",
+            "value": 23.8
           },
           "rental_revenue_share_pct": {
             "calculation_basis": "derived_from_reported",
@@ -8609,8 +8609,8 @@
           },
           "receivables_to_revenue_pct": {
             "calculation_basis": "derived_from_reported",
-            "display_text": "확인되지 않음",
-            "value": null
+            "display_text": "28.7%",
+            "value": 28.7
           },
           "rental_revenue_share_pct": {
             "calculation_basis": "derived_from_reported",
@@ -8768,9 +8768,9 @@
           "threshold": 0
         },
         "working_capital": {
-          "actual_value": null,
+          "actual_value": 28.7,
           "calculation_basis": "rule_based_from_reported_metrics",
-          "explanation": "2025년 채권/매출 비율은 확인되지 않음입니다.",
+          "explanation": "2025년 채권/매출 비율은 28.7%입니다.",
           "headline": "운전자본",
           "interpretation_scope": "채권/매출 비율이 관찰 기준을 넘는지 표시하며 회수 위험을 단정하지 않습니다.",
           "limitation": "채권은 감사보고서 주석의 매출채권과 공사미수금 등 공개 항목 합계입니다.",
@@ -8783,7 +8783,7 @@
           "source_ids": [
             "hyundai-engineering_opendart_2025_20260331003081"
           ],
-          "status": "additional_confirmation_required",
+          "status": "info",
           "threshold": 30
         }
       },
@@ -8911,11 +8911,10 @@
               ]
             },
             "receivables_total": {
-              "calculation_basis": "verification_pending",
-              "disclosure_status": "verification_pending",
-              "display_eok": null,
-              "display_text": "검증 보류",
-              "raw_krw": null,
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 32619.1,
+              "display_text": "32,619.1억원",
+              "raw_krw": 3261914000000,
               "source_locations": [
                 {
                   "section": "note.working_capital",
@@ -9152,11 +9151,10 @@
               ]
             },
             "receivables_total": {
-              "calculation_basis": "verification_pending",
-              "disclosure_status": "verification_pending",
-              "display_eok": null,
-              "display_text": "검증 보류",
-              "raw_krw": null,
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 35168.6,
+              "display_text": "35,168.6억원",
+              "raw_krw": 3516862000000,
               "source_locations": [
                 {
                   "section": "note.working_capital",
@@ -9393,11 +9391,10 @@
               ]
             },
             "receivables_total": {
-              "calculation_basis": "verification_pending",
-              "disclosure_status": "verification_pending",
-              "display_eok": null,
-              "display_text": "검증 보류",
-              "raw_krw": null,
+              "calculation_basis": "derived_from_reported",
+              "display_eok": 39946.0,
+              "display_text": "39,946.0억원",
+              "raw_krw": 3994597000000,
               "source_locations": [
                 {
                   "section": "note.working_capital",
@@ -9600,11 +9597,10 @@
           ]
         },
         "receivables_total": {
-          "calculation_basis": "verification_pending",
-          "disclosure_status": "verification_pending",
-          "display_eok": null,
-          "display_text": "검증 보류",
-          "raw_krw": null,
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 39946.0,
+          "display_text": "39,946.0억원",
+          "raw_krw": 3994597000000,
           "source_locations": [
             {
               "section": "note.working_capital",
@@ -9888,11 +9884,10 @@
           ]
         },
         "trade_receivables": {
-          "calculation_basis": "verification_pending",
-          "disclosure_status": "verification_pending",
-          "display_eok": null,
-          "display_text": "검증 보류",
-          "raw_krw": null,
+          "calculation_basis": "derived_from_reported",
+          "display_eok": 39946.0,
+          "display_text": "39,946.0억원",
+          "raw_krw": 3994597000000,
           "source_locations": [
             {
               "section": "note.working_capital",
@@ -10061,8 +10056,8 @@
         {
           "best_value": null,
           "calculation_basis": "same_company_group_latest_year_currency_financial_scope_minimum_three_values",
-          "company_display": "확인되지 않음",
-          "company_value": null,
+          "company_display": "28.7%",
+          "company_value": 28.7,
           "comparable": false,
           "comparison_currency": "KRW",
           "comparison_direction": "lower_is_lower_burden",
@@ -10070,16 +10065,16 @@
           "comparison_group_id": "general_contractor",
           "comparison_group_label": "건설사",
           "comparison_label": "동일 유형 재무 비교 준비 중",
-          "comparison_universe_count": 0,
+          "comparison_universe_count": 1,
           "comparison_year": 2025,
-          "current_company_included": false,
+          "current_company_included": true,
           "median": null,
           "median_difference_display": null,
           "median_display": "확인되지 않음",
           "metric_id": "receivables_to_revenue_pct",
-          "not_comparable_reason": "현재 기업의 해당 지표값이 확인되지 않았습니다.",
+          "not_comparable_reason": "같은 기업유형의 비교 가능한 감사재무가 3개 미만이라 상대 위치를 표시하지 않습니다.",
           "other_peer_count": 0,
-          "peer_count": 0,
+          "peer_count": 1,
           "rank": null,
           "reference_value": null,
           "reference_value_display": "확인되지 않음",
@@ -10234,13 +10229,13 @@
             2024,
             2025
           ],
-          "code": "receivables_unknown",
-          "description": "2024년 대비 2025년 매출채권 합계가 확인되지 않았다.",
+          "code": "receivables_increased",
+          "description": "2024년 대비 2025년 매출채권 합계가 증가했다.",
           "interpretation_type": "rule_based",
           "level": "info",
           "metric_values": {
-            "latest_raw_krw": null,
-            "previous_raw_krw": null
+            "latest_raw_krw": 3994597000000,
+            "previous_raw_krw": 3516862000000
           },
           "title": "매출채권 방향"
         },
@@ -10396,24 +10391,24 @@
         },
         "trade_receivables": {
           "calculation_basis": "latest_year_vs_previous_year",
-          "change_display": "계산되지 않음",
-          "change_pct": null,
-          "change_pct_unavailable_reason": "최신 연도 또는 직전 연도 값이 없어 변화율을 계산하지 않습니다.",
-          "change_value": null,
+          "change_display": "+4,777.4억원",
+          "change_pct": 13.6,
+          "change_pct_unavailable_reason": null,
+          "change_value": 477735000000,
           "explanation": "채권 증가 속도를 매출 변화와 함께 관찰합니다.",
           "headline": "채권 변화",
-          "latest_display": "검증 보류",
+          "latest_display": "39,946.0억원",
           "latest_year": 2025,
           "metric_ids": [
             "receivables_total"
           ],
-          "previous_display": "검증 보류",
+          "previous_display": "35,168.6억원",
           "previous_year": 2024,
           "source_ids": [
             "hyundai-engineering_opendart_2024_20251111000074",
             "hyundai-engineering_opendart_2025_20260331003081"
           ],
-          "status": "additional_confirmation_required"
+          "status": "increased"
         }
       }
     },
@@ -18973,7 +18968,7 @@
           "comparison_group_id": "general_contractor",
           "comparison_group_label": "건설사",
           "comparison_label": "동일 유형 재무 비교 준비 중",
-          "comparison_universe_count": 0,
+          "comparison_universe_count": 1,
           "comparison_year": 2025,
           "current_company_included": false,
           "median": null,
@@ -18981,8 +18976,8 @@
           "median_display": "확인되지 않음",
           "metric_id": "receivables_to_revenue_pct",
           "not_comparable_reason": "현재 기업의 해당 지표값이 확인되지 않았습니다.",
-          "other_peer_count": 0,
-          "peer_count": 0,
+          "other_peer_count": 1,
+          "peer_count": 1,
           "rank": null,
           "reference_value": null,
           "reference_value_display": "확인되지 않음",

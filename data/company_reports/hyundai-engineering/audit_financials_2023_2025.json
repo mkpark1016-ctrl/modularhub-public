@@ -423,9 +423,9 @@
       ],
       "working_capital": {
         "construction_receivables_gross": {
-          "disclosure_status": "verification_pending",
-          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
-          "reported": null,
+          "disclosure_status": "reported",
+          "notes": "OpenDART 연결 전체재무제표의 의미가 정확히 일치하는 XBRL 계정을 사용했다.",
+          "reported": 1432812000000,
           "source_locations": [
             {
               "section": "note.working_capital",
@@ -452,9 +452,9 @@
           ]
         },
         "trade_receivables_gross": {
-          "disclosure_status": "verification_pending",
-          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
-          "reported": null,
+          "disclosure_status": "reported",
+          "notes": "OpenDART 연결 전체재무제표의 의미가 정확히 일치하는 XBRL 계정을 사용했다.",
+          "reported": 1829102000000,
           "source_locations": [
             {
               "section": "note.working_capital",
@@ -847,9 +847,9 @@
       ],
       "working_capital": {
         "construction_receivables_gross": {
-          "disclosure_status": "verification_pending",
-          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
-          "reported": null,
+          "disclosure_status": "reported",
+          "notes": "OpenDART 연결 전체재무제표의 의미가 정확히 일치하는 XBRL 계정을 사용했다.",
+          "reported": 1108409000000,
           "source_locations": [
             {
               "section": "note.working_capital",
@@ -876,9 +876,9 @@
           ]
         },
         "trade_receivables_gross": {
-          "disclosure_status": "verification_pending",
-          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
-          "reported": null,
+          "disclosure_status": "reported",
+          "notes": "OpenDART 연결 전체재무제표의 의미가 정확히 일치하는 XBRL 계정을 사용했다.",
+          "reported": 2408453000000,
           "source_locations": [
             {
               "section": "note.working_capital",
@@ -1270,9 +1270,9 @@
       ],
       "working_capital": {
         "construction_receivables_gross": {
-          "disclosure_status": "verification_pending",
-          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
-          "reported": null,
+          "disclosure_status": "reported",
+          "notes": "OpenDART 연결 전체재무제표의 의미가 정확히 일치하는 XBRL 계정을 사용했다.",
+          "reported": 1138369000000,
           "source_locations": [
             {
               "section": "note.working_capital",
@@ -1299,9 +1299,9 @@
           ]
         },
         "trade_receivables_gross": {
-          "disclosure_status": "verification_pending",
-          "notes": "OpenDART 전체재무제표 API에서 보수적으로 확정하지 못한 계정입니다. 공시 원문 또는 XBRL 주석을 추가 확인해야 합니다.",
-          "reported": null,
+          "disclosure_status": "reported",
+          "notes": "OpenDART 연결 전체재무제표의 의미가 정확히 일치하는 XBRL 계정을 사용했다.",
+          "reported": 2856228000000,
           "source_locations": [
             {
               "section": "note.working_capital",
