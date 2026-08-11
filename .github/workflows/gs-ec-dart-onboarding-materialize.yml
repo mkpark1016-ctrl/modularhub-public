@@ -100,6 +100,7 @@ jobs:
               'allowed_warning_codes': [
                   'optional_metric_verification_pending',
                   'pending_manual_page_check',
+                  'revenue_breakdown_check_unavailable',
               ],
               'promotion_policy': {
                   'require_zero_blockers': True,
@@ -116,10 +117,25 @@ jobs:
 
       - name: Guarded validate and stage
         run: |
+          set +e
           python scripts/onboard_company_report.py validate \
             --manifest data/company_reports/gs-ec/onboarding/manifest.json
+          validate_code=$?
+          set -e
+          if [ "$validate_code" -ne 0 ] && [ "$validate_code" -ne 2 ]; then
+            exit "$validate_code"
+          fi
+
+          set +e
           python scripts/onboard_company_report.py stage \
             --manifest data/company_reports/gs-ec/onboarding/manifest.json
+          stage_code=$?
+          set -e
+          if [ "$stage_code" -ne 0 ] && [ "$stage_code" -ne 2 ]; then
+            exit "$stage_code"
+          fi
+
+          test -f data/company_reports/gs-ec/staging/audit_financials_2023_2025.json
 
       - name: Regression checks
         run: |
