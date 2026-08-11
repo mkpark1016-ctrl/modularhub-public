@@ -4,6 +4,11 @@ import json
 
 import pytest
 
+from scripts.build_general_contractor_dart_audit_candidates import (
+    attach_audit_cross_check_sources,
+    structured_receipts,
+)
+from scripts.validate_company_audit_financials import validate
 from src.company_dart_audit_adapter import (
     GENERAL_CONTRACTORS,
     TARGET_YEARS,
@@ -11,7 +16,6 @@ from src.company_dart_audit_adapter import (
     map_structured_year,
 )
 from src.opendart_client import OpenDartClient
-from scripts.validate_company_audit_financials import validate
 
 
 def row(account_id: str, account_nm: str, sj_div: str, amount: int) -> dict[str, str]:
@@ -51,6 +55,8 @@ def filing_meta(company_id: str) -> dict[int, dict[str, str]]:
         year: {
             "receipt_number": f"2026{year}000001",
             "filed_at": f"{year + 1}0315",
+            "audit_receipt_number": f"2026{year}000001",
+            "audit_filed_at": f"{year + 1}0315",
             "auditor": "테스트회계법인",
             "audit_opinion": "unmodified",
         }
@@ -86,6 +92,18 @@ def test_existing_opendart_callers_keep_separate_scope_default(monkeypatch: pyte
     monkeypatch.setattr(client, "_request_bytes", fake_request)
     client.single_account_all(corp_code="00144960", fiscal_year=2025)
     assert captured["params"]["fs_div"] == "OFS"  # type: ignore[index]
+
+
+def test_structured_receipts_prefers_the_receipt_used_by_most_rows() -> None:
+    payload = {
+        "list": [
+            {"rcept_no": "FIN-A"},
+            {"rcept_no": "FIN-B"},
+            {"rcept_no": "FIN-A"},
+            {"rcept_no": ""},
+        ]
+    }
+    assert structured_receipts(payload) == ["FIN-A", "FIN-B"]
 
 
 def test_adapter_maps_core_cfs_metrics_without_inventing_note_values() -> None:
@@ -138,6 +156,34 @@ def test_schema_shaped_candidate_validates_for_each_contractor(company_id: str) 
     assert latest["liabilities_to_equity_pct"] == "150.0"
     assert latest["total_borrowings"] == 600
     assert latest["receivables_total"] is None
+
+
+def test_audit_cross_check_keeps_financial_amount_lineage_separate() -> None:
+    structured = {
+        year: {"status": "000", "list": synthetic_cfs_rows(index + 1)}
+        for index, year in enumerate(TARGET_YEARS)
+    }
+    metadata = filing_meta("gs-ec")
+    metadata[2025]["audit_receipt_number"] = "AUDIT-2025"
+    metadata[2025]["audit_filed_at"] = "20260316"
+    candidate, _ = build_audit_financial_candidate(
+        company_id="gs-ec",
+        structured_payloads=structured,
+        filing_metadata=metadata,
+    )
+    financial_ref = candidate["source_priority"]["2025"]["primary_source_ref"]
+    amount_ref_before = candidate["financial_years"]["2025"]["income_statement"]["revenue"]["source_refs"]
+
+    attach_audit_cross_check_sources(candidate, metadata)
+
+    audit_ref = "gs-ec_opendart_audit_2025_AUDIT-2025"
+    assert candidate["source_priority"]["2025"]["primary_source_ref"] == financial_ref
+    assert candidate["source_priority"]["2025"]["cross_check_source_refs"] == [audit_ref]
+    assert candidate["financial_years"]["2025"]["income_statement"]["revenue"]["source_refs"] == amount_ref_before
+    assert audit_ref in candidate["financial_years"]["2025"]["source_refs"]
+    assert next(row for row in candidate["audit_opinions"] if row["covered_years"] == [2025])["source_ref"] == audit_ref
+    assert candidate["source_documents"][audit_ref]["source_role"] == "cross_check"
+    assert validate(candidate, expected_year_override=list(TARGET_YEARS), base_ref=None)["valid"]
 
 
 def test_candidate_refuses_to_invent_missing_auditor() -> None:
