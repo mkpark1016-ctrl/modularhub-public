@@ -59,7 +59,10 @@ jobs:
           cache: pip
 
       - name: Install Python dependencies
-        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+          python -m pip show pytest
 
       - name: Check LH secret configuration
         run: |
@@ -87,6 +90,11 @@ jobs:
             --live \
             --acknowledge-live
 
+      - name: Verify LH staging outputs
+        run: |
+          test -f artifacts/lh/lh_summary.json
+          test -f artifacts/lh/lh_records.json
+
       - name: Verify protected public data unchanged
         run: |
           git diff --exit-code -- \
@@ -104,12 +112,17 @@ jobs:
           from pathlib import Path
 
           path = Path("artifacts/lh/lh_summary.json")
+          summary_path = Path.cwd() / "lh-summary.md"
           if not path.exists():
-              print("No LH summary artifact was generated.")
+              summary_path.write_text(
+                  "# LH Procurement API Pilot\n\n"
+                  "No LH summary artifact was generated. An earlier workflow step failed before the live smoke produced staging outputs.\n",
+                  encoding="utf-8",
+              )
               raise SystemExit(0)
 
           summary = json.loads(path.read_text(encoding="utf-8"))
-          with open(Path.cwd() / "lh-summary.md", "w", encoding="utf-8") as handle:
+          with open(summary_path, "w", encoding="utf-8") as handle:
               handle.write("# LH Procurement API Pilot\n\n")
               handle.write(f"- source: {summary.get('source')}\n")
               handle.write(f"- request_attempted: {summary.get('request_attempted')}\n")
@@ -133,5 +146,5 @@ jobs:
         with:
           name: lh-procurement-api-pilot-${{ github.run_number }}-${{ github.run_attempt }}
           path: artifacts/lh/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14

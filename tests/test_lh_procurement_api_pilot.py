@@ -17,6 +17,8 @@ from scripts.integrations.business.lh import (
 )
 from scripts.integrations.business.run_lh_pilot import main as run_lh_pilot_main
 
+ROOT = Path(__file__).resolve().parents[1]
+
 
 PROCUREMENT_PLAN_XML = b"""<?xml version="1.0" encoding="UTF-8"?>
 <response>
@@ -205,3 +207,17 @@ def test_secret_redaction_and_no_sensitive_output() -> None:
         LH_SERVICE_KEY_ENV,
     ):
         assert forbidden not in serialized
+
+
+def test_lh_workflow_installs_pytest_and_preserves_original_failure() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "lh-procurement-api-pilot.yml").read_text(encoding="utf-8")
+
+    assert "python -m pip install -r requirements-dev.txt" in workflow
+    assert "python -m pip show pytest" in workflow
+    assert workflow.index("python -m pip show pytest") < workflow.index("python -m pytest -q")
+    assert "No LH summary artifact was generated. An earlier workflow step failed" in workflow
+    assert "cat lh-summary.md >> \"$GITHUB_STEP_SUMMARY\"" in workflow
+    assert "if-no-files-found: warn" in workflow
+    assert "Verify LH staging outputs" in workflow
+    assert "test -f artifacts/lh/lh_summary.json" in workflow
+    assert "test -f artifacts/lh/lh_records.json" in workflow
