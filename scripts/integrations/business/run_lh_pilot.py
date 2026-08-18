@@ -198,6 +198,11 @@ def _print_sanitized_summary(summary: dict[str, Any]) -> None:
                         f"api_errors={len(payload.get('api_errors') or [])}",
                         f"source_health={payload.get('source_health', '-')}",
                         f"fallback_used={payload.get('fallback_used', False)}",
+                        f"records_agency_matched={payload.get('records_agency_matched', '-')}",
+                        f"records_filtered_non_lh={payload.get('records_filtered_non_lh', '-')}",
+                        f"agency_filter_mode={payload.get('agency_filter_mode', '-')}",
+                        f"agency_code_verified={payload.get('agency_code_verified', '-')}",
+                        f"agency_identifier={payload.get('agency_identifier', '-')}",
                     ]
                     + error_parts
                 )
@@ -230,7 +235,7 @@ def _mark_lh_fallbacks(summary: dict[str, Any], fallback_resource_names: list[st
         lh_resource = summary["resources"][lh_name]
         lh_resource["fallback_used"] = True
         fallback_resource = (fallback_summary.get("resources") or {}).get(g2b_name) or {}
-        if fallback_resource.get("source_health") in {"healthy", "degraded"}:
+        if fallback_resource.get("source_health") in {"healthy", "healthy_empty"}:
             lh_resource["source_health"] = "degraded_source"
 
 
@@ -246,7 +251,7 @@ def _overall_health(summary: dict[str, Any], fallback_summary: dict[str, Any]) -
         if name in {"procurement_plan", "pre_spec"} and resource.get("fallback_used"):
             fallback_used = True
             g2b_name = "g2b_procurement_plan" if name == "procurement_plan" else "g2b_pre_spec"
-            if (g2b_resources.get(g2b_name) or {}).get("source_health") in {"healthy", "degraded"}:
+            if (g2b_resources.get(g2b_name) or {}).get("source_health") in {"healthy", "healthy_empty"}:
                 continue
         unresolved.append(name)
     if unresolved:

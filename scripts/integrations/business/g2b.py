@@ -23,7 +23,9 @@ MAX_PAGES = 3
 G2B_PORTAL_URL = "https://www.g2b.go.kr"
 G2B_PLAN_BASE_ENDPOINT = "https://apis.data.go.kr/1230000/ao/OrderPlanSttusService"
 G2B_PRE_SPEC_BASE_ENDPOINT = "https://apis.data.go.kr/1230000/ao/HrcspSsstndrdInfoService"
-LH_AGENCY_CODES = frozenset()
+LH_AGENCY_IDENTIFIER = "B552555"
+LH_AGENCY_IDENTIFIER_SOURCE = "g2b_demand_institution_code"
+LH_AGENCY_CODES = frozenset({LH_AGENCY_IDENTIFIER})
 LH_AGENCY_NAMES = frozenset({"한국토지주택공사"})
 LH_AGENCY_ALIASES = frozenset({"LH", "한국토지주택공사 본사"})
 
@@ -35,6 +37,7 @@ class G2BResource:
     endpoint_env: str
     default_base_endpoint: str
     operations: tuple[str, ...]
+    agency_filter_mode: str
 
     def base_endpoint(self) -> str:
         return os.getenv(self.endpoint_env, self.default_base_endpoint).strip().rstrip("/") or self.default_base_endpoint
@@ -55,6 +58,7 @@ G2B_RESOURCES: dict[str, G2BResource] = {
             "getOrderPlanSttusListServcPPSSrch",
             "getOrderPlanSttusListThngPPSSrch",
         ),
+        agency_filter_mode="server_side_agency_code",
     ),
     "g2b_pre_spec": G2BResource(
         name="g2b_pre_spec",
@@ -62,10 +66,12 @@ G2B_RESOURCES: dict[str, G2BResource] = {
         endpoint_env="G2B_PRE_SPEC_BASE_ENDPOINT",
         default_base_endpoint=G2B_PRE_SPEC_BASE_ENDPOINT,
         operations=(
-            "getPublicPrcureThngInfoCnstwkPPSSrch",
-            "getPublicPrcureThngInfoServcPPSSrch",
-            "getPublicPrcureThngInfoThngPPSSrch",
+            "getInsttAcctoThngListInfoCnstwk",
+            "getInsttAcctoThngListInfoServc",
+            "getInsttAcctoThngListInfoThng",
+            "getInsttAcctoThngListInfoFrgcpt",
         ),
+        agency_filter_mode="institution_endpoint_agency_code",
     ),
 }
 
@@ -125,6 +131,13 @@ class G2BCollectionSummary:
     total_count: int | None = None
     fallback_used: bool = True
     source_health: str = "healthy"
+    records_agency_matched: int = 0
+    records_filtered_non_lh: int = 0
+    agency_filter_mode: str = ""
+    agency_code_verified: bool = bool(LH_AGENCY_CODES)
+    agency_identifier: str = LH_AGENCY_IDENTIFIER
+    agency_identifier_source: str = LH_AGENCY_IDENTIFIER_SOURCE
+    agency_diagnostics: list[dict[str, str]] = field(default_factory=list)
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -141,6 +154,13 @@ class G2BCollectionSummary:
             "total_count": self.total_count,
             "fallback_used": self.fallback_used,
             "source_health": self.source_health,
+            "records_agency_matched": self.records_agency_matched,
+            "records_filtered_non_lh": self.records_filtered_non_lh,
+            "agency_filter_mode": self.agency_filter_mode,
+            "agency_code_verified": self.agency_code_verified,
+            "agency_identifier": self.agency_identifier,
+            "agency_identifier_source": self.agency_identifier_source,
+            "agency_diagnostics": self.agency_diagnostics,
         }
 
 
@@ -261,6 +281,7 @@ class G2BFallbackRunner:
             resource = self.resources[resource_name]
             adapter = G2BProcurementAdapter(resource, collected_at=started_at)
             summary = summaries[resource_name]
+            summary.agency_filter_mode = resource.agency_filter_mode
             for endpoint in resource.endpoints():
                 total_pages = 1
                 page_no = 1
@@ -288,8 +309,11 @@ class G2BFallbackRunner:
                     total_pages = max(1, math.ceil(page.payload.total_count / max(page.page_size, 1)))
 
                     for raw in page.payload.items:
+                        _append_agency_diagnostic(summary, raw, page.operation)
                         if not is_lh_agency_record(raw):
+                            summary.records_filtered_non_lh += 1
                             continue
+                        summary.records_agency_matched += 1
                         try:
                             normalized = adapter.normalize_raw_record(raw)
                         except ValueError:
@@ -305,10 +329,7 @@ class G2BFallbackRunner:
 
                     page_no += 1
 
-            if summary.api_errors and summary.records_normalized == 0 and summary.pages_requested == 0:
-                summary.source_health = "failed"
-            elif summary.api_errors:
-                summary.source_health = "degraded"
+            _finalize_source_health(summary)
 
         return records, _summary_payload(started_at, records, summaries)
 
@@ -422,6 +443,7 @@ def _request_params(
                 "orderEndYm": to_date.strftime("%Y%m"),
                 "inqryBgnDt": from_date.strftime("%Y%m%d") + "0000",
                 "inqryEndDt": to_date.strftime("%Y%m%d") + "2359",
+                "orderInsttCd": LH_AGENCY_IDENTIFIER,
             }
         )
     else:
@@ -430,6 +452,7 @@ def _request_params(
                 "inqryDiv": "1",
                 "inqryBgnDt": from_date.strftime("%Y%m%d") + "0000",
                 "inqryEndDt": to_date.strftime("%Y%m%d") + "2359",
+                "dminsttCd": LH_AGENCY_IDENTIFIER,
             }
         )
     return params
@@ -452,7 +475,7 @@ def _summary_payload(
 def _raise_api_error(result_code: str, result_message: str, endpoint: str | None) -> None:
     code = str(result_code or "").strip()
     message = str(result_message or "").strip()
-    if not code or code in {"0", "00"} or "NORMAL SERVICE" in message.upper():
+    if not code or code in {"0", "00", "03"} or "NORMAL SERVICE" in message.upper() or "NO DATA" in message.upper():
         return
     category = "service_access_denied" if code == "20" else "api_error"
     raise G2BApiError(code, message, diagnostic=_diagnostic(category, endpoint, result_code=code))
@@ -485,6 +508,44 @@ def _diagnostic(
     if parsed.hostname:
         diagnostic["endpoint_host"] = parsed.hostname
     return diagnostic
+
+
+def _append_agency_diagnostic(summary: G2BCollectionSummary, raw: dict[str, Any], operation: str) -> None:
+    if len(summary.agency_diagnostics) >= 5:
+        return
+    diagnostic = {"operation": operation}
+    for key in ("dminsttCd", "dmndInsttCd", "demandInsttCd", "orderInsttCd", "ntceInsttCd"):
+        value = _pick(raw, key)
+        if value:
+            diagnostic["agency_code_field"] = key
+            diagnostic["agency_code"] = value
+            break
+    for key in ("dminsttNm", "dmndInsttNm", "demandInsttNm", "orderInsttNm", "ntceInsttNm", "insttNm"):
+        value = _pick(raw, key)
+        if value:
+            diagnostic["agency_name_field"] = key
+            diagnostic["agency_name"] = value
+            break
+    summary.agency_diagnostics.append(diagnostic)
+
+
+def _finalize_source_health(summary: G2BCollectionSummary) -> None:
+    if summary.api_errors and summary.pages_requested == 0:
+        summary.source_health = "failed"
+        return
+    if summary.records_normalized > 0:
+        summary.source_health = "degraded" if summary.api_errors else "healthy"
+        return
+    if summary.records_agency_matched > 0:
+        summary.source_health = "failed"
+        return
+    if summary.records_received > 0:
+        summary.source_health = "unverified_empty"
+        return
+    if summary.pages_requested > 0 and summary.agency_code_verified:
+        summary.source_health = "healthy_empty" if not summary.api_errors else "degraded"
+        return
+    summary.source_health = "failed"
 
 
 def _external_id_keys(record_type: str) -> tuple[str, ...]:
