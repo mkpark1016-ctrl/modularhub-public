@@ -18,7 +18,16 @@ from scripts.integrations.business.lh import (
     LHProcurementAdapter,
     parse_lh_response,
 )
+from scripts.integrations.business.g2b import (
+    G2B_RESOURCES,
+    G2B_SERVICE_KEY_ENV,
+    G2BClient,
+    G2BFallbackRunner,
+    build_related_record_candidates,
+    is_lh_agency_record,
+)
 from scripts.integrations.business.run_lh_pilot import main as run_lh_pilot_main
+from scripts.integrations.business.run_lh_pilot import _fallback_resource_names, _overall_health
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -88,6 +97,53 @@ API_ERROR_XML = b"""<response>
   <header><resultCode>30</resultCode><resultMsg>SERVICE KEY IS NOT REGISTERED ERROR.</resultMsg></header>
   <body><totalCount>0</totalCount></body>
 </response>"""
+
+
+ACCESS_DENIED_XML = b"""<response>
+  <header><resultCode>20</resultCode><resultMsg>SERVICE_ACCESS_DENIED_ERROR</resultMsg></header>
+  <body><totalCount>0</totalCount></body>
+</response>"""
+
+
+G2B_PLAN_JSON = """{
+  "response": {
+    "header": {"resultCode": "00", "resultMsg": "NORMAL SERVICE."},
+    "body": {
+      "totalCount": 1,
+      "items": {
+        "item": [{
+          "orderPlanUntyNo": "G2B-PLAN-001",
+          "bizNm": "LH modular procurement planning",
+          "dminsttNm": "한국토지주택공사",
+          "orderInsttNm": "조달청",
+          "orderPrerngeYm": "202608",
+          "sumOrderAmt": "1200000",
+          "cntrctMthdNm": "일반경쟁"
+        }]
+      }
+    }
+  }
+}"""
+
+
+G2B_PRE_SPEC_JSON = """{
+  "response": {
+    "header": {"resultCode": "00", "resultMsg": "NORMAL SERVICE."},
+    "body": {
+      "totalCount": 1,
+      "items": {
+        "item": [{
+          "bfSpecRgstNo": "G2B-SPEC-001",
+          "prdctNm": "LH temporary school modular pre-spec",
+          "dmndInsttNm": "한국토지주택공사",
+          "opinionRegStartDtm": "202608010900",
+          "opinionRegEndDtm": "202608181800",
+          "asignBdgtAmt": "3500000"
+        }]
+      }
+    }
+  }
+}"""
 
 
 class FakeResponse:
@@ -322,6 +378,174 @@ def test_result_code_30_retries_and_preserves_sanitized_diagnostics(
     assert "?" not in serialized
 
 
+def test_lh_result_code_20_is_service_access_denied(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LH_ORDER_PLAN_ENDPOINT", raising=False)
+    monkeypatch.setattr("scripts.integrations.business.lh._sleep_before_retry", lambda _attempt: None)
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        return FakeResponse(ACCESS_DENIED_XML)
+
+    runner = LHPilotRunner(client=LHClient(service_key="secret-value-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert records == []
+    resource = summary["resources"]["procurement_plan"]
+    assert resource["source_health"] == "degraded_source"
+    assert resource["api_errors"][0]["category"] == "service_access_denied"
+    assert resource["api_errors"][0]["result_code"] == "20"
+
+
+def test_g2b_procurement_plan_fallback_normalization() -> None:
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        assert "OrderPlanSttusService" in endpoint
+        assert params["serviceKey"] == "g2b-secret-for-test"
+        return FakeResponse(G2B_PLAN_JSON)
+
+    runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["g2b_procurement_plan"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert [record.external_id for record in records] == ["g2b:procurement_plan:G2B-PLAN-001"]
+    assert records[0].source == "g2b"
+    assert records[0].source_record_type == "procurement_plan"
+    assert records[0].issuing_organization == "한국토지주택공사"
+    assert summary["resources"]["g2b_procurement_plan"]["source_health"] == "healthy"
+
+
+def test_g2b_pre_spec_fallback_normalization() -> None:
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        assert "HrcspSsstndrdInfoService" in endpoint
+        assert params["serviceKey"] == "g2b-secret-for-test"
+        return FakeResponse(G2B_PRE_SPEC_JSON)
+
+    runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["g2b_pre_spec"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert [record.external_id for record in records] == ["g2b:pre_spec:G2B-SPEC-001"]
+    assert records[0].source == "g2b"
+    assert records[0].source_record_type == "pre_spec"
+    assert records[0].issuing_organization == "한국토지주택공사"
+    assert records[0].deadline_at == "2026-08-18"
+    assert summary["resources"]["g2b_pre_spec"]["source_health"] == "healthy"
+
+
+def test_lh_agency_filter_uses_exact_verified_names_not_contains() -> None:
+    assert is_lh_agency_record({"dminsttNm": "한국토지주택공사"})
+    assert is_lh_agency_record({"dmndInsttNm": "LH"})
+    assert not is_lh_agency_record({"dminsttNm": "한국토지주택공사와 무관한 민간업체"})
+    assert not is_lh_agency_record({"dminsttNm": "서울주택도시공사"})
+
+
+def test_g2b_failure_remains_degraded_and_sanitized(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv(G2B_SERVICE_KEY_ENV, raising=False)
+    runner = G2BFallbackRunner(client=G2BClient(service_key=""))
+    records, summary = runner.collect(
+        resource_names=["g2b_procurement_plan"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert records == []
+    resource = summary["resources"]["g2b_procurement_plan"]
+    assert resource["source_health"] == "failed"
+    assert resource["api_errors"] == [{"category": "missing_secret", "required_secret": G2B_SERVICE_KEY_ENV}]
+    serialized = json.dumps(summary, ensure_ascii=False)
+    assert "g2b-secret-for-test" not in serialized
+    assert "serviceKey" not in serialized
+
+
+def test_lh_code20_selects_g2b_fallback_but_lh_success_does_not() -> None:
+    success_summary = {
+        "resources": {
+            "procurement_plan": {"api_errors": [], "fallback_used": False},
+            "pre_spec": {"api_errors": [], "fallback_used": False},
+            "bid_notice": {"api_errors": [], "fallback_used": False},
+        }
+    }
+    denied_summary = {
+        "resources": {
+            "procurement_plan": {
+                "api_errors": [{"category": "service_access_denied", "result_code": "20"}],
+                "fallback_used": False,
+            },
+            "pre_spec": {
+                "api_errors": [{"category": "service_access_denied", "result_code": "20"}],
+                "fallback_used": False,
+            },
+            "bid_notice": {"api_errors": [], "fallback_used": False},
+        }
+    }
+
+    assert _fallback_resource_names(success_summary) == []
+    assert _fallback_resource_names(denied_summary) == ["g2b_procurement_plan", "g2b_pre_spec"]
+
+
+def test_overall_health_success_with_fallback_when_g2b_recovers_code20() -> None:
+    lh_summary = {
+        "resources": {
+            "procurement_plan": {
+                "api_errors": [{"category": "service_access_denied", "result_code": "20"}],
+                "fallback_used": True,
+            },
+            "pre_spec": {"api_errors": [], "fallback_used": False},
+            "bid_notice": {"api_errors": [], "fallback_used": False},
+        }
+    }
+    g2b_summary = {
+        "resources": {
+            "g2b_procurement_plan": {"source_health": "healthy"},
+        }
+    }
+
+    assert _overall_health(lh_summary, g2b_summary) == "success_with_fallback"
+
+
+def test_cross_source_related_candidates_do_not_merge_records() -> None:
+    lh_record = LHProcurementAdapter(LH_RESOURCES["procurement_plan"]).normalize_raw_record(
+        {
+            "orderPlanNo": "LH-PLAN-001",
+            "orderPlanNm": "Same modular plan",
+            "orderInsttNm": "한국토지주택공사",
+            "orderExpectYm": "202608",
+        }
+    )
+    g2b_record = G2BFallbackRunner(client=G2BClient(service_key="unused")).resources["g2b_procurement_plan"]
+    assert g2b_record.source_record_type == "procurement_plan"
+
+    from scripts.integrations.business.g2b import G2BProcurementAdapter
+
+    normalized_g2b = G2BProcurementAdapter(g2b_record).normalize_raw_record(
+        {
+            "orderPlanUntyNo": "G2B-PLAN-001",
+            "bizNm": "Same modular plan",
+            "dminsttNm": "한국토지주택공사",
+            "orderPrerngeYm": "202608",
+        }
+    )
+    candidates = build_related_record_candidates([lh_record, normalized_g2b])
+
+    assert {item["external_id"] for item in candidates} == {
+        "lh:procurement_plan:LH-PLAN-001",
+        "g2b:procurement_plan:G2B-PLAN-001",
+    }
+    assert lh_record.external_id != normalized_g2b.external_id
+
+
 def test_three_lh_resources_share_staging_summary_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("LH_ORDER_PLAN_ENDPOINT", raising=False)
     monkeypatch.delenv("LH_PRE_SPEC_ENDPOINT", raising=False)
@@ -395,3 +619,5 @@ def test_lh_workflow_installs_pytest_and_preserves_original_failure() -> None:
     assert "test -f artifacts/lh/lh_records.json" in workflow
     assert "error_category={first_error.get('category', '-')}" in workflow
     assert "result_code={first_error.get('result_code', '-')}" in workflow
+    assert "DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}" in workflow
+    assert "overall_health" in workflow
