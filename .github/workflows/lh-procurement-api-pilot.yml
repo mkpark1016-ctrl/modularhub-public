@@ -1,0 +1,137 @@
+name: LH Procurement API Pilot
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_date:
+        description: Start date for the LH smoke window in YYYY-MM-DD format
+        required: true
+        default: "2026-08-01"
+        type: string
+      to_date:
+        description: End date for the LH smoke window in YYYY-MM-DD format
+        required: true
+        default: "2026-08-18"
+        type: string
+      max_pages:
+        description: Maximum pages per LH resource
+        required: true
+        default: "2"
+        type: string
+      page_size:
+        description: Records per page
+        required: true
+        default: "5"
+        type: string
+      acknowledge_live:
+        description: Confirm one read-only live call set against LH APIs
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  lh-live-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: Asia/Seoul
+      LH_SERVICE_KEY: ${{ secrets.LH_SERVICE_KEY }}
+
+    steps:
+      - name: Check live guard
+        run: |
+          if [ "${{ inputs.acknowledge_live }}" != "true" ]; then
+            echo "acknowledge_live must be true for LH live smoke."
+            exit 1
+          fi
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Check LH secret configuration
+        run: |
+          if [ -n "${LH_SERVICE_KEY}" ]; then
+            echo "LH_SERVICE_KEY configured: true"
+          else
+            echo "LH_SERVICE_KEY configured: false"
+            exit 1
+          fi
+
+      - name: Run LH procurement pilot tests
+        run: |
+          python -m pytest -q tests/test_external_api_integration_foundation.py
+          python -m pytest -q tests/test_lh_procurement_api_pilot.py
+
+      - name: Run LH read-only live smoke
+        run: |
+          python -m scripts.integrations.business.run_lh_pilot \
+            --resources procurement_plan,pre_spec,bid_notice \
+            --from-date "${{ inputs.from_date }}" \
+            --to-date "${{ inputs.to_date }}" \
+            --page-size "${{ inputs.page_size }}" \
+            --max-pages "${{ inputs.max_pages }}" \
+            --output-dir artifacts/lh \
+            --live \
+            --acknowledge-live
+
+      - name: Verify protected public data unchanged
+        run: |
+          git diff --exit-code -- \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json
+
+      - name: Append sanitized summary
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("artifacts/lh/lh_summary.json")
+          if not path.exists():
+              print("No LH summary artifact was generated.")
+              raise SystemExit(0)
+
+          summary = json.loads(path.read_text(encoding="utf-8"))
+          with open(Path.cwd() / "lh-summary.md", "w", encoding="utf-8") as handle:
+              handle.write("# LH Procurement API Pilot\n\n")
+              handle.write(f"- source: {summary.get('source')}\n")
+              handle.write(f"- request_attempted: {summary.get('request_attempted')}\n")
+              handle.write(f"- from_date: {summary.get('from_date')}\n")
+              handle.write(f"- to_date: {summary.get('to_date')}\n")
+              for name, resource in sorted((summary.get("resources") or {}).items()):
+                  handle.write(
+                      f"- {name}: pages={resource.get('pages_requested')}, "
+                      f"received={resource.get('records_received')}, "
+                      f"normalized={resource.get('records_normalized')}, "
+                      f"invalid={resource.get('records_invalid')}, "
+                      f"duplicates={resource.get('duplicates')}, "
+                      f"api_errors={len(resource.get('api_errors') or [])}\n"
+                  )
+          PY
+          cat lh-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload LH staging artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lh-procurement-api-pilot-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/lh/
+          if-no-files-found: error
+          retention-days: 14
