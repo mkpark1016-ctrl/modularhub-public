@@ -17,6 +17,13 @@ from scripts.integrations.business.lh import (
     LHPilotRunner,
     write_staging_outputs,
 )
+from scripts.integrations.business.g2b import (
+    G2B_RESOURCES,
+    G2B_SERVICE_KEY_ENV,
+    G2BClient,
+    G2BFallbackRunner,
+    build_related_record_candidates,
+)
 
 
 DEFAULT_OUTPUT_DIR = Path("artifacts/lh")
@@ -33,6 +40,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--live", action="store_true")
     parser.add_argument("--acknowledge-live", action="store_true")
+    parser.add_argument("--disable-g2b-fallback", action="store_true")
     return parser.parse_args()
 
 
@@ -45,7 +53,9 @@ def main() -> int:
         raise SystemExit(f"Unsupported LH resources: {', '.join(invalid_resources)}")
 
     configured = bool(os.getenv(LH_SERVICE_KEY_ENV, "").strip())
+    g2b_configured = bool(os.getenv(G2B_SERVICE_KEY_ENV, "").strip())
     print(f"{LH_SERVICE_KEY_ENV} configured: {str(configured).lower()}")
+    print(f"{G2B_SERVICE_KEY_ENV} configured: {str(g2b_configured).lower()}")
 
     if not (args.live and args.acknowledge_live):
         summary = {
@@ -54,6 +64,7 @@ def main() -> int:
             "live_opt_in": False,
             "request_attempted": False,
             "configured": configured,
+            "g2b_configured": g2b_configured,
             "resources": resources,
             "guard": "requires --live and --acknowledge-live",
         }
@@ -69,6 +80,7 @@ def main() -> int:
             "live_opt_in": True,
             "request_attempted": False,
             "configured": False,
+            "g2b_configured": g2b_configured,
             "resources": resources,
             "error_category": "missing_secret",
         }
@@ -86,14 +98,32 @@ def main() -> int:
         to_date=to_date,
         max_pages=args.max_pages,
     )
+    fallback_resource_names = [] if args.disable_g2b_fallback else _fallback_resource_names(summary)
+    fallback_records = []
+    fallback_summary: dict[str, Any] = {"source": "g2b", "resources": {}, "records_normalized": 0}
+    if fallback_resource_names:
+        fallback_runner = G2BFallbackRunner(client=G2BClient(page_size=args.page_size))
+        fallback_records, fallback_summary = fallback_runner.collect(
+            resource_names=fallback_resource_names,
+            from_date=from_date,
+            to_date=to_date,
+            max_pages=args.max_pages,
+        )
+        records.extend(fallback_records)
+        _mark_lh_fallbacks(summary, fallback_resource_names, fallback_summary)
     summary.update(
         {
             "run_mode": "live",
             "live_opt_in": True,
             "request_attempted": True,
             "configured": True,
+            "g2b_configured": g2b_configured,
             "from_date": from_date.isoformat(),
             "to_date": to_date.isoformat(),
+            "g2b_fallback": fallback_summary,
+            "fallback_used": bool(fallback_resource_names),
+            "overall_health": _overall_health(summary, fallback_summary),
+            "related_record_candidates": build_related_record_candidates(records),
             "output_files": {
                 "records": str(args.output_dir / "lh_records.json"),
                 "summary": str(args.output_dir / "lh_summary.json"),
@@ -102,7 +132,7 @@ def main() -> int:
     )
     write_staging_outputs(records, summary, args.output_dir)
     _print_sanitized_summary(summary)
-    return 0 if not _has_api_errors(summary) else 4
+    return 0 if not _has_blocking_errors(summary) else 4
 
 
 def _date_window(from_date: str | None, to_date: str | None, lookback_days: int) -> tuple[date, date]:
@@ -136,19 +166,92 @@ def _print_sanitized_summary(summary: dict[str, Any]) -> None:
                     f"records_invalid={payload.get('records_invalid')}",
                     f"duplicates={payload.get('duplicates')}",
                     f"api_errors={len(payload.get('api_errors') or [])}",
+                    f"source_health={payload.get('source_health', '-')}",
+                    f"fallback_used={payload.get('fallback_used', False)}",
                 ]
                 + error_parts
             )
         )
+    g2b_resources = (summary.get("g2b_fallback") or {}).get("resources") or {}
+    if g2b_resources:
+        print("G2B fallback summary:")
+        for resource, payload in g2b_resources.items():
+            first_error = _first_api_error(payload)
+            error_parts = []
+            if first_error:
+                error_parts = [
+                    f"error_category={first_error.get('category', '-')}",
+                    f"result_code={first_error.get('result_code', '-')}",
+                    f"exception_type={first_error.get('exception_type', '-')}",
+                    f"endpoint_scheme={first_error.get('endpoint_scheme', '-')}",
+                    f"endpoint_host={first_error.get('endpoint_host', '-')}",
+                ]
+            print(
+                " ".join(
+                    [
+                        f"- {resource}:",
+                        f"pages_requested={payload.get('pages_requested')}",
+                        f"records_received={payload.get('records_received')}",
+                        f"records_normalized={payload.get('records_normalized')}",
+                        f"records_invalid={payload.get('records_invalid')}",
+                        f"duplicates={payload.get('duplicates')}",
+                        f"api_errors={len(payload.get('api_errors') or [])}",
+                        f"source_health={payload.get('source_health', '-')}",
+                        f"fallback_used={payload.get('fallback_used', False)}",
+                    ]
+                    + error_parts
+                )
+            )
 
 
-def _has_api_errors(summary: dict[str, Any]) -> bool:
-    return any(bool(payload.get("api_errors")) for payload in summary.get("resources", {}).values())
+def _has_blocking_errors(summary: dict[str, Any]) -> bool:
+    return summary.get("overall_health") in {"failed", "degraded_unresolved"}
 
 
 def _first_api_error(payload: dict[str, Any]) -> dict[str, Any] | None:
     errors = payload.get("api_errors") or []
     return errors[0] if errors else None
+
+
+def _fallback_resource_names(summary: dict[str, Any]) -> list[str]:
+    mapping = {"procurement_plan": "g2b_procurement_plan", "pre_spec": "g2b_pre_spec"}
+    fallback_names = []
+    for lh_name, g2b_name in mapping.items():
+        resource = (summary.get("resources") or {}).get(lh_name) or {}
+        if any(error.get("category") == "service_access_denied" and error.get("result_code") == "20" for error in resource.get("api_errors") or []):
+            fallback_names.append(g2b_name)
+    return fallback_names
+
+
+def _mark_lh_fallbacks(summary: dict[str, Any], fallback_resource_names: list[str], fallback_summary: dict[str, Any]) -> None:
+    reverse = {"g2b_procurement_plan": "procurement_plan", "g2b_pre_spec": "pre_spec"}
+    for g2b_name in fallback_resource_names:
+        lh_name = reverse[g2b_name]
+        lh_resource = summary["resources"][lh_name]
+        lh_resource["fallback_used"] = True
+        fallback_resource = (fallback_summary.get("resources") or {}).get(g2b_name) or {}
+        if fallback_resource.get("source_health") in {"healthy", "degraded"}:
+            lh_resource["source_health"] = "degraded_source"
+
+
+def _overall_health(summary: dict[str, Any], fallback_summary: dict[str, Any]) -> str:
+    lh_resources = summary.get("resources") or {}
+    g2b_resources = (fallback_summary.get("resources") or {})
+    unresolved = []
+    fallback_used = False
+    for name, resource in lh_resources.items():
+        errors = resource.get("api_errors") or []
+        if not errors:
+            continue
+        if name in {"procurement_plan", "pre_spec"} and resource.get("fallback_used"):
+            fallback_used = True
+            g2b_name = "g2b_procurement_plan" if name == "procurement_plan" else "g2b_pre_spec"
+            if (g2b_resources.get(g2b_name) or {}).get("source_health") in {"healthy", "degraded"}:
+                continue
+        unresolved.append(name)
+    if unresolved:
+        return "degraded_unresolved"
+    return "success_with_fallback" if fallback_used else "healthy"
 
 
 if __name__ == "__main__":

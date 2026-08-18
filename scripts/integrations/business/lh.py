@@ -122,6 +122,8 @@ class LHCollectionSummary:
     api_result_codes: list[str | None] = field(default_factory=list)
     response_formats: list[str] = field(default_factory=list)
     total_count: int | None = None
+    fallback_used: bool = False
+    source_health: str = "healthy"
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -135,6 +137,8 @@ class LHCollectionSummary:
             "api_result_codes": self.api_result_codes,
             "response_formats": self.response_formats,
             "total_count": self.total_count,
+            "fallback_used": self.fallback_used,
+            "source_health": self.source_health,
         }
 
 
@@ -260,10 +264,11 @@ def parse_lh_response(content: bytes | str, *, encoding: str | None = None, endp
     result_code = _find_text(root, "resultCode")
     result_message = _find_text(root, "resultMsg") or _find_text(root, "resultMag")
     if result_code and result_code not in {"00", "0"}:
+        category = "service_access_denied" if result_code == "20" else "api_error"
         raise LHApiError(
             result_code,
             result_message or "",
-            diagnostic=_diagnostic("api_error", endpoint, result_code=result_code),
+            diagnostic=_diagnostic(category, endpoint, result_code=result_code),
         )
 
     items = []
@@ -347,15 +352,22 @@ class LHPilotRunner:
                     page = self.client.fetch_page(resource, page_no=page_no, from_date=from_date, to_date=to_date)
                 except LHApiError as exc:
                     summary.api_errors.append(exc.diagnostic)
+                    if exc.result_code == "20":
+                        summary.source_health = "degraded_source"
+                    else:
+                        summary.source_health = "failed"
                     break
                 except LHParseError as exc:
                     summary.api_errors.append(exc.diagnostic)
+                    summary.source_health = "failed"
                     break
                 except LHTransportError as exc:
                     summary.api_errors.append(exc.diagnostic)
+                    summary.source_health = "failed"
                     break
                 except requests.RequestException as exc:
                     summary.api_errors.append(_diagnostic("transport_error", resource.endpoint(), exception=exc))
+                    summary.source_health = "failed"
                     break
 
                 summary.pages_requested += 1
