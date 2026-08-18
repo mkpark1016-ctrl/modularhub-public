@@ -116,6 +116,16 @@ def _date_window(from_date: str | None, to_date: str | None, lookback_days: int)
 def _print_sanitized_summary(summary: dict[str, Any]) -> None:
     print("LH live pilot summary:")
     for resource, payload in summary.get("resources", {}).items():
+        first_error = _first_api_error(payload)
+        error_parts = []
+        if first_error:
+            error_parts = [
+                f"error_category={first_error.get('category', '-')}",
+                f"result_code={first_error.get('result_code', '-')}",
+                f"exception_type={first_error.get('exception_type', '-')}",
+                f"endpoint_scheme={first_error.get('endpoint_scheme', '-')}",
+                f"endpoint_host={first_error.get('endpoint_host', '-')}",
+            ]
         print(
             " ".join(
                 [
@@ -127,12 +137,18 @@ def _print_sanitized_summary(summary: dict[str, Any]) -> None:
                     f"duplicates={payload.get('duplicates')}",
                     f"api_errors={len(payload.get('api_errors') or [])}",
                 ]
+                + error_parts
             )
         )
 
 
 def _has_api_errors(summary: dict[str, Any]) -> bool:
     return any(bool(payload.get("api_errors")) for payload in summary.get("resources", {}).values())
+
+
+def _first_api_error(payload: dict[str, Any]) -> dict[str, Any] | None:
+    errors = payload.get("api_errors") or []
+    return errors[0] if errors else None
 
 
 if __name__ == "__main__":

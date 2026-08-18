@@ -3,13 +3,16 @@ from __future__ import annotations
 import math
 import os
 import re
+import time
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
+from urllib.parse import urlparse, urlunparse
 
 import requests
+from requests.exceptions import ConnectionError, SSLError, Timeout
 
 from .base import ExternalBusinessSourceAdapter, NormalizedBusinessRecord, parse_amount
 
@@ -17,8 +20,10 @@ from .base import ExternalBusinessSourceAdapter, NormalizedBusinessRecord, parse
 LH_SERVICE_KEY_ENV = "LH_SERVICE_KEY"
 LH_SOURCE = "lh"
 DEFAULT_PAGE_SIZE = 10
-DEFAULT_TIMEOUT_SECONDS = 20
+DEFAULT_TIMEOUT_SECONDS = 30
 MAX_PAGES = 50
+MAX_REQUEST_ATTEMPTS = 3
+LH_OPENAPI_HOST = "openapi.ebid.lh.or.kr"
 
 
 @dataclass(frozen=True)
@@ -67,14 +72,23 @@ LH_RESOURCES: dict[str, LHResource] = {
 
 
 class LHApiError(RuntimeError):
-    def __init__(self, result_code: str, result_message: str) -> None:
+    def __init__(self, result_code: str, result_message: str, *, diagnostic: dict[str, str] | None = None) -> None:
         super().__init__(f"LH API error: {result_code} {result_message}".strip())
         self.result_code = result_code
         self.result_message = result_message
+        self.diagnostic = diagnostic or {"category": "api_error", "result_code": result_code}
 
 
 class LHParseError(RuntimeError):
-    pass
+    def __init__(self, message: str, *, diagnostic: dict[str, str] | None = None) -> None:
+        super().__init__(message)
+        self.diagnostic = diagnostic or {"category": "response_parse_error"}
+
+
+class LHTransportError(RuntimeError):
+    def __init__(self, message: str, *, diagnostic: dict[str, str]) -> None:
+        super().__init__(message)
+        self.diagnostic = diagnostic
 
 
 @dataclass(frozen=True)
@@ -134,11 +148,13 @@ class LHClient:
         service_key: str | None = None,
         page_size: int = DEFAULT_PAGE_SIZE,
         timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
+        max_attempts: int = MAX_REQUEST_ATTEMPTS,
         request_get: RequestGet | None = None,
     ) -> None:
         self.service_key = (service_key if service_key is not None else os.getenv(LH_SERVICE_KEY_ENV, "")).strip()
         self.page_size = page_size
         self.timeout_seconds = timeout_seconds
+        self.max_attempts = max(1, max_attempts)
         self.request_get = request_get or requests.get
 
     def configured(self) -> bool:
@@ -155,20 +171,70 @@ class LHClient:
             resource.date_start_param: from_date.strftime(resource.date_format),
             resource.date_end_param: to_date.strftime(resource.date_format),
         }
-        response = self.request_get(resource.endpoint(), params=params, timeout=self.timeout_seconds)
-        response.raise_for_status()
-        payload = parse_lh_response(response.content, encoding=getattr(response, "encoding", None))
+        endpoint = resource.endpoint()
+        response, payload, used_endpoint = self._get_with_retries(endpoint, params=params)
         return LHPageResult(
             resource=resource.name,
             page_no=page_no,
             page_size=self.page_size,
             http_status=int(response.status_code),
             payload=payload,
-            endpoint=resource.endpoint(),
+            endpoint=used_endpoint,
+        )
+
+    def _get_with_retries(self, endpoint: str, *, params: dict[str, Any]) -> tuple[Any, LHPayload, str]:
+        last_transport_error: BaseException | None = None
+        last_transport_endpoint = endpoint
+        last_api_error: LHApiError | None = None
+
+        for candidate in _endpoint_candidates(endpoint):
+            for attempt in range(self.max_attempts):
+                try:
+                    response = self.request_get(candidate, params=params, timeout=self.timeout_seconds)
+                    response.raise_for_status()
+                    payload = parse_lh_response(
+                        response.content,
+                        encoding=getattr(response, "encoding", None),
+                        endpoint=candidate,
+                    )
+                    return response, payload, candidate
+                except (SSLError, ConnectionError, Timeout) as exc:
+                    last_transport_error = exc
+                    last_transport_endpoint = candidate
+                    if isinstance(exc, SSLError):
+                        break
+                    if attempt + 1 < self.max_attempts:
+                        _sleep_before_retry(attempt)
+                        continue
+                    break
+                except requests.HTTPError as exc:
+                    raise LHTransportError(
+                        "LH HTTP response failed",
+                        diagnostic=_diagnostic("transport_error", candidate, exception=exc),
+                    ) from exc
+                except LHApiError as exc:
+                    last_api_error = exc
+                    if exc.result_code != "30":
+                        raise exc
+                    if exc.result_code == "30" and attempt + 1 < self.max_attempts:
+                        _sleep_before_retry(attempt)
+                        continue
+                    break
+
+        if last_api_error is not None:
+            raise last_api_error
+        if last_transport_error is not None:
+            raise LHTransportError(
+                "LH API transport request failed",
+                diagnostic=_diagnostic("transport_error", last_transport_endpoint, exception=last_transport_error),
+            ) from last_transport_error
+        raise LHTransportError(
+            "LH API request failed before a response was received",
+            diagnostic=_diagnostic("transport_error", endpoint),
         )
 
 
-def parse_lh_response(content: bytes | str, *, encoding: str | None = None) -> LHPayload:
+def parse_lh_response(content: bytes | str, *, encoding: str | None = None, endpoint: str | None = None) -> LHPayload:
     if isinstance(content, bytes):
         text = content.decode(encoding or "utf-8", errors="replace").strip()
     else:
@@ -177,18 +243,28 @@ def parse_lh_response(content: bytes | str, *, encoding: str | None = None) -> L
         return LHPayload(result_code=None, result_message=None, total_count=0, items=[], response_format="empty")
 
     if text.startswith("{"):
-        raise LHParseError("LH JSON response is not supported by this XML parser")
+        raise LHParseError(
+            "LH JSON response is not supported by this XML parser",
+            diagnostic=_diagnostic("response_parse_error", endpoint),
+        )
 
     xml_text = re.sub(r"^\s*<\?xml[^>]*\?>", "", text).strip()
     try:
         root = ET.fromstring(xml_text)
     except ET.ParseError as exc:
-        raise LHParseError("LH XML response could not be parsed") from exc
+        raise LHParseError(
+            "LH XML response could not be parsed",
+            diagnostic=_diagnostic("response_parse_error", endpoint),
+        ) from exc
 
     result_code = _find_text(root, "resultCode")
     result_message = _find_text(root, "resultMsg") or _find_text(root, "resultMag")
     if result_code and result_code not in {"00", "0"}:
-        raise LHApiError(result_code, result_message or "")
+        raise LHApiError(
+            result_code,
+            result_message or "",
+            diagnostic=_diagnostic("api_error", endpoint, result_code=result_code),
+        )
 
     items = []
     for item_node in _iter_local(root, "item"):
@@ -270,13 +346,16 @@ class LHPilotRunner:
                 try:
                     page = self.client.fetch_page(resource, page_no=page_no, from_date=from_date, to_date=to_date)
                 except LHApiError as exc:
-                    summary.api_errors.append({"category": "api_error", "result_code": exc.result_code})
+                    summary.api_errors.append(exc.diagnostic)
                     break
-                except LHParseError:
-                    summary.api_errors.append({"category": "response_parse_error"})
+                except LHParseError as exc:
+                    summary.api_errors.append(exc.diagnostic)
                     break
-                except requests.RequestException:
-                    summary.api_errors.append({"category": "transport_error"})
+                except LHTransportError as exc:
+                    summary.api_errors.append(exc.diagnostic)
+                    break
+                except requests.RequestException as exc:
+                    summary.api_errors.append(_diagnostic("transport_error", resource.endpoint(), exception=exc))
                     break
 
                 summary.pages_requested += 1
@@ -330,6 +409,38 @@ def write_staging_outputs(records: list[NormalizedBusinessRecord], summary: dict
 
 def redact_url(url: str) -> str:
     return re.sub(r"([?&]serviceKey=)[^&]+", r"\1<redacted>", url)
+
+
+def _endpoint_candidates(endpoint: str) -> list[str]:
+    candidates = [endpoint]
+    parsed = urlparse(endpoint)
+    if parsed.scheme == "https" and parsed.hostname == LH_OPENAPI_HOST:
+        candidates.append(urlunparse(parsed._replace(scheme="http")))
+    return candidates
+
+
+def _diagnostic(
+    category: str,
+    endpoint: str | None,
+    *,
+    result_code: str | None = None,
+    exception: BaseException | None = None,
+) -> dict[str, str]:
+    parsed = urlparse(endpoint or "")
+    diagnostic: dict[str, str] = {"category": category}
+    if result_code:
+        diagnostic["result_code"] = result_code
+    if exception is not None:
+        diagnostic["exception_type"] = type(exception).__name__
+    if parsed.scheme:
+        diagnostic["endpoint_scheme"] = parsed.scheme
+    if parsed.hostname:
+        diagnostic["endpoint_host"] = parsed.hostname
+    return diagnostic
+
+
+def _sleep_before_retry(attempt: int) -> None:
+    time.sleep(0.5 * (attempt + 1))
 
 
 def _find_text(root: ET.Element, tag: str) -> str:

@@ -129,13 +129,20 @@ jobs:
               handle.write(f"- from_date: {summary.get('from_date')}\n")
               handle.write(f"- to_date: {summary.get('to_date')}\n")
               for name, resource in sorted((summary.get("resources") or {}).items()):
+                  errors = resource.get("api_errors") or []
+                  first_error = errors[0] if errors else {}
                   handle.write(
                       f"- {name}: pages={resource.get('pages_requested')}, "
                       f"received={resource.get('records_received')}, "
                       f"normalized={resource.get('records_normalized')}, "
                       f"invalid={resource.get('records_invalid')}, "
                       f"duplicates={resource.get('duplicates')}, "
-                      f"api_errors={len(resource.get('api_errors') or [])}\n"
+                      f"api_errors={len(errors)}, "
+                      f"error_category={first_error.get('category', '-')}, "
+                      f"result_code={first_error.get('result_code', '-')}, "
+                      f"exception_type={first_error.get('exception_type', '-')}, "
+                      f"endpoint_scheme={first_error.get('endpoint_scheme', '-')}, "
+                      f"endpoint_host={first_error.get('endpoint_host', '-')}\n"
                   )
           PY
           cat lh-summary.md >> "$GITHUB_STEP_SUMMARY"
