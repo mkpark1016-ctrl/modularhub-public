@@ -5,12 +5,15 @@ from datetime import date
 from pathlib import Path
 
 import pytest
+import requests
 
 from scripts.integrations.business.lh import (
     LH_RESOURCES,
     LH_SERVICE_KEY_ENV,
     LHApiError,
     LHClient,
+    LHResource,
+    LHTransportError,
     LHPilotRunner,
     LHProcurementAdapter,
     parse_lh_response,
@@ -178,6 +181,175 @@ def test_pagination_deduplication_and_invalid_date(monkeypatch: pytest.MonkeyPat
     assert resource_summary["records_invalid"] == 1
 
 
+def test_lh_client_uses_https_without_http_fallback(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LH_OPENBID_ENDPOINT", raising=False)
+    calls: list[str] = []
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        calls.append(endpoint)
+        assert params["serviceKey"] == "secret-value-for-test"
+        return FakeResponse(BID_NOTICE_XML)
+
+    client = LHClient(service_key="secret-value-for-test", request_get=fake_get)
+    result = client.fetch_page(
+        LH_RESOURCES["bid_notice"],
+        page_no=1,
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+    )
+
+    assert calls == [LH_RESOURCES["bid_notice"].default_endpoint]
+    assert result.endpoint.startswith("https://openapi.ebid.lh.or.kr/")
+
+
+def test_lh_client_falls_back_to_official_http_after_https_transport_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("LH_OPENBID_ENDPOINT", raising=False)
+    monkeypatch.setattr("scripts.integrations.business.lh._sleep_before_retry", lambda _attempt: None)
+    calls: list[str] = []
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        calls.append(endpoint)
+        if endpoint.startswith("https://"):
+            raise requests.exceptions.ConnectionError("simulated connection failure")
+        return FakeResponse(BID_NOTICE_XML)
+
+    client = LHClient(service_key="secret-value-for-test", request_get=fake_get)
+    result = client.fetch_page(
+        LH_RESOURCES["bid_notice"],
+        page_no=1,
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+    )
+
+    assert calls.count(LH_RESOURCES["bid_notice"].default_endpoint) == 3
+    assert calls[-1] == LH_RESOURCES["bid_notice"].default_endpoint.replace("https://", "http://", 1)
+    assert result.endpoint.startswith("http://openapi.ebid.lh.or.kr/")
+
+
+def test_lh_client_falls_back_to_http_after_ssl_failure(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LH_OPENBID_ENDPOINT", raising=False)
+    calls: list[str] = []
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        calls.append(endpoint)
+        if endpoint.startswith("https://"):
+            raise requests.exceptions.SSLError("simulated SSL failure")
+        return FakeResponse(PRE_SPEC_XML)
+
+    client = LHClient(service_key="secret-value-for-test", request_get=fake_get)
+    result = client.fetch_page(
+        LH_RESOURCES["pre_spec"],
+        page_no=1,
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+    )
+
+    assert calls == [
+        LH_RESOURCES["pre_spec"].default_endpoint,
+        LH_RESOURCES["pre_spec"].default_endpoint.replace("https://", "http://", 1),
+    ]
+    assert result.endpoint.startswith("http://openapi.ebid.lh.or.kr/")
+
+
+def test_lh_client_does_not_downgrade_non_lh_hosts(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("scripts.integrations.business.lh._sleep_before_retry", lambda _attempt: None)
+    custom_resource = LHResource(
+        name="custom",
+        source_record_type="bid_notice",
+        endpoint_env="CUSTOM_LH_ENDPOINT",
+        default_endpoint="https://api.example.test/lh",
+        date_start_param="tndrbidRegDtStart",
+        date_end_param="tndrbidRegDtEnd",
+        date_format="%Y%m%d",
+    )
+    calls: list[str] = []
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        calls.append(endpoint)
+        raise requests.exceptions.Timeout("simulated timeout")
+
+    client = LHClient(service_key="secret-value-for-test", request_get=fake_get)
+    with pytest.raises(LHTransportError) as exc_info:
+        client.fetch_page(
+            custom_resource,
+            page_no=1,
+            from_date=date(2026, 8, 1),
+            to_date=date(2026, 8, 18),
+        )
+
+    assert calls == ["https://api.example.test/lh"] * 3
+    assert exc_info.value.diagnostic == {
+        "category": "transport_error",
+        "exception_type": "Timeout",
+        "endpoint_scheme": "https",
+        "endpoint_host": "api.example.test",
+    }
+
+
+def test_result_code_30_retries_and_preserves_sanitized_diagnostics(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("LH_OPENBID_ENDPOINT", raising=False)
+    monkeypatch.setattr("scripts.integrations.business.lh._sleep_before_retry", lambda _attempt: None)
+    calls: list[str] = []
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        calls.append(endpoint)
+        return FakeResponse(API_ERROR_XML)
+
+    runner = LHPilotRunner(client=LHClient(service_key="secret-value-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["bid_notice"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert records == []
+    assert len(calls) == 6
+    api_error = summary["resources"]["bid_notice"]["api_errors"][0]
+    assert api_error == {
+        "category": "api_error",
+        "result_code": "30",
+        "endpoint_scheme": "http",
+        "endpoint_host": "openapi.ebid.lh.or.kr",
+    }
+    serialized = json.dumps(summary, ensure_ascii=False)
+    assert "secret-value-for-test" not in serialized
+    assert "serviceKey" not in serialized
+    assert "?" not in serialized
+
+
+def test_three_lh_resources_share_staging_summary_contract(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("LH_ORDER_PLAN_ENDPOINT", raising=False)
+    monkeypatch.delenv("LH_PRE_SPEC_ENDPOINT", raising=False)
+    monkeypatch.delenv("LH_OPENBID_ENDPOINT", raising=False)
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        if "OpenOrdergPlanList" in endpoint:
+            return FakeResponse(PROCUREMENT_PLAN_XML)
+        if "OpenAdvcinfoReqList" in endpoint:
+            return FakeResponse(PRE_SPEC_XML)
+        return FakeResponse(BID_NOTICE_XML)
+
+    runner = LHPilotRunner(client=LHClient(service_key="secret-value-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["procurement_plan", "pre_spec", "bid_notice"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert len(records) == 3
+    assert set(summary["resources"]) == {"procurement_plan", "pre_spec", "bid_notice"}
+    for resource in summary["resources"].values():
+        assert resource["pages_requested"] == 1
+        assert resource["api_errors"] == []
+        assert resource["http_statuses"] == [200]
+
+
 def test_live_guard_writes_summary_without_request(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.setenv(LH_SERVICE_KEY_ENV, "secret-value-for-test")
     monkeypatch.setattr(
@@ -221,3 +393,5 @@ def test_lh_workflow_installs_pytest_and_preserves_original_failure() -> None:
     assert "Verify LH staging outputs" in workflow
     assert "test -f artifacts/lh/lh_summary.json" in workflow
     assert "test -f artifacts/lh/lh_records.json" in workflow
+    assert "error_category={first_error.get('category', '-')}" in workflow
+    assert "result_code={first_error.get('result_code', '-')}" in workflow
