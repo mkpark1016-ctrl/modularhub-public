@@ -1,0 +1,94 @@
+name: D2B Live Schema Fingerprint
+
+on:
+  workflow_dispatch:
+    inputs:
+      acknowledge_live:
+        description: Confirm one key-only D2B live schema fingerprint run
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  d2b-schema-fingerprint:
+    runs-on: ubuntu-latest
+    env:
+      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Guard live opt-in
+        run: |
+          if [ "${{ inputs.acknowledge_live }}" != "true" ]; then
+            echo "D2B schema fingerprint skipped: acknowledge_live must be true."
+            exit 1
+          fi
+
+      - name: Check D2B secret configuration
+        run: |
+          if [ -n "${DATA_GO_KR_SERVICE_KEY}" ]; then
+            echo "DATA_GO_KR_SERVICE_KEY configured: true"
+          else
+            echo "DATA_GO_KR_SERVICE_KEY configured: false"
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Run offline schema fingerprint tests
+        run: |
+          python -m pytest -q tests/test_d2b_schema_fingerprint.py
+          python -m pytest -q tests/test_d2b_procurement_api_pilot.py
+
+      - name: Run key-only live schema fingerprint
+        run: |
+          python scripts/integrations/business/run_d2b_schema_fingerprint.py \
+            --output-dir artifacts/d2b-schema-fingerprint \
+            --live \
+            --acknowledge-live
+
+      - name: Verify sanitized schema fingerprint
+        run: |
+          test -f artifacts/d2b-schema-fingerprint/d2b-schema-fingerprint.json
+          test -f artifacts/d2b-schema-fingerprint/d2b-schema-fingerprint.md
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from scripts.integrations.business.d2b_schema_fingerprint import verify_schema_fingerprint
+
+          path = Path("artifacts/d2b-schema-fingerprint/d2b-schema-fingerprint.json")
+          summary = json.loads(path.read_text(encoding="utf-8"))
+          verify_schema_fingerprint(summary, service_key=os.environ["DATA_GO_KR_SERVICE_KEY"])
+          print(f"D2B fingerprint_health={summary.get('fingerprint_health')}")
+          PY
+
+      - name: Append sanitized schema summary
+        if: always()
+        run: |
+          if [ ! -f artifacts/d2b-schema-fingerprint/d2b-schema-fingerprint.md ]; then
+            echo "No D2B schema fingerprint was generated. An earlier step failed." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          cat artifacts/d2b-schema-fingerprint/d2b-schema-fingerprint.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload schema fingerprint artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d2b-live-schema-fingerprint-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/d2b-schema-fingerprint/
+          if-no-files-found: warn

@@ -17,8 +17,12 @@ from scripts.integrations.business.d2b import (
     D2B_GW_BID_BASE_ENDPOINT,
     D2B_GW_PLAN_BASE_ENDPOINT,
     D2BClient,
+    D2BCollectionSummary,
     D2BPilotRunner,
     D2BProcurementAdapter,
+    _overall_health,
+    _resource_health,
+    is_d2b_acceptance_failure,
     write_staging_outputs,
 )
 
@@ -360,6 +364,80 @@ def test_d2b_empty_response_is_healthy_empty() -> None:
     assert summary["overall_health"] == "healthy_empty"
 
 
+@pytest.mark.parametrize(
+    ("matched", "normalized", "invalid", "api_errors", "expected"),
+    [
+        (0, 0, 0, [], "healthy_empty"),
+        (10, 10, 0, [], "healthy"),
+        (10, 0, 10, [], "schema_mismatch"),
+        (0, 0, 0, [{"category": "transport_error"}], "failed"),
+        (10, 8, 2, [], "healthy"),
+    ],
+)
+def test_d2b_resource_health_semantics(
+    matched: int,
+    normalized: int,
+    invalid: int,
+    api_errors: list[dict[str, str]],
+    expected: str,
+) -> None:
+    summary = D2BCollectionSummary(
+        records_matched=matched,
+        records_normalized=normalized,
+        records_invalid=invalid,
+        api_errors=api_errors,
+    )
+
+    assert _resource_health(summary) == expected
+
+
+def test_d2b_schema_mismatch_propagates_to_overall_acceptance() -> None:
+    healthy = D2BCollectionSummary(records_matched=2, records_normalized=2, source_health="healthy")
+    mismatch = D2BCollectionSummary(
+        records_matched=3,
+        records_invalid=3,
+        source_health="schema_mismatch",
+    )
+    overall_health = _overall_health({"procurement_plan": mismatch, "bid_notice": healthy})
+
+    assert overall_health == "schema_mismatch"
+    assert is_d2b_acceptance_failure({"overall_health": overall_health}) is True
+    assert is_d2b_acceptance_failure({"overall_health": "healthy_empty"}) is False
+
+
+def test_d2b_runner_marks_matched_but_fully_invalid_records_as_schema_mismatch() -> None:
+    def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: Any) -> FakeResponse:
+        return FakeResponse(
+            d2b_payload(
+                [
+                    {
+                        "actualPlanIdentifier": "LIVE-SCHEMA-ID",
+                        "actualPlanLabel": D2B_PLAN_ITEM["reprsntPrdlstNm"],
+                        "excutTyNm": D2B_PLAN_ITEM["excutTyNm"],
+                    }
+                ]
+            )
+        )
+
+    runner = D2BPilotRunner(client=D2BClient(service_key="test-secret", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2027, 8, 1),
+        bid_from=date(2026, 5, 1),
+        bid_to=date(2026, 8, 19),
+        max_pages=1,
+    )
+
+    resource = summary["resources"]["procurement_plan"]
+    assert records == []
+    assert resource["records_matched"] == 1
+    assert resource["records_normalized"] == 0
+    assert resource["records_invalid"] == 1
+    assert resource["source_health"] == "schema_mismatch"
+    assert summary["overall_health"] == "schema_mismatch"
+
+
 def test_d2b_api_error_is_sanitized() -> None:
     def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: int) -> FakeResponse:
         return FakeResponse(d2b_payload([], result_code="99"))
@@ -549,6 +627,7 @@ def test_d2b_workflow_is_manual_staging_only() -> None:
     assert "python -m pytest -q tests/test_d2b_procurement_api_pilot.py" in workflow
     assert "artifacts/d2b/" in workflow
     assert "if-no-files-found: warn" in workflow
+    assert "is_d2b_acceptance_failure" in workflow
     assert "D2B_SERVICE_KEY" not in workflow
 
 

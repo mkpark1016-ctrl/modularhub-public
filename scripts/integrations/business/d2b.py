@@ -538,15 +538,23 @@ def _resource_health(summary: D2BCollectionSummary) -> str:
         return "failed"
     if summary.records_normalized > 0:
         return "healthy"
+    if summary.records_matched > 0 and summary.records_invalid > 0:
+        return "schema_mismatch"
     return "healthy_empty"
 
 
 def _overall_health(summaries: dict[str, D2BCollectionSummary]) -> str:
     if any(summary.source_health == "failed" for summary in summaries.values()):
         return "failed"
+    if any(summary.source_health == "schema_mismatch" for summary in summaries.values()):
+        return "schema_mismatch"
     if any(summary.records_normalized > 0 for summary in summaries.values()):
         return "healthy"
     return "healthy_empty"
+
+
+def is_d2b_acceptance_failure(summary: dict[str, Any]) -> bool:
+    return summary.get("overall_health") in {"failed", "schema_mismatch"}
 
 
 def _validation_error_reason(record_type: str, raw: dict[str, Any], exc: ValueError) -> str:
