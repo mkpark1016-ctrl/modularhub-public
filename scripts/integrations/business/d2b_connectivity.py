@@ -375,8 +375,48 @@ def assert_safe_summary(summary: dict[str, Any], *, service_key: str) -> None:
         raise ValueError("Diagnostic summary contains a credential value")
     if "serviceKey=" in serialized or "serviceKey%3D" in serialized:
         raise ValueError("Diagnostic summary contains a credential-bearing URL")
-    if _contains_key(summary, "raw_response"):
-        raise ValueError("Diagnostic summary contains a raw response field")
+    forbidden_key = _find_forbidden_key(summary)
+    if forbidden_key:
+        raise ValueError(f"Diagnostic summary contains unsafe field: {forbidden_key}")
+    if _contains_authorization_credential(summary):
+        raise ValueError("Diagnostic summary contains an authorization credential")
+
+
+def verify_diagnostic_summary(summary: dict[str, Any], *, service_key: str) -> None:
+    required_probes = {
+        "dns",
+        "tcp",
+        "https",
+        "g2b",
+        "d2b_procurement_plan",
+        "d2b_bid_notice",
+    }
+    if set(summary.get("probes") or {}) != required_probes:
+        raise ValueError("Diagnostic output is missing a required probe")
+
+    classification = (summary.get("classification") or {}).get("case")
+    if classification == "diagnostic_implementation_failure":
+        raise ValueError("Diagnostic implementation failure")
+    if classification not in {
+        "case_1",
+        "case_2",
+        "case_3",
+        "diagnostic_inconclusive",
+    }:
+        raise ValueError("Diagnostic classification is invalid")
+
+    security = summary.get("security")
+    if not isinstance(security, dict):
+        raise ValueError("Diagnostic security metadata is missing")
+    for field in (
+        "secret_exposure_detected",
+        "credential_url_exposure_detected",
+        "raw_response_persisted",
+    ):
+        if security.get(field) is not False:
+            raise ValueError(f"Diagnostic security check failed: {field}")
+
+    assert_safe_summary(summary, service_key=service_key)
 
 
 def write_diagnostic_outputs(summary: dict[str, Any], output_dir: Path) -> None:
@@ -478,13 +518,38 @@ def _find_result_code(value: Any) -> str | None:
     return None
 
 
-def _contains_key(value: Any, forbidden_key: str) -> bool:
+def _find_forbidden_key(value: Any) -> str | None:
+    forbidden_keys = {
+        "authorization",
+        "raw_payload",
+        "raw_response",
+        "request_headers",
+        "response_body",
+        "service_key",
+    }
     if isinstance(value, dict):
-        return forbidden_key in value or any(
-            _contains_key(child, forbidden_key) for child in value.values()
-        )
+        for key, child in value.items():
+            if str(key).casefold() in forbidden_keys:
+                return str(key)
+            nested = _find_forbidden_key(child)
+            if nested:
+                return nested
     if isinstance(value, list):
-        return any(_contains_key(child, forbidden_key) for child in value)
+        for child in value:
+            nested = _find_forbidden_key(child)
+            if nested:
+                return nested
+    return None
+
+
+def _contains_authorization_credential(value: Any) -> bool:
+    if isinstance(value, str):
+        normalized = value.casefold()
+        return "authorization: bearer " in normalized or "authorization: basic " in normalized
+    if isinstance(value, dict):
+        return any(_contains_authorization_credential(child) for child in value.values())
+    if isinstance(value, list):
+        return any(_contains_authorization_credential(child) for child in value)
     return False
 
 

@@ -68,26 +68,17 @@ jobs:
           test -f artifacts/d2b-connectivity/diagnostic-summary.md
           python - <<'PY'
           import json
+          import os
           from pathlib import Path
+
+          from scripts.integrations.business.d2b_connectivity import verify_diagnostic_summary
 
           path = Path("artifacts/d2b-connectivity/diagnostic-summary.json")
           summary = json.loads(path.read_text(encoding="utf-8"))
-          required = {
-              "dns",
-              "tcp",
-              "https",
-              "g2b",
-              "d2b_procurement_plan",
-              "d2b_bid_notice",
-          }
-          if set(summary.get("probes") or {}) != required:
-              raise SystemExit("Diagnostic output is missing a required probe")
-          if summary.get("classification", {}).get("case") == "diagnostic_implementation_failure":
-              raise SystemExit("Diagnostic implementation failure")
-          serialized = json.dumps(summary, ensure_ascii=False)
-          for forbidden in ("serviceKey=", "raw_response", "Authorization"):
-              if forbidden in serialized:
-                  raise SystemExit(f"Unsafe diagnostic output key: {forbidden}")
+          verify_diagnostic_summary(
+              summary,
+              service_key=os.environ.get("DATA_GO_KR_SERVICE_KEY", ""),
+          )
           print(f"classification={summary['classification']['case']}")
           PY
 

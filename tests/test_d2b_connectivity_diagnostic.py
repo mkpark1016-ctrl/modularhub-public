@@ -19,6 +19,7 @@ from scripts.integrations.business.d2b_connectivity import (
     probe_api_endpoint,
     probe_https,
     run_connectivity_diagnostic,
+    verify_diagnostic_summary,
 )
 
 
@@ -243,8 +244,80 @@ def test_summary_rejects_secret_urls_and_raw_response_fields() -> None:
             {"url": "https://apis.data.go.kr/path?serviceKey=redacted"},
             service_key="secret-value",
         )
-    with pytest.raises(ValueError, match="raw response"):
+    with pytest.raises(ValueError, match="unsafe field"):
         assert_safe_summary({"raw_response": "body"}, service_key="secret-value")
+    with pytest.raises(ValueError, match="unsafe field"):
+        assert_safe_summary({"response_body": "body"}, service_key="secret-value")
+    with pytest.raises(ValueError, match="unsafe field"):
+        assert_safe_summary({"authorization": "Bearer credential"}, service_key="secret-value")
+    with pytest.raises(ValueError, match="authorization credential"):
+        assert_safe_summary(
+            {"note": "Authorization: Bearer credential"},
+            service_key="secret-value",
+        )
+
+
+def test_case_3_security_metadata_passes_structured_verification() -> None:
+    probes = {
+        name: {"http_reached": False}
+        for name in (
+            "dns",
+            "tcp",
+            "https",
+            "g2b",
+            "d2b_procurement_plan",
+            "d2b_bid_notice",
+        )
+    }
+    summary = {
+        "probes": probes,
+        "classification": {"case": "case_3"},
+        "security": {
+            "secret_exposure_detected": False,
+            "credential_url_exposure_detected": False,
+            "raw_response_persisted": False,
+        },
+    }
+
+    verify_diagnostic_summary(summary, service_key="secret-value")
+
+    summary["classification"]["case"] = "diagnostic_implementation_failure"
+    with pytest.raises(ValueError, match="implementation failure"):
+        verify_diagnostic_summary(summary, service_key="secret-value")
+
+
+@pytest.mark.parametrize(
+    "field",
+    (
+        "secret_exposure_detected",
+        "credential_url_exposure_detected",
+        "raw_response_persisted",
+    ),
+)
+def test_structured_verification_rejects_failed_security_flags(field: str) -> None:
+    summary = {
+        "probes": {
+            name: {}
+            for name in (
+                "dns",
+                "tcp",
+                "https",
+                "g2b",
+                "d2b_procurement_plan",
+                "d2b_bid_notice",
+            )
+        },
+        "classification": {"case": "case_3"},
+        "security": {
+            "secret_exposure_detected": False,
+            "credential_url_exposure_detected": False,
+            "raw_response_persisted": False,
+        },
+    }
+    summary["security"][field] = True
+
+    with pytest.raises(ValueError, match=field):
+        verify_diagnostic_summary(summary, service_key="secret-value")
 
 
 def test_cli_guard_prevents_network_without_dual_opt_in(tmp_path: Path) -> None:
@@ -288,3 +361,5 @@ def test_connectivity_workflow_is_manual_read_only_and_sanitized() -> None:
     assert "if-no-files-found: warn" in workflow
     assert "verify=False" not in workflow
     assert 'echo "${DATA_GO_KR_SERVICE_KEY}"' not in workflow
+    assert "verify_diagnostic_summary" in workflow
+    assert 'for forbidden in ("serviceKey=", "raw_response", "Authorization")' not in workflow
