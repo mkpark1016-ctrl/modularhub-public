@@ -4,6 +4,7 @@ import json
 import math
 import os
 import re
+import time
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
@@ -12,6 +13,7 @@ from typing import Any, Callable
 from urllib.parse import urlparse
 
 import requests
+from requests.exceptions import ConnectionError, ConnectTimeout, HTTPError, ReadTimeout, Timeout
 
 from src.collectors.d2b_bid import calculate_d2b_bid_relevance
 from src.collectors.d2b_plan import calculate_d2b_relevance
@@ -25,6 +27,9 @@ DEFAULT_PAGE_SIZE = 50
 DEFAULT_MAX_PAGES = 3
 DEFAULT_LOOKBACK_DAYS = 90
 DEFAULT_LOOKAHEAD_MONTHS = 12
+DEFAULT_CONNECT_TIMEOUT_SECONDS = 10
+DEFAULT_READ_TIMEOUT_SECONDS = 30
+MAX_REQUEST_ATTEMPTS = 3
 D2B_GW_PLAN_BASE_ENDPOINT = "https://apis.data.go.kr/1690000/PrcurePlanInfoService"
 D2B_GW_BID_BASE_ENDPOINT = "https://apis.data.go.kr/1690000/BidPblancInfoService"
 D2B_GW_CODE_BASE_ENDPOINT = "https://apis.data.go.kr/1690000/CodeInqireService"
@@ -108,6 +113,12 @@ class D2BParseError(RuntimeError):
         self.diagnostic = _diagnostic("response_parse_error", endpoint)
 
 
+class D2BTransportError(RuntimeError):
+    def __init__(self, message: str, *, diagnostic: dict[str, str]) -> None:
+        super().__init__(message)
+        self.diagnostic = diagnostic
+
+
 @dataclass(frozen=True)
 class D2BPayload:
     result_code: str | None
@@ -162,6 +173,7 @@ class D2BCollectionSummary:
 
 
 RequestGet = Callable[..., Any]
+SleepFunc = Callable[[int], None]
 
 
 class D2BClient:
@@ -170,13 +182,18 @@ class D2BClient:
         *,
         service_key: str | None = None,
         page_size: int = DEFAULT_PAGE_SIZE,
-        timeout_seconds: int = 30,
+        timeout_seconds: int | tuple[int, int] = DEFAULT_READ_TIMEOUT_SECONDS,
+        connect_timeout_seconds: int = DEFAULT_CONNECT_TIMEOUT_SECONDS,
+        max_attempts: int = MAX_REQUEST_ATTEMPTS,
         request_get: RequestGet | None = None,
+        sleep_func: SleepFunc | None = None,
     ) -> None:
         self.service_key = (service_key if service_key is not None else os.getenv(D2B_SERVICE_KEY_ENV, "")).strip()
         self.page_size = page_size
-        self.timeout_seconds = timeout_seconds
+        self.timeout = _timeout_tuple(timeout_seconds, connect_timeout_seconds)
+        self.max_attempts = max(1, max_attempts)
         self.request_get = request_get or requests.get
+        self.sleep_func = sleep_func or _sleep_before_retry
 
     def configured(self) -> bool:
         return bool(self.service_key)
@@ -192,11 +209,7 @@ class D2BClient:
             operation.date_start_param: from_date.strftime(operation.date_format),
             operation.date_end_param: to_date.strftime(operation.date_format),
         }
-        try:
-            response = self.request_get(endpoint, params=params, timeout=self.timeout_seconds)
-            response.raise_for_status()
-        except requests.RequestException as exc:
-            raise RuntimeError("D2B GW transport request failed") from exc
+        response = self._get_with_retries(endpoint, params=params)
         payload = parse_d2b_response(
             response.content,
             encoding=getattr(response, "encoding", None),
@@ -210,6 +223,60 @@ class D2BClient:
             payload=payload,
             endpoint=endpoint,
         )
+
+    def _get_with_retries(self, endpoint: str, *, params: dict[str, Any]) -> Any:
+        last_error: BaseException | None = None
+        for attempt in range(self.max_attempts):
+            try:
+                response = self.request_get(endpoint, params=params, timeout=self.timeout)
+                response.raise_for_status()
+                return response
+            except (ConnectTimeout, ConnectionError, Timeout) as exc:
+                last_error = exc
+                if attempt + 1 < self.max_attempts:
+                    self.sleep_func(attempt)
+                    continue
+                break
+            except HTTPError as exc:
+                last_error = exc
+                status_code = _status_code_from_http_error(exc)
+                if status_code is not None and status_code >= 500 and attempt + 1 < self.max_attempts:
+                    self.sleep_func(attempt)
+                    continue
+                raise D2BTransportError(
+                    "D2B GW HTTP response failed",
+                    diagnostic=_diagnostic(
+                        "transport_error",
+                        endpoint,
+                        exception=exc,
+                        attempt_count=attempt + 1,
+                        http_status=status_code,
+                        transport_category=_transport_category(exc, status_code=status_code),
+                    ),
+                ) from exc
+            except requests.RequestException as exc:
+                last_error = exc
+                raise D2BTransportError(
+                    "D2B GW transport request failed",
+                    diagnostic=_diagnostic(
+                        "transport_error",
+                        endpoint,
+                        exception=exc,
+                        attempt_count=attempt + 1,
+                        transport_category=_transport_category(exc),
+                    ),
+                ) from exc
+
+        raise D2BTransportError(
+            "D2B GW transport request failed",
+            diagnostic=_diagnostic(
+                "transport_error",
+                endpoint,
+                exception=last_error,
+                attempt_count=self.max_attempts,
+                transport_category=_transport_category(last_error),
+            ),
+        ) from last_error
 
 
 class D2BProcurementAdapter(ExternalBusinessSourceAdapter):
@@ -281,6 +348,9 @@ class D2BPilotRunner:
             from_date, to_date = (plan_from, plan_to) if resource.name == "procurement_plan" else (bid_from, bid_to)
             for operation in resource.operations:
                 operation_counts = _operation_counts(summary, operation)
+                parsed_endpoint = urlparse(operation.endpoint())
+                operation_counts["endpoint_scheme"] = parsed_endpoint.scheme
+                operation_counts["endpoint_host"] = parsed_endpoint.hostname or ""
                 total_pages = 1
                 page_no = 1
                 while page_no <= min(total_pages, max(1, max_pages)):
@@ -291,6 +361,10 @@ class D2BPilotRunner:
                         summary.source_health = "failed"
                         break
                     except D2BParseError as exc:
+                        summary.api_errors.append(exc.diagnostic)
+                        summary.source_health = "failed"
+                        break
+                    except D2BTransportError as exc:
                         summary.api_errors.append(exc.diagnostic)
                         summary.source_health = "failed"
                         break
@@ -490,7 +564,7 @@ def _validation_error_reason(record_type: str, raw: dict[str, Any], exc: ValueEr
 
 def _diagnostic_from_exception(exc: Exception, endpoint: str | None) -> dict[str, str]:
     if isinstance(exc.__cause__, requests.RequestException):
-        return _diagnostic("transport_error", endpoint, exception=exc.__cause__)
+        return _diagnostic("transport_error", endpoint, exception=exc.__cause__, transport_category=_transport_category(exc.__cause__))
     return _diagnostic("api_error", endpoint, exception=exc)
 
 
@@ -500,18 +574,65 @@ def _diagnostic(
     *,
     exception: BaseException | None = None,
     result_code: str | None = None,
+    attempt_count: int | None = None,
+    http_status: int | None = None,
+    transport_category: str | None = None,
 ) -> dict[str, str]:
     parsed = urlparse(endpoint or "")
     diagnostic: dict[str, str] = {"category": category}
     if result_code:
         diagnostic["result_code"] = result_code
+    if attempt_count is not None:
+        diagnostic["attempt_count"] = str(attempt_count)
+    if http_status is not None:
+        diagnostic["http_status"] = str(http_status)
+    if transport_category:
+        diagnostic["transport_category"] = transport_category
     if exception is not None:
         diagnostic["exception_type"] = type(exception).__name__
+        diagnostic["final_exception_type"] = type(exception).__name__
     if parsed.scheme:
         diagnostic["endpoint_scheme"] = parsed.scheme
     if parsed.hostname:
         diagnostic["endpoint_host"] = parsed.hostname
     return diagnostic
+
+
+def _timeout_tuple(timeout_seconds: int | tuple[int, int], connect_timeout_seconds: int) -> tuple[int, int]:
+    if isinstance(timeout_seconds, tuple):
+        return timeout_seconds
+    return (min(connect_timeout_seconds, timeout_seconds), timeout_seconds)
+
+
+def _sleep_before_retry(attempt: int) -> None:
+    time.sleep(1 if attempt == 0 else 3)
+
+
+def _status_code_from_http_error(exc: HTTPError) -> int | None:
+    response = getattr(exc, "response", None)
+    status_code = getattr(response, "status_code", None)
+    try:
+        return int(status_code) if status_code is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _transport_category(exc: BaseException | None, *, status_code: int | None = None) -> str:
+    if status_code is not None:
+        if status_code >= 500:
+            return "http_5xx"
+        return "http_error"
+    if isinstance(exc, ConnectTimeout):
+        return "connect_timeout"
+    if isinstance(exc, ReadTimeout):
+        return "read_timeout"
+    if isinstance(exc, Timeout):
+        return "timeout"
+    if isinstance(exc, ConnectionError):
+        return "connection_error"
+    if isinstance(exc, requests.RequestException):
+        return "request_exception"
+    return "unknown"
 
 
 def _category_for_result_code(result_code: str) -> str:
