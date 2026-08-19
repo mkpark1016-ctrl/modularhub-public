@@ -140,6 +140,8 @@ class G2BCollectionSummary:
     agency_identifier_source: str = LH_AGENCY_IDENTIFIER_SOURCE
     agency_diagnostics: list[dict[str, str]] = field(default_factory=list)
     operation_counts: dict[str, dict[str, int]] = field(default_factory=dict)
+    invalid_diagnostics: list[dict[str, Any]] = field(default_factory=list)
+    invalid_reasons: dict[str, int] = field(default_factory=dict)
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -164,6 +166,8 @@ class G2BCollectionSummary:
             "agency_identifier_source": self.agency_identifier_source,
             "agency_diagnostics": self.agency_diagnostics,
             "operation_counts": self.operation_counts,
+            "invalid_diagnostics": self.invalid_diagnostics,
+            "invalid_reasons": self.invalid_reasons,
         }
 
 
@@ -324,9 +328,10 @@ class G2BFallbackRunner:
                         operation_counts["records_agency_matched"] += 1
                         try:
                             normalized = adapter.normalize_raw_record(raw)
-                        except ValueError:
+                        except ValueError as exc:
                             summary.records_invalid += 1
                             operation_counts["records_invalid"] += 1
+                            _append_invalid_diagnostic(summary, resource, raw, page.operation, exc)
                             continue
                         key = (normalized.source, normalized.source_record_type, normalized.external_id)
                         if key in seen:
@@ -541,6 +546,60 @@ def _append_agency_diagnostic(summary: G2BCollectionSummary, raw: dict[str, Any]
     summary.agency_diagnostics.append(diagnostic)
 
 
+def _append_invalid_diagnostic(
+    summary: G2BCollectionSummary,
+    resource: G2BResource,
+    raw: dict[str, Any],
+    operation: str,
+    exc: ValueError,
+) -> None:
+    reason = _validation_error_reason(resource, raw, exc)
+    summary.invalid_reasons[reason] = summary.invalid_reasons.get(reason, 0) + 1
+    if len(summary.invalid_diagnostics) >= 5:
+        return
+    agency_keys = (
+        "dminsttCd",
+        "dmndInsttCd",
+        "demandInsttCd",
+        "orderInsttCd",
+        "ntceInsttCd",
+        "dminsttNm",
+        "dmndInsttNm",
+        "demandInsttNm",
+        "rlDminsttNm",
+        "orderInsttNm",
+        "ntceInsttNm",
+        "insttNm",
+    )
+    summary.invalid_diagnostics.append(
+        {
+            "operation": operation,
+            "reason": reason,
+            "field_names": sorted(str(key) for key in raw.keys()),
+            "external_id_candidate_fields": _present_keys(raw, _external_id_keys(resource.source_record_type)),
+            "title_candidate_fields": _present_keys(raw, _title_keys(resource.source_record_type)),
+            "agency_fields": _present_keys(raw, agency_keys),
+        }
+    )
+
+
+def _validation_error_reason(resource: G2BResource, raw: dict[str, Any], exc: ValueError) -> str:
+    if not _pick(raw, *_external_id_keys(resource.source_record_type)):
+        return "missing_external_id"
+    if not _pick(raw, *_title_keys(resource.source_record_type)):
+        return "missing_title"
+    message = str(exc).lower()
+    if "external_id" in message:
+        return "missing_external_id"
+    if "title" in message:
+        return "missing_title"
+    return "other_validation_error"
+
+
+def _present_keys(raw: dict[str, Any], keys: tuple[str, ...]) -> list[str]:
+    return [key for key in keys if _pick(raw, key)]
+
+
 def _operation_counts(summary: G2BCollectionSummary, operation: str) -> dict[str, int]:
     return summary.operation_counts.setdefault(
         operation,
@@ -584,7 +643,7 @@ def _external_id_keys(record_type: str) -> tuple[str, ...]:
 def _title_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
         return ("bizNm", "orderPlanNm", "prcrmntObjNm", "prdctNm", "cnstwkNm", "servcNm")
-    return ("prdctNm", "bizNm", "bfSpecNm", "preSpecNm", "publicPrcureNm", "cnstwkNm", "servcNm")
+    return ("prdctClsfcNoNm", "prdctNm", "bizNm", "bfSpecNm", "preSpecNm", "publicPrcureNm", "prdctDtlList", "cnstwkNm", "servcNm")
 
 
 def _amount_keys(record_type: str) -> tuple[str, ...]:
@@ -602,7 +661,7 @@ def _published_at_keys(record_type: str) -> tuple[str, ...]:
 def _deadline_at_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
         return ("orderPrerngeDate", "orderPrearngeDate", "orderPrerngeYm", "orderPrearngeYm", "orderPlanDt")
-    return ("opinionRegEndDt", "opinionRegEndDtm", "opninRegEndDtm", "closeDt")
+    return ("opinionRegEndDt", "opinionRegEndDtm", "opninRgstClseDt", "opninRegEndDtm", "closeDt")
 
 
 def _issuing_organization(raw: dict[str, Any]) -> str:

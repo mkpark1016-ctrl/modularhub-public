@@ -144,11 +144,11 @@ G2B_PRE_SPEC_JSON = """{
       "items": {
         "item": [{
           "bfSpecRgstNo": "G2B-SPEC-001",
-          "prdctNm": "LH temporary school modular pre-spec",
+          "prdctClsfcNoNm": "LH temporary school modular pre-spec",
           "orderInsttNm": "조달청",
           "rlDminsttNm": "한국토지주택공사",
-          "opinionRegStartDtm": "202608010900",
-          "opinionRegEndDtm": "202608181800",
+          "rgstDt": "202608010900",
+          "opninRgstClseDt": "202608181800",
           "asignBdgtAmt": "3500000"
         }]
       }
@@ -459,12 +459,18 @@ def test_g2b_pre_spec_fallback_normalization() -> None:
     assert [record.external_id for record in records] == ["g2b:pre_spec:G2B-SPEC-001"]
     assert records[0].source == "g2b"
     assert records[0].source_record_type == "pre_spec"
+    assert records[0].external_id == "g2b:pre_spec:G2B-SPEC-001"
+    assert records[0].title == "LH temporary school modular pre-spec"
     assert records[0].issuing_organization == "한국토지주택공사"
+    assert records[0].estimated_amount == 3500000
+    assert records[0].published_at == "2026-08-01"
     assert records[0].deadline_at == "2026-08-18"
     resource = summary["resources"]["g2b_pre_spec"]
     assert resource["source_health"] == "healthy"
     assert resource["records_agency_matched"] == 4
     assert resource["records_filtered_non_lh"] == 0
+    assert resource["records_normalized"] == 1
+    assert resource["duplicates"] == 3
     assert resource["agency_filter_mode"] == "institution_endpoint_agency_code"
     assert sorted(resource["operation_counts"]) == sorted(G2B_RESOURCES["g2b_pre_spec"].operations)
     for counts in resource["operation_counts"].values():
@@ -505,6 +511,120 @@ def test_g2b_pre_spec_institution_request_uses_official_name_parameter() -> None
     resource = summary["resources"]["g2b_pre_spec"]
     assert resource["source_health"] == "healthy_empty"
     assert resource["operation_counts"]["getInsttAcctoThngListInfoCnstwk"]["pages_requested"] == 1
+
+
+def test_g2b_pre_spec_goods_official_field_mapping() -> None:
+    goods_json = """{
+      "response": {
+        "header": {"resultCode": "00", "resultMsg": "NORMAL SERVICE."},
+        "body": {
+          "totalCount": 1,
+          "items": {"item": [{
+            "bfSpecRgstNo": "G2B-GOODS-SPEC-001",
+            "prdctClsfcNoNm": "LH modular goods pre-spec",
+            "prdctDtlList": "detail should not replace official product class title",
+            "orderInsttNm": "조달청",
+            "rlDminsttNm": "한국토지주택공사",
+            "rgstDt": "202608020910",
+            "opninRgstClseDt": "202608191800",
+            "asignBdgtAmt": "4500000"
+          }]}
+        }
+      }
+    }"""
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        assert params["rlDminsttNm"] == "한국토지주택공사"
+        return FakeResponse(goods_json)
+
+    runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["g2b_pre_spec"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert records[0].external_id == "g2b:pre_spec:G2B-GOODS-SPEC-001"
+    assert records[0].title == "LH modular goods pre-spec"
+    assert records[0].estimated_amount == 4500000
+    assert records[0].published_at == "2026-08-02"
+    assert records[0].deadline_at == "2026-08-19"
+    assert summary["resources"]["g2b_pre_spec"]["source_health"] == "healthy"
+
+
+def test_g2b_pre_spec_missing_title_has_invalid_diagnostic() -> None:
+    missing_title_json = """{
+      "response": {
+        "header": {"resultCode": "00", "resultMsg": "NORMAL SERVICE."},
+        "body": {
+          "totalCount": 1,
+          "items": {"item": [{
+            "bfSpecRgstNo": "G2B-SPEC-MISSING-TITLE",
+            "orderInsttNm": "조달청",
+            "rlDminsttNm": "한국토지주택공사"
+          }]}
+        }
+      }
+    }"""
+
+    def fake_get(_endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        return FakeResponse(missing_title_json)
+
+    runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["g2b_pre_spec"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    resource = summary["resources"]["g2b_pre_spec"]
+    assert records == []
+    assert resource["records_invalid"] == 4
+    assert resource["invalid_reasons"] == {"missing_title": 4}
+    diagnostic = resource["invalid_diagnostics"][0]
+    assert diagnostic["reason"] == "missing_title"
+    assert "bfSpecRgstNo" in diagnostic["external_id_candidate_fields"]
+    assert diagnostic["title_candidate_fields"] == []
+    assert "rlDminsttNm" in diagnostic["agency_fields"]
+    assert "G2B-SPEC-MISSING-TITLE" not in json.dumps(diagnostic, ensure_ascii=False)
+
+
+def test_g2b_pre_spec_missing_external_id_has_invalid_diagnostic() -> None:
+    missing_id_json = """{
+      "response": {
+        "header": {"resultCode": "00", "resultMsg": "NORMAL SERVICE."},
+        "body": {
+          "totalCount": 1,
+          "items": {"item": [{
+            "prdctClsfcNoNm": "LH modular pre-spec without id",
+            "orderInsttNm": "조달청",
+            "rlDminsttNm": "한국토지주택공사"
+          }]}
+        }
+      }
+    }"""
+
+    def fake_get(_endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        return FakeResponse(missing_id_json)
+
+    runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["g2b_pre_spec"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    resource = summary["resources"]["g2b_pre_spec"]
+    assert records == []
+    assert resource["records_invalid"] == 4
+    assert resource["invalid_reasons"] == {"missing_external_id": 4}
+    diagnostic = resource["invalid_diagnostics"][0]
+    assert diagnostic["reason"] == "missing_external_id"
+    assert diagnostic["external_id_candidate_fields"] == []
+    assert "prdctClsfcNoNm" in diagnostic["title_candidate_fields"]
 
 
 def test_lh_agency_filter_uses_exact_verified_names_not_contains() -> None:
@@ -759,3 +879,4 @@ def test_lh_workflow_installs_pytest_and_preserves_original_failure() -> None:
     assert "agency_filter_mode" in workflow
     assert "agency_code_verified" in workflow
     assert "operation_counts" in workflow
+    assert "invalid_reasons" in workflow

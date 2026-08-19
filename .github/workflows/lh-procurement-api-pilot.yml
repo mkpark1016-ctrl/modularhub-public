@@ -153,6 +153,7 @@ jobs:
                       f"agency_filter_mode={resource.get('agency_filter_mode', '-')}, "
                       f"agency_code_verified={resource.get('agency_code_verified', '-')}, "
                       f"agency_identifier={resource.get('agency_identifier', '-')}, "
+                      f"invalid_reasons={resource.get('invalid_reasons', {})}, "
                       f"error_category={first_error.get('category', '-')}, "
                       f"result_code={first_error.get('result_code', '-')}, "
                       f"exception_type={first_error.get('exception_type', '-')}, "

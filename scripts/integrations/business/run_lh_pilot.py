@@ -203,6 +203,7 @@ def _print_sanitized_summary(summary: dict[str, Any]) -> None:
                         f"agency_filter_mode={payload.get('agency_filter_mode', '-')}",
                         f"agency_code_verified={payload.get('agency_code_verified', '-')}",
                         f"agency_identifier={payload.get('agency_identifier', '-')}",
+                        f"invalid_reasons={payload.get('invalid_reasons', {})}",
                     ]
                     + error_parts
                 )
