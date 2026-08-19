@@ -101,12 +101,15 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
+          from scripts.integrations.business.d2b import is_d2b_acceptance_failure
           summary = json.loads(Path("artifacts/d2b/d2b_summary.json").read_text(encoding="utf-8"))
           records = json.loads(Path("artifacts/d2b/d2b_records.json").read_text(encoding="utf-8"))
           if summary.get("request_attempted") is not True:
               raise SystemExit("D2B request_attempted must be true")
           if not isinstance(records, list):
               raise SystemExit("D2B records must be a list")
+          if is_d2b_acceptance_failure(summary):
+              raise SystemExit(f"D2B live acceptance failed: {summary.get('overall_health')}")
           print(f"D2B records_normalized={summary.get('records_normalized')}")
           print(f"D2B overall_health={summary.get('overall_health')}")
           PY

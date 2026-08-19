@@ -23,6 +23,7 @@ from scripts.integrations.business.d2b import (
     DEFAULT_PAGE_SIZE,
     D2BClient,
     D2BPilotRunner,
+    is_d2b_acceptance_failure,
     write_staging_outputs,
 )
 
@@ -118,7 +119,7 @@ def main() -> int:
     )
     write_staging_outputs(records, summary, args.output_dir)
     _print_sanitized_summary(summary)
-    return 0 if summary.get("overall_health") != "failed" else 4
+    return 4 if is_d2b_acceptance_failure(summary) else 0
 
 
 def _print_sanitized_summary(summary: dict[str, Any]) -> None:
