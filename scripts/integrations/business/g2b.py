@@ -25,8 +25,9 @@ G2B_PLAN_BASE_ENDPOINT = "https://apis.data.go.kr/1230000/ao/OrderPlanSttusServi
 G2B_PRE_SPEC_BASE_ENDPOINT = "https://apis.data.go.kr/1230000/ao/HrcspSsstndrdInfoService"
 LH_AGENCY_IDENTIFIER = "B552555"
 LH_AGENCY_IDENTIFIER_SOURCE = "g2b_demand_institution_code"
+LH_AGENCY_NAME = "한국토지주택공사"
 LH_AGENCY_CODES = frozenset({LH_AGENCY_IDENTIFIER})
-LH_AGENCY_NAMES = frozenset({"한국토지주택공사"})
+LH_AGENCY_NAMES = frozenset({LH_AGENCY_NAME})
 LH_AGENCY_ALIASES = frozenset({"LH", "한국토지주택공사 본사"})
 
 
@@ -138,6 +139,7 @@ class G2BCollectionSummary:
     agency_identifier: str = LH_AGENCY_IDENTIFIER
     agency_identifier_source: str = LH_AGENCY_IDENTIFIER_SOURCE
     agency_diagnostics: list[dict[str, str]] = field(default_factory=list)
+    operation_counts: dict[str, dict[str, int]] = field(default_factory=dict)
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -161,6 +163,7 @@ class G2BCollectionSummary:
             "agency_identifier": self.agency_identifier,
             "agency_identifier_source": self.agency_identifier_source,
             "agency_diagnostics": self.agency_diagnostics,
+            "operation_counts": self.operation_counts,
         }
 
 
@@ -304,27 +307,35 @@ class G2BFallbackRunner:
                     summary.response_formats.append(page.payload.response_format)
                     if page.operation not in summary.operations:
                         summary.operations.append(page.operation)
+                    operation_counts = _operation_counts(summary, page.operation)
+                    operation_counts["pages_requested"] += 1
                     summary.total_count = (summary.total_count or 0) + page.payload.total_count
                     summary.records_received += len(page.payload.items)
+                    operation_counts["records_received"] += len(page.payload.items)
                     total_pages = max(1, math.ceil(page.payload.total_count / max(page.page_size, 1)))
 
                     for raw in page.payload.items:
                         _append_agency_diagnostic(summary, raw, page.operation)
                         if not is_lh_agency_record(raw):
                             summary.records_filtered_non_lh += 1
+                            operation_counts["records_filtered_non_lh"] += 1
                             continue
                         summary.records_agency_matched += 1
+                        operation_counts["records_agency_matched"] += 1
                         try:
                             normalized = adapter.normalize_raw_record(raw)
                         except ValueError:
                             summary.records_invalid += 1
+                            operation_counts["records_invalid"] += 1
                             continue
                         key = (normalized.source, normalized.source_record_type, normalized.external_id)
                         if key in seen:
                             summary.duplicates += 1
+                            operation_counts["duplicates"] += 1
                             continue
                         seen.add(key)
                         summary.records_normalized += 1
+                        operation_counts["records_normalized"] += 1
                         records.append(normalized)
 
                     page_no += 1
@@ -360,6 +371,7 @@ def is_lh_agency_record(raw: dict[str, Any]) -> bool:
         "ntceInsttNm",
         "insttNm",
         "totlmngInsttNm",
+        "rlDminsttNm",
     ):
         name = _pick(raw, key)
         if _normalize_agency_name(name) in {_normalize_agency_name(value) for value in LH_AGENCY_NAMES | LH_AGENCY_ALIASES}:
@@ -452,7 +464,7 @@ def _request_params(
                 "inqryDiv": "1",
                 "inqryBgnDt": from_date.strftime("%Y%m%d") + "0000",
                 "inqryEndDt": to_date.strftime("%Y%m%d") + "2359",
-                "dminsttCd": LH_AGENCY_IDENTIFIER,
+                "rlDminsttNm": LH_AGENCY_NAME,
             }
         )
     return params
@@ -520,13 +532,28 @@ def _append_agency_diagnostic(summary: G2BCollectionSummary, raw: dict[str, Any]
             diagnostic["agency_code_field"] = key
             diagnostic["agency_code"] = value
             break
-    for key in ("dminsttNm", "dmndInsttNm", "demandInsttNm", "orderInsttNm", "ntceInsttNm", "insttNm"):
+    for key in ("dminsttNm", "dmndInsttNm", "demandInsttNm", "rlDminsttNm", "orderInsttNm", "ntceInsttNm", "insttNm"):
         value = _pick(raw, key)
         if value:
             diagnostic["agency_name_field"] = key
             diagnostic["agency_name"] = value
             break
     summary.agency_diagnostics.append(diagnostic)
+
+
+def _operation_counts(summary: G2BCollectionSummary, operation: str) -> dict[str, int]:
+    return summary.operation_counts.setdefault(
+        operation,
+        {
+            "pages_requested": 0,
+            "records_received": 0,
+            "records_agency_matched": 0,
+            "records_filtered_non_lh": 0,
+            "records_normalized": 0,
+            "records_invalid": 0,
+            "duplicates": 0,
+        },
+    )
 
 
 def _finalize_source_health(summary: G2BCollectionSummary) -> None:
@@ -579,7 +606,7 @@ def _deadline_at_keys(record_type: str) -> tuple[str, ...]:
 
 
 def _issuing_organization(raw: dict[str, Any]) -> str:
-    return _pick(raw, "dminsttNm", "dmndInsttNm", "demandInsttNm", "orderInsttNm", "ntceInsttNm") or "한국토지주택공사"
+    return _pick(raw, "dminsttNm", "dmndInsttNm", "demandInsttNm", "rlDminsttNm", "orderInsttNm", "ntceInsttNm") or "한국토지주택공사"
 
 
 def _pick(item: dict[str, Any], *keys: str) -> str:

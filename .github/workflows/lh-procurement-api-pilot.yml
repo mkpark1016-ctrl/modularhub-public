@@ -177,6 +177,16 @@ jobs:
                       f"endpoint_scheme={first_error.get('endpoint_scheme', '-')}, "
                       f"endpoint_host={first_error.get('endpoint_host', '-')}\n"
                   )
+                  for operation, counts in sorted((resource.get("operation_counts") or {}).items()):
+                      handle.write(
+                          f"  - {operation}: pages={counts.get('pages_requested')}, "
+                          f"received={counts.get('records_received')}, "
+                          f"agency_matched={counts.get('records_agency_matched')}, "
+                          f"filtered_non_lh={counts.get('records_filtered_non_lh')}, "
+                          f"normalized={counts.get('records_normalized')}, "
+                          f"invalid={counts.get('records_invalid')}, "
+                          f"duplicates={counts.get('duplicates')}\n"
+                      )
           PY
           cat lh-summary.md >> "$GITHUB_STEP_SUMMARY"
 
