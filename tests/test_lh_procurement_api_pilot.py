@@ -25,6 +25,7 @@ from scripts.integrations.business.g2b import (
     G2BFallbackRunner,
     LH_AGENCY_CODES,
     LH_AGENCY_IDENTIFIER,
+    LH_AGENCY_NAME,
     build_related_record_candidates,
     is_lh_agency_record,
 )
@@ -144,8 +145,8 @@ G2B_PRE_SPEC_JSON = """{
         "item": [{
           "bfSpecRgstNo": "G2B-SPEC-001",
           "prdctNm": "LH temporary school modular pre-spec",
-          "dminsttCd": "B552555",
-          "dmndInsttNm": "한국토지주택공사",
+          "orderInsttNm": "조달청",
+          "rlDminsttNm": "한국토지주택공사",
           "opinionRegStartDtm": "202608010900",
           "opinionRegEndDtm": "202608181800",
           "asignBdgtAmt": "3500000"
@@ -443,7 +444,8 @@ def test_g2b_pre_spec_fallback_normalization() -> None:
         assert "HrcspSsstndrdInfoService" in endpoint
         assert "getInsttAcctoThngListInfo" in endpoint
         assert params["serviceKey"] == "g2b-secret-for-test"
-        assert params["dminsttCd"] == LH_AGENCY_IDENTIFIER
+        assert params["rlDminsttNm"] == LH_AGENCY_NAME
+        assert "dminsttCd" not in params
         return FakeResponse(G2B_PRE_SPEC_JSON)
 
     runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
@@ -464,6 +466,11 @@ def test_g2b_pre_spec_fallback_normalization() -> None:
     assert resource["records_agency_matched"] == 4
     assert resource["records_filtered_non_lh"] == 0
     assert resource["agency_filter_mode"] == "institution_endpoint_agency_code"
+    assert sorted(resource["operation_counts"]) == sorted(G2B_RESOURCES["g2b_pre_spec"].operations)
+    for counts in resource["operation_counts"].values():
+        assert counts["records_received"] == 1
+        assert counts["records_agency_matched"] == 1
+        assert counts["records_filtered_non_lh"] == 0
 
 
 def test_g2b_pre_spec_uses_institution_endpoints() -> None:
@@ -475,9 +482,35 @@ def test_g2b_pre_spec_uses_institution_endpoints() -> None:
     )
 
 
+def test_g2b_pre_spec_institution_request_uses_official_name_parameter() -> None:
+    seen_params: list[dict] = []
+
+    def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
+        seen_params.append(params)
+        return FakeResponse(G2B_NO_DATA_XML)
+
+    runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
+    _records, summary = runner.collect(
+        resource_names=["g2b_pre_spec"],
+        from_date=date(2026, 8, 1),
+        to_date=date(2026, 8, 18),
+        max_pages=1,
+    )
+
+    assert seen_params
+    for params in seen_params:
+        assert params["rlDminsttNm"] == "한국토지주택공사"
+        assert "dminsttCd" not in params
+        assert "orderInsttCd" not in params
+    resource = summary["resources"]["g2b_pre_spec"]
+    assert resource["source_health"] == "healthy_empty"
+    assert resource["operation_counts"]["getInsttAcctoThngListInfoCnstwk"]["pages_requested"] == 1
+
+
 def test_lh_agency_filter_uses_exact_verified_names_not_contains() -> None:
     assert LH_AGENCY_CODES == frozenset({"B552555"})
     assert is_lh_agency_record({"dminsttCd": "B552555"})
+    assert is_lh_agency_record({"rlDminsttNm": "한국토지주택공사"})
     assert is_lh_agency_record({"dminsttNm": "한국토지주택공사"})
     assert is_lh_agency_record({"dmndInsttNm": "LH"})
     assert not is_lh_agency_record({"dminsttCd": "WRONG", "dminsttNm": "서울주택도시공사"})
@@ -525,7 +558,7 @@ def test_g2b_non_lh_rows_are_not_accepted_as_success() -> None:
 
 def test_g2b_verified_zero_result_is_healthy_empty() -> None:
     def fake_get(endpoint: str, *, params: dict, timeout: int) -> FakeResponse:
-        assert params["dminsttCd"] == LH_AGENCY_IDENTIFIER
+        assert params["rlDminsttNm"] == LH_AGENCY_NAME
         return FakeResponse(G2B_NO_DATA_XML)
 
     runner = G2BFallbackRunner(client=G2BClient(service_key="g2b-secret-for-test", request_get=fake_get))
@@ -725,3 +758,4 @@ def test_lh_workflow_installs_pytest_and_preserves_original_failure() -> None:
     assert "records_filtered_non_lh" in workflow
     assert "agency_filter_mode" in workflow
     assert "agency_code_verified" in workflow
+    assert "operation_counts" in workflow

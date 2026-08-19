@@ -207,6 +207,21 @@ def _print_sanitized_summary(summary: dict[str, Any]) -> None:
                     + error_parts
                 )
             )
+            for operation, counts in sorted((payload.get("operation_counts") or {}).items()):
+                print(
+                    " ".join(
+                        [
+                            f"  - {operation}:",
+                            f"pages_requested={counts.get('pages_requested')}",
+                            f"records_received={counts.get('records_received')}",
+                            f"records_agency_matched={counts.get('records_agency_matched')}",
+                            f"records_filtered_non_lh={counts.get('records_filtered_non_lh')}",
+                            f"records_normalized={counts.get('records_normalized')}",
+                            f"records_invalid={counts.get('records_invalid')}",
+                            f"duplicates={counts.get('duplicates')}",
+                        ]
+                    )
+                )
 
 
 def _has_blocking_errors(summary: dict[str, Any]) -> bool:
