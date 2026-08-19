@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+import requests
 
 from scripts.integrations.business.d2b import (
     D2B_RESOURCES,
@@ -34,7 +35,9 @@ class FakeResponse:
 
     def raise_for_status(self) -> None:
         if self.status_code >= 400:
-            raise RuntimeError(f"HTTP {self.status_code}")
+            error = requests.HTTPError(f"HTTP {self.status_code}")
+            error.response = self
+            raise error
 
     def json(self) -> Any:
         return json.loads(self.text)
@@ -201,6 +204,143 @@ def test_d2b_runner_reuses_existing_collectors_for_pagination_and_dedupe() -> No
     assert any(endpoint == f"{D2B_GW_BID_BASE_ENDPOINT}/getFcltyOthbcVltrnNtatPlanList" for endpoint, _page in calls)
 
 
+def test_d2b_connect_timeout_retries_then_success() -> None:
+    calls: list[tuple[str, Any]] = []
+    sleep_calls: list[int] = []
+
+    def fake_get(endpoint: str, *, params: dict[str, Any], timeout: Any) -> FakeResponse:
+        calls.append((endpoint, timeout))
+        if len(calls) < 3:
+            raise requests.exceptions.ConnectTimeout("simulated connect timeout")
+        return FakeResponse(d2b_payload([D2B_PLAN_ITEM], total_count=1))
+
+    runner = D2BPilotRunner(
+        client=D2BClient(
+            service_key="test-secret",
+            request_get=fake_get,
+            max_attempts=3,
+            sleep_func=sleep_calls.append,
+        )
+    )
+    records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2026, 12, 1),
+        bid_from=date(2026, 8, 1),
+        bid_to=date(2026, 8, 31),
+        max_pages=1,
+    )
+
+    assert len(calls) == 3
+    assert [timeout for _endpoint, timeout in calls] == [(10, 30), (10, 30), (10, 30)]
+    assert sleep_calls == [0, 1]
+    assert [record.external_id for record in records] == ["d2b:procurement_plan:D2B-PLAN-001"]
+    assert summary["resources"]["procurement_plan"]["api_errors"] == []
+    assert summary["overall_health"] == "healthy"
+
+
+def test_d2b_connect_timeout_all_attempts_fails_with_sanitized_diagnostic() -> None:
+    calls = 0
+    sleep_calls: list[int] = []
+
+    def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: Any) -> FakeResponse:
+        nonlocal calls
+        calls += 1
+        raise requests.exceptions.ConnectTimeout("simulated connect timeout")
+
+    runner = D2BPilotRunner(
+        client=D2BClient(
+            service_key="secret-not-for-output",
+            request_get=fake_get,
+            max_attempts=3,
+            sleep_func=sleep_calls.append,
+        )
+    )
+    _records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2026, 12, 1),
+        bid_from=date(2026, 8, 1),
+        bid_to=date(2026, 8, 31),
+        max_pages=1,
+    )
+
+    error = summary["resources"]["procurement_plan"]["api_errors"][0]
+    assert calls == 3
+    assert sleep_calls == [0, 1]
+    assert error["category"] == "transport_error"
+    assert error["attempt_count"] == "3"
+    assert error["transport_category"] == "connect_timeout"
+    assert error["final_exception_type"] == "ConnectTimeout"
+    assert error["endpoint_host"] == "apis.data.go.kr"
+    assert "serviceKey" not in json.dumps(summary, ensure_ascii=False)
+    assert "secret-not-for-output" not in json.dumps(summary, ensure_ascii=False)
+
+
+def test_d2b_connection_error_retries_then_success() -> None:
+    calls = 0
+
+    def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: Any) -> FakeResponse:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise requests.exceptions.ConnectionError("simulated connection reset")
+        return FakeResponse(d2b_payload([D2B_PLAN_ITEM], total_count=1))
+
+    runner = D2BPilotRunner(
+        client=D2BClient(
+            service_key="test-secret",
+            request_get=fake_get,
+            max_attempts=2,
+            sleep_func=lambda _attempt: None,
+        )
+    )
+    records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2026, 12, 1),
+        bid_from=date(2026, 8, 1),
+        bid_to=date(2026, 8, 31),
+        max_pages=1,
+    )
+
+    assert calls == 2
+    assert len(records) == 1
+    assert summary["resources"]["procurement_plan"]["source_health"] == "healthy"
+
+
+def test_d2b_http_5xx_retries_then_success() -> None:
+    calls = 0
+
+    def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: Any) -> FakeResponse:
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return FakeResponse("temporary outage", status_code=503)
+        return FakeResponse(d2b_payload([D2B_PLAN_ITEM], total_count=1))
+
+    runner = D2BPilotRunner(
+        client=D2BClient(
+            service_key="test-secret",
+            request_get=fake_get,
+            max_attempts=2,
+            sleep_func=lambda _attempt: None,
+        )
+    )
+    records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2026, 12, 1),
+        bid_from=date(2026, 8, 1),
+        bid_to=date(2026, 8, 31),
+        max_pages=1,
+    )
+
+    assert calls == 2
+    assert len(records) == 1
+    assert summary["overall_health"] == "healthy"
+
+
 def test_d2b_empty_response_is_healthy_empty() -> None:
     def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: int) -> FakeResponse:
         return FakeResponse(d2b_payload([], total_count=0))
@@ -244,10 +384,21 @@ def test_d2b_api_error_is_sanitized() -> None:
 
 
 def test_d2b_result_code_20_is_service_access_denied() -> None:
+    calls = 0
+
     def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: int) -> FakeResponse:
+        nonlocal calls
+        calls += 1
         return FakeResponse(d2b_payload([], result_code="20"))
 
-    runner = D2BPilotRunner(client=D2BClient(service_key="secret-not-for-output", request_get=fake_get))
+    runner = D2BPilotRunner(
+        client=D2BClient(
+            service_key="secret-not-for-output",
+            request_get=fake_get,
+            max_attempts=3,
+            sleep_func=lambda _attempt: None,
+        )
+    )
     _records, summary = runner.collect(
         resource_names=["procurement_plan"],
         plan_from=date(2026, 8, 1),
@@ -258,15 +409,27 @@ def test_d2b_result_code_20_is_service_access_denied() -> None:
     )
 
     error = summary["resources"]["procurement_plan"]["api_errors"][0]
+    assert calls == 1
     assert error["category"] == "service_access_denied"
     assert error["result_code"] == "20"
 
 
 def test_d2b_result_code_30_is_auth_error() -> None:
+    calls = 0
+
     def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: int) -> FakeResponse:
+        nonlocal calls
+        calls += 1
         return FakeResponse(d2b_payload([], result_code="30"))
 
-    runner = D2BPilotRunner(client=D2BClient(service_key="secret-not-for-output", request_get=fake_get))
+    runner = D2BPilotRunner(
+        client=D2BClient(
+            service_key="secret-not-for-output",
+            request_get=fake_get,
+            max_attempts=3,
+            sleep_func=lambda _attempt: None,
+        )
+    )
     _records, summary = runner.collect(
         resource_names=["procurement_plan"],
         plan_from=date(2026, 8, 1),
@@ -277,6 +440,7 @@ def test_d2b_result_code_30_is_auth_error() -> None:
     )
 
     error = summary["resources"]["procurement_plan"]["api_errors"][0]
+    assert calls == 1
     assert error["category"] == "auth_error"
     assert error["result_code"] == "30"
 

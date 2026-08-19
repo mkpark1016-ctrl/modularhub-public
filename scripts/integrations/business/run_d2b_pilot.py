@@ -131,6 +131,9 @@ def _print_sanitized_summary(summary: dict[str, Any]) -> None:
                 f"error_category={first_error.get('category', '-')}",
                 f"result_code={first_error.get('result_code', '-')}",
                 f"exception_type={first_error.get('exception_type', '-')}",
+                f"final_exception_type={first_error.get('final_exception_type', '-')}",
+                f"transport_category={first_error.get('transport_category', '-')}",
+                f"attempt_count={first_error.get('attempt_count', '-')}",
                 f"endpoint_scheme={first_error.get('endpoint_scheme', '-')}",
                 f"endpoint_host={first_error.get('endpoint_host', '-')}",
             ]
