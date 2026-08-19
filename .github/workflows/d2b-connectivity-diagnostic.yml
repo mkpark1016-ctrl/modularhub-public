@@ -1,0 +1,110 @@
+name: D2B / data.go.kr Connectivity Diagnostic
+
+on:
+  workflow_dispatch:
+    inputs:
+      acknowledge_live:
+        description: Confirm one read-only G2B and D2B connectivity diagnostic
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  connectivity-diagnostic:
+    runs-on: ubuntu-latest
+    env:
+      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Guard live opt-in
+        run: |
+          set -euo pipefail
+          if [ "${{ inputs.acknowledge_live }}" != "true" ]; then
+            echo "Connectivity diagnostic skipped: acknowledge_live must be true."
+            exit 1
+          fi
+
+      - name: Check data.go.kr secret configuration
+        run: |
+          if [ -n "${DATA_GO_KR_SERVICE_KEY}" ]; then
+            echo "DATA_GO_KR_SERVICE_KEY configured: true"
+          else
+            echo "DATA_GO_KR_SERVICE_KEY configured: false"
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Run offline diagnostic contract tests
+        run: |
+          python -m pytest -q tests/test_external_api_integration_foundation.py
+          python -m pytest -q tests/test_d2b_procurement_api_pilot.py
+          python -m pytest -q tests/test_d2b_connectivity_diagnostic.py
+
+      - name: Run read-only connectivity diagnostic
+        run: |
+          python scripts/integrations/business/run_d2b_connectivity_diagnostic.py \
+            --output-dir artifacts/d2b-connectivity \
+            --live \
+            --acknowledge-live
+
+      - name: Verify sanitized diagnostic outputs
+        run: |
+          test -f artifacts/d2b-connectivity/diagnostic-summary.json
+          test -f artifacts/d2b-connectivity/diagnostic-summary.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("artifacts/d2b-connectivity/diagnostic-summary.json")
+          summary = json.loads(path.read_text(encoding="utf-8"))
+          required = {
+              "dns",
+              "tcp",
+              "https",
+              "g2b",
+              "d2b_procurement_plan",
+              "d2b_bid_notice",
+          }
+          if set(summary.get("probes") or {}) != required:
+              raise SystemExit("Diagnostic output is missing a required probe")
+          if summary.get("classification", {}).get("case") == "diagnostic_implementation_failure":
+              raise SystemExit("Diagnostic implementation failure")
+          serialized = json.dumps(summary, ensure_ascii=False)
+          for forbidden in ("serviceKey=", "raw_response", "Authorization"):
+              if forbidden in serialized:
+                  raise SystemExit(f"Unsafe diagnostic output key: {forbidden}")
+          print(f"classification={summary['classification']['case']}")
+          PY
+
+      - name: Append sanitized connectivity summary
+        if: always()
+        run: |
+          if [ ! -f artifacts/d2b-connectivity/diagnostic-summary.md ]; then
+            echo "No diagnostic summary was generated. An earlier implementation step failed." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          cat artifacts/d2b-connectivity/diagnostic-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload connectivity diagnostic artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d2b-connectivity-diagnostic-${{ github.run_number }}-${{ github.run_attempt }}
+          path: artifacts/d2b-connectivity/
+          if-no-files-found: warn
+          retention-days: 7
