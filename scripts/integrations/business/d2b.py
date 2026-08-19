@@ -4,19 +4,19 @@ import json
 import math
 import os
 import re
-import time
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from urllib.parse import urlparse
 
 import requests
 
-from src.collectors.d2b_bid import D2BBidCollector
-from src.collectors.d2b_plan import D2BPlanCollector
+from src.collectors.d2b_bid import calculate_d2b_bid_relevance
+from src.collectors.d2b_plan import calculate_d2b_relevance
 
-from .base import ExternalBusinessSourceAdapter, NormalizedBusinessRecord, clean_text, parse_amount
+from .base import ExternalBusinessSourceAdapter, NormalizedBusinessRecord, parse_amount
 
 
 D2B_SOURCE = "d2b"
@@ -25,18 +25,106 @@ DEFAULT_PAGE_SIZE = 50
 DEFAULT_MAX_PAGES = 3
 DEFAULT_LOOKBACK_DAYS = 90
 DEFAULT_LOOKAHEAD_MONTHS = 12
+D2B_GW_PLAN_BASE_ENDPOINT = "https://apis.data.go.kr/1690000/PrcurePlanInfoService"
+D2B_GW_BID_BASE_ENDPOINT = "https://apis.data.go.kr/1690000/BidPblancInfoService"
+D2B_GW_CODE_BASE_ENDPOINT = "https://apis.data.go.kr/1690000/CodeInqireService"
+
+
+@dataclass(frozen=True)
+class D2BOperation:
+    name: str
+    label: str
+    endpoint_env: str
+    default_endpoint: str
+    date_start_param: str
+    date_end_param: str
+    date_format: str
+
+    def endpoint(self) -> str:
+        return os.getenv(self.endpoint_env, self.default_endpoint).strip() or self.default_endpoint
 
 
 @dataclass(frozen=True)
 class D2BResource:
     name: str
     source_record_type: str
+    operations: tuple[D2BOperation, ...]
 
 
 D2B_RESOURCES: dict[str, D2BResource] = {
-    "procurement_plan": D2BResource("procurement_plan", "procurement_plan"),
-    "bid_notice": D2BResource("bid_notice", "bid_notice"),
+    "procurement_plan": D2BResource(
+        name="procurement_plan",
+        source_record_type="procurement_plan",
+        operations=(
+            D2BOperation(
+                name="getFcltyPrcurePlanList",
+                label="facility_procurement_plan",
+                endpoint_env="D2B_GW_PLAN_FACILITY_ENDPOINT",
+                default_endpoint=f"{D2B_GW_PLAN_BASE_ENDPOINT}/getFcltyPrcurePlanList",
+                date_start_param="orderPrearngeMtBegin",
+                date_end_param="orderPrearngeMtEnd",
+                date_format="%Y%m",
+            ),
+        ),
+    ),
+    "bid_notice": D2BResource(
+        name="bid_notice",
+        source_record_type="bid_notice",
+        operations=(
+            D2BOperation(
+                name="getFcltyCmpetBidPblancList",
+                label="facility_competitive_bid_notice",
+                endpoint_env="D2B_GW_BID_FACILITY_COMPETITIVE_ENDPOINT",
+                default_endpoint=f"{D2B_GW_BID_BASE_ENDPOINT}/getFcltyCmpetBidPblancList",
+                date_start_param="anmtDateBegin",
+                date_end_param="anmtDateEnd",
+                date_format="%Y%m%d",
+            ),
+            D2BOperation(
+                name="getFcltyOthbcVltrnNtatPlanList",
+                label="facility_private_negotiation_plan",
+                endpoint_env="D2B_GW_BID_FACILITY_PRIVATE_ENDPOINT",
+                default_endpoint=f"{D2B_GW_BID_BASE_ENDPOINT}/getFcltyOthbcVltrnNtatPlanList",
+                date_start_param="anmtDateBegin",
+                date_end_param="anmtDateEnd",
+                date_format="%Y%m%d",
+            ),
+        ),
+    ),
 }
+
+
+class D2BApiError(RuntimeError):
+    def __init__(self, result_code: str, result_message: str, *, endpoint: str | None = None) -> None:
+        super().__init__(f"D2B GW API error: {result_code} {result_message}".strip())
+        self.result_code = result_code
+        self.result_message = result_message
+        self.diagnostic = _diagnostic(_category_for_result_code(result_code), endpoint, result_code=result_code)
+
+
+class D2BParseError(RuntimeError):
+    def __init__(self, message: str, *, endpoint: str | None = None) -> None:
+        super().__init__(message)
+        self.diagnostic = _diagnostic("response_parse_error", endpoint)
+
+
+@dataclass(frozen=True)
+class D2BPayload:
+    result_code: str | None
+    result_message: str | None
+    total_count: int
+    items: list[dict[str, str]]
+    response_format: str
+
+
+@dataclass(frozen=True)
+class D2BPageResult:
+    operation: D2BOperation
+    page_no: int
+    page_size: int
+    http_status: int
+    payload: D2BPayload
+    endpoint: str
 
 
 @dataclass
@@ -50,10 +138,10 @@ class D2BCollectionSummary:
     api_errors: list[dict[str, str]] = field(default_factory=list)
     total_count: int | None = None
     source_health: str = "healthy"
-    endpoint_groups: dict[str, dict[str, int]] = field(default_factory=dict)
+    operation_counts: dict[str, dict[str, Any]] = field(default_factory=dict)
     invalid_reasons: dict[str, int] = field(default_factory=dict)
-    facility_endpoint_configured: bool | None = None
-    facility_endpoint_status: str | None = None
+    primary_endpoint_family: str = "d2b_gw_facility"
+    legacy_endpoint_used: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -66,11 +154,14 @@ class D2BCollectionSummary:
             "api_errors": self.api_errors,
             "total_count": self.total_count,
             "source_health": self.source_health,
-            "endpoint_groups": self.endpoint_groups,
+            "operation_counts": self.operation_counts,
             "invalid_reasons": self.invalid_reasons,
-            "facility_endpoint_configured": self.facility_endpoint_configured,
-            "facility_endpoint_status": self.facility_endpoint_status,
+            "primary_endpoint_family": self.primary_endpoint_family,
+            "legacy_endpoint_used": self.legacy_endpoint_used,
         }
+
+
+RequestGet = Callable[..., Any]
 
 
 class D2BClient:
@@ -79,14 +170,46 @@ class D2BClient:
         *,
         service_key: str | None = None,
         page_size: int = DEFAULT_PAGE_SIZE,
-        request_get: Any | None = None,
+        timeout_seconds: int = 30,
+        request_get: RequestGet | None = None,
     ) -> None:
         self.service_key = (service_key if service_key is not None else os.getenv(D2B_SERVICE_KEY_ENV, "")).strip()
         self.page_size = page_size
-        self.request_get = request_get
+        self.timeout_seconds = timeout_seconds
+        self.request_get = request_get or requests.get
 
     def configured(self) -> bool:
         return bool(self.service_key)
+
+    def fetch_page(self, operation: D2BOperation, *, page_no: int, from_date: date, to_date: date) -> D2BPageResult:
+        if not self.service_key:
+            raise RuntimeError(f"{D2B_SERVICE_KEY_ENV} is not configured")
+        endpoint = operation.endpoint()
+        params = {
+            "serviceKey": self.service_key,
+            "pageNo": page_no,
+            "numOfRows": self.page_size,
+            operation.date_start_param: from_date.strftime(operation.date_format),
+            operation.date_end_param: to_date.strftime(operation.date_format),
+        }
+        try:
+            response = self.request_get(endpoint, params=params, timeout=self.timeout_seconds)
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            raise RuntimeError("D2B GW transport request failed") from exc
+        payload = parse_d2b_response(
+            response.content,
+            encoding=getattr(response, "encoding", None),
+            endpoint=endpoint,
+        )
+        return D2BPageResult(
+            operation=operation,
+            page_no=page_no,
+            page_size=self.page_size,
+            http_status=int(getattr(response, "status_code", 0)),
+            payload=payload,
+            endpoint=endpoint,
+        )
 
 
 class D2BProcurementAdapter(ExternalBusinessSourceAdapter):
@@ -108,25 +231,26 @@ class D2BProcurementAdapter(ExternalBusinessSourceAdapter):
             source=D2B_SOURCE,
             source_record_type=self.resource.source_record_type,
             external_id=external_id,
-            title=_pick(raw, "title"),
-            issuing_organization=_pick(raw, "organization") or "방위사업청",
-            category=_pick(raw, "business_type", "business_subtype", "category"),
-            region=_pick(raw, "region", "organization"),
-            estimated_amount=parse_amount(_pick(raw, "amount")),
+            title=_pick(raw, *_title_keys(self.resource.source_record_type)),
+            issuing_organization=_pick(raw, *_organization_keys()) or "방위사업청",
+            category=_pick(raw, *_category_keys(self.resource.source_record_type)),
+            region=_pick(raw, "orntNm", "orderInsttNm", "region", "areaNm"),
+            estimated_amount=parse_amount(_pick(raw, *_amount_keys(self.resource.source_record_type))),
             currency="KRW",
-            published_at=_parse_d2b_date(_pick(raw, "posted_at", "order_month")),
-            deadline_at=_parse_d2b_date(_pick(raw, "due_at", "order_month")),
-            status=_pick(raw, "progress_status", "notice_status"),
-            contract_method=_pick(raw, "contract_method", "bid_method"),
-            source_url=_pick(raw, "url"),
+            published_at=_parse_d2b_date(_pick(raw, *_published_at_keys(self.resource.source_record_type))),
+            deadline_at=_parse_d2b_date(_pick(raw, *_deadline_at_keys(self.resource.source_record_type))),
+            status=_pick(raw, "progrsSttus", "progressStatus", "progress_status", "pblancSe", "bidProgrsStatus", "sttusNm"),
+            contract_method=_pick(raw, "cntrctMth", "cntrctMthNm", "contractMethod", "contractMthd"),
+            source_url=_pick(raw, "url", "source_url") or _source_url(self.resource.source_record_type, external_part),
             collected_at=self.collected_at or self.collected_now(),
-            source_updated_at=_parse_d2b_date(_pick(raw, "source_updated_at")),
+            source_updated_at=_parse_d2b_date(_pick(raw, "chgDt", "chgDttm", "updtDt", "updatedAt")),
         )
 
 
 class D2BPilotRunner:
-    def __init__(self, *, client: D2BClient) -> None:
+    def __init__(self, *, client: D2BClient, resources: dict[str, D2BResource] | None = None) -> None:
         self.client = client
+        self.resources = resources or D2B_RESOURCES
 
     def collect(
         self,
@@ -146,40 +270,70 @@ class D2BPilotRunner:
         }
 
         for resource_name in resource_names:
-            resource = D2B_RESOURCES[resource_name]
-            summary = resource_summaries[resource_name]
+            resource = self.resources[resource_name]
             adapter = D2BProcurementAdapter(resource, collected_at=started_at)
-
+            summary = resource_summaries[resource_name]
             if not self.client.configured():
                 summary.api_errors.append({"category": "missing_secret", "required_secret": D2B_SERVICE_KEY_ENV})
                 summary.source_health = "failed"
                 continue
 
-            try:
-                raw_records = self._collect_raw_resource(resource, summary, plan_from, plan_to, bid_from, bid_to, max_pages)
-            except Exception as exc:  # noqa: BLE001 - sanitized summary keeps live pilot from leaking request details.
-                summary.api_errors.append(_diagnostic_from_exception(exc, _last_endpoint(summary)))
-                summary.source_health = "failed"
-                continue
+            from_date, to_date = (plan_from, plan_to) if resource.name == "procurement_plan" else (bid_from, bid_to)
+            for operation in resource.operations:
+                operation_counts = _operation_counts(summary, operation)
+                total_pages = 1
+                page_no = 1
+                while page_no <= min(total_pages, max(1, max_pages)):
+                    try:
+                        page = self.client.fetch_page(operation, page_no=page_no, from_date=from_date, to_date=to_date)
+                    except D2BApiError as exc:
+                        summary.api_errors.append(exc.diagnostic)
+                        summary.source_health = "failed"
+                        break
+                    except D2BParseError as exc:
+                        summary.api_errors.append(exc.diagnostic)
+                        summary.source_health = "failed"
+                        break
+                    except RuntimeError as exc:
+                        summary.api_errors.append(_diagnostic_from_exception(exc, operation.endpoint()))
+                        summary.source_health = "failed"
+                        break
 
-            summary.records_matched = len(raw_records)
-            for raw in raw_records:
-                try:
-                    normalized = adapter.normalize_raw_record(raw)
-                except ValueError as exc:
-                    summary.records_invalid += 1
-                    reason = _validation_error_reason(raw, exc)
-                    summary.invalid_reasons[reason] = summary.invalid_reasons.get(reason, 0) + 1
-                    continue
-                key = (normalized.source, normalized.source_record_type, normalized.external_id)
-                if key in seen:
-                    summary.duplicates += 1
-                    continue
-                seen.add(key)
-                summary.records_normalized += 1
-                records.append(normalized)
+                    summary.pages_requested += 1
+                    operation_counts["pages_requested"] += 1
+                    operation_counts["endpoint_scheme"] = urlparse(page.endpoint).scheme
+                    operation_counts["endpoint_host"] = urlparse(page.endpoint).hostname or ""
+                    summary.total_count = page.payload.total_count
+                    summary.records_received += len(page.payload.items)
+                    operation_counts["records_received"] += len(page.payload.items)
+                    total_pages = max(1, math.ceil(page.payload.total_count / max(page.page_size, 1)))
 
-            summary.source_health = _resource_health(summary)
+                    for raw in page.payload.items:
+                        if not _is_relevant(resource.source_record_type, raw):
+                            continue
+                        summary.records_matched += 1
+                        operation_counts["records_matched"] += 1
+                        try:
+                            normalized = adapter.normalize_raw_record(raw)
+                        except ValueError as exc:
+                            summary.records_invalid += 1
+                            operation_counts["records_invalid"] += 1
+                            reason = _validation_error_reason(resource.source_record_type, raw, exc)
+                            summary.invalid_reasons[reason] = summary.invalid_reasons.get(reason, 0) + 1
+                            continue
+                        key = (normalized.source, normalized.source_record_type, normalized.external_id)
+                        if key in seen:
+                            summary.duplicates += 1
+                            operation_counts["duplicates"] += 1
+                            continue
+                        seen.add(key)
+                        summary.records_normalized += 1
+                        operation_counts["records_normalized"] += 1
+                        records.append(normalized)
+                    page_no += 1
+
+            if summary.source_health != "failed":
+                summary.source_health = _resource_health(summary)
 
         finished_at = _now()
         summary_payload = {
@@ -189,41 +343,48 @@ class D2BPilotRunner:
             "resources": {name: summary.as_dict() for name, summary in resource_summaries.items()},
             "records_normalized": len(records),
             "overall_health": _overall_health(resource_summaries),
+            "legacy_endpoint_used": any(summary.legacy_endpoint_used for summary in resource_summaries.values()),
         }
         return records, summary_payload
 
-    def _collect_raw_resource(
-        self,
-        resource: D2BResource,
-        summary: D2BCollectionSummary,
-        plan_from: date,
-        plan_to: date,
-        bid_from: date,
-        bid_to: date,
-        max_pages: int,
-    ) -> list[dict[str, Any]]:
-        if resource.name == "procurement_plan":
-            collector = _configured_plan_collector(self.client)
-            summary.facility_endpoint_configured = bool(collector.facility_endpoint)
-            summary.facility_endpoint_status = (
-                "configured"
-                if collector.facility_endpoint
-                else "not_configured_official_facility_operation_not_confirmed"
-            )
-            endpoints = [("domestic_procurement_plan", "국내 조달계획", collector.domestic_endpoint)]
-            if collector.facility_endpoint:
-                endpoints.append(("facility_procurement_plan", "시설 조달계획", collector.facility_endpoint))
-            begin, end = plan_from.strftime("%Y%m"), plan_to.strftime("%Y%m")
-            return _collect_with_existing_collector(collector, summary, endpoints, begin, end, max_pages)
 
-        collector = _configured_bid_collector(self.client)
-        endpoints = [("domestic_bid_notice", "국내 경쟁입찰공고", collector.domestic_endpoint)]
-        if collector.foreign_endpoint:
-            endpoints.append(("foreign_bid_notice", "국외 경쟁입찰공고", collector.foreign_endpoint))
-        if collector.public_private_endpoint:
-            endpoints.append(("public_private_bid_notice", "공개수의 협상계획", collector.public_private_endpoint))
-        begin, end = bid_from.strftime("%Y%m%d"), bid_to.strftime("%Y%m%d")
-        return _collect_with_existing_collector(collector, summary, endpoints, begin, end, max_pages)
+def parse_d2b_response(content: bytes | str, *, encoding: str | None = None, endpoint: str | None = None) -> D2BPayload:
+    if isinstance(content, bytes):
+        text = content.decode(encoding or "utf-8", errors="replace").strip()
+    else:
+        text = content.strip()
+    if not text:
+        return D2BPayload(result_code=None, result_message=None, total_count=0, items=[], response_format="empty")
+
+    if text.startswith("{"):
+        try:
+            payload = json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise D2BParseError("D2B GW JSON response could not be parsed", endpoint=endpoint) from exc
+        return _payload_from_json(payload, endpoint=endpoint)
+
+    xml_text = re.sub(r"^\s*<\?xml[^>]*\?>", "", text).strip()
+    try:
+        root = ET.fromstring(xml_text)
+    except ET.ParseError as exc:
+        raise D2BParseError("D2B GW XML response could not be parsed", endpoint=endpoint) from exc
+
+    result_code = _find_text(root, "resultCode")
+    result_message = _find_text(root, "resultMsg") or _find_text(root, "resultMag")
+    if result_code and result_code not in {"00", "0"}:
+        raise D2BApiError(result_code, result_message or "", endpoint=endpoint)
+    items = []
+    for item_node in _iter_local(root, "item"):
+        item = {_local_name(child.tag): (child.text or "").strip() for child in list(item_node)}
+        if item:
+            items.append(item)
+    return D2BPayload(
+        result_code=result_code or None,
+        result_message=result_message or None,
+        total_count=_to_int(_find_text(root, "totalCount")),
+        items=items,
+        response_format="xml",
+    )
 
 
 def write_staging_outputs(records: list[NormalizedBusinessRecord], summary: dict[str, Any], output_dir: Path) -> None:
@@ -238,81 +399,64 @@ def write_staging_outputs(records: list[NormalizedBusinessRecord], summary: dict
     )
 
 
-def _configured_plan_collector(client: D2BClient) -> D2BPlanCollector:
-    collector = D2BPlanCollector()
-    collector.service_key = client.service_key
-    collector.page_size = client.page_size
-    if client.request_get is not None:
-        collector._request_get = client.request_get  # type: ignore[attr-defined]
-    return collector
+def _payload_from_json(payload: dict[str, Any], *, endpoint: str | None) -> D2BPayload:
+    response = payload.get("response") or payload
+    header = response.get("header") or {}
+    result_code = str(header.get("resultCode") or payload.get("resultCode") or "")
+    result_message = str(header.get("resultMsg") or header.get("resultMag") or payload.get("resultMsg") or "")
+    if result_code and result_code not in {"00", "0"}:
+        raise D2BApiError(result_code, result_message, endpoint=endpoint)
+    body = response.get("body") or payload
+    total_count = _to_int(body.get("totalCount"))
+    items = body.get("items", [])
+    if isinstance(items, dict):
+        item = items.get("item", items)
+        items = item if isinstance(item, list) else [item]
+    if not isinstance(items, list):
+        items = []
+    return D2BPayload(
+        result_code=result_code or None,
+        result_message=result_message or None,
+        total_count=total_count,
+        items=[_stringify_values(item) for item in items if isinstance(item, dict)],
+        response_format="json",
+    )
 
 
-def _configured_bid_collector(client: D2BClient) -> D2BBidCollector:
-    collector = D2BBidCollector()
-    collector.service_key = client.service_key
-    collector.page_size = client.page_size
-    if client.request_get is not None:
-        collector._request_get = client.request_get  # type: ignore[attr-defined]
-    return collector
+def _stringify_values(item: dict[str, Any]) -> dict[str, str]:
+    return {str(key): "" if value is None else str(value).strip() for key, value in item.items()}
 
 
-def _collect_with_existing_collector(
-    collector: Any,
-    summary: D2BCollectionSummary,
-    endpoints: list[tuple[str, str, str]],
-    begin: str,
-    end: str,
-    max_pages: int,
-) -> list[dict[str, Any]]:
-    matched: list[dict[str, Any]] = []
-    max_pages = max(1, max_pages)
-
-    for endpoint_key, category, endpoint in endpoints:
-        endpoint_counts = summary.endpoint_groups.setdefault(
-            endpoint_key,
-            {
-                "pages_requested": 0,
-                "records_received": 0,
-                "records_matched": 0,
-            },
-        )
-        page_no = 1
-        total_pages = 1
-        while page_no <= min(total_pages, max_pages):
-            summary.pages_requested += 1
-            endpoint_counts["pages_requested"] += 1
-            endpoint_counts["endpoint_scheme"] = urlparse(endpoint).scheme  # type: ignore[assignment]
-            endpoint_counts["endpoint_host"] = urlparse(endpoint).hostname or ""  # type: ignore[assignment]
-            endpoint_counts["last_endpoint"] = endpoint  # type: ignore[assignment]
-            try:
-                payload = _request_page(collector, endpoint, page_no, begin, end)
-                total_count, items = collector._extract_payload(payload)
-            except Exception:
-                raise
-            summary.total_count = total_count
-            summary.records_received += len(items)
-            endpoint_counts["records_received"] += len(items)
-            total_pages = max(1, math.ceil(total_count / max(collector.page_size, 1)))
-            for item in items:
-                raw_item = collector._to_raw_item(category, item)
-                if collector._is_relevant(raw_item):
-                    matched.append(raw_item)
-                    endpoint_counts["records_matched"] += 1
-            page_no += 1
-
-    return matched
+def _operation_counts(summary: D2BCollectionSummary, operation: D2BOperation) -> dict[str, Any]:
+    return summary.operation_counts.setdefault(
+        operation.name,
+        {
+            "pages_requested": 0,
+            "records_received": 0,
+            "records_matched": 0,
+            "records_normalized": 0,
+            "records_invalid": 0,
+            "duplicates": 0,
+            "endpoint_scheme": "",
+            "endpoint_host": "",
+        },
+    )
 
 
-def _request_page(collector: Any, endpoint: str, page_no: int, begin: str, end: str) -> dict[str, Any]:
-    request_get = getattr(collector, "_request_get", None)
-    if request_get is None:
-        return collector._request(endpoint, page_no, begin, end)
-    original_get = requests.get
-    try:
-        requests.get = request_get
-        return collector._request(endpoint, page_no, begin, end)
-    finally:
-        requests.get = original_get
+def _is_relevant(record_type: str, raw: dict[str, Any]) -> bool:
+    mapped = {
+        "title": _pick(raw, *_title_keys(record_type)),
+        "summary": " ".join(str(value or "") for value in raw.values()),
+        "description": " ".join(str(value or "") for value in raw.values()),
+        "amount": _pick(raw, *_amount_keys(record_type)),
+        "execution_type": _pick(raw, *_category_keys(record_type)),
+        "progress_status": _pick(raw, "progrsSttus", "progressStatus", "pblancSe", "bidProgrsStatus", "sttusNm"),
+        "organization": _pick(raw, *_organization_keys()),
+        "business_type": _pick(raw, *_category_keys(record_type)),
+    }
+    if record_type == "procurement_plan":
+        return calculate_d2b_relevance(mapped) > 0
+    return calculate_d2b_bid_relevance(mapped) > 0
 
 
 def _resource_health(summary: D2BCollectionSummary) -> str:
@@ -331,10 +475,10 @@ def _overall_health(summaries: dict[str, D2BCollectionSummary]) -> str:
     return "healthy_empty"
 
 
-def _validation_error_reason(raw: dict[str, Any], exc: ValueError) -> str:
-    if not _pick(raw, "source_record_id", "dcs_no", "plan_no", "notice_no", "bid_no"):
+def _validation_error_reason(record_type: str, raw: dict[str, Any], exc: ValueError) -> str:
+    if not _pick(raw, *_external_id_keys(record_type)):
         return "missing_external_id"
-    if not _pick(raw, "title"):
+    if not _pick(raw, *_title_keys(record_type)):
         return "missing_title"
     message = str(exc).lower()
     if "external_id" in message:
@@ -345,15 +489,9 @@ def _validation_error_reason(raw: dict[str, Any], exc: ValueError) -> str:
 
 
 def _diagnostic_from_exception(exc: Exception, endpoint: str | None) -> dict[str, str]:
-    message = str(exc)
-    result_code = _result_code_from_message(message)
-    category = "api_error"
-    if isinstance(exc, requests.RequestException):
-        category = "transport_error"
-    elif "JSON" in message or "XML" in message or "빈 응답" in message:
-        category = "response_parse_error"
-    diagnostic = _diagnostic(category, endpoint, exception=exc, result_code=result_code)
-    return diagnostic
+    if isinstance(exc.__cause__, requests.RequestException):
+        return _diagnostic("transport_error", endpoint, exception=exc.__cause__)
+    return _diagnostic("api_error", endpoint, exception=exc)
 
 
 def _diagnostic(
@@ -376,23 +514,65 @@ def _diagnostic(
     return diagnostic
 
 
-def _result_code_from_message(message: str) -> str | None:
-    match = re.search(r"API 오류:\s*([A-Za-z0-9_-]+)", message)
-    return match.group(1) if match else None
-
-
-def _last_endpoint(summary: D2BCollectionSummary) -> str | None:
-    for payload in reversed(list(summary.endpoint_groups.values())):
-        endpoint = payload.get("last_endpoint")
-        if isinstance(endpoint, str):
-            return endpoint
-    return None
+def _category_for_result_code(result_code: str) -> str:
+    if result_code == "20":
+        return "service_access_denied"
+    if result_code == "30":
+        return "auth_error"
+    if result_code in {"22", "23"}:
+        return "rate_limited"
+    if result_code == "10":
+        return "invalid_request"
+    return "api_error"
 
 
 def _external_id_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
-        return ("source_record_id", "dcs_no", "plan_no", "bid_no")
-    return ("source_record_id", "notice_no", "bid_no")
+        return ("dcsNo", "judgmntNo", "dcsnNo", "dcsNoList", "source_record_id")
+    return ("bidNo", "pblancNo", "bidNtceNo", "ntatPlanNo", "source_record_id")
+
+
+def _title_keys(record_type: str) -> tuple[str, ...]:
+    if record_type == "procurement_plan":
+        return ("reprsntPrdlstNm", "representPrdlstNm", "prcurePlanNm", "planNm", "prdctNm", "itemNm", "prdlstNm", "title")
+    return ("bidNm", "bidName", "bidPblancNm", "pblancNm", "ntatPlanNm", "bidNtceNm", "title")
+
+
+def _organization_keys() -> tuple[str, ...]:
+    return ("orntNm", "ornt", "orntCode", "orntCd", "orderInsttNm", "orderAgency", "organization")
+
+
+def _category_keys(record_type: str) -> tuple[str, ...]:
+    if record_type == "procurement_plan":
+        return ("excutTy", "excutTyNm", "execType", "bsnsSe", "bsnsSeNm", "business_type", "business_subtype", "category")
+    return ("busiDivs", "excutTy", "bsnsSe", "jobSe", "workSe", "bidJobGb", "business_type", "business_subtype", "category")
+
+
+def _amount_keys(record_type: str) -> tuple[str, ...]:
+    if record_type == "procurement_plan":
+        return ("bdgtAmount", "budgetAmount", "bdgtAmt", "budgetAmt", "estmtAmount", "amount")
+    return ("bsicExpt", "budgetAmount", "bdgtAmount", "presmptPrce", "bssamt", "amount")
+
+
+def _published_at_keys(record_type: str) -> tuple[str, ...]:
+    if record_type == "procurement_plan":
+        return ("regDt", "rgstDt", "frstRegDt", "planRegDt", "orderPrearngeMt", "orderPrerngeMt", "orderPrearngeYm", "posted_at")
+    return ("pblancDate", "anmtDate", "bidPblancDate", "bidNtceDate", "posted_at")
+
+
+def _deadline_at_keys(record_type: str) -> tuple[str, ...]:
+    if record_type == "procurement_plan":
+        return ("orderPrearngeMt", "orderPrerngeMt", "orderPrearngeYm", "orderPlanDt", "due_at")
+    return ("biddocPresentnClosDt", "bidDcPeoClseDttm", "bidSubmitClseDttm", "bidClseDttm", "ntatClosDttm", "due_at")
+
+
+def _source_url(record_type: str, external_part: str) -> str:
+    base = "https://www.d2b.go.kr/"
+    if record_type == "procurement_plan" and external_part:
+        return f"{base}?dcsNo={external_part}"
+    if external_part:
+        return f"{base}?bidNo={external_part}"
+    return base
 
 
 def _pick(item: dict[str, Any], *keys: str) -> str:
@@ -428,9 +608,29 @@ def _parse_d2b_date(value: Any) -> str | None:
     return text
 
 
+def _find_text(root: ET.Element, tag: str) -> str:
+    for node in root.iter():
+        if _local_name(node.tag) == tag:
+            return (node.text or "").strip()
+    return ""
+
+
+def _iter_local(root: ET.Element, tag: str):
+    for node in root.iter():
+        if _local_name(node.tag) == tag:
+            yield node
+
+
+def _local_name(tag: str) -> str:
+    return tag.split("}", 1)[-1]
+
+
+def _to_int(value: Any) -> int:
+    try:
+        return int(str(value or "0").replace(",", ""))
+    except ValueError:
+        return 0
+
+
 def _now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
-
-
-def sleep_for_live_retry(attempt: int) -> None:
-    time.sleep(0.5 * (attempt + 1))

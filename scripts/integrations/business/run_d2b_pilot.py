@@ -151,14 +151,17 @@ def _print_sanitized_summary(summary: dict[str, Any]) -> None:
                 + error_parts
             )
         )
-        for endpoint_group, counts in sorted((payload.get("endpoint_groups") or {}).items()):
+        for operation, counts in sorted((payload.get("operation_counts") or {}).items()):
             print(
                 " ".join(
                     [
-                        f"  - {endpoint_group}:",
+                        f"  - {operation}:",
                         f"pages_requested={counts.get('pages_requested')}",
                         f"records_received={counts.get('records_received')}",
                         f"records_matched={counts.get('records_matched')}",
+                        f"records_normalized={counts.get('records_normalized')}",
+                        f"records_invalid={counts.get('records_invalid')}",
+                        f"duplicates={counts.get('duplicates')}",
                         f"endpoint_scheme={counts.get('endpoint_scheme', '-')}",
                         f"endpoint_host={counts.get('endpoint_host', '-')}",
                     ]

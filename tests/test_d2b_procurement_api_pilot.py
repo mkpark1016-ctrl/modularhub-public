@@ -13,6 +13,8 @@ import pytest
 from scripts.integrations.business.d2b import (
     D2B_RESOURCES,
     D2B_SERVICE_KEY_ENV,
+    D2B_GW_BID_BASE_ENDPOINT,
+    D2B_GW_PLAN_BASE_ENDPOINT,
     D2BClient,
     D2BPilotRunner,
     D2BProcurementAdapter,
@@ -81,6 +83,21 @@ D2B_BID_ITEM = {
 }
 
 
+D2B_PRIVATE_BID_ITEM = {
+    "bidNo": "D2B-PRIVATE-001",
+    "pblancNo": "D2B-PRIVATE-001",
+    "bidNm": "모듈러 정비시설 공개수의 협상계획",
+    "orntNm": "국방시설본부",
+    "pblancDate": "20260802",
+    "ntatClosDttm": "202608311800",
+    "bsicExpt": "900000000",
+    "cntrctMthNm": "공개수의",
+    "bidStle": "협상",
+    "busiDivs": "시설공사",
+    "pblancSe": "협상계획",
+}
+
+
 def test_d2b_procurement_plan_canonical_mapping() -> None:
     adapter = D2BProcurementAdapter(D2B_RESOURCES["procurement_plan"], collected_at="2026-08-19T00:00:00+00:00")
     raw = {
@@ -145,6 +162,8 @@ def test_d2b_runner_reuses_existing_collectors_for_pagination_and_dedupe() -> No
         calls.append((endpoint, page_no))
         if "PrcurePlanInfoService" in endpoint:
             return FakeResponse(d2b_payload([D2B_PLAN_ITEM], total_count=2))
+        if "getFcltyOthbcVltrnNtatPlanList" in endpoint:
+            return FakeResponse(d2b_payload([D2B_PRIVATE_BID_ITEM], total_count=2))
         return FakeResponse(d2b_payload([D2B_BID_ITEM], total_count=2))
 
     runner = D2BPilotRunner(client=D2BClient(service_key="test-secret", request_get=fake_get, page_size=1))
@@ -160,17 +179,26 @@ def test_d2b_runner_reuses_existing_collectors_for_pagination_and_dedupe() -> No
     assert [record.external_id for record in records] == [
         "d2b:procurement_plan:D2B-PLAN-001",
         "d2b:bid_notice:D2B-BID-001",
+        "d2b:bid_notice:D2B-PRIVATE-001",
     ]
-    assert summary["records_normalized"] == 2
+    assert summary["records_normalized"] == 3
     assert summary["overall_health"] == "healthy"
     assert summary["resources"]["procurement_plan"]["pages_requested"] == 2
     assert summary["resources"]["procurement_plan"]["records_received"] == 2
     assert summary["resources"]["procurement_plan"]["records_matched"] == 2
     assert summary["resources"]["procurement_plan"]["records_normalized"] == 1
     assert summary["resources"]["procurement_plan"]["duplicates"] == 1
-    assert summary["resources"]["bid_notice"]["pages_requested"] == 2
-    assert summary["resources"]["bid_notice"]["duplicates"] == 1
-    assert len(calls) == 4
+    assert summary["resources"]["procurement_plan"]["operation_counts"]["getFcltyPrcurePlanList"]["pages_requested"] == 2
+    assert summary["resources"]["bid_notice"]["pages_requested"] == 4
+    assert summary["resources"]["bid_notice"]["records_normalized"] == 2
+    assert summary["resources"]["bid_notice"]["duplicates"] == 2
+    assert summary["resources"]["bid_notice"]["operation_counts"]["getFcltyCmpetBidPblancList"]["pages_requested"] == 2
+    assert summary["resources"]["bid_notice"]["operation_counts"]["getFcltyOthbcVltrnNtatPlanList"]["pages_requested"] == 2
+    assert len(calls) == 6
+    assert all("openapi.d2b.go.kr" not in endpoint for endpoint, _page in calls)
+    assert any(endpoint == f"{D2B_GW_PLAN_BASE_ENDPOINT}/getFcltyPrcurePlanList" for endpoint, _page in calls)
+    assert any(endpoint == f"{D2B_GW_BID_BASE_ENDPOINT}/getFcltyCmpetBidPblancList" for endpoint, _page in calls)
+    assert any(endpoint == f"{D2B_GW_BID_BASE_ENDPOINT}/getFcltyOthbcVltrnNtatPlanList" for endpoint, _page in calls)
 
 
 def test_d2b_empty_response_is_healthy_empty() -> None:
@@ -194,7 +222,7 @@ def test_d2b_empty_response_is_healthy_empty() -> None:
 
 def test_d2b_api_error_is_sanitized() -> None:
     def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: int) -> FakeResponse:
-        return FakeResponse(d2b_payload([], result_code="30"))
+        return FakeResponse(d2b_payload([], result_code="99"))
 
     runner = D2BPilotRunner(client=D2BClient(service_key="secret-not-for-output", request_get=fake_get))
     _records, summary = runner.collect(
@@ -209,10 +237,48 @@ def test_d2b_api_error_is_sanitized() -> None:
     resource = summary["resources"]["bid_notice"]
     assert resource["source_health"] == "failed"
     assert resource["api_errors"][0]["category"] == "api_error"
-    assert resource["api_errors"][0]["result_code"] == "30"
+    assert resource["api_errors"][0]["result_code"] == "99"
     payload = json.dumps(summary, ensure_ascii=False)
     assert "secret-not-for-output" not in payload
     assert "serviceKey=" not in payload
+
+
+def test_d2b_result_code_20_is_service_access_denied() -> None:
+    def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: int) -> FakeResponse:
+        return FakeResponse(d2b_payload([], result_code="20"))
+
+    runner = D2BPilotRunner(client=D2BClient(service_key="secret-not-for-output", request_get=fake_get))
+    _records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2026, 12, 1),
+        bid_from=date(2026, 8, 1),
+        bid_to=date(2026, 8, 31),
+        max_pages=1,
+    )
+
+    error = summary["resources"]["procurement_plan"]["api_errors"][0]
+    assert error["category"] == "service_access_denied"
+    assert error["result_code"] == "20"
+
+
+def test_d2b_result_code_30_is_auth_error() -> None:
+    def fake_get(_endpoint: str, *, params: dict[str, Any], timeout: int) -> FakeResponse:
+        return FakeResponse(d2b_payload([], result_code="30"))
+
+    runner = D2BPilotRunner(client=D2BClient(service_key="secret-not-for-output", request_get=fake_get))
+    _records, summary = runner.collect(
+        resource_names=["procurement_plan"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2026, 12, 1),
+        bid_from=date(2026, 8, 1),
+        bid_to=date(2026, 8, 31),
+        max_pages=1,
+    )
+
+    error = summary["resources"]["procurement_plan"]["api_errors"][0]
+    assert error["category"] == "auth_error"
+    assert error["result_code"] == "30"
 
 
 def test_d2b_malformed_response_is_parse_error() -> None:
@@ -231,7 +297,7 @@ def test_d2b_malformed_response_is_parse_error() -> None:
 
     error = summary["resources"]["procurement_plan"]["api_errors"][0]
     assert error["category"] == "response_parse_error"
-    assert error["endpoint_host"] == "openapi.d2b.go.kr"
+    assert error["endpoint_host"] == "apis.data.go.kr"
 
 
 def test_d2b_invalid_records_count_missing_external_id_and_title() -> None:
@@ -319,3 +385,13 @@ def test_d2b_workflow_is_manual_staging_only() -> None:
     assert "python -m pytest -q tests/test_d2b_procurement_api_pilot.py" in workflow
     assert "artifacts/d2b/" in workflow
     assert "if-no-files-found: warn" in workflow
+    assert "D2B_SERVICE_KEY" not in workflow
+
+
+def test_d2b_env_example_documents_current_gw_endpoints() -> None:
+    env_example = (ROOT / ".env.example").read_text(encoding="utf-8")
+
+    assert "D2B_GW_PLAN_FACILITY_ENDPOINT=https://apis.data.go.kr/1690000/PrcurePlanInfoService/getFcltyPrcurePlanList" in env_example
+    assert "D2B_GW_BID_FACILITY_COMPETITIVE_ENDPOINT=https://apis.data.go.kr/1690000/BidPblancInfoService/getFcltyCmpetBidPblancList" in env_example
+    assert "D2B_GW_BID_FACILITY_PRIVATE_ENDPOINT=https://apis.data.go.kr/1690000/BidPblancInfoService/getFcltyOthbcVltrnNtatPlanList" in env_example
+    assert "D2B_GW_CODE_ORNT_ENDPOINT=https://apis.data.go.kr/1690000/CodeInqireService/getOrntCodeList" in env_example
