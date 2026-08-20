@@ -1,0 +1,270 @@
+name: Unified Business Feed Live Staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      acknowledge_live:
+        description: Confirm one read-only LH/G2B fallback/D2B live staging run
+        required: true
+        default: false
+        type: boolean
+      lh_lookback_days:
+        description: Bounded LH lookback days
+        required: true
+        default: "30"
+        type: string
+      lh_page_size:
+        description: Bounded LH records per page
+        required: true
+        default: "5"
+        type: string
+      lh_max_pages:
+        description: Maximum LH pages per resource
+        required: true
+        default: "2"
+        type: string
+      d2b_bid_lookback_days:
+        description: Bounded D2B bid notice lookback days
+        required: true
+        default: "90"
+        type: string
+      d2b_plan_lookahead_months:
+        description: Bounded D2B procurement plan lookahead months
+        required: true
+        default: "12"
+        type: string
+      d2b_max_pages:
+        description: Maximum D2B pages per operation
+        required: true
+        default: "2"
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  unified-business-live-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ACKNOWLEDGE_LIVE: ${{ inputs.acknowledge_live }}
+      LH_LOOKBACK_DAYS: ${{ inputs.lh_lookback_days }}
+      LH_PAGE_SIZE: ${{ inputs.lh_page_size }}
+      LH_MAX_PAGES: ${{ inputs.lh_max_pages }}
+      D2B_BID_LOOKBACK_DAYS: ${{ inputs.d2b_bid_lookback_days }}
+      D2B_PLAN_LOOKAHEAD_MONTHS: ${{ inputs.d2b_plan_lookahead_months }}
+      D2B_MAX_PAGES: ${{ inputs.d2b_max_pages }}
+      LH_SERVICE_KEY: ${{ secrets.LH_SERVICE_KEY }}
+      DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
+
+    steps:
+      - name: Guard live opt-in and bounded inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$ACKNOWLEDGE_LIVE" != "true" ]; then
+            echo "Unified live staging requires acknowledge_live=true."
+            exit 1
+          fi
+          bounded_integer() {
+            local name="$1" value="$2" minimum="$3" maximum="$4"
+            if ! [[ "$value" =~ ^[0-9]+$ ]] || [ "$value" -lt "$minimum" ] || [ "$value" -gt "$maximum" ]; then
+              echo "$name must be an integer between $minimum and $maximum."
+              exit 1
+            fi
+          }
+          bounded_integer lh_lookback_days "$LH_LOOKBACK_DAYS" 1 90
+          bounded_integer lh_page_size "$LH_PAGE_SIZE" 1 20
+          bounded_integer lh_max_pages "$LH_MAX_PAGES" 1 3
+          bounded_integer d2b_bid_lookback_days "$D2B_BID_LOOKBACK_DAYS" 1 180
+          bounded_integer d2b_plan_lookahead_months "$D2B_PLAN_LOOKAHEAD_MONTHS" 1 24
+          bounded_integer d2b_max_pages "$D2B_MAX_PAGES" 1 3
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Check source secret configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          lh_configured=false
+          data_go_kr_configured=false
+          if [ -n "$LH_SERVICE_KEY" ]; then lh_configured=true; fi
+          if [ -n "$DATA_GO_KR_SERVICE_KEY" ]; then data_go_kr_configured=true; fi
+          echo "LH_SERVICE_KEY configured: $lh_configured"
+          echo "DATA_GO_KR_SERVICE_KEY configured: $data_go_kr_configured"
+          if [ "$lh_configured" != "true" ] || [ "$data_go_kr_configured" != "true" ]; then
+            echo "Both repository secrets are required for unified live staging."
+            exit 1
+          fi
+
+      - name: Run offline integration regression
+        run: |
+          python -m pytest -q tests/test_external_api_integration_foundation.py
+          python -m pytest -q tests/test_lh_procurement_api_pilot.py
+          python -m pytest -q tests/test_d2b_procurement_api_pilot.py
+          python -m pytest -q tests/test_unified_business_feed.py
+          python -m pytest -q tests/test_unified_business_live_staging.py
+
+      - name: Record protected public data hashes
+        shell: bash
+        run: |
+          sha256sum \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json \
+            > "$RUNNER_TEMP/unified-protected-before.sha256"
+
+      - name: Run LH direct with conditional G2B fallback once
+        id: lh_live
+        continue-on-error: true
+        run: |
+          python -m scripts.integrations.business.run_lh_pilot \
+            --resources procurement_plan,pre_spec,bid_notice \
+            --lookback-days "$LH_LOOKBACK_DAYS" \
+            --page-size "$LH_PAGE_SIZE" \
+            --max-pages "$LH_MAX_PAGES" \
+            --output-dir artifacts/lh \
+            --live \
+            --acknowledge-live
+
+      - name: Run D2B live staging once
+        id: d2b_live
+        continue-on-error: true
+        run: |
+          python scripts/integrations/business/run_d2b_pilot.py \
+            --resources procurement_plan,bid_notice \
+            --bid-lookback-days "$D2B_BID_LOOKBACK_DAYS" \
+            --plan-lookahead-months "$D2B_PLAN_LOOKAHEAD_MONTHS" \
+            --max-pages "$D2B_MAX_PAGES" \
+            --output-dir artifacts/d2b \
+            --live \
+            --acknowledge-live
+
+      - name: Verify source outcomes and canonical artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ steps.lh_live.outcome }}" != "success" ]; then
+            echo "LH source step failed; preserving available evidence."
+            exit 1
+          fi
+          if [ "${{ steps.d2b_live.outcome }}" != "success" ]; then
+            echo "D2B source step failed; preserving available evidence."
+            exit 1
+          fi
+          test -f artifacts/lh/lh_records.json
+          test -f artifacts/lh/lh_summary.json
+          test -f artifacts/d2b/d2b_records.json
+          test -f artifacts/d2b/d2b_summary.json
+          python -m scripts.integrations.business.validate_unified_live_staging \
+            --lh-summary artifacts/lh/lh_summary.json \
+            --lh-records artifacts/lh/lh_records.json \
+            --d2b-summary artifacts/d2b/d2b_summary.json \
+            --d2b-records artifacts/d2b/d2b_records.json \
+            --source-only
+
+      - name: Build unified business staging artifact once
+        run: |
+          python scripts/integrations/business/run_unified_business_feed.py \
+            --lh-records artifacts/lh/lh_records.json \
+            --d2b-records artifacts/d2b/d2b_records.json \
+            --output-dir artifacts/unified-business
+
+      - name: Validate unified live acceptance
+        run: |
+          python -m scripts.integrations.business.validate_unified_live_staging \
+            --lh-summary artifacts/lh/lh_summary.json \
+            --lh-records artifacts/lh/lh_records.json \
+            --d2b-summary artifacts/d2b/d2b_summary.json \
+            --d2b-records artifacts/d2b/d2b_records.json \
+            --unified-summary artifacts/unified-business/unified_business_summary.json \
+            --unified-records artifacts/unified-business/unified_business_records.json
+
+      - name: Verify protected public data unchanged
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "$RUNNER_TEMP/unified-protected-before.sha256"
+          sha256sum -c "$RUNNER_TEMP/unified-protected-before.sha256"
+          git diff --exit-code -- \
+            frontend/public/data/business.json \
+            frontend/public/data/news.json \
+            frontend/public/data/companies/companies.json \
+            frontend/public/data/companies/company_intelligence_v2.json \
+            frontend/public/data/companies/company_report_insights.json
+
+      - name: Append sanitized unified staging summary
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+
+          def load(path):
+              file_path = Path(path)
+              if not file_path.exists():
+                  return {}
+              try:
+                  payload = json.loads(file_path.read_text(encoding="utf-8"))
+                  return payload if isinstance(payload, dict) else {}
+              except (OSError, json.JSONDecodeError):
+                  return {}
+
+          lh = load("artifacts/lh/lh_summary.json")
+          d2b = load("artifacts/d2b/d2b_summary.json")
+          unified = load("artifacts/unified-business/unified_business_summary.json")
+          fallback = lh.get("g2b_fallback") or {}
+          security = unified.get("security") or {}
+
+          print("## Unified Business Feed Live Staging")
+          print("")
+          print("### LH")
+          print(f"- overall health: {lh.get('overall_health', 'not_generated')}")
+          print(f"- records normalized: {lh.get('records_normalized', 0)}")
+          print(f"- fallback used: {lh.get('fallback_used', False)}")
+          print(f"- G2B fallback normalized: {fallback.get('records_normalized', 0)}")
+          print("### D2B")
+          print(f"- overall health: {d2b.get('overall_health', 'not_generated')}")
+          print(f"- records normalized: {d2b.get('records_normalized', 0)}")
+          print("### Unified")
+          print(f"- records input: {unified.get('records_input', 0)}")
+          print(f"- records output: {unified.get('records_output', 0)}")
+          print(f"- source counts: {json.dumps(unified.get('source_counts', {}), sort_keys=True)}")
+          print(f"- record type counts: {json.dumps(unified.get('record_type_counts', {}), sort_keys=True)}")
+          print(f"- exact duplicates removed: {unified.get('exact_duplicates_removed', 0)}")
+          print(f"- identity conflict count: {unified.get('identity_conflict_count', 0)}")
+          print(f"- cross-source candidate count: {unified.get('cross_source_candidate_count', 0)}")
+          print(f"- security passed: {security.get('passed', False)}")
+          PY
+
+      - name: Upload unified live staging artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unified-business-live-staging-${{ github.run_number }}-${{ github.run_attempt }}
+          path: |
+            artifacts/lh/lh_summary.json
+            artifacts/lh/lh_records.json
+            artifacts/d2b/d2b_summary.json
+            artifacts/d2b/d2b_records.json
+            artifacts/unified-business/unified_business_summary.json
+            artifacts/unified-business/unified_business_records.json
+          if-no-files-found: warn
+          retention-days: 14
