@@ -657,14 +657,14 @@ def _category_for_result_code(result_code: str) -> str:
 
 def _external_id_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
-        return ("dcsNo", "judgmntNo", "dcsnNo", "dcsNoList", "source_record_id")
+        return ("dcsNo", "judgmntNo", "dcsnNo", "dcsNoList", "cntrwkNo", "source_record_id")
     return ("bidNo", "pblancNo", "bidNtceNo", "ntatPlanNo", "source_record_id")
 
 
 def _title_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
-        return ("reprsntPrdlstNm", "representPrdlstNm", "prcurePlanNm", "planNm", "prdctNm", "itemNm", "prdlstNm", "title")
-    return ("bidNm", "bidName", "bidPblancNm", "pblancNm", "ntatPlanNm", "bidNtceNm", "title")
+        return ("reprsntPrdlstNm", "representPrdlstNm", "prcurePlanNm", "planNm", "prdctNm", "itemNm", "prdlstNm", "cntrwkNm", "title")
+    return ("bidNm", "bidName", "bidPblancNm", "pblancNm", "ntatPlanNm", "bidNtceNm", "cntrwkNm", "title")
 
 
 def _organization_keys() -> tuple[str, ...]:
@@ -673,35 +673,30 @@ def _organization_keys() -> tuple[str, ...]:
 
 def _category_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
-        return ("excutTy", "excutTyNm", "execType", "bsnsSe", "bsnsSeNm", "business_type", "business_subtype", "category")
+        return ("excutTy", "excutTyNm", "execType", "bsnsSe", "bsnsSeNm", "cntrwkSe", "business_type", "business_subtype", "category")
     return ("busiDivs", "excutTy", "bsnsSe", "jobSe", "workSe", "bidJobGb", "business_type", "business_subtype", "category")
 
 
 def _amount_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
         return ("bdgtAmount", "budgetAmount", "bdgtAmt", "budgetAmt", "estmtAmount", "amount")
-    return ("bsicExpt", "budgetAmount", "bdgtAmount", "presmptPrce", "bssamt", "amount")
+    return ("bsicExpt", "budgetAmount", "baseAmnt", "bdgtAmount", "presmptPrce", "bssamt", "amount")
 
 
 def _published_at_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
         return ("regDt", "rgstDt", "frstRegDt", "planRegDt", "orderPrearngeMt", "orderPrerngeMt", "orderPrearngeYm", "posted_at")
-    return ("pblancDate", "anmtDate", "bidPblancDate", "bidNtceDate", "posted_at")
+    return ("pblancDate", "ntatPlanDate", "anmtDate", "bidPblancDate", "bidNtceDate", "posted_at")
 
 
 def _deadline_at_keys(record_type: str) -> tuple[str, ...]:
     if record_type == "procurement_plan":
         return ("orderPrearngeMt", "orderPrerngeMt", "orderPrearngeYm", "orderPlanDt", "due_at")
-    return ("biddocPresentnClosDt", "bidDcPeoClseDttm", "bidSubmitClseDttm", "bidClseDttm", "ntatClosDttm", "due_at")
+    return ("biddocPresentnClosDt", "prqudoPresentnClosDt", "bidDcPeoClseDttm", "bidSubmitClseDttm", "bidClseDttm", "ntatClosDttm", "due_at")
 
 
-def _source_url(record_type: str, external_part: str) -> str:
-    base = "https://www.d2b.go.kr/"
-    if record_type == "procurement_plan" and external_part:
-        return f"{base}?dcsNo={external_part}"
-    if external_part:
-        return f"{base}?bidNo={external_part}"
-    return base
+def _source_url(_record_type: str, _external_part: str) -> str:
+    return "https://www.d2b.go.kr/"
 
 
 def _pick(item: dict[str, Any], *keys: str) -> str:

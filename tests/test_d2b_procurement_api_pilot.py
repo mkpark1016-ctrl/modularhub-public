@@ -22,6 +22,7 @@ from scripts.integrations.business.d2b import (
     D2BProcurementAdapter,
     _overall_health,
     _resource_health,
+    _validation_error_reason,
     is_d2b_acceptance_failure,
     write_staging_outputs,
 )
@@ -105,6 +106,62 @@ D2B_PRIVATE_BID_ITEM = {
 }
 
 
+D2B_LIVE_PLAN_ITEM = {
+    "bidMth": "전자입찰",
+    "budgetAmount": "980000000",
+    "cntrctMth": "제한경쟁",
+    "cntrwkNm": D2B_PLAN_ITEM["reprsntPrdlstNm"],
+    "cntrwkNo": "TEST-FCLTY-PLAN-001",
+    "cntrwkSe": "시설",
+    "orderPrearngeMt": "202609",
+    "ornt": "방위사업청",
+    "orntCode": "TEST-ORNT-001",
+    "progrsSttus": "계획",
+}
+
+
+D2B_LIVE_COMPETITIVE_BID_ITEM = {
+    "baseAmnt": "1250000000",
+    "biddocPresentnClosDt": "202608301800",
+    "bidPartcptRegistClosDt": "202608291800",
+    "bidStle": "총액",
+    "bsisPrdprcApplcAt": "N",
+    "busiDivs": "시설공사",
+    "cntrctMth": "제한경쟁",
+    "cntrwkNm": D2B_BID_ITEM["bidNm"],
+    "cntrwkNo": "TEST-FCLTY-WORK-001",
+    "g2bPblancNo": "TEST-G2B-001",
+    "g2bPblancOdr": "1",
+    "opengDt": "202608311000",
+    "ornt": "국방시설본부",
+    "orntCode": "TEST-ORNT-002",
+    "pblancDate": "20260819",
+    "pblancNo": "TEST-FCLTY-BID-001",
+    "pblancOdr": "1",
+    "pblancSe": "공고",
+    "pblancSeCode": "01",
+    "pblancYear": "2026",
+}
+
+
+D2B_LIVE_PRIVATE_BID_ITEM = {
+    "baseAmnt": "850000000",
+    "bidMth": "전자입찰",
+    "budgetAmount": "900000000",
+    "busiDivs": "시설공사",
+    "cntrwkNm": D2B_PRIVATE_BID_ITEM["bidNm"],
+    "cntrwkNo": "TEST-FCLTY-WORK-002",
+    "ntatPlanDate": "20260820",
+    "opengDt": "202609011000",
+    "ornt": "국방시설본부",
+    "orntCode": "TEST-ORNT-002",
+    "pblancNo": "TEST-FCLTY-PRIVATE-001",
+    "pblancOdr": "1",
+    "progrsSttus": "협상계획",
+    "prqudoPresentnClosDt": "202608311800",
+}
+
+
 def test_d2b_procurement_plan_canonical_mapping() -> None:
     adapter = D2BProcurementAdapter(D2B_RESOURCES["procurement_plan"], collected_at="2026-08-19T00:00:00+00:00")
     raw = {
@@ -132,6 +189,7 @@ def test_d2b_procurement_plan_canonical_mapping() -> None:
     assert normalized.published_at == "2026-09-01"
     assert normalized.deadline_at == "2026-09-01"
     assert normalized.currency == "KRW"
+    assert normalized.source_url == raw["url"]
     assert "serviceKey" not in json.dumps(normalized.as_dict(), ensure_ascii=False)
 
 
@@ -159,6 +217,88 @@ def test_d2b_bid_notice_canonical_mapping() -> None:
     assert normalized.published_at == "2026-08-01"
     assert normalized.deadline_at == "2026-08-30"
     assert normalized.status == "공고"
+    assert normalized.source_url == raw["url"]
+
+
+def test_d2b_live_facility_plan_shape_maps_to_canonical_record() -> None:
+    adapter = D2BProcurementAdapter(D2B_RESOURCES["procurement_plan"], collected_at="2026-08-19T00:00:00+00:00")
+
+    normalized = adapter.normalize_raw_record(D2B_LIVE_PLAN_ITEM)
+
+    assert normalized.external_id == "d2b:procurement_plan:TEST-FCLTY-PLAN-001"
+    assert normalized.title == D2B_PLAN_ITEM["reprsntPrdlstNm"]
+    assert normalized.issuing_organization == "방위사업청"
+    assert normalized.category == "시설"
+    assert normalized.estimated_amount == 980_000_000
+    assert normalized.published_at == "2026-09-01"
+    assert normalized.deadline_at == "2026-09-01"
+    assert normalized.contract_method == "제한경쟁"
+    assert normalized.status == "계획"
+    assert normalized.source_url == "https://www.d2b.go.kr/"
+
+
+def test_d2b_live_facility_competitive_bid_shape_maps_to_canonical_record() -> None:
+    adapter = D2BProcurementAdapter(D2B_RESOURCES["bid_notice"], collected_at="2026-08-19T00:00:00+00:00")
+
+    normalized = adapter.normalize_raw_record(D2B_LIVE_COMPETITIVE_BID_ITEM)
+
+    assert normalized.external_id == "d2b:bid_notice:TEST-FCLTY-BID-001"
+    assert normalized.title == D2B_BID_ITEM["bidNm"]
+    assert normalized.issuing_organization == "국방시설본부"
+    assert normalized.category == "시설공사"
+    assert normalized.estimated_amount == 1_250_000_000
+    assert normalized.published_at == "2026-08-19"
+    assert normalized.deadline_at == "2026-08-30"
+    assert normalized.contract_method == "제한경쟁"
+    assert normalized.status == "공고"
+    assert normalized.source_url == "https://www.d2b.go.kr/"
+
+
+def test_d2b_live_facility_private_bid_shape_maps_to_canonical_record() -> None:
+    adapter = D2BProcurementAdapter(D2B_RESOURCES["bid_notice"], collected_at="2026-08-19T00:00:00+00:00")
+
+    normalized = adapter.normalize_raw_record(D2B_LIVE_PRIVATE_BID_ITEM)
+
+    assert normalized.external_id == "d2b:bid_notice:TEST-FCLTY-PRIVATE-001"
+    assert normalized.title == D2B_PRIVATE_BID_ITEM["bidNm"]
+    assert normalized.issuing_organization == "국방시설본부"
+    assert normalized.category == "시설공사"
+    assert normalized.estimated_amount == 900_000_000
+    assert normalized.published_at == "2026-08-20"
+    assert normalized.deadline_at == "2026-08-31"
+    assert normalized.status == "협상계획"
+    assert normalized.source_url == "https://www.d2b.go.kr/"
+
+
+def test_d2b_live_facility_shapes_complete_healthy_runner_flow() -> None:
+    def fake_get(endpoint: str, *, params: dict[str, Any], timeout: Any) -> FakeResponse:
+        del params, timeout
+        if "PrcurePlanInfoService" in endpoint:
+            item = D2B_LIVE_PLAN_ITEM
+        elif "getFcltyOthbcVltrnNtatPlanList" in endpoint:
+            item = D2B_LIVE_PRIVATE_BID_ITEM
+        else:
+            item = D2B_LIVE_COMPETITIVE_BID_ITEM
+        return FakeResponse(d2b_payload([item], total_count=1))
+
+    runner = D2BPilotRunner(client=D2BClient(service_key="test-secret", request_get=fake_get))
+    records, summary = runner.collect(
+        resource_names=["procurement_plan", "bid_notice"],
+        plan_from=date(2026, 8, 1),
+        plan_to=date(2026, 12, 1),
+        bid_from=date(2026, 8, 1),
+        bid_to=date(2026, 8, 31),
+        max_pages=1,
+    )
+
+    assert len(records) == 3
+    assert summary["records_normalized"] == 3
+    assert summary["overall_health"] == "healthy"
+    assert sum(resource["records_received"] for resource in summary["resources"].values()) == 3
+    assert sum(resource["records_matched"] for resource in summary["resources"].values()) == 3
+    assert sum(resource["records_invalid"] for resource in summary["resources"].values()) == 0
+    assert summary["resources"]["procurement_plan"]["source_health"] == "healthy"
+    assert summary["resources"]["bid_notice"]["source_health"] == "healthy"
 
 
 def test_d2b_runner_reuses_existing_collectors_for_pagination_and_dedupe() -> None:
@@ -549,6 +689,23 @@ def test_d2b_invalid_records_count_missing_external_id_and_title() -> None:
         adapter.normalize_raw_record({"title": "모듈러 계획"})
     with pytest.raises(ValueError, match="title"):
         adapter.normalize_raw_record({"source_record_id": "D2B-PLAN-001"})
+
+
+def test_d2b_live_facility_shapes_keep_specific_invalid_reasons() -> None:
+    plan_without_id = {key: value for key, value in D2B_LIVE_PLAN_ITEM.items() if key != "cntrwkNo"}
+    bid_without_title = {
+        key: value for key, value in D2B_LIVE_COMPETITIVE_BID_ITEM.items() if key != "cntrwkNm"
+    }
+    plan_adapter = D2BProcurementAdapter(D2B_RESOURCES["procurement_plan"])
+    bid_adapter = D2BProcurementAdapter(D2B_RESOURCES["bid_notice"])
+
+    with pytest.raises(ValueError) as plan_error:
+        plan_adapter.normalize_raw_record(plan_without_id)
+    with pytest.raises(ValueError) as bid_error:
+        bid_adapter.normalize_raw_record(bid_without_title)
+
+    assert _validation_error_reason("procurement_plan", plan_without_id, plan_error.value) == "missing_external_id"
+    assert _validation_error_reason("bid_notice", bid_without_title, bid_error.value) == "missing_title"
 
 
 def test_d2b_live_guard_skips_without_dual_opt_in(tmp_path: Path) -> None:
