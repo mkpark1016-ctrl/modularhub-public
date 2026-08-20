@@ -4,7 +4,6 @@ import argparse
 import hashlib
 import json
 import sys
-from copy import deepcopy
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -12,6 +11,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from scripts.integrations.business.public_pipeline import (
+    build_controlled_publication_payloads,
     integrate_optional_unified_business,
     write_public_pipeline_integration_report,
 )
@@ -24,6 +24,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--unified-records", type=Path, required=True)
     parser.add_argument("--unified-summary", type=Path, required=True)
     parser.add_argument("--public-business", type=Path, required=True)
+    parser.add_argument("--public-meta", type=Path)
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/public-pipeline-integration"))
     return parser.parse_args()
 
@@ -49,14 +50,26 @@ def main() -> int:
 
     output_dir = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
-    candidate_payload = deepcopy(public_payload) if isinstance(public_payload, dict) else {}
-    candidate_payload["items"] = merged_items
-    candidate_payload["business_total"] = len(merged_items)
-    candidate_payload["merged_business_count"] = len(merged_items)
+    public_meta = (
+        json.loads(args.public_meta.read_text(encoding="utf-8"))
+        if args.public_meta is not None
+        else {}
+    )
+    candidate_payload, candidate_meta = build_controlled_publication_payloads(
+        public_payload if isinstance(public_payload, dict) else {},
+        public_meta if isinstance(public_meta, dict) else {},
+        merged_items,
+        report,
+    )
     (output_dir / "candidate_business.json").write_text(
         json.dumps(candidate_payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+    if args.public_meta is not None:
+        (output_dir / "candidate_meta.json").write_text(
+            json.dumps(candidate_meta, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
     write_public_pipeline_integration_report(
         report,
         output_dir / "public_pipeline_integration_report.json",

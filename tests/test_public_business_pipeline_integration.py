@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,7 @@ from scripts.export_public_json import parse_args
 from scripts.integrations.business.base import NormalizedBusinessRecord
 from scripts.integrations.business.public_pipeline import (
     UnifiedPublicInputError,
+    build_controlled_publication_payloads,
     integrate_optional_unified_business,
 )
 from scripts.integrations.business.public_projection import build_public_projection
@@ -169,3 +171,70 @@ def test_korean_utf8_round_trip_and_no_network_client_in_integration_module(tmp_
     assert "import requests" not in source
     assert "httpx" not in source
     assert "urlopen" not in source
+
+
+def test_controlled_publication_recalculates_metadata_and_separates_d2b_status(
+    tmp_path: Path,
+) -> None:
+    existing = [{
+        "id": "old-1",
+        "source": "G2B",
+        "source_type": "bid",
+        "opportunity_status": "active",
+        "title": "기존 사업",
+    }]
+    merged, report = integrate(tmp_path, [canonical("D2B-1")], existing)
+    public = {
+        "generated_at": "2026-08-19T00:00:00+09:00",
+        "previous_news_count": 10,
+        "merged_news_count": 10,
+        "d2b_status": "disabled_stopped",
+        "d2b_legacy_status": "disabled_stopped",
+        "d2b_gw_migration_required": True,
+        "procurement_plan_source_status": {"G2B": "success"},
+        "items": existing,
+    }
+    meta = {
+        **{key: value for key, value in public.items() if key != "items"},
+        "business_count": 1,
+        "sources": ["G2B"],
+    }
+    published_at = datetime(2026, 8, 20, 18, 0, tzinfo=timezone.utc)
+
+    business_candidate, meta_candidate = build_controlled_publication_payloads(
+        public,
+        meta,
+        merged,
+        report,
+        publication_time=published_at,
+    )
+
+    assert business_candidate["business_total"] == 2
+    assert business_candidate["business_active"] == 2
+    assert business_candidate["business_closed"] == 0
+    assert business_candidate["business_unknown"] == 0
+    assert business_candidate["bid_total"] == 1
+    assert business_candidate["procurement_plan_total"] == 1
+    assert business_candidate["public_agency_contest_total"] == 0
+    assert business_candidate["public_data_guard_status"] == "passed"
+    assert "business 1 -> 2" in business_candidate["public_data_guard_message"]
+    assert business_candidate["d2b_status"] == "success"
+    assert business_candidate["d2b_legacy_status"] == "disabled_stopped"
+    assert business_candidate["d2b_gw_migration_required"] is False
+    assert business_candidate["d2b_unified_status"] == "success"
+    assert business_candidate["d2b_unified_public_count"] == 1
+    assert business_candidate["procurement_plan_last_collected_at"] == GENERATED_AT
+    assert business_candidate["procurement_plan_source_status"] == {
+        "G2B": "success",
+        "D2B": "success",
+    }
+    assert meta_candidate["business_count"] == 2
+    assert meta_candidate["business_total"] == 2
+    assert "D2B" in meta_candidate["sources"]
+    assert "items" not in meta_candidate
+
+
+def test_controlled_publication_rejects_non_conserving_candidate(tmp_path: Path) -> None:
+    merged, report = integrate(tmp_path, [canonical("D2B-1")])
+    with pytest.raises(UnifiedPublicInputError, match="COUNT_MISMATCH"):
+        build_controlled_publication_payloads({}, {}, merged + [dict(merged[0])], report)

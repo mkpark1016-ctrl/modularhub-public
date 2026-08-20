@@ -13,7 +13,7 @@ from scripts.integrations.business.public_projection import (
     select_net_new_projected_items,
 )
 from scripts.integrations.business.unified import load_canonical_records
-from src.public_data_policy import merge_public_items
+from src.public_data_policy import guard_result, merge_public_items
 
 
 PUBLIC_PIPELINE_INTEGRATION_SCHEMA_VERSION = "public-business-pipeline-integration-v1"
@@ -99,8 +99,130 @@ def integrate_optional_unified_business(
         "sources": projection_report["sources"],
         "record_types": projection_report["record_types"],
         "merge_contract": "src.public_data_policy.merge_public_items",
+        "unified_generated_at": str(summary.get("generated_at") or ""),
     }
     return merged_items, report
+
+
+def build_controlled_publication_payloads(
+    public_business_payload: dict[str, Any],
+    public_meta_payload: dict[str, Any],
+    candidate_items: list[dict[str, Any]],
+    integration_report: dict[str, Any],
+    *,
+    publication_time: datetime | None = None,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Build metadata-consistent publication candidates without touching public files."""
+    if not integration_report.get("integration_enabled"):
+        raise UnifiedPublicInputError("CONTROLLED_PUBLICATION_REQUIRES_UNIFIED_INPUT")
+
+    baseline = int(integration_report.get("baseline_public_count") or 0)
+    candidate_count = len(candidate_items)
+    net_new = int(integration_report.get("net_new_count") or 0)
+    if candidate_count != baseline + net_new:
+        raise UnifiedPublicInputError(
+            "CONTROLLED_PUBLICATION_COUNT_MISMATCH: "
+            f"baseline={baseline} net_new={net_new} candidate={candidate_count}"
+        )
+    if integration_report.get("existing_removed_count") or integration_report.get(
+        "identity_collision_count"
+    ):
+        raise UnifiedPublicInputError("CONTROLLED_PUBLICATION_PRESERVATION_FAILED")
+
+    generated_at = (publication_time or datetime.now().astimezone()).isoformat(timespec="seconds")
+    updates = _publication_metadata_updates(
+        public_business_payload,
+        candidate_items,
+        integration_report,
+        generated_at=generated_at,
+    )
+
+    business_payload = deepcopy(public_business_payload)
+    business_payload.update(updates)
+    business_payload["items"] = deepcopy(candidate_items)
+
+    meta_payload = deepcopy(public_meta_payload)
+    meta_payload.update(updates)
+    meta_payload["business_count"] = candidate_count
+    meta_payload["last_updated"] = generated_at
+    sources = list(meta_payload.get("sources") or [])
+    if updates.get("d2b_unified_status") == "success" and "D2B" not in sources:
+        sources.append("D2B")
+    meta_payload["sources"] = sources
+    return business_payload, meta_payload
+
+
+def _publication_metadata_updates(
+    existing_payload: dict[str, Any],
+    candidate_items: list[dict[str, Any]],
+    integration_report: dict[str, Any],
+    *,
+    generated_at: str,
+) -> dict[str, Any]:
+    baseline = int(integration_report.get("baseline_public_count") or 0)
+    candidate_count = len(candidate_items)
+    previous_news = int(existing_payload.get("previous_news_count") or 0)
+    merged_news = int(existing_payload.get("merged_news_count") or previous_news)
+    guard_status, guard_message = guard_result(
+        previous_business=baseline,
+        merged_business=candidate_count,
+        previous_news=previous_news,
+        merged_news=merged_news,
+        approved_news_policy_removals=int(existing_payload.get("news_policy_removed_count") or 0),
+    )
+    updates: dict[str, Any] = {
+        "generated_at": generated_at,
+        "last_updated_at": generated_at,
+        "previous_business_count": baseline,
+        "merged_business_count": candidate_count,
+        "public_data_guard_status": guard_status,
+        "public_data_guard_message": guard_message,
+        "business_total": candidate_count,
+        "business_active": _count(candidate_items, "opportunity_status", "active"),
+        "business_closed": _count(candidate_items, "opportunity_status", "closed"),
+        "business_unknown": _count(candidate_items, "opportunity_status", "unknown"),
+        "bid_total": _count(candidate_items, "source_type", "bid"),
+        "procurement_plan_count": _count(candidate_items, "source_type", "procurement_plan"),
+        "procurement_plan_total": _count(candidate_items, "source_type", "procurement_plan"),
+        "public_agency_contest_total": _count(
+            candidate_items, "source_type", "public_agency_contest"
+        ),
+    }
+
+    d2b_count = _count(candidate_items, "source", "D2B")
+    d2b_net_new = int(
+        ((integration_report.get("sources") or {}).get("d2b") or {}).get("net_new") or 0
+    )
+    if d2b_count and d2b_net_new:
+        legacy_status = (
+            existing_payload.get("d2b_legacy_status")
+            or existing_payload.get("d2b_status")
+            or "unknown"
+        )
+        unified_generated_at = str(integration_report.get("unified_generated_at") or "")
+        plan_source_status = deepcopy(existing_payload.get("procurement_plan_source_status") or {})
+        plan_source_status["D2B"] = "success"
+        updates.update(
+            {
+                "d2b_status": "success",
+                "d2b_message": (
+                    "Unified D2B GW 공개 데이터가 반영되었습니다. "
+                    "기존 Legacy API 상태는 별도로 유지됩니다."
+                ),
+                "d2b_legacy_status": legacy_status,
+                "d2b_gw_migration_required": False,
+                "d2b_unified_status": "success",
+                "d2b_unified_public_count": d2b_count,
+                "d2b_unified_last_collected_at": unified_generated_at,
+                "procurement_plan_last_collected_at": unified_generated_at,
+                "procurement_plan_source_status": plan_source_status,
+            }
+        )
+    return updates
+
+
+def _count(items: list[dict[str, Any]], field: str, value: str) -> int:
+    return sum(item.get(field) == value for item in items)
 
 
 def validate_unified_input_paths(
