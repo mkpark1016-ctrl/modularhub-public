@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import re
@@ -622,7 +623,20 @@ def include_business_row(row: dict[str, Any]) -> bool:
     return False
 
 
-def main() -> int:
+def main(
+    *,
+    unified_business_records: Path | None = None,
+    unified_business_summary: Path | None = None,
+    unified_integration_report: Path | None = None,
+) -> int:
+    integration_enabled = any(
+        path is not None
+        for path in (unified_business_records, unified_business_summary, unified_integration_report)
+    )
+    if integration_enabled:
+        from scripts.integrations.business.public_pipeline import validate_unified_input_paths
+
+        validate_unified_input_paths(unified_business_records, unified_business_summary)
     previous_business_payload = load_existing_payload("business.json")
     previous_news_payload = load_existing_payload("news.json")
     previous_business = payload_items(previous_business_payload)
@@ -680,6 +694,23 @@ def main() -> int:
         now=merge_time,
         removal_allowlist=removal_allowlist,
     )
+    if integration_enabled:
+        from scripts.integrations.business.public_pipeline import (
+            integrate_optional_unified_business,
+            write_public_pipeline_integration_report,
+        )
+
+        business, integration_report = integrate_optional_unified_business(
+            business,
+            unified_records_path=unified_business_records,
+            unified_summary_path=unified_business_summary,
+            merge_time=merge_time,
+        )
+        write_public_pipeline_integration_report(
+            integration_report,
+            unified_integration_report
+            or ROOT / "artifacts" / "public-pipeline-integration" / "public_pipeline_integration_report.json",
+        )
     news = merge_public_items(previous_news, current_news, kind="news", now=merge_time)
     news_before_global_dedup_count = len(news)
     overseas_rss_before_dedup_count = sum(item.get("source") == "해외 모듈러 RSS" for item in news)
@@ -952,5 +983,20 @@ def main() -> int:
     return 0
 
 
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Export cumulative verified public JSON data.")
+    parser.add_argument("--unified-business-records", type=Path)
+    parser.add_argument("--unified-business-summary", type=Path)
+    parser.add_argument("--unified-integration-report", type=Path)
+    return parser.parse_args(argv)
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    args = parse_args()
+    raise SystemExit(
+        main(
+            unified_business_records=args.unified_business_records,
+            unified_business_summary=args.unified_business_summary,
+            unified_integration_report=args.unified_integration_report,
+        )
+    )

@@ -320,6 +320,22 @@ def projection_blockers(report: dict[str, Any]) -> list[str]:
     return blockers
 
 
+def select_net_new_projected_items(
+    projected_items: Iterable[dict[str, Any]],
+    existing_items: Iterable[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    existing = list(existing_items)
+    existing_ids = {str(item.get("id")) for item in existing}
+    existing_lineages = {business_identity(item) for item in existing}
+    return _sort_public_items(
+        [
+            deepcopy(item)
+            for item in projected_items
+            if str(item.get("id")) not in existing_ids and business_identity(item) not in existing_lineages
+        ]
+    )
+
+
 def _collector_row(record: NormalizedBusinessRecord) -> dict[str, Any] | None:
     source_name = PUBLIC_SOURCE_NAMES.get(record.source.lower())
     source_type = PUBLIC_SOURCE_TYPES.get(record.source_record_type)
