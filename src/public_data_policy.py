@@ -5,7 +5,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
-from urllib.parse import urlsplit
+from urllib.parse import parse_qsl, urlsplit
 
 from src.overseas_news_rules import overseas_news_content_key
 
@@ -17,6 +17,66 @@ KST = timezone(timedelta(hours=9), "KST")
 PUBLIC_NEWS_POLICY_VERSION = "unified-v2-publication-v1"
 PUBLISHABLE_RELEVANCE_LEVELS = {"direct", "adjacent", "reference"}
 OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS"
+CONTROLLED_PUBLIC_BUSINESS_PATH = "frontend/public/data/business.json"
+CONTROLLED_PUBLIC_META_PATH = "frontend/public/data/meta.json"
+CONTROLLED_PUBLICATION_PATHS = {
+    CONTROLLED_PUBLIC_BUSINESS_PATH,
+    CONTROLLED_PUBLIC_META_PATH,
+}
+CONTROLLED_PUBLICATION_SCHEMA_VERSION = "controlled-publication-protection-v1"
+SENSITIVE_PUBLIC_QUERY_KEYS = {
+    "access_token",
+    "apikey",
+    "api_key",
+    "authorization",
+    "client_id",
+    "client_secret",
+    "servicekey",
+    "service_key",
+    "token",
+}
+FORBIDDEN_PUBLIC_PAYLOAD_KEYS = {
+    "access_token",
+    "apikey",
+    "api_key",
+    "authorization",
+    "client_id",
+    "client_secret",
+    "headers",
+    "raw_api_json",
+    "raw_http_response",
+    "raw_json",
+    "raw_response",
+    "raw_xml",
+    "request_headers",
+    "service_key",
+    "servicekey",
+    "token",
+}
+BUSINESS_METADATA_COUNT_FIELDS = (
+    "business_total",
+    "business_active",
+    "business_closed",
+    "business_unknown",
+    "bid_total",
+    "procurement_plan_count",
+    "procurement_plan_total",
+    "public_agency_contest_total",
+)
+BUSINESS_METADATA_MIRROR_FIELDS = (
+    *BUSINESS_METADATA_COUNT_FIELDS,
+    "previous_business_count",
+    "merged_business_count",
+    "public_data_guard_status",
+    "public_data_guard_message",
+    "d2b_status",
+    "d2b_legacy_status",
+    "d2b_gw_migration_required",
+    "d2b_unified_status",
+    "d2b_unified_public_count",
+    "d2b_unified_last_collected_at",
+    "procurement_plan_source_status",
+)
 
 
 def clean_text(value: Any) -> str:
@@ -34,6 +94,266 @@ def payload_items(payload: Any) -> list[dict[str, Any]]:
         if isinstance(items, list):
             return [item for item in items if isinstance(item, dict)]
     return []
+
+
+def validate_controlled_business_publication(
+    before_business: dict[str, Any],
+    after_business: dict[str, Any],
+    before_meta: dict[str, Any],
+    after_meta: dict[str, Any],
+    changed_paths: list[str] | set[str] | tuple[str, ...],
+) -> dict[str, Any]:
+    """Validate an additive business publication from payload semantics alone."""
+    normalized_paths = sorted({_normalized_repo_path(path) for path in changed_paths if path})
+    public_paths_changed = sorted(CONTROLLED_PUBLICATION_PATHS.intersection(normalized_paths))
+    before_items, before_shape_valid = _strict_payload_items(before_business)
+    after_items, after_shape_valid = _strict_payload_items(after_business)
+    failures: set[str] = set()
+
+    if not public_paths_changed:
+        return _controlled_publication_result(
+            failures,
+            normalized_paths,
+            before_items,
+            after_items,
+            status="NO_CONTROLLED_PUBLIC_DATA_CHANGE",
+        )
+
+    if set(normalized_paths) != CONTROLLED_PUBLICATION_PATHS:
+        failures.add("changed_file_scope_invalid")
+    if not before_shape_valid or not after_shape_valid:
+        failures.add("business_items_invalid")
+
+    before_ids = _item_id_counts(before_items)
+    after_ids = _item_id_counts(after_items)
+    before_id_set = set(before_ids)
+    after_id_set = set(after_ids)
+    missing_id_count = before_ids.get("", 0) + after_ids.get("", 0)
+    duplicate_id_count = sum(max(0, count - 1) for count in after_ids.values())
+    if missing_id_count:
+        failures.add("public_id_missing")
+    if duplicate_id_count:
+        failures.add("public_id_collision")
+
+    after_identity_counts = _identity_counts(after_items)
+    duplicate_identity_count = sum(max(0, count - 1) for count in after_identity_counts.values())
+    if duplicate_identity_count:
+        failures.add("duplicate_business_identity")
+
+    removed_ids = before_id_set - after_id_set
+    if removed_ids:
+        failures.add("existing_business_removed")
+    before_by_id = {clean_text(item.get("id")): item for item in before_items if clean_text(item.get("id"))}
+    after_by_id = {clean_text(item.get("id")): item for item in after_items if clean_text(item.get("id"))}
+    modified_ids = {
+        item_id
+        for item_id in before_id_set.intersection(after_id_set)
+        if before_by_id.get(item_id) != after_by_id.get(item_id)
+    }
+    if modified_ids:
+        failures.add("existing_business_modified")
+
+    net_new_ids = after_id_set - before_id_set
+    count_delta = len(after_items) - len(before_items)
+    if count_delta < 0:
+        failures.add("business_count_decreased")
+    if len(after_items) != len(before_items) + len(net_new_ids):
+        failures.add("business_count_conservation_failed")
+
+    expected_counts = _business_counts(after_items)
+    if before_business.get("business_total") != len(before_items):
+        failures.add("baseline_business_total_mismatch")
+    if before_meta.get("business_count") != len(before_items):
+        failures.add("baseline_meta_business_count_mismatch")
+    for field, expected in expected_counts.items():
+        if after_business.get(field) != expected:
+            failures.add(f"business_{field}_mismatch")
+        if after_meta.get(field) != expected:
+            failures.add(f"meta_{field}_mismatch")
+    if after_meta.get("business_count") != len(after_items):
+        failures.add("meta_business_count_mismatch")
+
+    for field in BUSINESS_METADATA_MIRROR_FIELDS:
+        if field in after_business or field in after_meta:
+            if after_business.get(field) != after_meta.get(field):
+                failures.add(f"business_meta_{field}_mismatch")
+
+    if after_business.get("public_data_guard_status") != "passed":
+        failures.add("public_data_guard_not_passed")
+    guard_counts = _guard_business_counts(after_business.get("public_data_guard_message"))
+    if guard_counts != (len(before_items), len(after_items)):
+        failures.add("public_data_guard_count_mismatch")
+    if after_business.get("previous_business_count") != len(before_items):
+        failures.add("previous_business_count_mismatch")
+    if after_business.get("merged_business_count") != len(after_items):
+        failures.add("merged_business_count_mismatch")
+
+    credential_urls = _count_credential_bearing_urls([after_business, after_meta])
+    forbidden_fields = _count_forbidden_public_keys([after_business, after_meta])
+    if credential_urls:
+        failures.add("credential_bearing_url_detected")
+    if forbidden_fields:
+        failures.add("raw_or_secret_field_detected")
+
+    new_d2b_items = [
+        after_by_id[item_id]
+        for item_id in net_new_ids
+        if clean_text(after_by_id[item_id].get("source")).casefold() == "d2b"
+    ]
+    if new_d2b_items:
+        if after_business.get("d2b_status") != "success":
+            failures.add("d2b_current_status_inconsistent")
+        if after_business.get("d2b_unified_status") != "success":
+            failures.add("d2b_unified_status_inconsistent")
+        if after_business.get("d2b_gw_migration_required") is not False:
+            failures.add("d2b_migration_status_inconsistent")
+        d2b_count = sum(
+            clean_text(item.get("source")).casefold() == "d2b" for item in after_items
+        )
+        if after_business.get("d2b_unified_public_count") != d2b_count:
+            failures.add("d2b_unified_count_inconsistent")
+        if any(clean_text(item.get("source_type")) == "procurement_plan" for item in new_d2b_items):
+            source_status = after_business.get("procurement_plan_source_status") or {}
+            if not isinstance(source_status, dict) or source_status.get("D2B") != "success":
+                failures.add("d2b_procurement_source_status_inconsistent")
+
+    return _controlled_publication_result(
+        failures,
+        normalized_paths,
+        before_items,
+        after_items,
+        removed_count=len(removed_ids),
+        modified_count=len(modified_ids),
+        net_new_count=len(net_new_ids),
+        public_id_collision_count=duplicate_id_count,
+        duplicate_identity_count=duplicate_identity_count,
+        credential_url_count=credential_urls,
+        forbidden_field_count=forbidden_fields,
+        status="CONTROLLED_PUBLICATION_SAFE" if not failures else "CONTROLLED_PUBLICATION_BLOCKED",
+    )
+
+
+def _normalized_repo_path(path: Any) -> str:
+    return str(path).strip().replace("\\", "/").lstrip("./")
+
+
+def _strict_payload_items(payload: Any) -> tuple[list[dict[str, Any]], bool]:
+    if not isinstance(payload, dict) or not isinstance(payload.get("items"), list):
+        return [], False
+    raw_items = payload["items"]
+    return [item for item in raw_items if isinstance(item, dict)], all(
+        isinstance(item, dict) for item in raw_items
+    )
+
+
+def _item_id_counts(items: list[dict[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in items:
+        item_id = clean_text(item.get("id"))
+        counts[item_id] = counts.get(item_id, 0) + 1
+    return counts
+
+
+def _identity_counts(items: list[dict[str, Any]]) -> dict[tuple[str, ...], int]:
+    counts: dict[tuple[str, ...], int] = {}
+    for item in items:
+        identity = business_identity(item)
+        counts[identity] = counts.get(identity, 0) + 1
+    return counts
+
+
+def _business_counts(items: list[dict[str, Any]]) -> dict[str, int]:
+    return {
+        "business_total": len(items),
+        "business_active": sum(item.get("opportunity_status") == "active" for item in items),
+        "business_closed": sum(item.get("opportunity_status") == "closed" for item in items),
+        "business_unknown": sum(item.get("opportunity_status") == "unknown" for item in items),
+        "bid_total": sum(item.get("source_type") == "bid" for item in items),
+        "procurement_plan_count": sum(
+            item.get("source_type") == "procurement_plan" for item in items
+        ),
+        "procurement_plan_total": sum(
+            item.get("source_type") == "procurement_plan" for item in items
+        ),
+        "public_agency_contest_total": sum(
+            item.get("source_type") == "public_agency_contest" for item in items
+        ),
+    }
+
+
+def _guard_business_counts(value: Any) -> tuple[int, int] | None:
+    match = re.search(r"\bbusiness\s+(\d+)\s*->\s*(\d+)\b", clean_text(value))
+    return (int(match.group(1)), int(match.group(2))) if match else None
+
+
+def _credential_bearing_url(value: Any) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        parsed = urlsplit(value)
+    except ValueError:
+        return False
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        return False
+    return any(key.casefold() in SENSITIVE_PUBLIC_QUERY_KEYS for key, _ in parse_qsl(parsed.query))
+
+
+def _count_credential_bearing_urls(value: Any) -> int:
+    if isinstance(value, dict):
+        return sum(_count_credential_bearing_urls(child) for child in value.values())
+    if isinstance(value, list):
+        return sum(_count_credential_bearing_urls(child) for child in value)
+    return int(_credential_bearing_url(value))
+
+
+def _count_forbidden_public_keys(value: Any) -> int:
+    if isinstance(value, dict):
+        own = sum(
+            str(key).casefold().replace("-", "_") in FORBIDDEN_PUBLIC_PAYLOAD_KEYS
+            for key in value
+        )
+        return own + sum(_count_forbidden_public_keys(child) for child in value.values())
+    if isinstance(value, list):
+        return sum(_count_forbidden_public_keys(child) for child in value)
+    return 0
+
+
+def _controlled_publication_result(
+    failures: set[str],
+    changed_paths: list[str],
+    before_items: list[dict[str, Any]],
+    after_items: list[dict[str, Any]],
+    *,
+    removed_count: int = 0,
+    modified_count: int = 0,
+    net_new_count: int = 0,
+    public_id_collision_count: int = 0,
+    duplicate_identity_count: int = 0,
+    credential_url_count: int = 0,
+    forbidden_field_count: int = 0,
+    status: str,
+) -> dict[str, Any]:
+    return {
+        "schema_version": CONTROLLED_PUBLICATION_SCHEMA_VERSION,
+        "passed": not failures,
+        "status": status,
+        "reason_codes": sorted(failures),
+        "changed_paths": changed_paths,
+        "counts": {
+            "baseline": len(before_items),
+            "candidate": len(after_items),
+            "net_new": net_new_count,
+            "removed": removed_count,
+            "modified": modified_count,
+            "public_id_collisions": public_id_collision_count,
+            "duplicate_identities": duplicate_identity_count,
+        },
+        "security": {
+            "credential_urls": credential_url_count,
+            "forbidden_fields": forbidden_field_count,
+            "passed": credential_url_count == 0 and forbidden_field_count == 0,
+        },
+    }
 
 
 def parse_public_datetime(value: Any) -> datetime | None:

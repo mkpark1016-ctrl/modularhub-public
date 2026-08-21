@@ -4,6 +4,8 @@ import json
 import subprocess
 from pathlib import Path
 
+from scripts.validate_company_audit_financials import protected_public_diff_status
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX_PATH = ROOT / "data" / "company_reports" / "planm" / "restatement_source_matrix_2023_2025.json"
@@ -15,6 +17,7 @@ PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "companies" / "company_intelligence_v2.json",
     ROOT / "frontend" / "public" / "data" / "news.json",
     ROOT / "frontend" / "public" / "data" / "business.json",
+    ROOT / "frontend" / "public" / "data" / "meta.json",
 ]
 DECISION_INTELLIGENCE_FIELDS = {
     "latest_snapshot",
@@ -334,14 +337,11 @@ def test_existing_company_report_insights_and_public_json_are_unchanged() -> Non
             "company_report_insights.json",
         }
     ]
-    result = subprocess.run(
-        ["git", "diff", "--name-only", "origin/main...HEAD", "--", *protected],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
+    status = protected_public_diff_status(
+        base_ref="origin/main",
+        paths=[ROOT / path for path in protected],
     )
-    assert result.stdout.strip() == ""
+    assert status["changed_files"] == [], status
 
     old_companies = load_from_main("frontend/public/data/companies/companies.json")
     current_companies = json.loads((ROOT / "frontend/public/data/companies/companies.json").read_text(encoding="utf-8"))

@@ -11,6 +11,12 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any
 
+from src.public_data_policy import (
+    CONTROLLED_PUBLIC_BUSINESS_PATH,
+    CONTROLLED_PUBLIC_META_PATH,
+    validate_controlled_business_publication,
+)
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "data" / "company_reports" / "yuchang-enc" / "audit_financials_2023_2025.json"
 SCHEMA_VERSION = "company_audit_financials_v1"
@@ -24,6 +30,8 @@ PROTECTED_PUBLIC_FILES = [
 ]
 COMPANIES_PUBLIC_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
 PUBLIC_COMPANY_SUPPLEMENTS_PATH = ROOT / "frontend" / "src" / "data" / "publicCompanySupplements.json"
+BUSINESS_PUBLIC_PATH = ROOT / CONTROLLED_PUBLIC_BUSINESS_PATH
+META_PUBLIC_PATH = ROOT / CONTROLLED_PUBLIC_META_PATH
 ALLOWED_NRB_FINANCIAL_SOURCE_ID = "nrb-audit-financials-2023-2025"
 REQUIRED_YEAR_SECTIONS = {
     "income_statement",
@@ -649,6 +657,18 @@ def git_ref_exists(ref: str) -> bool:
     return result.returncode == 0
 
 
+def git_merge_base(ref: str) -> str | None:
+    result = subprocess.run(
+        ["git", "merge-base", ref, "HEAD"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    value = result.stdout.strip()
+    return value if result.returncode == 0 and value else None
+
+
 def json_from_git(ref: str, path: Path) -> dict[str, Any] | None:
     result = subprocess.run(
         ["git", "show", f"{ref}:{path.relative_to(ROOT).as_posix()}"],
@@ -660,7 +680,11 @@ def json_from_git(ref: str, path: Path) -> dict[str, Any] | None:
     )
     if result.returncode != 0:
         return None
-    return json.loads(result.stdout)
+    try:
+        payload = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return None
+    return payload if isinstance(payload, dict) else None
 
 
 def is_allowed_nrb_public_financial_summary_update(base_ref: str | None) -> bool:
@@ -732,12 +756,17 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
     warnings: list[str] = []
     args = ["git", "diff", "--name-only"]
     mode = "worktree"
+    comparison_ref = "HEAD"
     if base_ref:
         if git_ref_exists(base_ref):
-            args.append(f"{base_ref}...HEAD")
+            comparison_ref = git_merge_base(base_ref) or base_ref
+            args.append(f"{comparison_ref}..HEAD")
             mode = "branch_vs_base"
         else:
             warnings.append(f"base ref not found: {base_ref}; falling back to worktree diff")
+            args.append("HEAD")
+    else:
+        args.append("HEAD")
     args.extend(["--", *existing])
     try:
         result = subprocess.run(
@@ -750,6 +779,18 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
     except OSError:
         return {"mode": mode, "base_ref": base_ref, "changed_files": [], "warnings": warnings + ["git diff command failed"]}
     changed_files = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    all_changed_result = subprocess.run(
+        ["git", "diff", "--name-only", f"{comparison_ref}..HEAD"]
+        if mode == "branch_vs_base"
+        else ["git", "diff", "--name-only", "HEAD"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    all_changed_files = [
+        line.strip() for line in all_changed_result.stdout.splitlines() if line.strip()
+    ]
     companies_relpath = COMPANIES_PUBLIC_PATH.relative_to(ROOT).as_posix()
     if companies_relpath in changed_files and is_allowed_nrb_public_financial_summary_update(base_ref):
         changed_files = [path for path in changed_files if path != companies_relpath]
@@ -757,11 +798,41 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
     if companies_relpath in changed_files and is_allowed_daeseung_canonical_migration(base_ref):
         changed_files = [path for path in changed_files if path != companies_relpath]
         warnings.append("allowed_daeseung_canonical_company_migration")
+    controlled_publication = None
+    controlled_paths = {CONTROLLED_PUBLIC_BUSINESS_PATH, CONTROLLED_PUBLIC_META_PATH}
+    if controlled_paths.intersection(changed_files):
+        before_business = json_from_git(comparison_ref, BUSINESS_PUBLIC_PATH)
+        before_meta = json_from_git(comparison_ref, META_PUBLIC_PATH)
+        if before_business is not None and before_meta is not None:
+            try:
+                current_business = json.loads(BUSINESS_PUBLIC_PATH.read_text(encoding="utf-8"))
+                current_meta = json.loads(META_PUBLIC_PATH.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                warnings.append("controlled_business_publication_payload_unreadable")
+                current_business = current_meta = None
+        else:
+            current_business = current_meta = None
+        if all(
+            isinstance(payload, dict)
+            for payload in [before_business, before_meta, current_business, current_meta]
+        ):
+            controlled_publication = validate_controlled_business_publication(
+                before_business,
+                current_business,
+                before_meta,
+                current_meta,
+                all_changed_files,
+            )
+            if controlled_publication["passed"] and controlled_publication["status"] == "CONTROLLED_PUBLICATION_SAFE":
+                changed_files = [path for path in changed_files if path not in controlled_paths]
+                warnings.append("controlled_business_publication_semantically_safe")
     return {
         "mode": mode,
         "base_ref": base_ref,
+        "comparison_ref": comparison_ref,
         "changed_files": changed_files,
         "warnings": warnings,
+        "controlled_publication": controlled_publication,
     }
 
 
