@@ -1,0 +1,137 @@
+{
+  "schema_version": "company-technology-fixture-v1",
+  "records": [
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-PUB-2388438",
+      "applicationNumber": "10-2020-000001",
+      "registrationNumber": "10-2388438",
+      "inventionTitle": "블록 모듈 및 블록 모듈러 건축물의 시공방법",
+      "applicantName": "삼성물산 주식회사",
+      "registrationStatus": "registered",
+      "applicationDate": "20200110",
+      "registrationDate": "2022-04-12",
+      "astrtCont": "블록 모듈러 건축물의 조립 및 시공에 관한 기술",
+      "sourceUrl": "https://patentscope.example.invalid/KR102388438",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-PUB-2644387",
+      "applicationNumber": "10-2020-000002",
+      "registrationNumber": "10-2644387",
+      "inventionTitle": "블록 모듈 및 블록 모듈러 건축물의 시공방법",
+      "applicantName": "삼성물산 건설부문",
+      "registrationStatus": "registered",
+      "applicationDate": "20200220",
+      "registrationDate": "2024-03-11",
+      "astrtCont": "서로 다른 블록 모듈의 결합과 현장 시공 기술",
+      "sourceUrl": "https://patentscope.example.invalid/KR102644387",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-DUP-2388438",
+      "applicationNumber": "10-2020-000001",
+      "registrationNumber": "10-2388438",
+      "inventionTitle": "블록 모듈 및 블록 모듈러 건축물의 시공방법",
+      "applicantName": "삼성물산 주식회사",
+      "registrationStatus": "registered",
+      "applicationDate": "20200110",
+      "registrationDate": "2022-04-12",
+      "astrtCont": "블록 모듈러 건축물의 조립 및 시공에 관한 기술",
+      "sourceUrl": "https://patentscope.example.invalid/KR102388438",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-PUB-2521464",
+      "applicationNumber": "10-2021-000003",
+      "registrationNumber": "10-2521464",
+      "inventionTitle": "습식공법을 이용한 모듈러 유닛 간 수직 접합구조",
+      "applicantName": "삼성물산",
+      "registrationStatus": "registered",
+      "applicationDate": "20210415",
+      "registrationDate": "2023-04-10",
+      "astrtCont": "모듈러 유닛의 수직 접합 구조",
+      "sourceUrl": "https://patentscope.example.invalid/KR102521464",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-NEW-MOD-1",
+      "applicationNumber": "10-2026-000101",
+      "inventionTitle": "재사용 가능한 모듈러 건축 유닛 연결 시스템",
+      "applicantName": "Samsung C&T Construction",
+      "registrationStatus": "filed",
+      "applicationDate": "20260801",
+      "astrtCont": "모듈러 건축 유닛을 해체 후 재사용하는 연결 시스템",
+      "keywords": [
+        "모듈러 건축",
+        "재사용",
+        "유닛"
+      ],
+      "sourceUrl": "https://patentscope.example.invalid/KR102026000101",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-NEW-ADJ-1",
+      "applicationNumber": "10-2026-000102",
+      "inventionTitle": "철골 콘크리트 패널 바닥 구조체 및 현장 시공방법",
+      "applicantName": "삼성물산 주식회사",
+      "registrationStatus": "filed",
+      "applicationDate": "20260802",
+      "astrtCont": "철골 패널과 바닥 슬래브의 접합 및 시공 구조",
+      "sourceUrl": "https://patentscope.example.invalid/KR102026000102",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-NON-MOD-1",
+      "applicationNumber": "10-2026-000103",
+      "inventionTitle": "굴착 장비 엔진 제어 장치",
+      "applicantName": "삼성물산 주식회사",
+      "registrationStatus": "filed",
+      "applicationDate": "20260803",
+      "astrtCont": "건설 장비의 연료 분사 제어",
+      "sourceUrl": "https://patentscope.example.invalid/KR102026000103",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-ELECTRONIC-MODULE-1",
+      "applicationNumber": "10-2026-000104",
+      "inventionTitle": "통신 장치용 전자 모듈 및 안테나 회로",
+      "applicantName": "삼성물산 주식회사",
+      "registrationStatus": "filed",
+      "applicationDate": "20260804",
+      "astrtCont": "무선 통신 전자 모듈",
+      "sourceUrl": "https://patentscope.example.invalid/KR102026000104",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kaia_newtech",
+      "newtecId": "KAIA-1005",
+      "apntNo": "1005",
+      "newtecNm": "모듈러의 분절과 내부결합기술을 이용한 최고층의 옥탑 설치 공법",
+      "dvlprNm": "삼성물산 주식회사",
+      "notDt": "20250115",
+      "prtDt": "20300114",
+      "newtecCts": "모듈러 옥탑 유닛의 분절과 내부 결합 시공 기술",
+      "keyword": "모듈러;접합;시공",
+      "tecDvs": "현장시공",
+      "sourceUrl": "https://www.kaia.re.kr/portal/newtec/detail/1005",
+      "collectedAt": "2026-08-21T00:00:00Z"
+    },
+    {
+      "source": "kipris",
+      "externalId": "KIPRIS-UNSAFE-1",
+      "applicationNumber": "10-2026-000105",
+      "inventionTitle": "모듈러 건축물 접합 장치",
+      "applicantName": "삼성물산 주식회사",
+      "registrationStatus": "filed",
+      "sourceUrl": "https://plus.kipris.or.kr/detail?accessKey=fixture-secret"
+    }
+  ]
+}
