@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import subprocess
 from copy import deepcopy
 from pathlib import Path
 
@@ -19,8 +18,6 @@ from scripts.validate_company_audit_financials import (
     aggregate_reported,
     calculate_derived_metrics,
     contains_key,
-    is_allowed_daeseung_canonical_migration,
-    is_allowed_nrb_public_financial_summary_update,
     protected_public_diff_status,
     validate,
 )
@@ -591,19 +588,8 @@ def test_validator_has_no_company_name_or_cash_flow_sign_hardcoding() -> None:
 
 
 def test_public_data_files_are_not_changed() -> None:
-    protected = [str(path.relative_to(ROOT)) for path in PROTECTED_PUBLIC_FILES if path.exists()]
-    result = subprocess.run(
-        ["git", "diff", "--name-only", "--", *protected],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    changed = [line.strip() for line in result.stdout.splitlines() if line.strip()]
-    if changed == ["frontend/public/data/companies/companies.json"]:
-        assert is_allowed_nrb_public_financial_summary_update(None) or is_allowed_daeseung_canonical_migration(None)
-    else:
-        assert changed == []
+    result = protected_public_diff_status(base_ref=None, paths=PROTECTED_PUBLIC_FILES)
+    assert result["changed_files"] == [], result
 
 
 def test_existing_yuchang_reported_values_remain_unchanged() -> None:
