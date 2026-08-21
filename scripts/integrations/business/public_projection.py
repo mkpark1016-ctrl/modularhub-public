@@ -78,6 +78,14 @@ FORBIDDEN_RAW_KEYS = {
     "service_key",
     "servicekey",
 }
+LIFECYCLE_DERIVED_FIELDS = {
+    "closed_at",
+    "days_until_deadline",
+    "is_closed",
+    "last_seen_at",
+    "lifecycle_reason",
+    "opportunity_status",
+}
 
 
 def public_id(record: NormalizedBusinessRecord) -> str:
@@ -222,7 +230,7 @@ def build_public_projection(
         record = publishable_by_id[str(item["id"])]
         existing_same_id = existing_by_id.get(str(item["id"]))
         if existing_same_id is not None:
-            if _stable_json(existing_same_id) == _stable_json(item):
+            if _same_substantive_public_payload(existing_same_id, item):
                 exact_existing_matches += 1
                 _increment_existing(source_stats, type_stats, record)
             else:
@@ -333,6 +341,21 @@ def select_net_new_projected_items(
             for item in projected_items
             if str(item.get("id")) not in existing_ids and business_identity(item) not in existing_lineages
         ]
+    )
+
+
+def _same_substantive_public_payload(
+    existing_item: dict[str, Any], projected_item: dict[str, Any]
+) -> bool:
+    def substantive(item: dict[str, Any]) -> dict[str, Any]:
+        return {
+            key: value
+            for key, value in item.items()
+            if key not in LIFECYCLE_DERIVED_FIELDS
+        }
+
+    return _stable_json(substantive(existing_item)) == _stable_json(
+        substantive(projected_item)
     )
 
 

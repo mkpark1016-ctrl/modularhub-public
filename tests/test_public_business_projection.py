@@ -63,6 +63,19 @@ def test_exact_existing_match_is_not_added_twice() -> None:
     assert candidate["items"] == [existing]
 
 
+def test_derived_lifecycle_drift_is_not_a_public_id_collision() -> None:
+    value = canonical("D2B-1")
+    existing = deepcopy(project([value])[0][0])
+    existing["days_until_deadline"] -= 1
+
+    _, candidate, report = project([value], baseline(existing))
+
+    assert report["exact_existing_matches"] == 1
+    assert report["public_id_collision_count"] == 0
+    assert report["net_new_count"] == 0
+    assert candidate["items"] == [existing]
+
+
 def test_same_public_id_with_different_payload_is_blocking_collision() -> None:
     value = canonical("D2B-1")
     existing = deepcopy(project([value])[0][0])
