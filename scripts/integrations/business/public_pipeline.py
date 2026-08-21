@@ -152,6 +152,66 @@ def build_controlled_publication_payloads(
     return business_payload, meta_payload
 
 
+def resolve_published_d2b_metadata(
+    previous_payload: dict[str, Any],
+    business_items: list[dict[str, Any]],
+    *,
+    legacy_status: str,
+    legacy_message: str,
+    procurement_plan_source_status: dict[str, str] | None = None,
+    unified_publication_accepted: bool = False,
+    unified_last_collected_at: str | None = None,
+) -> dict[str, Any]:
+    """Resolve public D2B status from retained publication evidence and legacy health."""
+    d2b_count = _count(business_items, "source", "D2B")
+    has_retained_publication = (
+        previous_payload.get("d2b_unified_status") == "success" and d2b_count > 0
+    )
+    has_accepted_publication = unified_publication_accepted and d2b_count > 0
+    plan_source_status = deepcopy(
+        procurement_plan_source_status
+        if procurement_plan_source_status is not None
+        else previous_payload.get("procurement_plan_source_status") or {}
+    )
+    updates: dict[str, Any] = {
+        "d2b_status": legacy_status,
+        "d2b_message": legacy_message,
+        "d2b_legacy_status": legacy_status,
+        "d2b_gw_migration_required": True,
+        "procurement_plan_source_status": plan_source_status,
+    }
+    if not (has_retained_publication or has_accepted_publication):
+        return updates
+
+    if any(
+        item.get("source") == "D2B" and item.get("source_type") == "procurement_plan"
+        for item in business_items
+    ):
+        plan_source_status["D2B"] = "success"
+
+    last_collected_at = (
+        unified_last_collected_at
+        if has_accepted_publication
+        else str(previous_payload.get("d2b_unified_last_collected_at") or "")
+    )
+    updates.update(
+        {
+            "d2b_status": "success",
+            "d2b_message": (
+                "Unified D2B GW 공개 데이터가 반영되었습니다. "
+                if has_accepted_publication
+                else "Unified D2B GW 공개 데이터가 유지되고 있습니다. "
+            )
+            + "기존 Legacy API 상태는 별도로 유지됩니다.",
+            "d2b_gw_migration_required": False,
+            "d2b_unified_status": "success",
+            "d2b_unified_public_count": d2b_count,
+            "d2b_unified_last_collected_at": last_collected_at,
+        }
+    )
+    return updates
+
+
 def _publication_metadata_updates(
     existing_payload: dict[str, Any],
     candidate_items: list[dict[str, Any]],
@@ -200,24 +260,20 @@ def _publication_metadata_updates(
             or "unknown"
         )
         unified_generated_at = str(integration_report.get("unified_generated_at") or "")
-        plan_source_status = deepcopy(existing_payload.get("procurement_plan_source_status") or {})
-        plan_source_status["D2B"] = "success"
         updates.update(
-            {
-                "d2b_status": "success",
-                "d2b_message": (
-                    "Unified D2B GW 공개 데이터가 반영되었습니다. "
-                    "기존 Legacy API 상태는 별도로 유지됩니다."
+            resolve_published_d2b_metadata(
+                existing_payload,
+                candidate_items,
+                legacy_status=legacy_status,
+                legacy_message=str(existing_payload.get("d2b_message") or ""),
+                procurement_plan_source_status=existing_payload.get(
+                    "procurement_plan_source_status"
                 ),
-                "d2b_legacy_status": legacy_status,
-                "d2b_gw_migration_required": False,
-                "d2b_unified_status": "success",
-                "d2b_unified_public_count": d2b_count,
-                "d2b_unified_last_collected_at": unified_generated_at,
-                "procurement_plan_last_collected_at": unified_generated_at,
-                "procurement_plan_source_status": plan_source_status,
-            }
+                unified_publication_accepted=True,
+                unified_last_collected_at=unified_generated_at,
+            )
         )
+        updates["procurement_plan_last_collected_at"] = unified_generated_at
     return updates
 
 
