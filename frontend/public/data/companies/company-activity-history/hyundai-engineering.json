@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-08-10T10:02:36.351576+00:00",
+  "generatedAt": "2026-08-21T06:37:15.395860+00:00",
   "companyId": "hyundai-engineering",
-  "activityCount": 13,
+  "activityCount": 14,
   "activities": [
+    {
+      "activityId": "news-hyundai-engineering-151ce0c805ff17af",
+      "companyId": "hyundai-engineering",
+      "activityType": "project",
+      "title": "삼성·LG도 뛰어든 '모듈러 주택', 공급 시너지 낼까",
+      "summary": "현대엔지니어링은 경기 용인에 13층 규모의 모듈러 공동주택을 성공적으로 완공해 국내 모듈러 건축의 한계로 여겨졌던 '12층 높이'를 넘어섰다. 삼성물산은 전담 모듈러팀을 구축해 기술 개발 및 사업화를 진행...",
+      "publishedAt": "2026-08-19",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.kpinews.kr/newsView/1065596711783714",
+      "sourceRecordId": "7336",
+      "matchedAlias": "현대엔지니어링",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "kpinews.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
+    },
     {
       "activityId": "news-hyundai-engineering-ee7fa17b32a03268",
       "companyId": "hyundai-engineering",

@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-index-v1",
-  "generatedAt": "2026-08-10T10:02:36.351576+00:00",
+  "generatedAt": "2026-08-21T06:37:15.395860+00:00",
   "companyCount": 11,
-  "totalActivityCount": 284,
+  "totalActivityCount": 357,
   "companies": [
     {
       "companyId": "yuchang-enc",
@@ -13,15 +13,15 @@
     },
     {
       "companyId": "kumkang-kind",
-      "activityCount": 9,
-      "latestPublishedAt": "2026-07-10",
+      "activityCount": 13,
+      "latestPublishedAt": "2026-08-20",
       "earliestPublishedAt": "2026-05-06",
       "path": "company-activity-history/kumkang-kind.json"
     },
     {
       "companyId": "planm",
-      "activityCount": 6,
-      "latestPublishedAt": "2026-06-23",
+      "activityCount": 7,
+      "latestPublishedAt": "2026-08-20",
       "earliestPublishedAt": "2026-06-19",
       "path": "company-activity-history/planm.json"
     },
@@ -41,36 +41,36 @@
     },
     {
       "companyId": "nrb",
-      "activityCount": 26,
-      "latestPublishedAt": "2026-08-04",
+      "activityCount": 41,
+      "latestPublishedAt": "2026-08-20",
       "earliestPublishedAt": "2026-06-01",
       "path": "company-activity-history/nrb.json"
     },
     {
       "companyId": "gs-ec",
-      "activityCount": 61,
-      "latestPublishedAt": "2026-08-04",
+      "activityCount": 97,
+      "latestPublishedAt": "2026-08-20",
       "earliestPublishedAt": "2026-05-07",
       "path": "company-activity-history/gs-ec.json"
     },
     {
       "companyId": "hyundai-engineering",
-      "activityCount": 13,
-      "latestPublishedAt": "2026-07-23",
+      "activityCount": 14,
+      "latestPublishedAt": "2026-08-19",
       "earliestPublishedAt": "2026-05-04",
       "path": "company-activity-history/hyundai-engineering.json"
     },
     {
       "companyId": "samsung-ct-construction",
-      "activityCount": 107,
-      "latestPublishedAt": "2026-08-05",
+      "activityCount": 119,
+      "latestPublishedAt": "2026-08-19",
       "earliestPublishedAt": "2026-05-12",
       "path": "company-activity-history/samsung-ct-construction.json"
     },
     {
       "companyId": "dl-enc",
-      "activityCount": 11,
-      "latestPublishedAt": "2026-08-03",
+      "activityCount": 15,
+      "latestPublishedAt": "2026-08-13",
       "earliestPublishedAt": "2026-05-11",
       "path": "company-activity-history/dl-enc.json"
     },

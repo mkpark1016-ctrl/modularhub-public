@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-08-10T10:02:36.351576+00:00",
+  "generatedAt": "2026-08-21T06:37:15.395860+00:00",
   "companyId": "planm",
-  "activityCount": 6,
+  "activityCount": 7,
   "activities": [
+    {
+      "activityId": "news-planm-8b6af3e6eadbe717",
+      "companyId": "planm",
+      "activityType": "project",
+      "title": "플랜엠, 홍천 이어 화천에도 군 간부숙소 착공",
+      "summary": "기자] 모듈러 전문기업 플랜엠(대표 이민규)은 지난 19일 강원도 홍천에 제작ㆍ설치한 군 간부숙소 준공식을... 군 건축물을 짓고자 했다. 구체적으로 기존 계획보다 숙소의 폭을 3.9ｍ로 넓혀, 전용 24㎡로 생활공간을...",
+      "publishedAt": "2026-08-20",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202608201358112480694",
+      "sourceRecordId": "7375",
+      "matchedAlias": "플랜엠",
+      "matchReason": "title_or_project_name_alias",
+      "confidence": "high",
+      "projectName": null,
+      "organization": "dnews.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "adjacent"
+    },
     {
       "activityId": "news-planm-f9b2054b6bc1ed4b",
       "companyId": "planm",
