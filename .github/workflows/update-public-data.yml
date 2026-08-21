@@ -40,14 +40,17 @@ jobs:
       - name: Create collector environment
         env:
           DATA_GO_KR_SERVICE_KEY: ${{ secrets.DATA_GO_KR_SERVICE_KEY }}
+          LH_SERVICE_KEY: ${{ secrets.LH_SERVICE_KEY }}
           NAVER_API_HUB_CLIENT_ID: ${{ secrets.NAVER_API_HUB_CLIENT_ID }}
           NAVER_API_HUB_CLIENT_SECRET: ${{ secrets.NAVER_API_HUB_CLIENT_SECRET }}
         run: |
           if [ -n "${DATA_GO_KR_SERVICE_KEY}" ]; then echo "DATA_GO_KR_SERVICE_KEY configured: true"; else echo "DATA_GO_KR_SERVICE_KEY configured: false"; fi
+          if [ -n "${LH_SERVICE_KEY}" ]; then echo "LH_SERVICE_KEY configured: true"; else echo "LH_SERVICE_KEY configured: false"; fi
           if [ -n "${NAVER_API_HUB_CLIENT_ID}" ]; then echo "NAVER_API_HUB_CLIENT_ID configured: true"; else echo "NAVER_API_HUB_CLIENT_ID configured: false"; fi
           if [ -n "${NAVER_API_HUB_CLIENT_SECRET}" ]; then echo "NAVER_API_HUB_CLIENT_SECRET configured: true"; else echo "NAVER_API_HUB_CLIENT_SECRET configured: false"; fi
           printf '%s\n' \
             "DATA_GO_KR_SERVICE_KEY=${DATA_GO_KR_SERVICE_KEY}" \
+            "LH_SERVICE_KEY=${LH_SERVICE_KEY}" \
             "NAVER_API_HUB_CLIENT_ID=${NAVER_API_HUB_CLIENT_ID}" \
             "NAVER_API_HUB_CLIENT_SECRET=${NAVER_API_HUB_CLIENT_SECRET}" \
             "NAVER_API_HUB_NEWS_ENDPOINT=https://naverapihub.apigw.ntruss.com/search/v1/news" \
@@ -202,8 +205,173 @@ jobs:
           fi
           exit 0
 
+      - name: Collect scheduled LH direct with conditional G2B fallback
+        id: scheduled_lh
+        continue-on-error: true
+        run: |
+          python -m scripts.integrations.business.run_lh_pilot \
+            --resources procurement_plan,pre_spec,bid_notice \
+            --lookback-days 30 \
+            --page-size 5 \
+            --max-pages 2 \
+            --output-dir artifacts/scheduled-unified/lh \
+            --live \
+            --acknowledge-live
+
+      - name: Collect scheduled D2B live feed
+        id: scheduled_d2b
+        continue-on-error: true
+        run: |
+          python scripts/integrations/business/run_d2b_pilot.py \
+            --resources procurement_plan,bid_notice \
+            --bid-lookback-days 90 \
+            --plan-lookahead-months 12 \
+            --max-pages 2 \
+            --output-dir artifacts/scheduled-unified/d2b \
+            --live \
+            --acknowledge-live
+
+      - name: Prepare scheduled Unified feed
+        id: scheduled_unified
+        shell: bash
+        run: |
+          set +e
+          echo "attempted=true" >> "$GITHUB_OUTPUT"
+          echo "unified_ready=false" >> "$GITHUB_OUTPUT"
+          echo "failure_category=source_transient" >> "$GITHUB_OUTPUT"
+
+          if [ "${{ steps.scheduled_lh.outcome }}" != "success" ]; then
+            echo "::warning::SOURCE_TRANSIENT_FAILURE: scheduled LH collection failed; using the default exporter."
+            exit 0
+          fi
+          if [ "${{ steps.scheduled_d2b.outcome }}" != "success" ]; then
+            echo "::warning::SOURCE_TRANSIENT_FAILURE: scheduled D2B collection failed; using the default exporter."
+            exit 0
+          fi
+
+          required_files=(
+            artifacts/scheduled-unified/lh/lh_records.json
+            artifacts/scheduled-unified/lh/lh_summary.json
+            artifacts/scheduled-unified/d2b/d2b_records.json
+            artifacts/scheduled-unified/d2b/d2b_summary.json
+          )
+          for path in "${required_files[@]}"; do
+            if [ ! -f "$path" ]; then
+              echo "failure_category=publication_safety" >> "$GITHUB_OUTPUT"
+              echo "::error::PUBLICATION_SAFETY_FAILURE: required canonical artifact is missing: $path"
+              exit 0
+            fi
+          done
+
+          python -m scripts.integrations.business.validate_unified_live_staging \
+            --lh-summary artifacts/scheduled-unified/lh/lh_summary.json \
+            --lh-records artifacts/scheduled-unified/lh/lh_records.json \
+            --d2b-summary artifacts/scheduled-unified/d2b/d2b_summary.json \
+            --d2b-records artifacts/scheduled-unified/d2b/d2b_records.json \
+            --source-only
+          if [ "$?" -ne 0 ]; then
+            echo "failure_category=publication_safety" >> "$GITHUB_OUTPUT"
+            echo "::error::PUBLICATION_SAFETY_FAILURE: source artifacts failed canonical validation."
+            exit 0
+          fi
+
+          python scripts/integrations/business/run_unified_business_feed.py \
+            --lh-records artifacts/scheduled-unified/lh/lh_records.json \
+            --d2b-records artifacts/scheduled-unified/d2b/d2b_records.json \
+            --output-dir artifacts/scheduled-unified/unified
+          if [ "$?" -ne 0 ]; then
+            echo "failure_category=publication_safety" >> "$GITHUB_OUTPUT"
+            echo "::error::PUBLICATION_SAFETY_FAILURE: Unified artifact build failed."
+            exit 0
+          fi
+
+          python -m scripts.integrations.business.validate_unified_live_staging \
+            --lh-summary artifacts/scheduled-unified/lh/lh_summary.json \
+            --lh-records artifacts/scheduled-unified/lh/lh_records.json \
+            --d2b-summary artifacts/scheduled-unified/d2b/d2b_summary.json \
+            --d2b-records artifacts/scheduled-unified/d2b/d2b_records.json \
+            --unified-summary artifacts/scheduled-unified/unified/unified_business_summary.json \
+            --unified-records artifacts/scheduled-unified/unified/unified_business_records.json
+          if [ "$?" -ne 0 ]; then
+            echo "failure_category=publication_safety" >> "$GITHUB_OUTPUT"
+            echo "::error::PUBLICATION_SAFETY_FAILURE: Unified acceptance validation failed."
+            exit 0
+          fi
+
+          echo "unified_ready=true" >> "$GITHUB_OUTPUT"
+          echo "failure_category=none" >> "$GITHUB_OUTPUT"
+
       - name: Export public JSON
-        run: python scripts/export_public_json.py
+        run: |
+          if [ "${{ steps.scheduled_unified.outputs.unified_ready }}" = "true" ]; then
+            python scripts/export_public_json.py \
+              --unified-business-records artifacts/scheduled-unified/unified/unified_business_records.json \
+              --unified-business-summary artifacts/scheduled-unified/unified/unified_business_summary.json \
+              --unified-integration-report artifacts/scheduled-unified/public_pipeline_integration_report.json
+          else
+            python scripts/export_public_json.py
+          fi
+
+      - name: Append scheduled Unified summary
+        if: always()
+        env:
+          UNIFIED_ATTEMPTED: ${{ steps.scheduled_unified.outputs.attempted }}
+          UNIFIED_READY: ${{ steps.scheduled_unified.outputs.unified_ready }}
+          FAILURE_CATEGORY: ${{ steps.scheduled_unified.outputs.failure_category }}
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          import os
+          from pathlib import Path
+
+          def load(path):
+              file_path = Path(path)
+              if not file_path.is_file():
+                  return {}
+              try:
+                  payload = json.loads(file_path.read_text(encoding="utf-8"))
+              except (OSError, json.JSONDecodeError):
+                  return {}
+              return payload if isinstance(payload, dict) else {}
+
+          lh = load("artifacts/scheduled-unified/lh/lh_summary.json")
+          d2b = load("artifacts/scheduled-unified/d2b/d2b_summary.json")
+          unified = load("artifacts/scheduled-unified/unified/unified_business_summary.json")
+          integration = load("artifacts/scheduled-unified/public_pipeline_integration_report.json")
+          security = unified.get("security") or {}
+          ready = os.environ.get("UNIFIED_READY", "false") == "true"
+
+          print("## Scheduled Unified Business Collection")
+          print(f"- Unified attempted: {os.environ.get('UNIFIED_ATTEMPTED', 'false')}")
+          print(f"- Unified ready: {str(ready).lower()}")
+          print(f"- LH health: {lh.get('overall_health', 'not_generated')}")
+          print(f"- LH fallback: {lh.get('fallback_used', False)}")
+          print(f"- D2B health: {d2b.get('overall_health', 'not_generated')}")
+          print(f"- Unified input/output: {unified.get('records_input', 0)}/{unified.get('records_output', 0)}")
+          print(f"- Publishable: {integration.get('publishable_count', 0)}")
+          print(f"- Net new: {integration.get('net_new_count', 0)}")
+          print(f"- Candidate total: {integration.get('candidate_public_count', 0)}")
+          print(f"- Security: {security.get('passed', False)}")
+          print(f"- Failure category: {os.environ.get('FAILURE_CATEGORY', 'unknown')}")
+          print(f"- Fallback default exporter used: {str(not ready).lower()}")
+          PY
+
+      - name: Upload scheduled Unified diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scheduled-unified-${{ github.run_number }}-${{ github.run_attempt }}
+          path: |
+            artifacts/scheduled-unified/lh/lh_summary.json
+            artifacts/scheduled-unified/lh/lh_records.json
+            artifacts/scheduled-unified/d2b/d2b_summary.json
+            artifacts/scheduled-unified/d2b/d2b_records.json
+            artifacts/scheduled-unified/unified/unified_business_summary.json
+            artifacts/scheduled-unified/unified/unified_business_records.json
+            artifacts/scheduled-unified/public_pipeline_integration_report.json
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Build company activity timelines
         run: |
@@ -415,6 +583,12 @@ jobs:
 
       - name: Audit public JSON delta
         run: python scripts/audit_public_json_delta.py --base git-head --current frontend/public/data/business.json
+
+      - name: Enforce scheduled Unified publication safety
+        if: steps.scheduled_unified.outputs.failure_category == 'publication_safety'
+        run: |
+          echo "PUBLICATION_SAFETY_FAILURE: scheduled Unified artifacts were malformed or failed integrity validation."
+          exit 1
 
       - name: Protect cumulative public JSON
         id: publish_guard
