@@ -171,6 +171,29 @@ def test_existing_business_payload_mutation_is_blocked() -> None:
     assert "existing_business_modified" in result["reason_codes"]
 
 
+def test_existing_business_lifecycle_drift_is_not_a_payload_mutation() -> None:
+    before, after, before_meta, after_meta = publication_payloads()
+    before["items"][0].update(
+        {
+            "days_until_deadline": 2,
+            "is_closed": False,
+            "last_seen_at": "2026-08-20T00:00:00Z",
+        }
+    )
+    after["items"][0].update(
+        {
+            "days_until_deadline": 1,
+            "is_closed": False,
+            "last_seen_at": "2026-08-21T00:00:00Z",
+        }
+    )
+
+    result = validate(before, after, before_meta, after_meta)
+
+    assert "existing_business_modified" not in result["reason_codes"]
+    assert result["passed"] is True
+
+
 def test_public_id_collision_is_blocked() -> None:
     before, after, before_meta, after_meta = publication_payloads()
     colliding = deepcopy(after["items"][-1])

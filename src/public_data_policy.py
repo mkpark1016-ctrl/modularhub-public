@@ -77,6 +77,16 @@ BUSINESS_METADATA_MIRROR_FIELDS = (
     "d2b_unified_last_collected_at",
     "procurement_plan_source_status",
 )
+BUSINESS_LIFECYCLE_DERIVED_FIELDS = frozenset(
+    {
+        "closed_at",
+        "days_until_deadline",
+        "is_closed",
+        "last_seen_at",
+        "lifecycle_reason",
+        "opportunity_status",
+    }
+)
 
 
 def clean_text(value: Any) -> str:
@@ -94,6 +104,22 @@ def payload_items(payload: Any) -> list[dict[str, Any]]:
         if isinstance(items, list):
             return [item for item in items if isinstance(item, dict)]
     return []
+
+
+def business_items_substantively_equal(
+    before: dict[str, Any], after: dict[str, Any]
+) -> bool:
+    """Compare public business records without derived lifecycle state."""
+
+    return {
+        key: value
+        for key, value in before.items()
+        if key not in BUSINESS_LIFECYCLE_DERIVED_FIELDS
+    } == {
+        key: value
+        for key, value in after.items()
+        if key not in BUSINESS_LIFECYCLE_DERIVED_FIELDS
+    }
 
 
 def validate_controlled_business_publication(
@@ -148,7 +174,9 @@ def validate_controlled_business_publication(
     modified_ids = {
         item_id
         for item_id in before_id_set.intersection(after_id_set)
-        if before_by_id.get(item_id) != after_by_id.get(item_id)
+        if not business_items_substantively_equal(
+            before_by_id[item_id], after_by_id[item_id]
+        )
     }
     if modified_ids:
         failures.add("existing_business_modified")

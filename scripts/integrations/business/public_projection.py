@@ -21,6 +21,7 @@ from scripts.integrations.business.base import NormalizedBusinessRecord
 from src.public_data_policy import (
     apply_business_lifecycle,
     business_identity,
+    business_items_substantively_equal,
     clean_text,
     parse_public_datetime,
     payload_items,
@@ -78,16 +79,6 @@ FORBIDDEN_RAW_KEYS = {
     "service_key",
     "servicekey",
 }
-LIFECYCLE_DERIVED_FIELDS = {
-    "closed_at",
-    "days_until_deadline",
-    "is_closed",
-    "last_seen_at",
-    "lifecycle_reason",
-    "opportunity_status",
-}
-
-
 def public_id(record: NormalizedBusinessRecord) -> str:
     """Follow the existing source-prefixed string ID convention used by public contests."""
 
@@ -347,16 +338,7 @@ def select_net_new_projected_items(
 def _same_substantive_public_payload(
     existing_item: dict[str, Any], projected_item: dict[str, Any]
 ) -> bool:
-    def substantive(item: dict[str, Any]) -> dict[str, Any]:
-        return {
-            key: value
-            for key, value in item.items()
-            if key not in LIFECYCLE_DERIVED_FIELDS
-        }
-
-    return _stable_json(substantive(existing_item)) == _stable_json(
-        substantive(projected_item)
-    )
+    return business_items_substantively_equal(existing_item, projected_item)
 
 
 def _collector_row(record: NormalizedBusinessRecord) -> dict[str, Any] | None:
