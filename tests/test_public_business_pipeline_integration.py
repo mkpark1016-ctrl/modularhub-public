@@ -6,17 +6,24 @@ from pathlib import Path
 
 import pytest
 
+import scripts.export_public_json as export_public_json
 from scripts.export_public_json import parse_args
 from scripts.integrations.business.base import NormalizedBusinessRecord
 from scripts.integrations.business.public_pipeline import (
     UnifiedPublicInputError,
     build_controlled_publication_payloads,
     integrate_optional_unified_business,
+    resolve_published_d2b_metadata,
 )
 from scripts.integrations.business.public_projection import build_public_projection
 
 
 GENERATED_AT = "2026-08-20T07:23:09+00:00"
+
+
+class EmptyFrame:
+    empty = True
+    columns: list[str] = []
 
 
 def canonical(
@@ -238,3 +245,176 @@ def test_controlled_publication_rejects_non_conserving_candidate(tmp_path: Path)
     merged, report = integrate(tmp_path, [canonical("D2B-1")])
     with pytest.raises(UnifiedPublicInputError, match="COUNT_MISMATCH"):
         build_controlled_publication_payloads({}, {}, merged + [dict(merged[0])], report)
+
+
+def test_published_d2b_metadata_requires_previous_success_and_actual_item() -> None:
+    legacy = resolve_published_d2b_metadata(
+        {},
+        [],
+        legacy_status="disabled_stopped",
+        legacy_message="legacy disabled",
+    )
+    assert legacy["d2b_status"] == "disabled_stopped"
+    assert legacy["d2b_legacy_status"] == "disabled_stopped"
+    assert legacy["d2b_gw_migration_required"] is True
+    assert "d2b_unified_status" not in legacy
+
+    item_without_metadata = resolve_published_d2b_metadata(
+        {},
+        [{"source": "D2B", "source_type": "procurement_plan"}],
+        legacy_status="disabled_stopped",
+        legacy_message="legacy disabled",
+    )
+    assert item_without_metadata["d2b_status"] == "disabled_stopped"
+    assert "d2b_unified_status" not in item_without_metadata
+
+    stale = resolve_published_d2b_metadata(
+        {"d2b_unified_status": "success", "d2b_unified_public_count": 9},
+        [],
+        legacy_status="disabled_stopped",
+        legacy_message="legacy disabled",
+    )
+    assert stale["d2b_status"] == "disabled_stopped"
+    assert "d2b_unified_status" not in stale
+    assert "d2b_unified_public_count" not in stale
+
+
+def test_published_d2b_metadata_recalculates_count_and_preserves_source_evidence() -> None:
+    item = {
+        "id": "d2b-plan-1",
+        "source": "D2B",
+        "source_type": "procurement_plan",
+    }
+    result = resolve_published_d2b_metadata(
+        {
+            "d2b_unified_status": "success",
+            "d2b_unified_public_count": 99,
+            "d2b_unified_last_collected_at": GENERATED_AT,
+        },
+        [item],
+        legacy_status="disabled_stopped",
+        legacy_message="legacy disabled",
+        procurement_plan_source_status={"나라장터": "failed"},
+    )
+    assert result["d2b_status"] == "success"
+    assert result["d2b_unified_status"] == "success"
+    assert result["d2b_unified_public_count"] == 1
+    assert result["d2b_legacy_status"] == "disabled_stopped"
+    assert result["d2b_gw_migration_required"] is False
+    assert result["d2b_unified_last_collected_at"] == GENERATED_AT
+    assert result["procurement_plan_source_status"] == {
+        "나라장터": "failed",
+        "D2B": "success",
+    }
+
+
+def test_published_d2b_metadata_does_not_copy_sensitive_previous_fields() -> None:
+    result = resolve_published_d2b_metadata(
+        {
+            "d2b_unified_status": "success",
+            "request_headers": {"serviceKey": "do-not-copy"},
+            "raw_response": "do-not-copy",
+        },
+        [{"source": "D2B", "source_type": "procurement_plan"}],
+        legacy_status="disabled_stopped",
+        legacy_message="legacy disabled",
+    )
+    serialized = json.dumps(result)
+    assert "serviceKey" not in serialized
+    assert "do-not-copy" not in serialized
+    assert "raw_response" not in serialized
+
+
+def test_default_export_retains_217_item_d2b_publication_metadata(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    baseline = [
+        {
+            "id": f"g2b-{index}",
+            "source": "G2B",
+            "source_type": "bid",
+            "bid_no": f"BID-{index}",
+            "title": f"기존 사업 {index}",
+            "organization": "기존 기관",
+            "posted_at": "2026-08-01",
+            "due_at": "",
+            "opportunity_status": "unknown",
+            "is_closed": False,
+            "days_until_deadline": None,
+            "closed_at": None,
+            "last_seen_at": "2026-08-20T00:00:00+09:00",
+            "lifecycle_reason": "no_deadline",
+        }
+        for index in range(216)
+    ]
+    target_id = "d2b_procurement_plan:d2b:procurement_plan:2026-11890"
+    d2b_item = {
+        "id": target_id,
+        "source": "D2B",
+        "source_name": "D2B",
+        "source_type": "procurement_plan",
+        "plan_no": "2026-11890",
+        "source_record_id": "2026-11890",
+        "title": "26-J-모듈러형 간부숙소 30실 신축 설계용역",
+        "organization": "제9해병여단",
+        "posted_at": "2026-08-20",
+        "due_at": "",
+        "opportunity_status": "unknown",
+        "is_closed": False,
+        "days_until_deadline": None,
+        "closed_at": None,
+        "last_seen_at": "2026-08-20T16:23:09+09:00",
+        "lifecycle_reason": "no_deadline",
+    }
+    previous = {
+        "d2b_status": "success",
+        "d2b_unified_status": "success",
+        "d2b_unified_public_count": 1,
+        "d2b_unified_last_collected_at": "2026-08-20T16:23:09+09:00",
+        "d2b_legacy_status": "disabled_stopped",
+        "d2b_gw_migration_required": False,
+        "items": baseline + [d2b_item],
+    }
+
+    monkeypatch.setattr(
+        export_public_json,
+        "load_existing_payload",
+        lambda name: previous if name == "business.json" else {"items": []},
+    )
+    monkeypatch.setattr(
+        export_public_json,
+        "load_git_head_payload",
+        lambda name: previous if name == "business.json" else {"items": []},
+    )
+    monkeypatch.setattr(export_public_json, "load_git_history_payloads", lambda *args, **kwargs: [])
+    monkeypatch.setattr(export_public_json, "load_items_dataframe", EmptyFrame)
+    monkeypatch.setattr(export_public_json, "load_latest_details", lambda: {})
+    monkeypatch.setattr(export_public_json, "load_collect_logs_dataframe", lambda **kwargs: EmptyFrame())
+    monkeypatch.setattr(export_public_json, "load_removal_allowlist", lambda: {})
+
+    def write_json(name: str, payload: object) -> None:
+        (tmp_path / name).write_text(
+            json.dumps(payload, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
+    monkeypatch.setattr(export_public_json, "write_json", write_json)
+
+    assert export_public_json.main() == 0
+    business = json.loads((tmp_path / "business.json").read_text(encoding="utf-8"))
+    meta = json.loads((tmp_path / "meta.json").read_text(encoding="utf-8"))
+    retained = next(item for item in business["items"] if item["id"] == target_id)
+
+    assert len(business["items"]) == 217
+    assert retained == d2b_item
+    assert business["d2b_status"] == "success"
+    assert business["d2b_unified_status"] == "success"
+    assert business["d2b_unified_public_count"] == 1
+    assert business["d2b_legacy_status"] == "disabled_stopped"
+    assert business["d2b_gw_migration_required"] is False
+    assert business["d2b_unified_last_collected_at"] == "2026-08-20T16:23:09+09:00"
+    assert business["procurement_plan_source_status"] == {"D2B": "success"}
+    assert not any(str(warning).startswith("D2B:") for warning in business["warnings"])
+    assert meta["business_count"] == len(business["items"])
+    assert meta["d2b_unified_public_count"] == 1

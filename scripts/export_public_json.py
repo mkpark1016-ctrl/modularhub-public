@@ -629,6 +629,8 @@ def main(
     unified_business_summary: Path | None = None,
     unified_integration_report: Path | None = None,
 ) -> int:
+    from scripts.integrations.business.public_pipeline import resolve_published_d2b_metadata
+
     integration_enabled = any(
         path is not None
         for path in (unified_business_records, unified_business_summary, unified_integration_report)
@@ -801,13 +803,29 @@ def main(
     if D2B_LEGACY_API_ENABLED:
         d2b_log = latest_log(logs, "D2B")
         if d2b_log and clean_text(d2b_log.get("status")) == "success":
-            d2b_status, d2b_message = "success", "D2B 기존 API 수집이 정상 완료되었습니다."
+            legacy_d2b_status = "success"
+            legacy_d2b_message = "D2B 기존 API 수집이 정상 완료되었습니다."
         else:
-            d2b_status = "warning"
-            d2b_message = sanitize_string(clean_text((d2b_log or {}).get("error_message"))) or "D2B 기존 API 수집 상태를 확인하세요."
+            legacy_d2b_status = "warning"
+            legacy_d2b_message = (
+                sanitize_string(clean_text((d2b_log or {}).get("error_message")))
+                or "D2B 기존 API 수집 상태를 확인하세요."
+            )
     else:
-        d2b_status = "disabled_stopped"
-        d2b_message = "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. 추후 GW API 전환이 필요합니다."
+        legacy_d2b_status = "disabled_stopped"
+        legacy_d2b_message = (
+            "방위사업청 기존 군수품조달정보 API가 중지 상태입니다. "
+            "추후 GW API 전환이 필요합니다."
+        )
+    d2b_metadata = resolve_published_d2b_metadata(
+        previous_business_payload,
+        business,
+        legacy_status=legacy_d2b_status,
+        legacy_message=legacy_d2b_message,
+        procurement_plan_source_status=plan_source_status,
+    )
+    d2b_status = str(d2b_metadata["d2b_status"])
+    d2b_message = str(d2b_metadata["d2b_message"])
 
     latest_public_news_published_at = latest_news_published_at(news)
     latest_direct_news_published_at = latest_news_published_at(news, relevance_level="direct")
@@ -862,10 +880,7 @@ def main(
     common_status = {
         "g2b_order_plan_status": g2b_status,
         "g2b_order_plan_message": g2b_message,
-        "d2b_status": d2b_status,
-        "d2b_message": d2b_message,
-        "d2b_legacy_status": d2b_status,
-        "d2b_gw_migration_required": True,
+        **d2b_metadata,
         "lh_contest_status": lh_status,
         "lh_contest_message": lh_message,
         "lh_contest_last_attempt": clean_text((lh_log or {}).get("started_at")),
