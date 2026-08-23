@@ -44,12 +44,12 @@ def patent(**overrides) -> NormalizedTechnologyRecord:
     return NormalizedTechnologyRecord(**values)
 
 
-def test_official_source_contracts_are_fixture_only_and_use_existing_secret() -> None:
+def test_official_source_contracts_use_reviewed_live_secret_contracts() -> None:
     assert KIPRIS_PATENT_CONTRACT.secret_env == "KIPRIS_API_KEY"
-    assert KIPRIS_PATENT_CONTRACT.network_enabled is False
-    assert "applicationNumber" in KIPRIS_PATENT_CONTRACT.official_fields
-    assert KAIA_NEWTECH_CONTRACT.secret_env is None
-    assert KAIA_NEWTECH_CONTRACT.network_enabled is False
+    assert KIPRIS_PATENT_CONTRACT.network_enabled is True
+    assert {"ApplicationNumber", "RegistrationNumber", "InventionName"}.issubset(KIPRIS_PATENT_CONTRACT.official_fields)
+    assert KAIA_NEWTECH_CONTRACT.secret_env == "KAIA_API_KEY"
+    assert KAIA_NEWTECH_CONTRACT.network_enabled is True
     assert {"newtecId", "apntNo", "dvlprNm"}.issubset(KAIA_NEWTECH_CONTRACT.official_fields)
 
 

@@ -80,3 +80,46 @@ The output directory is gitignored. Stable sorting and content hashes make repea
 3. Add bounded HTTP clients with sanitized diagnostics and raw artifacts under `artifacts/`.
 4. Run a Samsung-only live acceptance and compare official identifiers with the seven-row manual baseline.
 5. Keep publication disabled until identity, ambiguity, conflict, relevance, and credential gates pass.
+
+## Phase 11A-2 live source acceptance
+
+The Samsung-only live acceptance is implemented in
+`scripts/integrations/technology/live_acceptance.py`. It retains the Phase
+11A-1 canonical model and reconciliation rules, writes only to gitignored
+`artifacts/company-technology/samsung-live/`, and never updates public company
+data.
+
+Verified official contracts:
+
+- KIPRISPlus applicant search:
+  `https://plus.kipris.or.kr/openapi/rest/patUtiModInfoSearchSevice/applicantNameSearchInfo`
+  with `applicant`, `docsStart`, `docsCount`, `patent`, `utility`,
+  `sortSpec`, `descSort`, and credential parameter `accessKey`.
+- KAIA construction new technology:
+  `https://www.kaia.re.kr/portal/openApi/newtecListData.xml`
+  with `apiKey`, `apntNo`, `firstIndex`, and `lastIndex`.
+
+The KIPRIS applicant response uses `PatentUtilityInfo` rows and title field
+`InventionName`, while the older fixture contract used camel-case
+`inventionTitle`. The live parser preserves the documented source fields and
+the adapter maps only those verified names. KAIA's endpoint-specific guide
+uses `apiKey`; the more general portal help text mentions `keyValue`, so the
+endpoint-specific contract is authoritative for this integration.
+
+Required environment variables:
+
+- `KIPRIS_API_KEY`
+- `KAIA_API_KEY`
+
+Run the gated acceptance locally after both approved credentials are present:
+
+```powershell
+python -m scripts.integrations.technology.live_acceptance `
+  --output-dir artifacts/company-technology/samsung-live
+```
+
+The client uses explicit connect/read timeouts, at most two attempts for
+transient network and HTTP 5xx failures, bounded pages/records, credential-free
+source URLs, and sanitized diagnostics. Authentication and service-denial
+responses are not retried. A KAIA access failure is reported independently and
+does not erase a healthy KIPRIS result.

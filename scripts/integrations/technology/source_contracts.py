@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from scripts.integrations.technology.base import KIPRIS_API_KEY_ENV
+from scripts.integrations.technology.base import KAIA_API_KEY_ENV, KIPRIS_API_KEY_ENV
 
 
 @dataclass(frozen=True)
@@ -23,14 +23,19 @@ KIPRIS_PATENT_CONTRACT = OfficialTechnologySourceContract(
     documentation_url="https://plus.kipris.or.kr/portal/search/clasList/List.do",
     response_format="XML",
     official_fields=(
-        "applicationNumber",
-        "registrationNumber",
-        "inventionTitle",
-        "registrationStatus",
-        "applicantName",
+        "ApplicationNumber",
+        "RegistrationNumber",
+        "InventionName",
+        "RegistrationStatus",
+        "Applicant",
+        "ApplicationDate",
+        "RegistrationDate",
+        "Abstract",
+        "InternationalpatentclassificationNumber",
     ),
     credential_parameter="accessKey",
     secret_env=KIPRIS_API_KEY_ENV,
+    network_enabled=True,
 )
 
 KAIA_NEWTECH_CONTRACT = OfficialTechnologySourceContract(
@@ -50,7 +55,8 @@ KAIA_NEWTECH_CONTRACT = OfficialTechnologySourceContract(
         "tecDvs",
     ),
     credential_parameter="apiKey",
-    secret_env=None,
+    secret_env=KAIA_API_KEY_ENV,
+    network_enabled=True,
 )
 
 OFFICIAL_SOURCE_CONTRACTS = (KIPRIS_PATENT_CONTRACT, KAIA_NEWTECH_CONTRACT)
