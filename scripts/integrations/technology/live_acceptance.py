@@ -203,12 +203,17 @@ def build_summary(
                 "kaia_status": kaia.diagnostic.status,
             },
             "kipris": {
+                "request_attempted": kipris.diagnostic.request_attempted,
+                "request_count": kipris.diagnostic.pages_requested,
+                "attempt_count": kipris.diagnostic.attempt_count,
                 "received_count": kipris.diagnostic.received_count,
+                "unique_identity_count": per_source_records["kipris"],
                 "normalized_count": per_source_records["kipris"],
                 "company_matched_count": per_source_match["kipris"],
                 "direct_count": per_source_relevance.get("kipris", Counter())["direct"],
                 "adjacent_count": per_source_relevance.get("kipris", Counter())["adjacent"],
                 "irrelevant_count": per_source_relevance.get("kipris", Counter())["irrelevant"],
+                "alias_queries": kipris.diagnostic.query_metrics,
             },
             "kaia": {
                 "received_count": kaia.diagnostic.received_count,
@@ -282,17 +287,24 @@ def build_acceptance_detail(
             "enrichment_fields": sorted((decision or {}).get("enrichment_fields") or {}),
         })
     details.sort(key=lambda item: (str(item["baseline_official_number"] or ""), str(item["baseline_title"] or "")))
-    net_new = [
-        {
+    official_by_identity = {record.identity_key(): record for record in normalized_records}
+    net_new = []
+    for decision in reconciliation["decisions"]:
+        if decision["category"] != "net_new":
+            continue
+        official = official_by_identity.get(decision["identity"])
+        net_new.append({
             "official_identity": decision["identity"],
             "source": decision["source"],
             "external_id": decision["external_id"],
             "title": decision["title"],
+            "applicants": list(official.applicants) if official else [],
+            "application_date": official.application_date if official else None,
+            "registration_date": official.registration_date if official else None,
+            "status": official.status if official else None,
             "relevance": decision["relevance"]["level"],
-        }
-        for decision in reconciliation["decisions"]
-        if decision["category"] == "net_new"
-    ]
+            "technology_area": official.technology_area if official else None,
+        })
     return {
         "schema_version": "company-technology-live-acceptance-detail-v1",
         "baseline_records": details,

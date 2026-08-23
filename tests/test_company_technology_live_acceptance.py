@@ -10,6 +10,7 @@ from requests.exceptions import ConnectTimeout
 from scripts.integrations.technology.live_acceptance import (
     PROTECTED_PUBLIC_FILES,
     acceptance_decision,
+    build_acceptance_detail,
     hash_files,
     run_live_acceptance,
 )
@@ -161,6 +162,68 @@ def test_kipris_pagination_is_bounded_and_deterministic() -> None:
     assert len(calls) == 2
     assert [call[1]["docsStart"] for call in calls] == [1, 2]
     assert all(call[2] == (5, 20) for call in calls)
+    assert result.diagnostic.query_metrics == [{
+        "alias": "삼성물산",
+        "query_attempted": True,
+        "received_count": 2,
+        "unique_application_identity_count": 2,
+    }]
+
+
+def test_kipris_docs_start_uses_record_offset_for_full_pages() -> None:
+    responses = iter([
+        FakeResponse(single_kipris_xml(
+            serial="page-1",
+            application="1020260000001",
+            registration="1027000010000",
+            total=200,
+        )),
+        FakeResponse(single_kipris_xml(
+            serial="page-2",
+            application="1020260000101",
+            registration="1027000010100",
+            total=200,
+        )),
+    ])
+    starts = []
+
+    def request_get(url, *, params, timeout):
+        starts.append(params["docsStart"])
+        return next(responses)
+
+    KiprisLiveClient(
+        api_key="fixture-key",
+        request_get=request_get,
+    ).collect(["삼성물산"], page_size=100, max_pages=2, max_records=200)
+
+    assert starts == [1, 101]
+
+
+def test_kipris_alias_metrics_preserve_unattempted_queries_after_record_bound() -> None:
+    result = KiprisLiveClient(
+        api_key="fixture-key",
+        request_get=lambda *args, **kwargs: FakeResponse(single_kipris_xml(
+            serial="bounded",
+            application="1020260000001",
+            registration="1027000010000",
+            total=1,
+        )),
+    ).collect(["삼성물산 주식회사", "삼성물산(주)"], max_pages=1, max_records=1)
+
+    assert result.diagnostic.query_metrics == [
+        {
+            "alias": "삼성물산 주식회사",
+            "query_attempted": True,
+            "received_count": 1,
+            "unique_application_identity_count": 1,
+        },
+        {
+            "alias": "삼성물산(주)",
+            "query_attempted": False,
+            "received_count": 0,
+            "unique_application_identity_count": 0,
+        },
+    ]
 
 
 def test_transient_timeout_retries_once_then_succeeds() -> None:
@@ -323,6 +386,34 @@ def test_kaia_unavailable_does_not_invalidate_healthy_kipris(tmp_path: Path) -> 
         "raw_public_field_count": 0,
     }
     assert summary["protected_public_data_unchanged"] is True
+    assert summary["metrics"]["kipris"]["request_attempted"] is True
+    assert summary["metrics"]["kipris"]["request_count"] == sum(
+        int(row["query_attempted"]) for row in summary["metrics"]["kipris"]["alias_queries"]
+    )
+    assert summary["metrics"]["kipris"]["unique_identity_count"] == 2
+
+
+def test_net_new_detail_preserves_live_enrichment_fields() -> None:
+    rows, _, _, _ = parse_kipris_applicant_response(fixture("kipris_applicant_live.xml"))
+    record = normalize_fixture_records([rows[0]]).records[0]
+    detail = build_acceptance_detail([], [record], {
+        "decisions": [{
+            "category": "net_new",
+            "identity": record.identity_key(),
+            "source": record.source,
+            "external_id": record.external_id,
+            "title": record.title,
+            "relevance": {"level": "direct"},
+        }],
+    })
+
+    assert {
+        "applicants",
+        "application_date",
+        "registration_date",
+        "status",
+        "technology_area",
+    }.issubset(detail["net_new_records"][0])
 
 
 def test_acceptance_run_is_deterministic_with_fixed_inputs(tmp_path: Path) -> None:

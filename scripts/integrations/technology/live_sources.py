@@ -64,6 +64,7 @@ class TechnologySourceDiagnostic:
     observed_fields: list[str] = field(default_factory=list)
     documented_fields_missing_from_sample: list[str] = field(default_factory=list)
     undocumented_sample_fields: list[str] = field(default_factory=list)
+    query_metrics: list[dict[str, Any]] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if self.status not in SOURCE_STATUSES:
@@ -374,12 +375,20 @@ class KiprisLiveClient(_BoundedXmlClient):
         diagnostic.request_attempted = True
         try:
             for alias in aliases:
+                query_identities: set[str] = set()
+                query_metric = {
+                    "alias": alias,
+                    "query_attempted": False,
+                    "received_count": 0,
+                    "unique_application_identity_count": 0,
+                }
+                diagnostic.query_metrics.append(query_metric)
                 for page in range(1, max_pages + 1):
                     if len(records) >= max_records:
                         break
                     params = {
                         "applicant": alias,
-                        "docsStart": page,
+                        "docsStart": ((page - 1) * page_size) + 1,
                         "docsCount": min(page_size, max_records - len(records)),
                         "patent": "true",
                         "utility": "false",
@@ -387,6 +396,7 @@ class KiprisLiveClient(_BoundedXmlClient):
                         "descSort": "true",
                         "accessKey": self.api_key,
                     }
+                    query_metric["query_attempted"] = True
                     diagnostic.pages_requested += 1
                     response, attempts = self._get(params)
                     diagnostic.attempt_count += attempts
@@ -398,6 +408,13 @@ class KiprisLiveClient(_BoundedXmlClient):
                     )
                     diagnostic.api_result_code = result_code
                     observed_fields.update(fields)
+                    query_metric["received_count"] += len(page_rows)
+                    query_identities.update(
+                        str(row.get("ApplicationNumber") or row.get("RegistrationNumber") or "").strip()
+                        for row in page_rows
+                        if row.get("ApplicationNumber") or row.get("RegistrationNumber")
+                    )
+                    query_metric["unique_application_identity_count"] = len(query_identities)
                     records.extend(page_rows[: max_records - len(records)])
                     if not page_rows or page * page_size >= total:
                         break
