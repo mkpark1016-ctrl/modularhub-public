@@ -12,6 +12,10 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+
+from src.public_data_policy import business_items_substantively_equal
+
+
 LOG_DIR = ROOT / "logs"
 BUSINESS_PATH = ROOT / "frontend" / "public" / "data" / "business.json"
 NEWS_PATH = ROOT / "frontend" / "public" / "data" / "news.json"
@@ -77,6 +81,11 @@ def by_id(items: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
         key = item_id(item) or f"missing-id:{index}"
         result[key] = item
     return result
+
+
+def duplicate_id_count(items: list[dict[str, Any]]) -> int:
+    counts = Counter(item_id(item) for item in items if item_id(item))
+    return sum(max(0, count - 1) for count in counts.values())
 
 
 def source_counter(items: list[dict[str, Any]]) -> dict[str, int]:
@@ -216,11 +225,17 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
     current_map = by_id(current_items)
     added_ids = sorted(set(current_map) - set(base_map), key=str)
     removed_ids = sorted(set(base_map) - set(current_map), key=str)
-    changed_ids = sorted(
+    all_changed_ids = sorted(
         item_id
         for item_id in set(base_map) & set(current_map)
         if canonical(base_map[item_id]) != canonical(current_map[item_id])
     )
+    lifecycle_only_changed_ids = [
+        item_id
+        for item_id in all_changed_ids
+        if business_items_substantively_equal(base_map[item_id], current_map[item_id])
+    ]
+    changed_ids = sorted(set(all_changed_ids) - set(lifecycle_only_changed_ids))
     added = [summarize_item(current_map[item_id]) for item_id in added_ids]
     removed = [summarize_item(base_map[item_id]) for item_id in removed_ids]
     changed = [
@@ -240,6 +255,8 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         "added_count": len(added),
         "removed_count": len(removed),
         "changed_count": len(changed),
+        "lifecycle_only_changed_count": len(lifecycle_only_changed_ids),
+        "duplicate_id_count": duplicate_id_count(current_items),
         "added_by_source": source_counter([current_map[item_id] for item_id in added_ids]),
         "removed_by_source": source_counter([base_map[item_id] for item_id in removed_ids]),
         "current_by_source": source_counter(current_items),
@@ -247,6 +264,10 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         "added": added,
         "removed": removed,
         "changed": changed[:100],
+        "lifecycle_only_changed": [
+            summarize_item(current_map[item_id])
+            for item_id in lifecycle_only_changed_ids[:100]
+        ],
         "unexpected_records": unexpected,
         "public_contest_count_by_source": source_counter(
             [item for item in current_items if item.get("source_type") == "public_agency_contest"]
@@ -265,6 +286,17 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
     }
 
 
+def blocking_reasons(report: dict[str, Any]) -> list[str]:
+    reasons = []
+    if report["removed_count"]:
+        reasons.append("existing_record_removed")
+    if report["changed_count"]:
+        reasons.append("existing_record_modified")
+    if report["duplicate_id_count"]:
+        reasons.append("public_id_collision")
+    return reasons
+
+
 def write_reports(report: dict[str, Any]) -> tuple[Path, Path]:
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     json_path = LOG_DIR / "public_json_delta_audit.json"
@@ -278,6 +310,8 @@ def write_reports(report: dict[str, Any]) -> tuple[Path, Path]:
         f"- added_count: {report['added_count']}",
         f"- removed_count: {report['removed_count']}",
         f"- changed_count: {report['changed_count']}",
+        f"- lifecycle_only_changed_count: {report['lifecycle_only_changed_count']}",
+        f"- duplicate_id_count: {report['duplicate_id_count']}",
         f"- added_by_source: {report['added_by_source']}",
         f"- removed_by_source: {report['removed_by_source']}",
         f"- current_by_source: {report['current_by_source']}",
@@ -323,6 +357,8 @@ def main() -> int:
     print(f"added_count={report['added_count']}")
     print(f"removed_count={report['removed_count']}")
     print(f"changed_count={report['changed_count']}")
+    print(f"lifecycle_only_changed_count={report['lifecycle_only_changed_count']}")
+    print(f"duplicate_id_count={report['duplicate_id_count']}")
     print(f"added_by_source={report['added_by_source']}")
     print(f"removed_by_source={report['removed_by_source']}")
     print(f"unexpected_records={len(report['unexpected_records'])}")
@@ -337,6 +373,10 @@ def main() -> int:
         return 1
     if report["public_contest_violations"]:
         print("Public contest validation failed.")
+        return 1
+    reasons = blocking_reasons(report)
+    if reasons:
+        print(f"Public business delta validation failed: {','.join(reasons)}")
         return 1
     return 0
 
