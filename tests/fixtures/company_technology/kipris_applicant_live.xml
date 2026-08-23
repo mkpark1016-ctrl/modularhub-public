@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <header>
+    <resultCode>00</resultCode>
+    <resultMsg>NORMAL SERVICE</resultMsg>
+  </header>
+  <body>
+    <items>
+      <PatentUtilityInfo>
+        <Applicant>삼성물산 주식회사</Applicant>
+        <RegistrationDate>20220412</RegistrationDate>
+        <RegistrationNumber>1023884380000</RegistrationNumber>
+        <RegistrationStatus>등록</RegistrationStatus>
+        <ApplicationDate>20200110</ApplicationDate>
+        <ApplicationNumber>1020200000010</ApplicationNumber>
+        <Abstract>대형 블록 단위의 모듈러 건축물 시공 기술</Abstract>
+        <SerialNumber>KIPRIS-LIVE-1</SerialNumber>
+        <InventionName>블록 모듈 및 블록 모듈러 건축물의 시공방법</InventionName>
+        <InternationalpatentclassificationNumber>E04B 1/348</InternationalpatentclassificationNumber>
+      </PatentUtilityInfo>
+      <PatentUtilityInfo>
+        <Applicant>삼성물산 주식회사</Applicant>
+        <RegistrationDate>20240320</RegistrationDate>
+        <RegistrationNumber>1026443870000</RegistrationNumber>
+        <RegistrationStatus>등록</RegistrationStatus>
+        <ApplicationDate>20210611</ApplicationDate>
+        <ApplicationNumber>1020210000020</ApplicationNumber>
+        <Abstract>복도와 바닥 연결구조를 개선한 블록 모듈 기술</Abstract>
+        <SerialNumber>KIPRIS-LIVE-2</SerialNumber>
+        <InventionName>블록 모듈 및 블록 모듈러 건축물의 시공방법</InventionName>
+        <InternationalpatentclassificationNumber>E04B 1/348</InternationalpatentclassificationNumber>
+      </PatentUtilityInfo>
+      <docsStart>1</docsStart>
+      <totalSearchCount>2</totalSearchCount>
+    </items>
+  </body>
+</response>

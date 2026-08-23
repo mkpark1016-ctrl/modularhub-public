@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <cnt>1</cnt>
+  <item>
+    <newtecId>KAIA-1005</newtecId>
+    <apntNo>1005</apntNo>
+    <apntYear>2025</apntYear>
+    <notNo>제2025-1005호</notNo>
+    <notDt>20250716</notDt>
+    <newtecNm>모듈러의 분절과 내부결합기술을 이용한 최고층의 옥탑 설치 공법</newtecNm>
+    <tecDvs>건축</tecDvs>
+    <newtecScope>철골 모듈과 내부 결합 기술을 이용한 옥탑 설치</newtecScope>
+    <newtecCts>모듈러 옥탑을 공장 제작하고 현장에서 내부 결합하는 공법</newtecCts>
+    <prtDt>20330715</prtDt>
+    <dvlprNm>삼성물산 주식회사</dvlprNm>
+    <newTecDvs>건설시공</newTecDvs>
+    <keyword>모듈러,옥탑,철골</keyword>
+    <tecDvsCode>ARCH</tecDvsCode>
+    <newTecDvsCode>CONST</newTecDvsCode>
+    <typ>유효</typ>
+  </item>
+</response>

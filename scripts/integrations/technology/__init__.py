@@ -2,11 +2,20 @@
 
 from .adapters import KaiaNewTechnologyFixtureAdapter, KiprisFixtureAdapter, adapter_for_source
 from .base import (
+    KAIA_API_KEY_ENV,
     KIPRIS_API_KEY_ENV,
     NormalizedTechnologyRecord,
     TECHNOLOGY_RECORD_TYPES,
     normalize_official_number,
     validate_public_source_url,
+)
+from .live_sources import (
+    KAIA_NEWTECH_ENDPOINT,
+    KIPRIS_APPLICANT_ENDPOINT,
+    KaiaLiveClient,
+    KiprisLiveClient,
+    parse_kaia_newtech_response,
+    parse_kipris_applicant_response,
 )
 from .matching import CompanyIdentity, CompanyMatch, company_identities, match_companies
 from .reconciliation import (
@@ -20,11 +29,16 @@ from .relevance import RelevanceDecision, assess_modular_relevance, classify_tec
 from .source_contracts import KAIA_NEWTECH_CONTRACT, KIPRIS_PATENT_CONTRACT, OFFICIAL_SOURCE_CONTRACTS
 
 __all__ = [
+    "KAIA_API_KEY_ENV",
     "KIPRIS_API_KEY_ENV",
     "KAIA_NEWTECH_CONTRACT",
     "KIPRIS_PATENT_CONTRACT",
     "OFFICIAL_SOURCE_CONTRACTS",
     "TECHNOLOGY_RECORD_TYPES",
+    "KAIA_NEWTECH_ENDPOINT",
+    "KIPRIS_APPLICANT_ENDPOINT",
+    "KaiaLiveClient",
+    "KiprisLiveClient",
     "CompanyIdentity",
     "CompanyMatch",
     "KaiaNewTechnologyFixtureAdapter",
@@ -40,6 +54,8 @@ __all__ = [
     "company_identities",
     "match_companies",
     "normalize_fixture_records",
+    "parse_kaia_newtech_response",
+    "parse_kipris_applicant_response",
     "normalize_official_number",
     "reconcile_technology_records",
     "validate_public_source_url",

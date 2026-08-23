@@ -9,6 +9,7 @@ from scripts.integrations.business.base import clean_text, parse_date
 
 
 KIPRIS_API_KEY_ENV = "KIPRIS_API_KEY"
+KAIA_API_KEY_ENV = "KAIA_API_KEY"
 TECHNOLOGY_RECORD_TYPES = frozenset({"patent", "construction_new_technology"})
 SENSITIVE_QUERY_KEYS = frozenset({
     "accesskey",
