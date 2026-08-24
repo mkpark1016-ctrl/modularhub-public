@@ -74,7 +74,7 @@ async function openAndCloseEvidenceDrawer(page, buttonLocator, expectedText) {
   await drawer.waitFor({ state: "hidden", timeout: 5000 });
 }
 
-async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
+async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth, reportInsight) {
   const diagnostics = { consoleErrors: [], reactWarnings: [] };
   page.on("console", (message) => {
     const text = message.text();
@@ -102,7 +102,16 @@ async function assertWorkspaceCompany(page, baseUrl, companyId, viewportWidth) {
     check(financialText.includes("중앙값"), `${companyId}: peer median missing`);
     check(!financialText.includes("rule_id"), `${companyId}: raw health rule metadata should be hidden by default`);
     check(financialText.includes("재무 추세"), `${companyId}: financial trends missing`);
-    if (companyId === "kumkang-kind") check(financialText.includes("동일 유형 재무 비교 준비 중") || financialText.includes("3개 미만") || financialText.includes("다른 기업유형으로 대체 비교하지 않습니다"), `${companyId}: non-comparable peer state missing`);
+    const benchmarks = reportInsight?.peer_benchmarks || [];
+    if (benchmarks.length > 0 && benchmarks.every((item) => item.comparable === false)) {
+      check(financialText.includes("비교 데이터 부족"), `${companyId}: non-comparable summary missing`);
+      check(financialText.includes("비교 준비 중"), `${companyId}: non-comparable cards missing`);
+      const firstBasis = page.locator("#company-tab-panel-financial details.comparison-basis-details").first();
+      await firstBasis.click();
+      const basisText = await firstBasis.innerText();
+      check(basisText.includes(benchmarks[0].not_comparable_reason), `${companyId}: non-comparable reason does not match payload`);
+      check(basisText.includes(String(reportInsight.comparison_context?.minimum_peer_count || 3)), `${companyId}: minimum peer count missing`);
+    }
     await openAndCloseEvidenceDrawer(page, page.locator("#company-tab-panel-financial .evidence-inline-button").first(), "\uACC4\uC0B0 \uAE30\uC900");
   }
   check(!(await hasPageOverflow(page)), `${companyId} ${viewportWidth}: financial overflow`);
@@ -126,8 +135,12 @@ async function runWorkspaceQa(baseUrl, viewport) {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport });
   try {
+    const reportResponse = await page.request.get(`${baseUrl}/data/companies/company_report_insights.json`);
+    check(reportResponse.ok(), "company report insight JSON failed to load");
+    const reportPayload = await reportResponse.json();
+    const reportsByCompany = new Map((reportPayload.companies || []).map((item) => [item.company_id, item]));
     for (const companyId of ["yuchang-enc", "kumkang-kind", "daeseung-engineering", "planm", "nrb", "gs-ec"]) {
-      await assertWorkspaceCompany(page, baseUrl, companyId, viewport.width);
+      await assertWorkspaceCompany(page, baseUrl, companyId, viewport.width, reportsByCompany.get(companyId));
     }
   } finally {
     await browser.close();

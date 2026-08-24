@@ -6,6 +6,7 @@ import { getNewsSummary } from "../src/newsInsights.js";
 import { getNewsDisplayRegion, newsRegionCounts } from "../src/newsRegion.js";
 import { getOverseasCountryOptions, newsCountryMatches } from "../src/newsCountry.js";
 import { getCompanyDataStatus, getCompanyItems, getCompanySummary, isModularSpecialistCompany } from "../src/companyInsights.js";
+import { getSourceHealth, getSourceHealthSummary } from "../src/sourceHealth.js";
 
 const baseUrl = process.env.QA_BASE_URL || "http://127.0.0.1:5173";
 const artifactDir = fileURLToPath(new URL("../qa-artifacts/", import.meta.url));
@@ -104,6 +105,9 @@ try {
   const newsItems = itemsFrom(newsData);
   const companyItems = getCompanyItems(companiesData);
   const companySummary = getCompanySummary(companyItems);
+  const expectedSourceHealth = getSourceHealth(metaData);
+  const expectedSourceSummary = getSourceHealthSummary(expectedSourceHealth, metaData);
+  const expectedD2bHealth = expectedSourceHealth.find((source) => source.id === "d2b");
   const dashboardAsOf = parseDate(metaData.generated_at) || parseDate(metaData.last_updated_at) || new Date();
   const expectedNewsSummary = getNewsSummary(newsItems, dashboardAsOf);
   check(businessItems.length === metaData.business_count, "business count does not match meta");
@@ -131,19 +135,22 @@ try {
   const kpiHelperText = await page.locator(".kpi-helper").innerText();
   check(kpiHelperText.includes(`최근 7일 전체 뉴스 ${expectedNewsSummary.recent7.toLocaleString("ko-KR")}건`), "recent total news helper count mismatch");
   check(kpiHelperText.includes(`연관 산업 ${expectedNewsSummary.recentAdjacent7.toLocaleString("ko-KR")}건`), "recent adjacent news helper count mismatch");
-  check(homeText.includes("일부 제한"), "workflow should be displayed as partially limited");
+  check(homeText.includes(expectedSourceSummary.workflow.label), "workflow health should match the public payload");
   const healthToggle = page.locator(".source-health-panel button").first();
   check(await healthToggle.getAttribute("aria-expanded") === "false", "source health details should start collapsed");
   await healthToggle.click();
   check(await healthToggle.getAttribute("aria-expanded") === "true", "source health details should expand");
   const healthText = await page.locator(".source-health-panel").innerText();
   check(healthText.includes("D2B"), "source health details should include D2B");
-  check(healthText.includes("중지"), "D2B should be displayed as stopped, not a generic error");
+  check(expectedD2bHealth, "D2B source health contract missing");
+  check(healthText.includes(expectedD2bHealth.label), "D2B UI state should match the public payload");
+  if (expectedD2bHealth.description) {
+    check(healthText.includes(expectedD2bHealth.description), "D2B UI description should match the public payload");
+  }
   check(healthText.includes("SH"), "source health details should include SH");
   check(healthText.includes("해외 RSS"), "source health details should include overseas RSS");
   check(healthText.includes("미수집") || healthText.includes("수집 기록 없음"), "SH not_collected should be shown as not collected");
   check(!healthText.includes("SH\n현재 공고 없음"), "SH not_collected must not be shown as no current notices");
-  check(healthText.includes("GW API 전환 필요"), "D2B migration note missing");
   check(await page.locator(".news-brief-item .relevance-badge.reference, .news-brief-item .relevance-badge.excluded").count() === 0, "home latest news should exclude reference/excluded items");
 
   await page.locator("header nav").getByRole("link", { name: "기업정보" }).click();

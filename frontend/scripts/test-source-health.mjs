@@ -37,6 +37,20 @@ assert.equal(summary.limitedCount, 1);
 assert.equal(summary.notCollectedCount, 1);
 assert.equal(summary.workflow.id, "workflow");
 
+const migratedD2bSources = getSourceHealth({
+  ...meta,
+  workflow_last_run_status: "success",
+  d2b_status: "success",
+  d2b_message: "Unified D2B GW 공개 데이터가 유지되고 있습니다.",
+  d2b_legacy_status: "disabled_stopped",
+  d2b_gw_migration_required: false,
+});
+const migratedD2b = migratedD2bSources.find((source) => source.id === "d2b");
+assert.equal(migratedD2b.status, "success");
+assert.equal(migratedD2b.label, "정상");
+assert.match(migratedD2b.description, /Unified D2B GW/);
+assert.equal(migratedD2bSources.find((source) => source.id === "workflow").status, "success");
+
 const newsSourceMeta = {
   ...meta,
   news_source_statuses: [

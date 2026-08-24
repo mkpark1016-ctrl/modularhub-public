@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
 import subprocess
 import sys
 from datetime import date
@@ -21,6 +20,7 @@ from scripts.integrations.business.d2b_connectivity import (
     run_connectivity_diagnostic,
     verify_diagnostic_summary,
 )
+from tests.hermetic import hermetic_subprocess_env
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -321,7 +321,7 @@ def test_structured_verification_rejects_failed_security_flags(field: str) -> No
 
 
 def test_cli_guard_prevents_network_without_dual_opt_in(tmp_path: Path) -> None:
-    env = os.environ.copy()
+    env = hermetic_subprocess_env()
     env.pop("DATA_GO_KR_SERVICE_KEY", None)
     result = subprocess.run(
         [

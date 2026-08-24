@@ -13,12 +13,27 @@ R&D, 특허, 트렌드, 블로그, 커뮤니티, 즐겨찾기, 로그인, AI 요
 
 ### 역할 분리
 
+
 - `src/`, `scripts/`, `data/`: API Key를 사용하는 Python 수집 및 SQLite 저장
 - `scripts/export_public_site_data.py`: 공개 가능한 필드만 정적 JSON으로 내보내기
 - `frontend/`: API Key 없이 정적 JSON만 읽는 Vite React 공개 앱
 - `frontend/vercel.json`: Vercel SPA 라우팅과 JSON 캐시 설정
 
 프론트엔드에는 `DATA_GO_KR_SERVICE_KEY`, `NAVER_API_HUB_CLIENT_ID`, `NAVER_API_HUB_CLIENT_SECRET`을 넣지 않습니다. `source_detail_api_url`처럼 인증키가 포함될 가능성이 있는 값도 공개 JSON에서 제외됩니다.
+
+### Hermetic 테스트 기준선
+
+전체 Python 회귀의 표준 명령은 저장소 루트에서 실행하는 다음 명령입니다.
+
+```powershell
+python -m pytest -q
+```
+
+`pytest.ini`은 실제 테스트 디렉터리인 `tests/`만 수집하므로 루트 아래의 linked worktree를 중복 수집하지 않습니다. 일반 pytest 실행은 local `.env` 로드를 비활성화하고 API credential을 제거하며, localhost 이외의 네트워크 연결을 즉시 실패시킵니다. KIPRIS, KAIA, D2B, LH/G2B 등 실제 연동 확인은 각 integration의 명시적 live acceptance CLI와 이중 opt-in guard를 사용합니다.
+
+과거에 보고된 `754`, `743`, `735`, `641` 등의 결과 수 차이는 서로 다른 commit과 path scope, 루트 linked worktree 중복 수집, dotenv 설정 및 당시의 skip 조건이 섞인 결과입니다. 현재 기준선은 위 명령의 collection summary를 기준으로 하며, 일부 경로만 실행한 결과를 full suite로 부르지 않습니다.
+
+Frontend 회귀는 `frontend/package.json`의 개별 test script와 `npm.cmd run qa:browser`, `npm.cmd run lint`, `npm.cmd run build`를 사용합니다.
 
 ### 공개 앱 로컬 실행
 

@@ -35,6 +35,7 @@ footer { margin-top: 72px; padding: 28px 20px; text-align: center; color: #777; 
 .page-heading h1 { font-size: 38px; }
 .page-heading > p:last-child { color: #666; margin: 14px 0 0; }
 .content-layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 34px; padding-top: 30px; }
+.content-layout > * { min-width: 0; }
 .filters { align-self: start; position: sticky; top: 88px; display: grid; gap: 16px; padding: 20px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; }
 .filter-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .filters h2 { font-size: 16px; margin: 0; }
@@ -58,7 +59,7 @@ footer { margin-top: 72px; padding: 28px 20px; text-align: center; color: #777; 
 .summary-chip { display: grid; gap: 4px; min-width: 0; padding: 14px 16px; background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; }
 .summary-chip span { color: #666; font-size: 12px; font-weight: 800; }
 .summary-chip strong { font-size: 18px; overflow-wrap: anywhere; }
-.results { display: grid; gap: 12px; }
+.results { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
 .result-card { background: #fff; border: 1px solid #d7d7d2; border-radius: 8px; padding: 24px; }
 .result-card.status-closed { background: #fbfbf9; }
 .contest-card { border-left: 3px solid #237349; }

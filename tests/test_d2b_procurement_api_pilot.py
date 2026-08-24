@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import os
 import subprocess
 import sys
 from datetime import date
@@ -26,6 +25,7 @@ from scripts.integrations.business.d2b import (
     is_d2b_acceptance_failure,
     write_staging_outputs,
 )
+from tests.hermetic import hermetic_subprocess_env
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -718,6 +718,7 @@ def test_d2b_live_guard_skips_without_dual_opt_in(tmp_path: Path) -> None:
         ],
         cwd=ROOT,
         check=False,
+        env=hermetic_subprocess_env(),
         capture_output=True,
         text=True,
     )
@@ -729,8 +730,7 @@ def test_d2b_live_guard_skips_without_dual_opt_in(tmp_path: Path) -> None:
 
 
 def test_d2b_missing_secret_does_not_attempt_request(tmp_path: Path) -> None:
-    env = os.environ.copy()
-    env.pop(D2B_SERVICE_KEY_ENV, None)
+    env = hermetic_subprocess_env()
     result = subprocess.run(
         [
             sys.executable,

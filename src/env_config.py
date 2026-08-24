@@ -16,6 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 def load_project_dotenv() -> bool:
     """Load repository-root .env without overriding existing environment values."""
 
+    if os.getenv("PYTHON_DOTENV_DISABLED", "").strip().lower() in {"1", "true", "yes", "on"}:
+        return False
+
     env_path = ROOT / ".env"
     if not env_path.exists():
         return False
