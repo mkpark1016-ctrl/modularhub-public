@@ -11,11 +11,16 @@ from .base import (
 )
 from .live_sources import (
     KAIA_NEWTECH_ENDPOINT,
+    KIPRIS_APPLICATION_EXACT_ENDPOINT,
     KIPRIS_APPLICANT_ENDPOINT,
+    KIPRIS_REGISTRATION_EXACT_ENDPOINT,
     KaiaLiveClient,
+    KiprisExactLookupClient,
     KiprisLiveClient,
+    normalize_kipris_exact_query_identifier,
     parse_kaia_newtech_response,
     parse_kipris_applicant_response,
+    parse_kipris_exact_response,
 )
 from .matching import CompanyIdentity, CompanyMatch, company_identities, match_companies
 from .reconciliation import (
@@ -36,8 +41,11 @@ __all__ = [
     "OFFICIAL_SOURCE_CONTRACTS",
     "TECHNOLOGY_RECORD_TYPES",
     "KAIA_NEWTECH_ENDPOINT",
+    "KIPRIS_APPLICATION_EXACT_ENDPOINT",
     "KIPRIS_APPLICANT_ENDPOINT",
+    "KIPRIS_REGISTRATION_EXACT_ENDPOINT",
     "KaiaLiveClient",
+    "KiprisExactLookupClient",
     "KiprisLiveClient",
     "CompanyIdentity",
     "CompanyMatch",
@@ -54,8 +62,10 @@ __all__ = [
     "company_identities",
     "match_companies",
     "normalize_fixture_records",
+    "normalize_kipris_exact_query_identifier",
     "parse_kaia_newtech_response",
     "parse_kipris_applicant_response",
+    "parse_kipris_exact_response",
     "normalize_official_number",
     "reconcile_technology_records",
     "validate_public_source_url",

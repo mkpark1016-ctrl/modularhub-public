@@ -20,6 +20,14 @@ KIPRIS_APPLICANT_ENDPOINT = (
     "https://plus.kipris.or.kr/openapi/rest/"
     "patUtiModInfoSearchSevice/applicantNameSearchInfo"
 )
+KIPRIS_APPLICATION_EXACT_ENDPOINT = (
+    "https://plus.kipris.or.kr/openapi/rest/"
+    "patUtiModInfoSearchSevice/applicationNumberSearchInfo"
+)
+KIPRIS_REGISTRATION_EXACT_ENDPOINT = (
+    "https://plus.kipris.or.kr/openapi/rest/"
+    "patUtiModInfoSearchSevice/registrationNumberSearchInfo"
+)
 KIPRIS_SOURCE_URL = "https://plus.kipris.or.kr/portal/search/clasList/List.do"
 KAIA_NEWTECH_ENDPOINT = "https://www.kaia.re.kr/portal/openApi/newtecListData.xml"
 KAIA_SOURCE_URL = "https://www.kaia.re.kr/portal/bbs/view/B0000007/3494.do?menuNo=200026"
@@ -205,6 +213,30 @@ def parse_kipris_applicant_response(
     return rows, total_count, observed_fields, result_code
 
 
+def parse_kipris_exact_response(
+    content: bytes | str,
+    *,
+    collected_at: str | None = None,
+) -> tuple[list[dict[str, Any]], int, set[str], str | None]:
+    """Parse the documented exact-number operations, which share the patent row schema."""
+    return parse_kipris_applicant_response(content, collected_at=collected_at)
+
+
+def normalize_kipris_exact_query_identifier(value: str, lookup_type: str) -> str:
+    digits = re.sub(r"[^0-9]", "", str(value or ""))
+    if lookup_type == "application_number":
+        if len(digits) != 13:
+            raise ValueError("KIPRIS application number exact lookup requires 13 digits")
+        return digits
+    if lookup_type == "registration_number":
+        if len(digits) == 9:
+            return f"{digits}0000"
+        if len(digits) == 13:
+            return digits
+        raise ValueError("KIPRIS registration number exact lookup requires 9 or 13 digits")
+    raise ValueError(f"unsupported KIPRIS exact lookup type={lookup_type!r}")
+
+
 def parse_kaia_newtech_response(
     content: bytes | str,
     *,
@@ -276,10 +308,13 @@ class _BoundedXmlClient:
         return bool(self.api_key)
 
     def _get(self, params: dict[str, Any]) -> tuple[Any, int]:
+        return self._get_at(self.endpoint, params)
+
+    def _get_at(self, endpoint: str, params: dict[str, Any]) -> tuple[Any, int]:
         last_error: BaseException | None = None
         for attempt in range(self.max_attempts):
             try:
-                response = self.request_get(self.endpoint, params=params, timeout=self.timeout)
+                response = self.request_get(endpoint, params=params, timeout=self.timeout)
                 response.raise_for_status()
                 return response, attempt + 1
             except (ConnectTimeout, ConnectionError, Timeout) as exc:
@@ -298,7 +333,7 @@ class _BoundedXmlClient:
                 raise TechnologyTransportError(
                     f"{self.source} HTTP response failed",
                     _transport_diagnostic(
-                        self.endpoint,
+                        endpoint,
                         status=category,
                         error_category=category,
                         exception=exc,
@@ -310,7 +345,7 @@ class _BoundedXmlClient:
                 raise TechnologyTransportError(
                     f"{self.source} request failed",
                     _transport_diagnostic(
-                        self.endpoint,
+                        endpoint,
                         status="transport_error",
                         error_category="transport_error",
                         exception=exc,
@@ -321,7 +356,7 @@ class _BoundedXmlClient:
         raise TechnologyTransportError(
             f"{self.source} request failed",
             _transport_diagnostic(
-                self.endpoint,
+                endpoint,
                 status="transport_error",
                 error_category="transport_error",
                 exception=last_error,
@@ -433,6 +468,74 @@ class KiprisLiveClient(_BoundedXmlClient):
         )
         diagnostic.status = "healthy" if records else "empty_result"
         return TechnologyCollectionResult(self.source, records, raw_pages, diagnostic)
+
+
+class KiprisExactLookupClient(_BoundedXmlClient):
+    source = "kipris"
+    endpoint = KIPRIS_REGISTRATION_EXACT_ENDPOINT
+    secret_env = KIPRIS_API_KEY_ENV
+    endpoints = {
+        "application_number": (KIPRIS_APPLICATION_EXACT_ENDPOINT, "applicationNumber"),
+        "registration_number": (KIPRIS_REGISTRATION_EXACT_ENDPOINT, "registerNumber"),
+    }
+    documented_fields = KiprisLiveClient.documented_fields
+
+    def lookup(
+        self,
+        lookup_type: str,
+        identifier: str,
+        *,
+        collected_at: str | None = None,
+    ) -> TechnologyCollectionResult:
+        if lookup_type not in self.endpoints:
+            raise ValueError(f"unsupported KIPRIS exact lookup type={lookup_type!r}")
+        endpoint, parameter_name = self.endpoints[lookup_type]
+        query_identifier = normalize_kipris_exact_query_identifier(identifier, lookup_type)
+        diagnostic = _new_diagnostic(self.source, endpoint, self.configured())
+        diagnostic.query_metrics = [{
+            "lookup_type": lookup_type,
+            "lookup_identifier": query_identifier,
+            "query_attempted": False,
+            "received_count": 0,
+        }]
+        if not self.configured():
+            diagnostic.status = "authentication_denied"
+            diagnostic.error_category = "missing_secret"
+            return TechnologyCollectionResult(self.source, [], [], diagnostic)
+
+        params = {
+            parameter_name: query_identifier,
+            "docsStart": 1,
+            "accessKey": self.api_key,
+        }
+        diagnostic.request_attempted = True
+        diagnostic.pages_requested = 1
+        diagnostic.query_metrics[0]["query_attempted"] = True
+        try:
+            response, attempts = self._get_at(endpoint, params)
+            diagnostic.attempt_count = attempts
+            diagnostic.http_status = int(getattr(response, "status_code", 0))
+            raw_pages = [sanitize_response_text(response, secrets=(self.api_key,))]
+            records, _, observed_fields, result_code = parse_kipris_exact_response(
+                getattr(response, "content", b""),
+                collected_at=collected_at,
+            )
+            records = _stable_unique_raw(records)
+            diagnostic.api_result_code = result_code
+            diagnostic.received_count = len(records)
+            diagnostic.query_metrics[0]["received_count"] = len(records)
+            diagnostic.observed_fields = sorted(observed_fields)
+            diagnostic.documented_fields_missing_from_sample = sorted(
+                self.documented_fields - observed_fields
+            )
+            diagnostic.undocumented_sample_fields = sorted(
+                observed_fields - self.documented_fields - {"source", "sourceUrl", "collectedAt"}
+            )
+            diagnostic.status = "healthy" if records else "empty_result"
+            return TechnologyCollectionResult(self.source, records, raw_pages, diagnostic)
+        except (TechnologyApiError, TechnologyTransportError) as exc:
+            _apply_error(diagnostic, exc)
+            return TechnologyCollectionResult(self.source, [], [], diagnostic)
 
 
 class KaiaLiveClient(_BoundedXmlClient):
