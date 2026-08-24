@@ -13,8 +13,10 @@ from typing import Any
 
 from src.public_data_policy import (
     CONTROLLED_PUBLIC_BUSINESS_PATH,
+    CONTROLLED_PUBLIC_COMPANIES_PATH,
     CONTROLLED_PUBLIC_META_PATH,
     validate_controlled_business_publication,
+    validate_controlled_samsung_technology_publication,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -798,6 +800,25 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
     if companies_relpath in changed_files and is_allowed_daeseung_canonical_migration(base_ref):
         changed_files = [path for path in changed_files if path != companies_relpath]
         warnings.append("allowed_daeseung_canonical_company_migration")
+    controlled_company_technology = None
+    if companies_relpath in changed_files:
+        previous_companies = json_from_git(comparison_ref, COMPANIES_PUBLIC_PATH)
+        try:
+            current_companies = json.loads(COMPANIES_PUBLIC_PATH.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            current_companies = None
+        if isinstance(previous_companies, dict) and isinstance(current_companies, dict):
+            controlled_company_technology = validate_controlled_samsung_technology_publication(
+                previous_companies,
+                current_companies,
+                all_changed_files,
+            )
+            if (
+                controlled_company_technology["passed"]
+                and controlled_company_technology["status"] == "SAMSUNG_TECH_CONTROLLED_PUBLICATION_SAFE"
+            ):
+                changed_files = [path for path in changed_files if path != CONTROLLED_PUBLIC_COMPANIES_PATH]
+                warnings.append("controlled_samsung_technology_publication_semantically_safe")
     controlled_publication = None
     controlled_paths = {CONTROLLED_PUBLIC_BUSINESS_PATH, CONTROLLED_PUBLIC_META_PATH}
     if controlled_paths.intersection(changed_files):
@@ -833,6 +854,7 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
         "changed_files": changed_files,
         "warnings": warnings,
         "controlled_publication": controlled_publication,
+        "controlled_company_technology_publication": controlled_company_technology,
     }
 
 

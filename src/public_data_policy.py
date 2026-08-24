@@ -19,6 +19,7 @@ PUBLISHABLE_RELEVANCE_LEVELS = {"direct", "adjacent", "reference"}
 OVERSEAS_RSS_SOURCE = "해외 모듈러 RSS"
 CONTROLLED_PUBLIC_BUSINESS_PATH = "frontend/public/data/business.json"
 CONTROLLED_PUBLIC_META_PATH = "frontend/public/data/meta.json"
+CONTROLLED_PUBLIC_COMPANIES_PATH = "frontend/public/data/companies/companies.json"
 CONTROLLED_PUBLICATION_PATHS = {
     CONTROLLED_PUBLIC_BUSINESS_PATH,
     CONTROLLED_PUBLIC_META_PATH,
@@ -85,6 +86,44 @@ BUSINESS_LIFECYCLE_DERIVED_FIELDS = frozenset(
         "last_seen_at",
         "lifecycle_reason",
         "opportunity_status",
+    }
+)
+SAMSUNG_TECHNOLOGY_COMPANY_ID = "samsung-ct-construction"
+SAMSUNG_TECHNOLOGY_BASELINE_IDS = frozenset(
+    f"tech-samsung-{index:03d}" for index in range(1, 8)
+)
+SAMSUNG_TECHNOLOGY_NEW_IDS = frozenset(
+    {
+        "tech-samsung-kipris-1020230005994",
+        "tech-samsung-kipris-1020230005995",
+        "tech-samsung-kipris-1020230050560",
+        "tech-samsung-kipris-1020230050561",
+        "tech-samsung-kipris-1020230091868",
+        "tech-samsung-kipris-1020230105666",
+    }
+)
+SAMSUNG_TECHNOLOGY_ENRICHMENT_FIELDS = frozenset(
+    {"application_number", "patent_number", "application_date", "registration_date"}
+)
+SAMSUNG_TECHNOLOGY_STATUS_TRANSITIONS = {
+    "tech-samsung-006": ("registered", "expired"),
+    "tech-samsung-007": ("registered", "expired"),
+}
+SAMSUNG_TECHNOLOGY_SOURCE_ID = "samsung-kipris-direct-patents-20260824"
+SAMSUNG_NEW_TECHNOLOGY_REQUIRED_FIELDS = frozenset(
+    {
+        "technology_id",
+        "name",
+        "record_type",
+        "registration_number",
+        "application_number",
+        "patent_number",
+        "status",
+        "technology_area",
+        "application_date",
+        "registration_date",
+        "summary",
+        "source_ids",
     }
 )
 
@@ -260,6 +299,255 @@ def validate_controlled_business_publication(
         status="CONTROLLED_PUBLICATION_SAFE" if not failures else "CONTROLLED_PUBLICATION_BLOCKED",
     )
 
+
+def validate_controlled_samsung_technology_publication(
+    before_payload: dict[str, Any],
+    after_payload: dict[str, Any],
+    changed_paths: list[str] | set[str] | tuple[str, ...],
+) -> dict[str, Any]:
+    """Validate the accepted Samsung technology delta from payload semantics."""
+
+    paths = sorted({_normalized_repo_path(path) for path in changed_paths if path})
+    failures: set[str] = set()
+    counts = {
+        "baseline": 0,
+        "candidate": 0,
+        "existing_preserved": 0,
+        "enriched_existing": 0,
+        "status_updated_existing": 0,
+        "existing_modified": 0,
+        "net_new": 0,
+        "adjacent_published": 0,
+        "removed": 0,
+        "other_company_modified": 0,
+        "identity_collisions": 0,
+        "duplicate_identities": 0,
+        "before_incomplete": 0,
+        "after_incomplete": 0,
+        "resolved_incomplete": 0,
+    }
+    security = {"credential_urls": 0, "forbidden_fields": 0, "passed": True}
+
+    if CONTROLLED_PUBLIC_COMPANIES_PATH not in paths:
+        return {
+            "schema_version": "controlled-company-technology-publication-v1",
+            "passed": True,
+            "status": "NO_CONTROLLED_COMPANY_TECHNOLOGY_CHANGE",
+            "reason_codes": [],
+            "changed_paths": paths,
+            "company_id": SAMSUNG_TECHNOLOGY_COMPANY_ID,
+            "counts": counts,
+            "security": security,
+        }
+    if set(paths) != {CONTROLLED_PUBLIC_COMPANIES_PATH}:
+        failures.add("changed_file_scope_invalid")
+    if not isinstance(before_payload, dict) or not isinstance(after_payload, dict):
+        failures.add("company_payload_invalid")
+        return _samsung_technology_publication_result(failures, paths, counts, security)
+
+    before_companies = before_payload.get("companies")
+    after_companies = after_payload.get("companies")
+    if not isinstance(before_companies, list) or not isinstance(after_companies, list):
+        failures.add("company_list_invalid")
+        return _samsung_technology_publication_result(failures, paths, counts, security)
+    if {key: value for key, value in before_payload.items() if key != "companies"} != {
+        key: value for key, value in after_payload.items() if key != "companies"
+    }:
+        failures.add("company_root_metadata_modified")
+
+    before_ids = [clean_text(company.get("company_id")) for company in before_companies if isinstance(company, dict)]
+    after_ids = [clean_text(company.get("company_id")) for company in after_companies if isinstance(company, dict)]
+    if before_ids != after_ids or len(before_ids) != len(before_companies) or len(after_ids) != len(after_companies):
+        failures.add("company_universe_modified")
+    before_by_id = {clean_text(company.get("company_id")): company for company in before_companies if isinstance(company, dict)}
+    after_by_id = {clean_text(company.get("company_id")): company for company in after_companies if isinstance(company, dict)}
+    before_company = before_by_id.get(SAMSUNG_TECHNOLOGY_COMPANY_ID)
+    after_company = after_by_id.get(SAMSUNG_TECHNOLOGY_COMPANY_ID)
+    if not isinstance(before_company, dict) or not isinstance(after_company, dict):
+        failures.add("samsung_company_missing")
+        return _samsung_technology_publication_result(failures, paths, counts, security)
+
+    other_modified = sum(
+        before_by_id.get(company_id) != after_by_id.get(company_id)
+        for company_id in set(before_by_id) | set(after_by_id)
+        if company_id != SAMSUNG_TECHNOLOGY_COMPANY_ID
+    )
+    counts["other_company_modified"] = other_modified
+    if other_modified:
+        failures.add("other_company_modified")
+    before_nontechnology = {
+        key: value for key, value in before_company.items() if key not in {"technology", "sources"}
+    }
+    after_nontechnology = {
+        key: value for key, value in after_company.items() if key not in {"technology", "sources"}
+    }
+    if before_nontechnology != after_nontechnology:
+        failures.add("samsung_nontechnology_payload_modified")
+
+    before_items = _company_technology_items(before_company)
+    after_items = _company_technology_items(after_company)
+    counts["baseline"] = len(before_items)
+    counts["candidate"] = len(after_items)
+    before_item_counts = _technology_id_counts(before_items)
+    after_item_counts = _technology_id_counts(after_items)
+    if "" in before_item_counts or "" in after_item_counts:
+        failures.add("technology_id_missing")
+    if any(count > 1 for count in after_item_counts.values()):
+        failures.add("technology_id_collision")
+        counts["identity_collisions"] = sum(max(0, count - 1) for count in after_item_counts.values())
+    before_item_by_id = {clean_text(item.get("technology_id")): item for item in before_items}
+    after_item_by_id = {clean_text(item.get("technology_id")): item for item in after_items}
+    before_id_set = set(before_item_by_id)
+    after_id_set = set(after_item_by_id)
+    removed_ids = before_id_set - after_id_set
+    new_ids = after_id_set - before_id_set
+    counts["existing_preserved"] = len(before_id_set & after_id_set)
+    counts["removed"] = len(removed_ids)
+    counts["net_new"] = len(new_ids)
+    if removed_ids:
+        failures.add("existing_technology_removed")
+    if before_id_set != SAMSUNG_TECHNOLOGY_BASELINE_IDS:
+        failures.add("baseline_identity_drift")
+    if new_ids != SAMSUNG_TECHNOLOGY_NEW_IDS:
+        failures.add("new_technology_identity_mismatch")
+
+    enriched_ids: set[str] = set()
+    status_updated_ids: set[str] = set()
+    for technology_id in sorted(before_id_set & after_id_set):
+        before_item = before_item_by_id[technology_id]
+        after_item = after_item_by_id[technology_id]
+        changed_fields = {
+            key
+            for key in set(before_item) | set(after_item)
+            if before_item.get(key) != after_item.get(key)
+        }
+        for field in changed_fields:
+            if field in SAMSUNG_TECHNOLOGY_ENRICHMENT_FIELDS:
+                if before_item.get(field) not in {None, ""} or after_item.get(field) in {None, ""}:
+                    failures.add("existing_nonempty_field_overwritten")
+                else:
+                    enriched_ids.add(technology_id)
+            elif field == "status":
+                expected = SAMSUNG_TECHNOLOGY_STATUS_TRANSITIONS.get(technology_id)
+                if expected != (before_item.get(field), after_item.get(field)):
+                    failures.add("unapproved_status_transition")
+                else:
+                    status_updated_ids.add(technology_id)
+            else:
+                failures.add("unexpected_existing_technology_change")
+    counts["enriched_existing"] = len(enriched_ids)
+    counts["status_updated_existing"] = len(status_updated_ids)
+    counts["existing_modified"] = len(enriched_ids | status_updated_ids)
+    if len(enriched_ids) != 4:
+        failures.add("enrichment_count_mismatch")
+    if status_updated_ids != set(SAMSUNG_TECHNOLOGY_STATUS_TRANSITIONS):
+        failures.add("status_update_mismatch")
+
+    new_items = [after_item_by_id[item_id] for item_id in sorted(new_ids)]
+    for item in new_items:
+        if not SAMSUNG_NEW_TECHNOLOGY_REQUIRED_FIELDS.issubset(item):
+            failures.add("new_technology_schema_incomplete")
+        if item.get("record_type") != "patent" or item.get("status") != "registered":
+            failures.add("new_technology_contract_invalid")
+        if item.get("source_ids") != [SAMSUNG_TECHNOLOGY_SOURCE_ID]:
+            failures.add("new_technology_source_mismatch")
+
+    identity_counts: dict[tuple[str, str], int] = {}
+    for item in after_items:
+        identity = _technology_identity(item)
+        identity_counts[identity] = identity_counts.get(identity, 0) + 1
+    duplicate_identities = sum(max(0, count - 1) for count in identity_counts.values())
+    counts["duplicate_identities"] = duplicate_identities
+    if duplicate_identities:
+        failures.add("duplicate_technology_identity")
+
+    before_sources = before_company.get("sources")
+    after_sources = after_company.get("sources")
+    if not isinstance(before_sources, list) or not isinstance(after_sources, list):
+        failures.add("source_registry_invalid")
+        before_sources = before_sources if isinstance(before_sources, list) else []
+        after_sources = after_sources if isinstance(after_sources, list) else []
+    if after_sources[: len(before_sources)] != before_sources:
+        failures.add("existing_source_registry_modified")
+    added_sources = after_sources[len(before_sources) :]
+    if len(added_sources) != 1 or clean_text(added_sources[0].get("source_id")) != SAMSUNG_TECHNOLOGY_SOURCE_ID:
+        failures.add("source_registry_addition_mismatch")
+    source_ids = [clean_text(source.get("source_id")) for source in after_sources if isinstance(source, dict)]
+    if "" in source_ids or len(source_ids) != len(set(source_ids)):
+        failures.add("source_registry_identity_invalid")
+    known_sources = set(source_ids)
+    if any(
+        not isinstance(item.get("source_ids"), list)
+        or not item.get("source_ids")
+        or any(clean_text(source_id) not in known_sources for source_id in item.get("source_ids", []))
+        for item in after_items
+    ):
+        failures.add("technology_source_reference_invalid")
+
+    counts["before_incomplete"] = sum(_technology_information_incomplete(item) for item in before_items)
+    counts["after_incomplete"] = sum(_technology_information_incomplete(item) for item in after_items)
+    counts["resolved_incomplete"] = counts["before_incomplete"] - counts["after_incomplete"]
+    if (counts["baseline"], counts["candidate"], counts["before_incomplete"], counts["after_incomplete"]) != (7, 13, 7, 3):
+        failures.add("publication_metric_mismatch")
+
+    security["credential_urls"] = _count_credential_bearing_urls({"technology": after_company.get("technology"), "sources": added_sources})
+    security["forbidden_fields"] = _count_forbidden_public_keys({"technology": after_company.get("technology"), "sources": added_sources})
+    security["passed"] = security["credential_urls"] == 0 and security["forbidden_fields"] == 0
+    if not security["passed"]:
+        failures.add("sensitive_public_payload_detected")
+
+    return _samsung_technology_publication_result(failures, paths, counts, security)
+
+
+def _company_technology_items(company: dict[str, Any]) -> list[dict[str, Any]]:
+    technology = company.get("technology")
+    if not isinstance(technology, dict):
+        return []
+    return [
+        item
+        for rows in technology.values()
+        if isinstance(rows, list)
+        for item in rows
+        if isinstance(item, dict)
+    ]
+
+
+def _technology_id_counts(items: list[dict[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in items:
+        technology_id = clean_text(item.get("technology_id"))
+        counts[technology_id] = counts.get(technology_id, 0) + 1
+    return counts
+
+
+def _technology_identity(item: dict[str, Any]) -> tuple[str, str]:
+    for field in ("application_number", "registration_number", "patent_number"):
+        value = re.sub(r"[^0-9A-Za-z]", "", clean_text(item.get(field))).casefold()
+        if value:
+            return field, value
+    return "technology_id", clean_text(item.get("technology_id"))
+
+
+def _technology_information_incomplete(item: dict[str, Any]) -> int:
+    return int(not item.get("application_date") or not item.get("registration_date"))
+
+
+def _samsung_technology_publication_result(
+    failures: set[str],
+    paths: list[str],
+    counts: dict[str, int],
+    security: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "schema_version": "controlled-company-technology-publication-v1",
+        "passed": not failures,
+        "status": "SAMSUNG_TECH_CONTROLLED_PUBLICATION_SAFE" if not failures else "SAMSUNG_TECH_CONTROLLED_PUBLICATION_BLOCKED",
+        "reason_codes": sorted(failures),
+        "changed_paths": paths,
+        "company_id": SAMSUNG_TECHNOLOGY_COMPANY_ID,
+        "counts": counts,
+        "security": security,
+    }
 
 def _normalized_repo_path(path: Any) -> str:
     return str(path).strip().replace("\\", "/").lstrip("./")

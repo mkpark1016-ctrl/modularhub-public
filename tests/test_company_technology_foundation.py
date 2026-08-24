@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 from pathlib import Path
 
@@ -26,6 +27,25 @@ FIXTURE_PATH = ROOT / "tests/fixtures/company_technology/samsung_official_record
 def load_samsung() -> dict:
     payload = json.loads(COMPANIES_PATH.read_text(encoding="utf-8"))
     return next(company for company in payload["companies"] if company["company_id"] == "samsung-ct-construction")
+
+
+def foundation_samsung_baseline() -> dict:
+    company = deepcopy(load_samsung())
+    baseline_ids = {f"tech-samsung-{index:03d}" for index in range(1, 8)}
+    for group, rows in company["technology"].items():
+        if isinstance(rows, list):
+            company["technology"][group] = [
+                item for item in rows if item.get("technology_id") in baseline_ids
+            ]
+    for rows in company["technology"].values():
+        if not isinstance(rows, list):
+            continue
+        for item in rows:
+            for field in ("application_number", "patent_number", "application_date", "registration_date"):
+                item.pop(field, None)
+            if item.get("technology_id") in {"tech-samsung-006", "tech-samsung-007"}:
+                item["status"] = "registered"
+    return company
 
 
 def fixture_records() -> list[dict]:
@@ -79,7 +99,7 @@ def test_same_application_number_is_deduplicated() -> None:
 
 def test_samsung_fixture_reconciliation_preserves_manual_baseline() -> None:
     normalization = normalize_fixture_records(fixture_records())
-    candidates, report = reconcile_technology_records([load_samsung()], normalization)
+    candidates, report = reconcile_technology_records([foundation_samsung_baseline()], normalization)
 
     assert report["baseline_count"] == 7
     assert report["source_input_count"] == 10
@@ -105,7 +125,7 @@ def test_samsung_fixture_reconciliation_preserves_manual_baseline() -> None:
 
 def test_official_match_can_only_propose_empty_field_enrichment() -> None:
     normalization = normalize_fixture_records(fixture_records())
-    candidates, _ = reconcile_technology_records([load_samsung()], normalization)
+    candidates, _ = reconcile_technology_records([foundation_samsung_baseline()], normalization)
     candidate = next(item for item in candidates if item["registration_number"] == "10-2388438")
 
     assert candidate["candidate_type"] == "enrichment_candidate"
