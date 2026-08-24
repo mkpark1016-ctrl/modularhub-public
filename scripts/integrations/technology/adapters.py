@@ -77,12 +77,21 @@ class KiprisFixtureAdapter:
         validate_raw_payload_keys(raw)
         application_number = _kipris_application_number(_pick(raw, "applicationNumber", "ApplicationNumber", "application_number"))
         registration_number = _kipris_registration_number(_pick(raw, "registrationNumber", "RegistrationNumber", "registration_number"))
-        patent_number = _pick(raw, "patentNumber", "patent_number")
+        patent_number = _pick(
+            raw,
+            "OpeningNumber",
+            "openingNumber",
+            "PublicNumber",
+            "publicationNumber",
+            "patentNumber",
+            "patent_number",
+        )
         external_id = _pick(
             raw,
             "externalId",
             "external_id",
             "SerialNumber",
+            "OpeningNumber",
             "publicationNumber",
             "PublicNumber",
         )

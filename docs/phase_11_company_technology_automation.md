@@ -123,3 +123,36 @@ transient network and HTTP 5xx failures, bounded pages/records, credential-free
 source URLs, and sanitized diagnostics. Authentication and service-denial
 responses are not retried. A KAIA access failure is reported independently and
 does not erase a healthy KIPRIS result.
+
+## Phase 11A-2C Samsung baseline exact identity
+
+The Samsung baseline completion step uses KIPRISPlus's documented exact-number
+operations instead of repeating an applicant-name search:
+
+- `applicationNumberSearchInfo` with `applicationNumber`
+- `registrationNumberSearchInfo` with `registerNumber`
+
+Registration numbers stored as nine significant digits in the public baseline
+are converted to the documented 13-digit query form only at the adapter
+boundary. Application numbers must already resolve to exactly 13 digits. Each
+of Samsung's six patent rows produces at most one exact request, and the step
+does not call KAIA or perform a broad applicant query.
+
+An official result becomes `MATCHED_OFFICIAL` only when its normalized official
+number, title, and Samsung applicant or right-holder attribution agree with the
+baseline. Missing results, insufficient identifiers, and contradictory
+official evidence remain separate decisions; none is silently promoted. The
+accepted Phase 11A-2B direct and adjacent candidates are reconciled only by
+official-number aliases, never by title similarity.
+
+Run the bounded exact lookup after KIPRIS access is configured:
+
+```powershell
+python -m scripts.integrations.technology.baseline_exact `
+  --prior-candidates artifacts/company-technology/samsung-live/credentialed-acceptance/public_projection_candidates.json `
+  --output-dir artifacts/company-technology/samsung-baseline-exact
+```
+
+All outputs remain under gitignored `artifacts/`. The command writes no public
+JSON, stores only sanitized response pages and diagnostics, and records hashes
+for the protected public files before and after the run.
