@@ -11499,132 +11499,239 @@
         "highrise_track_record": null,
         "new_construction_technologies": [
           {
-            "technology_id": "tech-samsung-001",
-            "name": "모듈러의 분절과 내부결합기술을 이용한 최고층의 옥탑 설치 공법",
-            "registration_number": "건설신기술 제1005호",
-            "summary": "철골 모듈·PC 슬래브·연결보·일체형 외장패널로 옥탑을 경량화하고 실내 체결 및 기밀·수밀 확보",
+            "confidence": "high",
             "filed_at": null,
+            "name": "모듈러의 분절과 내부결합기술을 이용한 최고층의 옥탑 설치 공법",
+            "record_type": "construction_new_technology",
             "registered_at": null,
             "registration_date": null,
-            "record_type": "construction_new_technology",
-            "status": "registered",
-            "verification_status": "cross_verified",
-            "confidence": "high",
+            "registration_number": "건설신기술 제1005호",
+            "source_count": 1,
             "source_ids": [
               "manual-verified-samsung-ct-construction-20260716"
             ],
-            "source_count": 1,
+            "status": "registered",
+            "summary": "철골 모듈·PC 슬래브·연결보·일체형 외장패널로 옥탑을 경량화하고 실내 체결 및 기밀·수밀 확보",
+            "technology_id": "tech-samsung-001",
+            "verification_status": "cross_verified",
             "verified_at": "2026-07-16"
           }
         ],
         "patents": [
           {
-            "technology_id": "tech-samsung-002",
+            "application_date": "2021-05-04",
+            "application_number": "10-2021-0058095",
+            "confidence": "high",
+            "filed_at": null,
             "name": "습식공법을 이용한 모듈러 유닛 간 수직 접합구조",
+            "patent_number": "1020220151086",
+            "record_type": "patent",
+            "registered_at": null,
+            "registration_date": "2023-04-10",
             "registration_number": "10-2521464",
+            "source_count": 1,
+            "source_ids": [
+              "manual-verified-samsung-ct-construction-20260716"
+            ],
+            "status": "registered",
             "summary": "강봉·연결플레이트·무수축 모르타르로 수직접합 강성과 횡력 전달 개선",
-            "filed_at": null,
-            "registered_at": null,
-            "registration_date": null,
-            "record_type": "patent",
-            "status": "registered",
+            "technology_id": "tech-samsung-002",
             "verification_status": "cross_verified",
-            "confidence": "high",
-            "source_ids": [
-              "manual-verified-samsung-ct-construction-20260716"
-            ],
-            "source_count": 1,
             "verified_at": "2026-07-16"
           },
           {
-            "technology_id": "tech-samsung-003",
+            "application_date": "2021-05-31",
+            "application_number": "10-2021-0069954",
+            "confidence": "high",
+            "filed_at": null,
             "name": "블록 모듈 및 블록 모듈러 건축물의 시공방법",
+            "record_type": "patent",
+            "registered_at": null,
+            "registration_date": "2022-04-15",
             "registration_number": "10-2388438",
+            "source_count": 1,
+            "source_ids": [
+              "manual-verified-samsung-ct-construction-20260716"
+            ],
+            "status": "registered",
             "summary": "대형 블록 단위 조립으로 기둥·보·바닥·복도 구조를 결합하고 현장 조립공정 단축",
-            "filed_at": null,
-            "registered_at": null,
-            "registration_date": null,
-            "record_type": "patent",
-            "status": "registered",
+            "technology_id": "tech-samsung-003",
             "verification_status": "cross_verified",
-            "confidence": "high",
-            "source_ids": [
-              "manual-verified-samsung-ct-construction-20260716"
-            ],
-            "source_count": 1,
             "verified_at": "2026-07-16"
           },
           {
-            "technology_id": "tech-samsung-004",
+            "application_date": "2022-03-31",
+            "application_number": "10-2022-0040102",
+            "confidence": "high",
+            "filed_at": null,
             "name": "블록 모듈 및 블록 모듈러 건축물의 시공방법",
+            "patent_number": "1020230142045",
+            "record_type": "patent",
+            "registered_at": null,
+            "registration_date": "2024-03-04",
             "registration_number": "10-2644387",
+            "source_count": 1,
+            "source_ids": [
+              "manual-verified-samsung-ct-construction-20260716"
+            ],
+            "status": "registered",
             "summary": "복도와 바닥 연결구조를 개선해 운송성·조립성·공간 활용성 향상",
-            "filed_at": null,
-            "registered_at": null,
-            "registration_date": null,
-            "record_type": "patent",
-            "status": "registered",
+            "technology_id": "tech-samsung-004",
             "verification_status": "cross_verified",
-            "confidence": "high",
-            "source_ids": [
-              "manual-verified-samsung-ct-construction-20260716"
-            ],
-            "source_count": 1,
             "verified_at": "2026-07-16"
           },
           {
-            "technology_id": "tech-samsung-005",
+            "application_date": "2021-07-08",
+            "application_number": "10-2021-0089446",
+            "confidence": "high",
+            "filed_at": null,
             "name": "철골 콘크리트 합성보와 경량 콘크리트 패널이 합성된 바닥 구조체 및 시공방법",
+            "patent_number": "1020230008981",
+            "record_type": "patent",
+            "registered_at": null,
+            "registration_date": "2023-12-06",
             "registration_number": "10-2612179",
+            "source_count": 1,
+            "source_ids": [
+              "manual-verified-samsung-ct-construction-20260716"
+            ],
+            "status": "registered",
             "summary": "철골 합성보와 경량 콘크리트 패널로 바닥 중량을 줄이고 공장 제작률 향상",
-            "filed_at": null,
-            "registered_at": null,
-            "registration_date": null,
-            "record_type": "patent",
-            "status": "registered",
+            "technology_id": "tech-samsung-005",
             "verification_status": "cross_verified",
-            "confidence": "high",
-            "source_ids": [
-              "manual-verified-samsung-ct-construction-20260716"
-            ],
-            "source_count": 1,
             "verified_at": "2026-07-16"
           },
           {
-            "technology_id": "tech-samsung-006",
+            "confidence": "high",
+            "filed_at": null,
             "name": "브래킷을 이용한 모듈러 시스템 접합구조 및 시공방법",
-            "registration_number": "10-1672469",
-            "summary": "브래킷 기반 수직·수평 접합과 복도 패널 연결로 현장 조립성 개선",
-            "filed_at": null,
+            "record_type": "patent",
             "registered_at": null,
             "registration_date": null,
-            "record_type": "patent",
-            "status": "registered",
-            "verification_status": "cross_verified",
-            "confidence": "high",
+            "registration_number": "10-1672469",
+            "source_count": 1,
             "source_ids": [
               "manual-verified-samsung-ct-construction-20260716"
             ],
-            "source_count": 1,
+            "status": "expired",
+            "summary": "브래킷 기반 수직·수평 접합과 복도 패널 연결로 현장 조립성 개선",
+            "technology_id": "tech-samsung-006",
+            "verification_status": "cross_verified",
             "verified_at": "2026-07-16"
           },
           {
-            "technology_id": "tech-samsung-007",
-            "name": "결합플레이트를 이용한 모듈러 시스템 접합구조 및 시공방법",
-            "registration_number": "10-1632681",
-            "summary": "결합플레이트 기반 유닛·복도 패널 접합으로 구조 일체화와 시공성 향상",
+            "confidence": "high",
             "filed_at": null,
+            "name": "결합플레이트를 이용한 모듈러 시스템 접합구조 및 시공방법",
+            "record_type": "patent",
             "registered_at": null,
             "registration_date": null,
-            "record_type": "patent",
-            "status": "registered",
-            "verification_status": "cross_verified",
-            "confidence": "high",
+            "registration_number": "10-1632681",
+            "source_count": 1,
             "source_ids": [
               "manual-verified-samsung-ct-construction-20260716"
             ],
-            "source_count": 1,
+            "status": "expired",
+            "summary": "결합플레이트 기반 유닛·복도 패널 접합으로 구조 일체화와 시공성 향상",
+            "technology_id": "tech-samsung-007",
+            "verification_status": "cross_verified",
             "verified_at": "2026-07-16"
+          },
+          {
+            "application_date": "2023-01-16",
+            "application_number": "10-2023-0005994",
+            "name": "건축물 공간에 수평인필 가능한 층하용 수직 하수배관 일체형 조립구조를 갖춘 모듈러 방식의 프리패브 욕실 포드 및 그 제작방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2025-06-10",
+            "registration_number": "10-2820704",
+            "source_ids": [
+              "samsung-kipris-direct-patents-20260824"
+            ],
+            "status": "registered",
+            "summary": "본 발명은, 건축물 공간에 수평인필 가능한 층하용 수직 하수배관 일체형 조립구조를 갖춘 모듈러 방식의 프리패브 욕실 포드 및 그 제작방법에 관한 것으로, 보다 상세하게는 건축물의 리모델링이나 신축, 증축 작업현장에서 모듈러 방식의 프리패브 욕실 포드를 수평인필 방식으로 조립한 다음에 층하에서 수직 하수배관을 연결할 수 있도록 함으로서 작업효율을 향상시킬 수 있도록 발명한 것이다.  본 발명은, 욕실 평면에 맞춰 바닥외측지지대(11)가 테두리를 형성하고, 상기 바닥외측지지대(11)의 내측에 다수개의 바닥보강지지대(12)가 배치되면서, 상면에 바닥마감판(13)이 고정 설치되는 바닥프레임(10)과;  상기 바닥마감판(13)의 상면에 설치되어, 건식공간(21)과 습식공간(23)을 구분하는 구획부재(20)와;  상기 바닥외측지지대(11) 따라 수직지지대(31)가 고정 설치되며, 상기 수직지지대(31)의 내측면을 따라 측벽패널(33)이 구비되고, 상기 측벽패널(33)의 어느 일측에 건식공간(21)과 연결되는 욕실출입구(34)가 형성된 측벽프레임(30)과;  욕실 평면에 맞춰 천장외측지지대(41)가 수직지지대(31)의 상단에 고정되며, 다수개의 천장보강지지대(42)가 배치되어 내측면에 천장패널(43)이 형성된 천장프레임(40)과;  상기 건식공간(21)의 바닥마감판(13) 상부에 설치되는 건식 바닥마감부재(22...(이하생략)",
+            "technology_area": "E04B 1/348|E04B 1/343|E03F 5/04|E03C 1/122",
+            "technology_id": "tech-samsung-kipris-1020230005994"
+          },
+          {
+            "application_date": "2023-01-16",
+            "application_number": "10-2023-0005995",
+            "name": "건축물 공간에 수평인필 가능한 층상용 수평 하수배관 일체형 조립구조를 갖춘 모듈러 방식의 프리패브 욕실 포드 및 그 제작방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2025-10-24",
+            "registration_number": "10-2878043",
+            "source_ids": [
+              "samsung-kipris-direct-patents-20260824"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 건축물 공간에 수평인필 가능한 층상용 수평 하수배관 일체형 조립구조를 갖춘 모듈러 방식의 프리패브 욕실 포드 및 그 제작방법에 관한 것으로, 보다 상세하게는 건축물의 리모델링이나 신축, 증축 작업현장에서 모듈러 방식의 프리패브 욕실 포드를 수평인필 방식으로 조립하며, 수평 하수배관을 건물메인배관에 간편하게 연결할 수 있도록 함으로서 작업효율을 향상시킬 수 있도록 발명한 것이다.  본 발명은, 욕실 평면에 맞춰 바닥외측지지대(11)가 테두리를 형성하고, 상기 바닥외측지지대(11)의 내측에 다수개의 바닥보강지지대(12)가 배치되면서, 상면에 바닥마감판(13)이 고정 설치되는 바닥프레임(10)과;  상기 바닥마감판(13)의 상면에 설치되어, 건식공간(21)과 습식공간(23)을 구분하는 구획프레임(20)과;  상기 바닥외측지지대(11) 따라 수직지지대(31)가 고정 설치되며, 상기 수직지지대(31)의 내측면을 따라 측벽패널(33)이 구비되고, 상기 측벽패널(33)의 어느 일측에 건식공간(21)과 연결되는 욕실출입구(34)가 형성된 측벽프레임(30)과;  욕실 평면에 맞춰 천장외측지지대(41)가 수직지지대(31)의 상단에 고정되며, 다수개의 천장보강지지대(42)가 배치되어 내측면에 천장패널(43)이 형성된 천장프레임(40)과;  상기 건식공간(21)의 바닥마감판(13) 상부에 설치되는 건식 바닥마...(이하생략)",
+            "technology_area": "E04B 1/348|E04B 1/343|E03F 5/04|E03C 1/122",
+            "technology_id": "tech-samsung-kipris-1020230005995"
+          },
+          {
+            "application_date": "2023-04-18",
+            "application_number": "10-2023-0050560",
+            "name": "바닥용 모듈러 구조물 및 바닥물 모듈러 구조물의 제조방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2025-07-24",
+            "registration_number": "10-2839660",
+            "source_ids": [
+              "samsung-kipris-direct-patents-20260824"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 바닥용 모듈러 구조물 및 바닥물 모듈러 구조물의 제조방법에 관한 것으로, 골조를 형성하는 프레임부와, 프레임부의 길이방향으로 배치되어 프레임부와 결합되는 하나 이상의 보강부를 포함하여, 최적화된 층고절감형 바닥시스템 제작이 가능하다.",
+            "technology_area": "E04B 1/343|E04B 5/04|E04B 5/16|E04B 5/43|E04B 1/98",
+            "technology_id": "tech-samsung-kipris-1020230050560"
+          },
+          {
+            "application_date": "2023-04-18",
+            "application_number": "10-2023-0050561",
+            "name": "바닥용 모듈러 구조물 및 바닥물 모듈러 구조물의 제조방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2025-07-24",
+            "registration_number": "10-2839661",
+            "source_ids": [
+              "samsung-kipris-direct-patents-20260824"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 바닥용 모듈러 구조물 및 바닥물 모듈러 구조물의 제조방법에 관한 것으로, 골조를 형성하는 프레임부와, 프레임부의 폭방향으로 배치되어 프레임부와 결합되는 하나 이상의 보강부와, 보강부 사이에 배치되는 하부지지부와, 보강부와 하부지지부에 지지되는 바닥부를 포함하여, 가변평면설계에 대응될 수 있다.",
+            "technology_area": "E04B 1/343",
+            "technology_id": "tech-samsung-kipris-1020230050561"
+          },
+          {
+            "application_date": "2023-07-14",
+            "application_number": "10-2023-0091868",
+            "name": "건축용 모듈러 구조물 제작을 위한 3D 지그",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2025-10-01",
+            "registration_number": "10-2869353",
+            "source_ids": [
+              "samsung-kipris-direct-patents-20260824"
+            ],
+            "status": "registered",
+            "summary": "본 발명의 실시예에 따른 건축용 모듈러 구조물을 제작하기 위한 3D 지그는 제1방향으로 배치되고 서로 평행하게 정렬된 제1베이스레일 및 제2베이스레일을 포함하는 베이스, 모듈러 구조물의 부재를 파지하기 위한 클램프를 포함하고, 제1베이스레일 또는 제2베이스레일의 상부에 배치되며, 모듈러 구조물의 제1방향의 크기에 대응하여 제1베이스레일 또는 제2베이스레일 상에서 제1방향으로 위치 변경이 가능한 포스트, 상단에 고정핀을 포함하고, 모듈러 구조물의 바닥부에 포함되는 부재의 하부에 형성되는 접합홀에 고정핀이 안착되도록 하여 모듈러 구조물을 베이스에 고정되도록 하며, 베이스의 상면에 임의의 위치에 탈부착이 가능하도록 결합되는 로케이터를 포함하고, 포스트는 하부에 제2방향으로 배치된 포스트LM가이드를 포함하고, 포스트LM가이드 상부에 배치된 포스트의 상부는 모듈러 구조물의 제2방향의 크기에 대응하여 포스트LM가이드를 통해 제2방향으로 위치 변경이 가능함으로써 클램프가 모듈러 구조물 부재를 정확한 위치에 정확한 수평 또는 수직을 이루도록 파지하여 고정함으로써 정밀한 용접 또는 결합 작업을 가능하게 하고, 다양한 크기의 모듈러 구조물에 대응하여 용이하고 정확한 제작을 가능하도록 한다.",
+            "technology_area": "E04G 21/18|E04B 1/348",
+            "technology_id": "tech-samsung-kipris-1020230091868"
+          },
+          {
+            "application_date": "2023-08-11",
+            "application_number": "10-2023-0105666",
+            "name": "모듈러 건축용 합성바닥모듈 및 이를 이용한 모듈러 건축물의 시공방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2025-07-23",
+            "registration_number": "10-2839471",
+            "source_ids": [
+              "samsung-kipris-direct-patents-20260824"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 상부 건축용 모듈 또는 하부 건축용 모듈을 포함하는 복수의 건축용 모듈의 적층 조립에 의해 형성되는 모듈러 건축물에 사용됨과 아울러, 상기 건축용 모듈의 바닥부를 형성하기 위한 바닥모듈(100)에 관한 것으로서, 콘크리트 재질에 의해 형성된 본체부(110); 강재에 의해 형성됨과 아울러, 상기 본체부(110)의 가장자리를 둘러싸도록 설치된 바닥 프레임(120);을 포함하고, 상기 바닥 프레임(120)에는 상기 하부 건축용 모듈의 천장 프레임(200)과 결합하기 위한 천장 프레임 결합부(140)가 형성된 것을 특징으로 하는 모듈러 건축용 바닥모듈(100)을 제시함으로써, 상부 건축용 모듈의 바닥 구조물과 하부 건축용 모듈의 천장 구조물이 별도 부재로 형성되어, 운반, 분해 및 조립이 가능한 합성구조를 취하도록 함에 따라, 우수한 운송효율, 시공성 및 경제성을 얻도록 한다.",
+            "technology_area": "E04B 1/343|E04B 1/24",
+            "technology_id": "tech-samsung-kipris-1020230105666"
           }
         ],
         "innovative_procurement_products": [],
@@ -11933,6 +12040,25 @@
             "capacity_value"
           ],
           "visibility": "internal"
+        },
+        {
+          "source_id": "samsung-kipris-direct-patents-20260824",
+          "source_type": "patent",
+          "source_name": "KIPRIS Plus",
+          "title": "삼성물산 직접 관련 모듈러 특허 6건 공식 확인",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "published_at": "2025-10-24",
+          "accessed_at": "2026-08-24T02:24:32+00:00",
+          "publisher": "KIPRIS Plus",
+          "primary_source": true,
+          "confidence": "high",
+          "verification_note": "Accepted KIPRIS applicant and patent identity evidence for six direct modular patent records.",
+          "supported_claims": [
+            "technology",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "visibility": "public"
         }
       ],
       "intelligence_v2": {
