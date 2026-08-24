@@ -28,7 +28,15 @@ KIPRIS_REGISTRATION_EXACT_ENDPOINT = (
     "https://plus.kipris.or.kr/openapi/rest/"
     "patUtiModInfoSearchSevice/registrationNumberSearchInfo"
 )
+KIPRIS_LEGAL_STATUS_BASE_ENDPOINT = (
+    "https://plus.kipris.or.kr/openapi/rest/legStatusST27InfoSearchService"
+)
+KIPRIS_LEGAL_STATUS_BASIC_ENDPOINT = f"{KIPRIS_LEGAL_STATUS_BASE_ENDPOINT}/BasicInfo"
+KIPRIS_LEGAL_STATUS_STOP_RIGHT_ENDPOINT = f"{KIPRIS_LEGAL_STATUS_BASE_ENDPOINT}/StopRightInfo"
 KIPRIS_SOURCE_URL = "https://plus.kipris.or.kr/portal/search/clasList/List.do"
+KIPRIS_LEGAL_STATUS_SOURCE_URL = (
+    "https://plus.kipris.or.kr/portal/data/service/DBII_000000000000540/view.do"
+)
 KAIA_NEWTECH_ENDPOINT = "https://www.kaia.re.kr/portal/openApi/newtecListData.xml"
 KAIA_SOURCE_URL = "https://www.kaia.re.kr/portal/bbs/view/B0000007/3494.do?menuNo=200026"
 
@@ -220,6 +228,74 @@ def parse_kipris_exact_response(
 ) -> tuple[list[dict[str, Any]], int, set[str], str | None]:
     """Parse the documented exact-number operations, which share the patent row schema."""
     return parse_kipris_applicant_response(content, collected_at=collected_at)
+
+
+def parse_kipris_legal_status_response(
+    content: bytes | str,
+    *,
+    operation: str,
+    collected_at: str | None = None,
+) -> tuple[list[dict[str, Any]], int, set[str], str | None]:
+    """Parse KIPRISPlus ST.27 basic or right-termination history rows."""
+    item_names = {
+        "basic": "legalstatusst27info",
+        "stop_right": "legalstatusst27stoprightinfo",
+    }
+    if operation not in item_names:
+        raise ValueError(f"unsupported KIPRIS legal-status operation={operation!r}")
+
+    root = _parse_xml(content, source="kipris_st27")
+    result_code = _first_text(root, ("resultCode", "returnReasonCode", "errorCode"))
+    result_message = _first_text(root, ("resultMsg", "returnAuthMsg", "errorMessage"))
+    if result_code and result_code not in {"0", "00"}:
+        category = _api_error_category(result_code, result_message)
+        raise TechnologyApiError(
+            "KIPRISPlus ST.27 API rejected the request",
+            {
+                "status": category,
+                "error_category": category,
+                "api_result_code": result_code,
+            },
+        )
+
+    elements = [
+        element
+        for element in root.iter()
+        if _local_name(element.tag).casefold() == item_names[operation]
+    ]
+    if not elements:
+        required = {"applicationnumber", "eventdate"} if operation == "basic" else {
+            "applicationnumber",
+            "terminationregistrationcausedate",
+            "terminationregistrationcausename",
+        }
+        elements = _candidate_elements(root, required)
+
+    rows: list[dict[str, Any]] = []
+    observed_fields: set[str] = set()
+    for element in elements:
+        row = _children_as_dict(element)
+        if not row.get("applicationNumber"):
+            continue
+        observed_fields.update(row)
+        row["source"] = "kipris_st27"
+        row["operation"] = operation
+        row["sourceUrl"] = KIPRIS_LEGAL_STATUS_SOURCE_URL
+        if collected_at:
+            row["collectedAt"] = collected_at
+        rows.append(row)
+
+    total_text = _first_text(root, ("totalSearchCount", "TotalSearchCount", "totalCount"))
+    try:
+        total_count = int(total_text or len(rows))
+    except ValueError:
+        total_count = len(rows)
+    if total_count > 0 and not rows:
+        raise TechnologyApiError(
+            "KIPRISPlus ST.27 response did not contain documented history rows",
+            {"status": "schema_error", "error_category": "schema_error"},
+        )
+    return rows, total_count, observed_fields, result_code
 
 
 def normalize_kipris_exact_query_identifier(value: str, lookup_type: str) -> str:
@@ -530,6 +606,86 @@ class KiprisExactLookupClient(_BoundedXmlClient):
             )
             diagnostic.undocumented_sample_fields = sorted(
                 observed_fields - self.documented_fields - {"source", "sourceUrl", "collectedAt"}
+            )
+            diagnostic.status = "healthy" if records else "empty_result"
+            return TechnologyCollectionResult(self.source, records, raw_pages, diagnostic)
+        except (TechnologyApiError, TechnologyTransportError) as exc:
+            _apply_error(diagnostic, exc)
+            return TechnologyCollectionResult(self.source, [], [], diagnostic)
+
+
+class KiprisLegalStatusClient(_BoundedXmlClient):
+    source = "kipris_st27"
+    endpoint = KIPRIS_LEGAL_STATUS_BASIC_ENDPOINT
+    secret_env = KIPRIS_API_KEY_ENV
+    endpoints = {
+        "basic": KIPRIS_LEGAL_STATUS_BASIC_ENDPOINT,
+        "stop_right": KIPRIS_LEGAL_STATUS_STOP_RIGHT_ENDPOINT,
+    }
+    documented_fields = {
+        "basic": {
+            "applicationNumber", "supplySerialNumber", "rightTypeCode", "applicationDate",
+            "openNumber", "openingDate", "registrationNumber", "registrationDate",
+            "publicationNumber", "publicationDate", "trialNumber", "demurrerNumber",
+            "keyEventCode", "detailLawEventCode", "stateCode", "previousStageCode",
+            "currentStageCode", "eventIndicatorCode", "nationalEventCode", "eventDate",
+        },
+        "stop_right": {
+            "applicationNumber", "SerialNumber", "terminationRegistrationCauseDate",
+            "terminationRegistrationCauseName",
+        },
+    }
+
+    def lookup(
+        self,
+        operation: str,
+        application_number: str,
+        *,
+        collected_at: str | None = None,
+    ) -> TechnologyCollectionResult:
+        if operation not in self.endpoints:
+            raise ValueError(f"unsupported KIPRIS legal-status operation={operation!r}")
+        endpoint = self.endpoints[operation]
+        query_identifier = normalize_kipris_exact_query_identifier(
+            application_number, "application_number"
+        )
+        diagnostic = _new_diagnostic(self.source, endpoint, self.configured())
+        diagnostic.query_metrics = [{
+            "operation": operation,
+            "lookup_identifier": query_identifier,
+            "query_attempted": False,
+            "received_count": 0,
+        }]
+        if not self.configured():
+            diagnostic.status = "authentication_denied"
+            diagnostic.error_category = "missing_secret"
+            return TechnologyCollectionResult(self.source, [], [], diagnostic)
+
+        diagnostic.request_attempted = True
+        diagnostic.pages_requested = 1
+        diagnostic.query_metrics[0]["query_attempted"] = True
+        try:
+            response, attempts = self._get_at(endpoint, {
+                "applicationNumber": query_identifier,
+                "accessKey": self.api_key,
+            })
+            diagnostic.attempt_count = attempts
+            diagnostic.http_status = int(getattr(response, "status_code", 0))
+            raw_pages = [sanitize_response_text(response, secrets=(self.api_key,))]
+            records, _, observed_fields, result_code = parse_kipris_legal_status_response(
+                getattr(response, "content", b""),
+                operation=operation,
+                collected_at=collected_at,
+            )
+            records = _stable_unique_raw(records)
+            documented = self.documented_fields[operation]
+            diagnostic.api_result_code = result_code
+            diagnostic.received_count = len(records)
+            diagnostic.query_metrics[0]["received_count"] = len(records)
+            diagnostic.observed_fields = sorted(observed_fields)
+            diagnostic.documented_fields_missing_from_sample = sorted(documented - observed_fields)
+            diagnostic.undocumented_sample_fields = sorted(
+                observed_fields - documented - {"source", "operation", "sourceUrl", "collectedAt"}
             )
             diagnostic.status = "healthy" if records else "empty_result"
             return TechnologyCollectionResult(self.source, records, raw_pages, diagnostic)
