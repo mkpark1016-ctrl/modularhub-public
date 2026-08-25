@@ -1,0 +1,79 @@
+{
+  "schema_version": "multi-company-kipris-readiness-v1",
+  "artifact_root": "artifacts/company-technology/multi-company-live/<company-id>/",
+  "publication_sequence": ["gs-ec", "hyundai-engineering", "dl-enc"],
+  "request_defaults": {
+    "max_pages_per_alias": 1,
+    "page_size": 100,
+    "max_records": 200
+  },
+  "companies": [
+    {
+      "company_id": "gs-ec",
+      "canonical_applicant": "지에스건설 주식회사",
+      "approved_aliases": [
+        {"value": "지에스건설 주식회사", "kind": "exact_legal_name", "reason": "Repository DART identity registry legal name", "order": 1, "live_enabled": true},
+        {"value": "지에스건설", "kind": "normalized_exact_alias", "reason": "Corporate-form-normalized legal name in the identity policy", "order": 2, "live_enabled": true},
+        {"value": "GS건설", "kind": "curated_display_alias", "reason": "Canonical ModularHub display name", "order": 3, "live_enabled": true}
+      ],
+      "historical_alias_candidates": [],
+      "excluded_aliases": [
+        {"value": "GS리테일", "reason": "Separate GS group company"},
+        {"value": "GS칼텍스", "reason": "Separate GS group company"},
+        {"value": "GS글로벌", "reason": "Separate GS group company"}
+      ],
+      "ambiguous_aliases": [
+        {"value": "GS", "reason": "Group-level token shared by multiple legal entities"}
+      ],
+      "false_positive_risks": [
+        {"domain": "GS group electronics, energy and retail inventions", "reason": "A group-only applicant token can attribute another GS entity to GS E&C", "existing_rule_coverage": "Approved exact aliases and excluded entities", "additional_rule_required": false}
+      ]
+    },
+    {
+      "company_id": "hyundai-engineering",
+      "canonical_applicant": "현대엔지니어링 주식회사",
+      "approved_aliases": [
+        {"value": "현대엔지니어링 주식회사", "kind": "exact_legal_name", "reason": "Repository DART identity registry legal name", "order": 1, "live_enabled": true},
+        {"value": "현대엔지니어링", "kind": "normalized_exact_alias", "reason": "Corporate-form-normalized legal name and ModularHub display name", "order": 2, "live_enabled": true},
+        {"value": "Hyundai Engineering", "kind": "curated_english_alias", "reason": "Existing canonical English alias in companies.json", "order": 3, "live_enabled": true}
+      ],
+      "historical_alias_candidates": [],
+      "excluded_aliases": [
+        {"value": "현대건설", "reason": "Separate Hyundai group contractor"},
+        {"value": "현대자동차", "reason": "Separate Hyundai group company"},
+        {"value": "현대엔지니어링서비스", "reason": "Separate similarly named entity"}
+      ],
+      "ambiguous_aliases": [
+        {"value": "현대", "reason": "Group-level token shared by many legal entities"},
+        {"value": "현대ENG", "reason": "Unverified abbreviation that can collide with Hyundai group references"}
+      ],
+      "false_positive_risks": [
+        {"domain": "Hyundai group construction, automotive, software and equipment inventions", "reason": "Hyundai group names and generic engineering modules can be mistaken for building modular technology", "existing_rule_coverage": "Exact applicant isolation and deterministic construction-context relevance", "additional_rule_required": false}
+      ]
+    },
+    {
+      "company_id": "dl-enc",
+      "canonical_applicant": "디엘이앤씨 주식회사",
+      "approved_aliases": [
+        {"value": "디엘이앤씨 주식회사", "kind": "exact_legal_name", "reason": "Repository DART identity registry legal name", "order": 1, "live_enabled": true},
+        {"value": "디엘이앤씨", "kind": "normalized_exact_alias", "reason": "Corporate-form-normalized legal name in the identity policy", "order": 2, "live_enabled": true},
+        {"value": "DL이앤씨", "kind": "curated_display_alias", "reason": "Canonical ModularHub display name", "order": 3, "live_enabled": true}
+      ],
+      "historical_alias_candidates": [
+        {"value": "대림산업 주식회사", "kind": "historical_legal_name_candidate", "reason": "Repository identity policy records 대림산업 as a former name; pre-split attribution still requires explicit review", "live_enabled": false},
+        {"value": "대림산업", "kind": "historical_normalized_candidate", "reason": "Normalized former-name candidate; never included in broad collection without explicit approval", "live_enabled": false}
+      ],
+      "excluded_aliases": [
+        {"value": "DL건설", "reason": "Separate DL group contractor"},
+        {"value": "DL케미칼", "reason": "Separate DL group company"}
+      ],
+      "ambiguous_aliases": [
+        {"value": "DL", "reason": "Group-level token shared by multiple legal entities"},
+        {"value": "대림", "reason": "Broad historical group token without entity-level attribution"}
+      ],
+      "false_positive_risks": [
+        {"domain": "DL group chemical, construction and predecessor-company inventions", "reason": "Modern group entities and pre-split Daelim Industrial rights require entity-level attribution", "existing_rule_coverage": "Modern exact aliases; historical names are explicit-only and disabled", "additional_rule_required": false}
+      ]
+    }
+  ]
+}
