@@ -471,8 +471,17 @@ class KiprisLiveClient(_BoundedXmlClient):
         page_size: int = DEFAULT_PAGE_SIZE,
         max_pages: int = DEFAULT_MAX_PAGES,
         max_records: int = DEFAULT_MAX_RECORDS,
+        start_offset: int = 1,
+        continuation: bool = False,
         collected_at: str | None = None,
     ) -> TechnologyCollectionResult:
+        if page_size < 1 or max_pages < 1 or max_records < 1:
+            raise ValueError("KIPRIS pagination bounds must be positive")
+        if start_offset < 1:
+            raise ValueError("KIPRIS start_offset must be positive")
+        if continuation and start_offset == 1:
+            raise ValueError("KIPRIS continuation must not request the accepted first page")
+
         diagnostic = _new_diagnostic(self.source, self.endpoint, self.configured())
         if not self.configured():
             diagnostic.status = "authentication_denied"
@@ -487,6 +496,7 @@ class KiprisLiveClient(_BoundedXmlClient):
         try:
             for alias in aliases:
                 query_identities: set[str] = set()
+                reported_total: int | None = None
                 query_metric = {
                     "alias": alias,
                     "query_attempted": False,
@@ -494,12 +504,15 @@ class KiprisLiveClient(_BoundedXmlClient):
                     "unique_application_identity_count": 0,
                 }
                 diagnostic.query_metrics.append(query_metric)
-                for page in range(1, max_pages + 1):
+                for page_index in range(max_pages):
                     if len(records) >= max_records:
+                        break
+                    docs_start = start_offset + (page_index * page_size)
+                    if reported_total is not None and docs_start > reported_total:
                         break
                     params = {
                         "applicant": alias,
-                        "docsStart": ((page - 1) * page_size) + 1,
+                        "docsStart": docs_start,
                         "docsCount": min(page_size, max_records - len(records)),
                         "patent": "true",
                         "utility": "false",
@@ -518,6 +531,7 @@ class KiprisLiveClient(_BoundedXmlClient):
                         collected_at=collected_at,
                     )
                     diagnostic.api_result_code = result_code
+                    reported_total = total
                     observed_fields.update(fields)
                     query_metric["received_count"] += len(page_rows)
                     query_identities.update(
@@ -527,7 +541,7 @@ class KiprisLiveClient(_BoundedXmlClient):
                     )
                     query_metric["unique_application_identity_count"] = len(query_identities)
                     records.extend(page_rows[: max_records - len(records)])
-                    if not page_rows or page * page_size >= total:
+                    if not page_rows or docs_start + len(page_rows) - 1 >= total:
                         break
         except (TechnologyApiError, TechnologyTransportError) as exc:
             _apply_error(diagnostic, exc)

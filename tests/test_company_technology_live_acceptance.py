@@ -199,6 +199,75 @@ def test_kipris_docs_start_uses_record_offset_for_full_pages() -> None:
     assert starts == [1, 101]
 
 
+def test_kipris_continuation_uses_bounded_offsets_without_first_page() -> None:
+    starts = []
+    counts = []
+
+    def request_get(url, *, params, timeout):
+        starts.append(params["docsStart"])
+        counts.append(params["docsCount"])
+        return FakeResponse(single_kipris_xml(
+            serial=f"continuation-{params['docsStart']}",
+            application=f"102026{params['docsStart']:07d}",
+            registration=f"1027{params['docsStart']:05d}0000",
+            total=678,
+        ))
+
+    result = KiprisLiveClient(
+        api_key="fixture-key",
+        request_get=request_get,
+    ).collect(
+        ["지에스건설 주식회사"],
+        page_size=100,
+        max_pages=6,
+        max_records=600,
+        start_offset=101,
+        continuation=True,
+    )
+
+    assert starts == [101, 201, 301, 401, 501, 601]
+    assert 1 not in starts
+    assert counts == [100] * 6
+    assert result.diagnostic.pages_requested == 6
+
+
+def test_kipris_continuation_rejects_first_page() -> None:
+    with pytest.raises(ValueError, match="must not request the accepted first page"):
+        KiprisLiveClient(api_key="fixture-key").collect(
+            ["지에스건설 주식회사"],
+            start_offset=1,
+            continuation=True,
+        )
+
+
+def test_kipris_continuation_stops_before_offset_beyond_reported_total() -> None:
+    starts = []
+
+    def request_get(url, *, params, timeout):
+        starts.append(params["docsStart"])
+        return FakeResponse(single_kipris_xml(
+            serial="continuation-final",
+            application="1020260000101",
+            registration="1027001010000",
+            total=150,
+        ))
+
+    result = KiprisLiveClient(
+        api_key="fixture-key",
+        request_get=request_get,
+    ).collect(
+        ["지에스건설 주식회사"],
+        page_size=100,
+        max_pages=6,
+        max_records=600,
+        start_offset=101,
+        continuation=True,
+    )
+
+    assert starts == [101]
+    assert result.diagnostic.pages_requested == 1
+
+
 def test_kipris_alias_metrics_preserve_unattempted_queries_after_record_bound() -> None:
     result = KiprisLiveClient(
         api_key="fixture-key",
