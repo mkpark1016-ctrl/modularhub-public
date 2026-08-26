@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+import pytest
+
+from scripts.integrations.technology.adapters import KiprisFixtureAdapter
+from scripts.integrations.technology.gs_public_projection import (
+    build_evidence_resolution_report,
+    build_public_evidence_source_candidate,
+)
+from scripts.integrations.technology.live_sources import KIPRIS_SOURCE_URL
 from scripts.integrations.technology.public_projection import (
     CompanyProjectionPolicy,
     build_company_public_projection,
+    build_public_evidence_source_id,
     build_samsung_public_projection,
     deterministic_technology_id,
 )
@@ -109,6 +118,7 @@ def test_generic_projection_accepts_registered_candidate_for_non_samsung_company
     assert result["metrics"]["candidate_total"] == 2
     assert new["technology_id"] == "tech-example-builder-kipris-1020240000001"
     assert result["registered_candidate_report"][0]["publication_decision"] == "net_new_public_candidate"
+    assert new["source_ids"] == ["official:kipris:patent:1020240000001"]
 
 
 def test_deterministic_id_uses_company_source_and_official_identity_not_title() -> None:
@@ -120,6 +130,51 @@ def test_deterministic_id_uses_company_source_and_official_identity_not_title() 
     row_a = _candidate("patent:1020240000002", title="Original title")
     row_b = _candidate("patent:1020240000002", title="Renamed title")
     assert _project(candidates=[row_a])["candidate_company_technology"]["technology"]["patents"][-1]["technology_id"] == _project(candidates=[row_b])["candidate_company_technology"]["technology"]["patents"][-1]["technology_id"]
+
+
+def test_kipris_serial_number_never_defines_public_evidence_identity() -> None:
+    adapter = KiprisFixtureAdapter()
+    raw = {
+        "SerialNumber": "11",
+        "ApplicationNumber": "1020220067854",
+        "RegistrationNumber": "1027238310000",
+        "InventionName": "Original title",
+        "Applicant": "Example Builder Inc.",
+        "RegistrationStatus": "등록",
+    }
+    first = adapter.normalize_raw_record(raw)
+    second = adapter.normalize_raw_record({**raw, "SerialNumber": "611", "InventionName": "Renamed title"})
+    assert first.external_id == "11"
+    assert second.external_id == "611"
+    assert first.identity_key() == second.identity_key() == "patent:1020220067854"
+    assert build_public_evidence_source_id("kipris", "patent", first.identity_key()) == build_public_evidence_source_id("kipris", "patent", second.identity_key())
+
+
+def test_official_identity_wins_even_when_serial_number_is_reused() -> None:
+    adapter = KiprisFixtureAdapter()
+    common = {
+        "SerialNumber": "11",
+        "RegistrationNumber": "1027238310000",
+        "InventionName": "Patent title",
+        "Applicant": "Example Builder Inc.",
+        "RegistrationStatus": "등록",
+    }
+    first_record = adapter.normalize_raw_record({**common, "ApplicationNumber": "1020220067854"})
+    second_record = adapter.normalize_raw_record({**common, "ApplicationNumber": "1020220119658"})
+    assert first_record.external_id == second_record.external_id == "11"
+    first = build_public_evidence_source_id("kipris", "patent", first_record.identity_key())
+    second = build_public_evidence_source_id("kipris", "patent", second_record.identity_key())
+    assert first == "official:kipris:patent:1020220067854"
+    assert second == "official:kipris:patent:1020220119658"
+    assert first != second
+
+
+def test_title_is_not_part_of_public_evidence_identity() -> None:
+    before = _candidate("patent:1020230177479", title="First title")
+    after = _candidate("patent:1020230177479", title="Changed title")
+    first = build_public_evidence_source_id(before["source"], before["record_type"], before["official_identity"])
+    second = build_public_evidence_source_id(after["source"], after["record_type"], after["official_identity"])
+    assert first == second
 
 
 def test_published_application_is_review_only_under_policy_a() -> None:
@@ -163,6 +218,70 @@ def test_credential_bearing_url_is_filtered() -> None:
     assert "credential_url" in result["registered_candidate_report"][0]["filter_reason"]
 
 
+def test_gs_registered_evidence_candidates_resolve_four_of_four() -> None:
+    identities = (
+        "patent:1020220067854",
+        "patent:1020220119658",
+        "patent:1020230177479",
+        "patent:1020230181617",
+    )
+    candidates = []
+    for identity in identities:
+        row = _candidate(identity, company_id="gs-ec")
+        row["source_url"] = KIPRIS_SOURCE_URL
+        candidates.append(row)
+    company = _baseline("gs-ec", 3)
+    for patent in company["technology"]["patents"]:
+        patent["source_ids"] = ["manual-verified-gs-ec-20260716"]
+    result = _project(
+        company=company,
+        exact=_exact("gs-ec", 3),
+        candidates=candidates,
+        policy=CompanyProjectionPolicy(company_id="gs-ec"),
+    )
+    public_sources = [build_public_evidence_source_candidate(row) for row in candidates]
+    candidate_company = {
+        **company,
+        "technology": result["candidate_company_technology"]["technology"],
+        "sources": [
+            {"source_id": "manual-verified-gs-ec-20260716"},
+            *public_sources,
+        ],
+    }
+    resolution = build_evidence_resolution_report(
+        candidate_company,
+        result["candidate_company_technology"]["technology"]["patents"],
+    )
+    stable_ids = [source["source_id"] for source in public_sources]
+    assert stable_ids == [
+        "official:kipris:patent:1020220067854",
+        "official:kipris:patent:1020220119658",
+        "official:kipris:patent:1020230177479",
+        "official:kipris:patent:1020230181617",
+    ]
+    assert len(set(stable_ids)) == 4
+    assert all("upstream_source_ids" not in source for source in public_sources)
+    assert all(
+        report["public_source_ids"] == report["source_ids"]
+        for report in result["registered_candidate_report"]
+    )
+    assert resolution["linked_count"] == 4
+    assert resolution["source_pending_count"] == 0
+    assert resolution["duplicate_source_id_count"] == 0
+    existing = result["candidate_company_technology"]["technology"]["patents"][:3]
+    assert all(row["source_ids"] == ["manual-verified-gs-ec-20260716"] for row in existing)
+
+
+def test_public_evidence_source_rejects_credential_and_local_urls() -> None:
+    row = _candidate("patent:1020230181617", company_id="gs-ec")
+    row["source_url"] = "https://reader:synthetic@example.test/patent"
+    with pytest.raises(ValueError):
+        build_public_evidence_source_candidate(row)
+    row["source_url"] = "D:/synthetic/artifact.json"
+    with pytest.raises(ValueError):
+        build_public_evidence_source_candidate(row)
+
+
 def test_samsung_wrapper_preserves_schema_and_id_namespace() -> None:
     company = _baseline("samsung-ct-construction", 6)
     company["technology"]["new_construction_technologies"] = [{
@@ -191,6 +310,9 @@ def test_samsung_wrapper_preserves_schema_and_id_namespace() -> None:
     }
     assert result["candidate_company_technology"]["schema_version"] == "samsung-technology-public-projection-v1"
     assert result["candidate_company_technology"]["technology"]["patents"][-1]["technology_id"] == "tech-samsung-kipris-1020240000007"
+    assert result["candidate_company_technology"]["technology"]["patents"][-1]["source_ids"] == [
+        "official:kipris:1020240000007"
+    ]
 
 
 def test_samsung_wrapper_preserves_thirteen_record_projection_contract() -> None:

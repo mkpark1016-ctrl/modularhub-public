@@ -6,6 +6,16 @@ The technology projection layer has a company-generic core. Company behavior is 
 
 New technology IDs use the normalized tuple `company_id + source + official_identity`. A title change therefore does not change identity, while the same official record projected for two companies cannot collide. The Samsung compatibility wrapper supplies its historical `samsung` namespace so existing `tech-samsung-kipris-*` identifiers remain unchanged.
 
+Technology collection and public evidence use three deliberately separate identities:
+
+- The live transport `external_id` is collection provenance. For KIPRIS it can be a result `SerialNumber`, so pagination or query changes can change it.
+- The official patent identity is application-number based, such as `patent:1020220067854`.
+- The public evidence source ID is derived from source, record type, and official identity, such as `official:kipris:patent:1020220067854`.
+
+KIPRIS `SerialNumber`, applicant query, pagination position, timestamps, company display names, and patent titles are never public evidence identity inputs. Upstream artifacts retain their transport-based source IDs for provenance, while the public projection report records the mapping from `upstream_source_ids` to `public_source_ids`.
+
+Existing Samsung production records keep their legacy source IDs and evidence registry. The Samsung compatibility policy does not migrate those IDs.
+
 ## Projection policy
 
 The policy explicitly controls allowed new record types, allowed lifecycle statuses, safe enrichment fields, status-update permission, and treatment of published applications. Existing non-empty fields are never overwritten: disagreement with official evidence makes the whole record enrichment a conflict and rolls it back.
@@ -32,6 +42,8 @@ Run from the repository root:
 The runner consumes only the accepted Phase 11B-3B final-reconciliation JSON artifacts. It performs no KIPRIS, KAIA, ST27, or LLM request and does not write public JSON. Its accepted contract is baseline 3, enriched existing 3, registered new 4, published review 3, adjacent review 186, wrong-applicant exclusion 3, and final candidate total 7.
 
 Outputs are written beneath `artifacts/company-technology/gs-public-projection-dry-run/` and include candidate, diff, registered, published-review, adjacent-review, excluded-applicant, summary, report, and security-audit artifacts. Protected public file hashes are captured before and after the run and must remain identical.
+
+The GS dry-run also emits public-safe evidence source candidates and an evidence-resolution report. Each registered patent source uses the credential-free KIPRIS portal URL plus its accepted title and application number as display metadata. The runner resolves these sources against an in-memory company candidate; it does not write `companies.json`.
 
 ## Samsung compatibility
 

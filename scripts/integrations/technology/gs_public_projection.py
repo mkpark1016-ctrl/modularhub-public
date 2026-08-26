@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 from datetime import datetime
 import hashlib
 import json
 from pathlib import Path
+import re
 from typing import Any, Iterable
 
-from scripts.integrations.technology.base import NormalizedTechnologyRecord
+from scripts.integrations.technology.base import (
+    NormalizedTechnologyRecord,
+    validate_public_source_url,
+)
 from scripts.integrations.technology.dry_run import load_companies
 from scripts.integrations.technology.live_acceptance import (
     PROTECTED_PUBLIC_FILES,
@@ -20,7 +25,9 @@ from scripts.integrations.technology.public_projection import (
     CompanyProjectionPolicy,
     ProjectionInputError,
     build_company_public_projection,
+    build_public_evidence_source_id,
 )
+from scripts.integrations.technology.live_sources import KIPRIS_SOURCE_URL
 from scripts.integrations.technology.readiness import (
     company_identity_for_alias_contract,
     validate_alias_contracts,
@@ -133,6 +140,30 @@ def run_gs_public_projection(
     if protected_before != protected_after:
         raise ProjectionInputError("protected public data changed during GS projection")
 
+    public_evidence_sources = [
+        build_public_evidence_source_candidate(row, accessed_at=str(summary.get("generated_at") or ""))
+        for row in registered
+    ]
+    candidate_company = deepcopy(company)
+    candidate_company["technology"] = deepcopy(
+        projection["candidate_company_technology"]["technology"]
+    )
+    existing_source_ids = {
+        str(row.get("source_id") or "") for row in candidate_company.get("sources") or []
+    }
+    candidate_company["sources"] = [
+        *deepcopy(list(candidate_company.get("sources") or [])),
+        *[row for row in public_evidence_sources if row["source_id"] not in existing_source_ids],
+    ]
+    evidence_resolution = build_evidence_resolution_report(
+        candidate_company,
+        projection["candidate_company_technology"]["technology"]["patents"],
+    )
+    if evidence_resolution["linked_count"] != 4 or evidence_resolution["source_pending_count"]:
+        raise ProjectionInputError("GS public evidence resolution is incomplete")
+    if evidence_resolution["duplicate_source_id_count"]:
+        raise ProjectionInputError("GS public evidence source IDs are not unique")
+
     generated_at = str(summary.get("generated_at") or "")
     if output_dir is None:
         stamp = datetime.now().astimezone().strftime("%Y%m%dT%H%M%S%z")
@@ -145,22 +176,28 @@ def run_gs_public_projection(
         "published_application_review.json": projection["published_application_review"],
         "adjacent_review_report.json": projection["adjacent_review_report"],
         "excluded_applicant_report.json": projection["excluded_applicant_report"],
+        "public_evidence_sources.json": public_evidence_sources,
+        "evidence_resolution_report.json": evidence_resolution,
     }
     for name, payload in outputs.items():
         _write_json(output_dir / name, payload)
 
     artifact_security = security_metrics(
-        normalized_payload=[],
+        normalized_payload=public_evidence_sources,
         candidates=[*projection["candidate_company_technology"]["technology"]["patents"]],
         output_dir=output_dir,
         secrets=(),
     )
+    local_path_exposure_count = _local_path_exposure_count(outputs)
     security_audit = {
         "schema_version": "gs-company-technology-public-projection-security-v1",
         **artifact_security,
-        "passed": not any(artifact_security.values()),
+        "local_path_exposure_count": local_path_exposure_count,
+        "passed": not any(artifact_security.values()) and local_path_exposure_count == 0,
     }
     _write_json(output_dir / "security_audit.json", security_audit)
+    if not security_audit["passed"]:
+        raise ProjectionInputError("GS public evidence artifacts failed security validation")
     result = {
         "schema_version": "gs-company-technology-public-projection-summary-v1",
         "generated_at": generated_at,
@@ -179,6 +216,10 @@ def run_gs_public_projection(
         "protected_public_hashes_before": protected_before,
         "protected_public_hashes_after": protected_after,
         "protected_public_data_unchanged": True,
+        "public_evidence_source_count": len(public_evidence_sources),
+        "evidence_linked_count": evidence_resolution["linked_count"],
+        "source_pending_count": evidence_resolution["source_pending_count"],
+        "duplicate_source_id_count": evidence_resolution["duplicate_source_id_count"],
         "security": security_audit,
         "input_artifact_sha256": {
             path.relative_to(ROOT).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
@@ -192,6 +233,99 @@ def run_gs_public_projection(
     _write_json(output_dir / "projection_summary.json", result)
     _write_report(output_dir / "projection_report.md", result)
     return result
+
+
+def build_public_evidence_source_candidate(
+    row: dict[str, Any],
+    *,
+    accessed_at: str = "",
+) -> dict[str, Any]:
+    if row.get("source") != "kipris" or row.get("record_type") != "patent":
+        raise ProjectionInputError("GS public evidence candidate must be a KIPRIS patent")
+    title = str(row.get("title") or row.get("name") or "").strip()
+    document_id = str(row.get("application_number") or "").strip()
+    if not title or not document_id:
+        raise ProjectionInputError("public patent evidence requires title and application number")
+    accepted_source_url = validate_public_source_url(row.get("source_url"))
+    if accepted_source_url != KIPRIS_SOURCE_URL:
+        raise ProjectionInputError("public patent evidence must use the accepted KIPRIS portal URL")
+    source_url = validate_public_source_url(KIPRIS_SOURCE_URL)
+    return {
+        "source_id": build_public_evidence_source_id(
+            str(row["source"]),
+            str(row["record_type"]),
+            str(row.get("official_identity") or ""),
+        ),
+        "source_type": "patent",
+        "source_name": "KIPRIS Plus",
+        "title": title,
+        "source_url": source_url,
+        "published_at": None,
+        "accessed_at": accessed_at or None,
+        "publisher": "KIPRIS Plus",
+        "document_id": document_id,
+        "primary_source": True,
+        "confidence": "high",
+        "verification_status": "official",
+        "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+        "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity",
+        ],
+        "visibility": "public",
+    }
+
+
+def build_evidence_resolution_report(
+    company: dict[str, Any],
+    patents: Iterable[dict[str, Any]],
+) -> dict[str, Any]:
+    source_rows = []
+    seen = set()
+    for group in (company.get("intelligence_v2") or {}).get("source_groups") or []:
+        for source in group.get("sources") or []:
+            source_id = str(source.get("source_id") or "")
+            if source_id and source_id not in seen:
+                source_rows.append(source)
+                seen.add(source_id)
+    registry_rows = list(company.get("sources") or [])
+    source_id_counts: dict[str, int] = {}
+    for source in registry_rows:
+        source_id = str(source.get("source_id") or "")
+        if source_id:
+            source_id_counts[source_id] = source_id_counts.get(source_id, 0) + 1
+        if source_id and source_id not in seen:
+            source_rows.append(source)
+            seen.add(source_id)
+    available = {str(source.get("source_id") or "") for source in source_rows}
+    rows = []
+    for patent in patents:
+        source_ids = sorted(set(patent.get("source_ids") or []))
+        if not any(str(source_id).startswith("official:kipris:patent:") for source_id in source_ids):
+            continue
+        resolved = [source_id for source_id in source_ids if source_id in available]
+        rows.append({
+            "technology_id": patent.get("technology_id"),
+            "source_ids": source_ids,
+            "resolved_source_ids": resolved,
+            "resolved_source_count": len(resolved),
+            "evidence_status": "linked" if resolved else "source_pending",
+        })
+    return {
+        "schema_version": "gs-public-evidence-resolution-v1",
+        "company_id": company.get("company_id"),
+        "records": rows,
+        "linked_count": sum(row["evidence_status"] == "linked" for row in rows),
+        "source_pending_count": sum(row["evidence_status"] == "source_pending" for row in rows),
+        "duplicate_source_id_count": sum(count > 1 for count in source_id_counts.values()),
+    }
+
+
+def _local_path_exposure_count(payload: Any) -> int:
+    text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    return len(re.findall(r"(?i)\b[a-z]:[\\/]", text))
 
 
 def _adapt_existing(row: dict[str, Any]) -> dict[str, Any]:
@@ -294,6 +428,9 @@ def _write_report(path: Path, summary: dict[str, Any]) -> None:
         f"- Adjacent review only: {summary['adjacent_review_count']}",
         f"- Wrong applicant excluded: {summary['excluded_applicant_count']}",
         f"- Final candidate total: {summary['candidate_total']}",
+        f"- Public evidence sources: {summary['public_evidence_source_count']}",
+        f"- Evidence linked: {summary['evidence_linked_count']}",
+        f"- Evidence source pending: {summary['source_pending_count']}",
         f"- Public write performed: {str(summary['public_write_performed']).lower()}",
         f"- Protected public data unchanged: {str(summary['protected_public_data_unchanged']).lower()}",
     ]
