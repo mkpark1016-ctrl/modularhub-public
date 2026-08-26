@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
+from dataclasses import dataclass
 import hashlib
 import json
 from pathlib import Path
+import re
 from typing import Any, Iterable
 from urllib.parse import parse_qsl, urlsplit
 
@@ -74,15 +76,34 @@ class ProjectionInputError(ValueError):
     pass
 
 
-def build_samsung_public_projection(
+@dataclass(frozen=True)
+class CompanyProjectionPolicy:
+    company_id: str
+    allowed_new_record_types: tuple[str, ...] = ("patent",)
+    allowed_new_statuses: tuple[str, ...] = ("registered",)
+    allowed_enrichment_fields: tuple[str, ...] = ALLOWED_ENRICHMENT_FIELDS
+    allow_status_updates: bool = False
+    published_application_policy: str = "review_only"
+    technology_id_namespace: str | None = None
+    schema_version: str = "company-technology-public-projection-v1"
+
+    def __post_init__(self) -> None:
+        if not self.company_id:
+            raise ProjectionInputError("projection policy requires company_id")
+        if self.published_application_policy not in {"review_only", "filter"}:
+            raise ProjectionInputError("unsupported published application policy")
+
+
+def build_company_public_projection(
     *,
     companies: Iterable[dict[str, Any]],
     exact_reports: Iterable[dict[str, Any]],
     status_reports: Iterable[dict[str, Any]],
     applicant_candidates: Iterable[dict[str, Any]],
     applicant_summary: dict[str, Any],
-    company_id: str = DEFAULT_COMPANY_ID,
+    policy: CompanyProjectionPolicy,
 ) -> dict[str, Any]:
+    company_id = policy.company_id
     company_matches = [row for row in companies if row.get("company_id") == company_id]
     if len(company_matches) != 1:
         raise ProjectionInputError(f"company must resolve exactly once: {company_id}")
@@ -91,9 +112,6 @@ def build_samsung_public_projection(
     newtech = deepcopy(list(technology.get("new_construction_technologies") or []))
     patents = deepcopy(list(technology.get("patents") or []))
     baseline = [*newtech, *patents]
-    if len(baseline) != 7 or len(newtech) != 1 or len(patents) != 6:
-        raise ProjectionInputError("Samsung technology baseline must contain 1 new technology and 6 patents")
-
     exact_by_id = _unique_by(exact_reports, "baseline_technology_id", "exact identity report")
     status_by_id = _unique_by(status_reports, "technology_id", "status adjudication report")
     projected_existing = []
@@ -115,9 +133,22 @@ def build_samsung_public_projection(
                 conflicts.append("missing_exact_identity_evidence")
             else:
                 evidence.append(_exact_evidence(exact))
-                _apply_enrichment(before, after, exact, field_changes, conflicts)
+                _apply_enrichment(
+                    before,
+                    after,
+                    exact,
+                    field_changes,
+                    conflicts,
+                    policy.allowed_enrichment_fields,
+                )
                 adjudication = status_by_id.get(technology_id)
-                _apply_status_update(before, after, exact, adjudication, field_changes, conflicts)
+                if policy.allow_status_updates:
+                    _apply_status_update(before, after, exact, adjudication, field_changes, conflicts)
+                elif set(exact.get("conflict_fields") or []) - {"status"}:
+                    conflicts.extend(
+                        f"exact_identity_conflict:{field}"
+                        for field in sorted(set(exact.get("conflict_fields") or []) - {"status"})
+                    )
                 if adjudication:
                     evidence.append(_status_evidence(adjudication))
 
@@ -152,7 +183,7 @@ def build_samsung_public_projection(
     ]
     patents_after = [row for row in projected_existing if row.get("record_type") == "patent"]
     if newtech_after != newtech:
-        raise ProjectionInputError("manual KAIA baseline record must be preserved exactly")
+        raise ProjectionInputError("non-patent baseline records must be preserved exactly")
 
     existing_alias_map: dict[str, set[str]] = {}
     for row in projected_existing:
@@ -166,12 +197,30 @@ def build_samsung_public_projection(
         if isinstance(row, dict)
     }
     candidates = [dict(row) for row in applicant_candidates if isinstance(row, dict)]
+    excluded_applicants = sorted(
+        (row for row in candidates if not _company_match_confirmed(row, company_id)),
+        key=_candidate_sort_key,
+    )
+    company_candidates = [row for row in candidates if _company_match_confirmed(row, company_id)]
+    published_review = sorted(
+        (
+            row for row in company_candidates
+            if row.get("modular_relevance") == "direct"
+            and row.get("status") == "published"
+            and "published" not in policy.allowed_new_statuses
+            and policy.published_application_policy == "review_only"
+        ),
+        key=_candidate_sort_key,
+    )
     direct = sorted(
-        (row for row in candidates if row.get("modular_relevance") == "direct"),
+        (
+            row for row in company_candidates
+            if row.get("modular_relevance") == "direct" and row not in published_review
+        ),
         key=_candidate_sort_key,
     )
     adjacent = sorted(
-        (row for row in candidates if row.get("modular_relevance") == "adjacent"),
+        (row for row in company_candidates if row.get("modular_relevance") == "adjacent"),
         key=_candidate_sort_key,
     )
     accepted_new = []
@@ -184,7 +233,7 @@ def build_samsung_public_projection(
     )
 
     for source in direct:
-        reasons = _candidate_filter_reasons(source, company_id)
+        reasons = _candidate_filter_reasons(source, policy)
         safe_source_url = source.get("source_url")
         try:
             safe_source_url = validate_public_source_url(safe_source_url)
@@ -216,7 +265,7 @@ def build_samsung_public_projection(
         if source.get("company_match") in {"ambiguous", "unmatched"} or source.get("company_ids") != [company_id]:
             ambiguous_count += 1
         official_identity = str(source.get("official_identity") or "")
-        public_record = _public_candidate(source) if not reasons else None
+        public_record = _public_candidate(source, policy) if not reasons else None
         if public_record is not None:
             if public_record["technology_id"] in {
                 str(row.get("technology_id") or "") for row in [*projected_existing, *accepted_new]
@@ -251,6 +300,7 @@ def build_samsung_public_projection(
 
     adjacent_report = [
         {
+            "classification": "REVIEW_ONLY_ADJACENT",
             "official_identity": row.get("official_identity"),
             "title": row.get("name"),
             "application_number": row.get("application_number"),
@@ -260,13 +310,48 @@ def build_samsung_public_projection(
             "relevance": "adjacent",
             "publication_decision": "review_only_adjacent",
             "source_url": _safe_report_url(row.get("source_url")),
+            "source_ids": sorted(set(row.get("source_ids") or [])),
+            "applicants": list(row.get("applicants") or []),
         }
         for row in adjacent
     ]
+    published_application_review = [
+        _review_report_row(row, "application_only_review", ["status_not_allowed_by_policy:published"])
+        for row in published_review
+    ]
+    excluded_applicant_report = [
+        _review_report_row(row, "excluded_wrong_applicant", ["company_match_not_confirmed"])
+        for row in excluded_applicants
+    ]
+    accepted_ids = {
+        row["technology_id"] for row in accepted_new
+    }
+    registered_candidate_report = []
+    for source, report in zip(direct, new_report, strict=True):
+        technology_id = deterministic_technology_id(
+            company_id,
+            str(source.get("source") or ""),
+            str(source.get("official_identity") or ""),
+            namespace=policy.technology_id_namespace,
+        )
+        registered_candidate_report.append({
+            **report,
+            "technology_id": technology_id if technology_id in accepted_ids else None,
+            "classification": (
+                "PUBLICATION_ELIGIBLE_REGISTERED"
+                if technology_id in accepted_ids
+                else "FILTERED"
+            ),
+            "required_fields_present": not any(
+                str(reason).startswith("missing_required_field:")
+                for reason in report["filter_reason"]
+            ),
+            "source_ids": sorted(set(source.get("source_ids") or [])),
+        })
     accepted_new.sort(key=lambda row: str(row["technology_id"]))
     candidate_patents = [*patents_after, *accepted_new]
     candidate_company = {
-        "schema_version": "samsung-technology-public-projection-v1",
+        "schema_version": policy.schema_version,
         "company_id": company_id,
         "technology": {
             "new_construction_technologies": newtech_after,
@@ -306,17 +391,83 @@ def build_samsung_public_projection(
         "candidate_info_incomplete_count": candidate_incomplete,
         "resolved_info_incomplete_count": baseline_incomplete - candidate_incomplete,
         "unexpected_existing_substantive_change_count": sum(
-            change["field"] not in {*ALLOWED_ENRICHMENT_FIELDS, "status"}
+            change["field"] not in {
+                *policy.allowed_enrichment_fields,
+                *(('status',) if policy.allow_status_updates else ()),
+            }
             for row in existing_diff
             for change in row["field_changes"]
         ),
+        "published_application_review_count": len(published_application_review),
+        "excluded_applicant_count": len(excluded_applicant_report),
     }
     return {
         "candidate_company_technology": candidate_company,
         "existing_diff_report": existing_diff,
         "new_candidate_report": new_report,
+        "registered_candidate_report": registered_candidate_report,
+        "published_application_review": published_application_review,
         "adjacent_review_report": adjacent_report,
+        "excluded_applicant_report": excluded_applicant_report,
         "metrics": metrics,
+    }
+
+
+def build_samsung_public_projection(
+    *,
+    companies: Iterable[dict[str, Any]],
+    exact_reports: Iterable[dict[str, Any]],
+    status_reports: Iterable[dict[str, Any]],
+    applicant_candidates: Iterable[dict[str, Any]],
+    applicant_summary: dict[str, Any],
+    company_id: str = DEFAULT_COMPANY_ID,
+) -> dict[str, Any]:
+    companies = list(companies)
+    company = next((row for row in companies if row.get("company_id") == company_id), None)
+    technology = (company or {}).get("technology") or {}
+    newtech = list(technology.get("new_construction_technologies") or [])
+    patents = list(technology.get("patents") or [])
+    if len(newtech) != 1 or len(patents) != 6:
+        raise ProjectionInputError("Samsung technology baseline must contain 1 new technology and 6 patents")
+    generic = build_company_public_projection(
+        companies=companies,
+        exact_reports=exact_reports,
+        status_reports=status_reports,
+        applicant_candidates=applicant_candidates,
+        applicant_summary=applicant_summary,
+        policy=CompanyProjectionPolicy(
+            company_id=company_id,
+            allow_status_updates=True,
+            technology_id_namespace="samsung",
+            schema_version="samsung-technology-public-projection-v1",
+        ),
+    )
+    return {
+        "candidate_company_technology": generic["candidate_company_technology"],
+        "existing_diff_report": generic["existing_diff_report"],
+        "new_candidate_report": generic["new_candidate_report"],
+        "adjacent_review_report": [
+            {
+                key: row.get(key)
+                for key in (
+                    "official_identity",
+                    "title",
+                    "application_number",
+                    "registration_number",
+                    "status",
+                    "technology_area",
+                    "relevance",
+                    "publication_decision",
+                    "source_url",
+                )
+            }
+            for row in generic["adjacent_review_report"]
+        ],
+        "metrics": {
+            key: value
+            for key, value in generic["metrics"].items()
+            if key not in {"published_application_review_count", "excluded_applicant_count"}
+        },
     }
 
 
@@ -426,11 +577,13 @@ def _apply_enrichment(
     exact: dict[str, Any],
     changes: list[dict[str, Any]],
     conflicts: list[str],
+    allowed_fields: Iterable[str] = ALLOWED_ENRICHMENT_FIELDS,
 ) -> None:
+    allowed_fields = tuple(allowed_fields)
     enrichment = exact.get("enrichment_fields") or {}
-    unexpected = sorted(set(enrichment) - set(ALLOWED_ENRICHMENT_FIELDS))
+    unexpected = sorted(set(enrichment) - set(allowed_fields))
     conflicts.extend(f"unsupported_enrichment:{field}" for field in unexpected)
-    for field in ALLOWED_ENRICHMENT_FIELDS:
+    for field in allowed_fields:
         if field not in enrichment:
             continue
         official = enrichment[field]
@@ -487,7 +640,10 @@ def _apply_status_update(
     })
 
 
-def _candidate_filter_reasons(row: dict[str, Any], company_id: str) -> list[str]:
+def _candidate_filter_reasons(
+    row: dict[str, Any],
+    policy: CompanyProjectionPolicy,
+) -> list[str]:
     reasons = []
     required = {
         "official_identity": row.get("official_identity"),
@@ -497,18 +653,26 @@ def _candidate_filter_reasons(row: dict[str, Any], company_id: str) -> list[str]
         "status": row.get("status"),
         "technology_area": row.get("technology_area"),
         "application_date": row.get("application_date"),
-        "registration_date": row.get("registration_date"),
         "summary": row.get("summary"),
         "source_ids": row.get("source_ids"),
     }
+    if row.get("status") == "registered":
+        required.update({
+            "registration_number": row.get("registration_number"),
+            "registration_date": row.get("registration_date"),
+        })
     reasons.extend(f"missing_required_field:{key}" for key, value in required.items() if value in (None, "", [], ()))
-    if row.get("source") != "kipris" or row.get("record_type") != "patent":
+    if row.get("source") != "kipris":
         reasons.append("unsupported_official_source")
+    if row.get("record_type") not in policy.allowed_new_record_types:
+        reasons.append(f"record_type_not_allowed_by_policy:{row.get('record_type')}")
+    if row.get("status") not in policy.allowed_new_statuses:
+        reasons.append(f"status_not_allowed_by_policy:{row.get('status')}")
     if row.get("candidate_type") != "net_new":
         reasons.append("candidate_not_net_new")
     if row.get("modular_relevance") != "direct":
         reasons.append("not_direct_relevance")
-    if row.get("company_ids") != [company_id] or row.get("company_match") in {None, "ambiguous", "unmatched"}:
+    if not _company_match_confirmed(row, policy.company_id):
         reasons.append("company_match_not_confirmed")
     expected_identity = _identity_from_record(row)
     if expected_identity != row.get("official_identity"):
@@ -516,10 +680,32 @@ def _candidate_filter_reasons(row: dict[str, Any], company_id: str) -> list[str]
     return reasons
 
 
-def _public_candidate(row: dict[str, Any]) -> dict[str, Any]:
-    identity = str(row["official_identity"]).split(":", 1)[-1].lower()
+def deterministic_technology_id(
+    company_id: str,
+    source: str,
+    official_identity: str,
+    *,
+    namespace: str | None = None,
+) -> str:
+    identity = str(official_identity).split(":", 1)[-1]
+    parts = (namespace or company_id, source, identity)
+    normalized = [re.sub(r"[^a-z0-9]+", "-", str(part).casefold()).strip("-") for part in parts]
+    if not all(normalized):
+        raise ProjectionInputError("deterministic technology identity components must be non-empty")
+    return "tech-" + "-".join(normalized)
+
+
+def _public_candidate(
+    row: dict[str, Any],
+    policy: CompanyProjectionPolicy,
+) -> dict[str, Any]:
     public = {
-        "technology_id": f"tech-samsung-kipris-{identity}",
+        "technology_id": deterministic_technology_id(
+            policy.company_id,
+            str(row.get("source") or ""),
+            str(row["official_identity"]),
+            namespace=policy.technology_id_namespace,
+        ),
         "name": row.get("name"),
         "record_type": row.get("record_type"),
         "registration_number": row.get("registration_number"),
@@ -536,6 +722,43 @@ def _public_candidate(row: dict[str, Any]) -> dict[str, Any]:
     if missing_keys:
         raise ProjectionInputError(f"public technology contract fields missing: {sorted(missing_keys)}")
     return public
+
+
+def _company_match_confirmed(row: dict[str, Any], company_id: str) -> bool:
+    return row.get("company_ids") == [company_id] and row.get("company_match") not in {
+        None,
+        "ambiguous",
+        "unmatched",
+    }
+
+
+def _review_report_row(
+    row: dict[str, Any],
+    decision: str,
+    reasons: list[str],
+) -> dict[str, Any]:
+    return {
+        "classification": {
+            "application_only_review": "APPLICATION_ONLY_REVIEW",
+            "excluded_wrong_applicant": "EXCLUDED_WRONG_APPLICANT",
+        }.get(decision, decision.upper()),
+        "official_identity": row.get("official_identity"),
+        "title": row.get("name"),
+        "application_number": row.get("application_number"),
+        "registration_number": row.get("registration_number"),
+        "patent_number": row.get("patent_number"),
+        "status": row.get("status"),
+        "technology_area": row.get("technology_area"),
+        "application_date": row.get("application_date"),
+        "registration_date": row.get("registration_date"),
+        "summary": row.get("summary"),
+        "applicants": list(row.get("applicants") or []),
+        "source_ids": sorted(set(row.get("source_ids") or [])),
+        "relevance": row.get("modular_relevance"),
+        "publication_decision": decision,
+        "filter_reason": sorted(set(reasons)),
+        "source_url": _safe_report_url(row.get("source_url")),
+    }
 
 
 def _validate_acceptance_inputs(
