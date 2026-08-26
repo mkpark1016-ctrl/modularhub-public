@@ -84,6 +84,7 @@ class CompanyProjectionPolicy:
     allowed_enrichment_fields: tuple[str, ...] = ALLOWED_ENRICHMENT_FIELDS
     allow_status_updates: bool = False
     published_application_policy: str = "review_only"
+    preserve_legacy_source_ids: bool = False
     technology_id_namespace: str | None = None
     schema_version: str = "company-technology-public-projection-v1"
 
@@ -346,7 +347,9 @@ def build_company_public_projection(
                 str(reason).startswith("missing_required_field:")
                 for reason in report["filter_reason"]
             ),
-            "source_ids": sorted(set(source.get("source_ids") or [])),
+            "upstream_source_ids": sorted(set(source.get("source_ids") or [])),
+            "public_source_ids": _public_evidence_source_ids(source, policy),
+            "source_ids": _public_evidence_source_ids(source, policy),
         })
     accepted_new.sort(key=lambda row: str(row["technology_id"]))
     candidate_patents = [*patents_after, *accepted_new]
@@ -438,6 +441,7 @@ def build_samsung_public_projection(
         policy=CompanyProjectionPolicy(
             company_id=company_id,
             allow_status_updates=True,
+            preserve_legacy_source_ids=True,
             technology_id_namespace="samsung",
             schema_version="samsung-technology-public-projection-v1",
         ),
@@ -695,6 +699,40 @@ def deterministic_technology_id(
     return "tech-" + "-".join(normalized)
 
 
+def build_public_evidence_source_id(
+    source: str,
+    record_type: str,
+    official_identity: str,
+) -> str:
+    source_part = re.sub(r"[^a-z0-9]+", "-", str(source).casefold()).strip("-")
+    record_type_part = re.sub(r"[^a-z0-9]+", "-", str(record_type).casefold()).strip("-")
+    identity_type, separator, identity_value = str(official_identity).partition(":")
+    normalized_identity_type = re.sub(
+        r"[^a-z0-9]+", "-", identity_type.casefold()
+    ).strip("-")
+    normalized_identity_value = normalize_official_number(identity_value)
+    if not separator or normalized_identity_type != record_type_part:
+        raise ProjectionInputError("official identity type must match record_type")
+    if not source_part or not record_type_part or not normalized_identity_value:
+        raise ProjectionInputError("public evidence identity components must be non-empty")
+    return f"official:{source_part}:{record_type_part}:{normalized_identity_value.casefold()}"
+
+
+def _public_evidence_source_ids(
+    row: dict[str, Any],
+    policy: CompanyProjectionPolicy,
+) -> list[str]:
+    if policy.preserve_legacy_source_ids:
+        return sorted(set(row.get("source_ids") or []))
+    return [
+        build_public_evidence_source_id(
+            str(row.get("source") or ""),
+            str(row.get("record_type") or ""),
+            str(row.get("official_identity") or ""),
+        )
+    ]
+
+
 def _public_candidate(
     row: dict[str, Any],
     policy: CompanyProjectionPolicy,
@@ -716,7 +754,7 @@ def _public_candidate(
         "application_date": row.get("application_date"),
         "registration_date": row.get("registration_date"),
         "summary": row.get("summary"),
-        "source_ids": sorted(set(row.get("source_ids") or [])),
+        "source_ids": _public_evidence_source_ids(row, policy),
     }
     missing_keys = set(PUBLIC_TECHNOLOGY_FIELDS) - set(public)
     if missing_keys:
