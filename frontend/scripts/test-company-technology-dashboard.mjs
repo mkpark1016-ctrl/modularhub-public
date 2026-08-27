@@ -40,6 +40,7 @@ const kiprisPatent = gsItems.find((item) => item.technology_id === "tech-gs-ec-k
 assert.ok(kiprisPatent);
 assert.equal(isPatentClassificationCode(kiprisPatent.technology_area), true);
 assert.notEqual(technologyField(kiprisPatent), kiprisPatent.technology_area);
+assert.equal(technologyField(kiprisPatent), "구조·접합");
 assert.equal(technologyField(kiprisPatent).startsWith("E04"), false);
 assert.equal(formatPatentClassification(kiprisPatent.technology_area).includes(" · "), true);
 assert.equal(formatPatentClassification(kiprisPatent.technology_area).includes("|"), false);

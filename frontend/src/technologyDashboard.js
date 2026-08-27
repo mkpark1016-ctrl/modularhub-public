@@ -15,7 +15,7 @@ export function normalizeTechnologyText(value) {
 
 export function technologyField(item) {
   const text = normalizeTechnologyText([item?.name, item?.technology_area, item?.summary].join(" "));
-  if (/(접합|체결|연결|구조)/.test(text)) return "구조·접합";
+  if (/(접합|체결|연결|커넥터|구조)/.test(text)) return "구조·접합";
   if (/(고층|적층|층간)/.test(text)) return "고층화";
   if (/(시공|안전|고소작업|공기)/.test(text)) return "시공성·안전";
   if (/(외장|기밀|수밀|단열)/.test(text)) return "외장·기밀";
