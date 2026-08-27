@@ -15,9 +15,10 @@ const labels = {
   financial: k(0xC7AC, 0xBB34),
   detail: k(0xC0C1, 0xC138, 0xBCF4, 0xAE30),
   evidence: k(0xADFC, 0xAC70, 0xBCF4, 0xAE30),
-  registrationNumber: k(0xB4F1, 0xB85D, 0x00B7, 0xCD9C, 0xC6D0, 0xBC88, 0xD638),
+  registrationNumber: k(0xB4F1, 0xB85D, 0xBC88, 0xD638),
   status: k(0xC0C1, 0xD0DC),
   technologyField: k(0xAE30, 0xC220, 0x20, 0xBD84, 0xC57C),
+  ipcClassification: `IPC/CPC ${k(0xBD84, 0xB958)}`,
   latestFinancial: k(0xCD5C, 0xADFC, 0x20, 0xC7AC, 0xBB34),
   threeYearFinancial: k(0xCD5C, 0xADFC, 0x20, 0x0033, 0xAC1C, 0xB144, 0x20, 0xC7AC, 0xBB34),
 };
@@ -214,12 +215,38 @@ async function runCompanyDrawerQa(baseUrl, viewport) {
     await clickTab(page, labels.technology);
     const gsTechnologyCards = page.locator("#company-tab-panel-technology .technology-list > div");
     check(await gsTechnologyCards.count() === 7, `${viewport.width}: GS patent count should be 7`);
+    const metricValue = async (metric) => page.locator(`[data-technology-metric="${metric}"] strong`).innerText();
+    check((await metricValue("total")).trim() === "7", `${viewport.width}: GS total KPI should be 7`);
+    check((await metricValue("registered")).trim() === "7", `${viewport.width}: GS registered KPI should be 7`);
+    check((await metricValue("kipris")).trim() === "4", `${viewport.width}: GS KIPRIS KPI should be 4`);
+    check((await metricValue("evidence")).replace(/\s/g, "") === "7/7", `${viewport.width}: GS evidence KPI should be 7/7`);
+    check(await page.locator(".technology-toolbar label").count() === 3, `${viewport.width}: technology toolbar should have three controls`);
+    const fieldButtons = page.locator(".technology-field-chips button");
+    check(await fieldButtons.count() >= 2, `${viewport.width}: technology field chips missing`);
+    check(await fieldButtons.first().getAttribute("aria-pressed") === "true", `${viewport.width}: all-field chip should be active`);
+    const selectedFieldText = await fieldButtons.nth(1).innerText();
+    const selectedFieldCount = Number(selectedFieldText.trim().split(/\s+/).at(-1));
+    await fieldButtons.nth(1).click();
+    check(await gsTechnologyCards.count() === selectedFieldCount, `${viewport.width}: technology field chip count mismatch`);
+    await fieldButtons.first().click();
+    check(await gsTechnologyCards.count() === 7, `${viewport.width}: all-field chip should restore GS records`);
     const publishedOrWrongApplicantIds = [
       "1020230177458", "1020240017508", "1020240134310",
       "1020100087108", "1020130059832", "1020200042227",
     ];
     const gsTechnologyText = await page.locator("#company-tab-panel-technology").innerText();
     check(publishedOrWrongApplicantIds.every((identity) => !gsTechnologyText.includes(identity)), `${viewport.width}: excluded GS patent leaked into public UI`);
+    check(!gsTechnologyText.includes("E04B 1/343"), `${viewport.width}: raw classification should not clutter GS cards`);
+    check(await page.locator(".technology-evidence-button").count() === 7, `${viewport.width}: card evidence actions should cover all GS patents`);
+    check(await page.locator(".technology-provenance").count() === 4, `${viewport.width}: KIPRIS provenance count should be 4`);
+    const summariesClamped = await page.locator(".technology-card-summary").evaluateAll((nodes) => nodes.every((node) => getComputedStyle(node).webkitLineClamp === "2"));
+    check(summariesClamped, `${viewport.width}: technology summaries should be clamped to two lines`);
+    await gsTechnologyCards.nth(3).locator("button.technology-evidence-button").click();
+    const cardEvidenceDrawer = page.locator(".evidence-drawer");
+    await cardEvidenceDrawer.waitFor({ state: "visible", timeout: 5000 });
+    check((await cardEvidenceDrawer.innerText()).includes("KIPRIS Plus"), `${viewport.width}: card evidence action should resolve KIPRIS source`);
+    await page.keyboard.press("Escape");
+    await cardEvidenceDrawer.waitFor({ state: "hidden", timeout: 5000 });
     const registeredPatents = [
       { cardIndex: 3, registration: "10-2723831", applicationDate: "2022-06-02", registrationDate: "2024-10-25" },
       { cardIndex: 4, registration: "10-2767025", applicationDate: "2022-09-21", registrationDate: "2025-02-07" },
@@ -235,9 +262,22 @@ async function runCompanyDrawerQa(baseUrl, viewport) {
       check(detailText.includes(patent.registration), `${viewport.width}: GS registration number missing`);
       check(detailText.includes(patent.applicationDate), `${viewport.width}: GS application date missing`);
       check(detailText.includes(patent.registrationDate), `${viewport.width}: GS registration date missing`);
+      check(detailText.includes(labels.technologyField), `${viewport.width}: GS human-readable technology field missing`);
+      check(detailText.includes(labels.ipcClassification), `${viewport.width}: GS IPC/CPC classification missing from detail`);
       await openEvidenceFromEntityDrawer(page, `${viewport.width} GS KIPRIS evidence`, "KIPRIS Plus");
     }
     check(!(await hasPageOverflow(page)), `${viewport.width}: GS technology page overflow`);
+
+    await page.goto(`${baseUrl}/companies/hyundai-engineering`, { waitUntil: "networkidle" });
+    await clickTab(page, labels.technology);
+    check((await page.locator('[data-technology-metric="total"] strong').innerText()).trim() === "14", `${viewport.width}: Hyundai technology total should be 14`);
+    check((await page.locator('[data-technology-metric="kipris"] strong').innerText()).trim() === "0", `${viewport.width}: Hyundai manual/KAIA records must not count as KIPRIS`);
+    const recordTypeSelect = page.locator(".technology-toolbar select").first();
+    await recordTypeSelect.selectOption("construction_new_technology");
+    const hyundaiCards = page.locator("#company-tab-panel-technology .technology-list > div");
+    check(await hyundaiCards.count() === 1, `${viewport.width}: Hyundai construction-new-technology filter should return one record`);
+    check((await hyundaiCards.first().innerText()).includes(k(0xAC74, 0xC124, 0xC2E0, 0xAE30, 0xC220)), `${viewport.width}: Hyundai construction technology must not be labeled as patent`);
+    check(!(await hasPageOverflow(page)), `${viewport.width}: Hyundai technology page overflow`);
 
     check(diagnostics.consoleErrors.length === 0, `${viewport.width}: console errors: ${diagnostics.consoleErrors.join("\n")}`);
     check(diagnostics.reactWarnings.length === 0, `${viewport.width}: React warnings: ${diagnostics.reactWarnings.join("\n")}`);
