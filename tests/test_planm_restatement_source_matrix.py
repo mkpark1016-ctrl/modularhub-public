@@ -5,6 +5,7 @@ import subprocess
 from pathlib import Path
 
 from scripts.validate_company_audit_financials import protected_public_diff_status
+from src.public_data_policy import validate_public_local_path_cleanup
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -347,7 +348,17 @@ def test_existing_company_report_insights_and_public_json_are_unchanged() -> Non
     current_companies = json.loads((ROOT / "frontend/public/data/companies/companies.json").read_text(encoding="utf-8"))
     old_planm_company = next(company for company in old_companies["companies"] if company["company_id"] == "planm")
     current_planm_company = next(company for company in current_companies["companies"] if company["company_id"] == "planm")
-    assert current_planm_company == old_planm_company
+    if current_planm_company != old_planm_company:
+        cleanup = validate_public_local_path_cleanup(
+            old_planm_company,
+            current_planm_company,
+        )
+        assert cleanup == {
+            "passed": True,
+            "removed_local_path_count": 3,
+            "remaining_local_path_count": 0,
+            "other_changes": 0,
+        }
 
     old_insights = load_from_main("frontend/public/data/companies/company_report_insights.json")
     current_insights = json.loads((ROOT / "frontend/public/data/companies/company_report_insights.json").read_text(encoding="utf-8"))

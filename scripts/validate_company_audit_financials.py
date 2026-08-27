@@ -15,7 +15,9 @@ from src.public_data_policy import (
     CONTROLLED_PUBLIC_BUSINESS_PATH,
     CONTROLLED_PUBLIC_COMPANIES_PATH,
     CONTROLLED_PUBLIC_META_PATH,
+    scan_public_payload_security,
     validate_controlled_business_publication,
+    validate_public_local_path_cleanup,
     validate_controlled_samsung_technology_publication,
 )
 
@@ -30,6 +32,7 @@ PROTECTED_PUBLIC_FILES = [
     ROOT / "frontend" / "public" / "data" / "companies" / "companies.json",
     ROOT / "frontend" / "public" / "data" / "companies" / "company_intelligence_v2.json",
 ]
+PUBLIC_DATA_ROOT = ROOT / "frontend" / "public" / "data"
 COMPANIES_PUBLIC_PATH = ROOT / "frontend" / "public" / "data" / "companies" / "companies.json"
 PUBLIC_COMPANY_SUPPLEMENTS_PATH = ROOT / "frontend" / "src" / "data" / "publicCompanySupplements.json"
 BUSINESS_PUBLIC_PATH = ROOT / CONTROLLED_PUBLIC_BUSINESS_PATH
@@ -800,6 +803,23 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
     if companies_relpath in changed_files and is_allowed_daeseung_canonical_migration(base_ref):
         changed_files = [path for path in changed_files if path != companies_relpath]
         warnings.append("allowed_daeseung_canonical_company_migration")
+    controlled_public_local_path_cleanup = None
+    if companies_relpath in changed_files:
+        previous_companies = json_from_git(comparison_ref, COMPANIES_PUBLIC_PATH)
+        try:
+            current_companies = json.loads(COMPANIES_PUBLIC_PATH.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            current_companies = None
+        if previous_companies is not None and current_companies is not None:
+            controlled_public_local_path_cleanup = validate_public_local_path_cleanup(
+                previous_companies,
+                current_companies,
+            )
+            if controlled_public_local_path_cleanup["passed"]:
+                changed_files = [
+                    path for path in changed_files if path != companies_relpath
+                ]
+                warnings.append("public_local_path_cleanup_semantically_safe")
     controlled_company_technology = None
     if companies_relpath in changed_files:
         previous_companies = json_from_git(comparison_ref, COMPANIES_PUBLIC_PATH)
@@ -854,12 +874,53 @@ def protected_public_diff_status(base_ref: str | None = DEFAULT_BASE_REF, paths:
         "changed_files": changed_files,
         "warnings": warnings,
         "controlled_publication": controlled_publication,
+        "controlled_public_local_path_cleanup": controlled_public_local_path_cleanup,
         "controlled_company_technology_publication": controlled_company_technology,
     }
 
 
 def protected_public_diffs(paths: list[Path] = PROTECTED_PUBLIC_FILES) -> list[str]:
     return protected_public_diff_status(base_ref=None, paths=paths)["changed_files"]
+
+
+def protected_public_security_status(
+    paths: list[Path] | None = None,
+) -> dict[str, Any]:
+    """Scan public JSON files and return only redacted security diagnostics."""
+
+    targets = paths if paths is not None else sorted(PUBLIC_DATA_ROOT.rglob("*.json"))
+    findings: list[dict[str, str | None]] = []
+    credential_url_count = 0
+    forbidden_field_count = 0
+    unreadable_files: list[str] = []
+    for path in targets:
+        relative_path = path.relative_to(ROOT).as_posix()
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            unreadable_files.append(relative_path)
+            continue
+        result = scan_public_payload_security(payload)
+        findings.extend(
+            {"file": relative_path, **finding}
+            for finding in result["local_path_findings"]
+        )
+        credential_url_count += result["credential_url_count"]
+        forbidden_field_count += result["forbidden_field_count"]
+    return {
+        "passed": not (
+            findings
+            or credential_url_count
+            or forbidden_field_count
+            or unreadable_files
+        ),
+        "files_scanned": len(targets),
+        "local_path_count": len(findings),
+        "local_path_findings": findings,
+        "credential_url_count": credential_url_count,
+        "forbidden_field_count": forbidden_field_count,
+        "unreadable_files": unreadable_files,
+    }
 
 
 def validate(payload: dict[str, Any], expected_year_override: list[int] | None = None, base_ref: str | None = DEFAULT_BASE_REF) -> dict[str, Any]:
@@ -879,6 +940,43 @@ def validate(payload: dict[str, Any], expected_year_override: list[int] | None =
     protected_status = protected_public_diff_status(base_ref=base_ref)
     if protected_status["changed_files"]:
         issue(issues, "protected_public_file_changed", "frontend/public/data", "protected public data files changed versus protected diff scope", [], protected_status["changed_files"])
+    public_data_security = protected_public_security_status()
+    if public_data_security["local_path_count"]:
+        issue(
+            issues,
+            "public_local_path_exposure",
+            "frontend/public/data",
+            "absolute local filesystem paths detected in public JSON",
+            0,
+            public_data_security["local_path_findings"],
+        )
+    if public_data_security["credential_url_count"]:
+        issue(
+            issues,
+            "public_credential_url_exposure",
+            "frontend/public/data",
+            "credential-bearing URLs detected in public JSON",
+            0,
+            public_data_security["credential_url_count"],
+        )
+    if public_data_security["forbidden_field_count"]:
+        issue(
+            issues,
+            "public_forbidden_field_exposure",
+            "frontend/public/data",
+            "raw or secret-bearing fields detected in public JSON",
+            0,
+            public_data_security["forbidden_field_count"],
+        )
+    if public_data_security["unreadable_files"]:
+        issue(
+            issues,
+            "public_json_unreadable",
+            "frontend/public/data",
+            "public JSON files could not be read",
+            [],
+            public_data_security["unreadable_files"],
+        )
     derived_metrics = calculate_derived_metrics(payload) if not any(item.code.startswith("missing") for item in issues) else {}
     return {
         "valid": not any(item.severity == "error" for item in issues),
@@ -890,6 +988,7 @@ def validate(payload: dict[str, Any], expected_year_override: list[int] | None =
         "issue_count": len(issues),
         "issues": [item.as_dict() for item in issues],
         "protected_public_diff": protected_status,
+        "public_data_security": public_data_security,
     }
 
 
