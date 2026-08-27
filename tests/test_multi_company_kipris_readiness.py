@@ -152,11 +152,18 @@ def test_request_plan_is_deterministic_and_bounded() -> None:
 def test_baseline_inventory_and_exact_lookup_budgets_match_public_baseline() -> None:
     _, _, companies, _ = _payloads()
     expected = {
-        "gs-ec": (3, 3, 0, 0),
-        "hyundai-engineering": (14, 13, 1, 1),
-        "dl-enc": (21, 21, 0, 0),
+        "gs-ec": (7, 7, 0, 0, 7, 0),
+        "hyundai-engineering": (14, 13, 1, 1, 0, 13),
+        "dl-enc": (21, 21, 0, 0, 0, 21),
     }
-    for company_id, (total, patents, newtech, duplicate_titles) in expected.items():
+    for company_id, (
+        total,
+        patents,
+        newtech,
+        duplicate_titles,
+        exact_identities,
+        registration_identities,
+    ) in expected.items():
         inventory = inventory_company(companies[company_id])
         assert inventory["total_technology_count"] == total
         assert inventory["patent_count"] == patents
@@ -164,7 +171,11 @@ def test_baseline_inventory_and_exact_lookup_budgets_match_public_baseline() -> 
         assert inventory["duplicate_title_count"] == duplicate_titles
         assert inventory["duplicate_official_identity_count"] == 0
         assert inventory["records_without_official_identifier"] == 0
-        assert inventory["readiness_counts"][READY_VERIFIED_REGISTRATION_IDENTITY] == patents
+        assert inventory["readiness_counts"][READY_EXACT_IDENTITY] == exact_identities
+        assert (
+            inventory["readiness_counts"][READY_VERIFIED_REGISTRATION_IDENTITY]
+            == registration_identities
+        )
         assert build_exact_lookup_budget(companies[company_id])["maximum_exact_lookup_requests"] == 0
 
 

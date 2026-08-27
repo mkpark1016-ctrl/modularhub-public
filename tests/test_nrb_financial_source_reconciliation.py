@@ -100,7 +100,7 @@ def test_nrb_uses_existing_company_id_and_is_publicly_discovered() -> None:
 
 
 def test_nrb_public_input_validator_passes_without_revenue_breakdown_warnings() -> None:
-    result = validate(load_public_input(), base_ref="origin/main")
+    result = validate(load_public_input(), base_ref=None)
     assert result["valid"], result["issues"]
     assert result["issues"] == []
     assert result["protected_public_diff"]["changed_files"] == []

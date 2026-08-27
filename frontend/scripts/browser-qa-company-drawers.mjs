@@ -149,13 +149,16 @@ async function closeWithBackdrop(page, label, viewportWidth) {
   await assertIsolationRestored(page, `${label} backdrop close`);
 }
 
-async function openEvidenceFromEntityDrawer(page, label) {
+async function openEvidenceFromEntityDrawer(page, label, expectedSourceText = null) {
   const evidenceButton = page.locator(".company-entity-drawer button:visible").filter({ hasText: labels.evidence }).first();
   await evidenceButton.waitFor({ state: "visible", timeout: 5000 });
   await evidenceButton.click();
   await page.locator(".company-entity-drawer").waitFor({ state: "hidden", timeout: 5000 });
   const evidenceDrawer = page.locator(".evidence-drawer");
   await evidenceDrawer.waitFor({ state: "visible", timeout: 5000 });
+  if (expectedSourceText) {
+    check((await evidenceDrawer.innerText()).includes(expectedSourceText), `${label}: expected source text missing`);
+  }
   check(await page.locator(".company-entity-drawer").count() === 0, `${label}: entity drawer should not remain under evidence drawer`);
   check(await page.evaluate(() => document.body.style.overflow === "hidden"), `${label}: evidence drawer should lock body scroll`);
   await page.keyboard.press("Escape");
@@ -207,6 +210,34 @@ async function runCompanyDrawerQa(baseUrl, viewport) {
     const financialText = await page.locator("#company-tab-panel-financial").innerText();
     check(financialText.includes(labels.latestFinancial) || financialText.includes(labels.threeYearFinancial), `${viewport.width}: fallback financial UI missing`);
     check(!(await hasPageOverflow(page)), `${viewport.width}: fallback financial page overflow`);
+
+    await clickTab(page, labels.technology);
+    const gsTechnologyCards = page.locator("#company-tab-panel-technology .technology-list > div");
+    check(await gsTechnologyCards.count() === 7, `${viewport.width}: GS patent count should be 7`);
+    const publishedOrWrongApplicantIds = [
+      "1020230177458", "1020240017508", "1020240134310",
+      "1020100087108", "1020130059832", "1020200042227",
+    ];
+    const gsTechnologyText = await page.locator("#company-tab-panel-technology").innerText();
+    check(publishedOrWrongApplicantIds.every((identity) => !gsTechnologyText.includes(identity)), `${viewport.width}: excluded GS patent leaked into public UI`);
+    const registeredPatents = [
+      { cardIndex: 3, registration: "10-2723831", applicationDate: "2022-06-02", registrationDate: "2024-10-25" },
+      { cardIndex: 4, registration: "10-2767025", applicationDate: "2022-09-21", registrationDate: "2025-02-07" },
+      { cardIndex: 5, registration: "10-2882325", applicationDate: "2023-12-08", registrationDate: "2025-11-03" },
+      { cardIndex: 6, registration: "10-2951949", applicationDate: "2023-12-14", registrationDate: "2026-04-08" },
+    ];
+    for (const patent of registeredPatents) {
+      await gsTechnologyCards.nth(patent.cardIndex).locator("button.entity-detail-button").click();
+      const dialog = page.getByRole("dialog");
+      await dialog.waitFor({ state: "visible", timeout: 5000 });
+      await assertModalIsolation(page, `${viewport.width} GS registered patent`);
+      const detailText = await dialog.innerText();
+      check(detailText.includes(patent.registration), `${viewport.width}: GS registration number missing`);
+      check(detailText.includes(patent.applicationDate), `${viewport.width}: GS application date missing`);
+      check(detailText.includes(patent.registrationDate), `${viewport.width}: GS registration date missing`);
+      await openEvidenceFromEntityDrawer(page, `${viewport.width} GS KIPRIS evidence`, "KIPRIS Plus");
+    }
+    check(!(await hasPageOverflow(page)), `${viewport.width}: GS technology page overflow`);
 
     check(diagnostics.consoleErrors.length === 0, `${viewport.width}: console errors: ${diagnostics.consoleErrors.join("\n")}`);
     check(diagnostics.reactWarnings.length === 0, `${viewport.width}: React warnings: ${diagnostics.reactWarnings.join("\n")}`);
