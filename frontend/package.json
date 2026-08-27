@@ -16,6 +16,7 @@
     "test:companies-projects": "node scripts/test-company-projects.mjs",
     "test:companies-v2": "node scripts/test-company-intelligence-v2.mjs",
     "test:companies-url": "node scripts/test-company-url.mjs",
+    "test:technology-dashboard": "node scripts/test-company-technology-dashboard.mjs",
     "test:news": "node scripts/test-news-region-filters.mjs",
     "test:news-ime": "node scripts/test-news-search-ime.mjs",
     "test:news-url": "node scripts/test-news-url-compat.mjs",
