@@ -54,6 +54,17 @@ FORBIDDEN_PUBLIC_PAYLOAD_KEYS = {
     "servicekey",
     "token",
 }
+PUBLIC_LOCAL_PATH_PATTERNS = (
+    ("windows_drive", re.compile(r"^[A-Za-z]:[\\\\/]")),
+    ("file_url", re.compile(r"^file://", re.IGNORECASE)),
+    ("unc", re.compile(r"^\\\\[^\\/]+[\\/][^\\/]+")),
+    (
+        "unix_absolute",
+        re.compile(
+            r"^/(?:Users|Volumes|home|mnt|opt|private|root|srv|tmp|var)(?:/|$)"
+        ),
+    ),
+)
 BUSINESS_METADATA_COUNT_FIELDS = (
     "business_total",
     "business_active",
@@ -133,6 +144,107 @@ def clean_text(value: Any) -> str:
         return ""
     text = str(value).strip()
     return "" if text.lower() in {"", "none", "nan", "nat"} else text
+
+
+def classify_public_local_path(value: Any) -> str | None:
+    """Classify absolute local filesystem values without retaining the value."""
+
+    if not isinstance(value, str):
+        return None
+    candidate = value.strip()
+    for path_kind, pattern in PUBLIC_LOCAL_PATH_PATTERNS:
+        if pattern.match(candidate):
+            return path_kind
+    return None
+
+
+def find_public_local_paths(
+    value: Any,
+    *,
+    json_path: str = "$",
+    field: str | None = None,
+) -> list[dict[str, str | None]]:
+    """Return redacted structural diagnostics for local paths in a JSON payload."""
+
+    findings: list[dict[str, str | None]] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            key_text = str(key)
+            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", key_text):
+                child_path = f"{json_path}.{key_text}"
+            else:
+                child_path = f"{json_path}[{json.dumps(key_text, ensure_ascii=False)}]"
+            findings.extend(
+                find_public_local_paths(
+                    child,
+                    json_path=child_path,
+                    field=key_text,
+                )
+            )
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            findings.extend(
+                find_public_local_paths(
+                    child,
+                    json_path=f"{json_path}[{index}]",
+                    field=field,
+                )
+            )
+    else:
+        path_kind = classify_public_local_path(value)
+        if path_kind:
+            findings.append(
+                {
+                    "json_path": json_path,
+                    "field": field,
+                    "path_kind": path_kind,
+                }
+            )
+    return findings
+
+
+def scan_public_payload_security(value: Any) -> dict[str, Any]:
+    """Inspect a public payload while keeping sensitive values out of diagnostics."""
+
+    local_path_findings = find_public_local_paths(value)
+    credential_url_count = _count_credential_bearing_urls(value)
+    forbidden_field_count = _count_forbidden_public_keys(value)
+    return {
+        "passed": not (
+            local_path_findings or credential_url_count or forbidden_field_count
+        ),
+        "local_path_count": len(local_path_findings),
+        "local_path_findings": local_path_findings,
+        "credential_url_count": credential_url_count,
+        "forbidden_field_count": forbidden_field_count,
+    }
+
+
+def validate_public_local_path_cleanup(before: Any, after: Any) -> dict[str, Any]:
+    """Allow only deletion of existing local-path values from a public payload."""
+
+    before_findings = find_public_local_paths(before)
+    after_findings = find_public_local_paths(after)
+    sanitized_before = _without_public_local_paths(before)
+    passed = bool(before_findings) and not after_findings and sanitized_before == after
+    return {
+        "passed": passed,
+        "removed_local_path_count": len(before_findings) if passed else 0,
+        "remaining_local_path_count": len(after_findings),
+        "other_changes": 0 if passed else int(sanitized_before != after),
+    }
+
+
+def _without_public_local_paths(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {
+            key: _without_public_local_paths(child)
+            for key, child in value.items()
+            if classify_public_local_path(child) is None
+        }
+    if isinstance(value, list):
+        return [_without_public_local_paths(child) for child in value]
+    return value
 
 
 def payload_items(payload: Any) -> list[dict[str, Any]]:
