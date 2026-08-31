@@ -21,7 +21,7 @@ from scripts.integrations.business.base import NormalizedBusinessRecord
 from src.public_data_policy import (
     apply_business_lifecycle,
     business_identity,
-    business_items_substantively_equal,
+    business_items_safely_refreshable,
     clean_text,
     parse_public_datetime,
     payload_items,
@@ -338,7 +338,7 @@ def select_net_new_projected_items(
 def _same_substantive_public_payload(
     existing_item: dict[str, Any], projected_item: dict[str, Any]
 ) -> bool:
-    return business_items_substantively_equal(existing_item, projected_item)
+    return business_items_safely_refreshable(existing_item, projected_item)
 
 
 def _collector_row(record: NormalizedBusinessRecord) -> dict[str, Any] | None:
