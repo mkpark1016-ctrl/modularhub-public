@@ -14,8 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.public_data_policy import (
+    BUSINESS_AUTHORITATIVE_REFRESH_FIELDS,
+    BUSINESS_EVIDENCE_VERIFICATION_FIELDS,
+    BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS,
+    BUSINESS_VERIFIED_EVIDENCE_REFRESH_FIELDS,
+    business_items_safely_refreshable,
     business_items_substantively_equal,
     changed_business_fields,
+    safe_business_refresh_fields,
 )
 
 
@@ -52,7 +58,6 @@ SUPPLEMENTARY_STRUCTURAL_FIELDS = {
     "project_blocks",
     "project_sites",
 }
-SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS = frozenset()
 
 
 def clean_text(value: Any) -> str:
@@ -157,7 +162,7 @@ def classify_changed_fields(
     field_set = set(fields)
     if field_set & CANONICAL_PROTECTED_FIELDS:
         return "UNSAFE_EXISTING_VALUE_OVERWRITE"
-    if fields and field_set <= SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS and all(
+    if fields and field_set <= BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS and all(
         not _has_meaningful_value(before, field)
         and _has_meaningful_value(after, field)
         for field in fields
@@ -187,6 +192,29 @@ def summarize_changed_item(
         },
         "classification": classify_changed_fields(before, after, fields),
     }
+
+
+def summarize_authoritative_refresh(
+    before: dict[str, Any], after: dict[str, Any]
+) -> dict[str, Any]:
+    fields = safe_business_refresh_fields(before, after)
+    field_set = set(fields)
+    if field_set <= BUSINESS_AUTHORITATIVE_REFRESH_FIELDS:
+        classification = "AUTHORITATIVE_SOURCE_REFRESH"
+    elif field_set <= (
+        BUSINESS_VERIFIED_EVIDENCE_REFRESH_FIELDS
+        | BUSINESS_EVIDENCE_VERIFICATION_FIELDS
+    ):
+        classification = "VERIFIED_EVIDENCE_REFRESH"
+    else:
+        classification = "AUTHORITATIVE_AND_VERIFIED_EVIDENCE_REFRESH"
+    summary = summarize_changed_item(before, after)
+    summary["changed_fields"] = fields
+    summary["field_presence"] = {
+        field: summary["field_presence"][field] for field in fields
+    }
+    summary["classification"] = classification
+    return summary
 
 
 def is_contest_exact_url(source: str, url: str, source_record_id: str) -> bool:
@@ -311,7 +339,19 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         for item_id in all_changed_ids
         if business_items_substantively_equal(base_map[item_id], current_map[item_id])
     ]
-    changed_ids = sorted(set(all_changed_ids) - set(lifecycle_only_changed_ids))
+    authoritative_refresh_changed_ids = [
+        item_id
+        for item_id in all_changed_ids
+        if item_id not in lifecycle_only_changed_ids
+        and business_items_safely_refreshable(
+            base_map[item_id], current_map[item_id]
+        )
+    ]
+    changed_ids = sorted(
+        set(all_changed_ids)
+        - set(lifecycle_only_changed_ids)
+        - set(authoritative_refresh_changed_ids)
+    )
     added = [summarize_item(current_map[item_id]) for item_id in added_ids]
     removed = [summarize_item(base_map[item_id]) for item_id in removed_ids]
     changed = [
@@ -320,6 +360,19 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
     ]
     changed_field_counts = dict(
         sorted(Counter(field for item in changed for field in item["changed_fields"]).items())
+    )
+    authoritative_refresh_changed = [
+        summarize_authoritative_refresh(base_map[item_id], current_map[item_id])
+        for item_id in authoritative_refresh_changed_ids
+    ]
+    authoritative_refresh_field_counts = dict(
+        sorted(
+            Counter(
+                field
+                for item in authoritative_refresh_changed
+                for field in item["changed_fields"]
+            ).items()
+        )
     )
     unexpected = find_unexpected(current_items)
     public_contest_violations = validate_public_contest_items(current_items)
@@ -331,10 +384,14 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         "removed_count": len(removed),
         "changed_count": len(changed),
         "lifecycle_only_changed_count": len(lifecycle_only_changed_ids),
+        "authoritative_refresh_changed_count": len(
+            authoritative_refresh_changed_ids
+        ),
         "duplicate_id_count": duplicate_id_count(current_items),
         "added_by_source": source_counter([current_map[item_id] for item_id in added_ids]),
         "removed_by_source": source_counter([base_map[item_id] for item_id in removed_ids]),
         "changed_field_counts": changed_field_counts,
+        "authoritative_refresh_field_counts": authoritative_refresh_field_counts,
         "changed_by_source": source_counter([current_map[item_id] for item_id in changed_ids]),
         "changed_by_type": type_counter([current_map[item_id] for item_id in changed_ids]),
         "current_by_source": source_counter(current_items),
@@ -342,6 +399,7 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         "added": added,
         "removed": removed,
         "changed": changed[:100],
+        "authoritative_refresh_changed": authoritative_refresh_changed[:100],
         "lifecycle_only_changed": [
             summarize_item(current_map[item_id])
             for item_id in lifecycle_only_changed_ids[:100]
@@ -389,10 +447,12 @@ def write_reports(report: dict[str, Any]) -> tuple[Path, Path]:
         f"- removed_count: {report['removed_count']}",
         f"- changed_count: {report['changed_count']}",
         f"- lifecycle_only_changed_count: {report['lifecycle_only_changed_count']}",
+        f"- authoritative_refresh_changed_count: {report['authoritative_refresh_changed_count']}",
         f"- duplicate_id_count: {report['duplicate_id_count']}",
         f"- added_by_source: {report['added_by_source']}",
         f"- removed_by_source: {report['removed_by_source']}",
         f"- changed_field_counts: {report['changed_field_counts']}",
+        f"- authoritative_refresh_field_counts: {report['authoritative_refresh_field_counts']}",
         f"- changed_by_source: {report['changed_by_source']}",
         f"- changed_by_type: {report['changed_by_type']}",
         f"- current_by_source: {report['current_by_source']}",

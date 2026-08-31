@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from copy import deepcopy
 
+import pytest
+
 from src.public_data_policy import (
     CONTROLLED_PUBLIC_BUSINESS_PATH,
     CONTROLLED_PUBLIC_META_PATH,
@@ -187,6 +189,27 @@ def test_existing_business_lifecycle_drift_is_not_a_payload_mutation() -> None:
             "last_seen_at": "2026-08-21T00:00:00Z",
         }
     )
+
+    result = validate(before, after, before_meta, after_meta)
+
+    assert "existing_business_modified" not in result["reason_codes"]
+    assert result["passed"] is True
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("due_at", "2026-09-15T18:00:00+09:00"),
+        ("notice_status", "정정공고"),
+        ("notice_stage", "correction"),
+    ],
+)
+def test_existing_business_authoritative_refresh_is_allowed(
+    field: str, value: object
+) -> None:
+    before, after, before_meta, after_meta = publication_payloads()
+    before["items"][0][field] = "before"
+    after["items"][0][field] = value
 
     result = validate(before, after, before_meta, after_meta)
 

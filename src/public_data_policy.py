@@ -99,6 +99,27 @@ BUSINESS_LIFECYCLE_DERIVED_FIELDS = frozenset(
         "opportunity_status",
     }
 )
+BUSINESS_AUTHORITATIVE_REFRESH_FIELDS = frozenset(
+    {
+        "due_at",
+        "notice_stage",
+        "notice_status",
+    }
+)
+BUSINESS_VERIFIED_EVIDENCE_REFRESH_FIELDS = frozenset(
+    {
+        "attachments",
+        "external_original_url",
+        "original_url",
+    }
+)
+BUSINESS_EVIDENCE_VERIFICATION_FIELDS = frozenset(
+    {
+        "exact_link_verified",
+        "link_verified",
+    }
+)
+BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS = frozenset()
 SAMSUNG_TECHNOLOGY_COMPANY_ID = "samsung-ct-construction"
 SAMSUNG_TECHNOLOGY_BASELINE_IDS = frozenset(
     f"tech-samsung-{index:03d}" for index in range(1, 8)
@@ -265,6 +286,62 @@ def business_items_substantively_equal(
     return not changed_business_fields(before, after)
 
 
+def safe_business_refresh_fields(
+    before: dict[str, Any], after: dict[str, Any]
+) -> list[str]:
+    """Return changed fields allowed by the narrow existing-record contract.
+
+    Official deadline/status values may refresh when non-empty. Evidence fields
+    may refresh only when the candidate carries a verified exact-source link;
+    verification itself is monotonic and cannot be downgraded. Identity or any
+    other substantive mutation makes the transition unsafe.
+    """
+
+    changed = changed_business_fields(before, after)
+    if business_identity(before) != business_identity(after):
+        return []
+
+    verified = bool(
+        after.get("exact_link_verified") or after.get("link_verified")
+    )
+    safe: list[str] = []
+    for field in changed:
+        value = after.get(field)
+        if field in BUSINESS_AUTHORITATIVE_REFRESH_FIELDS and _nonempty(value):
+            safe.append(field)
+        elif (
+            field in BUSINESS_VERIFIED_EVIDENCE_REFRESH_FIELDS
+            and verified
+            and _nonempty(value)
+        ):
+            safe.append(field)
+        elif (
+            field in BUSINESS_EVIDENCE_VERIFICATION_FIELDS
+            and not bool(before.get(field))
+            and bool(value)
+        ):
+            safe.append(field)
+    return safe
+
+
+def unsafe_business_refresh_fields(
+    before: dict[str, Any], after: dict[str, Any]
+) -> list[str]:
+    """Return substantive changes that are outside the refresh contract."""
+
+    changed = changed_business_fields(before, after)
+    safe = set(safe_business_refresh_fields(before, after))
+    return [field for field in changed if field not in safe]
+
+
+def business_items_safely_refreshable(
+    before: dict[str, Any], after: dict[str, Any]
+) -> bool:
+    """Whether an existing public record transition is publication-safe."""
+
+    return not unsafe_business_refresh_fields(before, after)
+
+
 def changed_business_fields(
     before: dict[str, Any], after: dict[str, Any]
 ) -> list[str]:
@@ -331,7 +408,7 @@ def validate_controlled_business_publication(
     modified_ids = {
         item_id
         for item_id in before_id_set.intersection(after_id_set)
-        if not business_items_substantively_equal(
+        if not business_items_safely_refreshable(
             before_by_id[item_id], after_by_id[item_id]
         )
     }
@@ -1095,7 +1172,7 @@ def merge_record(existing: dict[str, Any], fresh: dict[str, Any]) -> dict[str, A
 def merge_existing_business_record(
     existing: dict[str, Any], fresh: dict[str, Any]
 ) -> dict[str, Any]:
-    """Preserve canonical business facts and refresh only derived lifecycle state.
+    """Preserve canonical facts while applying narrow, source-backed refreshes.
 
     Empty-field enrichment is intentionally not enabled here. It requires a
     separate, explicit field allowlist and verification contract.
@@ -1105,6 +1182,20 @@ def merge_existing_business_record(
     for field in BUSINESS_LIFECYCLE_DERIVED_FIELDS:
         if field in fresh:
             merged[field] = fresh[field]
+    for field in BUSINESS_AUTHORITATIVE_REFRESH_FIELDS:
+        if field in fresh and _nonempty(fresh[field]):
+            merged[field] = fresh[field]
+
+    verified = bool(
+        fresh.get("exact_link_verified") or fresh.get("link_verified")
+    )
+    if verified:
+        for field in BUSINESS_VERIFIED_EVIDENCE_REFRESH_FIELDS:
+            if field in fresh and _nonempty(fresh[field]):
+                merged[field] = fresh[field]
+        for field in BUSINESS_EVIDENCE_VERIFICATION_FIELDS:
+            if fresh.get(field):
+                merged[field] = True
     return merged
 
 
