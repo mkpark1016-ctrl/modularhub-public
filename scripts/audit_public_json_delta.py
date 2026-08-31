@@ -13,7 +13,10 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.public_data_policy import business_items_substantively_equal
+from src.public_data_policy import (
+    business_items_substantively_equal,
+    changed_business_fields,
+)
 
 
 LOG_DIR = ROOT / "logs"
@@ -26,6 +29,30 @@ CONTEST_SOURCE_RULES = {
     "GH": {"host": "gh.or.kr", "path_token": "bid-announcement.do", "query_token": "articleNo="},
     "iH": {"host": "ih.co.kr", "path_token": "bbsMsgDetail.do", "query_token": "msg_seq="},
 }
+CANONICAL_PROTECTED_FIELDS = {
+    "amount",
+    "bid_no",
+    "bid_order",
+    "external_original_url",
+    "id",
+    "organization",
+    "plan_no",
+    "source",
+    "source_name",
+    "source_record_id",
+    "source_record_no",
+    "source_type",
+    "title",
+}
+SUPPLEMENTARY_STRUCTURAL_FIELDS = {
+    "attachments",
+    "detail",
+    "manual_check",
+    "modular_evidence",
+    "project_blocks",
+    "project_sites",
+}
+SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS = frozenset()
 
 
 def clean_text(value: Any) -> str:
@@ -110,6 +137,55 @@ def summarize_item(item: dict[str, Any]) -> dict[str, Any]:
         "posted_at": item.get("posted_at"),
         "due_at": item.get("due_at"),
         "external_original_url": item.get("external_original_url"),
+    }
+
+
+def _has_meaningful_value(item: dict[str, Any], field: str) -> bool:
+    if field not in item or item[field] is None:
+        return False
+    value = item[field]
+    if isinstance(value, str):
+        return bool(clean_text(value))
+    if isinstance(value, (dict, list, tuple, set)):
+        return bool(value)
+    return True
+
+
+def classify_changed_fields(
+    before: dict[str, Any], after: dict[str, Any], fields: list[str]
+) -> str:
+    field_set = set(fields)
+    if field_set & CANONICAL_PROTECTED_FIELDS:
+        return "UNSAFE_EXISTING_VALUE_OVERWRITE"
+    if fields and field_set <= SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS and all(
+        not _has_meaningful_value(before, field)
+        and _has_meaningful_value(after, field)
+        for field in fields
+    ):
+        return "SAFE_EMPTY_FIELD_ENRICHMENT"
+    if field_set and field_set <= SUPPLEMENTARY_STRUCTURAL_FIELDS:
+        return "SCHEMA/PRESENTATION_DRIFT"
+    return "UNKNOWN"
+
+
+def summarize_changed_item(
+    before: dict[str, Any], after: dict[str, Any]
+) -> dict[str, Any]:
+    fields = changed_business_fields(before, after)
+    return {
+        "id": item_id(after) or item_id(before),
+        "source": after.get("source_name") or after.get("source")
+        or before.get("source_name") or before.get("source"),
+        "source_type": after.get("source_type") or before.get("source_type"),
+        "changed_fields": fields,
+        "field_presence": {
+            field: {
+                "before_present": field in before,
+                "after_present": field in after,
+            }
+            for field in fields
+        },
+        "classification": classify_changed_fields(before, after, fields),
     }
 
 
@@ -239,13 +315,12 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
     added = [summarize_item(current_map[item_id]) for item_id in added_ids]
     removed = [summarize_item(base_map[item_id]) for item_id in removed_ids]
     changed = [
-        {
-            "id": item_id,
-            "before": summarize_item(base_map[item_id]),
-            "after": summarize_item(current_map[item_id]),
-        }
+        summarize_changed_item(base_map[item_id], current_map[item_id])
         for item_id in changed_ids
     ]
+    changed_field_counts = dict(
+        sorted(Counter(field for item in changed for field in item["changed_fields"]).items())
+    )
     unexpected = find_unexpected(current_items)
     public_contest_violations = validate_public_contest_items(current_items)
     policy_excluded = load_db_exclusions()
@@ -259,6 +334,9 @@ def build_report(base_payload: dict[str, Any], current_payload: dict[str, Any]) 
         "duplicate_id_count": duplicate_id_count(current_items),
         "added_by_source": source_counter([current_map[item_id] for item_id in added_ids]),
         "removed_by_source": source_counter([base_map[item_id] for item_id in removed_ids]),
+        "changed_field_counts": changed_field_counts,
+        "changed_by_source": source_counter([current_map[item_id] for item_id in changed_ids]),
+        "changed_by_type": type_counter([current_map[item_id] for item_id in changed_ids]),
         "current_by_source": source_counter(current_items),
         "current_by_type": type_counter(current_items),
         "added": added,
@@ -314,6 +392,9 @@ def write_reports(report: dict[str, Any]) -> tuple[Path, Path]:
         f"- duplicate_id_count: {report['duplicate_id_count']}",
         f"- added_by_source: {report['added_by_source']}",
         f"- removed_by_source: {report['removed_by_source']}",
+        f"- changed_field_counts: {report['changed_field_counts']}",
+        f"- changed_by_source: {report['changed_by_source']}",
+        f"- changed_by_type: {report['changed_by_type']}",
         f"- current_by_source: {report['current_by_source']}",
         f"- current_by_type: {report['current_by_type']}",
         f"- lh_public_count: {report['lh_public_count']}",
@@ -331,6 +412,14 @@ def write_reports(report: dict[str, Any]) -> tuple[Path, Path]:
     lines.append("## Removed")
     for item in report["removed"]:
         lines.append(f"- {item['id']} | {item['source']} | {item['source_type']} | {item['title']}")
+    lines.append("")
+    lines.append("## Substantive Changes (values redacted)")
+    for item in report["changed"]:
+        fields = ", ".join(item["changed_fields"])
+        lines.append(
+            f"- {item['id']} | {item['source']} | {item['source_type']} | "
+            f"{item['classification']} | {fields}"
+        )
     lines.append("")
     lines.append("## Policy Excluded DB Items")
     for item in report["policy_excluded_db_items"]:
@@ -361,6 +450,9 @@ def main() -> int:
     print(f"duplicate_id_count={report['duplicate_id_count']}")
     print(f"added_by_source={report['added_by_source']}")
     print(f"removed_by_source={report['removed_by_source']}")
+    print(f"changed_field_counts={report['changed_field_counts']}")
+    print(f"changed_by_source={report['changed_by_source']}")
+    print(f"changed_by_type={report['changed_by_type']}")
     print(f"unexpected_records={len(report['unexpected_records'])}")
     print(f"lh_public_count={report['lh_public_count']}")
     print(f"gh_public_count={report['gh_public_count']}")

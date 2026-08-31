@@ -582,7 +582,37 @@ jobs:
         run: python scripts/diagnose_public_json_counts.py
 
       - name: Audit public JSON delta
-        run: python scripts/audit_public_json_delta.py --base git-head --current frontend/public/data/business.json
+        id: public_json_delta_audit
+        run: |
+          set +e
+          python scripts/audit_public_json_delta.py --base git-head --current frontend/public/data/business.json
+          code=$?
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Upload public JSON delta audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-json-delta-audit-${{ github.run_number }}-${{ github.run_attempt }}
+          path: |
+            logs/public_json_delta_audit.json
+            logs/public_json_delta_audit.md
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Enforce public JSON delta audit
+        if: always()
+        run: |
+          code="${{ steps.public_json_delta_audit.outputs.exit_code }}"
+          if [ -z "$code" ]; then
+            echo "::error::Public JSON delta audit did not report an exit code."
+            exit 1
+          fi
+          if [ "$code" -ne 0 ]; then
+            echo "::error::Public JSON delta audit blocked publication. exit_code=$code"
+            exit "$code"
+          fi
 
       - name: Enforce scheduled Unified publication safety
         if: steps.scheduled_unified.outputs.failure_category == 'publication_safety'

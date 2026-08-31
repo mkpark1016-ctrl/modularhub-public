@@ -262,15 +262,21 @@ def business_items_substantively_equal(
 ) -> bool:
     """Compare public business records without derived lifecycle state."""
 
-    return {
-        key: value
-        for key, value in before.items()
+    return not changed_business_fields(before, after)
+
+
+def changed_business_fields(
+    before: dict[str, Any], after: dict[str, Any]
+) -> list[str]:
+    """Return deterministic substantive top-level field names without values."""
+
+    missing = object()
+    return sorted(
+        key
+        for key in set(before) | set(after)
         if key not in BUSINESS_LIFECYCLE_DERIVED_FIELDS
-    } == {
-        key: value
-        for key, value in after.items()
-        if key not in BUSINESS_LIFECYCLE_DERIVED_FIELDS
-    }
+        and before.get(key, missing) != after.get(key, missing)
+    )
 
 
 def validate_controlled_business_publication(
@@ -1086,6 +1092,22 @@ def merge_record(existing: dict[str, Any], fresh: dict[str, Any]) -> dict[str, A
     return merged
 
 
+def merge_existing_business_record(
+    existing: dict[str, Any], fresh: dict[str, Any]
+) -> dict[str, Any]:
+    """Preserve canonical business facts and refresh only derived lifecycle state.
+
+    Empty-field enrichment is intentionally not enabled here. It requires a
+    separate, explicit field allowlist and verification contract.
+    """
+
+    merged = dict(existing)
+    for field in BUSINESS_LIFECYCLE_DERIVED_FIELDS:
+        if field in fresh:
+            merged[field] = fresh[field]
+    return merged
+
+
 def load_removal_allowlist(path: Path | None = None) -> dict[str, dict[str, Any]]:
     allowlist_path = path or REMOVAL_ALLOWLIST_PATH
     if not allowlist_path.exists():
@@ -1174,7 +1196,12 @@ def merge_public_items(
             continue
         key = identity(item)
         if key in merged_by_key:
-            merged_by_key[key] = merge_record(merged_by_key[key], item)
+            if kind == "business":
+                merged_by_key[key] = merge_existing_business_record(
+                    merged_by_key[key], item
+                )
+            else:
+                merged_by_key[key] = merge_record(merged_by_key[key], item)
         else:
             merged_by_key[key] = dict(item)
 

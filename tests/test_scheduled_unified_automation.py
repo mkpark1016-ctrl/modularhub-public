@@ -66,6 +66,26 @@ def test_success_uses_unified_export_and_publication_safety_remains_blocking() -
     )
 
 
+def test_public_delta_failure_artifact_is_uploaded_before_enforcement() -> None:
+    workflow = workflow_text()
+    assert "id: public_json_delta_audit" in workflow
+    assert 'echo "exit_code=$code" >> "$GITHUB_OUTPUT"' in workflow
+    assert "Upload public JSON delta audit artifact" in workflow
+    assert "logs/public_json_delta_audit.json" in workflow
+    assert "logs/public_json_delta_audit.md" in workflow
+    assert "Enforce public JSON delta audit" in workflow
+    audit_section = workflow[
+        workflow.index("Audit public JSON delta"):
+        workflow.index("Enforce scheduled Unified publication safety")
+    ]
+    assert "continue-on-error" not in audit_section
+    assert workflow.index("Audit public JSON delta") < workflow.index(
+        "Upload public JSON delta audit artifact"
+    ) < workflow.index("Enforce public JSON delta audit") < workflow.index(
+        "Protect cumulative public JSON"
+    )
+
+
 def test_sanitized_diagnostics_and_artifact_contract() -> None:
     workflow = workflow_text()
     assert "scheduled-unified-${{ github.run_number }}-${{ github.run_attempt }}" in workflow

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime, timezone
 
 import pytest
 
 from scripts.audit_public_json_delta import blocking_reasons, build_report
+from src.public_data_policy import apply_business_lifecycle, merge_public_items
 
 
 @pytest.fixture(autouse=True)
@@ -107,6 +109,8 @@ def test_substantive_or_sensitive_change_is_blocking(field: str, value: object) 
     assert result["changed_count"] == 1
     assert result["lifecycle_only_changed_count"] == 0
     assert "existing_record_modified" in blocking_reasons(result)
+    assert result["changed"][0]["changed_fields"] == [field]
+    assert result["changed_field_counts"] == {field: 1}
 
 
 def test_existing_id_removal_is_blocking() -> None:
@@ -148,3 +152,84 @@ def test_duplicate_public_id_is_blocking() -> None:
 
     assert result["duplicate_id_count"] == 1
     assert "public_id_collision" in blocking_reasons(result)
+
+
+def test_nested_detail_mutation_is_redacted_and_blocking() -> None:
+    before = item("1")
+    before["detail"] = {"status": "before"}
+    after = deepcopy(before)
+    after["detail"] = {"status": "after", "private": "must-not-appear"}
+
+    result = report([before], [after])
+
+    assert result["changed"][0]["changed_fields"] == ["detail"]
+    assert result["changed"][0]["classification"] == "SCHEMA/PRESENTATION_DRIFT"
+    assert result["changed"][0]["field_presence"] == {
+        "detail": {"before_present": True, "after_present": True}
+    }
+    assert "must-not-appear" not in str(result)
+    assert "existing_record_modified" in blocking_reasons(result)
+
+
+def test_changed_field_diagnostics_do_not_serialize_secret_values() -> None:
+    before = item("1")
+    after = deepcopy(before)
+    after["request_headers"] = {"Authorization": "super-secret-value"}
+
+    result = report([before], [after])
+
+    serialized = str(result)
+    assert result["changed"][0]["changed_fields"] == ["request_headers"]
+    assert "super-secret-value" not in serialized
+    assert "Authorization" not in serialized
+
+
+@pytest.mark.parametrize("field", ["title", "organization", "amount"])
+def test_canonical_mutation_is_classified_as_unsafe_overwrite(field: str) -> None:
+    before = item("1")
+    after = deepcopy(before)
+    after[field] = f"changed-{field}" if field != "amount" else 200
+
+    result = report([before], [after])
+
+    assert result["changed"][0]["classification"] == "UNSAFE_EXISTING_VALUE_OVERWRITE"
+    assert result["changed"][0]["changed_fields"] == [field]
+    assert "existing_record_modified" in blocking_reasons(result)
+
+
+def test_additive_export_preserves_existing_canonical_facts() -> None:
+    now = datetime(2026, 8, 20, tzinfo=timezone.utc)
+    before = item("1")
+    before["due_at"] = "2026-08-25T00:00:00+09:00"
+    fresh_existing = deepcopy(before)
+    fresh_existing.update(
+        {
+            "title": "Changed title",
+            "organization": "Changed organization",
+            "amount": 999,
+            "summary": "Unapproved enrichment",
+        }
+    )
+    fresh_new = item("2")
+    fresh_new["source_record_id"] = "record-2"
+
+    merged = merge_public_items(
+        [before],
+        [fresh_existing, fresh_new],
+        kind="business",
+        now=now,
+        removal_allowlist={},
+    )
+    candidate = apply_business_lifecycle(merged, now=now)
+    result = report([before], candidate)
+    existing = next(row for row in candidate if row["id"] == "1")
+
+    assert existing["title"] == before["title"]
+    assert existing["organization"] == before["organization"]
+    assert existing["amount"] == before["amount"]
+    assert "summary" not in existing
+    assert result["added_count"] == 1
+    assert result["removed_count"] == 0
+    assert result["changed_count"] == 0
+    assert result["lifecycle_only_changed_count"] == 1
+    assert blocking_reasons(result) == []
