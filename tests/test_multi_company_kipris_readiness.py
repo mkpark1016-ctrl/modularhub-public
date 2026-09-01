@@ -58,6 +58,31 @@ def test_exact_alias_matching_is_isolated_for_first_cohort() -> None:
         assert result.company_ids == (company_id,)
 
 
+def test_hyundai_english_alias_remains_approved_for_identity_matching() -> None:
+    _, _, company_map, contracts = _payloads()
+    contract = contracts["hyundai-engineering"]
+    identity = company_identity_for_alias_contract(
+        company_map["hyundai-engineering"],
+        contract,
+    )
+
+    decision = alias_decision(contract, "Hyundai Engineering")
+    assert decision.allowed is True
+    assert decision.category == "approved_fallback_discovery"
+    assert decision.collection_mode == "fallback_discovery"
+    assert alias_decision(contract, "현대엔지니어링 주식회사").category == "approved_completeness"
+    assert alias_decision(contract, "현대엔지니어링").category == "approved_completeness"
+    english_match = match_companies(_patent("Hyundai Engineering"), [identity])
+    assert english_match.outcome == "normalized_alias"
+    assert english_match.company_ids == ("hyundai-engineering",)
+
+    for applicant in ("현대건설", "현대엔지니어링서비스", "현대"):
+        assert match_companies(_patent(applicant), [identity]).outcome == "unmatched"
+    assert alias_decision(contract, "현대건설").category == "excluded"
+    assert alias_decision(contract, "현대엔지니어링서비스").category == "excluded"
+    assert alias_decision(contract, "현대").category == "ambiguous"
+
+
 def test_excluded_group_companies_do_not_match() -> None:
     _, _, company_map, contract_map = _payloads()
     excluded = {"gs-ec": "GS칼텍스", "hyundai-engineering": "현대건설", "dl-enc": "DL건설"}
@@ -147,6 +172,67 @@ def test_request_plan_is_deterministic_and_bounded() -> None:
         "maximum_records": 200,
         "maximum_requests": 3,
     }
+
+
+def test_hyundai_default_and_explicit_fallback_request_plans() -> None:
+    _, config, _, contracts = _payloads()
+    contract = contracts["hyundai-engineering"]
+
+    default = build_live_request_plan(contract, config["request_defaults"])
+    assert default["planned_alias_order"] == [
+        "현대엔지니어링 주식회사",
+        "현대엔지니어링",
+    ]
+    assert default["maximum_requests"] == 2
+    assert "Hyundai Engineering" not in default["planned_alias_order"]
+
+    fallback = build_live_request_plan(
+        contract,
+        config["request_defaults"],
+        include_fallback=True,
+    )
+    assert fallback["planned_alias_order"] == [
+        "현대엔지니어링 주식회사",
+        "현대엔지니어링",
+        "Hyundai Engineering",
+    ]
+    assert fallback["maximum_requests"] == 3
+    assert all(
+        rejected not in fallback["planned_alias_order"]
+        for rejected in ("현대건설", "현대엔지니어링서비스", "현대", "현대ENG")
+    )
+
+
+def test_gs_dl_and_legacy_collection_semantics_are_unchanged() -> None:
+    _, config, _, contracts = _payloads()
+    defaults = config["request_defaults"]
+
+    assert build_live_request_plan(contracts["gs-ec"], defaults)["planned_alias_order"] == [
+        "지에스건설 주식회사",
+        "지에스건설",
+        "GS건설",
+    ]
+    assert build_live_request_plan(contracts["dl-enc"], defaults)["planned_alias_order"] == [
+        "디엘이앤씨 주식회사",
+        "디엘이앤씨",
+        "DL이앤씨",
+    ]
+    dl_fallback_plan = build_live_request_plan(
+        contracts["dl-enc"],
+        defaults,
+        include_fallback=True,
+    )["planned_alias_order"]
+    assert "대림산업" not in dl_fallback_plan
+    assert "대림산업 주식회사" not in dl_fallback_plan
+
+    legacy_contract = {
+        "company_id": "legacy",
+        "approved_aliases": [
+            {"value": "default", "order": 1},
+            {"value": "disabled", "order": 2, "live_enabled": False},
+        ],
+    }
+    assert build_live_request_plan(legacy_contract, defaults)["planned_alias_order"] == ["default"]
 
 
 def test_baseline_inventory_and_exact_lookup_budgets_match_public_baseline() -> None:

@@ -26,12 +26,32 @@ READINESS_DECISIONS = frozenset({
     KAIA_MANUAL_BASELINE,
 })
 
+COLLECTION_COMPLETENESS = "completeness"
+COLLECTION_FALLBACK_DISCOVERY = "fallback_discovery"
+COLLECTION_DISABLED = "disabled"
+COLLECTION_MODES = frozenset({
+    COLLECTION_COMPLETENESS,
+    COLLECTION_FALLBACK_DISCOVERY,
+    COLLECTION_DISABLED,
+})
+
 
 @dataclass(frozen=True)
 class AliasDecision:
     allowed: bool
     category: str
     matched_value: str | None = None
+    collection_mode: str | None = None
+
+
+def _approved_alias_collection_mode(entry: dict[str, Any]) -> str:
+    explicit_mode = entry.get("collection_mode")
+    if explicit_mode is None:
+        return COLLECTION_COMPLETENESS if entry.get("live_enabled", True) else COLLECTION_DISABLED
+    mode = str(explicit_mode)
+    if mode not in COLLECTION_MODES:
+        raise ValueError(f"unsupported approved-alias collection_mode={mode!r}")
+    return mode
 
 
 def classify_baseline_identity(record: dict[str, Any]) -> str:
@@ -105,7 +125,7 @@ def company_identity_for_alias_contract(
     *,
     include_historical: bool = False,
 ) -> CompanyIdentity:
-    aliases = [entry["value"] for entry in contract.get("approved_aliases", []) if entry.get("live_enabled", True)]
+    aliases = [entry["value"] for entry in contract.get("approved_aliases", [])]
     if include_historical:
         aliases.extend(entry["value"] for entry in contract.get("historical_alias_candidates", []))
     return CompanyIdentity(
@@ -126,7 +146,13 @@ def alias_decision(contract: dict[str, Any], value: str, *, allow_historical: bo
                 return AliasDecision(False, category, entry["value"])
     for entry in contract.get("approved_aliases", []):
         if normalize_company_name(entry["value"]) == normalized:
-            return AliasDecision(bool(entry.get("live_enabled", True)), "approved", entry["value"])
+            collection_mode = _approved_alias_collection_mode(entry)
+            return AliasDecision(
+                True,
+                f"approved_{collection_mode}",
+                entry["value"],
+                collection_mode,
+            )
     for entry in contract.get("historical_alias_candidates", []):
         if normalize_company_name(entry["value"]) == normalized:
             return AliasDecision(allow_historical, "historical_explicit_only", entry["value"])
@@ -149,6 +175,14 @@ def validate_alias_contracts(contracts: Iterable[dict[str, Any]]) -> dict[str, l
             approved[normalized].append((company_id, entry["value"]))
             if normalized in rejected:
                 invalid.append({"company_id": company_id, "alias": entry["value"], "reason": "approved_and_rejected"})
+            try:
+                _approved_alias_collection_mode(entry)
+            except ValueError:
+                invalid.append({
+                    "company_id": company_id,
+                    "alias": entry["value"],
+                    "reason": "invalid_collection_mode",
+                })
         for entry in contract.get("historical_alias_candidates", []):
             historical[normalize_company_name(entry["value"])].append((company_id, entry["value"]))
     return {
@@ -158,9 +192,22 @@ def validate_alias_contracts(contracts: Iterable[dict[str, Any]]) -> dict[str, l
     }
 
 
-def build_live_request_plan(contract: dict[str, Any], defaults: dict[str, Any]) -> dict[str, Any]:
+def build_live_request_plan(
+    contract: dict[str, Any],
+    defaults: dict[str, Any],
+    *,
+    include_fallback: bool = False,
+) -> dict[str, Any]:
     aliases = sorted(
-        (entry for entry in contract.get("approved_aliases", []) if entry.get("live_enabled", True)),
+        (
+            entry
+            for entry in contract.get("approved_aliases", [])
+            if _approved_alias_collection_mode(entry) == COLLECTION_COMPLETENESS
+            or (
+                include_fallback
+                and _approved_alias_collection_mode(entry) == COLLECTION_FALLBACK_DISCOVERY
+            )
+        ),
         key=lambda entry: (int(entry.get("order", 999)), entry["value"]),
     )
     page_size = int(defaults["page_size"])
