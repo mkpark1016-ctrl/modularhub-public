@@ -1,5 +1,5 @@
 {
-  "schema_version": "multi-company-kipris-readiness-v1",
+  "schema_version": "multi-company-kipris-readiness-v2",
   "artifact_root": "artifacts/company-technology/multi-company-live/<company-id>/",
   "publication_sequence": ["gs-ec", "hyundai-engineering", "dl-enc"],
   "request_defaults": {
@@ -35,7 +35,7 @@
       "approved_aliases": [
         {"value": "현대엔지니어링 주식회사", "kind": "exact_legal_name", "reason": "Repository DART identity registry legal name", "order": 1, "live_enabled": true},
         {"value": "현대엔지니어링", "kind": "normalized_exact_alias", "reason": "Corporate-form-normalized legal name and ModularHub display name", "order": 2, "live_enabled": true},
-        {"value": "Hyundai Engineering", "kind": "curated_english_alias", "reason": "Existing canonical English alias in companies.json", "order": 3, "live_enabled": true}
+        {"value": "Hyundai Engineering", "kind": "curated_english_alias", "reason": "Approved identity alias retained for explicit fallback discovery; full pagination added no incremental Hyundai patent identity", "order": 3, "collection_mode": "fallback_discovery"}
       ],
       "historical_alias_candidates": [],
       "excluded_aliases": [
