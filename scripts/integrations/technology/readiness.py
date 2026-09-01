@@ -125,7 +125,11 @@ def company_identity_for_alias_contract(
     *,
     include_historical: bool = False,
 ) -> CompanyIdentity:
-    aliases = [entry["value"] for entry in contract.get("approved_aliases", [])]
+    aliases = [
+        entry["value"]
+        for entry in contract.get("approved_aliases", [])
+        if _approved_alias_collection_mode(entry) != COLLECTION_DISABLED
+    ]
     if include_historical:
         aliases.extend(entry["value"] for entry in contract.get("historical_alias_candidates", []))
     return CompanyIdentity(
@@ -148,7 +152,7 @@ def alias_decision(contract: dict[str, Any], value: str, *, allow_historical: bo
         if normalize_company_name(entry["value"]) == normalized:
             collection_mode = _approved_alias_collection_mode(entry)
             return AliasDecision(
-                True,
+                collection_mode != COLLECTION_DISABLED,
                 f"approved_{collection_mode}",
                 entry["value"],
                 collection_mode,

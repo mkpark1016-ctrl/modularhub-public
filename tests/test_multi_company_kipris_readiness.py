@@ -204,7 +204,7 @@ def test_hyundai_default_and_explicit_fallback_request_plans() -> None:
 
 
 def test_gs_dl_and_legacy_collection_semantics_are_unchanged() -> None:
-    _, config, _, contracts = _payloads()
+    _, config, company_map, contracts = _payloads()
     defaults = config["request_defaults"]
 
     assert build_live_request_plan(contracts["gs-ec"], defaults)["planned_alias_order"] == [
@@ -227,12 +227,50 @@ def test_gs_dl_and_legacy_collection_semantics_are_unchanged() -> None:
 
     legacy_contract = {
         "company_id": "legacy",
+        "canonical_applicant": "Legacy Company",
         "approved_aliases": [
             {"value": "default", "order": 1},
             {"value": "disabled", "order": 2, "live_enabled": False},
+            {"value": "explicit-disabled", "order": 3, "collection_mode": "disabled"},
         ],
     }
     assert build_live_request_plan(legacy_contract, defaults)["planned_alias_order"] == ["default"]
+    assert build_live_request_plan(
+        legacy_contract,
+        defaults,
+        include_fallback=True,
+    )["planned_alias_order"] == ["default"]
+
+    for alias in ("disabled", "explicit-disabled"):
+        decision = alias_decision(legacy_contract, alias)
+        assert decision.allowed is False
+        assert decision.category == "approved_disabled"
+        assert decision.collection_mode == "disabled"
+
+    legacy_identity = company_identity_for_alias_contract(
+        {"company_id": "legacy"},
+        legacy_contract,
+    )
+    assert match_companies(_patent("default"), [legacy_identity]).company_ids == ("legacy",)
+    assert match_companies(_patent("disabled"), [legacy_identity]).outcome == "unmatched"
+    assert match_companies(_patent("explicit-disabled"), [legacy_identity]).outcome == "unmatched"
+
+
+def test_invalid_collection_mode_is_rejected_without_silent_fallback() -> None:
+    invalid_contract = {
+        "company_id": "invalid",
+        "approved_aliases": [
+            {"value": "invalid alias", "collection_mode": "unknown"},
+        ],
+        "excluded_aliases": [],
+        "ambiguous_aliases": [],
+    }
+    validation = validate_alias_contracts([invalid_contract])
+    assert validation["invalid_entries"] == [{
+        "company_id": "invalid",
+        "alias": "invalid alias",
+        "reason": "invalid_collection_mode",
+    }]
 
 
 def test_baseline_inventory_and_exact_lookup_budgets_match_public_baseline() -> None:
