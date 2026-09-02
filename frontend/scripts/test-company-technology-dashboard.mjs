@@ -65,8 +65,23 @@ const hyundaiItems = technologyItems(hyundai);
 const hyundaiTypes = new Set(hyundaiItems.map((item) => item.record_type || item.group));
 assert.deepEqual(hyundaiTypes, new Set(["construction_new_technology", "patent"]));
 assert.equal(filterTechnologyItems(hyundaiItems, { recordType: "construction_new_technology" }).length, 1);
-assert.equal(filterTechnologyItems(hyundaiItems, { recordType: "patent" }).length, 13);
-assert.equal(technologyOverview(hyundai, hyundaiItems).kipris, 0);
+assert.equal(filterTechnologyItems(hyundaiItems, { recordType: "patent" }).length, 23);
+assert.deepEqual(technologyOverview(hyundai, hyundaiItems), { total: 24, registered: 23, kipris: 10, evidenceLinked: 24 });
+assert.equal(hyundaiItems.filter(isKiprisLinkedTechnology).length, 10);
+
+for (const applicationNumber of [
+  "10-2012-0156169",
+  "10-2023-0112193",
+  "10-2024-0081248",
+  "10-2025-0019265",
+]) {
+  const patent = hyundaiItems.find((item) => item.application_number === applicationNumber);
+  assert.ok(patent);
+  assert.equal(patent.record_type, "patent");
+  assert.equal(patent.status, "registered");
+  assert.equal(isKiprisLinkedTechnology(patent), true);
+  assert.equal(resolvedTechnologySources(hyundai, patent).length, 1);
+}
 
 assert.match(componentSource, /const PAGE_SIZE = 8/);
 assert.match(componentSource, /filtered\.slice\(0, visibleCount\)/);

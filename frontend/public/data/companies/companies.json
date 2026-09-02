@@ -10750,7 +10750,7 @@
             "summary": "변단면 천장보를 통한 유닛 경량화와 철골 물량 절감",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2015-06-30",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10759,7 +10759,9 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2014-0058039",
+            "application_date": "2014-05-14"
           },
           {
             "technology_id": "tech-hyeng-006",
@@ -10786,7 +10788,7 @@
             "summary": "H형강 보 웨브 개구부와 실내 볼트접합으로 내진성능 향상",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2018-07-09",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10795,7 +10797,9 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2017-0096152",
+            "application_date": "2017-07-28"
           },
           {
             "technology_id": "tech-hyeng-008",
@@ -10804,7 +10808,7 @@
             "summary": "확장형 기둥과 트랜스퍼 거더를 통한 초고층 하중전달",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2018-10-05",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10813,7 +10817,10 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2016-0111491",
+            "patent_number": "1020180024728",
+            "application_date": "2016-08-31"
           },
           {
             "technology_id": "tech-hyeng-009",
@@ -10822,7 +10829,7 @@
             "summary": "기둥 단면 확장으로 고층부 축력과 횡력에 대응",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2018-10-05",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10831,7 +10838,10 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2016-0111488",
+            "patent_number": "1020180024727",
+            "application_date": "2016-08-31"
           },
           {
             "technology_id": "tech-hyeng-010",
@@ -10840,7 +10850,7 @@
             "summary": "수직결합 브라켓과 하중전달 기둥으로 초고층 적층 안정성 확보",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2018-10-05",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10849,7 +10859,10 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2016-0111493",
+            "patent_number": "1020180024729",
+            "application_date": "2016-08-31"
           },
           {
             "technology_id": "tech-hyeng-011",
@@ -10876,7 +10889,7 @@
             "summary": "외장재 슬라이딩 삽입으로 기밀·수밀·단열을 확보하고 고소작업 축소",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2023-07-19",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10885,7 +10898,9 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2022-0175952",
+            "application_date": "2022-12-15"
           },
           {
             "technology_id": "tech-hyeng-013",
@@ -10894,7 +10909,7 @@
             "summary": "외단열 수평·수직 조인트와 하향식 시공으로 외부작업 최소화",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2023-07-19",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10903,7 +10918,9 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2022-0175980",
+            "application_date": "2022-12-15"
           },
           {
             "technology_id": "tech-hyeng-014",
@@ -10912,7 +10929,7 @@
             "summary": "슬래브·석고보드·천장 내부 차음판으로 중량충격음과 층간소음 저감",
             "filed_at": null,
             "registered_at": null,
-            "registration_date": null,
+            "registration_date": "2024-12-09",
             "record_type": "patent",
             "status": "registered",
             "verification_status": "cross_verified",
@@ -10921,7 +10938,169 @@
               "manual-verified-hyundai-engineering-20260716"
             ],
             "source_count": 1,
-            "verified_at": "2026-07-16"
+            "verified_at": "2026-07-16",
+            "application_number": "10-2024-0011527",
+            "application_date": "2024-01-25"
+          },
+          {
+            "application_date": "2012-12-28",
+            "application_number": "10-2012-0156169",
+            "name": "철골구조물의 주각부 수평 조절장치 및 이를 이용한 주각부 시공방법",
+            "patent_number": "1020140086098",
+            "record_type": "patent",
+            "registration_date": "2014-12-18",
+            "registration_number": "10-1476511",
+            "source_ids": [
+              "official:kipris:patent:1020120156169"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 모듈러 유닛, 건축물 기둥 등을 포함한 철골 기둥의 설치를 위하여 기초 콘크리트에 기둥를 고정시킬 때 기둥의 단부의 수평도 유지를 위하여 높이 조절을 할 수 있는 철골구조물의 주각부 수평 조절장치 및 이를 이용한 주각부 시공방법에 관한 것이다.  본 발명의 바람직한 실시 예에 따른 철골구조물의 주각부 수평 조절장치는 직육면체 형상의 지지본체와, 지지본체의 상부에 원형으로 형성되는 결합홈과, 지지본체의 측면에서 결합홈으로 관통되어 형성되며 너트홈이 형성된 너트공으로 구성되는 고정부재와; 직육면체의 형상으로 고정부재의 상부에 위치하며, 일측면 하단에서 돌출되어 지지턱이 형성되며, 결합홈과 대응되는 위치의 중앙부를 수직으로 관통하며 내부에 너트홈이 형성된 결합공이 형성된 높이 조절부재와; 원통형의 형상으로 하부 둘레에 구성되는 가이드홈과, 상부의 외주연에 형성되는 나사산과, 상단부에는 다각형 단면을 갖는 렌치홈이 형성되어, 하단부가 고정부재의 결합홈에 인입되도록 높이 조절부재의 결합공에 볼트 결합되는 높이 조절볼트와; 일단부에 다각형 단면을 갖는 렌치홈이 형성되어, 고정부재의 너트공에 볼트 결합되어 고정부재의 결합홈에 인입된 높이 조절볼트의 하단부를 조이도록 결합되는 고정볼트;로 구성된다.",
+            "technology_area": "E02D 27/12|E21D 20/00",
+            "technology_id": "tech-hyundai-engineering-kipris-1020120156169"
+          },
+          {
+            "application_date": "2023-08-25",
+            "application_number": "10-2023-0112193",
+            "name": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2024-08-22",
+            "registration_number": "10-2699253",
+            "source_ids": [
+              "official:kipris:patent:1020230112193"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 하부기둥 부재, 상기 하부기둥 부재에 결합되고, 서로 마주보도록 배치되는 제1상부 플랜지와 제1하부 플랜지 및 일측은 상기 제1상부 플랜지에 연결되고 타측은 상기 제1하부 플랜지에 연결되는 제1웨브를 포함하는 제1 H형강으로 이루어지는 제1보부재, 상기 하부기둥 부재의 상부에 이격되도록 배치되는 상부기둥 부재, 상기 제1보부재의 상부에 이격되도록 배치되어서, 상기 상부기둥 부재에 결합되는 제2보부재, 상기 제1보부재 및 상기 제2보부재 사이에 밀착되도록 배치되는 연결 플레이트를 포함하고, 상기 제1보부재는, 상기 제1웨브를 중심으로 바깥쪽에 해당하는 상기 제1상부 플랜지 외측부와 상기 연결 플레이트 외측부와 상기 제2보부재 외측부 각각에 대한 볼트 결합 작업을 용이하게 하기 위하여, 상기 제1보부재의 일측 단부로부터 타측 단부 방향으로 제1설정 길이 이격된 위치까지의 부분 중에서 하부에 보 절취부가 형성되어 있으며, 상기 제1보부재 중에서 상기 보 절취부의 상부 부분인 결합부가 상기 하부기둥 부재에 결합되는, 주택 모듈러 유닛의 결합 구조를 제공한다.  따라서 고층 주택의 건축 시에도 하부 모듈러 유닛의 천장보에 형성되어 있는 보 절취부를 통해서 모듈러 주택의 내측에서 안전하고 편리하게 상하부 모듈을 결합시킬 수 있는 장점이 있다.",
+            "technology_area": "E04B 1/24|E04B 1/348",
+            "technology_id": "tech-hyundai-engineering-kipris-1020230112193"
+          },
+          {
+            "application_date": "2023-08-25",
+            "application_number": "10-2023-0112194",
+            "name": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2024-06-21",
+            "registration_number": "10-2678742",
+            "source_ids": [
+              "official:kipris:patent:1020230112194"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 서로 마주보도록 배치되는 제1좌측 플랜지와 제1우측 플랜지 및 일측은 상기 제1좌측 플랜지에 연결되고 타측은 상기 제1우측 플랜지에 연결되는 제1기둥 웨브를 구비하는 제1 H형강을 포함하되, 상부에 모르타르 주입이 가능한 제1그라우팅부가 형성되어 있는 하부 기둥부재, 상기 하부 기둥부재에 결합되는 제1보부재, 서로 마주보도록 배치되는 제2좌측 플랜지와 제2우측 플랜지 및 일측은 상기 제2좌측 플랜지에 연결되고 타측은 상기 제2우측 플랜지에 연결되는 제2기둥 웨브를 구비하는 제2 H형강을 포함하되, 상기 하부 기둥부재의 상부에 이격되도록 배치되고, 하부에 모르타르 주입이 가능한 제2그라우팅부가 형성되어 있는 상부 기둥부재 및 상기 제1보부재에 이격되도록 상기 상부 기둥부재에 결합되는 제2보부재 및 하부는 상기 제1그라우팅부에 배치되고, 상기 제1그라우팅부의 상부 및 상기 제2그라우팅부의 하부를 관통하여 연장되어 상부는 상기 제2그라우팅부에 배치되어 상기 하부 기둥부재 및 상기 상부 기둥부재를 결합시키는 연결 모듈을 포함하고, 상기 제1그라우팅부 및 상기 제2그라우팅부에 각각 주입된 모르타르에 의하여, 상기 연결 모듈의 상부 및 하부가 상기 상부기둥 부재 및 상기 하부기둥 부재와 일체로 고정되는 주택 모듈러 유닛의 결합 구조를 제공한다.  따라서 모듈간 접합 시 하부기둥 부재와 상부기둥 부재...(이하생략)",
+            "technology_area": "E04B 1/24|E04B 1/348",
+            "technology_id": "tech-hyundai-engineering-kipris-1020230112194"
+          },
+          {
+            "application_date": "2023-08-25",
+            "application_number": "10-2023-0112195",
+            "name": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2024-08-22",
+            "registration_number": "10-2699254",
+            "source_ids": [
+              "official:kipris:patent:1020230112195"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 하부기둥 부재, 서로 마주보도록 배치되는 제1상부 플랜지와 제1하부 플랜지 및 일측은 상기 제1상부 플랜지에 연결되고 타측은 상기 제1하부 플랜지에 연결되는 제1웨브를 포함하는 제1 H형강으로 이루어지되, 상기 하부기둥 부재와 설정 길이 이격되어 배치되는 제1보부재, 상기 제1보부재가 상기 하부기둥 부재와 이격되어 있는 이격공간에 배치되어서 일측은 상기 제1보부재와 결합되고, 타측은 상기 하부기둥 부재와 결합되는 이격부 연결부재, 상기 하부기둥 부재의 상부에 이격되도록 배치되는 상부기둥 부재, 상기 제1보부재 및 상기 이격부 연결부재의 상부에 이격되도록 배치되어서, 상기 상부기둥 부재에 결합되는 제2보부재 및 상기 이격부 연결부재 및 상기 제2보부재 사이에 밀착되도록 배치되는 연결 플레이트를 포함하고, 상기 이격부 연결부재는, 상기 제1웨브를 중심으로 바깥쪽에 해당하는 상기 제1상부 플랜지의 외측부와 상기 연결 플레이트의 외측부와 상기 제2보부재의 외측부 각각에 대한 볼트 결합 작업을 용이하게 하기 위하여, 전면은 개구되어 있고 내부에는 중공이 형성되어 있는 주택 모듈러 유닛의 결합 구조를 제공한다.  따라서 고층 주택의 건축 시에도 하부 모듈러 유닛의 천정보와 기둥 사이의 이격공간에 설치되어 있는 이격부 연결부재의 중공을 이용하여 모듈러 주택의 내측에서 안전하고 편리하게 상하부 모듈을 ...(이하생략)",
+            "technology_area": "E04B 1/24",
+            "technology_id": "tech-hyundai-engineering-kipris-1020230112195"
+          },
+          {
+            "application_date": "2023-08-25",
+            "application_number": "10-2023-0112196",
+            "name": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2024-08-22",
+            "registration_number": "10-2699255",
+            "source_ids": [
+              "official:kipris:patent:1020230112196"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 서로 마주보도록 배치되는 제1좌측 플랜지와 제1우측 플랜지 및 일측은 상기 제1좌측 플랜지에 연결되고 타측은 상기 제1우측 플랜지에 연결되는 제1기둥 웨브를 구비하는 제1 H형강을 포함하되, 상단부에 제1상단부 엔드 플레이트가 배치되어 있는 하부 기둥부재, 상기 하부 기둥부재에 결합되는 제1보부재, 서로 마주보도록 배치되는 제2좌측 플랜지와 제2우측 플랜지 및 일측은 상기 제2좌측 플랜지에 연결되고 타측은 상기 제2우측 플랜지에 연결되는 제2기둥 웨브를 구비하는 제2 H형강을 포함하되, 상기 하부 기둥부재의 상부에 이격되도록 배치되고, 하단부에 제2하단부 엔드 플레이트가 배치되어 있는 상부 기둥부재, 상기 제1보부재에 이격되도록 상기 상부 기둥부재에 결합되는 제2보부재, 상기 하부 기둥부재 및 상기 상부 기둥부재 사이에 밀착되도록 배치되는 연결 플레이트 및 상기 제2하단부 엔드 플레이트와 상기 연결 플레이트와 상기 제1상단부 엔드 플레이트를 결합시키는 볼트와 상기 제2하단부 엔드 플레이트 상에 배치되고 상기 볼트가 관통하며 내부에 모르타르가 채워지는 관 부재를 구비하는 기둥 연결부재를 포함하고, 상기 관 부재에 주입된 모르타르에 의하여 상기 볼트가 상기 관 부재와 일체로 고정되는 주택 모듈러 유닛의 결합 구조를 제공한다.  따라서 모듈간 접합 시 앵커볼트 및 앵커볼트가 관통하고 내부에 모...(이하생략)",
+            "technology_area": "E04B 1/24|E04B 1/348",
+            "technology_id": "tech-hyundai-engineering-kipris-1020230112196"
+          },
+          {
+            "application_date": "2024-06-21",
+            "application_number": "10-2024-0081248",
+            "name": "철골조 모듈러 유닛의 결합 구조 및 시공 방법",
+            "patent_number": null,
+            "record_type": "patent",
+            "registration_date": "2025-02-14",
+            "registration_number": "10-2770361",
+            "source_ids": [
+              "official:kipris:patent:1020240081248"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 서로 마주보도록 배치되는 제1하부기둥 좌측 플랜지와 제1하부기둥 우측 플랜지 및 일측은 상기 제1하부기둥 좌측 플랜지에 연결되고 타측은 상기 제1하부기둥 우측 플랜지에 연결되는 제1하부기둥 웨브를 포함하는 제1하부 기둥용 형강을 포함하되, 상기 제1하부기둥 웨브보다 전측 부분에 상하 방향으로 제1관통공이 형성되어 있는 제1상단부 엔드 플레이트가 상기 제1하부 기둥용 형강의 상단부에 배치되어 있는 하부기둥 부재, 서로 마주보도록 배치되는 제1상부기둥 좌측 플랜지와 제1상부기둥 우측 플랜지 및 일측은 상기 제1상부기둥 좌측 플랜지에 연결되고 타측은 상기 제1상부기둥 우측 플랜지에 연결되는 제1상부기둥 웨브를 구비하는 제1상부 기둥용 형강을 포함하되, 상기 제1상부기둥 웨브보다 전측 부분에 상기 상하 방향으로 제2관통공이 형성되어 있는 제1하단부 엔드 플레이트가 상기 제1상부 기둥용 형강의 하단부에 배치되어 있고, 상기 제1상부기둥 웨브의 후면부에서 전면부 방향으로 관통하는 볼트에 끼워지고 상기 제1상부기둥 웨브의 전면과 이격되도록 배치되는 제1기둥 연결부재 상부 와셔 플레이트를 포함하며, 상기 하부 기둥부재의 상부에 이격되도록 배치되는 상부기둥 부재, 상기 제1상단부 엔드 플레이트와 상기 제1하단부 엔드 플레이트 사이에 밀착되도록 배치되고, 상기 제1하부기둥 웨브보다 전측 부분에 상기 상하 ...(이하생략)",
+            "technology_area": "E04B 1/348|E04B 1/24|E04B 1/38|E04B 1/58",
+            "technology_id": "tech-hyundai-engineering-kipris-1020240081248"
+          },
+          {
+            "application_date": "2024-06-21",
+            "application_number": "10-2024-0081249",
+            "name": "철골조 모듈러 유닛의 골조 형성 방식 및 시공 방법",
+            "patent_number": "1020250179767",
+            "record_type": "patent",
+            "registration_date": "2026-01-30",
+            "registration_number": "10-2922866",
+            "source_ids": [
+              "official:kipris:patent:1020240081249"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 서로 이격되어 배치되는 제1하부기둥 부재 및 제2하부기둥 부재, 상기 제1하부기둥 부재와 상기 제2하부기둥 부재 사이에 배치되되, 상기 제1하부기둥 부재와 상기 제2하부기둥 부재와 각각 이격되어 배치되는 제1하부 보 부재, 상기 제1하부기둥 부재와 상기 제1하부 보 부재 사이에 배치되며, 상기 제1하부 보 부재와 제1하부 접합 플레이트로 결합되고, 상기 제1하부기둥 부재와 직접 결합되며, 상기 제1하부기둥 부재와 상기 제1하부 보 부재 사이의 이격 공간 중에서 상기 제1하부 보 부재를 상기 제1하부기둥 부재까지 가상으로 수평 연장한 부분인 제1하부 이격부가 빈 공간으로 형성되도록 상기 제1하부 보 부재 보다 아래쪽 또는 위쪽에 배치되어서 상기 제1하부 보 부재와 단차 구조를 형성하는 제1하부 브릿지 유닛, 상기 제2하부기둥 부재와 상기 제1하부 보 부재 사이에 배치되며, 상기 제2하부 보 부재와 제2하부 접합 플레이트로 결합되고, 상기 제2하부기둥 부재와 직접 결합되며, 상기 제2하부기둥 부재와 상기 제1하부 보 부재 사이의 이격 공간 중에서 상기 제1하부 보 부재를 상기 제2하부기둥 부재까지 가상으로 수평 연장한 부분인 제2하부 이격부가 빈 공간으로 형성되도록 상기 제1하부 보 부재 보다 아래쪽 또는 위쪽에 배치되어서 상기 제1하부 보 부재와 단차 구조를 형성하는 제2하부 브릿지 유닛을...(이하생략)",
+            "technology_area": "E04B 1/348|E04B 1/343|E04B 1/24|E04B 1/38|E04B 1/58",
+            "technology_id": "tech-hyundai-engineering-kipris-1020240081249"
+          },
+          {
+            "application_date": "2025-02-14",
+            "application_number": "10-2025-0019265",
+            "name": "모듈러 유닛의 상하 결합 구조 및 시공 방법",
+            "patent_number": "1020250180113",
+            "record_type": "patent",
+            "registration_date": "2026-05-21",
+            "registration_number": "10-2969484",
+            "source_ids": [
+              "official:kipris:patent:1020250019265"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 서로 마주보도록 배치되는 제1하부기둥 좌측 플랜지와 제1하부기둥 우측 플랜지 및 일측은 상기 제1하부기둥 좌측 플랜지에 연결되고 타측은 상기 제1하부기둥 우측 플랜지에 연결되는 제1하부기둥 웨브를 포함하는 제1하부 기둥용 형강을 포함하되, 상기 제1하부기둥 웨브보다 전측 부분에 상하 방향으로 제1관통공이 형성되어 있는 제1상단부 엔드 플레이트가 상기 제1하부 기둥용 형강의 상단부에 배치되어 있는 하부기둥 부재, 서로 마주보도록 배치되는 제1상부기둥 좌측 플랜지와 제1상부기둥 우측 플랜지 및 일측은 상기 제1상부기둥 좌측 플랜지에 연결되고 타측은 상기 제1상부기둥 우측 플랜지에 연결되는 제1상부기둥 웨브를 구비하는 제1상부 기둥용 형강을 포함하되, 상기 제1상부기둥 웨브보다 전측 부분에 상기 상하 방향으로 제2관통공이 형성되어 있는 제1하단부 엔드 플레이트가 상기 제1상부 기둥용 형강의 하단부에 배치되어 있고, 상기 제1상부기둥 웨브의 후면부에서 전면부 방향으로 관통하는 볼트에 끼워지고 상기 제1상부기둥 웨브의 전면과 이격되도록 배치되는 제1기둥 연결부재 상부 와셔 플레이트를 포함하며, 상기 하부 기둥부재의 상부에 이격되도록 배치되는 상부기둥 부재, 상기 제1상단부 엔드 플레이트와 상기 제1하단부 엔드 플레이트 사이에 밀착되도록 배치되고, 상기 제1하부기둥 웨브보다 전측 부분에 상기 상하 ...(이하생략)",
+            "technology_area": "E04B 1/348|E04B 1/343|E04B 1/24|E04B 1/38|E04B 1/58",
+            "technology_id": "tech-hyundai-engineering-kipris-1020250019265"
+          },
+          {
+            "application_date": "2025-02-14",
+            "application_number": "10-2025-0019266",
+            "name": "모듈러 유닛의 상하 결합을 위한 기둥 연결부재",
+            "patent_number": "1020250180114",
+            "record_type": "patent",
+            "registration_date": "2026-05-21",
+            "registration_number": "10-2969485",
+            "source_ids": [
+              "official:kipris:patent:1020250019266"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 서로 마주보도록 배치되는 제1하부기둥 좌측 플랜지와 제1하부기둥 우측 플랜지 및 일측은 상기 제1하부기둥 좌측 플랜지에 연결되고 타측은 상기 제1하부기둥 우측 플랜지에 연결되는 제1하부기둥 웨브를 포함하는 제1하부 기둥용 형강을 포함하되, 상기 제1하부기둥 웨브보다 전측 부분에 상하 방향으로 제1관통공이 형성되어 있는 제1상단부 엔드 플레이트가 상기 제1하부 기둥용 형강의 상단부에 배치되어 있는 하부기둥 부재, 서로 마주보도록 배치되는 제1상부기둥 좌측 플랜지와 제1상부기둥 우측 플랜지 및 일측은 상기 제1상부기둥 좌측 플랜지에 연결되고 타측은 상기 제1상부기둥 우측 플랜지에 연결되는 제1상부기둥 웨브를 구비하는 제1상부 기둥용 형강을 포함하되, 상기 제1상부기둥 웨브보다 전측 부분에 상기 상하 방향으로 제2관통공이 형성되어 있는 제1하단부 엔드 플레이트가 상기 제1상부 기둥용 형강의 하단부에 배치되어 있고, 상기 제1상부기둥 웨브의 후면부에서 전면부 방향으로 관통하는 볼트에 끼워지고 상기 제1상부기둥 웨브의 전면과 이격되도록 배치되는 제1기둥 연결부재 상부 와셔 플레이트를 포함하며, 상기 하부 기둥부재의 상부에 이격되도록 배치되는 상부기둥 부재, 상기 제1상단부 엔드 플레이트와 상기 제1하단부 엔드 플레이트 사이에 밀착되도록 배치되고, 상기 제1하부기둥 웨브보다 전측 부분에 상기 상하 ...(이하생략)",
+            "technology_area": "E04B 1/348|E04B 1/343|E04B 1/24|E04B 1/38|E04B 1/58",
+            "technology_id": "tech-hyundai-engineering-kipris-1020250019266"
+          },
+          {
+            "application_date": "2025-02-14",
+            "application_number": "10-2025-0019267",
+            "name": "인접한 철골조 모듈러 유닛의 결합 구조 및 이를 위한 연결 플레이트",
+            "patent_number": "1020250180115",
+            "record_type": "patent",
+            "registration_date": "2026-05-21",
+            "registration_number": "10-2969486",
+            "source_ids": [
+              "official:kipris:patent:1020250019267"
+            ],
+            "status": "registered",
+            "summary": "본 발명은 서로 마주보도록 배치되는 제1하부기둥 좌측 플랜지와 제1하부기둥 우측 플랜지 및 일측은 상기 제1하부기둥 좌측 플랜지에 연결되고 타측은 상기 제1하부기둥 우측 플랜지에 연결되는 제1하부기둥 웨브를 포함하는 제1하부 기둥용 형강을 포함하되, 상기 제1하부기둥 웨브보다 전측 부분에 상하 방향으로 제1관통공이 형성되어 있는 제1상단부 엔드 플레이트가 상기 제1하부 기둥용 형강의 상단부에 배치되어 있는 하부기둥 부재, 서로 마주보도록 배치되는 제1상부기둥 좌측 플랜지와 제1상부기둥 우측 플랜지 및 일측은 상기 제1상부기둥 좌측 플랜지에 연결되고 타측은 상기 제1상부기둥 우측 플랜지에 연결되는 제1상부기둥 웨브를 구비하는 제1상부 기둥용 형강을 포함하되, 상기 제1상부기둥 웨브보다 전측 부분에 상기 상하 방향으로 제2관통공이 형성되어 있는 제1하단부 엔드 플레이트가 상기 제1상부 기둥용 형강의 하단부에 배치되어 있고, 상기 제1상부기둥 웨브의 후면부에서 전면부 방향으로 관통하는 볼트에 끼워지고 상기 제1상부기둥 웨브의 전면과 이격되도록 배치되는 제1기둥 연결부재 상부 와셔 플레이트를 포함하며, 상기 하부 기둥부재의 상부에 이격되도록 배치되는 상부기둥 부재, 상기 제1상단부 엔드 플레이트와 상기 제1하단부 엔드 플레이트 사이에 밀착되도록 배치되고, 상기 제1하부기둥 웨브보다 전측 부분에 상기 상하 ...(이하생략)",
+            "technology_area": "E04B 1/348|E04B 1/343|E04B 1/24|E04B 1/38|E04B 1/58",
+            "technology_id": "tech-hyundai-engineering-kipris-1020250019267"
           }
         ],
         "innovative_procurement_products": [],
@@ -11216,6 +11395,226 @@
             "capacity_value"
           ],
           "visibility": "internal"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2012-0156169",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020120156169",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "철골구조물의 주각부 수평 조절장치 및 이를 이용한 주각부 시공방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2023-0112193",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020230112193",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2023-0112194",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020230112194",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2023-0112195",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020230112195",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2023-0112196",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020230112196",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "주택 모듈러 유닛의 결합 구조 및 시공 방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2024-0081248",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020240081248",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "철골조 모듈러 유닛의 결합 구조 및 시공 방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2024-0081249",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020240081249",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "철골조 모듈러 유닛의 골조 형성 방식 및 시공 방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2025-0019265",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020250019265",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "모듈러 유닛의 상하 결합 구조 및 시공 방법",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2025-0019266",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020250019266",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "모듈러 유닛의 상하 결합을 위한 기둥 연결부재",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
+        },
+        {
+          "accessed_at": "2026-09-01T06:50:46+00:00",
+          "confidence": "high",
+          "document_id": "10-2025-0019267",
+          "primary_source": true,
+          "published_at": null,
+          "publisher": "KIPRIS Plus",
+          "source_id": "official:kipris:patent:1020250019267",
+          "source_name": "KIPRIS Plus",
+          "source_type": "patent",
+          "source_url": "https://plus.kipris.or.kr/portal/search/clasList/List.do",
+          "supported_claims": [
+            "technology",
+            "patent",
+            "patent_identity",
+            "applicant_identity"
+          ],
+          "title": "인접한 철골조 모듈러 유닛의 결합 구조 및 이를 위한 연결 플레이트",
+          "verification_note": "Official KIPRIS patent evidence identified by application identity.",
+          "verification_status": "official",
+          "visibility": "public"
         }
       ],
       "intelligence_v2": {
