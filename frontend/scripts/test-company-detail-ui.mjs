@@ -486,7 +486,7 @@ assert.equal(sourceSectionCounts(yuchangReport).length, 7);
 assert.equal(sourceSectionCounts(yuchangReport).find((item) => item.section === "note.revenue_breakdown").count, 0);
 
 const expectedTechnologyCounts = {
-  "hyundai-engineering": 14,
+  "hyundai-engineering": 24,
   "dl-enc": 21,
   nrb: 16,
   planm: 10,

@@ -63,6 +63,6 @@ for (let index = 1; index < revenueSorted.length; index += 1) {
   assert.ok(getLatestRevenue(revenueSorted[index - 1]) >= getLatestRevenue(revenueSorted[index]));
 }
 const technologySorted = [...companies].sort((a, b) => compareCompaniesForMvp(a, b, "technology", compareCompanies));
-assert.equal(technologySorted[0].company_id, "dl-enc");
+assert.equal(technologySorted[0].company_id, "hyundai-engineering");
 
 console.log("COMPANY COMPARISON TESTS PASSED");

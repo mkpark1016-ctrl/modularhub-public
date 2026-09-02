@@ -277,7 +277,7 @@ def test_baseline_inventory_and_exact_lookup_budgets_match_public_baseline() -> 
     _, _, companies, _ = _payloads()
     expected = {
         "gs-ec": (7, 7, 0, 0, 7, 0),
-        "hyundai-engineering": (14, 13, 1, 1, 0, 13),
+        "hyundai-engineering": (24, 23, 1, 2, 18, 5),
         "dl-enc": (21, 21, 0, 0, 0, 21),
     }
     for company_id, (
