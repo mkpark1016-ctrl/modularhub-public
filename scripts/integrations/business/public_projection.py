@@ -22,9 +22,12 @@ from src.public_data_policy import (
     apply_business_lifecycle,
     business_identity,
     business_items_safely_refreshable,
+    changed_business_fields,
     clean_text,
     parse_public_datetime,
     payload_items,
+    safe_business_refresh_fields,
+    unsafe_business_refresh_fields,
 )
 
 
@@ -226,12 +229,7 @@ def build_public_projection(
                 _increment_existing(source_stats, type_stats, record)
             else:
                 public_id_collisions.append(
-                    {
-                        "public_id": item["id"],
-                        "source": record.source,
-                        "source_record_type": record.source_record_type,
-                        "external_id": record.external_id,
-                    }
+                    _collision_diagnostic(existing_same_id, item, record)
                 )
             continue
         if business_identity(item) in existing_by_lineage:
@@ -255,6 +253,9 @@ def build_public_projection(
         "passed": input_credential_urls + candidate_credential_urls == 0 and raw_payload_fields == 0,
     }
     candidate_count_conservation_passed = len(candidate_items) == len(existing_items) + len(net_new_items)
+    changed_field_counts: Counter[str] = Counter()
+    for collision in public_id_collisions:
+        changed_field_counts.update(collision["changed_fields"])
 
     report = {
         "schema_version": PUBLIC_PROJECTION_SCHEMA_VERSION,
@@ -269,6 +270,7 @@ def build_public_projection(
         "net_new_count": len(net_new_items),
         "public_id_collision_count": len(public_id_collisions),
         "public_id_collisions": public_id_collisions,
+        "changed_field_counts": dict(sorted(changed_field_counts.items())),
         "possible_overlap_candidate_count": len(possible_overlap_candidates),
         "possible_overlap_candidates": possible_overlap_candidates,
         "candidate_public_count": len(candidate_items),
@@ -281,6 +283,27 @@ def build_public_projection(
         "security": security,
     }
     return projected_items, candidate_payload, report
+
+
+def write_public_projection_failure_diagnostics(
+    report: dict[str, Any], blockers: list[str], output_path: Path
+) -> None:
+    """Persist structural projection diagnostics without business values."""
+
+    payload = {
+        "schema_version": "public-business-projection-failure-v1",
+        "decision": "blocked",
+        "blockers": sorted(blockers),
+        "public_id_collision_count": int(report.get("public_id_collision_count") or 0),
+        "public_id_collisions": deepcopy(report.get("public_id_collisions") or []),
+        "changed_field_counts": dict(report.get("changed_field_counts") or {}),
+        "security": deepcopy(report.get("security") or {}),
+    }
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
 
 def write_public_projection_outputs(
@@ -339,6 +362,38 @@ def _same_substantive_public_payload(
     existing_item: dict[str, Any], projected_item: dict[str, Any]
 ) -> bool:
     return business_items_safely_refreshable(existing_item, projected_item)
+
+
+def _collision_diagnostic(
+    existing_item: dict[str, Any],
+    projected_item: dict[str, Any],
+    record: NormalizedBusinessRecord,
+) -> dict[str, Any]:
+    fields = changed_business_fields(existing_item, projected_item)
+    return {
+        "public_id": projected_item["id"],
+        "source": record.source,
+        "source_record_type": record.source_record_type,
+        "external_id": record.external_id,
+        "business_identity_equal": business_identity(existing_item) == business_identity(projected_item),
+        "changed_fields": fields,
+        "safe_changed_fields": safe_business_refresh_fields(existing_item, projected_item),
+        "unsafe_changed_fields": unsafe_business_refresh_fields(existing_item, projected_item),
+        "field_presence": {
+            field: {
+                "before_present": field in existing_item,
+                "after_present": field in projected_item,
+            }
+            for field in fields
+        },
+        "field_types": {
+            field: {
+                "before_type": type(existing_item[field]).__name__ if field in existing_item else None,
+                "after_type": type(projected_item[field]).__name__ if field in projected_item else None,
+            }
+            for field in fields
+        },
+    }
 
 
 def _collector_row(record: NormalizedBusinessRecord) -> dict[str, Any] | None:

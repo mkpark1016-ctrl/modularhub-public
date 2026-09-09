@@ -302,12 +302,14 @@ jobs:
           echo "failure_category=none" >> "$GITHUB_OUTPUT"
 
       - name: Export public JSON
+        id: export_public_json
         run: |
           if [ "${{ steps.scheduled_unified.outputs.unified_ready }}" = "true" ]; then
             python scripts/export_public_json.py \
               --unified-business-records artifacts/scheduled-unified/unified/unified_business_records.json \
               --unified-business-summary artifacts/scheduled-unified/unified/unified_business_summary.json \
-              --unified-integration-report artifacts/scheduled-unified/public_pipeline_integration_report.json
+              --unified-integration-report artifacts/scheduled-unified/public_pipeline_integration_report.json \
+              --unified-projection-diagnostics artifacts/scheduled-unified/public_projection_failure_diagnostics.json
           else
             python scripts/export_public_json.py
           fi
@@ -370,6 +372,7 @@ jobs:
             artifacts/scheduled-unified/unified/unified_business_summary.json
             artifacts/scheduled-unified/unified/unified_business_records.json
             artifacts/scheduled-unified/public_pipeline_integration_report.json
+            artifacts/scheduled-unified/public_projection_failure_diagnostics.json
           if-no-files-found: warn
           retention-days: 14
 
@@ -598,12 +601,16 @@ jobs:
           path: |
             logs/public_json_delta_audit.json
             logs/public_json_delta_audit.md
-          if-no-files-found: warn
+          if-no-files-found: ignore
           retention-days: 14
 
       - name: Enforce public JSON delta audit
         if: always()
         run: |
+          if [ "${{ steps.export_public_json.outcome }}" != "success" ]; then
+            echo "::error::PUBLIC_EXPORT_FAILED_UPSTREAM: Export public JSON failed; delta audit was skipped."
+            exit 1
+          fi
           code="${{ steps.public_json_delta_audit.outputs.exit_code }}"
           if [ -z "$code" ]; then
             echo "::error::Public JSON delta audit did not report an exit code."

@@ -628,6 +628,7 @@ def main(
     unified_business_records: Path | None = None,
     unified_business_summary: Path | None = None,
     unified_integration_report: Path | None = None,
+    unified_projection_diagnostics: Path | None = None,
 ) -> int:
     from scripts.integrations.business.public_pipeline import resolve_published_d2b_metadata
 
@@ -706,6 +707,7 @@ def main(
             business,
             unified_records_path=unified_business_records,
             unified_summary_path=unified_business_summary,
+            projection_diagnostics_path=unified_projection_diagnostics,
             merge_time=merge_time,
         )
         write_public_pipeline_integration_report(
@@ -1003,6 +1005,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--unified-business-records", type=Path)
     parser.add_argument("--unified-business-summary", type=Path)
     parser.add_argument("--unified-integration-report", type=Path)
+    parser.add_argument("--unified-projection-diagnostics", type=Path)
     return parser.parse_args(argv)
 
 
@@ -1013,5 +1016,6 @@ if __name__ == "__main__":
             unified_business_records=args.unified_business_records,
             unified_business_summary=args.unified_business_summary,
             unified_integration_report=args.unified_integration_report,
+            unified_projection_diagnostics=args.unified_projection_diagnostics,
         )
     )

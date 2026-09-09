@@ -56,6 +56,8 @@ def test_success_uses_unified_export_and_publication_safety_remains_blocking() -
     assert "--unified-business-records artifacts/scheduled-unified/unified/unified_business_records.json" in workflow
     assert "--unified-business-summary artifacts/scheduled-unified/unified/unified_business_summary.json" in workflow
     assert "--unified-integration-report artifacts/scheduled-unified/public_pipeline_integration_report.json" in workflow
+    assert "--unified-projection-diagnostics artifacts/scheduled-unified/public_projection_failure_diagnostics.json" in workflow
+    assert "id: export_public_json" in workflow
     assert "Enforce scheduled Unified publication safety" in workflow
     assert "steps.scheduled_unified.outputs.failure_category == 'publication_safety'" in workflow
     assert workflow.index("Export public JSON") < workflow.index(
@@ -74,6 +76,9 @@ def test_public_delta_failure_artifact_is_uploaded_before_enforcement() -> None:
     assert "logs/public_json_delta_audit.json" in workflow
     assert "logs/public_json_delta_audit.md" in workflow
     assert "Enforce public JSON delta audit" in workflow
+    assert 'steps.export_public_json.outcome' in workflow
+    assert "PUBLIC_EXPORT_FAILED_UPSTREAM" in workflow
+    assert "if-no-files-found: ignore" in workflow
     audit_section = workflow[
         workflow.index("Audit public JSON delta"):
         workflow.index("Enforce scheduled Unified publication safety")
