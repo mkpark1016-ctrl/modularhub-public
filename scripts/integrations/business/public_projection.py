@@ -232,9 +232,17 @@ def build_public_projection(
                     _collision_diagnostic(existing_same_id, item, record)
                 )
             continue
-        if business_identity(item) in existing_by_lineage:
-            lineage_matches += 1
-            _increment_existing(source_stats, type_stats, record)
+        lineage_existing = existing_by_lineage.get(business_identity(item), [])
+        if lineage_existing:
+            if len(lineage_existing) == 1 and _lineage_payload_safely_refreshable(
+                lineage_existing[0], item
+            ):
+                lineage_matches += 1
+                _increment_existing(source_stats, type_stats, record)
+            else:
+                public_id_collisions.append(
+                    _collision_diagnostic(lineage_existing[0], item, record)
+                )
             continue
         net_new_items.append(item)
         source_stats[record.source]["net_new"] += 1
@@ -362,6 +370,16 @@ def _same_substantive_public_payload(
     existing_item: dict[str, Any], projected_item: dict[str, Any]
 ) -> bool:
     return business_items_safely_refreshable(existing_item, projected_item)
+
+
+def _lineage_payload_safely_refreshable(
+    existing_item: dict[str, Any], projected_item: dict[str, Any]
+) -> bool:
+    """Evaluate lineage refreshes while preserving the established public ID."""
+
+    candidate = deepcopy(projected_item)
+    candidate["id"] = existing_item.get("id")
+    return business_items_safely_refreshable(existing_item, candidate)
 
 
 def _collision_diagnostic(

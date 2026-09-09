@@ -9,6 +9,7 @@ import pytest
 from scripts.integrations.business.base import NormalizedBusinessRecord
 from scripts.integrations.business.public_pipeline import (
     UnifiedPublicInputError,
+    _removed_payload_count,
     integrate_optional_unified_business,
 )
 from scripts.integrations.business.public_projection import (
@@ -111,6 +112,125 @@ def test_empty_amount_enrichment_is_not_allowed_for_non_d2b_sources() -> None:
     assert not business_items_safely_refreshable(before, after)
 
 
+@pytest.mark.parametrize(
+    ("source", "source_type"),
+    [
+        ("G2B", "procurement_plan"),
+        ("LH", "procurement_plan"),
+        ("GH", "procurement_plan"),
+        ("iH", "procurement_plan"),
+        ("D2B", "bid"),
+    ],
+)
+def test_amount_placeholder_contract_does_not_expand_to_other_sources_or_types(
+    source: str, source_type: str
+) -> None:
+    before = public_item(canonical(status="집행계획", amount=0))
+    after = public_item(canonical(status="공고확정", amount=100))
+    for item in (before, after):
+        item["source"] = item["source_name"] = source
+        item["source_type"] = source_type
+        if source_type == "bid":
+            item["bid_no"] = TARGET_EXTERNAL_ID
+    assert not business_items_safely_refreshable(before, after)
+
+
+@pytest.mark.parametrize("replacement", [None, ""])
+def test_positive_amount_cannot_be_cleared(replacement: object) -> None:
+    before = public_item(canonical(status="공고확정", amount=100))
+    after = deepcopy(before)
+    after["amount"] = replacement
+    assert not business_items_safely_refreshable(before, after)
+
+
+def test_empty_string_amount_can_be_filled_only_by_the_d2b_contract() -> None:
+    before = public_item(canonical(status="공고확정", amount=None))
+    before["amount"] = ""
+    after = public_item(canonical(status="공고확정", amount=100))
+    assert business_items_safely_refreshable(before, after)
+
+
+def test_lineage_match_with_legacy_public_id_applies_only_safe_refresh(tmp_path: Path) -> None:
+    existing = public_item(canonical(status="집행계획", amount=0))
+    existing["id"] = "legacy-d2b-public-id"
+    fresh = canonical(status="공고확정", amount=2_943_080_000)
+    records_path = tmp_path / "lineage_records.json"
+    summary_path = tmp_path / "lineage_summary.json"
+    records_path.write_text(json.dumps([fresh.as_dict()]), encoding="utf-8")
+    summary_path.write_text(
+        json.dumps({"records_output": 1, "generated_at": GENERATED_AT}),
+        encoding="utf-8",
+    )
+
+    merged, report = integrate_optional_unified_business(
+        [existing],
+        unified_records_path=records_path,
+        unified_summary_path=summary_path,
+    )
+
+    assert report["lineage_matches"] == 1
+    assert report["identity_collision_count"] == 0
+    assert merged[0]["id"] == "legacy-d2b-public-id"
+    assert merged[0]["amount"] == 2_943_080_000
+    assert merged[0]["notice_status"] == "공고확정"
+
+
+def test_lineage_match_with_unsafe_change_is_blocked() -> None:
+    existing = public_item(canonical(status="집행계획", amount=0))
+    existing["id"] = "legacy-d2b-public-id"
+    existing["title"] = "unsafe existing title"
+
+    _, _, report = build_public_projection(
+        [canonical(status="공고확정", amount=2_943_080_000)],
+        {"items": [existing]},
+        unified_summary={"generated_at": GENERATED_AT},
+    )
+
+    assert report["lineage_matches"] == 0
+    assert report["public_id_collision_count"] == 1
+    assert "title" in report["public_id_collisions"][0]["unsafe_changed_fields"]
+    assert projection_blockers(report) == ["public_id_collision"]
+
+
+def test_identity_removal_counter_detects_disappearance_replacement_and_duplicate_collapse() -> None:
+    first = public_item(canonical(status="집행계획", amount=0))
+    second = deepcopy(first)
+    second.update(
+        {
+            "id": "second-plan",
+            "plan_no": "d2b:procurement_plan:2026-99999",
+            "source_record_id": "d2b:procurement_plan:2026-99999",
+        }
+    )
+    replacement = deepcopy(first)
+    replacement.update(
+        {
+            "id": "replacement-plan",
+            "plan_no": "d2b:procurement_plan:2026-88888",
+            "source_record_id": "d2b:procurement_plan:2026-88888",
+        }
+    )
+    duplicate = deepcopy(first)
+    duplicate["id"] = "duplicate-public-id"
+
+    assert _removed_payload_count([first, second], [first]) == 1
+    assert _removed_payload_count([first], [replacement]) == 1
+    assert _removed_payload_count([first, duplicate], [first]) == 1
+
+
+def test_identity_counter_allows_safe_refresh_but_projection_blocks_unsafe_replacement() -> None:
+    before = public_item(canonical(status="집행계획", amount=0))
+    safe_after = public_item(canonical(status="공고확정", amount=2_943_080_000))
+
+    assert _removed_payload_count([before], [safe_after]) == 0
+    _, _, report = build_public_projection(
+        [canonical(status="공고확정", amount=2_943_080_000)],
+        {"items": [{**before, "organization": "changed organization"}]},
+        unified_summary={"generated_at": GENERATED_AT},
+    )
+    assert report["public_id_collision_count"] == 1
+
+
 def test_status_refresh_and_lifecycle_refresh_remain_allowed() -> None:
     before = public_item(canonical(status="집행계획", amount=0))
     after = public_item(canonical(status="공고확정", amount=0))
@@ -154,3 +274,4 @@ def test_blocked_projection_writes_redacted_diagnostics(tmp_path: Path) -> None:
     assert "tampered existing title" not in serialized
     assert "2943080000" not in serialized
     assert "Authorization" not in serialized
+    assert str(tmp_path) not in serialized

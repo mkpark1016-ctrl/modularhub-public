@@ -5,7 +5,11 @@ from datetime import datetime, timezone
 
 import pytest
 
-from scripts.audit_public_json_delta import blocking_reasons, build_report
+from scripts.audit_public_json_delta import (
+    blocking_reasons,
+    build_report,
+    summarize_authoritative_refresh,
+)
 from src.public_data_policy import apply_business_lifecycle, merge_public_items
 
 
@@ -386,3 +390,10 @@ def test_d2b_zero_placeholder_enrichment_has_explicit_audit_classification() -> 
     assert result["authoritative_refresh_changed"][0]["classification"] == (
         "AUTHORITATIVE_AND_EMPTY_FIELD_ENRICHMENT_REFRESH"
     )
+
+
+def test_empty_changed_field_set_is_not_classified_as_enrichment() -> None:
+    unchanged = item("1")
+    summary = summarize_authoritative_refresh(unchanged, deepcopy(unchanged))
+    assert summary["changed_fields"] == []
+    assert summary["classification"] == "NO_SUBSTANTIVE_REFRESH"
