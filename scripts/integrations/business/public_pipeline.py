@@ -11,9 +11,10 @@ from scripts.integrations.business.public_projection import (
     build_public_projection,
     projection_blockers,
     select_net_new_projected_items,
+    write_public_projection_failure_diagnostics,
 )
 from scripts.integrations.business.unified import load_canonical_records
-from src.public_data_policy import guard_result, merge_public_items
+from src.public_data_policy import business_identity, guard_result, merge_public_items
 
 
 PUBLIC_PIPELINE_INTEGRATION_SCHEMA_VERSION = "public-business-pipeline-integration-v1"
@@ -28,6 +29,7 @@ def integrate_optional_unified_business(
     *,
     unified_records_path: Path | None = None,
     unified_summary_path: Path | None = None,
+    projection_diagnostics_path: Path | None = None,
     merge_time: datetime | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     if unified_records_path is None and unified_summary_path is None:
@@ -52,6 +54,10 @@ def integrate_optional_unified_business(
     )
     blockers = projection_blockers(projection_report)
     if blockers:
+        if projection_diagnostics_path is not None:
+            write_public_projection_failure_diagnostics(
+                projection_report, blockers, projection_diagnostics_path
+            )
         raise UnifiedPublicInputError(
             f"UNIFIED_PUBLIC_PROJECTION_BLOCKED: {','.join(sorted(blockers))}"
         )
@@ -59,7 +65,7 @@ def integrate_optional_unified_business(
     net_new_items = select_net_new_projected_items(projected, existing_items)
     merged_items = merge_public_items(
         existing_items,
-        net_new_items,
+        projected,
         kind="business",
         now=merge_time or _summary_time(summary),
         removal_allowlist={},
@@ -337,7 +343,9 @@ def _summary_time(summary: dict[str, Any]) -> datetime:
 def _removed_payload_count(
     existing_items: list[dict[str, Any]], merged_items: list[dict[str, Any]]
 ) -> int:
-    stable = lambda item: json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    existing_payloads = Counter(stable(item) for item in existing_items)
-    merged_payloads = Counter(stable(item) for item in merged_items)
-    return sum(max(0, count - merged_payloads[payload]) for payload, count in existing_payloads.items())
+    existing_identities = Counter(business_identity(item) for item in existing_items)
+    merged_identities = Counter(business_identity(item) for item in merged_items)
+    return sum(
+        max(0, count - merged_identities[identity])
+        for identity, count in existing_identities.items()
+    )

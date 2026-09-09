@@ -5,7 +5,11 @@ from datetime import datetime, timezone
 
 import pytest
 
-from scripts.audit_public_json_delta import blocking_reasons, build_report
+from scripts.audit_public_json_delta import (
+    blocking_reasons,
+    build_report,
+    summarize_authoritative_refresh,
+)
 from src.public_data_policy import apply_business_lifecycle, merge_public_items
 
 
@@ -367,3 +371,29 @@ def test_authoritative_same_identity_refresh_is_non_blocking(
     assert result["authoritative_refresh_field_counts"] == {field: 1}
     assert result["authoritative_refresh_changed"][0]["changed_fields"] == [field]
     assert blocking_reasons(result) == []
+
+
+def test_d2b_zero_placeholder_enrichment_has_explicit_audit_classification() -> None:
+    before = item("d2b-plan-14303")
+    before.update({"plan_no": "d2b:procurement_plan:2026-14303", "amount": 0, "notice_status": "집행계획"})
+    after = deepcopy(before)
+    after.update({"amount": 2_943_080_000, "notice_status": "공고확정", "notice_stage": "공고확정"})
+
+    result = report([before], [after])
+
+    assert result["changed_count"] == 0
+    assert result["authoritative_refresh_field_counts"] == {
+        "amount": 1,
+        "notice_status": 1,
+        "notice_stage": 1,
+    }
+    assert result["authoritative_refresh_changed"][0]["classification"] == (
+        "AUTHORITATIVE_AND_EMPTY_FIELD_ENRICHMENT_REFRESH"
+    )
+
+
+def test_empty_changed_field_set_is_not_classified_as_enrichment() -> None:
+    unchanged = item("1")
+    summary = summarize_authoritative_refresh(unchanged, deepcopy(unchanged))
+    assert summary["changed_fields"] == []
+    assert summary["classification"] == "NO_SUBSTANTIVE_REFRESH"

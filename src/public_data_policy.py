@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -119,7 +120,14 @@ BUSINESS_EVIDENCE_VERIFICATION_FIELDS = frozenset(
         "link_verified",
     }
 )
-BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS = frozenset()
+# D2B facility procurement plans expose a preliminary ``집행계획`` row before
+# the official notice is confirmed.  The gateway reports zero for that row;
+# this is deliberately a field-specific contract, not a general amount refresh.
+BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS = frozenset({"amount"})
+D2B_PROCUREMENT_PLAN_SOURCE = "d2b"
+D2B_PROCUREMENT_PLAN_TYPE = "procurement_plan"
+D2B_PRELIMINARY_AMOUNT_STATUSES = frozenset({"집행계획"})
+D2B_CONFIRMED_AMOUNT_STATUSES = frozenset({"공고확정"})
 SAMSUNG_TECHNOLOGY_COMPANY_ID = "samsung-ct-construction"
 SAMSUNG_TECHNOLOGY_BASELINE_IDS = frozenset(
     f"tech-samsung-{index:03d}" for index in range(1, 8)
@@ -309,6 +317,9 @@ def safe_business_refresh_fields(
         value = after.get(field)
         if field in BUSINESS_AUTHORITATIVE_REFRESH_FIELDS and _nonempty(value):
             safe.append(field)
+        elif field in BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS and field == "amount":
+            if _safe_d2b_amount_enrichment(before, after):
+                safe.append(field)
         elif (
             field in BUSINESS_VERIFIED_EVIDENCE_REFRESH_FIELDS
             and verified
@@ -322,6 +333,58 @@ def safe_business_refresh_fields(
         ):
             safe.append(field)
     return safe
+
+
+def _numeric_amount(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _positive_amount(value: Any) -> bool:
+    if not _numeric_amount(value):
+        return False
+    if isinstance(value, float) and not math.isfinite(value):
+        return False
+    return value > 0
+
+
+def _d2b_plan_status(item: dict[str, Any]) -> str:
+    return clean_text(item.get("notice_status") or item.get("notice_stage"))
+
+
+def _safe_d2b_amount_enrichment(
+    before: dict[str, Any], after: dict[str, Any]
+) -> bool:
+    """Allow only evidence-backed D2B preliminary amount enrichment.
+
+    A missing amount may be filled by a positive value from the same official
+    D2B procurement-plan identity.  A stored zero is treated as a placeholder
+    only for the observed ``집행계획`` -> ``공고확정`` transition.  Existing
+    positive amounts, positive-to-zero changes, and arbitrary status changes
+    remain outside the contract.
+    """
+
+    if business_identity(before) != business_identity(after):
+        return False
+    if clean_text(before.get("source") or before.get("source_name")).casefold() != D2B_PROCUREMENT_PLAN_SOURCE:
+        return False
+    if clean_text(after.get("source") or after.get("source_name")).casefold() != D2B_PROCUREMENT_PLAN_SOURCE:
+        return False
+    if clean_text(before.get("source_type")).casefold() != D2B_PROCUREMENT_PLAN_TYPE:
+        return False
+    if clean_text(after.get("source_type")).casefold() != D2B_PROCUREMENT_PLAN_TYPE:
+        return False
+    if not _positive_amount(after.get("amount")):
+        return False
+
+    previous = before.get("amount")
+    if previous is None or (isinstance(previous, str) and not clean_text(previous)):
+        return True
+    return (
+        _numeric_amount(previous)
+        and previous == 0
+        and _d2b_plan_status(before) in D2B_PRELIMINARY_AMOUNT_STATUSES
+        and _d2b_plan_status(after) in D2B_CONFIRMED_AMOUNT_STATUSES
+    )
 
 
 def unsafe_business_refresh_fields(
@@ -1174,8 +1237,8 @@ def merge_existing_business_record(
 ) -> dict[str, Any]:
     """Preserve canonical facts while applying narrow, source-backed refreshes.
 
-    Empty-field enrichment is intentionally not enabled here. It requires a
-    separate, explicit field allowlist and verification contract.
+    Amount enrichment is intentionally limited to the explicit D2B
+    procurement-plan placeholder contract in ``safe_business_refresh_fields``.
     """
 
     merged = dict(existing)
@@ -1185,6 +1248,8 @@ def merge_existing_business_record(
     for field in BUSINESS_AUTHORITATIVE_REFRESH_FIELDS:
         if field in fresh and _nonempty(fresh[field]):
             merged[field] = fresh[field]
+    if _safe_d2b_amount_enrichment(existing, fresh):
+        merged["amount"] = fresh["amount"]
 
     verified = bool(
         fresh.get("exact_link_verified") or fresh.get("link_verified")

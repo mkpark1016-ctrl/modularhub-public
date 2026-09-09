@@ -199,7 +199,16 @@ def summarize_authoritative_refresh(
 ) -> dict[str, Any]:
     fields = safe_business_refresh_fields(before, after)
     field_set = set(fields)
-    if field_set <= BUSINESS_AUTHORITATIVE_REFRESH_FIELDS:
+    if not field_set:
+        classification = "NO_SUBSTANTIVE_REFRESH"
+    elif field_set <= BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS:
+        classification = "OFFICIAL_EMPTY_FIELD_ENRICHMENT"
+    elif field_set <= (
+        BUSINESS_AUTHORITATIVE_REFRESH_FIELDS
+        | BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS
+    ) and field_set & BUSINESS_SAFE_EMPTY_FIELD_ENRICHMENT_FIELDS:
+        classification = "AUTHORITATIVE_AND_EMPTY_FIELD_ENRICHMENT_REFRESH"
+    elif field_set <= BUSINESS_AUTHORITATIVE_REFRESH_FIELDS:
         classification = "AUTHORITATIVE_SOURCE_REFRESH"
     elif field_set <= (
         BUSINESS_VERIFIED_EVIDENCE_REFRESH_FIELDS
