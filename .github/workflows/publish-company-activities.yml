@@ -1,6 +1,10 @@
 name: Publish company activity timeline
 
 on:
+  workflow_run:
+    workflows: ["Update public data"]
+    types: [completed]
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -24,6 +28,7 @@ concurrency:
 
 jobs:
   publish-company-activities:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
