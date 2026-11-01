@@ -35,6 +35,12 @@ def dataset_items(payload: dict[str, Any], key: str = "items") -> list[dict[str,
     return [item for item in items if isinstance(item, dict)] if isinstance(items, list) else []
 
 
+def strict_audit_state(datasets: list[dict[str, Any]], count_deltas: list[dict[str, Any]], strict_datasets: list[str] | None = None) -> str:
+    """Scope freshness to the published datasets, keeping every count guard."""
+    selected = datasets if strict_datasets is None else [row for row in datasets if row["dataset"] in strict_datasets]
+    return worst_state(selected + count_deltas)
+
+
 def previous_count(payload: dict[str, Any], dataset: str, current: int) -> int:
     if dataset == "news":
         return int(payload.get("previous_news_count") or payload.get("current_news_count") or current)
@@ -57,6 +63,9 @@ def render_markdown(summary: dict[str, Any]) -> str:
         f"- overall_state: `{summary['overallState']}`",
         f"- generated_at: `{summary['generatedAt']}`",
         f"- policy: `{summary['policyPath']}`",
+        "",
+        f"- strict_state: `{summary.get('strictState', summary['overallState'])}`",
+        f"- strict_datasets: {', '.join(summary.get('strictDatasets', ['news', 'business', 'companies']))}",
         "",
         "### Dataset SLA",
         "",
@@ -133,6 +142,7 @@ def main() -> int:
     parser.add_argument("--companies-v2", type=Path, default=Path("frontend/public/data/companies/company_intelligence_v2.json"))
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/operations"))
     parser.add_argument("--strict-critical", action="store_true", help="Exit 1 when any critical state is found.")
+    parser.add_argument("--strict-datasets", nargs="+", choices=["news", "business", "companies"], help="Limit strict freshness enforcement to these datasets; all count and secret guards remain enforced.")
     args = parser.parse_args()
 
     try:
@@ -203,11 +213,14 @@ def main() -> int:
         overall_state = worst_state(overall_records)
         if any(row.get("state") == "critical" for row in count_deltas):
             overall_state = "critical"
+        strict_state = strict_audit_state(datasets, count_deltas, args.strict_datasets)
         summary = {
             "schemaVersion": 1,
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "policyPath": str(args.policy),
             "overallState": overall_state,
+            "strictState": strict_state,
+            "strictDatasets": args.strict_datasets or ["news", "business", "companies"],
             "datasets": datasets,
             "sources": sources,
             "countDeltas": count_deltas,
@@ -224,7 +237,7 @@ def main() -> int:
         if summary["secretExposureDetected"]:
             print("Secret indicator detected in operations audit output.")
             return 2
-        if args.strict_critical and overall_state == "critical":
+        if args.strict_critical and strict_state == "critical":
             return 1
         return 0
     except OperationsAuditError as exc:

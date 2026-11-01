@@ -1,6 +1,12 @@
 name: Update public data
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/update-public-data.yml"
+      - "scripts/audit_public_data_freshness.py"
+      - "config/operations/data_freshness_policy.json"
   schedule:
     # 22:00 UTC is 07:00 KST on the following day.
     - cron: "0 22 * * *"
@@ -536,6 +542,7 @@ jobs:
           set +e
           python scripts/audit_public_data_freshness.py \
             --output-dir artifacts/operations \
+            --strict-datasets news business \
             --strict-critical
           code=$?
           if [ -f artifacts/operations/freshness-report.md ]; then
