@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-08-21T06:37:15.395860+00:00",
+  "generatedAt": "2026-11-01T02:42:09.596676+00:00",
   "companyId": "kumkang-kind",
-  "activityCount": 13,
+  "activityCount": 14,
   "activities": [
+    {
+      "activityId": "news-kumkang-kind-55ed25c657bda12e",
+      "companyId": "kumkang-kind",
+      "activityType": "project",
+      "title": "금강공업 13%대 급등…거래량 669만주로 확대",
+      "summary": "금강공업 주가가 장중 두 자릿수 상승률을 기록했다. 강관과 건설용 가설재, 모듈러 건축 사업을 함께 운영하는 회사로 거래가 크게 늘었다. 28일 오후 2시34분 기준 금강공업 주가는 유가증권시장에서 4975원에...",
+      "publishedAt": "2026-09-28",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.job-post.co.kr/news/articleView.html?idxno=229440",
+      "sourceRecordId": "8509",
+      "matchedAlias": "금강공업",
+      "matchReason": "title_or_project_name_alias",
+      "confidence": "high",
+      "projectName": null,
+      "organization": "job-post.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "adjacent"
+    },
     {
       "activityId": "news-kumkang-kind-e2b61a8b5a5ac755",
       "companyId": "kumkang-kind",

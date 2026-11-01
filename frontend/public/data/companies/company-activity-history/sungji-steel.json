@@ -1,7 +1,28 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-08-21T06:37:15.395860+00:00",
+  "generatedAt": "2026-11-01T02:42:09.596676+00:00",
   "companyId": "sungji-steel",
-  "activityCount": 0,
-  "activities": []
+  "activityCount": 1,
+  "activities": [
+    {
+      "activityId": "news-sungji-steel-62d697a18ac3ea37",
+      "companyId": "sungji-steel",
+      "activityType": "project",
+      "title": "[2026 대경 스마트건설대상] OSC대상 성지제강",
+      "summary": "CG합성보 두각… 공기ㆍ시공성ㆍ품질 ‘세토끼’ 잡아 성지제강이 ‘2026 대한경제 스마트건설대상’에서 OSC(탈현장건설)대상을 수상했다. 강구조물을 기반으로 CG합성보와 데크플레이트, 보데크, 모듈러 등...",
+      "publishedAt": "2026-09-16",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202609120157181830707",
+      "sourceRecordId": "8160",
+      "matchedAlias": "성지제강",
+      "matchReason": "title_or_project_name_alias",
+      "confidence": "high",
+      "projectName": null,
+      "organization": "dnews.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
+    }
+  ]
 }

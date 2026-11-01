@@ -1,15 +1,15 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-08-21T06:37:15.395860+00:00",
+  "generatedAt": "2026-11-01T02:42:09.596676+00:00",
   "companyId": "planm",
-  "activityCount": 7,
+  "activityCount": 8,
   "activities": [
     {
       "activityId": "news-planm-8b6af3e6eadbe717",
       "companyId": "planm",
       "activityType": "project",
       "title": "플랜엠, 홍천 이어 화천에도 군 간부숙소 착공",
-      "summary": "기자] 모듈러 전문기업 플랜엠(대표 이민규)은 지난 19일 강원도 홍천에 제작ㆍ설치한 군 간부숙소 준공식을... 군 건축물을 짓고자 했다. 구체적으로 기존 계획보다 숙소의 폭을 3.9ｍ로 넓혀, 전용 24㎡로 생활공간을...",
+      "summary": "홍천서 첫 군 간부숙소 준공 국방부, 우수 품질에 감사장 내달 화천 간부숙소도 착공 [대한경제=장진우 기자] 모듈러 전문기업 플랜엠(대표 이민규)은 지난 19일 강원도 홍천에 제작ㆍ설치한 군 간부숙소 준공식을...",
       "publishedAt": "2026-08-20",
       "sourceType": "news",
       "sourceName": "네이버뉴스",
@@ -23,6 +23,26 @@
       "region": "대한민국",
       "amount": null,
       "status": "adjacent"
+    },
+    {
+      "activityId": "news-planm-517bd80de0b274cb",
+      "companyId": "planm",
+      "activityType": "project",
+      "title": "반도체·데이터센터 건설 붐에 근로자 ‘모듈러 숙소’ 뜬다",
+      "summary": "유창이앤씨는 인접 부지에 270실 규모의 모듈러 공동주택 추가 착공을 앞두고 있다. 승일실업도 처인구 운학동 일대에 연면적 1만1739㎡, 지상 2층 규모 모듈러 근로자 숙소를 신축했으며, 플랜엠 역시 모듈러 근로자 숙소...",
+      "publishedAt": "2026-08-19",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202608181410209380343",
+      "sourceRecordId": "7285",
+      "matchedAlias": "플랜엠",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "dnews.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
     },
     {
       "activityId": "news-planm-f9b2054b6bc1ed4b",

@@ -1,76 +1,76 @@
 {
   "schemaVersion": "company-activity-history-index-v1",
-  "generatedAt": "2026-08-21T06:37:15.395860+00:00",
+  "generatedAt": "2026-11-01T02:42:09.596676+00:00",
   "companyCount": 11,
-  "totalActivityCount": 357,
+  "totalActivityCount": 842,
   "companies": [
     {
       "companyId": "yuchang-enc",
-      "activityCount": 51,
-      "latestPublishedAt": "2026-07-08",
+      "activityCount": 56,
+      "latestPublishedAt": "2026-10-02",
       "earliestPublishedAt": "2026-06-18",
       "path": "company-activity-history/yuchang-enc.json"
     },
     {
       "companyId": "kumkang-kind",
-      "activityCount": 13,
-      "latestPublishedAt": "2026-08-20",
+      "activityCount": 14,
+      "latestPublishedAt": "2026-09-28",
       "earliestPublishedAt": "2026-05-06",
       "path": "company-activity-history/kumkang-kind.json"
     },
     {
       "companyId": "planm",
-      "activityCount": 7,
+      "activityCount": 8,
       "latestPublishedAt": "2026-08-20",
       "earliestPublishedAt": "2026-06-19",
       "path": "company-activity-history/planm.json"
     },
     {
       "companyId": "sungji-steel",
-      "activityCount": 0,
-      "latestPublishedAt": null,
-      "earliestPublishedAt": null,
+      "activityCount": 1,
+      "latestPublishedAt": "2026-09-16",
+      "earliestPublishedAt": "2026-09-16",
       "path": "company-activity-history/sungji-steel.json"
     },
     {
       "companyId": "geogwang-enterprise",
-      "activityCount": 0,
-      "latestPublishedAt": null,
-      "earliestPublishedAt": null,
+      "activityCount": 8,
+      "latestPublishedAt": "2026-08-21",
+      "earliestPublishedAt": "2026-08-21",
       "path": "company-activity-history/geogwang-enterprise.json"
     },
     {
       "companyId": "nrb",
-      "activityCount": 41,
-      "latestPublishedAt": "2026-08-20",
+      "activityCount": 68,
+      "latestPublishedAt": "2026-10-12",
       "earliestPublishedAt": "2026-06-01",
       "path": "company-activity-history/nrb.json"
     },
     {
       "companyId": "gs-ec",
-      "activityCount": 97,
-      "latestPublishedAt": "2026-08-20",
+      "activityCount": 247,
+      "latestPublishedAt": "2026-10-12",
       "earliestPublishedAt": "2026-05-07",
       "path": "company-activity-history/gs-ec.json"
     },
     {
       "companyId": "hyundai-engineering",
-      "activityCount": 14,
-      "latestPublishedAt": "2026-08-19",
+      "activityCount": 200,
+      "latestPublishedAt": "2026-10-14",
       "earliestPublishedAt": "2026-05-04",
       "path": "company-activity-history/hyundai-engineering.json"
     },
     {
       "companyId": "samsung-ct-construction",
-      "activityCount": 119,
-      "latestPublishedAt": "2026-08-19",
+      "activityCount": 215,
+      "latestPublishedAt": "2026-10-12",
       "earliestPublishedAt": "2026-05-12",
       "path": "company-activity-history/samsung-ct-construction.json"
     },
     {
       "companyId": "dl-enc",
-      "activityCount": 15,
-      "latestPublishedAt": "2026-08-13",
+      "activityCount": 25,
+      "latestPublishedAt": "2026-09-30",
       "earliestPublishedAt": "2026-05-11",
       "path": "company-activity-history/dl-enc.json"
     },
