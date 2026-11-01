@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-01T02:42:09.596676+00:00",
+  "generatedAt": "2026-11-01T02:53:45.340878+00:00",
   "companyId": "yuchang-enc",
-  "activityCount": 56,
+  "activityCount": 57,
   "activities": [
+    {
+      "activityId": "news-yuchang-enc-d2cbcf54fadbdb34",
+      "companyId": "yuchang-enc",
+      "activityType": "partnership",
+      "title": "삼성전자, AI 가전 넘어 주택 에너지 시장 공략…아파트로 사업 확대",
+      "summary": "지난해 유창이앤씨와 공동주택형 모듈러 주택 개발을 위한 업무협약을 체결한 데 이어 올해는 공간제작소와 단독주택형 AI 모듈러 홈을 출시하며 적용 범위를 넓혀 왔다. 향후에는 4층 이상 중층 건물을 비롯해 다양한...",
+      "publishedAt": "2026-10-14",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.dailian.co.kr/news/view/1701404/?sc=Naver",
+      "sourceRecordId": "9451",
+      "matchedAlias": "유창이앤씨",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "dailian.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "adjacent"
+    },
     {
       "activityId": "news-yuchang-enc-406ea117494da938",
       "companyId": "yuchang-enc",

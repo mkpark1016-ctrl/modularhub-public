@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-01T02:42:09.596676+00:00",
+  "generatedAt": "2026-11-01T02:53:45.340878+00:00",
   "companyId": "kumkang-kind",
-  "activityCount": 14,
+  "activityCount": 15,
   "activities": [
+    {
+      "activityId": "news-kumkang-kind-d24eb67e480b26bc",
+      "companyId": "kumkang-kind",
+      "activityType": "factory",
+      "title": "공기 단축·건설 자동화 기대…모듈러주택 관련주 매수 溫氣",
+      "summary": "모듈러 유닛 등 관련 제품을 공급하는 기업들은 공장 제작 방식의 확산에 따른 수요 증가 가능성이 투자 요인으로 꼽힌다. 다만 건설 프로젝트별 적용 방식과 납품 규모에 따라 실적 기여도는 달라질 수 있다. 금강공업은...",
+      "publishedAt": "2026-10-28",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.pinpointnews.co.kr/news/articleView.html?idxno=499126",
+      "sourceRecordId": "9189",
+      "matchedAlias": "금강공업",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "pinpointnews.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
+    },
     {
       "activityId": "news-kumkang-kind-55ed25c657bda12e",
       "companyId": "kumkang-kind",
