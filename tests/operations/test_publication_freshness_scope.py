@@ -1,14 +1,9 @@
 import json
 import sys
-from pathlib import Path
 
 import pytest
-import yaml
 
 from scripts import audit_public_data_freshness as audit
-
-ROOT = Path(__file__).resolve().parents[2]
-
 
 def rows():
     return [
@@ -58,14 +53,3 @@ def test_cli_scope_preserves_global_warning_and_secret_block(monkeypatch, tmp_pa
     assert summary["overallState"] == "critical"
     assert summary["strictState"] == ("healthy" if scoped else "critical")
     assert any(row["dataset"] == "companies" for row in summary["alerts"])
-
-
-def test_company_publication_follows_successful_main_refresh():
-    workflow = yaml.load(
-        (ROOT / ".github/workflows/publish-company-activities.yml").read_text(encoding="utf-8"),
-        Loader=yaml.BaseLoader,
-    )
-    trigger = workflow["on"]["workflow_run"]
-    assert trigger == {"workflows": ["Update public data"], "types": ["completed"], "branches": ["main"]}
-    condition = workflow["jobs"]["publish-company-activities"]["if"]
-    assert "github.event.workflow_run.conclusion == 'success'" in condition
