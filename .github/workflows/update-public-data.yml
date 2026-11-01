@@ -82,7 +82,7 @@ jobs:
             "IH_CONTEST_LOOKBACK_DAYS=730" \
             "IH_CONTEST_REQUEST_INTERVAL_SECONDS=1.5" \
             "IH_CONTEST_TIMEOUT_SECONDS=20" \
-            "NAVER_NEWS_LOOKBACK_DAYS=14" \
+            "NAVER_NEWS_LOOKBACK_DAYS=30" \
             "NAVER_NEWS_DISPLAY=50" \
             "NAVER_NEWS_SORT=date" \
             "GDELT_DOC_NEWS_ENABLED=true" \
@@ -681,10 +681,28 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add frontend/public/data/business.json frontend/public/data/news.json frontend/public/data/meta.json
-          if git diff --cached --quiet; then
+          # Preserve company publication commits made while collection was running.
+          collection_base=$(git rev-parse HEAD)
+          git fetch origin "$GITHUB_REF_NAME"
+          publication_base="origin/$GITHUB_REF_NAME"
+          public_paths=(
+            frontend/public/data/business.json
+            frontend/public/data/news.json
+            frontend/public/data/meta.json
+          )
+          if ! git diff --quiet "$collection_base" "$publication_base" -- "${public_paths[@]}"; then
+            echo "::error::Public data moved during collection; refusing to overwrite a newer refresh."
+            exit 1
+          fi
+          publish_dir=$(mktemp -d "$RUNNER_TEMP/public-data-publish.XXXXXX")
+          git worktree add --detach "$publish_dir" "$publication_base"
+          for path in "${public_paths[@]}"; do
+            cp "$path" "$publish_dir/$path"
+          done
+          git -C "$publish_dir" add -- "${public_paths[@]}"
+          if git -C "$publish_dir" diff --cached --quiet; then
             echo "No public data changes to commit."
             exit 0
           fi
-          git commit -m "chore: update public ModularHub data"
-          git push
+          git -C "$publish_dir" commit -m "chore: update public ModularHub data"
+          git -C "$publish_dir" push origin "HEAD:$GITHUB_REF_NAME"
