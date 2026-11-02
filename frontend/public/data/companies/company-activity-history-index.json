@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-index-v1",
-  "generatedAt": "2026-11-01T02:53:45.340878+00:00",
+  "generatedAt": "2026-11-02T01:11:50.874043+00:00",
   "companyCount": 11,
-  "totalActivityCount": 933,
+  "totalActivityCount": 950,
   "companies": [
     {
       "companyId": "yuchang-enc",
@@ -48,8 +48,8 @@
     },
     {
       "companyId": "gs-ec",
-      "activityCount": 297,
-      "latestPublishedAt": "2026-10-30",
+      "activityCount": 314,
+      "latestPublishedAt": "2026-11-02",
       "earliestPublishedAt": "2026-05-07",
       "path": "company-activity-history/gs-ec.json"
     },
