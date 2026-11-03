@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-index-v1",
-  "generatedAt": "2026-11-02T01:11:50.874043+00:00",
+  "generatedAt": "2026-11-03T03:16:20.194768+00:00",
   "companyCount": 11,
-  "totalActivityCount": 950,
+  "totalActivityCount": 1011,
   "companies": [
     {
       "companyId": "yuchang-enc",
@@ -48,29 +48,29 @@
     },
     {
       "companyId": "gs-ec",
-      "activityCount": 314,
-      "latestPublishedAt": "2026-11-02",
+      "activityCount": 366,
+      "latestPublishedAt": "2026-11-03",
       "earliestPublishedAt": "2026-05-07",
       "path": "company-activity-history/gs-ec.json"
     },
     {
       "companyId": "hyundai-engineering",
-      "activityCount": 206,
-      "latestPublishedAt": "2026-10-27",
+      "activityCount": 207,
+      "latestPublishedAt": "2026-10-29",
       "earliestPublishedAt": "2026-05-04",
       "path": "company-activity-history/hyundai-engineering.json"
     },
     {
       "companyId": "samsung-ct-construction",
-      "activityCount": 237,
-      "latestPublishedAt": "2026-10-29",
+      "activityCount": 239,
+      "latestPublishedAt": "2026-11-02",
       "earliestPublishedAt": "2026-05-12",
       "path": "company-activity-history/samsung-ct-construction.json"
     },
     {
       "companyId": "dl-enc",
-      "activityCount": 32,
-      "latestPublishedAt": "2026-10-23",
+      "activityCount": 38,
+      "latestPublishedAt": "2026-11-02",
       "earliestPublishedAt": "2026-05-11",
       "path": "company-activity-history/dl-enc.json"
     },

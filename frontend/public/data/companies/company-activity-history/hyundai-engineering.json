@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-02T01:11:50.874043+00:00",
+  "generatedAt": "2026-11-03T03:16:20.194768+00:00",
   "companyId": "hyundai-engineering",
-  "activityCount": 206,
+  "activityCount": 207,
   "activities": [
+    {
+      "activityId": "news-hyundai-engineering-a45fc74fb45a61fa",
+      "companyId": "hyundai-engineering",
+      "activityType": "project",
+      "title": "[이슈] 에스와이, '무용접·내진' 기술로 하이테크 인프라 정조준...B2B ...",
+      "summary": "에스와이는 삼성물산, 현대건설, IPARK현대산업개발, 현대엔지니어링 등 대형 건설사 및 한국토지주택공사... [사진=정윤섭 기자] 에스와이는 그간 지붕 임대형 태양광 EPC 사업과 모듈러 건축 등으로 사업 포트폴리오를...",
+      "publishedAt": "2026-10-29",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "http://www.paxetv.com/news/articleView.html?idxno=285582",
+      "sourceRecordId": "9181",
+      "matchedAlias": "현대엔지니어링",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "paxetv.com",
+      "region": "국가 미확인",
+      "amount": null,
+      "status": "adjacent"
+    },
     {
       "activityId": "news-hyundai-engineering-a08210ae3431d417",
       "companyId": "hyundai-engineering",
@@ -1787,9 +1807,9 @@
     {
       "activityId": "news-hyundai-engineering-60ff5c82cfea7c1b",
       "companyId": "hyundai-engineering",
-      "activityType": "general_news",
+      "activityType": "project",
       "title": "돈만 내던 사회공헌은 옛말···건설사 사회공헌도 '본업' 살린다",
-      "summary": "다른 건설사에서도 본업 역량을 활용한 사회공헌 활동이 확산하고 있다. 현대엔지니어링은 2015년부터 '기프트하우스'를 통해 전국 21개 지방자치단체에 모듈러주택 41동을 기증했고, 2023년부터는 임직원과 대학생이...",
+      "summary": "현대엔지니어링은 2015년부터 '기프트하우스'를 통해 전국 21개 지방자치단체에 모듈러주택 41동을 기증했고... DL이앤씨는 건설사의 시공 역량을 주거복지와 연결하고 있다. 2005년부터 한국해비타트와 함께 '희망의...",
       "publishedAt": "2026-10-07",
       "sourceType": "news",
       "sourceName": "네이버뉴스",
