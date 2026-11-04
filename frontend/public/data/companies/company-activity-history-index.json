@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-index-v1",
-  "generatedAt": "2026-11-03T03:16:20.194768+00:00",
+  "generatedAt": "2026-11-04T01:54:12.429270+00:00",
   "companyCount": 11,
-  "totalActivityCount": 1011,
+  "totalActivityCount": 1033,
   "companies": [
     {
       "companyId": "yuchang-enc",
@@ -13,15 +13,15 @@
     },
     {
       "companyId": "kumkang-kind",
-      "activityCount": 15,
-      "latestPublishedAt": "2026-10-28",
+      "activityCount": 18,
+      "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-05-06",
       "path": "company-activity-history/kumkang-kind.json"
     },
     {
       "companyId": "planm",
-      "activityCount": 11,
-      "latestPublishedAt": "2026-10-28",
+      "activityCount": 16,
+      "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-06-19",
       "path": "company-activity-history/planm.json"
     },
@@ -41,14 +41,14 @@
     },
     {
       "companyId": "nrb",
-      "activityCount": 69,
-      "latestPublishedAt": "2026-10-22",
+      "activityCount": 74,
+      "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-06-01",
       "path": "company-activity-history/nrb.json"
     },
     {
       "companyId": "gs-ec",
-      "activityCount": 366,
+      "activityCount": 369,
       "latestPublishedAt": "2026-11-03",
       "earliestPublishedAt": "2026-05-07",
       "path": "company-activity-history/gs-ec.json"
@@ -62,23 +62,23 @@
     },
     {
       "companyId": "samsung-ct-construction",
-      "activityCount": 239,
-      "latestPublishedAt": "2026-11-02",
+      "activityCount": 241,
+      "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-05-12",
       "path": "company-activity-history/samsung-ct-construction.json"
     },
     {
       "companyId": "dl-enc",
-      "activityCount": 38,
+      "activityCount": 40,
       "latestPublishedAt": "2026-11-02",
       "earliestPublishedAt": "2026-05-11",
       "path": "company-activity-history/dl-enc.json"
     },
     {
       "companyId": "daeseung-engineering",
-      "activityCount": 0,
-      "latestPublishedAt": null,
-      "earliestPublishedAt": null,
+      "activityCount": 2,
+      "latestPublishedAt": "2026-11-04",
+      "earliestPublishedAt": "2026-11-04",
       "path": "company-activity-history/daeseung-engineering.json"
     }
   ]
