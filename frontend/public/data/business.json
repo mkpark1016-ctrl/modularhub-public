@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-05T11:01:25+09:00",
-  "procurement_plan_count": 87,
+  "generated_at": "2026-11-06T10:59:04+09:00",
+  "procurement_plan_count": 88,
   "procurement_plan_collection_status": "success",
   "procurement_plan_source_status": {
     "나라장터": "success",
     "D2B": "success"
   },
-  "procurement_plan_last_collected_at": "2026-11-05T10:54:48",
+  "procurement_plan_last_collected_at": "2026-11-06T10:52:54",
   "g2b_order_plan_status": "success",
-  "g2b_order_plan_message": "정상 호출되어 85건을 공개 데이터에 반영했습니다.",
+  "g2b_order_plan_message": "정상 호출되어 86건을 공개 데이터에 반영했습니다.",
   "d2b_status": "success",
   "d2b_message": "Unified D2B GW 공개 데이터가 유지되고 있습니다. 기존 Legacy API 상태는 별도로 유지됩니다.",
   "d2b_legacy_status": "disabled_stopped",
@@ -18,19 +18,19 @@
   "d2b_unified_last_collected_at": "2026-08-20T07:23:09+00:00",
   "lh_contest_status": "success",
   "lh_contest_message": "LH 민간참여 공공주택 공모 12건을 공개 사업정보에 반영했습니다.",
-  "lh_contest_last_attempt": "2026-11-05T10:55:47+09:00",
-  "lh_contest_last_success": "2026-11-05T10:55:47+09:00",
+  "lh_contest_last_attempt": "2026-11-06T10:53:53+09:00",
+  "lh_contest_last_success": "2026-11-06T10:53:53+09:00",
   "lh_contest_scanned_count": 101,
-  "lh_contest_matched_count": 12,
-  "lh_contest_inserted_count": 12,
+  "lh_contest_matched_count": 11,
+  "lh_contest_inserted_count": 11,
   "lh_contest_updated_count": 0,
   "lh_contest_public_count": 12,
   "lh_contest_exact_link_count": 12,
   "lh_contest_failure_reason": "",
   "gh_contest_status": "success",
   "gh_contest_message": "GH 공모 관련사항 14건을 공개 사업정보에 반영했습니다.",
-  "gh_contest_last_attempt": "2026-11-05T10:57:09+09:00",
-  "gh_contest_last_success": "2026-11-05T10:57:09+09:00",
+  "gh_contest_last_attempt": "2026-11-06T10:55:15+09:00",
+  "gh_contest_last_success": "2026-11-06T10:55:16+09:00",
   "gh_contest_scanned_count": 100,
   "gh_contest_matched_count": 24,
   "gh_contest_opportunity_count": 13,
@@ -42,8 +42,8 @@
   "gh_contest_failure_reason": "",
   "ih_contest_status": "success",
   "ih_contest_message": "iH 공지사항 5건을 공개 사업정보에 반영했습니다.",
-  "ih_contest_last_attempt": "2026-11-05T10:59:21+09:00",
-  "ih_contest_last_success": "2026-11-05T10:59:21+09:00",
+  "ih_contest_last_attempt": "2026-11-06T10:57:29+09:00",
+  "ih_contest_last_success": "2026-11-06T10:57:29+09:00",
   "ih_contest_scanned_count": 0,
   "ih_contest_matched_count": 0,
   "ih_contest_opportunity_count": 0,
@@ -52,7 +52,7 @@
   "ih_contest_public_count": 5,
   "ih_contest_exact_link_count": 5,
   "ih_contest_attachment_count": 0,
-  "ih_contest_failure_reason": "list page 1: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/customer/notification/notice.jsp (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7185c2679b50>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4191: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4191&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7185c267b910>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4152: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4152&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x7185c267d610>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)'))",
+  "ih_contest_failure_reason": "list page 1: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/customer/notification/notice.jsp (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x74a02c36a790>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4191: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4191&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x74a02c34fb90>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)')); 4152: empty detail response: status=None error=HTTPSConnectionPool(host='www.ih.co.kr', port=443): Max retries exceeded with url: /main/bbs/bbsMsgDetail.do?msg_seq=4152&bcd=notice (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.ih.co.kr', port=443) at 0x74a02c36b850>, 'Connection to www.ih.co.kr timed out. (connect timeout=20)'))",
   "sh_contest_status": "not_collected",
   "sh_contest_message": "SH 사업발주·공지 수집 기록이 아직 없습니다.",
   "sh_contest_last_attempt": "",
@@ -68,23 +68,23 @@
   "sh_contest_failure_reason": "",
   "workflow_last_run_status": "success",
   "warnings": [],
-  "previous_business_count": 319,
-  "current_business_count": 146,
-  "merged_business_count": 324,
-  "previous_news_count": 4467,
-  "current_news_count": 515,
-  "merged_news_count": 4566,
-  "news_before_global_dedup_count": 4591,
-  "news_after_global_dedup_count": 4588,
-  "news_global_duplicate_removed_count": 3,
-  "news_before_publish_filter_count": 4588,
-  "news_after_publish_filter_count": 4566,
+  "previous_business_count": 324,
+  "current_business_count": 35,
+  "merged_business_count": 325,
+  "previous_news_count": 4566,
+  "current_news_count": 524,
+  "merged_news_count": 4637,
+  "news_before_global_dedup_count": 4665,
+  "news_after_global_dedup_count": 4659,
+  "news_global_duplicate_removed_count": 6,
+  "news_before_publish_filter_count": 4659,
+  "news_after_publish_filter_count": 4637,
   "news_excluded_removed_count": 22,
-  "news_policy_removed_count": 25,
+  "news_policy_removed_count": 28,
   "news_policy_version": "unified-v2-publication-v1",
-  "latest_public_news_published_at": "2026-11-05T00:00:00+00:00",
-  "latest_direct_news_published_at": "2026-11-05T00:00:00+00:00",
-  "latest_adjacent_news_published_at": "2026-11-05T00:00:00+00:00",
+  "latest_public_news_published_at": "2026-11-06T00:00:00+00:00",
+  "latest_direct_news_published_at": "2026-11-06T00:00:00+00:00",
+  "latest_adjacent_news_published_at": "2026-11-06T00:00:00+00:00",
   "public_news_freshness_state": "fresh",
   "news_source_statuses": [
     {
@@ -92,11 +92,11 @@
       "name": "NAVER API HUB",
       "source_name": "네이버뉴스",
       "source_type": "news",
-      "last_attempted_at": "2026-11-05T10:54:00",
-      "last_successful_at": "2026-11-05T10:54:26",
-      "latest_item_published_at": "2026-11-05T00:00:00+00:00",
-      "fetched_count": 479,
-      "accepted_count": 4101,
+      "last_attempted_at": "2026-11-06T10:52:06",
+      "last_successful_at": "2026-11-06T10:52:33",
+      "latest_item_published_at": "2026-11-06T00:00:00+00:00",
+      "fetched_count": 485,
+      "accepted_count": 4167,
       "rejected_count": 0,
       "duplicate_count": 0,
       "http_status": "",
@@ -110,9 +110,9 @@
       "source_type": "news",
       "last_attempted_at": "",
       "last_successful_at": "",
-      "latest_item_published_at": "2026-11-04T00:00:00+00:00",
+      "latest_item_published_at": "2026-11-06T00:00:00+00:00",
       "fetched_count": 0,
-      "accepted_count": 465,
+      "accepted_count": 470,
       "rejected_count": 0,
       "duplicate_count": 0,
       "http_status": "",
@@ -120,16 +120,16 @@
       "safe_error_category": "none"
     }
   ],
-  "overseas_rss_before_dedup_count": 465,
-  "overseas_rss_after_dedup_count": 465,
+  "overseas_rss_before_dedup_count": 470,
+  "overseas_rss_after_dedup_count": 470,
   "overseas_rss_duplicate_removed_count": 0,
   "score_version": "unified-v2",
-  "news_score_total_count": 4566,
-  "news_score_domestic_count": 4101,
-  "news_score_overseas_count": 465,
+  "news_score_total_count": 4637,
+  "news_score_domestic_count": 4167,
+  "news_score_overseas_count": 470,
   "news_score_level_counts": {
-    "direct": 1332,
-    "adjacent": 3232,
+    "direct": 1341,
+    "adjacent": 3294,
     "reference": 2,
     "excluded": 0
   },
@@ -146,24 +146,78 @@
   "news_score_range_violation_count": 0,
   "news_score_missing_level_count": 0,
   "news_score_missing_version_count": 0,
-  "news_score_existing_id_retained_count": 4566,
+  "news_score_existing_id_retained_count": 4637,
   "news_score_existing_id_missing_count": 0,
   "public_data_guard_status": "passed",
-  "public_data_guard_message": "Cumulative merge protected public data: business 319 -> 324, news 4467 -> 4566.",
+  "public_data_guard_message": "Cumulative merge protected public data: business 324 -> 325, news 4566 -> 4637.",
   "data_policy": "cumulative_verified",
-  "business_total": 324,
+  "business_total": 325,
   "business_active": 13,
-  "business_closed": 280,
+  "business_closed": 281,
   "business_unknown": 31,
   "bid_total": 206,
-  "procurement_plan_total": 87,
+  "procurement_plan_total": 88,
   "public_agency_contest_total": 31,
   "lh_public_count": 12,
   "gh_public_count": 14,
   "ih_public_count": 5,
   "sh_public_count": 0,
-  "last_updated_at": "2026-11-05T11:01:25+09:00",
+  "last_updated_at": "2026-11-06T10:59:04+09:00",
   "items": [
+    {
+      "id": 579,
+      "source": "나라장터",
+      "source_name": "나라장터",
+      "source_type": "procurement_plan",
+      "type": "발주계획",
+      "title": "덕신초 모듈러교실 설치 부대공사 건설재해예방 기술지도 용역",
+      "organization": "울산광역시교육청 울산광역시강남교육지원청",
+      "demand_org": "울산광역시교육청",
+      "business_type": "용역",
+      "business_subtype": "신규(단기)",
+      "notice_status": "발주계획",
+      "notice_stage": "발주계획",
+      "source_record_id": "R26DD20919283",
+      "source_record_no": "0",
+      "plan_no": "R26DD20919283",
+      "bid_no": "R26DD20919283",
+      "bid_order": "0",
+      "posted_at": "2026-11-05",
+      "due_at": "2026-11-01",
+      "amount": 1375000,
+      "region": "",
+      "summary": "발주계획번호: R26DD20919283; 발주예정: 202611; 업무구분: 용역; 계약방법: 수의계약; 입찰방법: 자체조달; 발주기관: 울산광역시교육청 울산광역시강남교육지원청; 수요기관: 울산광역시교육청; 예산액: 1375000",
+      "keywords": "모듈러;시설;모듈러교실",
+      "relevance_score": 12,
+      "is_known_important": false,
+      "is_operating_scope": true,
+      "display_type": "발주계획",
+      "modular_relevance": "",
+      "modular_evidence": [],
+      "project_name": "",
+      "project_sites": [],
+      "project_blocks": [],
+      "application_schedule_text": "",
+      "household_count": null,
+      "housing_type": "",
+      "attachments": [],
+      "related_group_key": "",
+      "exact_link_verified": false,
+      "external_original_url": null,
+      "manual_check": {
+        "site_name": "나라장터",
+        "site_url": "https://www.g2b.go.kr",
+        "search_text": "R26DD20919283 0 덕신초 모듈러교실 설치 부대공사 건설재해예방 기술지도 용역 울산광역시교육청 울산광역시강남교육지원청",
+        "guide_text": "나라장터에서 공고번호 또는 공고명으로 검색해 상세 공고를 확인하세요."
+      },
+      "detail": null,
+      "opportunity_status": "closed",
+      "is_closed": true,
+      "days_until_deadline": -5,
+      "closed_at": "2026-11-01",
+      "last_seen_at": "2026-11-05",
+      "lifecycle_reason": "deadline_passed"
+    },
     {
       "id": 696,
       "source": "나라장터",
@@ -175,8 +229,8 @@
       "demand_org": "경상북도교육청",
       "business_type": "공사",
       "business_subtype": "신규(단기)",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20918447",
       "source_record_no": "0",
       "plan_no": "R26DD20918447",
@@ -213,7 +267,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-04",
       "lifecycle_reason": "deadline_passed"
@@ -267,7 +321,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-04",
       "lifecycle_reason": "deadline_passed"
@@ -321,7 +375,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-04",
       "lifecycle_reason": "deadline_passed"
@@ -375,7 +429,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 5,
+      "days_until_deadline": 4,
       "closed_at": null,
       "last_seen_at": "2026-11-04",
       "lifecycle_reason": "deadline_today_or_future"
@@ -429,7 +483,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-04",
       "lifecycle_reason": "deadline_passed"
@@ -483,7 +537,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_passed"
@@ -537,7 +591,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_passed"
@@ -591,7 +645,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_passed"
@@ -645,7 +699,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 11,
+      "days_until_deadline": 10,
       "closed_at": null,
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_today_or_future"
@@ -661,8 +715,8 @@
       "demand_org": "울산광역시교육청",
       "business_type": "공사",
       "business_subtype": "신규(단기)",
-      "notice_status": "발주계획",
-      "notice_stage": "발주계획",
+      "notice_status": "입찰공고연계",
+      "notice_stage": "입찰공고연계",
       "source_record_id": "R26DD20916326",
       "source_record_no": "0",
       "plan_no": "R26DD20916326",
@@ -699,7 +753,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_passed"
@@ -753,7 +807,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_passed"
@@ -807,7 +861,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 11,
+      "days_until_deadline": 10,
       "closed_at": null,
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_today_or_future"
@@ -861,7 +915,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 11,
+      "days_until_deadline": 10,
       "closed_at": null,
       "last_seen_at": "2026-11-03",
       "lifecycle_reason": "deadline_today_or_future"
@@ -915,7 +969,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_passed"
@@ -969,7 +1023,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_passed"
@@ -1023,7 +1077,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_passed"
@@ -1077,7 +1131,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_passed"
@@ -1131,7 +1185,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_passed"
@@ -1185,7 +1239,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 1,
+      "days_until_deadline": 0,
       "closed_at": null,
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1239,7 +1293,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 1,
+      "days_until_deadline": 0,
       "closed_at": null,
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1293,7 +1347,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_passed"
@@ -1347,7 +1401,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_passed"
@@ -1401,7 +1455,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 8,
+      "days_until_deadline": 7,
       "closed_at": null,
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1455,7 +1509,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 15,
+      "days_until_deadline": 14,
       "closed_at": null,
       "last_seen_at": "2026-11-02",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1509,7 +1563,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 4,
+      "days_until_deadline": 3,
       "closed_at": null,
       "last_seen_at": "2026-10-28",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1563,7 +1617,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -8,
+      "days_until_deadline": -9,
       "closed_at": "2026-10-28",
       "last_seen_at": "2026-10-28",
       "lifecycle_reason": "deadline_passed"
@@ -1617,7 +1671,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 1,
+      "days_until_deadline": 0,
       "closed_at": null,
       "last_seen_at": "2026-10-26",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1671,7 +1725,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 4,
+      "days_until_deadline": 3,
       "closed_at": null,
       "last_seen_at": "2026-10-26",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1725,7 +1779,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -8,
+      "days_until_deadline": -9,
       "closed_at": "2026-10-28",
       "last_seen_at": "2026-10-22",
       "lifecycle_reason": "deadline_passed"
@@ -1779,7 +1833,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 1,
+      "days_until_deadline": 0,
       "closed_at": null,
       "last_seen_at": "2026-10-22",
       "lifecycle_reason": "deadline_today_or_future"
@@ -1833,7 +1887,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -6,
+      "days_until_deadline": -7,
       "closed_at": "2026-10-30",
       "last_seen_at": "2026-10-20",
       "lifecycle_reason": "deadline_passed"
@@ -1887,7 +1941,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -3,
+      "days_until_deadline": -4,
       "closed_at": "2026-11-02",
       "last_seen_at": "2026-10-20",
       "lifecycle_reason": "deadline_passed"
@@ -1941,7 +1995,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -6,
+      "days_until_deadline": -7,
       "closed_at": "2026-10-30",
       "last_seen_at": "2026-10-19",
       "lifecycle_reason": "deadline_passed"
@@ -1995,7 +2049,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -6,
+      "days_until_deadline": -7,
       "closed_at": "2026-10-30",
       "last_seen_at": "2026-10-19",
       "lifecycle_reason": "deadline_passed"
@@ -2049,7 +2103,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -9,
+      "days_until_deadline": -10,
       "closed_at": "2026-10-27",
       "last_seen_at": "2026-10-19",
       "lifecycle_reason": "deadline_passed"
@@ -2103,7 +2157,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -6,
+      "days_until_deadline": -7,
       "closed_at": "2026-10-30",
       "last_seen_at": "2026-10-19",
       "lifecycle_reason": "deadline_passed"
@@ -2157,7 +2211,7 @@
       "detail": null,
       "opportunity_status": "active",
       "is_closed": false,
-      "days_until_deadline": 1,
+      "days_until_deadline": 0,
       "closed_at": null,
       "last_seen_at": "2026-10-15",
       "lifecycle_reason": "deadline_today_or_future"
@@ -2211,7 +2265,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -10,
+      "days_until_deadline": -11,
       "closed_at": "2026-10-26",
       "last_seen_at": "2026-10-15",
       "lifecycle_reason": "deadline_passed"
@@ -2265,7 +2319,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -21,
+      "days_until_deadline": -22,
       "closed_at": "2026-10-15",
       "last_seen_at": "2026-10-14",
       "lifecycle_reason": "deadline_passed"
@@ -2319,7 +2373,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -21,
+      "days_until_deadline": -22,
       "closed_at": "2026-10-15",
       "last_seen_at": "2026-10-14",
       "lifecycle_reason": "deadline_passed"
@@ -2378,7 +2432,7 @@
       ],
       "related_group_key": "한국토지주택공사|민간참여 공공주택건설사업 민간사업자 공모 공고|도시조성사업 신도시",
       "exact_link_verified": true,
-      "external_original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=734530&tag=&nPage=2",
+      "external_original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=734530&tag=&nPage=3",
       "manual_check": {
         "site_name": "LH 공모안내",
         "site_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034",
@@ -2442,7 +2496,7 @@
       },
       "source_code": "LH_CONTEST",
       "link_verified": true,
-      "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=734530&tag=&nPage=2",
+      "original_url": "https://www.lh.or.kr/board.es?mid=a10601020000&bid=0034&act=view&list_no=734530&tag=&nPage=3",
       "opportunity_status": "unknown",
       "is_closed": false,
       "days_until_deadline": null,
@@ -2625,7 +2679,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -13,
+      "days_until_deadline": -14,
       "closed_at": "2026-10-23",
       "last_seen_at": "2026-10-12",
       "lifecycle_reason": "deadline_passed"
@@ -2679,7 +2733,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -22,
+      "days_until_deadline": -23,
       "closed_at": "2026-10-14",
       "last_seen_at": "2026-10-12",
       "lifecycle_reason": "deadline_passed"
@@ -2733,7 +2787,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -23,
+      "days_until_deadline": -24,
       "closed_at": "2026-10-13",
       "last_seen_at": "2026-10-08",
       "lifecycle_reason": "deadline_passed"
@@ -2787,7 +2841,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-10-08",
       "lifecycle_reason": "deadline_passed"
@@ -2841,7 +2895,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-10-08",
       "lifecycle_reason": "deadline_passed"
@@ -2895,7 +2949,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -17,
+      "days_until_deadline": -18,
       "closed_at": "2026-10-19",
       "last_seen_at": "2026-10-06",
       "lifecycle_reason": "deadline_passed"
@@ -2949,7 +3003,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -23,
+      "days_until_deadline": -24,
       "closed_at": "2026-10-13",
       "last_seen_at": "2026-10-02",
       "lifecycle_reason": "deadline_passed"
@@ -3003,7 +3057,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-10-02",
       "lifecycle_reason": "deadline_passed"
@@ -3057,7 +3111,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-10-01",
       "lifecycle_reason": "deadline_passed"
@@ -3111,7 +3165,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -21,
+      "days_until_deadline": -22,
       "closed_at": "2026-10-15",
       "last_seen_at": "2026-10-01",
       "lifecycle_reason": "deadline_passed"
@@ -3165,7 +3219,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-09-30",
       "lifecycle_reason": "deadline_passed"
@@ -3219,7 +3273,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-09-28",
       "lifecycle_reason": "deadline_passed"
@@ -3273,7 +3327,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-28",
       "lifecycle_reason": "deadline_passed"
@@ -3327,7 +3381,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-09-22",
       "lifecycle_reason": "deadline_passed"
@@ -3381,7 +3435,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -30,
+      "days_until_deadline": -31,
       "closed_at": "2026-10-06",
       "last_seen_at": "2026-09-22",
       "lifecycle_reason": "deadline_passed"
@@ -3435,7 +3489,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -30,
+      "days_until_deadline": -31,
       "closed_at": "2026-10-06",
       "last_seen_at": "2026-09-22",
       "lifecycle_reason": "deadline_passed"
@@ -3489,7 +3543,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-22",
       "lifecycle_reason": "deadline_passed"
@@ -3543,7 +3597,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-09-22",
       "lifecycle_reason": "deadline_passed"
@@ -3597,7 +3651,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-22",
       "lifecycle_reason": "deadline_passed"
@@ -3651,7 +3705,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -44,
+      "days_until_deadline": -45,
       "closed_at": "2026-09-22",
       "last_seen_at": "2026-09-21",
       "lifecycle_reason": "deadline_passed"
@@ -3705,7 +3759,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-21",
       "lifecycle_reason": "deadline_passed"
@@ -3759,7 +3813,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -43,
+      "days_until_deadline": -44,
       "closed_at": "2026-09-23",
       "last_seen_at": "2026-09-17",
       "lifecycle_reason": "deadline_passed"
@@ -3813,7 +3867,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-17",
       "lifecycle_reason": "deadline_passed"
@@ -3867,7 +3921,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-17",
       "lifecycle_reason": "deadline_passed"
@@ -3921,7 +3975,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -44,
+      "days_until_deadline": -45,
       "closed_at": "2026-09-22",
       "last_seen_at": "2026-09-16",
       "lifecycle_reason": "deadline_passed"
@@ -3975,7 +4029,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -45,
+      "days_until_deadline": -46,
       "closed_at": "2026-09-21",
       "last_seen_at": "2026-09-15",
       "lifecycle_reason": "deadline_passed"
@@ -4029,7 +4083,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -44,
+      "days_until_deadline": -45,
       "closed_at": "2026-09-22",
       "last_seen_at": "2026-09-15",
       "lifecycle_reason": "deadline_passed"
@@ -4083,7 +4137,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -48,
+      "days_until_deadline": -49,
       "closed_at": "2026-09-18",
       "last_seen_at": "2026-09-14",
       "lifecycle_reason": "deadline_passed"
@@ -4281,7 +4335,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -44,
+      "days_until_deadline": -45,
       "closed_at": "2026-09-22",
       "last_seen_at": "2026-09-11",
       "lifecycle_reason": "deadline_passed"
@@ -4335,7 +4389,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-11",
       "lifecycle_reason": "deadline_passed"
@@ -4389,7 +4443,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -51,
+      "days_until_deadline": -52,
       "closed_at": "2026-09-15",
       "last_seen_at": "2026-09-09",
       "lifecycle_reason": "deadline_passed"
@@ -4443,7 +4497,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -55,
+      "days_until_deadline": -56,
       "closed_at": "2026-09-11",
       "last_seen_at": "2026-09-08",
       "lifecycle_reason": "deadline_passed"
@@ -4497,7 +4551,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -45,
+      "days_until_deadline": -46,
       "closed_at": "2026-09-21",
       "last_seen_at": "2026-09-08",
       "lifecycle_reason": "deadline_passed"
@@ -4551,7 +4605,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -50,
+      "days_until_deadline": -51,
       "closed_at": "2026-09-16",
       "last_seen_at": "2026-09-08",
       "lifecycle_reason": "deadline_passed"
@@ -4605,7 +4659,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -9,
+      "days_until_deadline": -10,
       "closed_at": "2026-10-27",
       "last_seen_at": "2026-09-07",
       "lifecycle_reason": "deadline_passed"
@@ -4659,7 +4713,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -52,
+      "days_until_deadline": -53,
       "closed_at": "2026-09-14",
       "last_seen_at": "2026-09-07",
       "lifecycle_reason": "deadline_passed"
@@ -4713,7 +4767,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-09-07",
       "lifecycle_reason": "deadline_passed"
@@ -4767,7 +4821,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -57,
+      "days_until_deadline": -58,
       "closed_at": "2026-09-09",
       "last_seen_at": "2026-09-03",
       "lifecycle_reason": "deadline_passed"
@@ -4821,7 +4875,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-03",
       "lifecycle_reason": "deadline_passed"
@@ -4875,7 +4929,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-03",
       "lifecycle_reason": "deadline_passed"
@@ -4929,7 +4983,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -52,
+      "days_until_deadline": -53,
       "closed_at": "2026-09-14",
       "last_seen_at": "2026-09-02",
       "lifecycle_reason": "deadline_passed"
@@ -4983,7 +5037,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-02",
       "lifecycle_reason": "deadline_passed"
@@ -5037,7 +5091,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-02",
       "lifecycle_reason": "deadline_passed"
@@ -5091,7 +5145,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-02",
       "lifecycle_reason": "deadline_passed"
@@ -5145,7 +5199,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-01",
       "lifecycle_reason": "deadline_passed"
@@ -5199,7 +5253,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-01",
       "lifecycle_reason": "deadline_passed"
@@ -5253,7 +5307,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-01",
       "lifecycle_reason": "deadline_passed"
@@ -5307,7 +5361,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-09-01",
       "lifecycle_reason": "deadline_passed"
@@ -5361,7 +5415,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -58,
+      "days_until_deadline": -59,
       "closed_at": "2026-09-08",
       "last_seen_at": "2026-08-31",
       "lifecycle_reason": "deadline_passed"
@@ -5415,7 +5469,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -59,
+      "days_until_deadline": -60,
       "closed_at": "2026-09-07",
       "last_seen_at": "2026-08-28",
       "lifecycle_reason": "deadline_passed"
@@ -5469,7 +5523,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -63,
+      "days_until_deadline": -64,
       "closed_at": "2026-09-03",
       "last_seen_at": "2026-08-28",
       "lifecycle_reason": "deadline_passed"
@@ -5523,7 +5577,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -64,
+      "days_until_deadline": -65,
       "closed_at": "2026-09-02",
       "last_seen_at": "2026-08-27",
       "lifecycle_reason": "deadline_passed"
@@ -5577,7 +5631,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -65,
+      "days_until_deadline": -66,
       "closed_at": "2026-09-01",
       "last_seen_at": "2026-08-27",
       "lifecycle_reason": "deadline_passed"
@@ -5631,7 +5685,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -28,
+      "days_until_deadline": -29,
       "closed_at": "2026-10-08",
       "last_seen_at": "2026-08-27",
       "lifecycle_reason": "deadline_passed"
@@ -5685,7 +5739,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -36,
+      "days_until_deadline": -37,
       "closed_at": "2026-09-30",
       "last_seen_at": "2026-08-26",
       "lifecycle_reason": "deadline_passed"
@@ -5739,7 +5793,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -63,
+      "days_until_deadline": -64,
       "closed_at": "2026-09-03",
       "last_seen_at": "2026-08-26",
       "lifecycle_reason": "deadline_passed"
@@ -5793,7 +5847,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -52,
+      "days_until_deadline": -53,
       "closed_at": "2026-09-14",
       "last_seen_at": "2026-08-25",
       "lifecycle_reason": "deadline_passed"
@@ -5847,7 +5901,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -37,
+      "days_until_deadline": -38,
       "closed_at": "2026-09-29",
       "last_seen_at": "2026-08-24",
       "lifecycle_reason": "deadline_passed"
@@ -5901,7 +5955,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -66,
+      "days_until_deadline": -67,
       "closed_at": "2026-08-31",
       "last_seen_at": "2026-08-24",
       "lifecycle_reason": "deadline_passed"
@@ -5955,7 +6009,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-24",
       "lifecycle_reason": "deadline_passed"
@@ -6009,7 +6063,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-24",
       "lifecycle_reason": "deadline_passed"
@@ -6063,7 +6117,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-21",
       "lifecycle_reason": "deadline_passed"
@@ -6117,7 +6171,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -36,
+      "days_until_deadline": -37,
       "closed_at": "2026-09-30",
       "last_seen_at": "2026-08-20",
       "lifecycle_reason": "deadline_passed"
@@ -6171,7 +6225,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-18",
       "lifecycle_reason": "deadline_passed"
@@ -6225,7 +6279,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-13",
       "lifecycle_reason": "deadline_passed"
@@ -6279,7 +6333,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-12",
       "lifecycle_reason": "deadline_passed"
@@ -6333,7 +6387,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -72,
+      "days_until_deadline": -73,
       "closed_at": "2026-08-25",
       "last_seen_at": "2026-08-11",
       "lifecycle_reason": "deadline_passed"
@@ -6387,7 +6441,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -69,
+      "days_until_deadline": -70,
       "closed_at": "2026-08-28",
       "last_seen_at": "2026-08-11",
       "lifecycle_reason": "deadline_passed"
@@ -6441,7 +6495,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-11",
       "lifecycle_reason": "deadline_passed"
@@ -6495,7 +6549,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-11",
       "lifecycle_reason": "deadline_passed"
@@ -6549,7 +6603,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -76,
+      "days_until_deadline": -77,
       "closed_at": "2026-08-21",
       "last_seen_at": "2026-08-10",
       "lifecycle_reason": "deadline_passed"
@@ -6603,7 +6657,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -58,
+      "days_until_deadline": -59,
       "closed_at": "2026-09-08",
       "last_seen_at": "2026-08-06",
       "lifecycle_reason": "deadline_passed"
@@ -6657,7 +6711,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -83,
+      "days_until_deadline": -84,
       "closed_at": "2026-08-14",
       "last_seen_at": "2026-08-06",
       "lifecycle_reason": "deadline_passed"
@@ -6711,7 +6765,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -57,
+      "days_until_deadline": -58,
       "closed_at": "2026-09-09",
       "last_seen_at": "2026-08-06",
       "lifecycle_reason": "deadline_passed"
@@ -6765,7 +6819,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-06",
       "lifecycle_reason": "deadline_passed"
@@ -6819,7 +6873,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -57,
+      "days_until_deadline": -58,
       "closed_at": "2026-09-09",
       "last_seen_at": "2026-08-05",
       "lifecycle_reason": "deadline_passed"
@@ -6873,7 +6927,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-05",
       "lifecycle_reason": "deadline_passed"
@@ -6927,7 +6981,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-05",
       "lifecycle_reason": "deadline_passed"
@@ -6981,7 +7035,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -57,
+      "days_until_deadline": -58,
       "closed_at": "2026-09-09",
       "last_seen_at": "2026-08-04",
       "lifecycle_reason": "deadline_passed"
@@ -7035,7 +7089,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-04",
       "lifecycle_reason": "deadline_passed"
@@ -7089,7 +7143,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-08-01",
       "lifecycle_reason": "deadline_passed"
@@ -7143,7 +7197,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-30",
       "lifecycle_reason": "deadline_passed"
@@ -7197,7 +7251,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -86,
+      "days_until_deadline": -87,
       "closed_at": "2026-08-11",
       "last_seen_at": "2026-07-29",
       "lifecycle_reason": "deadline_passed"
@@ -7251,7 +7305,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -87,
+      "days_until_deadline": -88,
       "closed_at": "2026-08-10",
       "last_seen_at": "2026-07-28",
       "lifecycle_reason": "deadline_passed"
@@ -7305,7 +7359,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-07-28",
       "lifecycle_reason": "deadline_passed"
@@ -7359,7 +7413,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -98,
+      "days_until_deadline": -99,
       "closed_at": "2026-07-30",
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_passed"
@@ -7413,7 +7467,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -97,
+      "days_until_deadline": -98,
       "closed_at": "2026-07-31",
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_passed"
@@ -7467,7 +7521,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -94,
+      "days_until_deadline": -95,
       "closed_at": "2026-08-03",
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_passed"
@@ -7521,7 +7575,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -94,
+      "days_until_deadline": -95,
       "closed_at": "2026-08-03",
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_passed"
@@ -7575,7 +7629,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -94,
+      "days_until_deadline": -95,
       "closed_at": "2026-08-03",
       "last_seen_at": "2026-07-27",
       "lifecycle_reason": "deadline_passed"
@@ -7629,7 +7683,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -90,
+      "days_until_deadline": -91,
       "closed_at": "2026-08-07",
       "last_seen_at": "2026-07-24",
       "lifecycle_reason": "deadline_passed"
@@ -7683,7 +7737,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -98,
+      "days_until_deadline": -99,
       "closed_at": "2026-07-30",
       "last_seen_at": "2026-07-24",
       "lifecycle_reason": "deadline_passed"
@@ -7737,7 +7791,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-24",
       "lifecycle_reason": "deadline_passed"
@@ -7791,7 +7845,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-23",
       "lifecycle_reason": "deadline_passed"
@@ -7845,7 +7899,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-23",
       "lifecycle_reason": "deadline_passed"
@@ -7899,7 +7953,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-22",
       "lifecycle_reason": "deadline_passed"
@@ -7953,7 +8007,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -101,
+      "days_until_deadline": -102,
       "closed_at": "2026-07-27",
       "last_seen_at": "2026-07-21",
       "lifecycle_reason": "deadline_passed"
@@ -8007,7 +8061,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-21",
       "lifecycle_reason": "deadline_passed"
@@ -8061,7 +8115,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -97,
+      "days_until_deadline": -98,
       "closed_at": "2026-07-31",
       "last_seen_at": "2026-07-20",
       "lifecycle_reason": "deadline_passed"
@@ -8115,7 +8169,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -92,
+      "days_until_deadline": -93,
       "closed_at": "2026-08-05",
       "last_seen_at": "2026-07-16",
       "lifecycle_reason": "deadline_passed"
@@ -8169,7 +8223,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -96,
+      "days_until_deadline": -97,
       "closed_at": "2026-08-01",
       "last_seen_at": "2026-07-16",
       "lifecycle_reason": "deadline_passed"
@@ -8223,7 +8277,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -101,
+      "days_until_deadline": -102,
       "closed_at": "2026-07-27",
       "last_seen_at": "2026-07-15",
       "lifecycle_reason": "deadline_passed"
@@ -8277,7 +8331,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -101,
+      "days_until_deadline": -102,
       "closed_at": "2026-07-27",
       "last_seen_at": "2026-07-14",
       "lifecycle_reason": "deadline_passed"
@@ -8331,7 +8385,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -107,
+      "days_until_deadline": -108,
       "closed_at": "2026-07-21",
       "last_seen_at": "2026-07-14",
       "lifecycle_reason": "deadline_passed"
@@ -8385,7 +8439,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-14",
       "lifecycle_reason": "deadline_passed"
@@ -8439,7 +8493,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-13",
       "lifecycle_reason": "deadline_passed"
@@ -8493,7 +8547,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-10",
       "lifecycle_reason": "deadline_passed"
@@ -8547,7 +8601,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-10",
       "lifecycle_reason": "deadline_passed"
@@ -8601,7 +8655,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-10",
       "lifecycle_reason": "deadline_passed"
@@ -8655,7 +8709,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-09",
       "lifecycle_reason": "deadline_passed"
@@ -8709,7 +8763,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-09",
       "lifecycle_reason": "deadline_passed"
@@ -8763,7 +8817,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-09",
       "lifecycle_reason": "deadline_passed"
@@ -8817,7 +8871,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -119,
+      "days_until_deadline": -120,
       "closed_at": "2026-07-09",
       "last_seen_at": "2026-07-08",
       "lifecycle_reason": "deadline_passed"
@@ -8871,7 +8925,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-08",
       "lifecycle_reason": "deadline_passed"
@@ -8925,7 +8979,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -114,
+      "days_until_deadline": -115,
       "closed_at": "2026-07-14",
       "last_seen_at": "2026-07-03",
       "lifecycle_reason": "deadline_passed"
@@ -8979,7 +9033,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-07-03",
       "lifecycle_reason": "deadline_passed"
@@ -9033,7 +9087,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -120,
+      "days_until_deadline": -121,
       "closed_at": "2026-07-08",
       "last_seen_at": "2026-07-02",
       "lifecycle_reason": "deadline_passed"
@@ -9087,7 +9141,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -120,
+      "days_until_deadline": -121,
       "closed_at": "2026-07-08",
       "last_seen_at": "2026-07-02",
       "lifecycle_reason": "deadline_passed"
@@ -9141,7 +9195,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -121,
+      "days_until_deadline": -122,
       "closed_at": "2026-07-07",
       "last_seen_at": "2026-07-01",
       "lifecycle_reason": "deadline_passed"
@@ -9195,7 +9249,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -121,
+      "days_until_deadline": -122,
       "closed_at": "2026-07-07",
       "last_seen_at": "2026-06-26",
       "lifecycle_reason": "deadline_passed"
@@ -9249,7 +9303,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -126,
+      "days_until_deadline": -127,
       "closed_at": "2026-07-02",
       "last_seen_at": "2026-06-26",
       "lifecycle_reason": "deadline_passed"
@@ -9303,7 +9357,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-25",
       "lifecycle_reason": "deadline_passed"
@@ -9357,7 +9411,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -93,
+      "days_until_deadline": -94,
       "closed_at": "2026-08-04",
       "last_seen_at": "2026-06-24",
       "lifecycle_reason": "deadline_passed"
@@ -9411,7 +9465,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-24",
       "lifecycle_reason": "deadline_passed"
@@ -9465,7 +9519,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -127,
+      "days_until_deadline": -128,
       "closed_at": "2026-07-01",
       "last_seen_at": "2026-06-23",
       "lifecycle_reason": "deadline_passed"
@@ -9519,7 +9573,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -129,
+      "days_until_deadline": -130,
       "closed_at": "2026-06-29",
       "last_seen_at": "2026-06-23",
       "lifecycle_reason": "deadline_passed"
@@ -9563,7 +9617,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -120,
+      "days_until_deadline": -121,
       "closed_at": "2026-07-08",
       "last_seen_at": "2026-06-17",
       "lifecycle_reason": "deadline_passed"
@@ -9607,7 +9661,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-17",
       "lifecycle_reason": "deadline_passed"
@@ -9651,7 +9705,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -121,
+      "days_until_deadline": -122,
       "closed_at": "2026-07-07",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -9695,7 +9749,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -129,
+      "days_until_deadline": -130,
       "closed_at": "2026-06-29",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -9739,7 +9793,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -9783,7 +9837,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-16",
       "lifecycle_reason": "deadline_passed"
@@ -9827,7 +9881,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -132,
+      "days_until_deadline": -133,
       "closed_at": "2026-06-26",
       "last_seen_at": "2026-06-15",
       "lifecycle_reason": "deadline_passed"
@@ -9871,7 +9925,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-15",
       "lifecycle_reason": "deadline_passed"
@@ -9915,7 +9969,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-15",
       "lifecycle_reason": "deadline_passed"
@@ -9959,7 +10013,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -135,
+      "days_until_deadline": -136,
       "closed_at": "2026-06-23",
       "last_seen_at": "2026-06-12",
       "lifecycle_reason": "deadline_passed"
@@ -10003,7 +10057,7 @@
       "exact_link_verified": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -135,
+      "days_until_deadline": -136,
       "closed_at": "2026-06-23",
       "last_seen_at": "2026-06-12",
       "lifecycle_reason": "deadline_passed"
@@ -10047,7 +10101,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -128,
+      "days_until_deadline": -129,
       "closed_at": "2026-06-30",
       "last_seen_at": "2026-06-10",
       "lifecycle_reason": "deadline_passed"
@@ -10091,7 +10145,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -128,
+      "days_until_deadline": -129,
       "closed_at": "2026-06-30",
       "last_seen_at": "2026-06-09",
       "lifecycle_reason": "deadline_passed"
@@ -10261,7 +10315,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-09",
       "lifecycle_reason": "deadline_passed"
@@ -10305,7 +10359,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-09",
       "lifecycle_reason": "deadline_passed"
@@ -10349,7 +10403,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-08",
       "lifecycle_reason": "deadline_passed"
@@ -10789,7 +10843,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -149,
+      "days_until_deadline": -150,
       "closed_at": "2026-06-09",
       "last_seen_at": "2026-06-02",
       "lifecycle_reason": "deadline_passed"
@@ -10833,7 +10887,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-06-02",
       "lifecycle_reason": "deadline_passed"
@@ -11301,7 +11355,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -153,
+      "days_until_deadline": -154,
       "closed_at": "2026-06-05",
       "last_seen_at": "2026-05-28",
       "lifecycle_reason": "deadline_passed"
@@ -11345,7 +11399,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -156,
+      "days_until_deadline": -157,
       "closed_at": "2026-06-02",
       "last_seen_at": "2026-05-26",
       "lifecycle_reason": "deadline_passed"
@@ -11389,7 +11443,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -156,
+      "days_until_deadline": -157,
       "closed_at": "2026-06-02",
       "last_seen_at": "2026-05-26",
       "lifecycle_reason": "deadline_passed"
@@ -11433,7 +11487,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -146,
+      "days_until_deadline": -147,
       "closed_at": "2026-06-12",
       "last_seen_at": "2026-05-21",
       "lifecycle_reason": "deadline_passed"
@@ -11477,7 +11531,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -148,
+      "days_until_deadline": -149,
       "closed_at": "2026-06-10",
       "last_seen_at": "2026-05-18",
       "lifecycle_reason": "deadline_passed"
@@ -11521,7 +11575,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -163,
+      "days_until_deadline": -164,
       "closed_at": "2026-05-26",
       "last_seen_at": "2026-05-13",
       "lifecycle_reason": "deadline_passed"
@@ -11565,7 +11619,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -170,
+      "days_until_deadline": -171,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-13",
       "lifecycle_reason": "deadline_passed"
@@ -11609,7 +11663,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -177,
+      "days_until_deadline": -178,
       "closed_at": "2026-05-12",
       "last_seen_at": "2026-05-12",
       "lifecycle_reason": "deadline_passed"
@@ -11653,7 +11707,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -168,
+      "days_until_deadline": -169,
       "closed_at": "2026-05-21",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -11697,7 +11751,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -170,
+      "days_until_deadline": -171,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -11741,7 +11795,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -171,
+      "days_until_deadline": -172,
       "closed_at": "2026-05-18",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -126224,7 +126278,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -170,
+      "days_until_deadline": -171,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -126267,7 +126321,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -171,
+      "days_until_deadline": -172,
       "closed_at": "2026-05-18",
       "last_seen_at": "2026-05-11",
       "lifecycle_reason": "deadline_passed"
@@ -126311,7 +126365,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -170,
+      "days_until_deadline": -171,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-08",
       "lifecycle_reason": "deadline_passed"
@@ -126355,7 +126409,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -170,
+      "days_until_deadline": -171,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-08",
       "lifecycle_reason": "deadline_passed"
@@ -126399,7 +126453,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -170,
+      "days_until_deadline": -171,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-08",
       "lifecycle_reason": "deadline_passed"
@@ -126443,7 +126497,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -170,
+      "days_until_deadline": -171,
       "closed_at": "2026-05-19",
       "last_seen_at": "2026-05-07",
       "lifecycle_reason": "deadline_passed"
@@ -126487,7 +126541,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -176,
+      "days_until_deadline": -177,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-05-07",
       "lifecycle_reason": "deadline_passed"
@@ -126531,7 +126585,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -174,
+      "days_until_deadline": -175,
       "closed_at": "2026-05-15",
       "last_seen_at": "2026-05-04",
       "lifecycle_reason": "deadline_passed"
@@ -126574,7 +126628,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -174,
+      "days_until_deadline": -175,
       "closed_at": "2026-05-15",
       "last_seen_at": "2026-05-04",
       "lifecycle_reason": "deadline_passed"
@@ -126618,7 +126672,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -178,
+      "days_until_deadline": -179,
       "closed_at": "2026-05-11",
       "last_seen_at": "2026-04-27",
       "lifecycle_reason": "deadline_passed"
@@ -126662,7 +126716,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -181,
+      "days_until_deadline": -182,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-27",
       "lifecycle_reason": "deadline_passed"
@@ -126705,7 +126759,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -181,
+      "days_until_deadline": -182,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-27",
       "lifecycle_reason": "deadline_passed"
@@ -126749,7 +126803,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -192,
+      "days_until_deadline": -193,
       "closed_at": "2026-04-27",
       "last_seen_at": "2026-04-24",
       "lifecycle_reason": "deadline_passed"
@@ -126793,7 +126847,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -181,
+      "days_until_deadline": -182,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-23",
       "lifecycle_reason": "deadline_passed"
@@ -126837,7 +126891,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -181,
+      "days_until_deadline": -182,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-23",
       "lifecycle_reason": "deadline_passed"
@@ -126881,7 +126935,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -183,
+      "days_until_deadline": -184,
       "closed_at": "2026-05-06",
       "last_seen_at": "2026-04-23",
       "lifecycle_reason": "deadline_passed"
@@ -126925,7 +126979,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -176,
+      "days_until_deadline": -177,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-04-22",
       "lifecycle_reason": "deadline_passed"
@@ -126969,7 +127023,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -185,
+      "days_until_deadline": -186,
       "closed_at": "2026-05-04",
       "last_seen_at": "2026-04-22",
       "lifecycle_reason": "deadline_passed"
@@ -127013,7 +127067,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -181,
+      "days_until_deadline": -182,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-04-22",
       "lifecycle_reason": "deadline_passed"
@@ -127193,7 +127247,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -189,
+      "days_until_deadline": -190,
       "closed_at": "2026-04-30",
       "last_seen_at": "2026-04-20",
       "lifecycle_reason": "deadline_passed"
@@ -127237,7 +127291,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -202,
+      "days_until_deadline": -203,
       "closed_at": "2026-04-17",
       "last_seen_at": "2026-04-13",
       "lifecycle_reason": "deadline_passed"
@@ -127281,7 +127335,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -199,
+      "days_until_deadline": -200,
       "closed_at": "2026-04-20",
       "last_seen_at": "2026-04-09",
       "lifecycle_reason": "deadline_passed"
@@ -127471,7 +127525,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -209,
+      "days_until_deadline": -210,
       "closed_at": "2026-04-10",
       "last_seen_at": "2026-04-06",
       "lifecycle_reason": "deadline_passed"
@@ -127655,7 +127709,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -209,
+      "days_until_deadline": -210,
       "closed_at": "2026-04-10",
       "last_seen_at": "2026-03-30",
       "lifecycle_reason": "deadline_passed"
@@ -127698,7 +127752,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -209,
+      "days_until_deadline": -210,
       "closed_at": "2026-04-10",
       "last_seen_at": "2026-03-30",
       "lifecycle_reason": "deadline_passed"
@@ -127742,7 +127796,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -219,
+      "days_until_deadline": -220,
       "closed_at": "2026-03-31",
       "last_seen_at": "2026-03-25",
       "lifecycle_reason": "deadline_passed"
@@ -127930,7 +127984,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -213,
+      "days_until_deadline": -214,
       "closed_at": "2026-04-06",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -127974,7 +128028,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -176,
+      "days_until_deadline": -177,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -128018,7 +128072,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -176,
+      "days_until_deadline": -177,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -128062,7 +128116,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -176,
+      "days_until_deadline": -177,
       "closed_at": "2026-05-13",
       "last_seen_at": "2026-03-24",
       "lifecycle_reason": "deadline_passed"
@@ -128106,7 +128160,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -221,
+      "days_until_deadline": -222,
       "closed_at": "2026-03-29",
       "last_seen_at": "2026-03-23",
       "lifecycle_reason": "deadline_passed"
@@ -128149,7 +128203,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -221,
+      "days_until_deadline": -222,
       "closed_at": "2026-03-29",
       "last_seen_at": "2026-03-23",
       "lifecycle_reason": "deadline_passed"
@@ -128193,7 +128247,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -216,
+      "days_until_deadline": -217,
       "closed_at": "2026-04-03",
       "last_seen_at": "2026-03-20",
       "lifecycle_reason": "deadline_passed"
@@ -128237,7 +128291,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -225,
+      "days_until_deadline": -226,
       "closed_at": "2026-03-25",
       "last_seen_at": "2026-03-19",
       "lifecycle_reason": "deadline_passed"
@@ -128281,7 +128335,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -181,
+      "days_until_deadline": -182,
       "closed_at": "2026-05-08",
       "last_seen_at": "2026-03-19",
       "lifecycle_reason": "deadline_passed"
@@ -128325,7 +128379,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -226,
+      "days_until_deadline": -227,
       "closed_at": "2026-03-24",
       "last_seen_at": "2026-03-18",
       "lifecycle_reason": "deadline_passed"
@@ -128369,7 +128423,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -230,
+      "days_until_deadline": -231,
       "closed_at": "2026-03-20",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -128413,7 +128467,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -223,
+      "days_until_deadline": -224,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -128457,7 +128511,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -223,
+      "days_until_deadline": -224,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -128500,7 +128554,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -223,
+      "days_until_deadline": -224,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-16",
       "lifecycle_reason": "deadline_passed"
@@ -128544,7 +128598,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -223,
+      "days_until_deadline": -224,
       "closed_at": "2026-03-27",
       "last_seen_at": "2026-03-13",
       "lifecycle_reason": "deadline_passed"
@@ -128588,7 +128642,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -226,
+      "days_until_deadline": -227,
       "closed_at": "2026-03-24",
       "last_seen_at": "2026-03-13",
       "lifecycle_reason": "deadline_passed"
@@ -128632,7 +128686,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -235,
+      "days_until_deadline": -236,
       "closed_at": "2026-03-15",
       "last_seen_at": "2026-03-13",
       "lifecycle_reason": "deadline_passed"
@@ -128676,7 +128730,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -237,
+      "days_until_deadline": -238,
       "closed_at": "2026-03-13",
       "last_seen_at": "2026-03-11",
       "lifecycle_reason": "deadline_passed"
@@ -128720,7 +128774,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -230,
+      "days_until_deadline": -231,
       "closed_at": "2026-03-20",
       "last_seen_at": "2026-03-11",
       "lifecycle_reason": "deadline_passed"
@@ -128764,7 +128818,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -196,
+      "days_until_deadline": -197,
       "closed_at": "2026-04-23",
       "last_seen_at": "2026-03-11",
       "lifecycle_reason": "deadline_passed"
@@ -128808,7 +128862,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -237,
+      "days_until_deadline": -238,
       "closed_at": "2026-03-13",
       "last_seen_at": "2026-03-09",
       "lifecycle_reason": "deadline_passed"
@@ -128852,7 +128906,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -203,
+      "days_until_deadline": -204,
       "closed_at": "2026-04-16",
       "last_seen_at": "2026-03-05",
       "lifecycle_reason": "deadline_passed"
@@ -128896,7 +128950,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -203,
+      "days_until_deadline": -204,
       "closed_at": "2026-04-16",
       "last_seen_at": "2026-03-05",
       "lifecycle_reason": "deadline_passed"
@@ -128940,7 +128994,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -203,
+      "days_until_deadline": -204,
       "closed_at": "2026-04-16",
       "last_seen_at": "2026-03-05",
       "lifecycle_reason": "deadline_passed"
@@ -128984,7 +129038,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -224,
+      "days_until_deadline": -225,
       "closed_at": "2026-03-26",
       "last_seen_at": "2026-03-04",
       "lifecycle_reason": "deadline_passed"
@@ -129028,7 +129082,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -240,
+      "days_until_deadline": -241,
       "closed_at": "2026-03-10",
       "last_seen_at": "2026-03-04",
       "lifecycle_reason": "deadline_passed"
@@ -129072,7 +129126,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -234,
+      "days_until_deadline": -235,
       "closed_at": "2026-03-16",
       "last_seen_at": "2026-03-03",
       "lifecycle_reason": "deadline_passed"
@@ -129116,7 +129170,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -234,
+      "days_until_deadline": -235,
       "closed_at": "2026-03-16",
       "last_seen_at": "2026-03-03",
       "lifecycle_reason": "deadline_passed"
@@ -129159,7 +129213,7 @@
       "is_operating_scope": false,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -234,
+      "days_until_deadline": -235,
       "closed_at": "2026-03-16",
       "last_seen_at": "2026-03-03",
       "lifecycle_reason": "deadline_passed"
@@ -129203,7 +129257,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -246,
+      "days_until_deadline": -247,
       "closed_at": "2026-03-04",
       "last_seen_at": "2026-02-27",
       "lifecycle_reason": "deadline_passed"
@@ -129247,7 +129301,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -240,
+      "days_until_deadline": -241,
       "closed_at": "2026-03-10",
       "last_seen_at": "2026-02-20",
       "lifecycle_reason": "deadline_passed"
@@ -129291,7 +129345,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -231,
+      "days_until_deadline": -232,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-02-10",
       "lifecycle_reason": "deadline_passed"
@@ -129335,7 +129389,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -231,
+      "days_until_deadline": -232,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-02-10",
       "lifecycle_reason": "deadline_passed"
@@ -129379,7 +129433,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -231,
+      "days_until_deadline": -232,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-02-10",
       "lifecycle_reason": "deadline_passed"
@@ -129423,7 +129477,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -265,
+      "days_until_deadline": -266,
       "closed_at": "2026-02-13",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -129583,7 +129637,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -129627,7 +129681,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -129671,7 +129725,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-02-09",
       "lifecycle_reason": "deadline_passed"
@@ -129715,7 +129769,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -273,
+      "days_until_deadline": -274,
       "closed_at": "2026-02-05",
       "last_seen_at": "2026-02-05",
       "lifecycle_reason": "deadline_passed"
@@ -129759,7 +129813,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -269,
+      "days_until_deadline": -270,
       "closed_at": "2026-02-09",
       "last_seen_at": "2026-02-03",
       "lifecycle_reason": "deadline_passed"
@@ -129959,7 +130013,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -274,
+      "days_until_deadline": -275,
       "closed_at": "2026-02-04",
       "last_seen_at": "2026-01-29",
       "lifecycle_reason": "deadline_passed"
@@ -130003,7 +130057,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -275,
+      "days_until_deadline": -276,
       "closed_at": "2026-02-03",
       "last_seen_at": "2026-01-27",
       "lifecycle_reason": "deadline_passed"
@@ -130047,7 +130101,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -275,
+      "days_until_deadline": -276,
       "closed_at": "2026-02-03",
       "last_seen_at": "2026-01-27",
       "lifecycle_reason": "deadline_passed"
@@ -130091,7 +130145,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -275,
+      "days_until_deadline": -276,
       "closed_at": "2026-02-03",
       "last_seen_at": "2026-01-27",
       "lifecycle_reason": "deadline_passed"
@@ -130135,7 +130189,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -231,
+      "days_until_deadline": -232,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-01-26",
       "lifecycle_reason": "deadline_passed"
@@ -130179,7 +130233,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -231,
+      "days_until_deadline": -232,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-01-26",
       "lifecycle_reason": "deadline_passed"
@@ -130223,7 +130277,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -231,
+      "days_until_deadline": -232,
       "closed_at": "2026-03-19",
       "last_seen_at": "2026-01-26",
       "lifecycle_reason": "deadline_passed"
@@ -130267,7 +130321,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -276,
+      "days_until_deadline": -277,
       "closed_at": "2026-02-02",
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_passed"
@@ -130311,7 +130365,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -4,
+      "days_until_deadline": -5,
       "closed_at": "2026-11-01",
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_passed"
@@ -130355,7 +130409,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_passed"
@@ -130399,7 +130453,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -35,
+      "days_until_deadline": -36,
       "closed_at": "2026-10-01",
       "last_seen_at": "2026-01-20",
       "lifecycle_reason": "deadline_passed"
@@ -130443,7 +130497,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -157,
+      "days_until_deadline": -158,
       "closed_at": "2026-06-01",
       "last_seen_at": "2026-01-19",
       "lifecycle_reason": "deadline_passed"
@@ -130487,7 +130541,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -273,
+      "days_until_deadline": -274,
       "closed_at": "2026-02-05",
       "last_seen_at": "2026-01-15",
       "lifecycle_reason": "deadline_passed"
@@ -130531,7 +130585,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -289,
+      "days_until_deadline": -290,
       "closed_at": "2026-01-20",
       "last_seen_at": "2026-01-14",
       "lifecycle_reason": "deadline_passed"
@@ -130575,7 +130629,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -293,
+      "days_until_deadline": -294,
       "closed_at": "2026-01-16",
       "last_seen_at": "2026-01-12",
       "lifecycle_reason": "deadline_passed"
@@ -130619,7 +130673,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -296,
+      "days_until_deadline": -297,
       "closed_at": "2026-01-13",
       "last_seen_at": "2026-01-12",
       "lifecycle_reason": "deadline_passed"
@@ -130859,7 +130913,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -293,
+      "days_until_deadline": -294,
       "closed_at": "2026-01-16",
       "last_seen_at": "2026-01-05",
       "lifecycle_reason": "deadline_passed"
@@ -130903,7 +130957,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -293,
+      "days_until_deadline": -294,
       "closed_at": "2026-01-16",
       "last_seen_at": "2026-01-05",
       "lifecycle_reason": "deadline_passed"
@@ -130947,7 +131001,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -300,
+      "days_until_deadline": -301,
       "closed_at": "2026-01-09",
       "last_seen_at": "2026-01-05",
       "lifecycle_reason": "deadline_passed"
@@ -130991,7 +131045,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -297,
+      "days_until_deadline": -298,
       "closed_at": "2026-01-12",
       "last_seen_at": "2026-01-02",
       "lifecycle_reason": "deadline_passed"
@@ -131035,7 +131089,7 @@
       "is_operating_scope": true,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -300,
+      "days_until_deadline": -301,
       "closed_at": "2026-01-09",
       "last_seen_at": "2025-12-26",
       "lifecycle_reason": "deadline_passed"
@@ -131089,7 +131143,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -317,
+      "days_until_deadline": -318,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-23",
       "lifecycle_reason": "deadline_passed"
@@ -131143,7 +131197,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -317,
+      "days_until_deadline": -318,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-23",
       "lifecycle_reason": "deadline_passed"
@@ -131197,7 +131251,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -317,
+      "days_until_deadline": -318,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-16",
       "lifecycle_reason": "deadline_passed"
@@ -131251,7 +131305,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -321,
+      "days_until_deadline": -322,
       "closed_at": "2025-12-19",
       "last_seen_at": "2025-12-15",
       "lifecycle_reason": "deadline_passed"
@@ -131305,7 +131359,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -317,
+      "days_until_deadline": -318,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -131359,7 +131413,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -317,
+      "days_until_deadline": -318,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -131413,7 +131467,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -317,
+      "days_until_deadline": -318,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -131467,7 +131521,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -317,
+      "days_until_deadline": -318,
       "closed_at": "2025-12-23",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -131521,7 +131575,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -318,
+      "days_until_deadline": -319,
       "closed_at": "2025-12-22",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -131575,7 +131629,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -318,
+      "days_until_deadline": -319,
       "closed_at": "2025-12-22",
       "last_seen_at": "2025-12-12",
       "lifecycle_reason": "deadline_passed"
@@ -131629,7 +131683,7 @@
       "detail": null,
       "opportunity_status": "closed",
       "is_closed": true,
-      "days_until_deadline": -323,
+      "days_until_deadline": -324,
       "closed_at": "2025-12-17",
       "last_seen_at": "2025-12-11",
       "lifecycle_reason": "deadline_passed"
