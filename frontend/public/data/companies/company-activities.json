@@ -1,12 +1,32 @@
 {
   "schemaVersion": "company-activities-v1",
-  "generatedAt": "2026-11-05T02:02:41.557664+00:00",
+  "generatedAt": "2026-11-06T02:00:12.940244+00:00",
   "companyCount": 11,
   "companies": [
     {
       "companyId": "yuchang-enc",
-      "activityCount": 57,
+      "activityCount": 58,
       "activities": [
+        {
+          "activityId": "news-yuchang-enc-c6fdaa20bb69219c",
+          "companyId": "yuchang-enc",
+          "activityType": "general_news",
+          "title": "[경제일보] 아파트·상업시설 AI로 통합 관리… 삼성·LG, B2B로 판 키운...",
+          "summary": "같은 해 2월에는 모듈러 건축 전문기업 유창이앤씨와 협력해 주거·교육·업무시설 등에 AI 가전과 스마트싱스 프로를 적용하기로 했다. 올해 6월에는 글로벌 전기화·자동화 기업 ABB와 스마트싱스 프로 및 건물 자동화...",
+          "publishedAt": "2026-11-06",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://www.ajunews.com/view/20261105163049745",
+          "sourceRecordId": "9720",
+          "matchedAlias": "유창이앤씨",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "ajunews.com",
+          "region": "국가 미확인",
+          "amount": null,
+          "status": "adjacent"
+        },
         {
           "activityId": "news-yuchang-enc-d2cbcf54fadbdb34",
           "companyId": "yuchang-enc",
@@ -1151,7 +1171,7 @@
     },
     {
       "companyId": "kumkang-kind",
-      "activityCount": 26,
+      "activityCount": 28,
       "activities": [
         {
           "activityId": "news-kumkang-kind-f9fb408e2f3850bc",
@@ -1234,6 +1254,26 @@
           "status": "direct"
         },
         {
+          "activityId": "news-kumkang-kind-b5bfa45b4618d28d",
+          "companyId": "kumkang-kind",
+          "activityType": "general_news",
+          "title": "LH, 2030년까지 모듈러주택 1만8000호 발주",
+          "summary": "LH는 지난 3일 서울지역본부에서 이성훈 사장과 국내 모듈러 제조기업 6개사가 참석한 가운데 '모듈러주택 활성화 간담회'를 개최했다. 간담회에는 엔알비, 플랜엠, 유창, 금강공업, 대승엔지니어링, 자이가이스트...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "http://www.newslock.co.kr/news/articleView.html?idxno=139246",
+          "sourceRecordId": "9581",
+          "matchedAlias": "금강공업",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newslock.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "direct"
+        },
+        {
           "activityId": "news-kumkang-kind-8e5a60a7157cb204",
           "companyId": "kumkang-kind",
           "activityType": "factory",
@@ -1312,6 +1352,26 @@
           "region": "국가 미확인",
           "amount": null,
           "status": "direct"
+        },
+        {
+          "activityId": "news-kumkang-kind-2db43f3702ded44e",
+          "companyId": "kumkang-kind",
+          "activityType": "general_news",
+          "title": "[부동산 나들이] 서울 아파트 95주째 상승·삼성 '홈닉 21개사 확대'·LH...",
+          "summary": "◆LH '모듈러 1.8만호 발주' 이성훈 LH 사장이 서울지역본부에서 엔알비·플랜엠·유창·금강공업·대승엔지니어링·자이가이스트 등 모듈러 제조사 6곳이 참석한 가운데 '모듈러주택 활성화 간담회'를 열었다. 지난달...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://www.newsworks.co.kr/news/articleView.html?idxno=901849",
+          "sourceRecordId": "9682",
+          "matchedAlias": "금강공업",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newsworks.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "adjacent"
         },
         {
           "activityId": "news-kumkang-kind-25a267eeb6481326",
@@ -1677,7 +1737,7 @@
     },
     {
       "companyId": "planm",
-      "activityCount": 25,
+      "activityCount": 27,
       "activities": [
         {
           "activityId": "news-planm-f9fb408e2f3850bc",
@@ -1776,6 +1836,26 @@
           "projectName": null,
           "organization": "newsis.com",
           "region": "국가 미확인",
+          "amount": null,
+          "status": "direct"
+        },
+        {
+          "activityId": "news-planm-b5bfa45b4618d28d",
+          "companyId": "planm",
+          "activityType": "general_news",
+          "title": "LH, 2030년까지 모듈러주택 1만8000호 발주",
+          "summary": "LH는 지난 3일 서울지역본부에서 이성훈 사장과 국내 모듈러 제조기업 6개사가 참석한 가운데 '모듈러주택 활성화 간담회'를 개최했다. 간담회에는 엔알비, 플랜엠, 유창, 금강공업, 대승엔지니어링, 자이가이스트...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "http://www.newslock.co.kr/news/articleView.html?idxno=139246",
+          "sourceRecordId": "9581",
+          "matchedAlias": "플랜엠",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newslock.co.kr",
+          "region": "대한민국",
           "amount": null,
           "status": "direct"
         },
@@ -1898,6 +1978,26 @@
           "region": "국가 미확인",
           "amount": null,
           "status": "direct"
+        },
+        {
+          "activityId": "news-planm-2db43f3702ded44e",
+          "companyId": "planm",
+          "activityType": "general_news",
+          "title": "[부동산 나들이] 서울 아파트 95주째 상승·삼성 '홈닉 21개사 확대'·LH...",
+          "summary": "◆LH '모듈러 1.8만호 발주' 이성훈 LH 사장이 서울지역본부에서 엔알비·플랜엠·유창·금강공업·대승엔지니어링·자이가이스트 등 모듈러 제조사 6곳이 참석한 가운데 '모듈러주택 활성화 간담회'를 열었다. 지난달...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://www.newsworks.co.kr/news/articleView.html?idxno=901849",
+          "sourceRecordId": "9682",
+          "matchedAlias": "플랜엠",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newsworks.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "adjacent"
         },
         {
           "activityId": "news-planm-25a267eeb6481326",
@@ -2375,7 +2475,7 @@
     },
     {
       "companyId": "nrb",
-      "activityCount": 83,
+      "activityCount": 85,
       "activities": [
         {
           "activityId": "news-nrb-f9fb408e2f3850bc",
@@ -2474,6 +2574,26 @@
           "projectName": null,
           "organization": "newsis.com",
           "region": "국가 미확인",
+          "amount": null,
+          "status": "direct"
+        },
+        {
+          "activityId": "news-nrb-b5bfa45b4618d28d",
+          "companyId": "nrb",
+          "activityType": "general_news",
+          "title": "LH, 2030년까지 모듈러주택 1만8000호 발주",
+          "summary": "LH는 지난 3일 서울지역본부에서 이성훈 사장과 국내 모듈러 제조기업 6개사가 참석한 가운데 '모듈러주택 활성화 간담회'를 개최했다. 간담회에는 엔알비, 플랜엠, 유창, 금강공업, 대승엔지니어링, 자이가이스트...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "http://www.newslock.co.kr/news/articleView.html?idxno=139246",
+          "sourceRecordId": "9581",
+          "matchedAlias": "엔알비",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newslock.co.kr",
+          "region": "대한민국",
           "amount": null,
           "status": "direct"
         },
@@ -2596,6 +2716,26 @@
           "region": "국가 미확인",
           "amount": null,
           "status": "direct"
+        },
+        {
+          "activityId": "news-nrb-2db43f3702ded44e",
+          "companyId": "nrb",
+          "activityType": "general_news",
+          "title": "[부동산 나들이] 서울 아파트 95주째 상승·삼성 '홈닉 21개사 확대'·LH...",
+          "summary": "◆LH '모듈러 1.8만호 발주' 이성훈 LH 사장이 서울지역본부에서 엔알비·플랜엠·유창·금강공업·대승엔지니어링·자이가이스트 등 모듈러 제조사 6곳이 참석한 가운데 '모듈러주택 활성화 간담회'를 열었다. 지난달...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://www.newsworks.co.kr/news/articleView.html?idxno=901849",
+          "sourceRecordId": "9682",
+          "matchedAlias": "엔알비",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newsworks.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "adjacent"
         },
         {
           "activityId": "news-nrb-25a267eeb6481326",
@@ -4043,6 +4183,46 @@
       "companyId": "gs-ec",
       "activityCount": 100,
       "activities": [
+        {
+          "activityId": "news-gs-ec-9901f6fd7900c331",
+          "companyId": "gs-ec",
+          "activityType": "general_news",
+          "title": "[PC 국가대표] GPC - 탄소저감 콘크리트 최대 경쟁력…데이터센터·공동...",
+          "summary": "등 프리패브(Prefab) 기술로의 전환은 필수적이다. GPC는 이러한 흐름에 맞춰 2022년 캐나다 카본큐어(CarbonCure)... 또한 GS건설과 공동으로 진행한 PC 중간구조벽체 접합부의 건축구조기준 적합성 평가를 완료하고...",
+          "publishedAt": "2026-11-06",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611051029213150766",
+          "sourceRecordId": "9717",
+          "matchedAlias": "GS건설",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "dnews.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "adjacent"
+        },
+        {
+          "activityId": "news-gs-ec-aa86d0039023bc1f",
+          "companyId": "gs-ec",
+          "activityType": "general_news",
+          "title": "[건설플러스] GS건설, 공간 바꾸는 ‘무빙월’ 선봬 外",
+          "summary": "이와 함께 ‘결함 관리’와 탈현장건설(OSC) 제품을 위한 ‘OSC 관리’ 메뉴를 추가하고, 손으로 쓴 기록을 사진으로 자동 등록하는 AI 지능형 문자 인식(ICR) 기술도 적용했다. 특히 현대건설은 지난 8월 IT기업...",
+          "publishedAt": "2026-11-05",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://news.dealsitetv.com/articles/178102",
+          "sourceRecordId": "9733",
+          "matchedAlias": "GS건설",
+          "matchReason": "title_or_project_name_alias",
+          "confidence": "high",
+          "projectName": null,
+          "organization": "news.dealsitetv.com",
+          "region": "국가 미확인",
+          "amount": null,
+          "status": "adjacent"
+        },
         {
           "activityId": "news-gs-ec-448de014c3a39299",
           "companyId": "gs-ec",
@@ -5999,46 +6179,6 @@
           "confidence": "high",
           "projectName": null,
           "organization": "donga.com",
-          "region": "국가 미확인",
-          "amount": null,
-          "status": "adjacent"
-        },
-        {
-          "activityId": "news-gs-ec-6c74714e1d5ec036",
-          "companyId": "gs-ec",
-          "activityType": "financial",
-          "title": "GS건설, 3분기 영업이익 955억원…주택사업 부진 속 수익성 회복 모색",
-          "summary": "소재 모듈러 전문 자회사 단우드의 1962억 원 등을 수주했다. 도시정비사업에서는 성수1지구 재개발(2조1540억 원), 송파한양2차 재건축(6856억 원), 서초진흥 재건축(6793억 원) 등을 포함해 3분기까지 약 5조5000억 원을...",
-          "publishedAt": "2026-10-30",
-          "sourceType": "news",
-          "sourceName": "네이버뉴스",
-          "sourceUrl": "https://www.g-enews.com/view.php?ud=2026103013284569122aa6f4cdad_1",
-          "sourceRecordId": "9141",
-          "matchedAlias": "GS건설",
-          "matchReason": "title_or_project_name_alias",
-          "confidence": "high",
-          "projectName": null,
-          "organization": "g-enews.com",
-          "region": "국가 미확인",
-          "amount": null,
-          "status": "adjacent"
-        },
-        {
-          "activityId": "news-gs-ec-66e30234668cc1ec",
-          "companyId": "gs-ec",
-          "activityType": "contract",
-          "title": "GS건설, 3Q 영업익 955억···전년 동기比 35.7%↓",
-          "summary": "폴란드 모듈러 전문 자회사 단우드 1962억원 등을 수주했다. GS건설은 올해 △성수1지구 재개발 2조1540억원 △송파한양2차 재건축 6856억원 △서초진흥 재건축 6793억원 등 3분기까지 약 5조5000억원 규모의...",
-          "publishedAt": "2026-10-30",
-          "sourceType": "news",
-          "sourceName": "네이버뉴스",
-          "sourceUrl": "https://www.seoulfn.com/news/articleView.html?idxno=641428",
-          "sourceRecordId": "9136",
-          "matchedAlias": "GS건설",
-          "matchReason": "title_or_project_name_alias",
-          "confidence": "high",
-          "projectName": null,
-          "organization": "seoulfn.com",
           "region": "국가 미확인",
           "amount": null,
           "status": "adjacent"
@@ -10059,7 +10199,7 @@
     },
     {
       "companyId": "dl-enc",
-      "activityCount": 42,
+      "activityCount": 43,
       "activities": [
         {
           "activityId": "news-dl-enc-0a6ef4531496135c",
@@ -10140,6 +10280,26 @@
           "region": "대한민국",
           "amount": null,
           "status": "adjacent"
+        },
+        {
+          "activityId": "news-dl-enc-28c327e7aa35ef39",
+          "companyId": "dl-enc",
+          "activityType": "project",
+          "title": "GS건설, 스틸 모듈러 표준평면 20종 개발…사업성 검토 빨라진다",
+          "summary": "경쟁사들도 모듈러에 힘을 싣고 있다. 현대건설은 콘크리트 기둥과 보를 미리 만들어 조립하는 PC 모듈러 공법을 개발했다. DL이앤씨는 2023년 전남 구례에 모듈러 단독주택 단지를 지었다. 업계에서는 공사비 절감이...",
+          "publishedAt": "2026-11-02",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://www.fetv.co.kr/news/articleView.html?idxno=312880",
+          "sourceRecordId": "557",
+          "matchedAlias": "DL이앤씨",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "fetv.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "direct"
         },
         {
           "activityId": "news-dl-enc-2792e75e09cab093",
@@ -10905,7 +11065,7 @@
     },
     {
       "companyId": "daeseung-engineering",
-      "activityCount": 10,
+      "activityCount": 12,
       "activities": [
         {
           "activityId": "news-daeseung-engineering-f9fb408e2f3850bc",
@@ -10988,6 +11148,26 @@
           "status": "direct"
         },
         {
+          "activityId": "news-daeseung-engineering-b5bfa45b4618d28d",
+          "companyId": "daeseung-engineering",
+          "activityType": "general_news",
+          "title": "LH, 2030년까지 모듈러주택 1만8000호 발주",
+          "summary": "LH는 지난 3일 서울지역본부에서 이성훈 사장과 국내 모듈러 제조기업 6개사가 참석한 가운데 '모듈러주택 활성화 간담회'를 개최했다. 간담회에는 엔알비, 플랜엠, 유창, 금강공업, 대승엔지니어링, 자이가이스트...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "http://www.newslock.co.kr/news/articleView.html?idxno=139246",
+          "sourceRecordId": "9581",
+          "matchedAlias": "대승엔지니어링",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newslock.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "direct"
+        },
+        {
           "activityId": "news-daeseung-engineering-8e5a60a7157cb204",
           "companyId": "daeseung-engineering",
           "activityType": "factory",
@@ -11066,6 +11246,26 @@
           "region": "국가 미확인",
           "amount": null,
           "status": "direct"
+        },
+        {
+          "activityId": "news-daeseung-engineering-2db43f3702ded44e",
+          "companyId": "daeseung-engineering",
+          "activityType": "general_news",
+          "title": "[부동산 나들이] 서울 아파트 95주째 상승·삼성 '홈닉 21개사 확대'·LH...",
+          "summary": "◆LH '모듈러 1.8만호 발주' 이성훈 LH 사장이 서울지역본부에서 엔알비·플랜엠·유창·금강공업·대승엔지니어링·자이가이스트 등 모듈러 제조사 6곳이 참석한 가운데 '모듈러주택 활성화 간담회'를 열었다. 지난달...",
+          "publishedAt": "2026-11-04",
+          "sourceType": "news",
+          "sourceName": "네이버뉴스",
+          "sourceUrl": "https://www.newsworks.co.kr/news/articleView.html?idxno=901849",
+          "sourceRecordId": "9682",
+          "matchedAlias": "대승엔지니어링",
+          "matchReason": "summary_alias_with_modular_context",
+          "confidence": "medium",
+          "projectName": null,
+          "organization": "newsworks.co.kr",
+          "region": "대한민국",
+          "amount": null,
+          "status": "adjacent"
         },
         {
           "activityId": "news-daeseung-engineering-25a267eeb6481326",

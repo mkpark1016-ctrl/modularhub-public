@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-05T02:02:43.099078+00:00",
+  "generatedAt": "2026-11-06T02:00:15.441169+00:00",
   "companyId": "yuchang-enc",
-  "activityCount": 57,
+  "activityCount": 58,
   "activities": [
+    {
+      "activityId": "news-yuchang-enc-c6fdaa20bb69219c",
+      "companyId": "yuchang-enc",
+      "activityType": "general_news",
+      "title": "[경제일보] 아파트·상업시설 AI로 통합 관리… 삼성·LG, B2B로 판 키운...",
+      "summary": "같은 해 2월에는 모듈러 건축 전문기업 유창이앤씨와 협력해 주거·교육·업무시설 등에 AI 가전과 스마트싱스 프로를 적용하기로 했다. 올해 6월에는 글로벌 전기화·자동화 기업 ABB와 스마트싱스 프로 및 건물 자동화...",
+      "publishedAt": "2026-11-06",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.ajunews.com/view/20261105163049745",
+      "sourceRecordId": "9720",
+      "matchedAlias": "유창이앤씨",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "ajunews.com",
+      "region": "국가 미확인",
+      "amount": null,
+      "status": "adjacent"
+    },
     {
       "activityId": "news-yuchang-enc-d2cbcf54fadbdb34",
       "companyId": "yuchang-enc",

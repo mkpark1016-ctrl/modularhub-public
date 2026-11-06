@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-05T02:02:43.099078+00:00",
+  "generatedAt": "2026-11-06T02:00:15.441169+00:00",
   "companyId": "nrb",
-  "activityCount": 83,
+  "activityCount": 85,
   "activities": [
     {
       "activityId": "news-nrb-f9fb408e2f3850bc",
@@ -101,6 +101,26 @@
       "projectName": null,
       "organization": "newsis.com",
       "region": "국가 미확인",
+      "amount": null,
+      "status": "direct"
+    },
+    {
+      "activityId": "news-nrb-b5bfa45b4618d28d",
+      "companyId": "nrb",
+      "activityType": "general_news",
+      "title": "LH, 2030년까지 모듈러주택 1만8000호 발주",
+      "summary": "LH는 지난 3일 서울지역본부에서 이성훈 사장과 국내 모듈러 제조기업 6개사가 참석한 가운데 '모듈러주택 활성화 간담회'를 개최했다. 간담회에는 엔알비, 플랜엠, 유창, 금강공업, 대승엔지니어링, 자이가이스트...",
+      "publishedAt": "2026-11-04",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "http://www.newslock.co.kr/news/articleView.html?idxno=139246",
+      "sourceRecordId": "9581",
+      "matchedAlias": "엔알비",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "newslock.co.kr",
+      "region": "대한민국",
       "amount": null,
       "status": "direct"
     },
@@ -223,6 +243,26 @@
       "region": "국가 미확인",
       "amount": null,
       "status": "direct"
+    },
+    {
+      "activityId": "news-nrb-2db43f3702ded44e",
+      "companyId": "nrb",
+      "activityType": "general_news",
+      "title": "[부동산 나들이] 서울 아파트 95주째 상승·삼성 '홈닉 21개사 확대'·LH...",
+      "summary": "◆LH '모듈러 1.8만호 발주' 이성훈 LH 사장이 서울지역본부에서 엔알비·플랜엠·유창·금강공업·대승엔지니어링·자이가이스트 등 모듈러 제조사 6곳이 참석한 가운데 '모듈러주택 활성화 간담회'를 열었다. 지난달...",
+      "publishedAt": "2026-11-04",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.newsworks.co.kr/news/articleView.html?idxno=901849",
+      "sourceRecordId": "9682",
+      "matchedAlias": "엔알비",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "newsworks.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "adjacent"
     },
     {
       "activityId": "news-nrb-25a267eeb6481326",

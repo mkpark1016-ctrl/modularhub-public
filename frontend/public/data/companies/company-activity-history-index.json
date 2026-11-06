@@ -1,26 +1,26 @@
 {
   "schemaVersion": "company-activity-history-index-v1",
-  "generatedAt": "2026-11-05T02:02:43.099078+00:00",
+  "generatedAt": "2026-11-06T02:00:15.441169+00:00",
   "companyCount": 11,
-  "totalActivityCount": 1081,
+  "totalActivityCount": 1093,
   "companies": [
     {
       "companyId": "yuchang-enc",
-      "activityCount": 57,
-      "latestPublishedAt": "2026-10-14",
+      "activityCount": 58,
+      "latestPublishedAt": "2026-11-06",
       "earliestPublishedAt": "2026-06-18",
       "path": "company-activity-history/yuchang-enc.json"
     },
     {
       "companyId": "kumkang-kind",
-      "activityCount": 26,
+      "activityCount": 28,
       "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-05-06",
       "path": "company-activity-history/kumkang-kind.json"
     },
     {
       "companyId": "planm",
-      "activityCount": 25,
+      "activityCount": 27,
       "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-06-19",
       "path": "company-activity-history/planm.json"
@@ -41,15 +41,15 @@
     },
     {
       "companyId": "nrb",
-      "activityCount": 83,
+      "activityCount": 85,
       "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-06-01",
       "path": "company-activity-history/nrb.json"
     },
     {
       "companyId": "gs-ec",
-      "activityCount": 374,
-      "latestPublishedAt": "2026-11-04",
+      "activityCount": 376,
+      "latestPublishedAt": "2026-11-06",
       "earliestPublishedAt": "2026-05-07",
       "path": "company-activity-history/gs-ec.json"
     },
@@ -69,14 +69,14 @@
     },
     {
       "companyId": "dl-enc",
-      "activityCount": 42,
+      "activityCount": 43,
       "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-05-11",
       "path": "company-activity-history/dl-enc.json"
     },
     {
       "companyId": "daeseung-engineering",
-      "activityCount": 10,
+      "activityCount": 12,
       "latestPublishedAt": "2026-11-04",
       "earliestPublishedAt": "2026-11-04",
       "path": "company-activity-history/daeseung-engineering.json"
