@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-06T02:00:15.441169+00:00",
+  "generatedAt": "2026-11-20T02:52:10.173938+00:00",
   "companyId": "yuchang-enc",
-  "activityCount": 58,
+  "activityCount": 59,
   "activities": [
     {
       "activityId": "news-yuchang-enc-c6fdaa20bb69219c",
@@ -23,6 +23,26 @@
       "region": "국가 미확인",
       "amount": null,
       "status": "adjacent"
+    },
+    {
+      "activityId": "news-yuchang-enc-1a45c5f58a3be770",
+      "companyId": "yuchang-enc",
+      "activityType": "project",
+      "title": "[마켓+]모듈러 주택, '빨리 짓는 집' 넘어…'원가·품질'이 상용화 관건",
+      "summary": "업계에선 고층 PC 모듈러를 추진하는 엔알비, 대규모 주거·공공시설 사업을 확대하는 유창이앤씨와 플랜엠 등이 제작 역량을 키우고 있다. 자이가이스트와 LG전자, 삼성전자 등은 단독주택·스마트코티지 등 저층 시장...",
+      "publishedAt": "2026-10-22",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.businessplus.kr/news/articleView.html?idxno=118535",
+      "sourceRecordId": "9308",
+      "matchedAlias": "유창이앤씨",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "businessplus.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
     },
     {
       "activityId": "news-yuchang-enc-d2cbcf54fadbdb34",
