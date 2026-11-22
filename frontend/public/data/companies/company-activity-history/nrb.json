@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-21T03:03:16.366674+00:00",
+  "generatedAt": "2026-11-22T01:52:06.166215+00:00",
   "companyId": "nrb",
-  "activityCount": 122,
+  "activityCount": 123,
   "activities": [
+    {
+      "activityId": "news-nrb-e8edf35fb54773d2",
+      "companyId": "nrb",
+      "activityType": "general_news",
+      "title": "한국토지주택공사(LH), 모듈러주택 기술·제도적 난제 해소 나서",
+      "summary": "토론회에는 이성훈 LH 사장과 공공주택본부장 등 LH 관계자와 삼성물산, GS건설, 엔알비, 이화여대 등 산·학 핵심 전문가들이 참석했다. 토론회에서는 모듈러주택 발주물량 확대와 연계한 공사비 절감 방안, 모듈러주택...",
+      "publishedAt": "2026-11-20",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "http://www.ikld.kr/news/articleView.html?idxno=344528",
+      "sourceRecordId": "10361",
+      "matchedAlias": "엔알비",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "ikld.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
+    },
     {
       "activityId": "news-nrb-7b072fb30fca554c",
       "companyId": "nrb",
