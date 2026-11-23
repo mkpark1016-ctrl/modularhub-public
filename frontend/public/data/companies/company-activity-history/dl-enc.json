@@ -1,6 +1,6 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-22T01:52:06.166215+00:00",
+  "generatedAt": "2026-11-23T02:10:45.604485+00:00",
   "companyId": "dl-enc",
   "activityCount": 109,
   "activities": [
@@ -387,9 +387,9 @@
     {
       "activityId": "news-dl-enc-ae44b6667cd5e6d1",
       "companyId": "dl-enc",
-      "activityType": "technology",
+      "activityType": "management",
       "title": "DL이앤씨, '한숲 파트너스 데이' 개최···동반성장 강화",
-      "summary": "앞으로는 탈현장건설(OSC)·모듈러, AI·로봇 스마트 건설, 층간소음 저감 기술을 중심으로 협력사와 공동 연구개발을 넓혀갈 계획이다. 이 밖에도 무이자 자금대여·상생펀드 등 금융지원과 법적 기준 초과 안전관리자...",
+      "summary": "DL이앤씨는 지난 18일 서울 여의도 글래드호텔에서 박상신 대표이사와 협력사 대표 등 140여 명이 참석한... 앞으로는 탈현장건설(OSC)·모듈러, AI·로봇 스마트 건설, 층간소음 저감 기술을 중심으로 협력사와 공동...",
       "publishedAt": "2026-11-19",
       "sourceType": "news",
       "sourceName": "네이버뉴스",

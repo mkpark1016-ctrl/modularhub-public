@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-22T01:52:06.166215+00:00",
+  "generatedAt": "2026-11-23T02:10:45.604485+00:00",
   "companyId": "nrb",
-  "activityCount": 123,
+  "activityCount": 125,
   "activities": [
     {
       "activityId": "news-nrb-e8edf35fb54773d2",
@@ -20,6 +20,26 @@
       "confidence": "medium",
       "projectName": null,
       "organization": "ikld.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
+    },
+    {
+      "activityId": "news-nrb-db66688b28b71b0a",
+      "companyId": "nrb",
+      "activityType": "investment",
+      "title": "LH, 2030년까지 모듈러주택 1만8000호 발주",
+      "summary": "이성훈 LH 사장을 비롯해 삼성물산, GS건설, 엔알비, 이화여자대학교 등 건설업계와 학계 관계자들이 참석했다. 이날 토론회에서는 모듈러주택 발주물량 확대에 따른 공사비 절감과 공사기간 단축, 민간기업의 설비투자...",
+      "publishedAt": "2026-11-20",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "http://www.newslock.co.kr/news/articleView.html?idxno=140538",
+      "sourceRecordId": "10363",
+      "matchedAlias": "엔알비",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "newslock.co.kr",
       "region": "대한민국",
       "amount": null,
       "status": "direct"
@@ -123,6 +143,26 @@
       "region": "대한민국",
       "amount": null,
       "status": "direct"
+    },
+    {
+      "activityId": "news-nrb-9cf77cbcd5da4b10",
+      "companyId": "nrb",
+      "activityType": "factory",
+      "title": "아파트 한층 하루만에 짓는데 ‘날림’ 아니다?…층간소음·누수 걱정 ...",
+      "summary": "최고층 모듈러 공동주택 건설현장을 찾았다. 이곳에는 최고 22층, 3개 동, 총 381가구 규모의 통합 공공임대주택이 들어설 예정이다. 기존 아파트처럼 현장에서 골조를 만드는 대신 전북 군산의 엔알비 공장에서 미리...",
+      "publishedAt": "2026-11-18",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.mk.co.kr/article/12212179",
+      "sourceRecordId": "10247",
+      "matchedAlias": "엔알비",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "mk.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "adjacent"
     },
     {
       "activityId": "news-nrb-7d7c47fb3cf39e34",

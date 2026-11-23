@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-22T01:52:06.166215+00:00",
+  "generatedAt": "2026-11-23T02:10:45.604485+00:00",
   "companyId": "samsung-ct-construction",
-  "activityCount": 269,
+  "activityCount": 271,
   "activities": [
     {
       "activityId": "news-samsung-ct-construction-a96e0fc1fac632c0",
@@ -45,6 +45,26 @@
       "status": "direct"
     },
     {
+      "activityId": "news-samsung-ct-construction-db66688b28b71b0a",
+      "companyId": "samsung-ct-construction",
+      "activityType": "investment",
+      "title": "LH, 2030년까지 모듈러주택 1만8000호 발주",
+      "summary": "이성훈 LH 사장을 비롯해 삼성물산, GS건설, 엔알비, 이화여자대학교 등 건설업계와 학계 관계자들이 참석했다. 이날 토론회에서는 모듈러주택 발주물량 확대에 따른 공사비 절감과 공사기간 단축, 민간기업의 설비투자...",
+      "publishedAt": "2026-11-20",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "http://www.newslock.co.kr/news/articleView.html?idxno=140538",
+      "sourceRecordId": "10363",
+      "matchedAlias": "삼성물산",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "newslock.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "direct"
+    },
+    {
       "activityId": "news-samsung-ct-construction-bd39598e3da9872e",
       "companyId": "samsung-ct-construction",
       "activityType": "factory",
@@ -80,6 +100,26 @@
       "confidence": "medium",
       "projectName": null,
       "organization": "inews24.com",
+      "region": "국가 미확인",
+      "amount": null,
+      "status": "direct"
+    },
+    {
+      "activityId": "news-samsung-ct-construction-734f9b0ad55558b0",
+      "companyId": "samsung-ct-construction",
+      "activityType": "project",
+      "title": "LH, 모듈러주택 1만8000가구 공급 추진…공사비 낮추고 공기 단축",
+      "summary": "간담회 행사 사진./사진=LH LH는 전날 서울지역본부에서 '모듈러주택 안정적 생태계 구축을 위한 토론회'를 개최했다고 20일 밝혔다. 이날 토론회에는 이성훈 LH 사장과 공공주택본부 관계자를 비롯해 삼성물산, GS건설...",
+      "publishedAt": "2026-11-20",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.mediapen.com/news/view/1138755",
+      "sourceRecordId": "10362",
+      "matchedAlias": "삼성물산",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "mediapen.com",
       "region": "국가 미확인",
       "amount": null,
       "status": "direct"

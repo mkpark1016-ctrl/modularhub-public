@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-index-v1",
-  "generatedAt": "2026-11-22T01:52:06.166215+00:00",
+  "generatedAt": "2026-11-23T02:10:45.604485+00:00",
   "companyCount": 11,
-  "totalActivityCount": 1395,
+  "totalActivityCount": 1401,
   "companies": [
     {
       "companyId": "yuchang-enc",
@@ -41,14 +41,14 @@
     },
     {
       "companyId": "nrb",
-      "activityCount": 123,
+      "activityCount": 125,
       "latestPublishedAt": "2026-11-20",
       "earliestPublishedAt": "2026-06-01",
       "path": "company-activity-history/nrb.json"
     },
     {
       "companyId": "gs-ec",
-      "activityCount": 467,
+      "activityCount": 469,
       "latestPublishedAt": "2026-11-21",
       "earliestPublishedAt": "2026-05-07",
       "path": "company-activity-history/gs-ec.json"
@@ -62,7 +62,7 @@
     },
     {
       "companyId": "samsung-ct-construction",
-      "activityCount": 269,
+      "activityCount": 271,
       "latestPublishedAt": "2026-11-21",
       "earliestPublishedAt": "2026-05-12",
       "path": "company-activity-history/samsung-ct-construction.json"
