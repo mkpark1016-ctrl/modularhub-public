@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-23T02:10:45.604485+00:00",
+  "generatedAt": "2026-11-24T05:47:40.439927+00:00",
   "companyId": "yuchang-enc",
-  "activityCount": 59,
+  "activityCount": 60,
   "activities": [
+    {
+      "activityId": "news-yuchang-enc-f53b2e13d791038d",
+      "companyId": "yuchang-enc",
+      "activityType": "general_news",
+      "title": "현대엔지니어링, 국내 최대 모듈러 공동주택 기술로 ‘BIM Awards’ 2관왕",
+      "summary": "이를 위해 DfMA(Design for Manufacturing & Assembly) 개념을 도입하고 현대엔지니어링의 모듈러 건축 경험과 제작사 유창이앤씨의 생산 노하우, 구조·성능 기준 등을 BIM 모델에 반영했다. 모듈 접합부와 설비·배관·배선...",
+      "publishedAt": "2026-11-24",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.seoultimes.news/news/article.html?no=2000102610",
+      "sourceRecordId": "10585",
+      "matchedAlias": "유창이앤씨",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "seoultimes.news",
+      "region": "국가 미확인",
+      "amount": null,
+      "status": "direct"
+    },
     {
       "activityId": "news-yuchang-enc-c6fdaa20bb69219c",
       "companyId": "yuchang-enc",

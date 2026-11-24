@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-23T02:10:45.604485+00:00",
+  "generatedAt": "2026-11-24T05:47:40.439927+00:00",
   "companyId": "planm",
-  "activityCount": 54,
+  "activityCount": 55,
   "activities": [
+    {
+      "activityId": "news-planm-8212574f22f14f3c",
+      "companyId": "planm",
+      "activityType": "project",
+      "title": "LH \"모듈러 3000호 이상 묶어 발주하면 공사비 RC 수준까지\"",
+      "summary": "20층 이상 고층 모듈러주택 시범사업도 시행하기로 했다. LH는 지난 3일 엔알비·플랜엠·유창·금강공업·대승엔지니어링·자이가이스트 등 6개 제조사와 간담회를 열고, 내년부터 2030년까지 수도권 3기 신도시를...",
+      "publishedAt": "2026-11-20",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.fnnews.com/news/202611201107317127",
+      "sourceRecordId": "10378",
+      "matchedAlias": "플랜엠",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "fnnews.com",
+      "region": "국가 미확인",
+      "amount": null,
+      "status": "adjacent"
+    },
     {
       "activityId": "news-planm-4dba2e121c3c14a9",
       "companyId": "planm",
