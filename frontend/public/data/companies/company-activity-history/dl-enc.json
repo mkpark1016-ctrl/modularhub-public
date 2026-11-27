@@ -1,8 +1,8 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-26T03:58:26.278351+00:00",
+  "generatedAt": "2026-11-27T03:59:13.113902+00:00",
   "companyId": "dl-enc",
-  "activityCount": 114,
+  "activityCount": 115,
   "activities": [
     {
       "activityId": "news-dl-enc-4a5d946da7968d79",
@@ -461,6 +461,26 @@
       "projectName": null,
       "organization": "cnbnews.com",
       "region": "국가 미확인",
+      "amount": null,
+      "status": "adjacent"
+    },
+    {
+      "activityId": "news-dl-enc-a7dab389e07eefac",
+      "companyId": "dl-enc",
+      "activityType": "technology",
+      "title": "DL이앤씨, '한숲 파트너스 데이' 개최…우수 협력사 100곳 선정",
+      "summary": "(OSC)·모듈러 기술과 인공지능(AI)·로봇을 활용한 스마트 건설기술, 층간소음 저감 등 주거 성능 개선 분야에서 협력사와 공동 연구개발을 확대할 계획이다. 행사에서는 DL이앤씨의 올해 경영 현황을 공유하고 주택·토목...",
+      "publishedAt": "2026-11-19",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "https://www.cstimes.com/news/articleView.html?idxno=728600",
+      "sourceRecordId": "491",
+      "matchedAlias": "DL이앤씨",
+      "matchReason": "title_or_project_name_alias",
+      "confidence": "high",
+      "projectName": null,
+      "organization": "beyondpost.co.kr",
+      "region": "대한민국",
       "amount": null,
       "status": "adjacent"
     },

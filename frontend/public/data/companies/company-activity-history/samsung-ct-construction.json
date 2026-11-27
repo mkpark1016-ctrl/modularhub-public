@@ -1,9 +1,29 @@
 {
   "schemaVersion": "company-activity-history-v1",
-  "generatedAt": "2026-11-26T03:58:26.278351+00:00",
+  "generatedAt": "2026-11-27T03:59:13.113902+00:00",
   "companyId": "samsung-ct-construction",
-  "activityCount": 312,
+  "activityCount": 313,
   "activities": [
+    {
+      "activityId": "news-samsung-ct-construction-1b1841ac7b0b8347",
+      "companyId": "samsung-ct-construction",
+      "activityType": "factory",
+      "title": "중동 대신 미국…K건설, 제조업 투자 타고 북미 공략",
+      "summary": "내년까지 모듈러 데이터센터 양산 체계를 구축하고 2028년부터 미국 텍사스 대규모 데이터센터 설계·조달·시공(EPC) 사업 참여를 추진한다는 계획이다. 삼성물산은 미국 테일러와 국내 평택 등 기존 반도체 공장...",
+      "publishedAt": "2026-11-26",
+      "sourceType": "news",
+      "sourceName": "네이버뉴스",
+      "sourceUrl": "http://www.hansbiz.co.kr/news/articleView.html?idxno=887581",
+      "sourceRecordId": "10798",
+      "matchedAlias": "삼성물산",
+      "matchReason": "summary_alias_with_modular_context",
+      "confidence": "medium",
+      "projectName": null,
+      "organization": "hansbiz.co.kr",
+      "region": "대한민국",
+      "amount": null,
+      "status": "adjacent"
+    },
     {
       "activityId": "news-samsung-ct-construction-8e93a9fcb7ece6ee",
       "companyId": "samsung-ct-construction",
